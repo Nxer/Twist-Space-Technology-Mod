@@ -65,6 +65,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
@@ -571,27 +572,15 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean active, boolean redstoneLevel) {
-        if (side == facing) {
-            if (active) return new ITexture[] { TextureFactory.of(blockMetalDevice, 9), TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-            return new ITexture[] { TextureFactory.of(blockMetalDevice, 9), TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-        }
-        return new ITexture[] { TextureFactory.of(blockMetalDevice, 9) };
+        return TSTControllerTextures.getTexture(
+            side,
+            facing,
+            active,
+            TextureFactory.of(blockMetalDevice, 9),
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE,
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW,
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE,
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW);
     }
 
     // endregion
@@ -727,48 +716,3 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
     // endregion
 
 }
-
-// Structure:
-//
-// Blocks:
-// A -> ofBlock...(essentiaCell, 2, ...);
-// B -> ofBlock...(magicCasing, 0, ...);
-// C -> ofBlock...(tile.FieryBlock, 0, ...);
-// D -> ofBlock...(tile.TBoldLapis, 0, ...);
-// E -> ofBlock...(tile.blockCosmeticSlabStone, 0, ...);
-// F -> ofBlock...(tile.blockCosmeticSolid, 0, ...);
-// G -> ofBlock...(tile.blockCosmeticSolid, 6, ...);
-// H -> ofBlock...(tile.blockCosmeticSolid, 7, ...);
-// I -> ofBlock...(tile.blockDiamond, 0, ...);
-// J -> ofBlock...(tile.blockMetalDevice, 3, ...);
-// K -> ofBlock...(tile.blockMetalDevice, 9, ...);
-// L -> ofBlock...(tile.blockTranslucent, 0, ...);
-// M -> ofBlock...(tile.blockTranslucent, 1, ...);
-// N -> ofBlock...(tile.chisel.arcane, 1, ...);
-// O -> ofBlock...(tile.chisel.arcane, 4, ...);
-// P -> ofBlock...(tile.eldritchArk, 0, ...);
-// Q -> ofBlock...(tile.extrautils:decorativeBlock1, 14, ...);
-//
-// Tiles:
-//
-// Special Tiles:
-// R -> ofSpecialTileAdder(thaumcraft.common.tiles.TileCrucible, ...); // You will probably want to change it to
-// something else
-// S -> ofSpecialTileAdder(thaumcraft.common.tiles.TileOwned, ...); // You will probably want to change it to something
-// else
-// T -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaTileEntity, ...); // You will probably want to change it
-// to something else
-// U -> ofSpecialTileAdder(thaumcraft.common.tiles.TileNodeStabilizer, ...); // You will probably want to change it to
-// something else
-// V -> ofSpecialTileAdder(thaumcraft.common.tiles.TileNodeConverter, ...); // You will probably want to change it to
-// something else
-// W -> ofSpecialTileAdder(makeo.gadomancy.common.blocks.tiles.TileExtendedNode, ...); // You will probably want to
-// change it to something else
-// X -> ofSpecialTileAdder(emt.tile.TileElectricCloud, ...); // You will probably want to change it to something else
-// Y -> ofSpecialTileAdder(net.minecraft.tileentity.TileEntityBeacon, ...); // You will probably want to change it to
-// something else
-// Z -> ofSpecialTileAdder(thaumcraft.common.tiles.TileNitor, ...); // You will probably want to change it to something
-// else
-//
-// Offsets:
-// 7 15 1

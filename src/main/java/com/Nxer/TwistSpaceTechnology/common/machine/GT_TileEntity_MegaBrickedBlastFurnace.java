@@ -28,6 +28,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
@@ -669,24 +670,19 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     // endregion
 
     // region Textures
-    private static final ITexture[] FACING_SIDE = { TextureFactory.of(BlockIcons.MACHINE_CASING_DENSEBRICKS) };
-
-    private static final ITexture[] FACING_FRONT = {
-        TextureFactory.of(BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_INACTIVE) };
-
-    private static final ITexture[] FACING_ACTIVE = {
-        TextureFactory.of(BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_ACTIVE), TextureFactory.builder()
-            .addIcon(BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_ACTIVE_GLOW)
-            .glow()
-            .build() };
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
         int colorIndex, boolean aActive, boolean redstoneLevel) {
-        if (side == aFacing) {
-            return aActive ? FACING_ACTIVE : FACING_FRONT;
-        }
-        return FACING_SIDE;
+        return TSTControllerTextures.getTexture(
+            side,
+            aFacing,
+            aActive,
+            TextureFactory.of(BlockIcons.MACHINE_CASING_DENSEBRICKS),
+            BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_INACTIVE,
+            BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_INACTIVE_GLOW,
+            BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_ACTIVE,
+            BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_ACTIVE_GLOW);
     }
 
     // endregion

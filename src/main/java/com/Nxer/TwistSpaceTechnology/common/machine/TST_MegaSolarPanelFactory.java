@@ -35,6 +35,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
@@ -55,7 +56,6 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescri
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
@@ -115,13 +115,6 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
         if (null == STRUCTURE_DEFINITION) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaSolarPanelFactory>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-                // A -> ofBlock...(BW_GlasBlocks, 0, ...);
-                // B -> ofBlock...(componentAssemblyLineCasing, 0, ...);
-                // C -> ofBlock...(gt.blockcasings10, 11, ...);
-                // D -> ofBlock...(gt.blockcasingsTT, 9, ...);
-                // E -> ofBlock...(gt.godforgecasing, 0, ...);
-                // F -> ofBlock...(tile.MetaBlockCasing02, 2, ...);
-
                 .addElement('A', chainAllGlasses())
                 .addElement(
                     'B',
@@ -306,28 +299,15 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side,
         ForgeDirection forgeDirection, int aColorIndex, boolean aActive, boolean aRedstone) {
-        if (side == forgeDirection) {
-            if (aActive) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(181),
-                TextureFactory.builder()
-                    .addIcon(Textures.BlockIcons.OVERLAY_FRONT_HEAT_EXCHANGER_ACTIVE)
-                    .extFacing()
-                    .build(),
-                TextureFactory.builder()
-                    .addIcon(Textures.BlockIcons.OVERLAY_FRONT_HEAT_EXCHANGER_ACTIVE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(181), TextureFactory.builder()
-                .addIcon(Textures.BlockIcons.OVERLAY_FRONT_HEAT_EXCHANGER)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(Textures.BlockIcons.OVERLAY_FRONT_HEAT_EXCHANGER_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-        }
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(181) };
+        return TSTControllerTextures.getTexture(
+            side,
+            forgeDirection,
+            aActive,
+            Textures.BlockIcons.getCasingTextureForId(181),
+            Textures.BlockIcons.OVERLAY_FRONT_HEAT_EXCHANGER,
+            Textures.BlockIcons.OVERLAY_FRONT_HEAT_EXCHANGER_GLOW,
+            Textures.BlockIcons.OVERLAY_FRONT_HEAT_EXCHANGER_ACTIVE,
+            Textures.BlockIcons.OVERLAY_FRONT_HEAT_EXCHANGER_ACTIVE_GLOW);
     }
 
     // endregion

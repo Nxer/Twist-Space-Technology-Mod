@@ -1,16 +1,18 @@
 package com.Nxer.TwistSpaceTechnology.common;
 
+import static gregtech.GTLoggers.GT_FML_LOGGER;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.util.GTLog;
 import gregtech.api.util.GTUtility;
 
 public enum GTCMItemList {
@@ -270,6 +272,7 @@ public enum GTCMItemList {
     IndustrialMagicMatrix,
     StellarMaterialSiphon,
     ElvenWorkshop,
+    ElvenWorkshopLegacy,
     HyperSpacetimeTransformer,
     superCleanRoom,
     BiosphereIII,
@@ -620,8 +623,7 @@ public enum GTCMItemList {
         sanityCheck();
         // if invalid, return a replacements
         if (GTUtility.isStackInvalid(mStack)) {
-            GTLog.out.println("Object in the ItemList is null at:");
-            new NullPointerException().printStackTrace(GTLog.out);
+            TwistSpaceTechnology.LOG.warn("Object in the ItemList is null at: {}", this.toString());
             return GTUtility.copyAmountUnsafe(aAmount, TestItem0.get(1));
         }
         return GTUtility.copyAmountUnsafe(aAmount, mStack);
@@ -673,7 +675,7 @@ public enum GTCMItemList {
         if (mHasNotBeenSet)
             throw new IllegalAccessError("The Enum '" + name() + "' has not been set to an Item at this time!");
         if (mDeprecated && !mWarned) {
-            new Exception(this + " is now deprecated").printStackTrace(GTLog.err);
+            GT_FML_LOGGER.error(new Exception(this + " is now deprecated"));
             // warn only once
             mWarned = true;
         }

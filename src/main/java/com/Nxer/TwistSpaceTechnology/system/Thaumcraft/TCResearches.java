@@ -274,8 +274,8 @@ public class TCResearches {
             // #zh_CN 一处供栖息地接纳受控例外的预留连接.
 
             // #tr tc.research_text.ECO_SPHERE_UPGRADE_INTERFACE.1
-            // # {\BOLD}Purpose and Function<BR>{\RESET}The upgrade interface accepts amendments, not ordinary inputs. Registered upgrades alter the active environment; unrelated items remain inert.<BR>Ordinary revisions may repeat. Specialized revisions reject duplicates, while revisions incompatible with the active protocol remain stored but inactive.
-            // #zh_CN {\BOLD}用途与功能<BR>{\RESET}升级接口接纳的是环境修订, 而非普通输入. 已登记升级会改变当前环境; 无关物品保持无效.<BR>普通修订允许重复登记. 特殊修订拒绝重复项; 当前协议不相容的修订会被保留, 但不会生效.
+            // # {\BOLD}Purpose and Function<BR>{\RESET}The upgrade interface accepts amendments, not ordinary inputs. Four positions remain visible; unavailable ones stay locked. Reinforcing the surrounding structure and its containment materials allows the interface to sustain more amendments, though its capacity remains finite.<BR>Ordinary amendments may repeat. Specialized ones reject duplicates; incompatible ones remain stored but inactive.
+            // #zh_CN {\BOLD}用途与功能<BR>{\RESET}升级接口接纳环境修订, 而非普通输入. 四个位置始终可见, 未开放者保持锁定. 强化周边结构与承载材料可使接口容纳更多修订, 但其容量仍有极限.<BR>普通修订可重复登记. 特殊修订拒绝重复项; 不相容者保留但不生效.
 
             // #tr tc.research_text.ECO_SPHERE_UPGRADE_INTERFACE.2
             // # <LINE>{\BOLD}Operation Record ESS-UP-01<BR>{\RESET}A registered amendment was installed before a stable cycle. The controller kept it separate from recipe inputs and applied it only after the protocol accepted the environment.<BR>Removing it restored prior behavior next cycle without cleaning or damage.<BR>Status: separation confirmed.

@@ -71,7 +71,7 @@ import appeng.me.helpers.AENetworkProxy;
 import appeng.me.helpers.IGridProxyable;
 import appeng.util.IWideReadableNumberConverter;
 import appeng.util.ReadableNumberConverter;
-import gregtech.GTMod;
+import gregtech.GTLoggers;
 import gregtech.api.enums.ItemList;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.IConfigurationCircuitSupport;
@@ -266,7 +266,6 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends MTEHatch
         MAX_PATTERN_COUNT);
 
     private boolean needPatternSync = true;
-    private boolean justHadNewItems = false;
 
     private String customName = null;
     private boolean additionalConnection = false;
@@ -293,6 +292,7 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends MTEHatch
         super.onPostTick(aBaseMetaTileEntity, aTimer);
 
         if (getBaseMetaTileEntity().isServerSide()) {
+            detectInventoryChange();
             if (needPatternSync && aTimer % 10 == 0) {
                 needPatternSync = !postMEPatternChange();
             }
@@ -467,7 +467,7 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends MTEHatch
                     patternSlotNBT,
                     getBaseMetaTileEntity().getWorld());
             } else {
-                GTMod.GT_FML_LOGGER.warn(
+                GTLoggers.GT_FML_LOGGER.warn(
                     "An error occurred while loading contents of ME Crafting Input Bus. This pattern has been voided: "
                         + patternSlotNBT);
             }
@@ -747,7 +747,7 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends MTEHatch
             if (slot == null) continue;
             ICraftingPatternDetails details = slot.getPatternDetails();
             if (details == null) {
-                GTMod.GT_FML_LOGGER.warn(
+                GTLoggers.GT_FML_LOGGER.warn(
                     "Found an invalid pattern at " + getBaseMetaTileEntity().getCoords()
                         + " in dim "
                         + getBaseMetaTileEntity().getWorld().provider.dimensionId);
@@ -761,9 +761,9 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends MTEHatch
     public boolean pushPattern(ICraftingPatternDetails patternDetails, InventoryCrafting table) {
         if (!isActive()) return false;
         if (!(patternDetails instanceof FluidPatternDetails)) return false;
-        if (patternDetailsPatternSlotMap.get(patternDetails)
-            .addCraft()) return false;
-        justHadNewItems = true;
+        PatternSlot slot = patternDetailsPatternSlotMap.get(patternDetails);
+        if (slot == null || !slot.addCraft()) return false;
+        markDirty();
         return true;
     }
 
@@ -783,13 +783,6 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends MTEHatch
             if (slot == null) continue;
             outputs = combineAnyStackList(outputs, slot.getOutput(true, true, 0));
         }
-    }
-
-    @Override
-    public boolean justUpdated() {
-        var ret = justHadNewItems;
-        justHadNewItems = false;
-        return ret;
     }
 
     @Override

@@ -22,6 +22,7 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChann
 import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
@@ -55,6 +56,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
@@ -78,7 +80,6 @@ import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
@@ -162,20 +163,6 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     };
     // spotless:on
 
-    /*
-     * A -> ofBlock...(gt.blockcasings, 14, ...); // tierDimensionField
-     * B -> ofBlock...(gt.blockcasingsSE, 2, ...);
-     * C -> ofBlock...(gt.blockcasingsTT, 4, ...);
-     * D -> ofBlock...(gt.blockcasingsTT, 14, ...); // tierTimeField
-     * E -> ofBlock...(gt.blockcasingsTT, 7, ...);
-     * F -> ofBlock...(gt.blockcasingsTT, 8, ...);
-     * G -> ofBlock...(gt.blockcasingsTT, 9, ...); // tierStabilisationField
-     * H -> ofBlock...(gt.blockcasingsTT, 12, ...);
-     * I -> ofBlock...(gt.blockcasingsTT, 13, ...);
-     * J -> ofBlock...(tile.DysonSwarmPart, 9, ...);
-     * K -> ofBlock...(tile.quantumGlass, 0, ...);
-     * L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
-     */
     @Override
     public IStructureDefinition<TST_ArtificialStar> getStructureDefinition() {
         return IStructureDefinition.<TST_ArtificialStar>builder()
@@ -735,26 +722,15 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
         int colorIndex, boolean aActive, boolean redstoneLevel) {
-        if (side == aFacing) {
-            if (aActive) {
-                return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
-                    .addIcon(OVERLAY_DTPF_ON)
-                    .extFacing()
-                    .build(),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FUSION1_GLOW)
-                        .extFacing()
-                        .glow()
-                        .build() };
-            }
-
-            return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
-                .addIcon(OVERLAY_DTPF_OFF)
-                .extFacing()
-                .build() };
-        }
-
-        return new ITexture[] { casingTexturePages[0][12] };
+        return TSTControllerTextures.getTexture(
+            side,
+            aFacing,
+            aActive,
+            casingTexturePages[0][12],
+            OVERLAY_DTPF_OFF,
+            OVERLAY_DTPF_OFF_GLOW,
+            OVERLAY_DTPF_ON,
+            OVERLAY_FUSION1_GLOW);
     }
 
     // endregion

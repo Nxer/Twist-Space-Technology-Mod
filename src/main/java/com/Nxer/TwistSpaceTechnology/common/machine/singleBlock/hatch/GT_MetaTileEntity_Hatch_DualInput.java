@@ -287,11 +287,6 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus
     }
 
     @Override
-    public boolean justUpdated() {
-        return false;
-    }
-
-    @Override
     public Iterator<? extends IDualInputInventory> inventories() {
         return Arrays.stream(new Inventory[] { inventory })
             .filter(Objects::nonNull)
@@ -391,6 +386,7 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
         if (aBaseMetaTileEntity.isServerSide()) {
+            detectInventoryChange();
             updateSlots();
         }
     }

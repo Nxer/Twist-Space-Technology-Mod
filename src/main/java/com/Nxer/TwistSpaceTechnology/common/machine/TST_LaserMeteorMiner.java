@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.entity.TileEntityLaserBeacon;
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
@@ -66,7 +67,6 @@ import gregtech.api.objects.ItemData;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
@@ -111,24 +111,6 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     private static IStructureDefinition<TST_LaserMeteorMiner> STRUCTURE_DEFINITION;
 
     // spotless:off
-    /*
-    A -> ofBlock...(blockAlloyGlass, 0, ...);
-    B -> ofBlock...(gt.blockcasings, 15, ...);
-    C -> ofBlock...(gt.blockcasings4, 7, ...);
-    D -> ofBlock...(gt.blockcasings8, 2, ...);
-    E -> ofBlock...(gt.blockcasings8, 3, ...);
-    F -> ofBlock...(gt.blockcasings9, 11, ...);
-    G -> ofBlock...(gt.blockframes, 129, ...);
-    H -> ofBlock...(gt.blockframes, 388, ...);
-    I -> ofBlock...(gt.blockcasings5, 5, ...);
-    J -> ofBlock...(gt.blockframes, 306, ...);
-    K -> ofBlock...(gtplusplus.blockspecialcasings.1, 6, ...); //
-    L -> ofBlock...(gtplusplus.blockspecialcasings.1, 8, ...);
-    W -> ofBlock...(tile.wood, 0, ...); // T1 hatches
-    X -> ofBlock...(tile.wood, 0, ...); // T2 hatches
-    Y -> ofBlock...(tile.stone, 0, ...); // special input bus
-    Z -> ofSpecialTileAdder(com.Nxer.TwistSpaceTechnology.common.entity.TileEntityLaserBeacon, ...);
-     */
     protected static final String[][] shape_T1 = new String[][]{
         {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","         J         ","        J J        ","         J         ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
         {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","         J         ","        J J        ","       J   J       ","        J J        ","         J         ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
@@ -823,35 +805,15 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
         int colorIndex, boolean aActive, boolean redstoneLevel) {
-        ITexture[] rTexture;
-        if (side == aFacing) {
-            if (aActive) {
-                rTexture = new ITexture[] { Textures.BlockIcons.getCasingTextureForId(TAE.getIndexFromPage(0, 8)),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FRONT_METEOR_MINER_ACTIVE)
-                        .extFacing()
-                        .build(),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FRONT_METEOR_MINER_ACTIVE_GLOW)
-                        .extFacing()
-                        .glow()
-                        .build() };
-            } else {
-                rTexture = new ITexture[] { Textures.BlockIcons.getCasingTextureForId(TAE.getIndexFromPage(0, 8)),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FRONT_METEOR_MINER)
-                        .extFacing()
-                        .build(),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FRONT_METEOR_MINER_GLOW)
-                        .extFacing()
-                        .glow()
-                        .build() };
-            }
-        } else {
-            rTexture = new ITexture[] { Textures.BlockIcons.getCasingTextureForId(TAE.getIndexFromPage(0, 8)) };
-        }
-        return rTexture;
+        return TSTControllerTextures.getTexture(
+            side,
+            aFacing,
+            aActive,
+            Textures.BlockIcons.getCasingTextureForId(TAE.getIndexFromPage(0, 8)),
+            OVERLAY_FRONT_METEOR_MINER,
+            OVERLAY_FRONT_METEOR_MINER_GLOW,
+            OVERLAY_FRONT_METEOR_MINER_ACTIVE,
+            OVERLAY_FRONT_METEOR_MINER_ACTIVE_GLOW);
     }
 
     // endregion
@@ -988,6 +950,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
         if (aMetaTileEntity == null) return false;
         if (!(aMetaTileEntity instanceof MTEHatchInputBus bus)) return false;
         bus.updateTexture(aBaseCasingIndex);
+        addIfSmartInput(bus);
         return mInputBusses.add(bus);
     }
 

@@ -20,7 +20,6 @@ import com.gtnewhorizons.modularui.api.drawable.IDrawable;
 import com.gtnewhorizons.modularui.api.drawable.shapes.Rectangle;
 import com.gtnewhorizons.modularui.api.math.Alignment;
 import com.gtnewhorizons.modularui.api.math.Color;
-import com.gtnewhorizons.modularui.api.math.Pos2d;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 import com.gtnewhorizons.modularui.common.internal.wrapper.BaseSlot;
@@ -38,14 +37,17 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.render.TextureFactory;
+import gregtech.common.tileentities.machines.ISmartInputHatch;
 
 @SkipGenerateDescription
-public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implements IAddUIWidgets, TSTTooltipCredit {
+public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch
+    implements IAddUIWidgets, ISmartInputHatch, TSTTooltipCredit {
 
     private static final int MAX_UPGRADE_SLOTS = 4;
 
     private int machineMode = -1;
     private int structureTier = 1;
+    private int glassTier;
 
     public TST_EcoSphereUpgradeInterfaceHatch(int id, String name, String nameRegional, int tier) {
         super(id, name, nameRegional, tier, MAX_UPGRADE_SLOTS, new String[0]);
@@ -54,6 +56,12 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implement
 
     private TST_EcoSphereUpgradeInterfaceHatch(String name, int tier, String[] description, ITexture[][][] textures) {
         super(name, tier, MAX_UPGRADE_SLOTS, description, textures);
+    }
+
+    @Override
+    public void onPostTick(IGregTechTileEntity base, long tick) {
+        super.onPostTick(base, tick);
+        if (base.isServerSide()) detectInventoryChange();
     }
 
     @Override
@@ -115,15 +123,16 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implement
         return side == baseMetaTileEntity.getFrontFacing() && isSlotActive(index) && isUpgradeValid(index, stack);
     }
 
-    public void setMachineState(int mode, int tier) {
+    public void setMachineState(int mode, int tier, int glass) {
+        int oldActiveSlots = getActiveSlots();
         int newStructureTier = Math.max(1, tier);
-        if (machineMode == mode && structureTier == newStructureTier) return;
-        // Eject upgrades that no longer fit when the structure tier shrinks (4 slots -> 1 slot).
-        if (mode >= 0 && machineMode == mode && newStructureTier < structureTier) {
-            dropInventoryRange(newStructureTier >= 2 ? 4 : 1, MAX_UPGRADE_SLOTS);
-        }
+        int newGlassTier = Math.max(0, glass);
+        if (machineMode == mode && structureTier == newStructureTier && glassTier == newGlassTier) return;
         machineMode = mode;
         structureTier = newStructureTier;
+        glassTier = newGlassTier;
+        int activeSlots = getActiveSlots();
+        if (mode >= 0 && activeSlots < oldActiveSlots) dropInventoryRange(activeSlots, MAX_UPGRADE_SLOTS);
         IGregTechTileEntity base = getBaseMetaTileEntity();
         if (base != null && base.isServerSide()) base.markDirty();
     }
@@ -137,7 +146,7 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implement
     }
 
     private int getActiveSlots() {
-        return structureTier >= 2 ? 4 : 1;
+        return Math.min(Math.max(1, glassTier + (structureTier >= 2 ? 1 : 0)), MAX_UPGRADE_SLOTS);
     }
 
     private boolean isSlotActive(int index) {
@@ -160,6 +169,7 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implement
         super.saveNBTData(nbt);
         nbt.setInteger("ecoSphereMachineMode", machineMode);
         nbt.setInteger("ecoSphereStructureTier", structureTier);
+        nbt.setInteger("ecoSphereGlassTier", glassTier);
     }
 
     @Override
@@ -177,6 +187,7 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implement
             savedStructureTier = nbt.getInteger("ecoSphereStructureTier");
         }
         structureTier = Math.max(1, savedStructureTier);
+        glassTier = Math.max(0, nbt.getInteger("ecoSphereGlassTier"));
     }
 
     private void dropInventoryRange(int firstSlot, int endSlot) {
@@ -198,17 +209,12 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implement
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
         SlotWidget[] upgradeSlots = new SlotWidget[MAX_UPGRADE_SLOTS];
         for (int index = 0; index < MAX_UPGRADE_SLOTS; index++) {
-            Pos2d position = getUpgradeSlotPosition(index);
-            upgradeSlots[index] = createUpgradeSlot(index, position.x, position.y);
+            upgradeSlots[index] = createUpgradeSlot(index, 70 + index % 2 * 18, 26 + index / 2 * 18);
         }
 
         builder.widget(new FakeSyncWidget.IntegerSyncer(() -> machineMode, value -> machineMode = value))
-            .widget(new FakeSyncWidget.IntegerSyncer(() -> structureTier, value -> {
-                structureTier = value;
-                for (int index = 0; index < MAX_UPGRADE_SLOTS; index++) {
-                    upgradeSlots[index].setPosSilent(getUpgradeSlotPosition(index));
-                }
-            }))
+            .widget(new FakeSyncWidget.IntegerSyncer(() -> structureTier, value -> structureTier = value))
+            .widget(new FakeSyncWidget.IntegerSyncer(() -> glassTier, value -> glassTier = value))
             .widget(
                 new ButtonWidget()
                     .setOnClick(
@@ -241,11 +247,6 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implement
         }
     }
 
-    private Pos2d getUpgradeSlotPosition(int index) {
-        if (structureTier < 2) return new Pos2d(79, 35);
-        return new Pos2d(70 + index % 2 * 18, 26 + index / 2 * 18);
-    }
-
     private SlotWidget createUpgradeSlot(int index, int x, int y) {
         BaseSlot slot = new BaseSlot(inventoryHandler, index) {
 
@@ -256,7 +257,7 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implement
 
             @Override
             public boolean isEnabled() {
-                return machineMode >= 0 && isSlotActive(index);
+                return machineMode >= 0;
             }
 
             @Override
@@ -269,7 +270,7 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implement
             () -> isSlotActive(index) ? new IDrawable[] { getGUITextureSet().getItemSlot() }
                 : new IDrawable[] { getGUITextureSet().getItemSlot(), new Rectangle().setColor(0xB0000000) });
         widget.setPos(x, y);
-        widget.setEnabled(value -> machineMode >= 0 && isSlotActive(index));
+        widget.setEnabled(value -> machineMode >= 0);
         return widget;
     }
 }

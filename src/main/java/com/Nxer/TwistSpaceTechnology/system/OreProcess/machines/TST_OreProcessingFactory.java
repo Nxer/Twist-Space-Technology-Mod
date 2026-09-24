@@ -43,6 +43,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.api.giver.ItemStacksGiver;
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -66,7 +67,6 @@ import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.HatchElementBuilder;
@@ -158,23 +158,6 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
             .addElement('M', ofFrame(Materials.TungstenSteel))
             .build();
     }
-
-    /*
-     * Blocks:
-     * A -> ofBlock...(blockAlloyGlass, 0, ...);
-     * B -> ofBlock...(gt.blockcasings2, 4, ...);
-     * C -> ofBlock...(gt.blockcasings2, 6, ...);
-     * D -> ofBlock...(gt.blockcasings2, 15, ...);
-     * E -> ofBlock...(gt.blockcasings4, 0, ...);
-     * F -> ofBlock...(gt.blockcasings4, 1, ...);
-     * G -> ofBlock...(gt.blockcasings8, 7, ...);
-     * H -> ofBlock...(gt.blockcasingsTT, 0, ...);
-     * I -> ofBlock...(gt.blockcasingsTT, 7, ...);
-     * J -> ofBlock...(gt.blockcasings4, 0, ...); // input hatches
-     * K -> ofBlock...(gt.blockcasingsTT, 0, ...); // energy hatches
-     * L -> ofBlock...(gt.blockcasings8, 7, ...); // input output buses
-     * M -> ofFrame...(Materials.TungstenSteel, 0, ...);
-     */
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
@@ -523,28 +506,15 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean aActive, boolean aRedstone) {
-        if (side == facing) {
-            if (aActive) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(183),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE)
-                    .extFacing()
-                    .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(183), TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-        }
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(183) };
+        return TSTControllerTextures.getTexture(
+            side,
+            facing,
+            aActive,
+            Textures.BlockIcons.getCasingTextureForId(183),
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE,
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW,
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE,
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW);
     }
 
     // endregion

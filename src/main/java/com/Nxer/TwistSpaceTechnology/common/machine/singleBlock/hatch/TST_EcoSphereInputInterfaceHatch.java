@@ -47,10 +47,12 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.render.TextureFactory;
+import gregtech.common.tileentities.machines.ISmartInputHatch;
 import gregtech.common.tileentities.machines.multi.MTETreeFarm.Mode;
 
 @SkipGenerateDescription
-public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements IAddUIWidgets, TSTTooltipCredit {
+public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch
+    implements IAddUIWidgets, ISmartInputHatch, TSTTooltipCredit {
 
     private static final int TREE_INPUT_SLOT = 0;
     private static final int TREE_MAX_SLOTS = 4;
@@ -86,6 +88,19 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
 
     public int getCloningRecipeId() {
         return cloningRecipeId;
+    }
+
+    @Override
+    public void onPostTick(IGregTechTileEntity base, long tick) {
+        super.onPostTick(base, tick);
+        if (base.isServerSide()) detectInventoryChange();
+    }
+
+    private void onConfigurationChanged() {
+        IGregTechTileEntity base = getBaseMetaTileEntity();
+        if (base != null && base.isServerSide()) {
+            markDirty();
+        }
     }
 
     @Override
@@ -378,18 +393,19 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
             int index = mode.ordinal();
             int x = 101 + index % 2 * 20;
             int y = 26 + index / 2 * 20;
-            builder.widget(
-                new ButtonWidget()
-                    .setOnClick((clickData, widget) -> selectedTreeOutputs[index] = !selectedTreeOutputs[index])
-                    .setBackground(() -> getTreeButtonBackground(mode, selectedTreeOutputs[index]))
-                    .attachSyncer(
-                        new FakeSyncWidget.BooleanSyncer(
-                            () -> selectedTreeOutputs[index],
-                            value -> selectedTreeOutputs[index] = value),
-                        builder)
-                    .setPos(x, y)
-                    .setSize(18, 18)
-                    .setEnabled(widget -> machineMode == 0));
+            builder.widget(new ButtonWidget().setOnClick((clickData, widget) -> {
+                selectedTreeOutputs[index] = !selectedTreeOutputs[index];
+                onConfigurationChanged();
+            })
+                .setBackground(() -> getTreeButtonBackground(mode, selectedTreeOutputs[index]))
+                .attachSyncer(
+                    new FakeSyncWidget.BooleanSyncer(
+                        () -> selectedTreeOutputs[index],
+                        value -> selectedTreeOutputs[index] = value),
+                    builder)
+                .setPos(x, y)
+                .setSize(18, 18)
+                .setEnabled(widget -> machineMode == 0));
         }
     }
 
@@ -486,7 +502,11 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
                     }
                     return super.onKeyPressed(character, keyCode);
                 }
-            }.setSetterInt(value -> cloningRecipeId = value)
+            }.setSetterInt(value -> {
+                if (cloningRecipeId == value) return;
+                cloningRecipeId = value;
+                onConfigurationChanged();
+            })
                 .setGetterInt(() -> cloningRecipeId)
                 .setNumbers(0, Integer.MAX_VALUE)
                 .setOnScrollNumbers(1, 10, 100)

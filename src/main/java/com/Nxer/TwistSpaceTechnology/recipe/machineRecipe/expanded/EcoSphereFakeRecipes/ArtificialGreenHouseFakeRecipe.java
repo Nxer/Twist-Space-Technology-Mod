@@ -109,7 +109,8 @@ public final class ArtificialGreenHouseFakeRecipe {
     }
 
     private static String getSeedKey(ItemStack seed, GameRegistry.UniqueIdentifier identifier) {
-        return identifier + ":" + seed.getItemDamage();
+        ICropCard crop = CropRegistry.instance.get(seed, false);
+        return identifier + ":" + seed.getItemDamage() + (crop == null ? "" : ":" + crop.getId());
     }
 
     private static void registerOutputs(ItemStack seed, Map<ItemStack, Integer> outputs, boolean hybrid) {

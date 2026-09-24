@@ -19,7 +19,6 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
-import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 
 public class FluidSolidifierRecipePool {
 
@@ -575,7 +574,7 @@ public class FluidSolidifierRecipePool {
 
                 .eut(RECIPE_UEV)
                 .duration(200)
-                .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
+                .addTo(RecipeMaps.mixerNonCellRecipes);
 
             GTValues.RA.stdBuilder()
                 .itemInputs(
@@ -601,7 +600,7 @@ public class FluidSolidifierRecipePool {
 
                 .eut(RECIPE_UEV)
                 .duration(200)
-                .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
+                .addTo(RecipeMaps.mixerNonCellRecipes);
 
             GTValues.RA.stdBuilder()
                 .itemInputs(
@@ -627,7 +626,7 @@ public class FluidSolidifierRecipePool {
 
                 .eut(RECIPE_UEV)
                 .duration(200)
-                .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
+                .addTo(RecipeMaps.mixerNonCellRecipes);
 
             GTValues.RA.stdBuilder()
                 .itemInputs(
@@ -652,7 +651,7 @@ public class FluidSolidifierRecipePool {
 
                 .eut(RECIPE_UEV)
                 .duration(200)
-                .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
+                .addTo(RecipeMaps.mixerNonCellRecipes);
 
             GTValues.RA.stdBuilder()
                 .itemInputs(
@@ -679,7 +678,7 @@ public class FluidSolidifierRecipePool {
 
                 .eut(RECIPE_UEV)
                 .duration(200)
-                .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
+                .addTo(RecipeMaps.mixerNonCellRecipes);
 
             GTValues.RA.stdBuilder()
                 .itemInputs(
@@ -704,7 +703,7 @@ public class FluidSolidifierRecipePool {
 
                 .eut(RECIPE_UEV)
                 .duration(200)
-                .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
+                .addTo(RecipeMaps.mixerNonCellRecipes);
 
             GTValues.RA.stdBuilder()
                 .itemInputs(
@@ -731,7 +730,7 @@ public class FluidSolidifierRecipePool {
 
                 .eut(RECIPE_UEV)
                 .duration(200)
-                .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
+                .addTo(RecipeMaps.mixerNonCellRecipes);
 
             // other singularity(no molten)
 

@@ -30,6 +30,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
@@ -70,7 +71,6 @@ import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.IGTHatchAdder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import tectech.thing.block.BlockQuantumGlass;
-import tectech.thing.metaTileEntity.multi.base.render.TTRenderedExtendedFacingTexture;
 
 @SkipGenerateDescription
 public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_IntegratedAssemblyMatrix> {
@@ -117,14 +117,6 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
         if (null == STRUCTURE_DEFINITION) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_IntegratedAssemblyMatrix>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-                // A -> ofBlock...(BW_GlasBlocks, 14, ...);
-                // B -> ofBlock...(gt.blockcasings2, 5, ...);
-                // C -> ofBlock...(gt.blockcasings2, 9, ...);
-                // D -> ofBlock...(gt.blockcasingsSE, 0, ...);
-                // E -> ofBlock...(gt.blockcasingsTT, 0, ...);
-                // F -> ofBlock...(gt.blockcasingsTT, 4, ...);
-                // G -> ofBlock...(gt.blockcasingsTT, 6, ...);
-                // H -> ofBlock...(tile.quantumGlass, 0, ...);
                 .addElement('A', chainAllGlasses())
                 .addElement('B', ofBlock(GregTechAPI.sBlockCasings2, 5))
                 .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 9))
@@ -382,11 +374,8 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean active, boolean redstoneLevel) {
-        if (side == facing) {
-            return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][12],
-                new TTRenderedExtendedFacingTexture(active ? ActiveFace : InactiveFace) };
-        }
-        return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][12] };
+        return TSTControllerTextures
+            .getTexture(side, facing, active, Textures.BlockIcons.casingTexturePages[8][12], InactiveFace, ActiveFace);
     }
 
     // endregion

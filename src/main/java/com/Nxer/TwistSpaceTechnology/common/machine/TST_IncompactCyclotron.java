@@ -28,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
@@ -43,10 +44,9 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
-import gregtech.api.render.TextureFactory;
+import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.MultiblockTooltipBuilder;
-import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 
 @SkipGenerateDescription
@@ -76,14 +76,6 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
     private static IStructureDefinition<TST_IncompactCyclotron> STRUCTURE_DEFINITION = null;
 
     // spotless:off
-    /*
-     * A -> ofBlock...(BW_GlasBlocks, 14, ...);
-     * B -> ofBlock...(block.Quantum.frame, 0, ...);
-     * C -> ofBlock...(gtplusplus.blockcasings.2, 9, ...);
-     * D -> ofBlock...(gtplusplus.blockcasings.2, 10, ...);
-     * E -> ofBlock...(tile.wood, 0, ...);
-     * F -> ofBlock...(tile.wood, 1, ...);
-     */
     private final String[][] shapeMain = new String[][]{
         {"                                               ","                                               ","                    BDDDDDB                    ","                    BDEAEDB                    ","                    BDDDDDB                    ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","  BBB                                     BBB  ","  DDD                                     DDD  ","  DED                                     DED  ","  DAD                                     DAD  ","  DED                                     DED  ","  DDD                                     DDD  ","  BBB                                     BBB  ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                    BDDDDDB                    ","                    BDEAEDB                    ","                    BDDDDDB                    ","                                               ","                                               "},
         {"                                               ","                    BDEAEDB                    ","                   DD     DD                   ","                DDDDD     DDDDD                ","              DDDDDDD     DDDDDDD              ","            DDDDDDD BDEAEDB DDDDDDD            ","           DDDDD               DDDDD           ","          DDDD                   DDDD          ","         DDD                       DDD         ","        DDD                         DDD        ","       DDD                           DDD       ","      DDD                             DDD      ","     DDD                               DDD     ","     DDD                               DDD     ","    DDD                                 DDD    ","    DDD                                 DDD    ","   DDD                                   DDD   ","   DDD                                   DDD   ","   DDD                                   DDD   ","  DDD                                     DDD  "," BDDDB                                   BDDDB "," D   D                                   D   D "," E   E                                   E   E "," A   A                                   A   A "," E   E                                   E   E "," D   D                                   D   D "," BDDDB                                   BDDDB ","  DDD                                     DDD  ","   DDD                                   DDD   ","   DDD                                   DDD   ","   DDD                                   DDD   ","    DDD                                 DDD    ","    DDD                                 DDD    ","     DDD                               DDD     ","     DDD                               DDD     ","      DDD                             DDD      ","       DDD                           DDD       ","        DDD                         DDD        ","         DDD                       DDD         ","          DDDD                   DDDD          ","           DDDDD               DDDDD           ","            DDDDDDD BDEAEDB DDDDDDD            ","              DDDDDDD     DDDDDDD              ","                DDDDD     DDDDD                ","                   DD     DD                   ","                    BDEAEDB                    ","                                               "},
@@ -155,7 +147,7 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return GTPPRecipeMaps.cyclotronRecipes;
+        return RecipeMaps.cyclotronRecipes;
     }
 
     @Override
@@ -190,18 +182,15 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean aActive, boolean aRedstone) {
-        ITexture base = casingTexturePages[115][MetaBlockCasing01.getTextureIndexInPage(11)];
-        if (side == facing) {
-            if (aActive) return new ITexture[] { base, TextureFactory.builder()
-                .addIcon(TexturesGtBlock.Overlay_MatterFab_Active_Animated)
-                .extFacing()
-                .build() };
-            return new ITexture[] { base, TextureFactory.builder()
-                .addIcon(TexturesGtBlock.Overlay_MatterFab_Animated)
-                .extFacing()
-                .build() };
-        }
-        return new ITexture[] { base };
+        return TSTControllerTextures.getTexture(
+            side,
+            facing,
+            aActive,
+            casingTexturePages[115][MetaBlockCasing01.getTextureIndexInPage(11)],
+            TexturesGtBlock.Overlay_MatterFab_Animated,
+            TexturesGtBlock.Overlay_MatterFab_Animated_Glow,
+            TexturesGtBlock.Overlay_MatterFab_Active_Animated,
+            TexturesGtBlock.Overlay_MatterFab_Active_Animated_Glow);
     }
 
     // endregion

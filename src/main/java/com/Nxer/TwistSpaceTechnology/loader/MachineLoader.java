@@ -12,6 +12,7 @@ import net.minecraft.entity.EntityList;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_ElvenWorkshop;
+import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_ElvenWorkshopLegacy;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_HyperSpacetimeTransformer;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_HolySeparator;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IndustrialMagicMatrix;
@@ -257,28 +258,27 @@ public final class MachineLoader {
         GTCMItemList.OreProcessingFactory.set(
             new TST_OreProcessingFactory(19017, "NameOreProcessingFactory", TSTUtils.tr("tst.common.machine.OreProcessingFactory.name")));
 
-        // Space Station Systems
         // #tr tst.common.machine.MegaUniversalSpaceStation.name
         // # Mega Universal Space Station
         // #zh_CN {\RED}寰 {\AQUA}宇 {\GOLD}空 {\BLUE}间 {\DARK_GRAY}站
 
-        // #tr tst.common.machine.StellarMaterialSiphon.name
-        // # Stellar Material Siphon
-        // #zh_CN Stellar Material Siphon
-        /*
-        if (Config.activateMegaSpaceStation) {
-            GTCMItemList.megaUniversalSpaceStation.set(
-                new TST_MegaUniversalSpaceStation(
-                    19018,
-                    "NameMegaUniversalSpaceStation",
-                    TSTUtils.tr("tst.common.machine.MegaUniversalSpaceStation.name")));
-            GTCMItemList.StellarMaterialSiphon.set(
-                new GT_TileEntity_StellarMaterialSiphon(
-                    19019,
-                    "NameStellarMaterialSiphon",
-                    TSTUtils.tr("tst.common.machine.StellarMaterialSiphon.name")));
-        }
-         */
+        // #tr tst.common.machine.ElvenWorkshop.name
+        // # ElvenWorkshop
+        // #zh_CN 精灵工坊
+        GTCMItemList.ElvenWorkshop
+            .set(new GTCM_ElvenWorkshop(19018, "NameElvenWorkshop", TSTUtils.tr("tst.common.machine.ElvenWorkshop.name")));
+        // TODO: Remove the transitional controller (19299) in the next version.
+        GTCMItemList.ElvenWorkshopLegacy
+            .set(new GTCM_ElvenWorkshopLegacy(19299, "NameElvenWorkshopLegacy", TSTUtils.tr("tst.common.machine.ElvenWorkshop.name")));
+
+        // #tr tst.common.machine.HyperSpacetimeTransformer.name
+        // # HyperSpacetimeTransformer
+        // #zh_CN 极限时空转换仪
+        GTCMItemList.HyperSpacetimeTransformer.set(
+            new GTCM_HyperSpacetimeTransformer(
+                19019,
+                "NameHyperSpacetimeTransformer",
+                TSTUtils.tr("tst.common.machine.HyperSpacetimeTransformer.name")));
 
         // #tr tst.common.machine.CircuitConverter.name
         // # General Circuit Converter
@@ -294,21 +294,6 @@ public final class MachineLoader {
                 19021,
                 "NameLargeIndustrialCokingFactory",
                 TSTUtils.tr("tst.common.machine.LargeIndustrialCokingFactory.name")));
-
-        // #tr tst.common.machine.ElvenWorkshop.name
-        // # ElvenWorkshop
-        // #zh_CN 精灵工坊
-        GTCMItemList.ElvenWorkshop
-            .set(new GTCM_ElvenWorkshop(19500, "NameElvenWorkshop", TSTUtils.tr("tst.common.machine.ElvenWorkshop.name")));
-
-        // #tr tst.common.machine.HyperSpacetimeTransformer.name
-        // # HyperSpacetimeTransformer
-        // #zh_CN 极限时空转换仪
-        GTCMItemList.HyperSpacetimeTransformer.set(
-            new GTCM_HyperSpacetimeTransformer(
-                19501,
-                "NameHyperSpacetimeTransformer",
-                TSTUtils.tr("tst.common.machine.HyperSpacetimeTransformer.name")));
 
         // #tr tst.common.machine.MegaBrickedBlastFurnace.name
         // # Mega Bricked Blast Furnace
@@ -715,10 +700,10 @@ public final class MachineLoader {
                     19068,
                     "NameSwelegfyrBlastFurnace",
                     TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.name")));
-            // TODO: Remove the transitional controller (19502) in the next version.
+            // TODO: Remove the transitional controller (19298) in the next version.
             GTCMItemList.SwelegfyrBlastFurnaceLegacy.set(
                 new TST_SwelegfyrBlastFurnaceLegacy(
-                    19502,
+                    19298,
                     "NameSwelegfyrBlastFurnaceLegacy",
                     TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.name")));
         }

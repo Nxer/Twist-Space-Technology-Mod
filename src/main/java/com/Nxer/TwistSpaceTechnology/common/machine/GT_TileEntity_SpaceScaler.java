@@ -15,6 +15,7 @@ import static gregtech.api.enums.HatchElement.InputHatch;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
@@ -37,6 +38,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
@@ -64,12 +66,10 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.metadata.CompressionTierKey;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
-import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import tectech.thing.block.BlockQuantumGlass;
 
 @SkipGenerateDescription
@@ -184,16 +184,6 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
         return STRUCTURE_DEFINITION;
     }
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(gt.blockcasingsTT, 0, ...); // Energy
-     * B -> ofBlock...(gt.blockcasingsTT, 4, ...);
-     * C -> ofBlock...(gt.blockcasingsTT, 6, ...); // Field generator NORMAL
-     * D -> ofBlock...(tile.quantumGlass, 0, ...);
-     * E -> ofBlock...(gt.blockcasingsTT, 4, ...); // Hatches
-     * G -> ofBlock...(gt.blockcasingsTT, 6, ...); // Field generator can upgrade
-     */
-
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
@@ -242,7 +232,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
             case 1:
                 return RecipeMaps.extractorRecipes;
             case 2:
-                return GTPPRecipeMaps.cyclotronRecipes;
+                return RecipeMaps.cyclotronRecipes;
             case 3:
                 return BartWorksRecipeMaps.electricImplosionCompressorRecipes;
             case 4:
@@ -257,7 +247,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
         return Arrays.asList(
             RecipeMaps.extractorRecipes,
-            GTPPRecipeMaps.cyclotronRecipes,
+            RecipeMaps.cyclotronRecipes,
             RecipeMaps.compressorRecipes,
             BartWorksRecipeMaps.electricImplosionCompressorRecipes,
             RecipeMaps.neutroniumCompressorRecipes);
@@ -491,27 +481,15 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
         int colorIndex, boolean aActive, boolean redstoneLevel) {
-        if (side == aFacing) {
-
-            if (aActive) {
-                return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
-                    .addIcon(OVERLAY_DTPF_ON)
-                    .extFacing()
-                    .build(),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FUSION1_GLOW)
-                        .extFacing()
-                        .glow()
-                        .build() };
-            }
-
-            return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
-                .addIcon(OVERLAY_DTPF_OFF)
-                .extFacing()
-                .build() };
-        }
-
-        return new ITexture[] { casingTexturePages[0][12] };
+        return TSTControllerTextures.getTexture(
+            side,
+            aFacing,
+            aActive,
+            casingTexturePages[0][12],
+            OVERLAY_DTPF_OFF,
+            OVERLAY_DTPF_OFF_GLOW,
+            OVERLAY_DTPF_ON,
+            OVERLAY_FUSION1_GLOW);
     }
 
     // endregion

@@ -13,6 +13,7 @@ import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.InputHatch;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
@@ -32,6 +33,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
@@ -57,7 +59,6 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
@@ -421,22 +422,6 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
                         .hint(1)
                         .casingIndex(SPACE_ELEVATOR_BASE_CASING_INDEX)
                         .buildAndChain(GregTechAPI.sBlockCasingsSE, 0))
-                /*
-                 * Blocks:
-                 * A -> ofBlock...(BW_GlasBlocks, 0, ...); // any glass
-                 * B -> ofBlock...(gt.blockcasings, 11, ...);
-                 * C -> ofBlock...(gt.blockcasings, 14, ...);
-                 * D -> ofBlock...(gt.blockcasings2, 15, ...);
-                 * E -> ofBlock...(gt.blockcasings8, 7, ...);
-                 * F -> ofBlock...(gt.blockcasings8, 10, ...); // Nq alloy casing
-                 * G -> ofBlock...(gt.blockcasingsSE, 0, ...);
-                 * H -> ofBlock...(gt.blockcasingsSE, 1, ...);
-                 * I -> ofBlock...(gt.blockcasingsTT, 8, ...); // holo casing
-                 * J -> ofBlock...(tile.DysonSwarmPart, 9, ...);
-                 * K -> ofBlock...(tile.glass, 0, ...); // any glass or ofFrame(Materials.NaquadahAlloy) or
-                 * ofBlock(NaquadahAlloy casing)
-                 * L -> ofBlock...(gt.blockcasingsSE, 0); // hatches
-                 */
                 .addElement('Z', ofBlock(Blocks.bedrock, 0))
                 .build();
         }
@@ -763,29 +748,15 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
         int colorIndex, boolean aActive, boolean redstoneLevel) {
-        if (side == aFacing) {
-
-            if (aActive) {
-                return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(SPACE_ELEVATOR_BASE_CASING_INDEX),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_DTPF_ON)
-                        .extFacing()
-                        .build(),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FUSION1_GLOW)
-                        .extFacing()
-                        .glow()
-                        .build() };
-            }
-
-            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(SPACE_ELEVATOR_BASE_CASING_INDEX),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_DTPF_OFF)
-                    .extFacing()
-                    .build() };
-        }
-
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(SPACE_ELEVATOR_BASE_CASING_INDEX) };
+        return TSTControllerTextures.getTexture(
+            side,
+            aFacing,
+            aActive,
+            Textures.BlockIcons.getCasingTextureForId(SPACE_ELEVATOR_BASE_CASING_INDEX),
+            OVERLAY_DTPF_OFF,
+            OVERLAY_DTPF_OFF_GLOW,
+            OVERLAY_DTPF_ON,
+            OVERLAY_FUSION1_GLOW);
     }
 
     // endregion

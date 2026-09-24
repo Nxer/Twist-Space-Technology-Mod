@@ -5,6 +5,8 @@ import static gregtech.common.misc.WirelessNetworkManager.strongCheckOrAddUser;
 
 import java.util.UUID;
 
+import net.minecraft.util.StatCollector;
+
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
@@ -13,7 +15,6 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.util.GTUtility;
 import gregtech.api.util.tooltip.TooltipHelper;
 import tectech.thing.metaTileEntity.hatch.MTEHatchWirelessMulti;
 import tectech.util.TTUtility;
@@ -59,7 +60,7 @@ public class GT_Hatch_InfiniteWirelessMulti extends MTEHatchWirelessMulti implem
             // # {\GRAY}Be careful of energy overflow.
             // #zh_CN {\GRAY}小心能量溢出.
             TSTUtils.tr("tst.common.machine.InfiniteWirelessMulti.tooltip.info.03"),
-            GTUtility.translate("gt.tileentity.amperage", TooltipHelper.ampText(Amperes)) };
+            StatCollector.translateToLocalFormatted("gt.tileentity.amperage", TooltipHelper.ampText(Amperes)) };
     }
 
     @Override

@@ -13,6 +13,7 @@ import static gregtech.api.enums.HatchElement.Maintenance;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
@@ -29,6 +30,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
@@ -46,7 +48,6 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescri
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTStructureUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
@@ -106,23 +107,6 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
         {"                     ","         HHH         ","                     ","                     ","                     ","                     ","                     ","                     "}
     };
 
-    /*
-     * A -> ofBlock...(gt.blockcasingsTT, 4, ...);
-     * B -> ofBlock...(gt.blockcasingsTT, 7, ...);
-     * C -> ofBlock...(gt.blockcasingsTT, 9, ...);
-     * D -> ofBlock...(gtplusplus.blockcasings.4, 4, ...);
-     * E -> ofBlock...(tile.quantumGlass, 0, ...);
-     */
-
-    /*
-     * Blocks:
-     * A -> ofBlock...(gt.blockcasingsTT, 4, ...);
-     * B -> ofBlock...(gt.blockcasingsTT, 7, ...);
-     * C -> ofBlock...(gt.blockcasingsTT, 9, ...);
-     * D -> ofBlock...(gtplusplus.blockcasings.4, 4, ...);
-     * E -> ofBlock...(tile.quantumGlass, 0, ...);
-     */
-
     private final String[][] shapeMiddle = new String[][]{
         {"                     ","         HHH         ","                     ","                     ","                     ","                     ","                     ","                     "},
         {"         AAA         ","       AADDDAA       ","         AAA         ","                     ","                     ","                     ","                     ","                     "},
@@ -146,15 +130,6 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
         {"         AAA         ","       AADDDAA       ","         AAA         ","                     ","                     ","                     ","                     ","                     "},
         {"                     ","         HHH         ","                     ","                     ","                     ","                     ","                     ","                     "}
     };
-
-    /*
-     * Blocks:
-     * A -> ofBlock...(gt.blockcasingsTT, 4, ...);
-     * B -> ofBlock...(gt.blockcasingsTT, 7, ...);
-     * C -> ofBlock...(gt.blockcasingsTT, 9, ...);
-     * D -> ofBlock...(gtplusplus.blockcasings.4, 4, ...);
-     * E -> ofBlock...(tile.quantumGlass, 0, ...);
-     */
 
     private final String[][] shapeEnd = new String[][]{
         {"                     ","         HHH         ","                     "},
@@ -181,15 +156,6 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
     };
     // spotless:on
 
-    /*
-     * A -> ofBlock...(gt.blockcasingsTT, 4, ...);
-     * B -> ofBlock...(gt.blockcasingsTT, 7, ...);
-     * C -> ofBlock...(gt.blockcasingsTT, 9, ...);
-     * D -> ofBlock...(gtplusplus.blockcasings.4, 4, ...);
-     * E -> ofBlock...(tile.quantumGlass, 0, ...);
-     * H -> Hatches;
-     * M -> Maintenance Hatch;
-     */
     @Override
     public IStructureDefinition<GT_TileEntity_MiracleTop> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
@@ -442,27 +408,15 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
         int colorIndex, boolean aActive, boolean redstoneLevel) {
-        if (side == aFacing) {
-
-            if (aActive) {
-                return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
-                    .addIcon(OVERLAY_DTPF_ON)
-                    .extFacing()
-                    .build(),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FUSION1_GLOW)
-                        .extFacing()
-                        .glow()
-                        .build() };
-            }
-
-            return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
-                .addIcon(OVERLAY_DTPF_OFF)
-                .extFacing()
-                .build() };
-        }
-
-        return new ITexture[] { casingTexturePages[0][12] };
+        return TSTControllerTextures.getTexture(
+            side,
+            aFacing,
+            aActive,
+            casingTexturePages[0][12],
+            OVERLAY_DTPF_OFF,
+            OVERLAY_DTPF_OFF_GLOW,
+            OVERLAY_DTPF_ON,
+            OVERLAY_FUSION1_GLOW);
     }
 
     // endregion

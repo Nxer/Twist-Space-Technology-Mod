@@ -132,6 +132,7 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
 
     public static int getCardiganTier(ItemStack itemStack) {
         NBTTagCompound tag = itemStack.getTagCompound();
+        if (tag == null) return 0;
         int tier = tag.getInteger("cardiganTier");
         return tier >= 0 && tier < TIERED_MAX_CHARGE.length ? tier : 0;
     }

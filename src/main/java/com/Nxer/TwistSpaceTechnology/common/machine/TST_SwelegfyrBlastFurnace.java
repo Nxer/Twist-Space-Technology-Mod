@@ -5,7 +5,6 @@ import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.Simpl
 import static com.Nxer.TwistSpaceTechnology.util.RecipeMathUtils.numericalApproximation;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Kelvin;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.MoreInfoCheckingInScanner;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.getBlueprintWithDot;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textColon;
@@ -51,6 +50,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_SwelegfyrBlastFurnace;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
@@ -67,11 +67,10 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.HeatingCoilLevel;
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.Mods;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
@@ -84,7 +83,6 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.structure.error.StructureErrorRegistry;
 import gregtech.api.util.GTRecipe;
@@ -224,7 +222,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 .addElement('-', isAir())
                 .addElement('A', chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier))
                 .addElement('a', ofChain(chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier), isAir()))
-                .addElement('B', ofBlock(GameRegistry.findBlock(Mods.IndustrialCraft2.ID, "blockFenceIron"), 0))
+                .addElement('B', ofBlock(ItemList.FenceIron.getBlock(), 0))
                 .addElement('C', ofBlock(compactFusionCoil, 0))
                 .addElement('D', ofBlock(GregTechAPI.sBlockCasings1, 11))
                 .addElement(
@@ -1169,24 +1167,15 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean active, boolean redstoneLevel) {
-        ITexture base = casingTexturePages[115][MetaBlockCasing01.getTextureIndexInPage(15)];
-        if (side == facing) {
-            if (active) return new ITexture[] { base, TextureFactory.builder()
-                .addIcon(TexturesGtBlock.oMCAAdvancedEBF)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(TexturesGtBlock.oMCAAdvancedEBFActive)
-                    .extFacing()
-                    .glow()
-                    .build() };
-            return new ITexture[] { base, TextureFactory.builder()
-                .addIcon(TexturesGtBlock.oMCAAdvancedEBF)
-                .extFacing()
-                .glow()
-                .build() };
-        }
-        return new ITexture[] { base };
+        return TSTControllerTextures.getTexture(
+            side,
+            facing,
+            active,
+            casingTexturePages[115][MetaBlockCasing01.getTextureIndexInPage(15)],
+            TexturesGtBlock.oMCAAdvancedEBF,
+            TexturesGtBlock.oMCAAdvancedEBFGlow,
+            TexturesGtBlock.oMCAAdvancedEBFActive,
+            TexturesGtBlock.oMCAAdvancedEBFActiveGlow);
     }
 
     // endregion
@@ -1242,8 +1231,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             // # {\YELLOW}Do not open the cabin door while the machine is running!
             // #zh_CN {\YELLOW}禁止在机器运行时打开舱门!
             .addInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.09"))
-            .addSeparator()
-            .addInfo(MoreInfoCheckingInScanner)
             .addStructureInfo(Text_SeparatingLine)
             // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.01
             // # {\GOLD}Heat {\WHITE}Upper Limit:
@@ -1270,8 +1257,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式: {\AQUA}当前炉温 {\WHITE}/ {\GOLD}5 {\WHITE}L/s
             .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.06"))
             // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.07
-            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating: {\GOLD}10x {\WHITE}passive cost + dynamic surcharge per 1 s cycle (heat, voltage, remaining gap)
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式: 每1秒循环消耗{\GOLD}10倍{\WHITE}被动基础量, 另加随炉温, 电压和剩余温差变化的附加量
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating Mode: {\AQUA}Current Heat {\WHITE}x {\AQUA}Max Heat {\WHITE}/ {\AQUA}Input Voltage Tier {\WHITE}^ {\GOLD}3 {\WHITE}(affected by remaining heat)
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式: {\AQUA}当前炉温 {\WHITE}x {\AQUA}最高炉温 {\WHITE}/ {\AQUA}输入电压等级 {\WHITE}^ {\GOLD}3 {\WHITE}(受剩余温差影响)
             .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.07"))
             // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.08
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Thermal Retention Mode: {\AQUA}Current Heat {\WHITE}/ {\GOLD}20 {\WHITE}L/s
@@ -1286,20 +1273,20 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式: {\GOLD}5 {\WHITE}K/s [{\RED}升温{\WHITE}]
             .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.10"))
             // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.11
-            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating Mode: ({\AQUA}Max Heat {\WHITE}- {\AQUA}Current Heat{\WHITE}) x {\GOLD}10%-45% {\WHITE}per 1 s cycle (200 K floor, capped at max) [{\RED}Increasing{\WHITE}]
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式: 每1秒补足({\AQUA}最高炉温 {\WHITE}- {\AQUA}当前炉温{\WHITE}) x {\GOLD}10%-45% {\WHITE}(下限200K, 以最高炉温封顶) [{\RED}升温{\WHITE}]
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating Mode: (Max Heat - Current Heat) x 20% K/s (affected by input voltage) [{\RED}Increasing{\WHITE}]
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式: (最高炉温 - 当前炉温) x 20% K/s (受输入电压影响) [{\RED}升温{\WHITE}]
             .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.11"))
             // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.12
-            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Normal Mode: gap to {\AQUA}Coil Heat {\WHITE}x {\GOLD}10% {\WHITE}per 10 s (min. 1 K) [{\BLUE}Approaching{\WHITE}]
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式: 与{\AQUA}线圈炉温{\WHITE}的温差 x {\GOLD}10% {\WHITE}/ 10秒 (至少1K) [{\BLUE}趋近{\WHITE}]
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Normal Mode: {\AQUA}Current Heat {\WHITE}x {\GOLD}10% {\WHITE}K/s [{\BLUE}Decreasing{\WHITE}] (Minimum: Coil Heat)
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式: {\AQUA}当前炉温 {\WHITE}x {\GOLD}10% {\WHITE}K/s [{\BLUE}降温{\WHITE}], 不低于线圈炉温
             .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.12"))
             // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.13
-            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Shutdown (no retention): gap to {\AQUA}Coil Heat {\WHITE}x {\GOLD}20% {\WHITE}per 10 s (min. 1 K) [{\BLUE}Approaching{\WHITE}]
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}关机未保温: 与{\AQUA}线圈炉温{\WHITE}的温差 x {\GOLD}20% {\WHITE}/ 10秒 (至少1K) [{\BLUE}趋近{\WHITE}]
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Shutdown: {\AQUA}Current Heat {\WHITE}x {\GOLD}20% {\WHITE}K/s [{\BLUE}Decreasing{\WHITE}] (Minimum: Coil Heat)
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}关机状态: {\AQUA}当前炉温 {\WHITE}x {\GOLD}20% {\WHITE}K/s [{\BLUE}降温{\WHITE}], 不低于线圈炉温
             .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.13"))
             // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.14
-            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Recipe Change: Tier I resets excess heat; Tier II retains {\GOLD}25%-75% {\WHITE}(by voltage tier difference)
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}切换配方: 一级结构清除额外炉温; 二级结构保留{\GOLD}25%-75% {\WHITE}(按新旧配方电压等级差计算)
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Recipe Change: Tier I {\GOLD}0%{\WHITE}, Tier II {\GOLD}25%-75% {\WHITE}(scaled by recipe voltage) [{\BLUE}Decreasing{\WHITE}]
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}切换配方: 一级结构 {\GOLD}0%{\WHITE}, 二级结构 {\GOLD}25%-75% {\WHITE}(按配方电压折算) [{\BLUE}降温{\WHITE}]
             .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.14"))
             .addStructureInfo(Text_SeparatingLine)
             // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.15

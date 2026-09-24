@@ -21,8 +21,8 @@ import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import gregtech.api.enums.VoidingMode;
 import gregtech.api.interfaces.IOutputBus;
+import gregtech.api.interfaces.IOutputHatch;
 import gregtech.api.interfaces.ITexture;
-import gregtech.api.interfaces.fluid.IFluidStore;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.tileentity.IVoidable;
 import gregtech.api.logic.ProcessingLogic;
@@ -368,18 +368,18 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
     @Override
     public void setVoidingMode(VoidingMode mode) {}
 
-    // @Override
-    // public List<IOutputHatch> getOutputHatches() {
-    // if (mainMachine instanceof IVoidable iVoidable) {
-    // iVoidable.getOutputHatches();
-    // }
-    // return Collections.emptyList();
-    // }
+    @Override
+    public List<IOutputHatch> getOutputHatches() {
+        if (mainMachine instanceof IVoidable m) {
+            return m.getOutputHatches();
+        }
+        return Collections.emptyList();
+    }
 
     @Override
-    public List<? extends IFluidStore> getFluidOutputSlots(FluidStack[] toOutput) {
+    public List<IOutputHatch> getOutputHatches(FluidStack[] toOutput) {
         if (mainMachine instanceof IVoidable m) {
-            return m.getFluidOutputSlots(toOutput);
+            return m.getOutputHatches(toOutput);
         }
         return Collections.emptyList();
     }
@@ -401,9 +401,9 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
     }
 
     @Override
-    public boolean canDumpFluidToME() {
+    public boolean canDumpFluidToME(List<GTUtility.FluidId> outputs) {
         if (mainMachine instanceof IVoidable m) {
-            return m.canDumpFluidToME();
+            return m.canDumpFluidToME(outputs);
         }
         return false;
     }

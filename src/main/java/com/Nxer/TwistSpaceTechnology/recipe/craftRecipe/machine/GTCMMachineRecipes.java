@@ -215,7 +215,6 @@ import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipeConstants;
 import gregtech.api.util.GTUtility;
-import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
@@ -1291,7 +1290,7 @@ public class GTCMMachineRecipes {
 
             .eut(RECIPE_IV)
             .duration((int) (20 * 37.5))
-            .addTo(GTPPRecipeMaps.alloyBlastSmelterRecipes);
+            .addTo(RecipeMaps.alloyBlastSmelterRecipes);
 
         GTValues.RA.stdBuilder()
             .itemInputs(
@@ -1307,7 +1306,7 @@ public class GTCMMachineRecipes {
 
             .eut(RECIPE_IV)
             .duration((int) (20 * 37.5))
-            .addTo(GTPPRecipeMaps.alloyBlastSmelterRecipes);
+            .addTo(RecipeMaps.alloyBlastSmelterRecipes);
 
         GTValues.RA.stdBuilder()
             .itemInputs(
@@ -1323,7 +1322,7 @@ public class GTCMMachineRecipes {
 
             .eut(RECIPE_IV)
             .duration((int) (20 * 37.5))
-            .addTo(GTPPRecipeMaps.alloyBlastSmelterRecipes);
+            .addTo(RecipeMaps.alloyBlastSmelterRecipes);
 
         GTValues.RA.stdBuilder()
             .itemInputs(
@@ -1339,7 +1338,7 @@ public class GTCMMachineRecipes {
 
             .eut(RECIPE_IV)
             .duration(20 * 75)
-            .addTo(GTPPRecipeMaps.alloyBlastSmelterRecipes);
+            .addTo(RecipeMaps.alloyBlastSmelterRecipes);
 
         GTValues.RA.stdBuilder()
             .itemInputs(
@@ -1356,7 +1355,7 @@ public class GTCMMachineRecipes {
 
             .eut(RECIPE_IV)
             .duration(20 * 75)
-            .addTo(GTPPRecipeMaps.alloyBlastSmelterRecipes);
+            .addTo(RecipeMaps.alloyBlastSmelterRecipes);
 
         // endregion
 

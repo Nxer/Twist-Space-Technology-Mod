@@ -86,7 +86,7 @@ public final class CropsNHFarm {
     }
 
     public static int getFertilizerCost(ItemStack seed) {
-        ISeedData seedData = CropsNHUtils.getAnalyzedSeedData(seed);
+        ISeedData seedData = CropsNHUtils.getSeedData(seed, false, true);
         ICropCard crop = seedData == null ? null : seedData.getCrop();
         if (crop == null) return 20;
         return Math.max(
@@ -166,7 +166,7 @@ public final class CropsNHFarm {
     }
 
     private boolean createCrop(ItemStack seedStack, int simulatedSeedStat) {
-        ISeedData seed = CropsNHUtils.getAnalyzedSeedData(seedStack);
+        ISeedData seed = CropsNHUtils.getSeedData(seedStack, false, true);
         if (seed == null) return false;
 
         int growth = simulatedSeedStat > 0 ? simulatedSeedStat

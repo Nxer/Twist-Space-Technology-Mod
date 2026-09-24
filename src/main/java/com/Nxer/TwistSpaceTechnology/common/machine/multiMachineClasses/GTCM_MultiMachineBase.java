@@ -7,14 +7,9 @@ import static net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.function.LongPredicate;
 
 import javax.annotation.Nonnull;
 
@@ -36,8 +31,11 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.TSTMEOutputTransaction;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.ITSTSegmentedFluidInput;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.ITSTSegmentedItemInput;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellHelper;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellHelper.SegmentedInputs;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
@@ -48,6 +46,8 @@ import com.github.bsideup.jabel.Desugar;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 
+import appeng.api.storage.data.IAEFluidStack;
+import appeng.api.storage.data.IAEItemStack;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
@@ -57,7 +57,6 @@ import gregtech.api.metatileentity.implementations.MTEHatchDynamo;
 import gregtech.api.metatileentity.implementations.MTEHatchInput;
 import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
 import gregtech.api.metatileentity.implementations.MTEHatchMuffler;
-import gregtech.api.metatileentity.implementations.MTEHatchMultiInput;
 import gregtech.api.metatileentity.implementations.MTEHatchOutput;
 import gregtech.api.metatileentity.implementations.MTEHatchOutputBus;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -477,27 +476,15 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
 
     private boolean canFitMEItemOutputs(List<ItemStackLong> outputs) {
         if (outputs == null || outputs.isEmpty()) return true;
-        List<MTEHatchOutputBusME> meBusses = getMEOutputBusses();
-        Map<MTEHatchOutputBusME, Long> reserved = new HashMap<>();
+        List<TSTMEOutputTransaction<GTUtility.ItemId, ItemStack, IAEItemStack>> transactions = new ArrayList<>();
+        for (MTEHatchOutputBusME bus : getMEOutputBusses()) {
+            transactions.add(TSTMEOutputTransaction.forItems(bus, true, protectsExcessItem()));
+        }
         for (ItemStackLong output : outputs) {
             if (output.itemStack() == null || output.stackSize() <= 0) continue;
             long remaining = output.stackSize();
-            for (MTEHatchOutputBusME meBus : meBusses) {
-                var provider = meBus.getProvider();
-                long room = getLongCacheRoom(provider.getCachedAmount(), reserved.getOrDefault(meBus, 0L));
-                if (room <= 0) continue;
-                long accepted = Math.min(remaining, room);
-                if (provider.shouldCheck()) {
-                    accepted = findLargestAcceptedAmount(
-                        accepted,
-                        value -> provider.canStore(output.itemStack(), value));
-                } else if (!provider.canAcceptAnyInput() || !provider.getFilter()
-                    .isAllowed(output.itemStack())) {
-                        continue;
-                    }
-                if (accepted <= 0) continue;
-                reserved.merge(meBus, accepted, Long::sum);
-                remaining -= accepted;
+            for (TSTMEOutputTransaction<GTUtility.ItemId, ItemStack, IAEItemStack> transaction : transactions) {
+                remaining -= transaction.reserve(output.itemStack(), remaining);
                 if (remaining <= 0) break;
             }
             if (remaining > 0) return false;
@@ -507,27 +494,15 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
 
     private boolean canFitMEFluidOutputs(List<FluidStackLong> outputs) {
         if (outputs == null || outputs.isEmpty()) return true;
-        List<MTEHatchOutputME> meHatches = getMEOutputHatches();
-        Map<MTEHatchOutputME, Long> reserved = new HashMap<>();
+        List<TSTMEOutputTransaction<GTUtility.FluidId, FluidStack, IAEFluidStack>> transactions = new ArrayList<>();
+        for (MTEHatchOutputME hatch : getMEOutputHatches()) {
+            transactions.add(TSTMEOutputTransaction.forFluids(hatch, true, protectsExcessFluid()));
+        }
         for (FluidStackLong output : outputs) {
             if (output.fluidStack() == null || output.amount() <= 0) continue;
             long remaining = output.amount();
-            for (MTEHatchOutputME meHatch : meHatches) {
-                var provider = meHatch.getProvider();
-                long room = getLongCacheRoom(provider.getCachedAmount(), reserved.getOrDefault(meHatch, 0L));
-                if (room <= 0) continue;
-                long accepted = Math.min(remaining, room);
-                if (provider.shouldCheck()) {
-                    accepted = findLargestAcceptedAmount(
-                        accepted,
-                        value -> provider.canStore(output.fluidStack(), value));
-                } else if (!provider.canAcceptAnyInput() || !provider.getFilter()
-                    .isAllowed(output.fluidStack())) {
-                        continue;
-                    }
-                if (accepted <= 0) continue;
-                reserved.merge(meHatch, accepted, Long::sum);
-                remaining -= accepted;
+            for (TSTMEOutputTransaction<GTUtility.FluidId, FluidStack, IAEFluidStack> transaction : transactions) {
+                remaining -= transaction.reserve(output.fluidStack(), remaining);
                 if (remaining <= 0) break;
             }
             if (remaining > 0) return false;
@@ -634,32 +609,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
             }
         }
 
-        Map<GTUtility.ItemId, ItemStack> inputsFromME = new HashMap<>();
-        for (MTEHatchInputBus tHatch : GTUtility.filterValidMTEs(mInputBusses)) {
-            tHatch.mRecipeMap = getRecipeMap();
-            IGregTechTileEntity tileEntity = tHatch.getBaseMetaTileEntity();
-            boolean isMEBus = tHatch instanceof MTEHatchInputBusME;
-            for (int i = tileEntity.getSizeInventory() - 1; i >= 0; i--) {
-                ItemStack itemStack = tileEntity.getStackInSlot(i);
-                if (itemStack != null) {
-                    if (isMEBus) {
-                        // Prevent the same item from different ME buses from being recognized
-                        inputsFromME.put(GTUtility.ItemId.createNoCopy(itemStack), itemStack);
-                    } else {
-                        rList.add(itemStack);
-                    }
-                }
-            }
-        }
-
-        if (getStackInSlot(1) != null && getStackInSlot(1).getUnlocalizedName()
-            .startsWith("gt.integrated_circuit")) {
-            rList.add(getStackInSlot(1));
-        }
-        if (!inputsFromME.isEmpty()) {
-            rList.addAll(inputsFromME.values());
-        }
-        appendSegmentedItemInputs(rList, Optional.empty());
+        rList.addAll(getStoredInputsForColor(Optional.empty()));
         return rList;
     }
 
@@ -669,34 +619,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
      * @return ArrayList of all fluid stacks, contains fluid stacks in Crafting Input Hatch.
      */
     public ArrayList<FluidStack> getStoredFluidsWithDualInput() {
-        ArrayList<FluidStack> rList = new ArrayList<>();
-        Map<Fluid, FluidStack> inputsFromME = new HashMap<>();
-        for (MTEHatchInput tHatch : GTUtility.filterValidMTEs(mInputHatches)) {
-            setHatchRecipeMap(tHatch);
-            if (tHatch instanceof MTEHatchMultiInput multiInputHatch) {
-                for (FluidStack tFluid : multiInputHatch.getStoredFluid()) {
-                    if (tFluid != null) {
-                        rList.add(tFluid);
-                    }
-                }
-            } else if (tHatch instanceof MTEHatchInputME meHatch) {
-                for (FluidStack fluidStack : meHatch.getStoredFluids()) {
-                    if (fluidStack != null) {
-                        // Prevent the same fluid from different ME hatches from being recognized
-                        inputsFromME.put(fluidStack.getFluid(), fluidStack);
-                    }
-                }
-            } else {
-                if (tHatch.getFillableStack() != null) {
-                    rList.add(tHatch.getFillableStack());
-                }
-            }
-        }
-
-        if (!inputsFromME.isEmpty()) {
-            rList.addAll(inputsFromME.values());
-        }
-        appendSegmentedFluidInputs(rList, Optional.empty());
+        ArrayList<FluidStack> rList = getStoredFluidsForColor(Optional.empty());
 
         // get all fluids from Dual input
         if (supportsCraftingMEBuffer()) {
@@ -722,40 +645,74 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         return rList;
     }
 
-    // GT keeps one stack per ME type; TST machines add the remaining int-sized segments back.
+    // Restore TST segments once per source and type; separate storage cells remain independent.
     private void appendSegmentedItemInputs(List<ItemStack> inputs, Optional<Byte> color) {
-        Set<ItemStack> includedSegments = null;
+        SegmentedInputs<GTUtility.ItemId, ItemStack> segmentedInputs = null;
         for (MTEHatchInputBus bus : GTUtility.filterValidMTEs(mInputBusses)) {
             if (!(bus instanceof ITSTSegmentedItemInput segmentedInput)) continue;
             byte busColor = bus.getColor();
             if (color.isPresent() && busColor != -1 && busColor != color.get()) continue;
-            if (includedSegments == null) {
-                includedSegments = Collections.newSetFromMap(new IdentityHashMap<>());
-                includedSegments.addAll(inputs);
-            }
-            for (ItemStack segment : segmentedInput.getTSTStoredItemSegments()) {
-                if (segment != null && !includedSegments.remove(segment)) inputs.add(segment);
+            if (segmentedInputs == null) segmentedInputs = new SegmentedInputs<>(GTUtility.ItemId::createNoCopy);
+            segmentedInputs.add(segmentedInput.getTSTInputSource(), segmentedInput.getTSTStoredItemSegments());
+        }
+        if (segmentedInputs == null || segmentedInputs.isEmpty()) return;
+        for (MTEHatchInputBus bus : GTUtility.filterValidMTEs(mInputBusses)) {
+            if (!(bus instanceof MTEHatchInputBusME meBus) || bus instanceof ITSTSegmentedItemInput) continue;
+            byte busColor = bus.getColor();
+            if (color.isPresent() && busColor != -1 && busColor != color.get()) continue;
+            Object network = TST_AEStorageCellHelper.getNetwork(meBus.getProxy());
+            // Only the virtual stocking slots share ME resources; circuit and manual slots are physical.
+            for (int i = 0; i < MTEHatchInputBusME.SLOT_COUNT; i++) {
+                segmentedInputs.removeOverlap(network, meBus.getStackInSlot(i));
             }
         }
+        segmentedInputs.appendTo(inputs);
     }
 
     private void appendSegmentedFluidInputs(List<FluidStack> inputs, Optional<Byte> color) {
-        Set<FluidStack> includedSegments = null;
+        SegmentedInputs<Fluid, FluidStack> segmentedInputs = null;
         for (MTEHatchInput hatch : GTUtility.filterValidMTEs(mInputHatches)) {
             if (!(hatch instanceof ITSTSegmentedFluidInput segmentedInput)) continue;
             byte hatchColor = hatch.getColor();
             if (color.isPresent() && hatchColor != -1 && hatchColor != color.get()) continue;
-            if (includedSegments == null) {
-                includedSegments = Collections.newSetFromMap(new IdentityHashMap<>());
-                includedSegments.addAll(inputs);
-            }
-            for (FluidStack segment : segmentedInput.getTSTStoredFluidSegments()) {
-                if (segment != null && !includedSegments.remove(segment)) inputs.add(segment);
+            if (segmentedInputs == null) segmentedInputs = new SegmentedInputs<>(FluidStack::getFluid);
+            segmentedInputs.add(segmentedInput.getTSTInputSource(), segmentedInput.getTSTStoredFluidSegments());
+        }
+        if (segmentedInputs == null || segmentedInputs.isEmpty()) return;
+        for (MTEHatchInput hatch : GTUtility.filterValidMTEs(mInputHatches)) {
+            if (!(hatch instanceof MTEHatchInputME meHatch) || hatch instanceof ITSTSegmentedFluidInput) continue;
+            byte hatchColor = hatch.getColor();
+            if (color.isPresent() && hatchColor != -1 && hatchColor != color.get()) continue;
+            Object network = TST_AEStorageCellHelper.getNetwork(meHatch.getProxy());
+            for (FluidStack fluid : meHatch.getStoredFluids()) {
+                segmentedInputs.removeOverlap(network, fluid);
             }
         }
+        segmentedInputs.appendTo(inputs);
     }
 
     // region Overrides
+    @Override
+    protected void runMachine(IGregTechTileEntity base, long tick) {
+        // Added by Astra: defensive capacity recheck before completion keeps queued outputs pending when ME is full.
+        if (isMEOutputEnabled() && mMaxProgresstime > 0 && mProgresstime >= mMaxProgresstime - 1) {
+            CheckRecipeResult result = checkMEOutputCapacityBeforeCompletion();
+            if (!result.wasSuccessful()) {
+                setCheckRecipeResult(result);
+                return;
+            }
+            if (checkRecipeResult == CheckRecipeResultRegistry.ITEM_OUTPUT_FULL
+                || checkRecipeResult == CheckRecipeResultRegistry.FLUID_OUTPUT_FULL) {
+                setCheckRecipeResult(CheckRecipeResultRegistry.SUCCESSFUL);
+            }
+        }
+        super.runMachine(base, tick);
+    }
+
+    protected CheckRecipeResult checkMEOutputCapacityBeforeCompletion() {
+        return checkMEOutputCapacity(meOutputQueue, meFluidOutputQueue);
+    }
+
     @Override
     protected void outputAfterRecipe() {
         if (isMEOutputEnabled()) {
@@ -783,22 +740,9 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         if (item == null || amount <= 0) return amount;
         long remaining = amount;
         for (MTEHatchOutputBusME meBus : getMEOutputBusses()) {
-            var provider = meBus.getProvider();
-            long transfer = Math.min(remaining, getLongCacheRoom(provider.getCachedAmount(), 0));
-            if (transfer <= 0) continue;
-            if (provider.shouldCheck()) {
-                transfer = findLargestAcceptedAmount(transfer, value -> provider.canStore(item, value));
-            } else if (!provider.canAcceptAnyInput() || !provider.getFilter()
-                .isAllowed(item)) {
-                    continue;
-                }
-            if (transfer <= 0) continue;
-            provider.storeToCache(
-                provider.getFilter()
-                    .fromNative(GTUtility.copyAmountUnsafe(1, item))
-                    .setStackSize(transfer));
-            meBus.markDirty();
-            remaining -= transfer;
+            var transaction = TSTMEOutputTransaction.forItems(meBus, false, protectsExcessItem());
+            remaining -= transaction.reserve(item, remaining);
+            transaction.commit();
             if (remaining <= 0) break;
         }
         return remaining;
@@ -808,24 +752,9 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         if (fluid == null || amount <= 0) return amount;
         long remaining = amount;
         for (MTEHatchOutputME meHatch : getMEOutputHatches()) {
-            var provider = meHatch.getProvider();
-            long transfer = Math.min(remaining, getLongCacheRoom(provider.getCachedAmount(), 0));
-            if (transfer <= 0) continue;
-            if (provider.shouldCheck()) {
-                transfer = findLargestAcceptedAmount(transfer, value -> provider.canStore(fluid, value));
-            } else if (!provider.canAcceptAnyInput() || !provider.getFilter()
-                .isAllowed(fluid)) {
-                    continue;
-                }
-            if (transfer <= 0) continue;
-            FluidStack template = fluid.copy();
-            template.amount = 1;
-            provider.storeToCache(
-                provider.getFilter()
-                    .fromNative(template)
-                    .setStackSize(transfer));
-            meHatch.markDirty();
-            remaining -= transfer;
+            var transaction = TSTMEOutputTransaction.forFluids(meHatch, false, protectsExcessFluid());
+            remaining -= transaction.reserve(fluid, remaining);
+            transaction.commit();
             if (remaining <= 0) break;
         }
         return remaining;
@@ -850,24 +779,6 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         }
         result.sort(Comparator.comparingInt(hatch -> hatch.isFluidLocked() ? 0 : 1));
         return result;
-    }
-
-    private static long getLongCacheRoom(long cached, long reserved) {
-        if (cached < 0 || reserved < 0 || cached >= Long.MAX_VALUE - reserved) return 0;
-        return Long.MAX_VALUE - cached - reserved;
-    }
-
-    private static long findLargestAcceptedAmount(long maximum, LongPredicate canStore) {
-        if (maximum <= 0) return 0;
-        if (canStore.test(maximum)) return maximum;
-        long low = 0;
-        long high = maximum;
-        while (low < high) {
-            long middle = low + ((high - low) >>> 1) + 1;
-            if (canStore.test(middle)) low = middle;
-            else high = middle - 1;
-        }
-        return low;
     }
 
     @Override
@@ -967,6 +878,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         if (aMetaTileEntity instanceof MTEHatchInput) {
             ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
             ((MTEHatchInput) aMetaTileEntity).mRecipeMap = getRecipeMap();
+            addIfSmartInput(aMetaTileEntity);
             return mInputHatches.add((MTEHatchInput) aMetaTileEntity);
         } else if (aMetaTileEntity instanceof MTEHatchMuffler) {
             ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);

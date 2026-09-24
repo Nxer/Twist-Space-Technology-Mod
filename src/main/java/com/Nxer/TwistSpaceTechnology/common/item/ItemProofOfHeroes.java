@@ -35,6 +35,11 @@ public class ItemProofOfHeroes extends Item {
     }
 
     @Override
+    public String getUnlocalizedName(ItemStack stack) {
+        return getUnlocalizedName();
+    }
+
+    @Override
     public EnumRarity getRarity(ItemStack p_77613_1_) {
         return this.rarity;
     }
