@@ -62,7 +62,6 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.structure.error.StructureError;
-import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OutputHatchWrapper;
 import gregtech.common.tileentities.machines.IRecipeProcessingAwareHatch;

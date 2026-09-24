@@ -393,21 +393,19 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch
             int index = mode.ordinal();
             int x = 101 + index % 2 * 20;
             int y = 26 + index / 2 * 20;
-            builder.widget(
-                new ButtonWidget()
-                    .setOnClick((clickData, widget) -> {
-                        selectedTreeOutputs[index] = !selectedTreeOutputs[index];
-                        onConfigurationChanged();
-                    })
-                    .setBackground(() -> getTreeButtonBackground(mode, selectedTreeOutputs[index]))
-                    .attachSyncer(
-                        new FakeSyncWidget.BooleanSyncer(
-                            () -> selectedTreeOutputs[index],
-                            value -> selectedTreeOutputs[index] = value),
-                        builder)
-                    .setPos(x, y)
-                    .setSize(18, 18)
-                    .setEnabled(widget -> machineMode == 0));
+            builder.widget(new ButtonWidget().setOnClick((clickData, widget) -> {
+                selectedTreeOutputs[index] = !selectedTreeOutputs[index];
+                onConfigurationChanged();
+            })
+                .setBackground(() -> getTreeButtonBackground(mode, selectedTreeOutputs[index]))
+                .attachSyncer(
+                    new FakeSyncWidget.BooleanSyncer(
+                        () -> selectedTreeOutputs[index],
+                        value -> selectedTreeOutputs[index] = value),
+                    builder)
+                .setPos(x, y)
+                .setSize(18, 18)
+                .setEnabled(widget -> machineMode == 0));
         }
     }
 

@@ -113,7 +113,7 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
             seed.stackSize = 1;
 
             // CropsNH stores different stats in NBT, so seeds of one registered crop share one selection slot.
-            ISeedData seedData = CropsNHUtils.getSeedData(seed, false, false);
+            ISeedData seedData = CropsNHUtils.getSeedData(seed, false, true);
             ICropCard cropType = seedData != null ? seedData.getCrop() : CropRegistry.instance.fromAlternateSeed(seed);
             Object typeKey = cropType != null ? cropType : TST_ItemID.create(seed);
             int statTotal = 0;
