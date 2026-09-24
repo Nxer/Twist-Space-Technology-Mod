@@ -31,6 +31,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
@@ -62,7 +63,6 @@ import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.tileentities.machines.IRecipeProcessingAwareHatch;
 import tectech.thing.casing.TTCasingsContainer;
-import tectech.thing.metaTileEntity.multi.base.render.TTRenderedExtendedFacingTexture;
 
 @SkipGenerateDescription
 public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_MicroSpaceTimeFabricatorio> {
@@ -440,11 +440,8 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean active, boolean redstoneLevel) {
-        if (side == facing) {
-            return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][12],
-                new TTRenderedExtendedFacingTexture(active ? ActiveFace : InactiveFace) };
-        }
-        return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][12] };
+        return TSTControllerTextures
+            .getTexture(side, facing, active, Textures.BlockIcons.casingTexturePages[8][12], InactiveFace, ActiveFace);
     }
 
     // endregion

@@ -51,6 +51,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_SwelegfyrBlastFurnace;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
@@ -84,7 +85,6 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.structure.error.StructureErrorRegistry;
 import gregtech.api.util.GTRecipe;
@@ -1169,24 +1169,15 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean active, boolean redstoneLevel) {
-        ITexture base = casingTexturePages[115][MetaBlockCasing01.getTextureIndexInPage(15)];
-        if (side == facing) {
-            if (active) return new ITexture[] { base, TextureFactory.builder()
-                .addIcon(TexturesGtBlock.oMCAAdvancedEBF)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(TexturesGtBlock.oMCAAdvancedEBFActive)
-                    .extFacing()
-                    .glow()
-                    .build() };
-            return new ITexture[] { base, TextureFactory.builder()
-                .addIcon(TexturesGtBlock.oMCAAdvancedEBF)
-                .extFacing()
-                .glow()
-                .build() };
-        }
-        return new ITexture[] { base };
+        return TSTControllerTextures.getTexture(
+            side,
+            facing,
+            active,
+            casingTexturePages[115][MetaBlockCasing01.getTextureIndexInPage(15)],
+            TexturesGtBlock.oMCAAdvancedEBF,
+            TexturesGtBlock.oMCAAdvancedEBFGlow,
+            TexturesGtBlock.oMCAAdvancedEBFActive,
+            TexturesGtBlock.oMCAAdvancedEBFActiveGlow);
     }
 
     // endregion

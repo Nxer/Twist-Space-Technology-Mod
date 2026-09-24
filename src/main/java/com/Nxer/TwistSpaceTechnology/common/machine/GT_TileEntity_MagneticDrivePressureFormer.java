@@ -37,6 +37,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
@@ -58,7 +59,6 @@ import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.structure.error.StructureErrors;
 import gregtech.api.util.HatchElementBuilder;
@@ -339,27 +339,15 @@ public class GT_TileEntity_MagneticDrivePressureFormer
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean aActive, boolean aRedstone) {
-        if (side == facing) {
-            if (aActive) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(62), TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(62), TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-        }
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(62) };
+        return TSTControllerTextures.getTexture(
+            side,
+            facing,
+            aActive,
+            Textures.BlockIcons.getCasingTextureForId(62),
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE,
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW,
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE,
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW);
     }
 
     // endregion

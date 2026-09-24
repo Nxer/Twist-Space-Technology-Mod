@@ -397,6 +397,11 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
         return TexturesGtBlock.oMCACokeOvenActiveGlow;
     }
 
+    @Override
+    protected IIconContainer getInactiveGlowOverlay() {
+        return TexturesGtBlock.oMCACokeOvenGlow;
+    }
+
     // endregion
 
     // region Tooltip

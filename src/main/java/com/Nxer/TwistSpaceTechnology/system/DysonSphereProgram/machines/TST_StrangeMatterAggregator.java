@@ -39,6 +39,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults;
 import com.Nxer.TwistSpaceTechnology.common.misc.MachineShutDownReasons.SimpleShutDownReasons;
@@ -100,7 +101,6 @@ import gregtech.common.tileentities.machines.MTEHatchInputME;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import tectech.thing.block.BlockQuantumGlass;
-import tectech.thing.metaTileEntity.multi.base.render.TTRenderedExtendedFacingTexture;
 
 @SkipGenerateDescription
 public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllModuleBase<TST_StrangeMatterAggregator> {
@@ -1825,11 +1825,8 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean active, boolean redstoneLevel) {
-        if (side == facing) {
-            return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][12],
-                new TTRenderedExtendedFacingTexture(active ? ActiveFace : InactiveFace) };
-        }
-        return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][12] };
+        return TSTControllerTextures
+            .getTexture(side, facing, active, Textures.BlockIcons.casingTexturePages[8][12], InactiveFace, ActiveFace);
     }
 
     // endregion

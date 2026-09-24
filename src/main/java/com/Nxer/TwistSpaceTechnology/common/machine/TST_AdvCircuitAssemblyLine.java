@@ -37,6 +37,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_CircuitImprintHatch;
@@ -65,7 +66,6 @@ import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.ErrorType;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.structure.error.StructureErrors;
@@ -333,27 +333,15 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int aColorIndex, boolean aActive, boolean aRedstone) {
-        if (side == facing) {
-            if (aActive) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(16), TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(16), TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-        }
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(16) };
+        return TSTControllerTextures.getTexture(
+            side,
+            facing,
+            aActive,
+            Textures.BlockIcons.getCasingTextureForId(16),
+            OVERLAY_FRONT_ASSEMBLY_LINE,
+            OVERLAY_FRONT_ASSEMBLY_LINE_GLOW,
+            OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE,
+            OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW);
     }
 
     // endregion

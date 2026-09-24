@@ -65,6 +65,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
@@ -571,27 +572,15 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean active, boolean redstoneLevel) {
-        if (side == facing) {
-            if (active) return new ITexture[] { TextureFactory.of(blockMetalDevice, 9), TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-            return new ITexture[] { TextureFactory.of(blockMetalDevice, 9), TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-        }
-        return new ITexture[] { TextureFactory.of(blockMetalDevice, 9) };
+        return TSTControllerTextures.getTexture(
+            side,
+            facing,
+            active,
+            TextureFactory.of(blockMetalDevice, 9),
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE,
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW,
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE,
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW);
     }
 
     // endregion

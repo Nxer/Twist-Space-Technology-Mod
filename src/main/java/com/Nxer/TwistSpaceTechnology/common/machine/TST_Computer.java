@@ -38,6 +38,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
 import com.Nxer.TwistSpaceTechnology.system.WirelessDataNetWork.WirelessDataPacket;
@@ -75,7 +76,6 @@ import tectech.thing.metaTileEntity.multi.base.INameFunction;
 import tectech.thing.metaTileEntity.multi.base.IStatusFunction;
 import tectech.thing.metaTileEntity.multi.base.LedStatus;
 import tectech.thing.metaTileEntity.multi.base.Parameters;
-import tectech.thing.metaTileEntity.multi.base.render.TTRenderedExtendedFacingTexture;
 
 @SkipGenerateDescription
 public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalConstructable, TSTTooltipCredit {
@@ -544,11 +544,13 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean aActive, boolean aRedstone) {
-        if (side == facing) {
-            return new ITexture[] { Textures.BlockIcons.casingTexturePages[texturePage][3],
-                new TTRenderedExtendedFacingTexture(aActive ? ScreenON : ScreenOFF) };
-        }
-        return new ITexture[] { Textures.BlockIcons.casingTexturePages[texturePage][3] };
+        return TSTControllerTextures.getTexture(
+            side,
+            facing,
+            aActive,
+            Textures.BlockIcons.casingTexturePages[texturePage][3],
+            ScreenOFF,
+            ScreenON);
     }
 
     // endregion

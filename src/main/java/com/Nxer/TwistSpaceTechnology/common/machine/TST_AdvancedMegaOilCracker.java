@@ -26,6 +26,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
@@ -49,7 +50,6 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescri
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
@@ -231,27 +231,15 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
         int colorIndex, boolean aActive, boolean redstoneLevel) {
-        if (side == aFacing) {
-            if (aActive) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(49), TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_DISTILLATION_TOWER_ACTIVE)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_DISTILLATION_TOWER_ACTIVE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(49), TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_DISTILLATION_TOWER)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_DISTILLATION_TOWER_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-        }
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(49) };
+        return TSTControllerTextures.getTexture(
+            side,
+            aFacing,
+            aActive,
+            Textures.BlockIcons.getCasingTextureForId(49),
+            OVERLAY_FRONT_DISTILLATION_TOWER,
+            OVERLAY_FRONT_DISTILLATION_TOWER_GLOW,
+            OVERLAY_FRONT_DISTILLATION_TOWER_ACTIVE,
+            OVERLAY_FRONT_DISTILLATION_TOWER_ACTIVE_GLOW);
     }
 
     // endregion

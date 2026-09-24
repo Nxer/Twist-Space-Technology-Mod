@@ -66,6 +66,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.DebugMode;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.DirectedMobClonerMode;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.CropsNHFarm;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.TreeGrowthSimulatorMode;
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_EcoSphereSimulator;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
@@ -737,26 +738,15 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
         int colorIndex, boolean aActive, boolean redstoneLevel) {
-        if (side == aFacing) {
-            if (aActive) {
-                return new ITexture[] { getCasingTexture(), TextureFactory.builder()
-                    .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced)
-                    .extFacing()
-                    .build(),
-                    TextureFactory.builder()
-                        .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced_Active)
-                        .extFacing()
-                        .glow()
-                        .build() };
-            }
-
-            return new ITexture[] { getCasingTexture(), TextureFactory.builder()
-                .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced)
-                .extFacing()
-                .build() };
-        }
-
-        return new ITexture[] { getCasingTexture() };
+        return TSTControllerTextures.getTexture(
+            side,
+            aFacing,
+            aActive,
+            getCasingTexture(),
+            TexturesGtBlock.Overlay_Machine_Controller_Advanced,
+            TexturesGtBlock.Overlay_Machine_Controller_Advanced_Glow,
+            TexturesGtBlock.Overlay_Machine_Controller_Advanced_Active,
+            TexturesGtBlock.Overlay_Machine_Controller_Advanced_Active_Glow);
     }
 
     // spotless:off

@@ -27,6 +27,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
@@ -52,7 +53,6 @@ import gregtech.api.metatileentity.implementations.MTEHatchInput;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.HatchElementBuilder;
@@ -261,28 +261,15 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
         int colorIndex, boolean aActive, boolean redstoneLevel) {
-        if (side == aFacing) {
-            if (aActive) {
-                return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(TAE.GTPP_INDEX(16)),
-                    TextureFactory.builder()
-                        .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced)
-                        .extFacing()
-                        .build(),
-                    TextureFactory.builder()
-                        .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced_Active)
-                        .extFacing()
-                        .glow()
-                        .build() };
-            }
-
-            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(TAE.GTPP_INDEX(16)),
-                TextureFactory.builder()
-                    .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced)
-                    .extFacing()
-                    .build() };
-        }
-
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(TAE.GTPP_INDEX(16)) };
+        return TSTControllerTextures.getTexture(
+            side,
+            aFacing,
+            aActive,
+            Textures.BlockIcons.getCasingTextureForId(TAE.GTPP_INDEX(16)),
+            TexturesGtBlock.Overlay_Machine_Controller_Advanced,
+            TexturesGtBlock.Overlay_Machine_Controller_Advanced_Glow,
+            TexturesGtBlock.Overlay_Machine_Controller_Advanced_Active,
+            TexturesGtBlock.Overlay_Machine_Controller_Advanced_Active_Glow);
     }
 
     // endregion

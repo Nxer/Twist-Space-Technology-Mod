@@ -16,6 +16,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.google.common.collect.ImmutableList;
 
+import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.OverclockCalculator;
@@ -31,6 +33,30 @@ public abstract class TST_SteamMultiMachineBase<T extends TST_SteamMultiMachineB
     public TST_SteamMultiMachineBase(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
+
+    // region Textures
+
+    @Override
+    protected IIconContainer getActiveOverlay() {
+        return Textures.BlockIcons.OVERLAY_FRONT_STEAM_FURNACE_MULTI_ACTIVE;
+    }
+
+    @Override
+    protected IIconContainer getInactiveOverlay() {
+        return Textures.BlockIcons.OVERLAY_FRONT_STEAM_FURNACE_MULTI;
+    }
+
+    @Override
+    protected IIconContainer getActiveGlowOverlay() {
+        return Textures.BlockIcons.OVERLAY_FRONT_STEAM_FURNACE_MULTI_GLOW_ACTIVE;
+    }
+
+    @Override
+    protected IIconContainer getInactiveGlowOverlay() {
+        return Textures.BlockIcons.OVERLAY_FRONT_STEAM_FURNACE_MULTI_GLOW;
+    }
+
+    // endregion
 
     // region Processing Logic
     public static final List<Pair<Block, Integer>> STEAM_CASING_LIST = ImmutableList

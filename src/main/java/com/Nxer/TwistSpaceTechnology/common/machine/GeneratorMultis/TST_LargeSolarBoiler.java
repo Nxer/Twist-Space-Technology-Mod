@@ -39,6 +39,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper;
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_LargeSolarBoiler;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
@@ -64,7 +65,6 @@ import gregtech.api.metatileentity.implementations.MTEHatchInput;
 import gregtech.api.metatileentity.implementations.MTEHatchOutput;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.shutdown.ShutDownReason;
@@ -592,29 +592,15 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean aActive, boolean aRedstone) {
-        if (side == facing) {
-            if (aActive) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(getCasingTextureID()),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE)
-                    .extFacing()
-                    .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(getCasingTextureID()),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE)
-                    .extFacing()
-                    .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-        }
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(getCasingTextureID()) };
+        return TSTControllerTextures.getTexture(
+            side,
+            facing,
+            aActive,
+            Textures.BlockIcons.getCasingTextureForId(getCasingTextureID()),
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE,
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW,
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE,
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW);
     }
 
     private int getCasingTextureID() {

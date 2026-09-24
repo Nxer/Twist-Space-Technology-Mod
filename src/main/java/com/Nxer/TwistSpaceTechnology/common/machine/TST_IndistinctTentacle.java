@@ -17,6 +17,7 @@ import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.InputHatch;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
@@ -45,6 +46,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.WirelessEnergyMultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
@@ -73,7 +75,6 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.structure.error.StructureErrorRegistry;
 import gregtech.api.util.GTRecipe;
@@ -482,26 +483,15 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
         int colorIndex, boolean aActive, boolean redstoneLevel) {
-        if (side == aFacing) {
-            if (aActive) {
-                return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
-                    .addIcon(OVERLAY_DTPF_ON)
-                    .extFacing()
-                    .build(),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FUSION1_GLOW)
-                        .extFacing()
-                        .glow()
-                        .build() };
-            }
-
-            return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
-                .addIcon(OVERLAY_DTPF_OFF)
-                .extFacing()
-                .build() };
-        }
-
-        return new ITexture[] { casingTexturePages[0][12] };
+        return TSTControllerTextures.getTexture(
+            side,
+            aFacing,
+            aActive,
+            casingTexturePages[0][12],
+            OVERLAY_DTPF_OFF,
+            OVERLAY_DTPF_OFF_GLOW,
+            OVERLAY_DTPF_ON,
+            OVERLAY_FUSION1_GLOW);
     }
 
     // endregion

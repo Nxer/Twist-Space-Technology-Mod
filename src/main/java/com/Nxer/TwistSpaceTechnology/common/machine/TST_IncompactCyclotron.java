@@ -28,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
@@ -44,7 +45,6 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescri
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
@@ -182,18 +182,15 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean aActive, boolean aRedstone) {
-        ITexture base = casingTexturePages[115][MetaBlockCasing01.getTextureIndexInPage(11)];
-        if (side == facing) {
-            if (aActive) return new ITexture[] { base, TextureFactory.builder()
-                .addIcon(TexturesGtBlock.Overlay_MatterFab_Active_Animated)
-                .extFacing()
-                .build() };
-            return new ITexture[] { base, TextureFactory.builder()
-                .addIcon(TexturesGtBlock.Overlay_MatterFab_Animated)
-                .extFacing()
-                .build() };
-        }
-        return new ITexture[] { base };
+        return TSTControllerTextures.getTexture(
+            side,
+            facing,
+            aActive,
+            casingTexturePages[115][MetaBlockCasing01.getTextureIndexInPage(11)],
+            TexturesGtBlock.Overlay_MatterFab_Animated,
+            TexturesGtBlock.Overlay_MatterFab_Animated_Glow,
+            TexturesGtBlock.Overlay_MatterFab_Active_Animated,
+            TexturesGtBlock.Overlay_MatterFab_Active_Animated_Glow);
     }
 
     // endregion

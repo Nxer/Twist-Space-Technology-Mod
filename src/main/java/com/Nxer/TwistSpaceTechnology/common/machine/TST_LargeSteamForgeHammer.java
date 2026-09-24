@@ -237,6 +237,16 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
         return Textures.BlockIcons.OVERLAY_FRONT_STEAM_FORGE_HAMMER;
     }
 
+    @Override
+    protected IIconContainer getActiveGlowOverlay() {
+        return Textures.BlockIcons.OVERLAY_FRONT_STEAM_FORGE_HAMMER_ACTIVE_GLOW;
+    }
+
+    @Override
+    protected IIconContainer getInactiveGlowOverlay() {
+        return Textures.BlockIcons.OVERLAY_FRONT_STEAM_FORGE_HAMMER_GLOW;
+    }
+
     // endregion
 
     // region Tooltip

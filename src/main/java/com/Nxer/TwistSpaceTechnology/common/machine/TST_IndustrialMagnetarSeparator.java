@@ -27,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
@@ -42,7 +43,6 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescri
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
@@ -181,28 +181,15 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean aActive, boolean aRedstone) {
-        ITexture base = casingTexturePages[115][MetaBlockCasing01.getTextureIndexInPage(8)];
-        if (side == facing) {
-            if (aActive) return new ITexture[] { base, TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-            return new ITexture[] { base, TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-        }
-        return new ITexture[] { base };
+        return TSTControllerTextures.getTexture(
+            side,
+            facing,
+            aActive,
+            casingTexturePages[115][MetaBlockCasing01.getTextureIndexInPage(8)],
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE,
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW,
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE,
+            OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW);
     }
 
     // endregion

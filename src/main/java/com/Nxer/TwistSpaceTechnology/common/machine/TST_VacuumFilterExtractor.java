@@ -28,6 +28,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
@@ -47,7 +48,6 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
@@ -265,33 +265,15 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
         int colorIndex, boolean aActive, boolean redstoneLevel) {
-        ITexture[] rTexture;
-        if (side == aFacing) {
-            if (aActive) {
-                rTexture = new ITexture[] { getCasingTextureForId(179), TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ORE_DRILL_ACTIVE)
-                    .extFacing()
-                    .build(),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FRONT_ORE_DRILL_ACTIVE_GLOW)
-                        .extFacing()
-                        .glow()
-                        .build() };
-            } else {
-                rTexture = new ITexture[] { getCasingTextureForId(179), TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ORE_DRILL)
-                    .extFacing()
-                    .build(),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FRONT_ORE_DRILL_GLOW)
-                        .extFacing()
-                        .glow()
-                        .build() };
-            }
-        } else {
-            rTexture = new ITexture[] { getCasingTextureForId(179) };
-        }
-        return rTexture;
+        return TSTControllerTextures.getTexture(
+            side,
+            aFacing,
+            aActive,
+            getCasingTextureForId(179),
+            OVERLAY_FRONT_ORE_DRILL,
+            OVERLAY_FRONT_ORE_DRILL_GLOW,
+            OVERLAY_FRONT_ORE_DRILL_ACTIVE,
+            OVERLAY_FRONT_ORE_DRILL_ACTIVE_GLOW);
     }
 
     // endregion

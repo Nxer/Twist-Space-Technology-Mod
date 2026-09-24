@@ -15,6 +15,7 @@ import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.NAQUADAH_REACTOR_SOLID_FRONT;
 import static gregtech.api.enums.Textures.BlockIcons.NAQUADAH_REACTOR_SOLID_FRONT_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.NAQUADAH_REACTOR_SOLID_FRONT_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.NAQUADAH_REACTOR_SOLID_FRONT_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.getCasingTextureForId;
 import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 
@@ -37,6 +38,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.client.effect.MegaNqReactorParticleBatch;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_GeneratorBase;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
@@ -69,7 +71,6 @@ import gregtech.api.metatileentity.implementations.MTEHatchInput;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTRecipe;
@@ -773,26 +774,15 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean aActive, boolean redstoneLevel) {
-        final ITexture baseCasingTexture = getCasingTextureForId(
-            GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 3));
-        if (side == facing) {
-            if (aActive) {
-                return new ITexture[] { baseCasingTexture, TextureFactory.builder()
-                    .addIcon(NAQUADAH_REACTOR_SOLID_FRONT_ACTIVE)
-                    .extFacing()
-                    .build(),
-                    TextureFactory.builder()
-                        .addIcon(NAQUADAH_REACTOR_SOLID_FRONT_ACTIVE_GLOW)
-                        .extFacing()
-                        .glow()
-                        .build() };
-            }
-            return new ITexture[] { baseCasingTexture, TextureFactory.builder()
-                .addIcon(NAQUADAH_REACTOR_SOLID_FRONT)
-                .extFacing()
-                .build() };
-        }
-        return new ITexture[] { baseCasingTexture };
+        return TSTControllerTextures.getTexture(
+            side,
+            facing,
+            aActive,
+            getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 3)),
+            NAQUADAH_REACTOR_SOLID_FRONT,
+            NAQUADAH_REACTOR_SOLID_FRONT_GLOW,
+            NAQUADAH_REACTOR_SOLID_FRONT_ACTIVE,
+            NAQUADAH_REACTOR_SOLID_FRONT_ACTIVE_GLOW);
     }
 
     // endregion

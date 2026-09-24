@@ -53,6 +53,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_SkypiercerTower;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
@@ -88,7 +89,6 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
@@ -894,27 +894,15 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int aColorIndex, boolean aActive, boolean aRedstone) {
-        if (side == facing) {
-            if (aActive) return new ITexture[] { casingTexturePages[1][48], TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-            return new ITexture[] { casingTexturePages[1][48], TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-        }
-        return new ITexture[] { casingTexturePages[1][48] };
+        return TSTControllerTextures.getTexture(
+            side,
+            facing,
+            aActive,
+            casingTexturePages[1][48],
+            OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR,
+            OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW,
+            OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE,
+            OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW);
     }
 
     // endregion

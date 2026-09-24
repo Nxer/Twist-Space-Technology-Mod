@@ -40,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.WirelessEnergyMultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -61,7 +62,6 @@ import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
@@ -545,26 +545,15 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
         int colorIndex, boolean aActive, boolean redstoneLevel) {
-        if (side == aFacing) {
-            if (aActive) {
-                return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
-                    .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced)
-                    .extFacing()
-                    .build(),
-                    TextureFactory.builder()
-                        .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced_Active)
-                        .extFacing()
-                        .glow()
-                        .build() };
-            }
-
-            return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
-                .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced)
-                .extFacing()
-                .build() };
-        }
-
-        return new ITexture[] { casingTexturePages[0][12] };
+        return TSTControllerTextures.getTexture(
+            side,
+            aFacing,
+            aActive,
+            casingTexturePages[0][12],
+            TexturesGtBlock.Overlay_Machine_Controller_Advanced,
+            TexturesGtBlock.Overlay_Machine_Controller_Advanced_Glow,
+            TexturesGtBlock.Overlay_Machine_Controller_Advanced_Active,
+            TexturesGtBlock.Overlay_Machine_Controller_Advanced_Active_Glow);
     }
 
     // endregion
