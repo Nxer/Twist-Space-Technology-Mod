@@ -135,13 +135,10 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_Advance
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_Cyclotron_Coil;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_Cyclotron_External;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_Industrial_Arc_Furnace;
-import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Controller_IndustrialRockBreaker;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Controller_Vacuum_Furnace;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.GTPP_Casing_UHV;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.GT_Dehydrator_ZPM;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Hatch_Air_Intake_Extreme;
-import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Arc_Furnace;
-import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Extruder;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_MassFab;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Mega_AlloyBlastSmelter;
@@ -745,7 +742,7 @@ public class GTCMMachineRecipes {
 
         // region MagneticDrivePressureFormer
         GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, Industrial_Extruder.get(1))
+            .metadata(RESEARCH_ITEM, ItemList.IndustrialExtruder.get(1))
             .metadata(SCANNING, scanningLV(8 * HOURS))
             .itemInputs(
                 ItemList.IndustrialBendingMachine.get(64),
@@ -1242,7 +1239,7 @@ public class GTCMMachineRecipes {
         // region Ore Processing Factory
         GTValues.RA
             .stdBuilder()
-            .metadata(RESEARCH_ITEM, ItemList.Ore_Processor.get(1))
+            .metadata(RESEARCH_ITEM, ItemList.IntegratedOreFactory.get(1))
             .metadata(SCANNING, scanningLV(16 * HOURS))
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
@@ -1271,7 +1268,6 @@ public class GTCMMachineRecipes {
                 Materials.Osmiridium.getMolten(144 * 1024)
             )
             .itemOutputs(OreProcessingFactory.get(1))
-
             .eut(RECIPE_UEV)
             .duration(20 * 1800)
             .addTo(AssemblyLine);
@@ -1634,7 +1630,7 @@ public class GTCMMachineRecipes {
         // region ThermalEnergyDevourer
         GTValues.RA
             .stdBuilder()
-            .metadata(RESEARCH_ITEM, megaMachines[1])
+            .metadata(RESEARCH_ITEM, ItemList.EndothermicFridge.get(1))
             .metadata(SCANNING, scanningLV(8 * HOURS))
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.NaquadahAlloy, 64),
@@ -2280,7 +2276,7 @@ public class GTCMMachineRecipes {
         if (Config.Enable_BallLightning) {
             GTValues.RA
                 .stdBuilder()
-                .metadata(RESEARCH_ITEM, Industrial_Arc_Furnace.get(1))
+                .metadata(RESEARCH_ITEM, ItemList.IndustrialArcFurnace.get(1))
                 .metadata(SCANNING, scanningLV(8 * HOURS))
                 .itemInputs(
                     HighPowerRadiationProofCasing.get(64),
@@ -2990,7 +2986,7 @@ public class GTCMMachineRecipes {
         if(Config.Enable_MegaStoneBreaker){
             GTValues.RA
                 .stdBuilder()
-                .metadata(RESEARCH_ITEM, Controller_IndustrialRockBreaker.get(1))
+                .metadata(RESEARCH_ITEM, ItemList.Boldarnator.get(1))
                 .metadata(SCANNING, scanningLV(8 * HOURS))
                 .itemInputs(
                     ItemList.Hull_UEV.get(4),
@@ -3741,7 +3737,7 @@ public class GTCMMachineRecipes {
         // region MegaNqReactor
         GTValues.RA
             .stdBuilder()
-            .metadata(RESEARCH_ITEM, ItemRefer.Large_Naquadah_Reactor.get(1))
+            .metadata(RESEARCH_ITEM, ItemList.LargeNaquadahReactor.get(1))
             .metadata(SCANNING, scanningLV(24 * HOURS))
             .itemInputs(
                 ItemList.LargeNaquadahReactor.get(64),
