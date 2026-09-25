@@ -255,7 +255,7 @@ public class GTCMRecipe {
 
     // #tr tst.common.recipe.IndustrialMagicMatrixRecipeMap.name
     // # Industrial Infusion Matrix Recipes
-    // #zh_CN §0§k工业注魔矩阵配方
+    // #zh_CN §0工业注魔矩阵配方
     public static final RecipeMap<RecipeMapBackend> IndustrialMagicMatrixRecipeMap = RecipeMapBuilder
         .of("tst.common.recipe.IndustrialMagicMatrixRecipeMap.name")
         .maxIO(25, 1, 0, 0)

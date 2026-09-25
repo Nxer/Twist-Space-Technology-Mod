@@ -7,6 +7,7 @@ import static thaumcraft.common.config.ConfigBlocks.blockCosmeticSolid;
 import static thaumcraft.common.config.ConfigItems.itemEssence;
 import static thaumcraft.common.config.ConfigItems.itemJarNode;
 import static thaumcraft.common.config.ConfigItems.itemShard;
+import static thaumcraft.common.config.ConfigItems.itemWandCasting;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -78,6 +79,8 @@ public class IndustrialMagicMatrixRecipePool {
         if (null == skips) {
             skips = new HashSet<>();
             skips.add(itemJarNode);
+            skips.add(itemWandCasting);
+
             if (Mods.ThaumicBases.isModLoaded()) {
                 Item revolver = GameRegistry.findItem(Mods.ThaumicBases.ID, "revolver");
                 if (null != revolver) {
@@ -88,6 +91,19 @@ public class IndustrialMagicMatrixRecipePool {
                 Item itemEtherealFamiliar = GameRegistry.findItem(Mods.Gadomancy.ID, "ItemEtherealFamiliar");
                 if (null != itemEtherealFamiliar) {
                     skips.add(itemEtherealFamiliar);
+                }
+            }
+            if (Mods.TinkerConstruct.isModLoaded()) {
+                String[] tools = new String[] { "pickaxe", "shovel", "hatchet", "broadsword", "longsword", "rapier",
+                    "dagger", "cutlass", "frypan", "battlesign", "chisel", "mattock", "scythe", "lumberaxe", "cleaver",
+                    "hammer", "battleaxe", "excavator", "Shuriken", "ThrowingKnife", "Javelin", "ShortBow", "LongBow",
+                    "Crossbow", "ArrowAmmo", "BoltAmmo" };
+
+                for (String tool : tools) {
+                    Item t = GameRegistry.findItem(Mods.TinkerConstruct.ID, tool);
+                    if (null != t) {
+                        skips.add(t);
+                    }
                 }
             }
         }

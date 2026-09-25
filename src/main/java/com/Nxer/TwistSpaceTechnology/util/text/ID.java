@@ -22,7 +22,6 @@ public final class ID implements Supplier<String> {
     public static final ID HOLEFISH = new ID("holefish");
     public static final ID LUO_YANG_YU_LI = new ID("LuoYangYuLi");
     public static final ID RH_NU = new ID("Rh_Nu");
-    public static final ID YUE_LENG_M = new ID("YueLeng_M");
     public static final ID XIAO_XING_521 = new ID("xiao_xing521");
     public static final ID SNOW_DREAM = new ID("SnowDream");
     public static final ID KO_TORI_MINAMI = new ID("ko_tori_minami");
@@ -40,6 +39,7 @@ public final class ID implements Supplier<String> {
     public static final ID TOTTO = new ID("Totto", Style.of(EnumChatFormatting.AQUA));
     public static final ID FAOTIK = new ID("Faotik", Style.of(EnumChatFormatting.YELLOW));
     public static final ID EVGEN_WAR_GOLD = new ID("EvgenWarGold", Style.of(ID::formatEvgenWarGold));
+    public static final ID YUE_LENG_M = new ID("YueLeng_M", Style.of(EnumChatFormatting.BLUE));
     // spotless:on
 
     private final String minecraftId;

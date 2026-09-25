@@ -405,13 +405,13 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
 
     // #tr GT5U.gui.text.recipe_result.Essentiainsentia
     // # Essentia insentia
-    // #zh_CN §c§k源质不足
+    // #zh_CN §c源质不足
     public static final CheckRecipeResult Essentia_InsentiaL = SimpleCheckRecipeResult
         .ofFailurePersistOnShutdown("Essentiainsentia");
 
     // #tr GT5U.gui.text.recipe_result.Research_not_completed
     // # Research not completed
-    // #zh_CN §c§k小朋友, 作业还没写完呢§c§k
+    // #zh_CN §c小朋友, 作业还没写完呢
     public static final CheckRecipeResult Research_not_completed = SimpleCheckRecipeResult
         .ofFailurePersistOnShutdown("Research_not_completed");
 
@@ -845,7 +845,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
             .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.05"))
             // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.06
             // # Needless to say, its incredible principle is fascinating...
-            // #zh_CN §k毋庸置疑的是它那不可思议的原理令人十分入迷...
+            // #zh_CN 毋庸置疑的是它那不可思议的原理令人十分入迷...
             .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.06"))
             // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.07
             // # Because of the pollution of technology,
