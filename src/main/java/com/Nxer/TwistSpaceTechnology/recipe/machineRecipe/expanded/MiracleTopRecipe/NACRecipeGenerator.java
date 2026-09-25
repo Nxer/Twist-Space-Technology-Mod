@@ -194,8 +194,10 @@ public final class NACRecipeGenerator {
         // Keep unused byproducts as outputs when upstream NAC recipe ratios change.
         for (Map.Entry<TST_ItemID, Integer> entry : context.availableItems.entrySet()) {
             if (entry.getValue() <= 0) continue;
-            unwrappedOutputs.add(tryUnwrapNACComponent(entry.getKey()
-                .getItemStack(entry.getValue())));
+            unwrappedOutputs.add(
+                tryUnwrapNACComponent(
+                    entry.getKey()
+                        .getItemStack(entry.getValue())));
         }
 
         ArrayList<FluidStack> mergedFluids = new ArrayList<>();
