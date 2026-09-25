@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
-import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static goodgenerator.loader.Loaders.MAR_Casing;
@@ -63,7 +62,7 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
     // region Class Constructor
     public TST_ThermalEnergyDevourer(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
-        registerTooltipCredits(AUTHOR, ID.NXER, MAINTAINER, ID.YUE_LENG_M);
+        registerTooltipCredits(AUTHOR, ID.NXER);
     }
 
     public TST_ThermalEnergyDevourer(String aName) {
