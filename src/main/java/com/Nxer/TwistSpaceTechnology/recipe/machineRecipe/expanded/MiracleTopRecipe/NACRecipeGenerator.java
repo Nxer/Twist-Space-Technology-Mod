@@ -62,7 +62,7 @@ public final class NACRecipeGenerator {
                 new GTRecipe(
                     false,
                     unwrappedRecipe.mInputs,
-                    new ItemStack[] { output },
+                    unwrappedRecipe.mOutputs,
                     null,
                     null,
                     null,
@@ -186,11 +186,17 @@ public final class NACRecipeGenerator {
             }
         }
 
-        ItemStack[] unwrappedOutputs = recipe.mOutputs == null ? null : recipe.mOutputs.clone();
-        if (unwrappedOutputs != null) {
-            for (int i = 0; i < unwrappedOutputs.length; i++) {
-                unwrappedOutputs[i] = tryUnwrapNACComponent(unwrappedOutputs[i]);
+        ArrayList<ItemStack> unwrappedOutputs = new ArrayList<>();
+        if (recipe.mOutputs != null) {
+            for (ItemStack output : recipe.mOutputs) {
+                unwrappedOutputs.add(tryUnwrapNACComponent(output));
             }
+        }
+        // Keep unused byproducts as outputs when upstream NAC recipe ratios change.
+        for (Map.Entry<TST_ItemID, Integer> entry : context.availableItems.entrySet()) {
+            if (entry.getValue() <= 0) continue;
+            unwrappedOutputs.add(tryUnwrapNACComponent(entry.getKey()
+                .getItemStack(entry.getValue())));
         }
 
         ArrayList<FluidStack> mergedFluids = new ArrayList<>();
@@ -202,7 +208,7 @@ public final class NACRecipeGenerator {
         return new GTRecipe(
             false,
             mergeSameItem(context.itemInputs.toArray(new ItemStack[0])),
-            unwrappedOutputs,
+            mergeSameItem(unwrappedOutputs.toArray(new ItemStack[0])),
             null,
             null,
             null,
