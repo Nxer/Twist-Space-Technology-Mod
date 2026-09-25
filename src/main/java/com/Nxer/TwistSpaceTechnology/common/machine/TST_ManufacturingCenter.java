@@ -32,6 +32,7 @@ import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedFormat;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -44,12 +45,12 @@ import gregtech.api.enums.GTValues;
 import gregtech.api.enums.HatchElement;
 import gregtech.api.enums.TAE;
 import gregtech.api.enums.VoltageIndex;
-import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
+import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -60,6 +61,7 @@ import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTStructureUtility;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
 import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.base.GTPPMultiBlockBase;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
@@ -322,18 +324,27 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
         return getMachineMode() + 1 % getMachineModesCount();
     }
 
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[] { GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING, // Compressor
+            GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_BENDING, // Lathe
+            GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_POLARIZER, // Magnetic
+            GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_STEAM, // Fermenting
+            GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID, // Fluid Extractor
+            GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_UNPACKAGER, // Extract
+            GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_COLLIDER, // Laser Engraver
+            GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_DISTILLING, // Autoclave
+            GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_FORMING // Solidifier
+        };
+    }
+
     @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.clear();
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_METAL); // TODO: Lathe
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_POLARIZER); // Magnetic
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID); // TODO: Fermenting
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID); // TODO: Fluid Extractor
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_METAL); // TODO: Extract
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_METAL); // TODO: Laser Engraver
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID); // TODO: Autoclave
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT); // TODO: Fluid Solidifier
+    protected @NotNull MTEMultiBlockBaseGui<?> getGui() {
+        MTEMultiBlockBaseGui<?> gui = super.getGui();
+        if (supportsMachineModeSwitch()) {
+            return gui.withMachineModeIcons(getMachineModeIcons());
+        } else {
+            return gui;
+        }
     }
 
     @Override
@@ -348,11 +359,15 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
         IWailaConfigHandler config) {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
-        currentTip.add(
-            StatCollector.translateToLocal("GT5U.machines.oreprocessor1") + " "
-                + EnumChatFormatting.WHITE
-                + getMachineModeName()
-                + EnumChatFormatting.RESET);
+        currentTip.add(EnumChatFormatting.YELLOW +
+        // #tr tst.common.shared.machine_info.running_mode
+        // # Running Mode :
+        // #zh_CN 运行模式 :
+            StatCollector.translateToLocal("tst.common.shared.machine_info.running_mode")
+            + " "
+            + EnumChatFormatting.WHITE
+            + getMachineModeName()
+            + EnumChatFormatting.RESET);
     }
 
     // endregion
