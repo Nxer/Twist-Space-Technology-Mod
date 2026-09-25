@@ -6,6 +6,9 @@ import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTH
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -143,26 +146,26 @@ public class TST_ManaHatch extends MTEHatchInput implements TSTTooltipCredit {
     }
 
     public String[] getCustomTooltip() {
-        String[] aTooltip = new String[5];
+        List<String> aTooltip = new ArrayList<>();
 
         // #tr tst.common.machine.ManaHatch.tooltip.info.01
         // # Mana transform hatch
         // #zh_CN 魔力转换阀
-        aTooltip[0] = TSTUtils.tr("tst.common.machine.ManaHatch.tooltip.info.01");
+        aTooltip.add(TSTUtils.tr("tst.common.machine.ManaHatch.tooltip.info.01"));
 
         // #tr tst.common.machine.ManaHatch.tooltip.info.02
         // # Transform mana up to 10000 mana or 1000L every second
         // #zh_CN 每秒至多转换1000L液态魔力/10000mana.
-        aTooltip[1] = TSTUtils.tr("tst.common.machine.ManaHatch.tooltip.info.02");
+        aTooltip.add(TSTUtils.tr("tst.common.machine.ManaHatch.tooltip.info.02"));
 
         // #tr tst.common.machine.ManaHatch.tooltip.info.03
         // # Need to facing at a mana pool to work.
         // #zh_CN 需要正面朝向魔力池来工作.
-        aTooltip[2] = TSTUtils.tr("tst.common.machine.ManaHatch.tooltip.info.03");
+        aTooltip.add(TSTUtils.tr("tst.common.machine.ManaHatch.tooltip.info.03"));
 
-        aTooltip[3] = TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode;
+        aTooltip.add(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode);
 
-        return aTooltip;
+        return aTooltip.toArray(new String[0]);
     }
 
     @Override
