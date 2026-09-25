@@ -2,7 +2,9 @@ package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.AutoSeparation;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.FluidCapacity;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_ME_CRAFTING_INPUT_BUFFER;
+import static gregtech.api.enums.Textures.BlockIcons.FLUID_IN_SIGN;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_PIPE_COLORS;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_PIPE_IN;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -16,19 +18,25 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_HatchGui_Solidify;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
+import com.cleanroommc.modularui.factory.PosGuiData;
+import com.cleanroommc.modularui.screen.ModularPanel;
+import com.cleanroommc.modularui.screen.UISettings;
+import com.cleanroommc.modularui.utils.fluid.FluidStackTank;
+import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.gtnewhorizons.modularui.api.ModularUITextures;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
-import com.gtnewhorizons.modularui.common.fluid.FluidStackTank;
 import com.gtnewhorizons.modularui.common.widget.FluidSlotWidget;
 import com.gtnewhorizons.modularui.common.widget.SlotGroup;
 
 import ggfab.GGItemList;
+import gregtech.GTMod;
 import gregtech.api.enums.ItemList;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
@@ -85,9 +93,9 @@ public class GT_MetaTileEntity_Hatch_Solidify extends MTEHatchInputBus
         TST_ItemID.createNoNBT(GGItemList.SingleUseSawMold.get(1));
     }
     private final FluidStack[] mStoredFluid;
-    private final FluidStackTank[] fluidTanks;
+    public final FluidStackTank[] fluidTanks;
     public final int mCapacityPer;
-    private static final int ITEM_SLOT_AMOUNT = 1;
+    private static final int ITEM_SLOT_AMOUNT = 2;
     private static final int MOLD_SLOT = 0;
 
     public static class Inventory implements IDualInputInventory {
@@ -195,12 +203,22 @@ public class GT_MetaTileEntity_Hatch_Solidify extends MTEHatchInputBus
 
     @Override
     public ITexture[] getTexturesActive(ITexture aBaseTexture) {
-        return new ITexture[] { aBaseTexture, TextureFactory.of(OVERLAY_ME_CRAFTING_INPUT_BUFFER) };
+        byte color = getBaseMetaTileEntity().getColorization();
+        ITexture coloredPipeOverlay = TextureFactory.of(OVERLAY_PIPE_COLORS[color + 1]);
+        return GTMod.proxy.mRenderIndicatorsOnHatch
+            ? new ITexture[] { aBaseTexture, TextureFactory.of(OVERLAY_PIPE_IN), coloredPipeOverlay,
+                TextureFactory.of(FLUID_IN_SIGN) }
+            : new ITexture[] { aBaseTexture, TextureFactory.of(OVERLAY_PIPE_IN), coloredPipeOverlay };
     }
 
     @Override
     public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
-        return new ITexture[] { aBaseTexture, TextureFactory.of(OVERLAY_ME_CRAFTING_INPUT_BUFFER) };
+        byte color = getBaseMetaTileEntity().getColorization();
+        ITexture coloredPipeOverlay = TextureFactory.of(OVERLAY_PIPE_COLORS[color + 1]);
+        return GTMod.proxy.mRenderIndicatorsOnHatch
+            ? new ITexture[] { aBaseTexture, TextureFactory.of(OVERLAY_PIPE_IN), coloredPipeOverlay,
+                TextureFactory.of(FLUID_IN_SIGN) }
+            : new ITexture[] { aBaseTexture, TextureFactory.of(OVERLAY_PIPE_IN), coloredPipeOverlay };
     }
 
     @Override
@@ -220,8 +238,7 @@ public class GT_MetaTileEntity_Hatch_Solidify extends MTEHatchInputBus
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, ForgeDirection side,
         ItemStack aStack) {
-        if (solidifierMolds.contains(TST_ItemID.createNoNBT(aStack))) return true;
-        return false;
+        return aIndex == MOLD_SLOT && solidifierMolds.contains(TST_ItemID.createNoNBT(aStack));
     }
 
     public FluidStack getFluid(int aSlot) {
@@ -324,7 +341,12 @@ public class GT_MetaTileEntity_Hatch_Solidify extends MTEHatchInputBus
 
     @Override
     public boolean allowSelectCircuit() {
-        return false;
+        return true;
+    }
+
+    @Override
+    public int getCircuitSlot() {
+        return ITEM_SLOT_AMOUNT - 1;
     }
 
     @Override
@@ -464,5 +486,10 @@ public class GT_MetaTileEntity_Hatch_Solidify extends MTEHatchInputBus
                 .background(ModularUITextures.ITEM_SLOT, GTUITextures.OVERLAY_SLOT_MOLD)
                 .build()
                 .setPos(7, 7));
+    }
+
+    @Override
+    public ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager, UISettings uiSettings) {
+        return new TST_HatchGui_Solidify(this).build(guiData, syncManager, uiSettings);
     }
 }
