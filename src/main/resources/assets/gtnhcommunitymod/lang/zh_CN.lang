@@ -1794,6 +1794,7 @@ tst.common.recipe.MegaSolarPanelFactoryRecipeMap.name=巨型太阳能板工厂
 tst.common.recipe.MegaStoneBreakerRecipeMap.name=巨型碎石机
 tst.common.recipe.megaUniversalSpaceStationRecipeMap.name=§c寰 §b宇 §6空 §9间 §8站
 tst.common.recipe.MicroSpaceTimeFabricatorioRecipeMap.name=微型时空发生器
+tst.common.recipe.MiracleTopNACRecipeCategory.name=奇迹顶点 - NAC配方
 tst.common.recipe.MiracleTopRecipeMap.name=奇迹顶点
 tst.common.recipe.NetherInterfaceVisualRecipeMap.name=地狱接口
 tst.common.recipe.NeutronActivatorWithEURecipeMap.name=中子振荡器 - 电力版中子活化器

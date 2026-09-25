@@ -342,20 +342,5 @@ public class LapotronChipRecipes {
             .metadata(IGRecipeMaps.MODULE_TIER, 2)
             .addTo(IGRecipeMaps.spaceAssemblerRecipes);
 
-        // UltimateEnergyFlowCircuit
-        TST_RecipeBuilder.builder()
-            .itemInputs(
-                GTCMItemList.SpaceTimeSuperconductingInlaidMotherboard.get(1),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 2),
-                Materials.SixPhasedCopper.getNanite(1),
-
-                GTCMItemList.PerfectEngravedEnergyChip.get(2),
-                GTCMItemList.PerfectEngravedLaptronChip.get(2),
-                GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUIV, 64))
-            .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 8))
-            .itemOutputs(GTCMItemList.UltimateEnergyFlowCircuit.get(1))
-            .eut(TierEU.RECIPE_UIV)
-            .duration(20 * 120)
-            .addTo(RecipeMaps.circuitAssemblerRecipes);
     }
 }

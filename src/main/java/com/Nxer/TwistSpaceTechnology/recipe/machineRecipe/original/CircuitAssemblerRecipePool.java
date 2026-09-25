@@ -11,6 +11,7 @@ import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.TierEU;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTOreDictUnificator;
@@ -79,5 +80,22 @@ public class CircuitAssemblerRecipePool {
             .eut(RECIPE_LuV)
             .duration(20 * 60 * 4)
             .addTo(CAL);
+
+        // Ultimate Energy Flow Circuit
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                GTCMItemList.SpaceTimeSuperconductingInlaidMotherboard.get(1),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 2),
+                Materials.SixPhasedCopper.getNanite(1),
+
+                GTCMItemList.PerfectEngravedEnergyChip.get(2),
+                GTCMItemList.PerfectEngravedLaptronChip.get(2),
+                GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUIV, 64))
+            .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 8))
+            .itemOutputs(GTCMItemList.UltimateEnergyFlowCircuit.get(1))
+            .eut(TierEU.RECIPE_UIV)
+            .duration(20 * 120)
+            .addTo(RecipeMaps.circuitAssemblerRecipes);
+
     }
 }
