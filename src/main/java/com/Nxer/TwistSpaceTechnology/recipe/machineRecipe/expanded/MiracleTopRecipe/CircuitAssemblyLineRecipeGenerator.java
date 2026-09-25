@@ -50,7 +50,7 @@ public final class CircuitAssemblyLineRecipeGenerator {
 
             GTRecipe generatedRecipe = convertCircuitRecipeItems(aRecipe);
             generatedRecipe = reduplicateRecipe(generatedRecipe, 3, 3, 4, 4, 1, 3);
-            addRecipeMT(addIntegratedCircuitToRecipe(generatedRecipe, 16));
+            addRecipeMT(addIntegratedCircuitToRecipe(generatedRecipe, 15));
         }
     }
 

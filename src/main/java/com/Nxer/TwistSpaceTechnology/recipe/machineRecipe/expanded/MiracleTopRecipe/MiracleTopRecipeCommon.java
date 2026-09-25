@@ -311,6 +311,7 @@ public final class MiracleTopRecipeCommon {
                 .itemOutputs(recipe.mOutputs)
                 .eut(recipe.mEUt)
                 .duration(recipe.mDuration)
+                .recipeCategory(recipe.getRecipeCategory())
                 .addTo(MT);
         }
         MT_RECIPE_CACHE.clear();

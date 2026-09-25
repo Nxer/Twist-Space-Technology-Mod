@@ -187,7 +187,7 @@ public final class AssemblyLineRecipeGenerator {
                     GTRecipe generatedRecipe = packageCircuitRecipe(recipe);
                     generatedRecipe = convertCircuitRecipeItems(generatedRecipe);
                     generatedRecipe = reduplicateRecipe(generatedRecipe, 3, 3, 4, 4, 1, 3);
-                    addRecipeMT(addIntegratedCircuitToRecipe(generatedRecipe, 15));
+                    addRecipeMT(addIntegratedCircuitToRecipe(generatedRecipe, 14));
                 }
             }
         }

@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
+import gregtech.api.recipe.RecipeCategory;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.metadata.IRecipeMetadataStorage;
 import gregtech.api.util.GTRecipe;
@@ -23,6 +24,8 @@ public class TST_RecipeBuilder {
     private int eut = 0;
     private int duration = 0;
     private int specialValue = 0;
+    @Nullable
+    private RecipeCategory recipeCategory;
     @Nullable
     protected IRecipeMetadataStorage metadataStorage;
 
@@ -81,6 +84,11 @@ public class TST_RecipeBuilder {
         return this;
     }
 
+    public TST_RecipeBuilder recipeCategory(@Nullable RecipeCategory recipeCategory) {
+        this.recipeCategory = recipeCategory;
+        return this;
+    }
+
     public TST_RecipeBuilder addTo(RecipeMap<?> recipeMap) {
         GTRecipe tempRecipe = new GTRecipe(
             false,
@@ -99,6 +107,7 @@ public class TST_RecipeBuilder {
 
         tempRecipe.mInputs = inputItems.clone();
         tempRecipe.mOutputs = outputItems.clone();
+        tempRecipe.setRecipeCategory(recipeCategory);
 
         recipeMap.add(tempRecipe);
         return this;

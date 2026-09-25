@@ -88,7 +88,7 @@ public final class CircuitAssemblerRecipeGenerator {
                 originalRecipe.mDuration,
                 originalRecipe.mEUt,
                 0);
-            int integratedCircuitNum = 16;
+            int integratedCircuitNum = 17;
             if (originalRecipe.mInputs != null) {
                 for (ItemStack itemStack : originalRecipe.mInputs) {
                     if (itemStack.getItem() == ItemList.Circuit_Integrated.getItem()) {

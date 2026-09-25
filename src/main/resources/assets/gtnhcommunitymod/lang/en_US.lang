@@ -1794,6 +1794,7 @@ tst.common.recipe.MegaSolarPanelFactoryRecipeMap.name=Mega Solar Panel Factory
 tst.common.recipe.MegaStoneBreakerRecipeMap.name=Mega Stone Breaker
 tst.common.recipe.megaUniversalSpaceStationRecipeMap.name=§cThe §bMega §6Universal §9Space §8Station
 tst.common.recipe.MicroSpaceTimeFabricatorioRecipeMap.name=Micro SpaceTime Fabricatorio Recipes
+tst.common.recipe.MiracleTopNACRecipeCategory.name=Miracle Top - NAC Recipes
 tst.common.recipe.MiracleTopRecipeMap.name=Miracle Top
 tst.common.recipe.NetherInterfaceVisualRecipeMap.name=Nether Interface
 tst.common.recipe.NeutronActivatorWithEURecipeMap.name=Neutron Oscillator - Electric Neutron Activator

@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.recipeMap;
 
 import static com.Nxer.TwistSpaceTechnology.config.Config.Debug_DisplayAdvCircuitAssemblyLineCurrentRecipe;
+import static gregtech.api.enums.Mods.GTPlusPlus;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -17,15 +18,19 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_Art
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_DirectedMobClonerFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_IndustrialMagicMatrixFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_MiracleTopFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_RapidCoolingDownFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_RapidHeatExchangeFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StellarForgeFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StrangeMatterAggregatorFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_SuperWaterPurifierFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_TreeGrowthSimulatorFrontend;
+import com.gtnewhorizons.modularui.api.drawable.UITexture;
 
 import goodgenerator.client.GUI.GGUITextures;
 import gregtech.api.gui.modularui.GTUITextures;
+import gregtech.api.recipe.RecipeCategory;
+import gregtech.api.recipe.RecipeCategorySetting;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMapBackend;
 import gregtech.api.recipe.RecipeMapBuilder;
@@ -68,13 +73,25 @@ public class GTCMRecipe {
     // #zh_CN 奇迹顶点
     public static final RecipeMap<TST_RecipeMapBackend> MiracleTopRecipeMap = RecipeMapBuilder
         .of("tst.common.recipe.MiracleTopRecipeMap.name", TST_RecipeMapBackend::new)
-        .maxIO(16, 16, 16, 4)
-        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
-        .frontend(TST_GeneralFrontend::new)
+        .maxIO(24, 4, 24, 4)
+        .dontUseProgressBar()
+        .addSpecialTexture(83, 116, 10, 16, UITexture.fullImage(GTPlusPlus.ID, "gui/picture/arrow_white_down"))
+        .neiTransferRect(78, 114, 20, 20)
+        .frontend(TST_MiracleTopFrontend::new)
         .neiHandlerInfo(
             builder -> builder.setDisplayStack(GTCMItemList.MiracleTop.get(1))
                 .setMultipleWidgetsAllowed(false))
         .build();
+
+    // #tr tst.common.recipe.MiracleTopNACRecipeCategory.name
+    // # Miracle Top - NAC Recipes
+    // #zh_CN 奇迹顶点 - NAC配方
+    public static final RecipeCategory MiracleTopNACRecipeCategory = new RecipeCategory(
+        "tst.common.recipe.MiracleTopNACRecipeCategory.name",
+        MiracleTopRecipeMap,
+        RecipeCategorySetting::getDefault,
+        builder -> builder.setDisplayStack(GTCMItemList.MiracleTop.get(1))
+            .setMultipleWidgetsAllowed(false));
 
     // #tr tst.common.recipe.QuantumInversionRecipeMap.name
     // # Quantum Inversion
