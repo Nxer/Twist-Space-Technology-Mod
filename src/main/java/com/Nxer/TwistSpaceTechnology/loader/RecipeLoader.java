@@ -99,6 +99,7 @@ public class RecipeLoader {
         // Original GTNH RecipeMap
         ChemicalReactorRecipePool.loadRecipes();
         CircuitAssemblerRecipePool.loadRecipes();
+        CircuitAssemblyLineWithoutImprintRecipePool.loadRecipes();
         DistillationRecipePool.loadRecipes();
         ExtractorRecipePool.loadRecipes();
         CompressorRecipePool.loadRecipes();
@@ -175,7 +176,6 @@ public class RecipeLoader {
         StellarForgeRecipePool.loadOnServerStarted();
         TreeGrowthSimulatorWithoutToolFakeRecipe.loadRecipes();
         MiracleTopRecipePool.loadRecipes();
-        CircuitAssemblyLineWithoutImprintRecipePool.loadRecipes();
         if (Config.Enable_IndustrialMagicMatrix) {
             new IndustrialMagicMatrixRecipePool().loadRecipes();
         }
