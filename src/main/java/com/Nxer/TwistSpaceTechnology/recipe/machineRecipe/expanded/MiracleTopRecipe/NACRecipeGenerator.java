@@ -97,7 +97,6 @@ public final class NACRecipeGenerator {
     // Index every real NAC output so recipes with several outputs are expanded only once.
     // Optical matrix recipes have a 50% chance to return a circuit that still needs packaging. MT always uses the
     // packaged result like other circuit tiers, then lets the normal unwrapping path handle it.
-    // 我认为这是非常弱智的行为. - Goderium
     private static Map<TST_ItemID, NACProducer> buildNACProducerIndex(
         Map<TST_ItemID, CircuitComponent> realComponents) {
         Map<TST_ItemID, NACProducer> producers = new LinkedHashMap<>();
