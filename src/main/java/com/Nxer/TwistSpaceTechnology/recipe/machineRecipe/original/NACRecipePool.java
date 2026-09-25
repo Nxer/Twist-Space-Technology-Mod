@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 
 import static gregtech.api.enums.TierEU.RECIPE_UIV;
+import static gregtech.api.enums.TierEU.RECIPE_UV;
 
 import com.Nxer.TwistSpaceTechnology.common.item.NACComponentRegistry;
 
@@ -11,7 +12,6 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.metadata.NanochipAssemblyMatrixTierKey;
 import gregtech.api.util.GTRecipeConstants;
 import gregtech.common.tileentities.machines.multi.nanochip.util.CircuitComponent;
-import gregtech.common.tileentities.machines.multi.nanochip.util.ModuleRecipeInfo;
 import gtPlusPlus.core.material.MaterialMisc;
 
 /**
@@ -33,7 +33,7 @@ public final class NACRecipePool {
             .itemInputs(NACComponentRegistry.opticalSOC.getFakeStack(1))
             .itemOutputs(NACComponentRegistry.processedOpticalSOC.getFakeStack(1))
             .duration(30 * 20)
-            .eut(ModuleRecipeInfo.ExtremeTier.recipeEUt)
+            .eut(RECIPE_UIV)
             .addTo(RecipeMaps.nanochipOpticalOrganizer);
 
         // Package infinity bolt
@@ -42,7 +42,7 @@ public final class NACRecipePool {
             .fluidInputs(Materials.Lubricant.getFluid(20))
             .itemOutputs(NACComponentRegistry.processedBoltInfinity.getFakeStack(1))
             .duration(5 * 20)
-            .eut(ModuleRecipeInfo.LowTier.recipeEUt)
+            .eut(RECIPE_UV)
             .addTo(RecipeMaps.nanochipCuttingChamber);
 
         // Optical process with soc

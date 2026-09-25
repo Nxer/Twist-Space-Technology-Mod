@@ -44,7 +44,7 @@ public final class MiracleTopRecipeInitialization {
         recipeComparisonWhitelist.clear();
         specialMaterialCantAutoModify.clear();
 
-        NAC_UNWRAP_RECIPE_MAPS = new RecipeMap<?>[] { RecipeMaps.nanochipSMDProcessorRecipes,
+        NAC_UNWRAP_RECIPE_MAPS = new RecipeMap<?>[] { RecipeMaps.nanochipPartProcessorRecipes,
             RecipeMaps.nanochipBoardProcessorRecipes, RecipeMaps.nanochipEtchingArray,
             RecipeMaps.nanochipCuttingChamber, RecipeMaps.nanochipWireTracer, RecipeMaps.nanochipSuperconductorSplitter,
             RecipeMaps.nanochipOpticalOrganizer, RecipeMaps.nanochipEncasementWrapper,

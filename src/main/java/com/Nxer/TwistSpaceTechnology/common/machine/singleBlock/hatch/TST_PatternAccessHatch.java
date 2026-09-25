@@ -279,6 +279,12 @@ public class TST_PatternAccessHatch extends MTEHatch
     }
 
     @Override
+    public AccessRestriction getReshuffleAccess() {
+
+        return AccessRestriction.READ_WRITE;
+    }
+
+    @Override
     public boolean isPrioritized(AEItemStack input) {
 
         return false;
