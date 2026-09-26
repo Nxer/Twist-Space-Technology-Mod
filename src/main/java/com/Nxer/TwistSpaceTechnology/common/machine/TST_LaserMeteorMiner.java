@@ -1036,8 +1036,8 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
             .addEnergyHatch(tr("tst.common.machine.MeteorMiner.tooltip.structure.03"), 1)
             .addMaintenanceHatch(tr("tst.common.machine.MeteorMiner.tooltip.structure.03"), 1)
             // #tr tst.common.machine.MeteorMiner.tooltip.structure.04
-            // # Below the controller
-            // #zh_CN 控制器下侧
+            // # ULV only, below the controller
+            // #zh_CN 仅限ULV, 控制器下侧
             .addInputBus(tr("tst.common.machine.MeteorMiner.tooltip.structure.04"), 2)
             // #tr tst.common.machine.MeteorMiner.tooltip.structure.05
             // # {\GOLD}{\BOLD}TIER II
@@ -1065,7 +1065,8 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     private boolean addInjector(IGregTechTileEntity aBaseMetaTileEntity, int aBaseCasingIndex) {
         IMetaTileEntity aMetaTileEntity = aBaseMetaTileEntity.getMetaTileEntity();
         if (aMetaTileEntity == null) return false;
-        if (!(aMetaTileEntity instanceof MTEHatchInputBus bus)) return false;
+        // Only an ULV input bus (a single slot) for the fortune pickaxe
+        if (!(aMetaTileEntity instanceof MTEHatchInputBus bus) || bus.mTier != 0) return false;
         bus.updateTexture(aBaseCasingIndex);
         addIfSmartInput(bus);
         return mInputBusses.add(bus);
