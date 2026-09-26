@@ -1902,6 +1902,7 @@ tst.common.shared.structure_error.special_block_structure_issue=特殊方块结�
 tst.common.shared.structure_error.special_hatch_amount_wrong=特殊仓室数量不正确
 tst.common.shared.structure_error.tiered_structure_issue=等级方块存在放置错误
 tst.common.shared.structure_error.too_more_hatches=仓室数量过多
+tst.common.shared.tooltip.key.more=按住 %s 显示更多
 tst.common.shared.waila.current_eu_cost=当前EU消耗
 tst.common.shared.waila.wireless_mode=无线模式
 tst.dyson.machine.ArtificialStar.info.00=连续运行奖励
