@@ -32,6 +32,7 @@ import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infus
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipePrimordialDisjunctus;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeSkypiercerTower;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeTimeBendingSpeedRune;
+import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeTimeBendingSpeedRuneTimewood;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -1212,7 +1213,8 @@ public class TCResearches {
                 new ItemStack(TstBlocks.TimeBendingSpeedRune))
                     .setPages(
                         new ResearchPage(TSTUtils.tr("tc.research_text.TIME_BENDING_SPEED_RUNE.1")),
-                        new ResearchPage(infusionRecipeTimeBendingSpeedRune))
+                        new ResearchPage(infusionRecipeTimeBendingSpeedRune),
+                        new ResearchPage(infusionRecipeTimeBendingSpeedRuneTimewood))
                     .setParents("BLOODY_HELL")
                     .setSecondary()
                     .registerResearchItem();

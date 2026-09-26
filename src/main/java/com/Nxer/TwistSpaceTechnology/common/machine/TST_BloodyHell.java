@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static WayofTime.alchemicalWizardry.ModBlocks.blockLifeEssence;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInfusedDiamondBlock;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInfusedGlowstone;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInfusedIronBlock;
@@ -10,7 +11,6 @@ import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Stru
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockHint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -29,7 +29,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -63,7 +62,6 @@ import com.Nxer.TwistSpaceTechnology.util.text.Style;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.dreammaster.block.BlockList;
-import com.gtnewhorizon.structurelib.StructureLibAPI;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.alignment.enumerable.ExtendedFacing;
@@ -86,6 +84,7 @@ import gregtech.api.enums.Mods;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.IIconContainer;
+import gregtech.api.interfaces.INEIPreviewModifier;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
@@ -105,7 +104,8 @@ import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
 import gregtech.common.render.GTRenderUtil;
 
 @SkipGenerateDescription
-public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implements ISurvivalConstructable {
+public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell>
+    implements ISurvivalConstructable, INEIPreviewModifier {
 
     // region Class Constructor
     public TST_BloodyHell(int aID, String aName, String aNameRegional) {
@@ -503,7 +503,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                             .hint(1)
                             .casingIndex(MetaBlockCasing02.getTextureIndex(0))
                             .buildAndChain(MetaBlockCasing02, 0)))
-                .addElement('Z', ofBlockHint(Blocks.air, 0, StructureLibAPI.getBlockHint(), 3))
+                .addElement('Z', ofBlock(blockLifeEssence, 0))
                 .build();
         }
         return StructureDef;
@@ -525,16 +525,23 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             getOffset(0, tier, 0),
             getOffset(0, tier, 1),
             getOffset(0, tier, 2));
-        if (hintsOnly && tier >= 3) {
-            int fluidTier = tier == 6 ? 2 : 1;
-            buildPiece(
-                "fluid" + fluidTier,
-                stackSize,
-                true,
-                getOffset(1, tier, 0),
-                getOffset(1, tier, 1),
-                getOffset(1, tier, 2));
-        }
+        if (hintsOnly && tier >= 3) buildFluidPreview(stackSize, true, tier);
+    }
+
+    @Override
+    public void onPreviewConstruct(@NotNull ItemStack trigger) {
+        int tier = Math.min(trigger.stackSize, 6);
+        if (tier >= 3) buildFluidPreview(trigger, false, tier);
+    }
+
+    private void buildFluidPreview(ItemStack trigger, boolean hintsOnly, int tier) {
+        buildPiece(
+            tier == 6 ? STRUCTURE_FLUID_2 : STRUCTURE_FLUID_1,
+            trigger,
+            hintsOnly,
+            getOffset(1, tier, 0),
+            getOffset(1, tier, 1),
+            getOffset(1, tier, 2));
     }
 
     @Override
