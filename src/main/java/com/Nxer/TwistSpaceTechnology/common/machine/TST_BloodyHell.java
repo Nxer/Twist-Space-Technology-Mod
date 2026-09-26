@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static WayofTime.alchemicalWizardry.ModBlocks.blockLifeEssence;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInfusedDiamondBlock;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInfusedGlowstone;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInfusedIronBlock;
@@ -11,6 +10,7 @@ import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Stru
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockHint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -44,6 +43,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
+import com.Nxer.TwistSpaceTechnology.common.machine.BloodyHell.BloodyHellFluidAreaHandler;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_BloodyHell;
@@ -63,6 +63,7 @@ import com.Nxer.TwistSpaceTechnology.util.text.Style;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.dreammaster.block.BlockList;
+import com.gtnewhorizon.structurelib.StructureLibAPI;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.alignment.enumerable.ExtendedFacing;
@@ -92,6 +93,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.ISBRWorldContext;
 import gregtech.api.structure.error.StructureError;
@@ -501,7 +503,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                             .hint(1)
                             .casingIndex(MetaBlockCasing02.getTextureIndex(0))
                             .buildAndChain(MetaBlockCasing02, 0)))
-                .addElement('Z', ofBlock(blockLifeEssence, 0))
+                .addElement('Z', ofBlockHint(Blocks.air, 0, StructureLibAPI.getBlockHint(), 3))
                 .build();
         }
         return StructureDef;
@@ -523,6 +525,16 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             getOffset(0, tier, 0),
             getOffset(0, tier, 1),
             getOffset(0, tier, 2));
+        if (hintsOnly && tier >= 3) {
+            int fluidTier = tier == 6 ? 2 : 1;
+            buildPiece(
+                "fluid" + fluidTier,
+                stackSize,
+                true,
+                getOffset(1, tier, 0),
+                getOffset(1, tier, 1),
+                getOffset(1, tier, 2));
+        }
     }
 
     @Override
@@ -542,27 +554,12 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             false,
             true);
 
-        if (tier < 3) return blocksBuilt;
-        else {
-            int tierF = tier == 6 ? 2 : 1;
-            int fluidBuilt = this.survivalBuildPiece(
-                "fluid" + tierF,
-                stackSize,
-                getOffset(1, tier, 0),
-                getOffset(1, tier, 1),
-                getOffset(1, tier, 2),
-                elementBudget,
-                env,
-                false,
-                true);
-            return blocksBuilt + fluidBuilt;
-        }
+        return blocksBuilt;
     }
 
     @Override
     public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         mTier = 0;
-        isBloodChecked = false;
         isStructureBuild = false;
         for (int i = 6; i > 0; i--) {
             if (checkPiece("tier" + i, getOffset(0, i, 0), getOffset(0, i, 1), getOffset(0, i, 2), errors)) {
@@ -575,22 +572,14 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         }
 
         if (!errors.isEmpty()) {
+            setBloodState(false, true);
             parallel = 1;
             return;
         } else {
             isStructureBuild = true;
         }
 
-        int fluidTier = (mTier == 6) ? 2 : (mTier > 2) ? 1 : 0;
-        if (fluidTier > 0 && checkPiece(
-            "fluid" + fluidTier,
-            getOffset(1, mTier, 0),
-            getOffset(1, mTier, 1),
-            getOffset(1, mTier, 2),
-            errors)) {
-            isBloodChecked = true;
-        }
-
+        checkBlood(false);
         calculateParallel();
 
     }
@@ -611,6 +600,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     public boolean isStructureBuild = false;
     public boolean mIsAnimated = true;
     protected boolean mFormed;
+    private BloodyHellFluidAreaHandler bloodFluidAreaHandler;
     public static final String STRUCTURE_FLUID_1 = "fluid1";
     public static final String STRUCTURE_FLUID_2 = "fluid2";
     public static final int BLOOD_AMOUNT_NEEDED_1 = 324_000;
@@ -652,8 +642,8 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     @Override
     protected IAlignmentLimits getInitialAlignmentLimits() {
-        // Prevent tilting or inversion
-        return (d, r, f) -> d == ForgeDirection.UP;
+        // The controller texture and fluid area only support this exact upward-facing alignment.
+        return (d, r, f) -> d == ForgeDirection.UP && r.isNotRotated() && f.isNotFlipped();
     }
 
     @Override
@@ -675,7 +665,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
 
                 // check structure blood
-                if (!isBloodChecked) return SimpleCheckRecipeResult.ofFailure("press_button_to_set_structure");
+                if (!checkBlood(false)) return SimpleCheckRecipeResult.ofFailure("press_button_to_set_structure");
                 // #tr GT5U.gui.text.recipe_result.press_button_to_set_structure
                 // # Click the button to fill up the structure
                 // #zh_CN 点击按钮以填充结构
@@ -769,93 +759,76 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         super.onPreTick(aBaseMetaTileEntity, aTick);
 
         if (aTick % 20 == 0) { // for every second
-            if (aBaseMetaTileEntity.isServerSide()) {
-                if (!isBloodChecked) { // check blood if it has not been checked yet
-                    checkBlood(false);
-                }
-            }
+            if (aBaseMetaTileEntity.isServerSide() && mTier > 0 && !isBloodChecked) checkBlood(false);
         }
     }
 
     /**
-     * Check the blood fluids in the structure and optionally place or clear them.
+     * Check the blood fluid area and optionally fill or clear it.
      * <p>
      * Invoking this in tiers without fluid structures is ok, and always return true.
      *
-     * @param needPlace true = set block, false = only check structure
-     * @return true if the blood is valid, or successfully placed/cleared.
+     * @param toggleArea true = fill or clear the complete area, false = only check it
+     * @return true if the blood is valid, or the requested fill/clear operation succeeded
      */
-    public boolean checkBlood(boolean needPlace) {
-        if (mTier <= 0) return false; // invalid tiers
-        else if (mTier < 3) return true; // no blood needed
-
-        IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
-        String[][] structureDef = mTier > 5 ? STRUCTURE_BLOOD_2 : STRUCTURE_BLOOD_1;
-        int bloodAmountNeeded = mTier > 5 ? BLOOD_AMOUNT_NEEDED_2 : BLOOD_AMOUNT_NEEDED_1;
-        int offsetX = getOffset(1, mTier, 0);
-        int offsetY = getOffset(1, mTier, 1);
-        int offsetZ = getOffset(1, mTier, 2);
-        Block Blood = blockLifeEssence;
-        Block Air = Blocks.air;
-
-        int lengthX = structureDef.length;
-        int lengthY = structureDef[0].length;
-        int lengthZ = structureDef[0][0].length();
-
-        ArrayList<FluidStack> inputFluids = this.getStoredFluids();
-        int mBloodAmount = 0;
-        for (FluidStack aFluid : inputFluids) {
-            if (aFluid.isFluidEqual(getLifeEssenceFluidStack(1))) {
-                mBloodAmount += aFluid.amount;
-            }
-        }
-
-        if (needPlace && bloodAmountNeeded > mBloodAmount) {
+    public boolean checkBlood(boolean toggleArea) {
+        if (mTier <= 0) {
+            setBloodState(false, true);
             return false;
         }
-
-        int fixX = 0;
-        int fixY = mTier > 5 ? -1 : -24;
-        int fixZ = mTier > 5 ? 1 : 24;
-
-        int setCount = 0;
-        for (int y = 0; y < lengthY; y++) {
-            for (int x = 0; x < lengthX; x++) {
-                for (int z = 0; z < lengthZ; z++) {
-                    String strList = String.valueOf(structureDef[x][y].charAt(z));
-                    if (!Objects.equals(strList, "Z")) continue;
-
-                    int aX = offsetX - x + fixX;
-                    int aY = offsetY - y + fixY;
-                    int aZ = offsetZ - z + fixZ;
-
-                    aX += aBaseMetaTileEntity.getXCoord();
-                    aY += aBaseMetaTileEntity.getYCoord();
-                    aZ += aBaseMetaTileEntity.getZCoord();
-
-                    if (needPlace) {
-                        if (isBloodClear) {
-                            for (FluidStack aFluid : inputFluids) {
-                                if (aFluid.isFluidEqual(getLifeEssenceFluidStack(1)) && aFluid.amount >= 1000) {
-                                    aFluid.amount -= 1000;
-                                    break;
-                                }
-                            }
-                            aBaseMetaTileEntity.getWorld()
-                                .setBlock(aX, aY, aZ, Blood);
-                        } else {
-                            aBaseMetaTileEntity.getWorld()
-                                .setBlock(aX, aY, aZ, Air);
-                        }
-                    }
-
-                    setCount++;
-                    if (setCount == bloodAmountNeeded / 1000) break;
-                }
-            }
+        if (mTier < 3) {
+            setBloodState(true, true);
+            return true;
         }
 
-        return true;
+        BloodyHellFluidAreaHandler fluidArea = getBloodFluidAreaHandler();
+        boolean filled = fluidArea.isFilled(mTier);
+        if (!toggleArea) {
+            setBloodState(filled, !filled);
+            return filled;
+        }
+
+        if (filled) {
+            fluidArea.clear(mTier);
+            setBloodState(false, true);
+            mUpdated = true;
+            return true;
+        }
+        if (!fluidArea.isAreaLoaded(mTier)) return false;
+
+        FluidStack lifeEssence = getLifeEssenceFluidStack(fluidArea.getRequiredAmount(mTier));
+        if (!depleteStructureFluid(lifeEssence)) return false;
+
+        boolean fillSucceeded = fluidArea.fill(mTier);
+        setBloodState(fillSucceeded, !fillSucceeded);
+        mUpdated = true;
+        return fillSucceeded;
+    }
+
+    private boolean depleteStructureFluid(FluidStack fluid) {
+        if (fluid == null) return false;
+
+        CheckRecipeResult previousResult = getCheckRecipeResult();
+        setCheckRecipeResult(CheckRecipeResultRegistry.SUCCESSFUL);
+        startRecipeProcessing();
+        boolean depleted = depleteInput(fluid, true) && depleteInput(fluid);
+        endRecipeProcessing();
+
+        if (!getCheckRecipeResult().wasSuccessful()) return false;
+        setCheckRecipeResult(previousResult);
+        return depleted;
+    }
+
+    private BloodyHellFluidAreaHandler getBloodFluidAreaHandler() {
+        if (bloodFluidAreaHandler == null) bloodFluidAreaHandler = new BloodyHellFluidAreaHandler(this);
+        return bloodFluidAreaHandler;
+    }
+
+    private void setBloodState(boolean checked, boolean clear) {
+        if (isBloodChecked == checked && isBloodClear == clear) return;
+        isBloodChecked = checked;
+        isBloodClear = clear;
+        markDirty();
     }
 
     protected static FluidStack getLifeEssenceFluidStack(int amount) {
@@ -875,13 +848,12 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     public ButtonWidget createBloodStatusButton(IWidgetBuilder<?> builder) {
 
-        Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
-            if (checkStructure(true, getBaseMetaTileEntity()) && !this.getBaseMetaTileEntity()
-                .isActive()) if (checkBlood(true)) {
-                    isBloodClear = !isBloodClear;
-                    isBloodChecked = !isBloodClear;
-                }
-        })
+        Widget button = new ButtonWidget()
+            .setOnClick(
+                (clickData, widget) -> {
+                    if (checkStructure(true, getBaseMetaTileEntity()) && !this.getBaseMetaTileEntity()
+                        .isActive()) checkBlood(true);
+                })
             .setPlayClickSound(true)
             .setBackground(() -> {
                 List<IDrawable> layers = new ArrayList<>();
@@ -990,7 +962,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         IIconContainer[] tTextures;
         if (mActive) tTextures = BloodyHellIconsActive;
         else tTextures = BloodyHellIcons;
-        assert tTextures != null && tTextures.length == tABCCoord.length;
+        assert tTextures != null && tTextures.length >= 9;
 
         for (int i = 0; i < 9; i++) {
             tExtendedFacing.getWorldOffset(tABCCoord, tXYZOffset);
