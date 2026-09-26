@@ -14,8 +14,10 @@ import static gregtech.api.enums.TierEU.RECIPE_MV;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,10 +40,12 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.entity.TileEntityLaserBeacon;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_LaserMeteorMiner;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
+import com.github.bsideup.jabel.Desugar;
 import com.gtnewhorizon.structurelib.StructureLibAPI;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -324,6 +328,16 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     private int multiTier = 0;
     private boolean stopAllRendering = false;
 
+    /** Window of the stats shown in the GUI: 5 seconds. */
+    private static final int RECENT_WINDOW_TICKS = 5 * 20;
+
+    /** A mining cycle, kept for the GUI stats of the last {@link #RECENT_WINDOW_TICKS} ticks (not saved). */
+    @Desugar
+    private record MiningCycle(long tick, List<ItemStack> outputs, int blocksMined, double progress) {}
+
+    private final ArrayDeque<MiningCycle> recentCycles = new ArrayDeque<>();
+    private int blocksMinedThisCycle = 0;
+
     @Override
     public int getMaxEfficiency(ItemStack aStack) {
         return 10000;
@@ -386,8 +400,10 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
             updateLaser(true, this.currentRadius + distanceFromMeteor + 0.5 + this.getLaserToEndHeight());
             this.setFortuneTier();
             this.startMining(this.multiTier);
-            mOutputItems = toOutputArray(mergeStacks(res));
+            final List<ItemStack> outputs = mergeStacks(res);
+            mOutputItems = toOutputArray(outputs);
             res.clear();
+            recordCycle(outputs);
         } else {
             updateLaser(false, 0);
             this.isWaiting = true;
@@ -619,6 +635,7 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
             } else res.addAll(drops);
             getBaseMetaTileEntity().getWorld()
                 .setBlockToAir(currentX, currentY, currentZ);
+            blocksMinedThisCycle++;
         }
     }
 
@@ -775,6 +792,9 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
 
         this.isStartInitialized = true;
         this.hasFinished = false;
+        // a new meteor (or a reset): the stats of the previous one don't apply
+        recentCycles.clear();
+        blocksMinedThisCycle = 0;
     }
 
     private boolean checkCenter() {
@@ -826,6 +846,113 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     protected @NotNull MTEMultiBlockBaseGui<?> getGui() {
         return new TST_Gui_LaserMeteorMiner(this);
     }
+
+    /**
+     * The GUI shows the outputs of the last seconds instead of the outputs and progress of the single (short) cycle.
+     */
+    @Override
+    public boolean showRecipeTextInGUI() {
+        return false;
+    }
+
+    // region GUI stats (server side, read by TST_Gui_LaserMeteorMiner's sync values)
+
+    private void recordCycle(List<ItemStack> outputs) {
+        final long now = getWorldTime();
+        recentCycles.addLast(new MiningCycle(now, outputs, blocksMinedThisCycle, getProgress()));
+        blocksMinedThisCycle = 0;
+        pruneRecentCycles(now);
+    }
+
+    /**
+     * Drops the cycles older than the window, but keeps the last two to compute rates when cycles are slow.
+     */
+    private void pruneRecentCycles(long now) {
+        while (recentCycles.size() > 2 && now - recentCycles.peekFirst()
+            .tick() > RECENT_WINDOW_TICKS) {
+            recentCycles.pollFirst();
+        }
+    }
+
+    private long getWorldTime() {
+        return getBaseMetaTileEntity().getWorld()
+            .getTotalWorldTime();
+    }
+
+    public boolean isMining() {
+        return getBaseMetaTileEntity().isActive() && isStartInitialized && !hasFinished && !isWaiting;
+    }
+
+    public int getCurrentRadius() {
+        return currentRadius;
+    }
+
+    public int getFortuneTier() {
+        return fortuneTier;
+    }
+
+    /**
+     * Fraction (0-1) of the mining cube already scanned: the whole rows (y, x) behind the drill, plus the current row
+     * for tier 1. The drill moves from {@code start - radius} to {@code start + radius + 1} on each axis.
+     */
+    public double getProgress() {
+        final int side = 2 * currentRadius + 2;
+        double rows = (double) (yDrill - (yStart - currentRadius)) * side + (xDrill - (xStart - currentRadius));
+        if (multiTier == 1) rows += (double) (zDrill - (zStart - currentRadius)) / side;
+        return Math.max(0, Math.min(1, rows / ((double) side * side)));
+    }
+
+    /**
+     * Blocks mined per second over the recent cycles.
+     */
+    public double getBlocksPerSecond() {
+        pruneRecentCycles(getWorldTime());
+        if (recentCycles.size() < 2) return 0;
+        final long ticks = recentCycles.peekLast()
+            .tick()
+            - recentCycles.peekFirst()
+                .tick();
+        if (ticks <= 0) return 0;
+        int blocks = -recentCycles.peekFirst()
+            .blocksMined(); // the first cycle happened before the measured interval
+        for (MiningCycle cycle : recentCycles) blocks += cycle.blocksMined();
+        return blocks * 20.0 / ticks;
+    }
+
+    /**
+     * Seconds until the whole meteor area is scanned, at the pace of the recent cycles; -1 if unknown.
+     */
+    public int getEtaSeconds() {
+        pruneRecentCycles(getWorldTime());
+        if (recentCycles.size() < 2) return -1;
+        final MiningCycle first = recentCycles.peekFirst();
+        final MiningCycle last = recentCycles.peekLast();
+        final double progress = last.progress() - first.progress();
+        final long ticks = last.tick() - first.tick();
+        if (progress <= 0 || ticks <= 0) return -1;
+        final double ticksLeft = (1 - last.progress()) / progress * ticks;
+        return (int) Math.min(Integer.MAX_VALUE, Math.ceil(ticksLeft / 20));
+    }
+
+    /**
+     * Everything produced in the last {@link #RECENT_WINDOW_TICKS} ticks, merged, biggest amounts first.
+     */
+    public List<ItemStackLong> getRecentOutputs() {
+        final long now = getWorldTime();
+        pruneRecentCycles(now);
+        final List<ItemStack> produced = new ArrayList<>();
+        for (MiningCycle cycle : recentCycles) {
+            if (now - cycle.tick() <= RECENT_WINDOW_TICKS) produced.addAll(cycle.outputs());
+        }
+        final List<ItemStackLong> result = new ArrayList<>();
+        for (ItemStack stack : mergeStacks(produced)) result.add(new ItemStackLong(stack, stack.stackSize));
+        result.sort(
+            Comparator.comparingLong(ItemStackLong::stackSize)
+                .reversed());
+        return result;
+    }
+
+    // endregion
 
     @Override
     public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
