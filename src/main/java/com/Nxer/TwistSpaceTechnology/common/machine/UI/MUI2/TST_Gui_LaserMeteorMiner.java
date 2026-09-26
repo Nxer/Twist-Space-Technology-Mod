@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import net.minecraft.item.ItemStack;
@@ -54,9 +55,9 @@ public class TST_Gui_LaserMeteorMiner extends MTEMultiBlockBaseGui<TST_LaserMete
         syncManager.syncValue("meteorEta", new IntSyncValue(multiblock::getEtaSeconds));
         syncManager.syncValue("meteorBlocksPerSecond", new DoubleSyncValue(multiblock::getBlocksPerSecond));
         syncManager.syncValue(
-            "meteorRecentOutputs",
+            "meteorOutputs",
             new GenericListSyncHandler<>(
-                multiblock::getRecentOutputs,
+                multiblock::getMeteorOutputs,
                 null,
                 TST_Gui_LaserMeteorMiner::readOutput,
                 TST_Gui_LaserMeteorMiner::writeOutput,
@@ -91,8 +92,11 @@ public class TST_Gui_LaserMeteorMiner extends MTEMultiBlockBaseGui<TST_LaserMete
         DoubleSyncValue progress = syncManager.findSyncHandler("meteorProgress", DoubleSyncValue.class);
         IntSyncValue eta = syncManager.findSyncHandler("meteorEta", IntSyncValue.class);
         DoubleSyncValue blocksPerSecond = syncManager.findSyncHandler("meteorBlocksPerSecond", DoubleSyncValue.class);
-        GenericListSyncHandler<ItemStackLong> recentOutputs = syncManager
-            .findSyncHandler("meteorRecentOutputs", GenericListSyncHandler.class);
+        GenericListSyncHandler<ItemStackLong> meteorOutputs = syncManager
+            .findSyncHandler("meteorOutputs", GenericListSyncHandler.class);
+        // Kept after the meteor is done, until the next one starts
+        BooleanSupplier hasOutputs = () -> !meteorOutputs.getValue()
+            .isEmpty();
 
         // #tr tst.common.machine.MeteorMiner.gui.radius
         // # Radius: {\WHITE}%s
@@ -106,9 +110,9 @@ public class TST_Gui_LaserMeteorMiner extends MTEMultiBlockBaseGui<TST_LaserMete
         // # Mining speed: {\WHITE}%s blocks/s
         // #zh_CN 开采速度: {\WHITE}%s 方块/秒
 
-        // #tr tst.common.machine.MeteorMiner.gui.recent_outputs
-        // # Produced in the last 5 s:
-        // #zh_CN 最近5秒产出:
+        // #tr tst.common.machine.MeteorMiner.gui.meteor_outputs
+        // # Mined since the last meteor arrived:
+        // #zh_CN 本次陨星开采产出:
         terminal
             .child(
                 statLine(
@@ -135,14 +139,14 @@ public class TST_Gui_LaserMeteorMiner extends MTEMultiBlockBaseGui<TST_LaserMete
                     mining))
             .child(
                 statLine(
-                    () -> StatCollector.translateToLocal("tst.common.machine.MeteorMiner.gui.recent_outputs"),
-                    mining));
+                    () -> StatCollector.translateToLocal("tst.common.machine.MeteorMiner.gui.meteor_outputs"),
+                    hasOutputs));
 
         DynamicSyncHandler outputsHandler = new DynamicSyncHandler()
             .widgetProvider((manager, packet) -> packet == null ? new EmptyWidget() : createOutputRows(packet))
             .allowC2S();
-        recentOutputs.setChangeListener(() -> outputsHandler.notifyUpdate(packet -> {
-            List<ItemStackLong> outputs = recentOutputs.getValue();
+        meteorOutputs.setChangeListener(() -> outputsHandler.notifyUpdate(packet -> {
+            List<ItemStackLong> outputs = meteorOutputs.getValue();
             packet.writeInt(outputs.size());
             for (ItemStackLong output : outputs) writeOutput(packet, output);
         }));
@@ -150,16 +154,20 @@ public class TST_Gui_LaserMeteorMiner extends MTEMultiBlockBaseGui<TST_LaserMete
             new DynamicSyncedWidget<>().widthRel(0.85f)
                 .coverChildrenHeight(0)
                 .syncHandler(outputsHandler)
-                .setEnabledIf(widget -> mining.getBoolValue()));
+                .setEnabledIf(widget -> hasOutputs.getAsBoolean()));
         return terminal;
     }
 
     private static IWidget statLine(Supplier<String> text, BooleanSyncValue mining) {
+        return statLine(text, mining::getBoolValue);
+    }
+
+    private static IWidget statLine(Supplier<String> text, BooleanSupplier visible) {
         return IKey.dynamic(text::get)
             .asWidget()
             .marginBottom(2)
             .fullWidth()
-            .setEnabledIf(widget -> mining.getBoolValue());
+            .setEnabledIf(widget -> visible.getAsBoolean());
     }
 
     private static String formatEta(int seconds) {

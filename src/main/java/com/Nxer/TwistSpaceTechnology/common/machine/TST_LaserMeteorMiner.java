@@ -27,10 +27,12 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -331,9 +333,24 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     /** Window of the stats shown in the GUI: 5 seconds. */
     private static final int RECENT_WINDOW_TICKS = 5 * 20;
 
-    /** A mining cycle, kept for the GUI stats of the last {@link #RECENT_WINDOW_TICKS} ticks (not saved). */
+    /** A mining cycle, kept for the mining speed of the last {@link #RECENT_WINDOW_TICKS} ticks (not saved). */
     @Desugar
-    private record MiningCycle(long tick, List<ItemStack> outputs, int blocksMined) {}
+    private record MiningCycle(long tick, int blocksMined) {}
+
+    /** An item produced from the current meteor, with its total amount. */
+    private static final class MinedAmount {
+
+        final ItemStack stack; // stack size 1
+        long amount;
+
+        MinedAmount(ItemStack stack, long amount) {
+            this.stack = stack;
+            this.amount = amount;
+        }
+    }
+
+    /** Everything produced since the drill started on the current meteor, merged (saved). */
+    private final List<MinedAmount> meteorOutputs = new ArrayList<>();
 
     private final ArrayDeque<MiningCycle> recentCycles = new ArrayDeque<>();
     private int blocksMinedThisCycle = 0;
@@ -406,7 +423,8 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
             final List<ItemStack> outputs = mergeStacks(res);
             mOutputItems = toOutputArray(outputs);
             res.clear();
-            recordCycle(outputs);
+            addToMeteorOutputs(outputs);
+            recordCycle();
         } else {
             updateLaser(false, 0);
             this.isWaiting = true;
@@ -819,6 +837,7 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
         // a new meteor (or a reset): the stats of the previous one don't apply
         recentCycles.clear();
         blocksMinedThisCycle = 0;
+        meteorOutputs.clear();
     }
 
     private boolean checkCenter() {
@@ -881,9 +900,9 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
 
     // region GUI stats (server side, read by TST_Gui_LaserMeteorMiner's sync values)
 
-    private void recordCycle(List<ItemStack> outputs) {
+    private void recordCycle() {
         final long now = getWorldTime();
-        recentCycles.addLast(new MiningCycle(now, outputs, blocksMinedThisCycle));
+        recentCycles.addLast(new MiningCycle(now, blocksMinedThisCycle));
         blocksMinedThisCycle = 0;
         pruneRecentCycles(now);
     }
@@ -988,18 +1007,27 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
         return (int) Math.min(Integer.MAX_VALUE, (ticks + 19) / 20);
     }
 
-    /**
-     * Everything produced in the last {@link #RECENT_WINDOW_TICKS} ticks, merged, biggest amounts first.
-     */
-    public List<ItemStackLong> getRecentOutputs() {
-        final long now = getWorldTime();
-        pruneRecentCycles(now);
-        final List<ItemStack> produced = new ArrayList<>();
-        for (MiningCycle cycle : recentCycles) {
-            if (now - cycle.tick() <= RECENT_WINDOW_TICKS) produced.addAll(cycle.outputs());
+    private void addToMeteorOutputs(List<ItemStack> outputs) {
+        for (ItemStack output : outputs) {
+            MinedAmount same = null;
+            for (MinedAmount mined : meteorOutputs) {
+                if (GTUtility.areStacksEqual(mined.stack, output)) {
+                    same = mined;
+                    break;
+                }
+            }
+            if (same == null)
+                meteorOutputs.add(new MinedAmount(GTUtility.copyAmountUnsafe(1, output), output.stackSize));
+            else same.amount += output.stackSize;
         }
-        final List<ItemStackLong> result = new ArrayList<>();
-        for (ItemStack stack : mergeStacks(produced)) result.add(new ItemStackLong(stack, stack.stackSize));
+    }
+
+    /**
+     * Everything produced from the current meteor (or the last one, while waiting), biggest amounts first.
+     */
+    public List<ItemStackLong> getMeteorOutputs() {
+        final List<ItemStackLong> result = new ArrayList<>(meteorOutputs.size());
+        for (MinedAmount mined : meteorOutputs) result.add(new ItemStackLong(mined.stack, mined.amount));
         result.sort(
             Comparator.comparingLong(ItemStackLong::stackSize)
                 .reversed());
@@ -1075,6 +1103,14 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
         aNBT.setBoolean("stopAllRendering", stopAllRendering);
         aNBT.setInteger("multiTier", multiTier);
         aNBT.setInteger("fortuneTier", fortuneTier);
+        NBTTagList outputsTag = new NBTTagList();
+        for (MinedAmount mined : meteorOutputs) {
+            NBTTagCompound tag = new NBTTagCompound();
+            mined.stack.writeToNBT(tag);
+            tag.setLong("amount", mined.amount); // ItemStack's own count is a byte
+            outputsTag.appendTag(tag);
+        }
+        aNBT.setTag("meteorOutputs", outputsTag);
     }
 
     @Override
@@ -1093,6 +1129,13 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
         stopAllRendering = aNBT.getBoolean("stopAllRendering");
         multiTier = aNBT.getInteger("multiTier");
         fortuneTier = aNBT.getInteger("fortuneTier");
+        meteorOutputs.clear();
+        NBTTagList outputsTag = aNBT.getTagList("meteorOutputs", Constants.NBT.TAG_COMPOUND);
+        for (int i = 0; i < outputsTag.tagCount(); i++) {
+            NBTTagCompound tag = outputsTag.getCompoundTagAt(i);
+            ItemStack stack = ItemStack.loadItemStackFromNBT(tag);
+            if (stack != null) meteorOutputs.add(new MinedAmount(stack, tag.getLong("amount")));
+        }
     }
 
     // endregion
