@@ -357,9 +357,6 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
             // #zh_CN {\LIGHT_PURPLE}缺少设计图.
             return SimpleCheckRecipeResult.ofFailure("missing_schematic");
         }
-        if (renderer != null) {
-            renderer.setColors(1, 0, 0);
-        }
         if (isResetting) {
             this.reset();
             // #tr GT5U.gui.text.recipe_result.meteor_reset
@@ -381,14 +378,13 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
         }
 
         if (!hasFinished) {
-            renderer.setShouldRender(true);
-            renderer.setRange((double) (this.currentRadius + distanceFromMeteor + 0.5 + this.getLaserToEndHeight()));
+            updateLaser(true, this.currentRadius + distanceFromMeteor + 0.5 + this.getLaserToEndHeight());
             this.setFortuneTier();
             this.startMining(this.multiTier);
             mOutputItems = res.toArray(new ItemStack[0]);
             res.clear();
         } else {
-            renderer.setShouldRender(false);
+            updateLaser(false, 0);
             this.isWaiting = true;
             this.setElectricityStats();
             boolean isReady = checkCenter();
@@ -414,14 +410,28 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
 
     @Override
     public void onDisableWorking() {
-        if (renderer != null) renderer.setShouldRender(false);
+        updateLaser(false, 0);
         super.onDisableWorking();
     }
 
     @Override
     public void onBlockDestroyed() {
-        if (renderer != null) renderer.setShouldRender(false);
+        updateLaser(false, 0);
         super.onBlockDestroyed();
+    }
+
+    /**
+     * Updates the laser only when something changed: every setter of the laser tile entity sends a block update to the
+     * clients.
+     *
+     * @param mining whether the miner is mining; the laser is shown only if the screwdriver didn't turn rendering off
+     * @param range  length of the laser, used only while it is shown
+     */
+    private void updateLaser(boolean mining, double range) {
+        if (renderer == null) return;
+        boolean shouldRender = mining && !stopAllRendering;
+        if (renderer.getShouldRender() != shouldRender) renderer.setShouldRender(shouldRender);
+        if (shouldRender && renderer.getRange() != range) renderer.setRange(range);
     }
 
     private boolean findLaserRenderer() {
@@ -434,6 +444,7 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
                 zStart) instanceof TileEntityLaserBeacon laser) {
             renderer = laser;
             renderer.setRotationFields(ExtendedFacing.of(getDirection(), getRotation(), getFlip()));
+            renderer.setColors(1, 0, 0);
             return true;
         }
         return false;
@@ -452,8 +463,9 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
         // #zh_CN 渲染特效开启
         if (stopAllRendering) {
             TSTUtils.sendMessageKeyToPlayer(aPlayer, "tst.common.machine.MeteorMiner.message.render.off");
-            if (renderer != null) renderer.setShouldRender(false);
+            updateLaser(false, 0);
         } else {
+            // the laser comes back on the next mining cycle
             TSTUtils.sendMessageKeyToPlayer(aPlayer, "tst.common.machine.MeteorMiner.message.render.on");
         }
     }
