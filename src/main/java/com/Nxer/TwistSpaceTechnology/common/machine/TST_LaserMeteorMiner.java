@@ -26,6 +26,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -40,6 +41,7 @@ import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
+import com.gtnewhorizon.structurelib.StructureLibAPI;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.alignment.enumerable.ExtendedFacing;
@@ -53,8 +55,10 @@ import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 import com.gtnewhorizons.modularui.common.widget.ButtonWidget;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TAE;
 import gregtech.api.enums.Textures;
@@ -242,6 +246,8 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
                 verticalOffSet_T1,
                 depthOffSet_T1);
         }
+        // Only for the hologram projector's hints: not part of the structure, of auto-build or of the NEI preview
+        if (hintsOnly) hintMeteorCenter(stackSize.stackSize > 1 ? 2 : 1);
     }
 
     @Override
@@ -722,17 +728,43 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
      *
      */
     private void setStartCoords() {
-        ForgeDirection facing = getBaseMetaTileEntity().getBackFacing();
+        final ChunkCoordinates center = getMeteorCenter(this.multiTier);
+        xStart = center.posX;
+        yStart = center.posY;
+        zStart = center.posZ;
+    }
+
+    /**
+     * Center of the meteor for the given tier: right above the laser beacon, {@code distanceFromMeteor} blocks above
+     * the highest block of the multi. This is where players put the Warded Glass that stops the meteor.
+     */
+    private ChunkCoordinates getMeteorCenter(int tier) {
+        final IGregTechTileEntity base = getBaseMetaTileEntity();
+        final int backDistance = tier == 1 ? 2 : 6;
+        int x = base.getXCoord();
+        int z = base.getZCoord();
+        ForgeDirection facing = base.getBackFacing();
         if (facing == ForgeDirection.NORTH || facing == ForgeDirection.SOUTH) {
-            xStart = getBaseMetaTileEntity().getXCoord();
-            zStart = (this.multiTier == 1 ? 2 : 6) * getExtendedFacing().getRelativeBackInWorld().offsetZ
-                + getBaseMetaTileEntity().getZCoord();
+            z += backDistance * getExtendedFacing().getRelativeBackInWorld().offsetZ;
         } else {
-            xStart = (this.multiTier == 1 ? 2 : 6) * getExtendedFacing().getRelativeBackInWorld().offsetX
-                + getBaseMetaTileEntity().getXCoord();
-            zStart = getBaseMetaTileEntity().getZCoord();
+            x += backDistance * getExtendedFacing().getRelativeBackInWorld().offsetX;
         }
-        yStart = distanceFromMeteor + (this.multiTier == 1 ? 13 : 15) + getBaseMetaTileEntity().getYCoord();
+        return new ChunkCoordinates(x, distanceFromMeteor + (tier == 1 ? 13 : 15) + base.getYCoord(), z);
+    }
+
+    /**
+     * Shows where the Warded Glass goes, together with the hologram projector's structure hints.
+     */
+    private void hintMeteorCenter(int tier) {
+        final ChunkCoordinates center = getMeteorCenter(tier);
+        final World world = getBaseMetaTileEntity().getWorld();
+        final Block wardedGlass = GameRegistry.findBlock(Mods.Thaumcraft.ID, "blockCosmeticOpaque");
+        if (wardedGlass != null) {
+            StructureLibAPI.hintParticle(world, center.posX, center.posY, center.posZ, wardedGlass, 2);
+        } else {
+            StructureLibAPI
+                .hintParticle(world, center.posX, center.posY, center.posZ, StructureLibAPI.getBlockHint(), 0);
+        }
     }
 
     private void setReady() {
@@ -969,6 +1001,10 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
             // # considering the block right above the center of the meteor (like Warded Glass).
             // #zh_CN 顾及了中心正上方的方块(比如守卫者玻璃).
             .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.14"))
+            // #tr tst.common.machine.MeteorMiner.tooltip.info.hologram
+            // # Use the Hologram Projector on the controller to see where the Warded Glass goes (center of the meteor).
+            // #zh_CN 对控制器使用全息投影仪, 可显示守卫者玻璃的放置位置(陨星中心).
+            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.hologram"))
             // #tr tst.common.machine.MeteorMiner.tooltip.info.15
             // # The reset button will restart the machine without optimizing the radius.
             // #zh_CN 点击重启按钮将重启机器, 并且不进行半径适配优化.

@@ -1408,6 +1408,7 @@ tst.common.machine.MeteorMiner.tooltip.info.24=总是时运III.
 tst.common.machine.MeteorMiner.tooltip.info.25=每次运行挖掘一行.
 tst.common.machine.MeteorMiner.tooltip.info.26=§9§l终是好陨星! (Finally some good Meteors!)
 tst.common.machine.MeteorMiner.tooltip.info.energy_hatches=可使用普通能源仓, 或TecTech高电流/激光能源仓, 但不可混用.
+tst.common.machine.MeteorMiner.tooltip.info.hologram=对控制器使用全息投影仪, 可显示守卫者玻璃的放置位置(陨星中心).
 tst.common.machine.MeteorMiner.tooltip.machine_type=陨星采矿机
 tst.common.machine.MeteorMiner.tooltip.structure.01=§6§l等级 I
 tst.common.machine.MeteorMiner.tooltip.structure.02=仪式上方第二层的中心

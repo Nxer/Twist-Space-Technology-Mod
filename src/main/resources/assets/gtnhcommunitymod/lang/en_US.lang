@@ -1408,6 +1408,7 @@ tst.common.machine.MeteorMiner.tooltip.info.24=Always has Fortune III
 tst.common.machine.MeteorMiner.tooltip.info.25=Mines one row every cycle.
 tst.common.machine.MeteorMiner.tooltip.info.26=§9§lFinally some good Meteors!
 tst.common.machine.MeteorMiner.tooltip.info.energy_hatches=Accepts normal energy hatches or TecTech multi Amp / laser energy hatches, but not mixed.
+tst.common.machine.MeteorMiner.tooltip.info.hologram=Use the Hologram Projector on the controller to see where the Warded Glass goes (center of the meteor).
 tst.common.machine.MeteorMiner.tooltip.machine_type=Meteor Miner
 tst.common.machine.MeteorMiner.tooltip.structure.01=§6§lTIER I
 tst.common.machine.MeteorMiner.tooltip.structure.02=Center of the second layer above the ritual
