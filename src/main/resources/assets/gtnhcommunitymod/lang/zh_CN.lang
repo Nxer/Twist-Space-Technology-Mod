@@ -8,6 +8,7 @@ GT5U.gui.text.recipe_result.growing_algae=§a藻类生长中
 GT5U.gui.text.recipe_result.infusion_complete=§a注魔完成
 GT5U.gui.text.recipe_result.infusioning=§a正在注魔
 GT5U.gui.text.recipe_result.insufficient_pedestals=§c(螺丝刀右键可重新检查) 基座缺少数量: %d
+GT5U.gui.text.recipe_result.meteor_area_not_loaded=§d陨星区域未加载, 等待中...
 GT5U.gui.text.recipe_result.meteor_mining=§d正在开采!
 GT5U.gui.text.recipe_result.meteor_reset=§d重置完成!
 GT5U.gui.text.recipe_result.meteor_waiting=§d等待陨星中...

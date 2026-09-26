@@ -16,7 +16,6 @@ import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -308,6 +307,8 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     // region Processing Logic
     private static final int distanceFromMeteor = 48;
     private static final int MAX_RADIUS = 40;
+    /** Max air blocks the tier 1 drill skips in a single cycle, to avoid lag spikes. */
+    private static final int MAX_AIR_CHECKS_PER_CYCLE = 4096;
     protected TileEntityLaserBeacon renderer;
     private int currentRadius = MAX_RADIUS;
     private int xDrill, yDrill, zDrill;
@@ -317,7 +318,7 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     private boolean hasFinished = true;
     private boolean isWaiting = false;
     private boolean isResetting = false;
-    Collection<ItemStack> res = new HashSet<>();
+    private final List<ItemStack> res = new ArrayList<>();
     private int multiTier = 0;
     private boolean stopAllRendering = false;
 
@@ -373,20 +374,24 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
 
         if (!isStartInitialized) {
             this.setStartCoords();
+            if (!isMeteorAreaLoaded(MAX_RADIUS)) return meteorAreaNotLoaded();
             this.findBestRadius();
             this.initializeDrillPos();
         }
 
         if (!hasFinished) {
+            if (!isMeteorAreaLoaded(currentRadius)) return meteorAreaNotLoaded();
             updateLaser(true, this.currentRadius + distanceFromMeteor + 0.5 + this.getLaserToEndHeight());
             this.setFortuneTier();
             this.startMining(this.multiTier);
-            mOutputItems = res.toArray(new ItemStack[0]);
+            mOutputItems = toOutputArray(mergeStacks(res));
             res.clear();
         } else {
             updateLaser(false, 0);
             this.isWaiting = true;
             this.setElectricityStats();
+            // Finding the new radius reads blocks up to the max radius
+            if (!isMeteorAreaLoaded(MAX_RADIUS)) return meteorAreaNotLoaded();
             boolean isReady = checkCenter();
             if (isReady) {
                 this.isWaiting = false;
@@ -432,6 +437,28 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
         boolean shouldRender = mining && !stopAllRendering;
         if (renderer.getShouldRender() != shouldRender) renderer.setShouldRender(shouldRender);
         if (shouldRender && renderer.getRange() != range) renderer.setRange(range);
+    }
+
+    /**
+     * Whether all the chunks of the cube mined around the meteor center are loaded, so that mining never loads chunks
+     * by itself.
+     */
+    private boolean isMeteorAreaLoaded(int radius) {
+        return getBaseMetaTileEntity().getWorld()
+            .checkChunksExist(
+                xStart - radius,
+                yStart - radius,
+                zStart - radius,
+                xStart + radius + 1,
+                yStart + radius + 1,
+                zStart + radius + 1);
+    }
+
+    private static CheckRecipeResult meteorAreaNotLoaded() {
+        // #tr GT5U.gui.text.recipe_result.meteor_area_not_loaded
+        // # {\LIGHT_PURPLE}Meteor area not loaded, waiting...
+        // #zh_CN {\LIGHT_PURPLE}陨星区域未加载, 等待中...
+        return SimpleCheckRecipeResult.ofFailure("meteor_area_not_loaded");
     }
 
     private boolean findLaserRenderer() {
@@ -541,10 +568,16 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     }
 
     private void mineSingleBlock() {
-        while (getBaseMetaTileEntity().getWorld()
-            .isAirBlock(this.xDrill, this.yDrill, this.zDrill)) {
-            this.moveToNextBlock();
-            if (this.hasFinished) return;
+        final World world = getBaseMetaTileEntity().getWorld();
+        int airChecks = 0;
+        while (true) {
+            if (this.zDrill == this.zStart - currentRadius && world.isAirBlock(this.xDrill, this.yDrill, this.zStart)) {
+                // Meteors are symmetric: if the center of the row is air, the whole row is air
+                this.moveToNextColumn();
+            } else if (world.isAirBlock(this.xDrill, this.yDrill, this.zDrill)) {
+                this.moveToNextBlock();
+            } else break;
+            if (this.hasFinished || ++airChecks >= MAX_AIR_CHECKS_PER_CYCLE) return;
         }
         this.mineBlock(this.xDrill, this.yDrill, this.zDrill);
         this.moveToNextBlock();
@@ -587,9 +620,9 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
         }
     }
 
-    private Collection<ItemStack> getOutputByDrops(Collection<ItemStack> oreBlockDrops) {
+    private List<ItemStack> getOutputByDrops(Collection<ItemStack> oreBlockDrops) {
         long voltage = getMaxInputVoltage();
-        Collection<ItemStack> outputItems = new HashSet<>();
+        List<ItemStack> outputItems = new ArrayList<>();
         oreBlockDrops.forEach(currentItem -> {
             if (!doUseMaceratorRecipe(currentItem)) {
                 outputItems.add(multiplyStackSize(currentItem));
@@ -604,13 +637,47 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
                 return;
             }
             for (int i = 0; i < tRecipe.mOutputs.length; i++) {
-                ItemStack recipeOutput = tRecipe.mOutputs[i].copy();
-                if (getBaseMetaTileEntity().getRandomNumber(10000) < tRecipe.getOutputChance(i))
-                    multiplyStackSize(recipeOutput);
-                outputItems.add(recipeOutput);
+                if (tRecipe.mOutputs[i] == null) continue;
+                // Chanced outputs (e.g. byproducts) only come out when the roll succeeds
+                if (getBaseMetaTileEntity().getRandomNumber(10000) >= tRecipe.getOutputChance(i)) continue;
+                outputItems.add(multiplyStackSize(tRecipe.mOutputs[i].copy()));
             }
         });
         return outputItems;
+    }
+
+    /**
+     * Merges equal stacks (same item, meta and NBT). The resulting stacks can be bigger than their max stack size.
+     */
+    private static List<ItemStack> mergeStacks(List<ItemStack> stacks) {
+        List<ItemStack> merged = new ArrayList<>();
+        for (ItemStack stack : stacks) {
+            if (stack == null || stack.stackSize <= 0) continue;
+            ItemStack same = null;
+            for (ItemStack candidate : merged) {
+                if (GTUtility.areStacksEqual(candidate, stack)) {
+                    same = candidate;
+                    break;
+                }
+            }
+            if (same == null) merged.add(stack.copy());
+            else same.stackSize += stack.stackSize;
+        }
+        return merged;
+    }
+
+    /**
+     * Splits merged stacks into stacks of at most their max stack size.
+     */
+    private static ItemStack[] toOutputArray(List<ItemStack> mergedStacks) {
+        List<ItemStack> outputs = new ArrayList<>();
+        for (ItemStack stack : mergedStacks) {
+            final int maxSize = Math.max(1, stack.getMaxStackSize());
+            for (int left = stack.stackSize; left > 0; left -= maxSize) {
+                outputs.add(GTUtility.copyAmountUnsafe(Math.min(maxSize, left), stack));
+            }
+        }
+        return outputs.toArray(new ItemStack[0]);
     }
 
     private ItemStack multiplyStackSize(ItemStack itemStack) {

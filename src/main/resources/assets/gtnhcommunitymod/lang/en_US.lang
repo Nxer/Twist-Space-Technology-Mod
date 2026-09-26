@@ -8,6 +8,7 @@ GT5U.gui.text.recipe_result.growing_algae=§aGrowing Algae
 GT5U.gui.text.recipe_result.infusion_complete=§aInfusion complete
 GT5U.gui.text.recipe_result.infusioning=§aInfusioning
 GT5U.gui.text.recipe_result.insufficient_pedestals=§c(Right-click screwdriver to check again) Missing pedestals: %d
+GT5U.gui.text.recipe_result.meteor_area_not_loaded=§dMeteor area not loaded, waiting...
 GT5U.gui.text.recipe_result.meteor_mining=§dCurrently Mining!
 GT5U.gui.text.recipe_result.meteor_reset=§dReset completed!
 GT5U.gui.text.recipe_result.meteor_waiting=§dWaiting for a Meteor...
