@@ -247,7 +247,7 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
                 depthOffSet_T1);
         }
         // Only for the hologram projector's hints: not part of the structure, of auto-build or of the NEI preview
-        if (hintsOnly) hintMeteorCenter(stackSize.stackSize > 1 ? 2 : 1);
+        if (hintsOnly) hintRitualLayout(stackSize.stackSize > 1 ? 2 : 1);
     }
 
     @Override
@@ -769,17 +769,38 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     }
 
     /**
-     * Shows where the Warded Glass goes, together with the hologram projector's structure hints.
+     * Position of Blood Magic's Master Ritual Stone of the ritual the multi is built around: in the same column as the
+     * laser and the meteor center, below the Superconducting Coils (tier 1: below the 3x3 with 3 blocks of air in
+     * between; tier 2: below the column with 5 blocks of air in between).
      */
-    private void hintMeteorCenter(int tier) {
+    private ChunkCoordinates getMasterRitualStonePosition(int tier) {
         final ChunkCoordinates center = getMeteorCenter(tier);
+        return new ChunkCoordinates(
+            center.posX,
+            getBaseMetaTileEntity().getYCoord() - (tier == 1 ? 5 : 4),
+            center.posZ);
+    }
+
+    /**
+     * Shows where the Warded Glass (meteor center) and the Master Ritual Stone go, together with the hologram
+     * projector's structure hints.
+     */
+    private void hintRitualLayout(int tier) {
+        hintBlock(getMeteorCenter(tier), Mods.Thaumcraft.ID, "blockCosmeticOpaque", 2); // Warded Glass
+        hintBlock(getMasterRitualStonePosition(tier), Mods.BloodMagic.ID, "masterStone", 0);
+    }
+
+    /**
+     * Hint particle of the given block, or of StructureLib's generic hint block if the mod isn't loaded.
+     */
+    private void hintBlock(ChunkCoordinates position, String modId, String blockName, int meta) {
         final World world = getBaseMetaTileEntity().getWorld();
-        final Block wardedGlass = GameRegistry.findBlock(Mods.Thaumcraft.ID, "blockCosmeticOpaque");
-        if (wardedGlass != null) {
-            StructureLibAPI.hintParticle(world, center.posX, center.posY, center.posZ, wardedGlass, 2);
+        final Block block = GameRegistry.findBlock(modId, blockName);
+        if (block != null) {
+            StructureLibAPI.hintParticle(world, position.posX, position.posY, position.posZ, block, meta);
         } else {
             StructureLibAPI
-                .hintParticle(world, center.posX, center.posY, center.posZ, StructureLibAPI.getBlockHint(), 0);
+                .hintParticle(world, position.posX, position.posY, position.posZ, StructureLibAPI.getBlockHint(), 0);
         }
     }
 
@@ -1144,8 +1165,8 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
             // #zh_CN 顾及了中心正上方的方块(比如守卫者玻璃).
             .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.14"))
             // #tr tst.common.machine.MeteorMiner.tooltip.info.hologram
-            // # Use the Hologram Projector on the controller to see where the Warded Glass goes (center of the meteor).
-            // #zh_CN 对控制器使用全息投影仪, 可显示守卫者玻璃的放置位置(陨星中心).
+            // # Use the Hologram Projector on the controller to see where the Warded Glass (center of the meteor) and the Master Ritual Stone go.
+            // #zh_CN 对控制器使用全息投影仪, 可显示守卫者玻璃(陨星中心)与主仪式石的放置位置.
             .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.hologram"))
             // #tr tst.common.machine.MeteorMiner.tooltip.info.15
             // # The reset button will restart the machine without optimizing the radius.
