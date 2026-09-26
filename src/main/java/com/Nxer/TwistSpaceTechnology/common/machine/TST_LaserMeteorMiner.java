@@ -333,10 +333,13 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
 
     /** A mining cycle, kept for the GUI stats of the last {@link #RECENT_WINDOW_TICKS} ticks (not saved). */
     @Desugar
-    private record MiningCycle(long tick, List<ItemStack> outputs, int blocksMined, double progress) {}
+    private record MiningCycle(long tick, List<ItemStack> outputs, int blocksMined) {}
 
     private final ArrayDeque<MiningCycle> recentCycles = new ArrayDeque<>();
     private int blocksMinedThisCycle = 0;
+    /** Cache of {@link #sphereWork} for the whole meteor, which only depends on radius and tier. */
+    private long totalWork = 0;
+    private int totalWorkRadius = -1, totalWorkTier = -1;
 
     @Override
     public int getMaxEfficiency(ItemStack aStack) {
@@ -859,7 +862,7 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
 
     private void recordCycle(List<ItemStack> outputs) {
         final long now = getWorldTime();
-        recentCycles.addLast(new MiningCycle(now, outputs, blocksMinedThisCycle, getProgress()));
+        recentCycles.addLast(new MiningCycle(now, outputs, blocksMinedThisCycle));
         blocksMinedThisCycle = 0;
         pruneRecentCycles(now);
     }
@@ -892,14 +895,50 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     }
 
     /**
-     * Fraction (0-1) of the mining cube already scanned: the whole rows (y, x) behind the drill, plus the current row
-     * for tier 1. The drill moves from {@code start - radius} to {@code start + radius + 1} on each axis.
+     * Mining cycles needed for the meteor, a sphere of the given radius around its center, from the given drill
+     * position (relative to the center) to the end. The drill scans y, then x, then (tier 1 only) z, each from
+     * {@code -radius} to {@code radius + 1}. Tier 1 mines one block per cycle and tier 2 one row per cycle, while empty
+     * space is skipped within a cycle, so it costs nothing.
+     */
+    static long sphereWork(int radius, int tier, int dxFrom, int dyFrom, int dzFrom) {
+        final long radiusSquared = (long) radius * radius;
+        long work = 0;
+        for (int dy = dyFrom; dy <= radius + 1; dy++) {
+            for (int dx = dy == dyFrom ? dxFrom : -radius; dx <= radius + 1; dx++) {
+                final long left = radiusSquared - (long) dx * dx - (long) dy * dy;
+                if (left < 0) continue; // the row misses the sphere
+                if (tier != 1) {
+                    work++;
+                    continue;
+                }
+                final int halfLength = (int) Math.sqrt(left); // blocks of the row at |dz| <= halfLength
+                final int firstDz = dy == dyFrom && dx == dxFrom ? Math.max(dzFrom, -halfLength) : -halfLength;
+                if (firstDz <= halfLength) work += halfLength - firstDz + 1;
+            }
+        }
+        return work;
+    }
+
+    private long getRemainingWork() {
+        return sphereWork(currentRadius, multiTier, xDrill - xStart, yDrill - yStart, zDrill - zStart);
+    }
+
+    private long getTotalWork() {
+        if (totalWorkRadius != currentRadius || totalWorkTier != multiTier) {
+            totalWork = sphereWork(currentRadius, multiTier, -currentRadius, -currentRadius, -currentRadius);
+            totalWorkRadius = currentRadius;
+            totalWorkTier = multiTier;
+        }
+        return totalWork;
+    }
+
+    /**
+     * Fraction (0-1) of the meteor already mined, counted in mining cycles: it grows at a steady pace.
      */
     public double getProgress() {
-        final int side = 2 * currentRadius + 2;
-        double rows = (double) (yDrill - (yStart - currentRadius)) * side + (xDrill - (xStart - currentRadius));
-        if (multiTier == 1) rows += (double) (zDrill - (zStart - currentRadius)) / side;
-        return Math.max(0, Math.min(1, rows / ((double) side * side)));
+        final long total = getTotalWork();
+        if (total <= 0) return 0;
+        return Math.max(0, Math.min(1, 1 - (double) getRemainingWork() / total));
     }
 
     /**
@@ -920,18 +959,12 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     }
 
     /**
-     * Seconds until the whole meteor area is scanned, at the pace of the recent cycles; -1 if unknown.
+     * Seconds until the meteor is mined: the remaining mining cycles times the current cycle duration; -1 if unknown.
      */
     public int getEtaSeconds() {
-        pruneRecentCycles(getWorldTime());
-        if (recentCycles.size() < 2) return -1;
-        final MiningCycle first = recentCycles.peekFirst();
-        final MiningCycle last = recentCycles.peekLast();
-        final double progress = last.progress() - first.progress();
-        final long ticks = last.tick() - first.tick();
-        if (progress <= 0 || ticks <= 0) return -1;
-        final double ticksLeft = (1 - last.progress()) / progress * ticks;
-        return (int) Math.min(Integer.MAX_VALUE, Math.ceil(ticksLeft / 20));
+        if (mMaxProgresstime <= 0) return -1;
+        final long ticks = getRemainingWork() * mMaxProgresstime;
+        return (int) Math.min(Integer.MAX_VALUE, (ticks + 19) / 20);
     }
 
     /**
