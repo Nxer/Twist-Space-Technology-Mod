@@ -5,14 +5,16 @@ import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.Simpl
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_block_structure_issue;
 import static com.Nxer.TwistSpaceTechnology.config.Config.StandardRecipeDuration_Second_LaserMeteorMiner;
 import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.tr;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.lazy;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.*;
 import static gregtech.api.enums.TierEU.RECIPE_MV;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
-import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -29,6 +31,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -42,6 +45,7 @@ import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.alignment.enumerable.ExtendedFacing;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.IStructureElement;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import com.gtnewhorizons.modularui.api.drawable.IDrawable;
@@ -74,6 +78,7 @@ import gregtech.api.structure.error.StructureErrors;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
+import gregtech.api.util.GlassTier;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
@@ -168,7 +173,7 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
             STRUCTURE_DEFINITION = StructureDefinition.<TST_LaserMeteorMiner>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape_T1))
                 .addShape(STRUCTURE_PIECE_TIER2, transpose(shape_T2))
-                .addElement('A', chainAllGlasses())
+                .addElement('A', ofAnyGlass())
                 .addElement('B', ofBlock(GregTechAPI.sBlockCasings1, 15)) // Superconducting Coil
                 .addElement('C', ofBlock(GregTechAPI.sBlockCasings4, 7)) // Fusion Coil Block
                 .addElement('D', ofBlock(GregTechAPI.sBlockCasings8, 2)) // Mining Neutronium Casing
@@ -203,6 +208,20 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
                 .build();
         }
         return STRUCTURE_DEFINITION;
+    }
+
+    /**
+     * Any glass, like {@code chainAllGlasses()} but without its glass tier channel: in NEI that channel raises the tier
+     * slider to the number of glass tiers and adds a "Glass" slider, while this multi accepts every glass anyway.
+     */
+    private static IStructureElement<TST_LaserMeteorMiner> ofAnyGlass() {
+        return lazy(() -> {
+            List<IStructureElement<TST_LaserMeteorMiner>> glasses = new ArrayList<>();
+            for (Pair<Block, Integer> glass : GlassTier.getGlassList()) {
+                glasses.add(ofBlock(glass.getLeft(), glass.getRight()));
+            }
+            return ofChain(glasses);
+        });
     }
 
     @Override
