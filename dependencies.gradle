@@ -95,6 +95,10 @@ dependencies {
 
 
     runtimeOnlyNonPublishable(gtnh("BlockRenderer6343")) { transitive = false }
+
+//    runtimeOnlyNonPublishable("com.github.slprime:ChromaticTooltips:1.0.36-GTNH:dev") { transitive = false }
+//    runtimeOnlyNonPublishable("com.github.slprime:ChromaticTooltipsCompat:1.0.38-GTNH:dev") { transitive = false }
+
 //    runtimeOnlyNonPublishable(gtnh("worldedit-gtnh")) { transitive = false }
 //    implementation("com.github.GTNewHorizons:BlockRenderer6343:1.3.16:dev") { transitive = false }
 

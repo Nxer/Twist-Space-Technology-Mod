@@ -1902,6 +1902,7 @@ tst.common.shared.structure_error.special_block_structure_issue=Something wrong 
 tst.common.shared.structure_error.special_hatch_amount_wrong=Amount of special hatches is wrong.
 tst.common.shared.structure_error.tiered_structure_issue=Something wrong with tiered blocks.
 tst.common.shared.structure_error.too_more_hatches=Too many hatches!
+tst.common.shared.tooltip.key.more=Hold %s for more
 tst.common.shared.waila.current_eu_cost=Current EU Cost
 tst.common.shared.waila.wireless_mode=Wireless Mode
 tst.dyson.machine.ArtificialStar.info.00=Reward for continuous operation
