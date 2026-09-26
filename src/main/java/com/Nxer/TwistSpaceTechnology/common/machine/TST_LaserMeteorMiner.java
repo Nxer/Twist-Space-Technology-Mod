@@ -37,6 +37,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.entity.TileEntityLaserBeacon;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
+import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_LaserMeteorMiner;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
@@ -49,11 +50,6 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.IStructureElement;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-import com.gtnewhorizons.modularui.api.drawable.IDrawable;
-import com.gtnewhorizons.modularui.api.math.Pos2d;
-import com.gtnewhorizons.modularui.api.screen.ModularWindow;
-import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
-import com.gtnewhorizons.modularui.common.widget.ButtonWidget;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTechAPI;
@@ -62,7 +58,6 @@ import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TAE;
 import gregtech.api.enums.Textures;
-import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -86,6 +81,7 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
 import gregtech.common.blocks.BlockCasings8;
+import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
 import gtPlusPlus.core.block.ModBlocks;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
@@ -559,7 +555,7 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
         this.initializeDrillPos();
     }
 
-    private void startReset() {
+    public void startReset() {
         this.isResetting = true;
         stopMachine(ShutDownReasonRegistry.NONE);
         enableWorking();
@@ -827,22 +823,8 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     }
 
     @Override
-    public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
-        super.addUIWidgets(builder, buildContext);
-
-        builder.widget(
-            new ButtonWidget().setOnClick((clickData, widget) -> this.startReset())
-                .setPlayClickSound(true)
-                .setBackground(
-                    () -> {
-                        return new IDrawable[] { GTUITextures.BUTTON_STANDARD, GTUITextures.OVERLAY_BUTTON_CYCLIC };
-                    })
-                .setPos(new Pos2d(174, 112))
-                .addTooltip(tr("tst.common.machine.MeteorMiner.gui.reset"))
-                .setSize(16, 16));
-        // #tr tst.common.machine.MeteorMiner.gui.reset
-        // # Reset machine
-        // #zh_CN 重启机器
+    protected @NotNull MTEMultiBlockBaseGui<?> getGui() {
+        return new TST_Gui_LaserMeteorMiner(this);
     }
 
     @Override
