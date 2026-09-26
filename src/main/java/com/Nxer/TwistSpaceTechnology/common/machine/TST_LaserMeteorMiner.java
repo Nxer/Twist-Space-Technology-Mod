@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.LaserBeaconRender;
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.mixed_energy_hatches;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_block_structure_issue;
 import static com.Nxer.TwistSpaceTechnology.config.Config.StandardRecipeDuration_Second_LaserMeteorMiner;
 import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.tr;
@@ -60,14 +61,16 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.implementations.MTEEnhancedMultiBlockBase;
-import gregtech.api.metatileentity.implementations.MTEHatchEnergy;
+import gregtech.api.metatileentity.implementations.MTEExtendedPowerMultiBlockBase;
+import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
 import gregtech.api.objects.ItemData;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
+import gregtech.api.structure.error.ErrorType;
 import gregtech.api.structure.error.StructureError;
+import gregtech.api.structure.error.StructureErrors;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
@@ -80,7 +83,7 @@ import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
 @SkipGenerateDescription
-public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMeteorMiner>
+public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_LaserMeteorMiner>
     implements ISurvivalConstructable, TSTTooltipCredit {
 
     // region Class Constructor
@@ -179,7 +182,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                 .addElement('L', ofBlock(ModBlocks.blockSpecialMultiCasings, 8)) // Thermally Insulated Casing
                 .addElement(
                     'W',
-                    buildHatchAdder(TST_LaserMeteorMiner.class).atLeast(OutputBus, Energy, Maintenance)
+                    buildHatchAdder(TST_LaserMeteorMiner.class).atLeast(OutputBus, Energy.or(ExoticEnergy), Maintenance)
                         .casingIndex(TAE.getIndexFromPage(3, 9))
                         .hint(1)
                         .buildAndChain(ofBlock(ModBlocks.blockSpecialMultiCasings, 6)))
@@ -192,7 +195,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                         .buildAndChain(ofBlock(ModBlocks.blockSpecialMultiCasings, 6)))
                 .addElement(
                     'X',
-                    buildHatchAdder(TST_LaserMeteorMiner.class).atLeast(OutputBus, Energy, Maintenance)
+                    buildHatchAdder(TST_LaserMeteorMiner.class).atLeast(OutputBus, Energy.or(ExoticEnergy), Maintenance)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(2))
                         .hint(3)
                         .buildAndChain(ofBlock(GregTechAPI.sBlockCasings8, 2)))
@@ -267,8 +270,19 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
             return;
         }
 
-        checkHasEnergyHatch(errors);
+        checkEnergyHatches(errors);
 
+    }
+
+    /**
+     * At least one energy hatch: any number of normal ones, or TecTech multi Amp / laser ones, but not mixed.
+     */
+    private void checkEnergyHatches(List<StructureError> errors) {
+        if (mEnergyHatches.isEmpty() && mExoticEnergyHatches.isEmpty()) {
+            errors.add(StructureErrors.hatchCount(ErrorType.TOO_FEW, Energy, 0, 1));
+        } else if (!mEnergyHatches.isEmpty() && !mExoticEnergyHatches.isEmpty()) {
+            errors.add(mixed_energy_hatches);
+        }
     }
     // endregion
 
@@ -665,17 +679,17 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
             .setAmperage(getMaxInputAmps())
             .setRecipeEUt(RECIPE_MV)
             .setDuration(StandardRecipeDuration_Second_LaserMeteorMiner * 20)
-            .setAmperageOC(mEnergyHatches.size() != 1)
+            .setAmperageOC(!mExoticEnergyHatches.isEmpty() || mEnergyHatches.size() != 1)
             .enablePerfectOC();
         calculator.calculate();
         this.mMaxProgresstime = (isWaiting) ? 20 * StandardRecipeDuration_Second_LaserMeteorMiner
             : calculator.getDuration();
-        this.mEUt = (int) (isWaiting ? 0 : -calculator.getConsumption());
+        this.lEUt = isWaiting ? 0 : -calculator.getConsumption();
     }
 
     private boolean isEnergyEnough() {
         long requiredEnergy = 512 + getMaxInputVoltage() * 4;
-        for (MTEHatchEnergy energyHatch : mEnergyHatches) {
+        for (MTEHatch energyHatch : getExoticAndNormalEnergyHatchList()) {
             requiredEnergy -= energyHatch.getEUVar();
             if (requiredEnergy <= 0) return true;
         }
@@ -865,6 +879,10 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
             // # Machine need Meteor Miner Schematic put in controller slot to run.
             // #zh_CN 机器需要在控制器方块内放置陨星采矿场设计图才可运行.
             .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.16"))
+            // #tr tst.common.machine.MeteorMiner.tooltip.info.energy_hatches
+            // # Accepts normal energy hatches or TecTech multi Amp / laser energy hatches, but not mixed.
+            // #zh_CN 可使用普通能源仓, 或TecTech高电流/激光能源仓, 但不可混用.
+            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.energy_hatches"))
             // #tr tst.common.machine.MeteorMiner.tooltip.info.17
             // # {\RED}{\BOLD} TIER I
             // #zh_CN {\RED}{\BOLD} 等级 I

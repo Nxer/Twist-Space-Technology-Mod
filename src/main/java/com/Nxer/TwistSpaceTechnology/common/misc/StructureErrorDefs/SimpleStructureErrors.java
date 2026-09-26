@@ -59,6 +59,12 @@ public class SimpleStructureErrors {
     public static TranslatableStructureError multi_Amp_hatch_incompatible = StructureErrors
         .of("tst.common.shared.structure_error.multi_amp_hatch_incompatible");
 
+    // #tr tst.common.shared.structure_error.mixed_energy_hatches
+    // # Do not mix normal energy hatches with multi Amp or laser hatches.
+    // #zh_CN 不可混用普通能源仓与高电流仓或激光仓
+    public static TranslatableStructureError mixed_energy_hatches = StructureErrors
+        .of("tst.common.shared.structure_error.mixed_energy_hatches");
+
     // #tr tst.common.shared.structure_error.one_hatch_each_module
     // # Only one hatch of each module is allowed to be installed.
     // #zh_CN 每种模块仓室只允许安装一个
