@@ -529,7 +529,8 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
 
     private void mineBlock(int currentX, int currentY, int currentZ) {
         Block target = getBaseMetaTileEntity().getBlock(currentX, currentY, currentZ);
-        if (target.getBlockHardness(getBaseMetaTileEntity().getWorld(), currentX, currentY, currentZ) > 0) {
+        // Negative hardness means unbreakable (e.g. bedrock); zero is valid (e.g. Et Futurum's honey block)
+        if (target.getBlockHardness(getBaseMetaTileEntity().getWorld(), currentX, currentY, currentZ) >= 0) {
             final int targetMeta = getBaseMetaTileEntity().getMetaID(currentX, currentY, currentZ);
             Collection<ItemStack> drops = target
                 .getDrops(getBaseMetaTileEntity().getWorld(), currentX, currentY, currentZ, targetMeta, 0);
