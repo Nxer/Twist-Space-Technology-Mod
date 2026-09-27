@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
+import static com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.ModItem.getModItem;
 import static gregtech.api.util.GTRecipeBuilder.SECONDS;
 
 import net.minecraft.init.Items;
@@ -14,7 +15,6 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TierEU;
-import gregtech.api.util.GTModHandler;
 
 // spotless:off
 public class HyperSpacetimeTransformerRecipePool  {
@@ -43,27 +43,27 @@ public class HyperSpacetimeTransformerRecipePool  {
         if (Mods.GalacticraftCore.isModLoaded()) {
             addMolecularRecipe(
                 ItemList.Food_Cheese.get(1),
-                GTModHandler.getModItem(Mods.GalacticraftCore.ID, "item.cheeseCurd", 1),
+                getModItem(Mods.GalacticraftCore.ID, "item.cheeseCurd", 1),
                 326,
                 7680);
             if (Mods.PamsHarvestCraft.isModLoaded()) {
                 addMolecularRecipe(
-                    GTModHandler.getModItem(Mods.PamsHarvestCraft.ID, "cheeseItem", 1),
-                    GTModHandler.getModItem(Mods.GalacticraftCore.ID, "item.cheeseCurd", 1),
+                    getModItem(Mods.PamsHarvestCraft.ID, "cheeseItem", 1),
+                    getModItem(Mods.GalacticraftCore.ID, "item.cheeseCurd", 1),
                     326,
                     7680);
             }
         }
 
         if (Mods.AdvancedSolarPanel.isModLoaded() && Mods.GalaxySpace.isModLoaded()) {
-            ItemStack sunnarium = GTModHandler.getModItem(Mods.AdvancedSolarPanel.ID, "asp_crafting_items", 1, 9);
+            ItemStack sunnarium = getModItem(Mods.AdvancedSolarPanel.ID, "asp_crafting_items", 1, 9);
             addMolecularRecipe(Materials.Glowstone.getDust(1), sunnarium, 600, 1920);
-            addMolecularRecipe(GTModHandler.getModItem(Mods.GalaxySpace.ID, "item.GlowstoneDusts", 1, 0), sunnarium, 150, 7680);
-            addMolecularRecipe(GTModHandler.getModItem(Mods.GalaxySpace.ID, "item.GlowstoneDusts", 1, 1), sunnarium, 38, 30720);
-            addMolecularRecipe(GTModHandler.getModItem(Mods.GalaxySpace.ID, "item.GlowstoneDusts", 1, 2), sunnarium, 10, 122880);
-            addMolecularRecipe(GTModHandler.getModItem(Mods.GalaxySpace.ID, "item.GlowstoneDusts", 1, 3), sunnarium, 3, 491520);
+            addMolecularRecipe(getModItem(Mods.GalaxySpace.ID, "item.GlowstoneDusts", 1, 0), sunnarium, 150, 7680);
+            addMolecularRecipe(getModItem(Mods.GalaxySpace.ID, "item.GlowstoneDusts", 1, 1), sunnarium, 38, 30720);
+            addMolecularRecipe(getModItem(Mods.GalaxySpace.ID, "item.GlowstoneDusts", 1, 2), sunnarium, 10, 122880);
+            addMolecularRecipe(getModItem(Mods.GalaxySpace.ID, "item.GlowstoneDusts", 1, 3), sunnarium, 3, 491520);
             // Preserve the old loader's literal EU/t, which differs from the modern UHV recipe voltage.
-            addMolecularRecipe(GTModHandler.getModItem(Mods.GalaxySpace.ID, "item.GlowstoneDusts", 1, 4), sunnarium, 1, 1996080);
+            addMolecularRecipe(getModItem(Mods.GalaxySpace.ID, "item.GlowstoneDusts", 1, 4), sunnarium, 1, 1996080);
         }
     }
 
