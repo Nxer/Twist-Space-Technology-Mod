@@ -582,10 +582,29 @@ public class TCRecipePool {
                             new ItemStack(WayofTime.alchemicalWizardry.ModItems.sacrificialDagger),
                             new ItemStack(itemZombieBrain), new ItemStack(itemZombieBrain), });
                 }
-                infusionRecipeTimeBendingSpeedRune =
-                    addTimeBendingSpeedRuneRecipe(Materials.SpaceTime.getBlocks(1));
-                infusionRecipeTimeBendingSpeedRuneTimewood = addTimeBendingSpeedRuneRecipe(
-                    getModItem(Mods.TwilightForest.ID, "tile.TFMagicLogSpecial", 1, 0));
+                infusionRecipeTimeBendingSpeedRune = addInfusionCraftingRecipeAspectNotNull(
+                    "TIME_BENDING_SPEED_RUNE",
+                    new ItemStack(TstBlocks.TimeBendingSpeedRune),
+                    10,
+                    new AspectList().merge(Aspect.LIFE, 64)
+                        .merge(Aspect.MOTION, 256)
+                        .merge(getAspect("tempus", 64)),
+                    Materials.SpaceTime.getBlocks(1),
+                    new ItemStack[] { ItemList.AcceleratorZPM.get(1), ItemList.AcceleratorZPM.get(1),
+                        new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.bloodRune, 1, 5), // Rune of Acceleration
+                        new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.bloodRune, 1, 5) });
+
+                infusionRecipeTimeBendingSpeedRuneTimewood = addInfusionCraftingRecipeAspectNotNull(
+                    "TIME_BENDING_SPEED_RUNE",
+                    new ItemStack(TstBlocks.TimeBendingSpeedRune),
+                    10,
+                    new AspectList().merge(Aspect.LIFE, 64)
+                        .merge(Aspect.MOTION, 256)
+                        .merge(getAspect("tempus", 64)),
+                    getModItem(Mods.TwilightForest.ID, "tile.TFMagicLogSpecial", 1, 0),
+                    new ItemStack[] { ItemList.AcceleratorZPM.get(1), ItemList.AcceleratorZPM.get(1),
+                        new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.bloodRune, 1, 5), // Rune of Acceleration
+                        new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.bloodRune, 1, 5) });
             }
             if (Config.Enable_IndustrialAlchemyTower) {
                 infusionRecipeIndustrialAlchemyTower = addInfusionCraftingRecipeAspectNotNull(
@@ -678,20 +697,6 @@ public class TCRecipePool {
             }
         }
         //spotless:on
-    }
-
-    private static InfusionRecipe addTimeBendingSpeedRuneRecipe(ItemStack centralInput) {
-        return addInfusionCraftingRecipeAspectNotNull(
-            "TIME_BENDING_SPEED_RUNE",
-            new ItemStack(TstBlocks.TimeBendingSpeedRune),
-            10,
-            new AspectList().merge(Aspect.LIFE, 64)
-                .merge(Aspect.MOTION, 256)
-                .merge(getAspect(Mods.MagicBees.isModLoaded() ? "tempus" : "air", 64)),
-            centralInput,
-            new ItemStack[] { ItemList.AcceleratorZPM.get(1), ItemList.AcceleratorZPM.get(1),
-                new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.bloodRune, 1, 5), // Rune of Acceleration
-                new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.bloodRune, 1, 5), });
     }
 
     private static ItemStack getEnchantedCapacitor() {
