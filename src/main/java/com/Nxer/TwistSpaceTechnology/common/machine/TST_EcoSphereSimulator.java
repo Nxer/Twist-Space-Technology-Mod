@@ -7,6 +7,7 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFl
 import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFluidAreaHandler.FluidArea.MAIN_SOURCE;
 import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFluidAreaHandler.FluidArea.UPPER_SOURCE;
 import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFluidAreaHandler.MAIN_SOURCE_LAST_LAYER;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.calculateVoltageTier;
 import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.tr;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.getBlueprintWithDot;
@@ -1119,7 +1120,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                 if (inputItems == null) inputItems = new ItemStack[0];
                 if (inputFluids == null) inputFluids = new FluidStack[0];
 
-                EuTier = getTotalPowerTier();
+                EuTier = (int) calculateVoltageTier(getMaxInputEu());
                 updateSlots();
                 if (!debugItemInstalled && EuTier < 1) return CheckRecipeResultRegistry.insufficientPower(32);
                 if (cleaningRequested || cleaningRunActive) {
