@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine;
 
-import static bartworks.common.loaders.ItemRegistry.megaMachines;
 import static bartworks.common.loaders.ItemRegistry.voidminer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AdvancedHighPowerCoilBlock;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AdvancedMegaOilCracker;
@@ -1554,7 +1553,7 @@ public class GTCMMachineRecipes {
             .stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(10),
-                megaMachines[4],
+                ItemList.MegaOilCracker.get(1),
                 new Object[]{OrePrefixes.circuit.get(Materials.IV), 4},
                 new Object[]{OrePrefixes.circuit.get(Materials.EV), 16},
                 ItemList.Electric_Pump_IV.get(4)

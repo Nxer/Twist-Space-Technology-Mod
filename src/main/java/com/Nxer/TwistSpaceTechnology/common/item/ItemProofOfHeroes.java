@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.item;
 
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipKeyHint.getShiftKeyHint;
 import static net.minecraft.client.gui.GuiScreen.isShiftKeyDown;
 
 import java.util.List;
@@ -87,6 +88,8 @@ public class ItemProofOfHeroes extends Item {
                     // # Impossible final goal
                     // #zh_CN 可能，也许，最后……
                     TSTUtils.tr("item.tst.common.proof_of_gods.tooltip.01"));
+
+                toolTip.add(getShiftKeyHint());
             }
         }
     }

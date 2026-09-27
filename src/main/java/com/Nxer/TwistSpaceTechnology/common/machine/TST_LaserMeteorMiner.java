@@ -1,19 +1,23 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.LaserBeaconRender;
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.mixed_energy_hatches;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_block_structure_issue;
 import static com.Nxer.TwistSpaceTechnology.config.Config.StandardRecipeDuration_Second_LaserMeteorMiner;
 import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.tr;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.lazy;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.*;
 import static gregtech.api.enums.TierEU.RECIPE_MV;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
-import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,64 +27,73 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.entity.TileEntityLaserBeacon;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
+import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_LaserMeteorMiner;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
+import com.github.bsideup.jabel.Desugar;
+import com.gtnewhorizon.structurelib.StructureLibAPI;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.alignment.enumerable.ExtendedFacing;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.IStructureElement;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-import com.gtnewhorizons.modularui.api.drawable.IDrawable;
-import com.gtnewhorizons.modularui.api.math.Pos2d;
-import com.gtnewhorizons.modularui.api.screen.ModularWindow;
-import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
-import com.gtnewhorizons.modularui.common.widget.ButtonWidget;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TAE;
 import gregtech.api.enums.Textures;
-import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.implementations.MTEEnhancedMultiBlockBase;
-import gregtech.api.metatileentity.implementations.MTEHatchEnergy;
+import gregtech.api.metatileentity.implementations.MTEExtendedPowerMultiBlockBase;
+import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
 import gregtech.api.objects.ItemData;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
+import gregtech.api.structure.error.ErrorType;
 import gregtech.api.structure.error.StructureError;
+import gregtech.api.structure.error.StructureErrors;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
+import gregtech.api.util.GlassTier;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
 import gregtech.common.blocks.BlockCasings8;
+import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
 import gtPlusPlus.core.block.ModBlocks;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
 @SkipGenerateDescription
-public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMeteorMiner>
+public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_LaserMeteorMiner>
     implements ISurvivalConstructable, TSTTooltipCredit {
 
     // region Class Constructor
@@ -165,7 +178,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
             STRUCTURE_DEFINITION = StructureDefinition.<TST_LaserMeteorMiner>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape_T1))
                 .addShape(STRUCTURE_PIECE_TIER2, transpose(shape_T2))
-                .addElement('A', chainAllGlasses())
+                .addElement('A', ofAnyGlass())
                 .addElement('B', ofBlock(GregTechAPI.sBlockCasings1, 15)) // Superconducting Coil
                 .addElement('C', ofBlock(GregTechAPI.sBlockCasings4, 7)) // Fusion Coil Block
                 .addElement('D', ofBlock(GregTechAPI.sBlockCasings8, 2)) // Mining Neutronium Casing
@@ -179,7 +192,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                 .addElement('L', ofBlock(ModBlocks.blockSpecialMultiCasings, 8)) // Thermally Insulated Casing
                 .addElement(
                     'W',
-                    buildHatchAdder(TST_LaserMeteorMiner.class).atLeast(OutputBus, Energy, Maintenance)
+                    buildHatchAdder(TST_LaserMeteorMiner.class).atLeast(OutputBus, Energy.or(ExoticEnergy), Maintenance)
                         .casingIndex(TAE.getIndexFromPage(3, 9))
                         .hint(1)
                         .buildAndChain(ofBlock(ModBlocks.blockSpecialMultiCasings, 6)))
@@ -192,7 +205,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                         .buildAndChain(ofBlock(ModBlocks.blockSpecialMultiCasings, 6)))
                 .addElement(
                     'X',
-                    buildHatchAdder(TST_LaserMeteorMiner.class).atLeast(OutputBus, Energy, Maintenance)
+                    buildHatchAdder(TST_LaserMeteorMiner.class).atLeast(OutputBus, Energy.or(ExoticEnergy), Maintenance)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(2))
                         .hint(3)
                         .buildAndChain(ofBlock(GregTechAPI.sBlockCasings8, 2)))
@@ -200,6 +213,20 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                 .build();
         }
         return STRUCTURE_DEFINITION;
+    }
+
+    /**
+     * Any glass, like {@code chainAllGlasses()} but without its glass tier channel: in NEI that channel raises the tier
+     * slider to the number of glass tiers and adds a "Glass" slider, while this multi accepts every glass anyway.
+     */
+    private static IStructureElement<TST_LaserMeteorMiner> ofAnyGlass() {
+        return lazy(() -> {
+            List<IStructureElement<TST_LaserMeteorMiner>> glasses = new ArrayList<>();
+            for (Pair<Block, Integer> glass : GlassTier.getGlassList()) {
+                glasses.add(ofBlock(glass.getLeft(), glass.getRight()));
+            }
+            return ofChain(glasses);
+        });
     }
 
     @Override
@@ -221,6 +248,8 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                 verticalOffSet_T1,
                 depthOffSet_T1);
         }
+        // Only for the hologram projector's hints: not part of the structure, of auto-build or of the NEI preview
+        if (hintsOnly) hintRitualLayout(stackSize.stackSize > 1 ? 2 : 1);
     }
 
     @Override
@@ -267,14 +296,27 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
             return;
         }
 
-        checkHasEnergyHatch(errors);
+        checkEnergyHatches(errors);
 
+    }
+
+    /**
+     * At least one energy hatch: any number of normal ones, or TecTech multi Amp / laser ones, but not mixed.
+     */
+    private void checkEnergyHatches(List<StructureError> errors) {
+        if (mEnergyHatches.isEmpty() && mExoticEnergyHatches.isEmpty()) {
+            errors.add(StructureErrors.hatchCount(ErrorType.TOO_FEW, Energy, 0, 1));
+        } else if (!mEnergyHatches.isEmpty() && !mExoticEnergyHatches.isEmpty()) {
+            errors.add(mixed_energy_hatches);
+        }
     }
     // endregion
 
     // region Processing Logic
     private static final int distanceFromMeteor = 48;
     private static final int MAX_RADIUS = 40;
+    /** Max air blocks the tier 1 drill skips in a single cycle, to avoid lag spikes. */
+    private static final int MAX_AIR_CHECKS_PER_CYCLE = 4096;
     protected TileEntityLaserBeacon renderer;
     private int currentRadius = MAX_RADIUS;
     private int xDrill, yDrill, zDrill;
@@ -284,9 +326,37 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     private boolean hasFinished = true;
     private boolean isWaiting = false;
     private boolean isResetting = false;
-    Collection<ItemStack> res = new HashSet<>();
+    private final List<ItemStack> res = new ArrayList<>();
     private int multiTier = 0;
     private boolean stopAllRendering = false;
+
+    /** Window of the stats shown in the GUI: 5 seconds. */
+    private static final int RECENT_WINDOW_TICKS = 5 * 20;
+
+    /** A mining cycle, kept for the mining speed of the last {@link #RECENT_WINDOW_TICKS} ticks (not saved). */
+    @Desugar
+    private record MiningCycle(long tick, int blocksMined) {}
+
+    /** An item produced from the current meteor, with its total amount. */
+    private static final class MinedAmount {
+
+        final ItemStack stack; // stack size 1
+        long amount;
+
+        MinedAmount(ItemStack stack, long amount) {
+            this.stack = stack;
+            this.amount = amount;
+        }
+    }
+
+    /** Everything produced since the drill started on the current meteor, merged (saved). */
+    private final List<MinedAmount> meteorOutputs = new ArrayList<>();
+
+    private final ArrayDeque<MiningCycle> recentCycles = new ArrayDeque<>();
+    private int blocksMinedThisCycle = 0;
+    /** Cache of {@link #sphereWork} for the whole meteor, which only depends on radius and tier. */
+    private long totalWork = 0;
+    private int totalWorkRadius = -1, totalWorkTier = -1;
 
     @Override
     public int getMaxEfficiency(ItemStack aStack) {
@@ -324,9 +394,6 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
             // #zh_CN {\LIGHT_PURPLE}缺少设计图.
             return SimpleCheckRecipeResult.ofFailure("missing_schematic");
         }
-        if (renderer != null) {
-            renderer.setColors(1, 0, 0);
-        }
         if (isResetting) {
             this.reset();
             // #tr GT5U.gui.text.recipe_result.meteor_reset
@@ -343,21 +410,27 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
 
         if (!isStartInitialized) {
             this.setStartCoords();
+            if (!isMeteorAreaLoaded(MAX_RADIUS)) return meteorAreaNotLoaded();
             this.findBestRadius();
             this.initializeDrillPos();
         }
 
         if (!hasFinished) {
-            renderer.setShouldRender(true);
-            renderer.setRange((double) (this.currentRadius + distanceFromMeteor + 0.5 + this.getLaserToEndHeight()));
+            if (!isMeteorAreaLoaded(currentRadius)) return meteorAreaNotLoaded();
+            updateLaser(true, this.currentRadius + distanceFromMeteor + 0.5 + this.getLaserToEndHeight());
             this.setFortuneTier();
             this.startMining(this.multiTier);
-            mOutputItems = res.toArray(new ItemStack[0]);
+            final List<ItemStack> outputs = mergeStacks(res);
+            mOutputItems = toOutputArray(outputs);
             res.clear();
+            addToMeteorOutputs(outputs);
+            recordCycle();
         } else {
-            renderer.setShouldRender(false);
+            updateLaser(false, 0);
             this.isWaiting = true;
             this.setElectricityStats();
+            // Finding the new radius reads blocks up to the max radius
+            if (!isMeteorAreaLoaded(MAX_RADIUS)) return meteorAreaNotLoaded();
             boolean isReady = checkCenter();
             if (isReady) {
                 this.isWaiting = false;
@@ -381,14 +454,50 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
 
     @Override
     public void onDisableWorking() {
-        if (renderer != null) renderer.setShouldRender(false);
+        updateLaser(false, 0);
         super.onDisableWorking();
     }
 
     @Override
     public void onBlockDestroyed() {
-        if (renderer != null) renderer.setShouldRender(false);
+        updateLaser(false, 0);
         super.onBlockDestroyed();
+    }
+
+    /**
+     * Updates the laser only when something changed: every setter of the laser tile entity sends a block update to the
+     * clients.
+     *
+     * @param mining whether the miner is mining; the laser is shown only if the screwdriver didn't turn rendering off
+     * @param range  length of the laser, used only while it is shown
+     */
+    private void updateLaser(boolean mining, double range) {
+        if (renderer == null) return;
+        boolean shouldRender = mining && !stopAllRendering;
+        if (renderer.getShouldRender() != shouldRender) renderer.setShouldRender(shouldRender);
+        if (shouldRender && renderer.getRange() != range) renderer.setRange(range);
+    }
+
+    /**
+     * Whether all the chunks of the cube mined around the meteor center are loaded, so that mining never loads chunks
+     * by itself.
+     */
+    private boolean isMeteorAreaLoaded(int radius) {
+        return getBaseMetaTileEntity().getWorld()
+            .checkChunksExist(
+                xStart - radius,
+                yStart - radius,
+                zStart - radius,
+                xStart + radius + 1,
+                yStart + radius + 1,
+                zStart + radius + 1);
+    }
+
+    private static CheckRecipeResult meteorAreaNotLoaded() {
+        // #tr GT5U.gui.text.recipe_result.meteor_area_not_loaded
+        // # {\LIGHT_PURPLE}Meteor area not loaded, waiting...
+        // #zh_CN {\LIGHT_PURPLE}陨星区域未加载, 等待中...
+        return SimpleCheckRecipeResult.ofFailure("meteor_area_not_loaded");
     }
 
     private boolean findLaserRenderer() {
@@ -401,6 +510,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                 zStart) instanceof TileEntityLaserBeacon laser) {
             renderer = laser;
             renderer.setRotationFields(ExtendedFacing.of(getDirection(), getRotation(), getFlip()));
+            renderer.setColors(1, 0, 0);
             return true;
         }
         return false;
@@ -419,8 +529,9 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
         // #zh_CN 渲染特效开启
         if (stopAllRendering) {
             TSTUtils.sendMessageKeyToPlayer(aPlayer, "tst.common.machine.MeteorMiner.message.render.off");
-            if (renderer != null) renderer.setShouldRender(false);
+            updateLaser(false, 0);
         } else {
+            // the laser comes back on the next mining cycle
             TSTUtils.sendMessageKeyToPlayer(aPlayer, "tst.common.machine.MeteorMiner.message.render.on");
         }
     }
@@ -481,7 +592,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
         this.initializeDrillPos();
     }
 
-    private void startReset() {
+    public void startReset() {
         this.isResetting = true;
         stopMachine(ShutDownReasonRegistry.NONE);
         enableWorking();
@@ -496,10 +607,16 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     }
 
     private void mineSingleBlock() {
-        while (getBaseMetaTileEntity().getWorld()
-            .isAirBlock(this.xDrill, this.yDrill, this.zDrill)) {
-            this.moveToNextBlock();
-            if (this.hasFinished) return;
+        final World world = getBaseMetaTileEntity().getWorld();
+        int airChecks = 0;
+        while (true) {
+            if (this.zDrill == this.zStart - currentRadius && world.isAirBlock(this.xDrill, this.yDrill, this.zStart)) {
+                // Meteors are symmetric: if the center of the row is air, the whole row is air
+                this.moveToNextColumn();
+            } else if (world.isAirBlock(this.xDrill, this.yDrill, this.zDrill)) {
+                this.moveToNextBlock();
+            } else break;
+            if (this.hasFinished || ++airChecks >= MAX_AIR_CHECKS_PER_CYCLE) return;
         }
         this.mineBlock(this.xDrill, this.yDrill, this.zDrill);
         this.moveToNextBlock();
@@ -529,7 +646,8 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
 
     private void mineBlock(int currentX, int currentY, int currentZ) {
         Block target = getBaseMetaTileEntity().getBlock(currentX, currentY, currentZ);
-        if (target.getBlockHardness(getBaseMetaTileEntity().getWorld(), currentX, currentY, currentZ) > 0) {
+        // Negative hardness means unbreakable (e.g. bedrock); zero is valid (e.g. Et Futurum's honey block)
+        if (target.getBlockHardness(getBaseMetaTileEntity().getWorld(), currentX, currentY, currentZ) >= 0) {
             final int targetMeta = getBaseMetaTileEntity().getMetaID(currentX, currentY, currentZ);
             Collection<ItemStack> drops = target
                 .getDrops(getBaseMetaTileEntity().getWorld(), currentX, currentY, currentZ, targetMeta, 0);
@@ -538,12 +656,13 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
             } else res.addAll(drops);
             getBaseMetaTileEntity().getWorld()
                 .setBlockToAir(currentX, currentY, currentZ);
+            blocksMinedThisCycle++;
         }
     }
 
-    private Collection<ItemStack> getOutputByDrops(Collection<ItemStack> oreBlockDrops) {
+    private List<ItemStack> getOutputByDrops(Collection<ItemStack> oreBlockDrops) {
         long voltage = getMaxInputVoltage();
-        Collection<ItemStack> outputItems = new HashSet<>();
+        List<ItemStack> outputItems = new ArrayList<>();
         oreBlockDrops.forEach(currentItem -> {
             if (!doUseMaceratorRecipe(currentItem)) {
                 outputItems.add(multiplyStackSize(currentItem));
@@ -558,13 +677,47 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                 return;
             }
             for (int i = 0; i < tRecipe.mOutputs.length; i++) {
-                ItemStack recipeOutput = tRecipe.mOutputs[i].copy();
-                if (getBaseMetaTileEntity().getRandomNumber(10000) < tRecipe.getOutputChance(i))
-                    multiplyStackSize(recipeOutput);
-                outputItems.add(recipeOutput);
+                if (tRecipe.mOutputs[i] == null) continue;
+                // Chanced outputs (e.g. byproducts) only come out when the roll succeeds
+                if (getBaseMetaTileEntity().getRandomNumber(10000) >= tRecipe.getOutputChance(i)) continue;
+                outputItems.add(multiplyStackSize(tRecipe.mOutputs[i].copy()));
             }
         });
         return outputItems;
+    }
+
+    /**
+     * Merges equal stacks (same item, meta and NBT). The resulting stacks can be bigger than their max stack size.
+     */
+    private static List<ItemStack> mergeStacks(List<ItemStack> stacks) {
+        List<ItemStack> merged = new ArrayList<>();
+        for (ItemStack stack : stacks) {
+            if (stack == null || stack.stackSize <= 0) continue;
+            ItemStack same = null;
+            for (ItemStack candidate : merged) {
+                if (GTUtility.areStacksEqual(candidate, stack)) {
+                    same = candidate;
+                    break;
+                }
+            }
+            if (same == null) merged.add(stack.copy());
+            else same.stackSize += stack.stackSize;
+        }
+        return merged;
+    }
+
+    /**
+     * Splits merged stacks into stacks of at most their max stack size.
+     */
+    private static ItemStack[] toOutputArray(List<ItemStack> mergedStacks) {
+        List<ItemStack> outputs = new ArrayList<>();
+        for (ItemStack stack : mergedStacks) {
+            final int maxSize = Math.max(1, stack.getMaxStackSize());
+            for (int left = stack.stackSize; left > 0; left -= maxSize) {
+                outputs.add(GTUtility.copyAmountUnsafe(Math.min(maxSize, left), stack));
+            }
+        }
+        return outputs.toArray(new ItemStack[0]);
     }
 
     private ItemStack multiplyStackSize(ItemStack itemStack) {
@@ -609,17 +762,64 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
      *
      */
     private void setStartCoords() {
-        ForgeDirection facing = getBaseMetaTileEntity().getBackFacing();
+        final ChunkCoordinates center = getMeteorCenter(this.multiTier);
+        xStart = center.posX;
+        yStart = center.posY;
+        zStart = center.posZ;
+    }
+
+    /**
+     * Center of the meteor for the given tier: right above the laser beacon, {@code distanceFromMeteor} blocks above
+     * the highest block of the multi. This is where players put the Warded Glass that stops the meteor.
+     */
+    private ChunkCoordinates getMeteorCenter(int tier) {
+        final IGregTechTileEntity base = getBaseMetaTileEntity();
+        final int backDistance = tier == 1 ? 2 : 6;
+        int x = base.getXCoord();
+        int z = base.getZCoord();
+        ForgeDirection facing = base.getBackFacing();
         if (facing == ForgeDirection.NORTH || facing == ForgeDirection.SOUTH) {
-            xStart = getBaseMetaTileEntity().getXCoord();
-            zStart = (this.multiTier == 1 ? 2 : 6) * getExtendedFacing().getRelativeBackInWorld().offsetZ
-                + getBaseMetaTileEntity().getZCoord();
+            z += backDistance * getExtendedFacing().getRelativeBackInWorld().offsetZ;
         } else {
-            xStart = (this.multiTier == 1 ? 2 : 6) * getExtendedFacing().getRelativeBackInWorld().offsetX
-                + getBaseMetaTileEntity().getXCoord();
-            zStart = getBaseMetaTileEntity().getZCoord();
+            x += backDistance * getExtendedFacing().getRelativeBackInWorld().offsetX;
         }
-        yStart = distanceFromMeteor + (this.multiTier == 1 ? 13 : 15) + getBaseMetaTileEntity().getYCoord();
+        return new ChunkCoordinates(x, distanceFromMeteor + (tier == 1 ? 13 : 15) + base.getYCoord(), z);
+    }
+
+    /**
+     * Position of Blood Magic's Master Ritual Stone of the ritual the multi is built around: in the same column as the
+     * laser and the meteor center, below the Superconducting Coils (tier 1: below the 3x3 with 3 blocks of air in
+     * between; tier 2: below the column with 5 blocks of air in between).
+     */
+    private ChunkCoordinates getMasterRitualStonePosition(int tier) {
+        final ChunkCoordinates center = getMeteorCenter(tier);
+        return new ChunkCoordinates(
+            center.posX,
+            getBaseMetaTileEntity().getYCoord() - (tier == 1 ? 5 : 4),
+            center.posZ);
+    }
+
+    /**
+     * Shows where the Warded Glass (meteor center) and the Master Ritual Stone go, together with the hologram
+     * projector's structure hints.
+     */
+    private void hintRitualLayout(int tier) {
+        hintBlock(getMeteorCenter(tier), Mods.Thaumcraft.ID, "blockCosmeticOpaque", 2); // Warded Glass
+        hintBlock(getMasterRitualStonePosition(tier), Mods.BloodMagic.ID, "masterStone", 0);
+    }
+
+    /**
+     * Hint particle of the given block, or of StructureLib's generic hint block if the mod isn't loaded.
+     */
+    private void hintBlock(ChunkCoordinates position, String modId, String blockName, int meta) {
+        final World world = getBaseMetaTileEntity().getWorld();
+        final Block block = GameRegistry.findBlock(modId, blockName);
+        if (block != null) {
+            StructureLibAPI.hintParticle(world, position.posX, position.posY, position.posZ, block, meta);
+        } else {
+            StructureLibAPI
+                .hintParticle(world, position.posX, position.posY, position.posZ, StructureLibAPI.getBlockHint(), 0);
+        }
     }
 
     private void setReady() {
@@ -634,6 +834,10 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
 
         this.isStartInitialized = true;
         this.hasFinished = false;
+        // a new meteor (or a reset): the stats of the previous one don't apply
+        recentCycles.clear();
+        blocksMinedThisCycle = 0;
+        meteorOutputs.clear();
     }
 
     private boolean checkCenter() {
@@ -664,17 +868,17 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
             .setAmperage(getMaxInputAmps())
             .setRecipeEUt(RECIPE_MV)
             .setDuration(StandardRecipeDuration_Second_LaserMeteorMiner * 20)
-            .setAmperageOC(mEnergyHatches.size() != 1)
+            .setAmperageOC(!mExoticEnergyHatches.isEmpty() || mEnergyHatches.size() != 1)
             .enablePerfectOC();
         calculator.calculate();
         this.mMaxProgresstime = (isWaiting) ? 20 * StandardRecipeDuration_Second_LaserMeteorMiner
             : calculator.getDuration();
-        this.mEUt = (int) (isWaiting ? 0 : -calculator.getConsumption());
+        this.lEUt = isWaiting ? 0 : -calculator.getConsumption();
     }
 
     private boolean isEnergyEnough() {
         long requiredEnergy = 512 + getMaxInputVoltage() * 4;
-        for (MTEHatchEnergy energyHatch : mEnergyHatches) {
+        for (MTEHatch energyHatch : getExoticAndNormalEnergyHatchList()) {
             requiredEnergy -= energyHatch.getEUVar();
             if (requiredEnergy <= 0) return true;
         }
@@ -682,23 +886,155 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     }
 
     @Override
-    public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
-        super.addUIWidgets(builder, buildContext);
-
-        builder.widget(
-            new ButtonWidget().setOnClick((clickData, widget) -> this.startReset())
-                .setPlayClickSound(true)
-                .setBackground(
-                    () -> {
-                        return new IDrawable[] { GTUITextures.BUTTON_STANDARD, GTUITextures.OVERLAY_BUTTON_CYCLIC };
-                    })
-                .setPos(new Pos2d(174, 112))
-                .addTooltip(tr("tst.common.machine.MeteorMiner.gui.reset"))
-                .setSize(16, 16));
-        // #tr tst.common.machine.MeteorMiner.gui.reset
-        // # Reset machine
-        // #zh_CN 重启机器
+    protected @NotNull MTEMultiBlockBaseGui<?> getGui() {
+        return new TST_Gui_LaserMeteorMiner(this);
     }
+
+    /**
+     * The GUI shows the outputs of the last seconds instead of the outputs and progress of the single (short) cycle.
+     */
+    @Override
+    public boolean showRecipeTextInGUI() {
+        return false;
+    }
+
+    // region GUI stats (server side, read by TST_Gui_LaserMeteorMiner's sync values)
+
+    private void recordCycle() {
+        final long now = getWorldTime();
+        recentCycles.addLast(new MiningCycle(now, blocksMinedThisCycle));
+        blocksMinedThisCycle = 0;
+        pruneRecentCycles(now);
+    }
+
+    /**
+     * Drops the cycles older than the window, but keeps the last two to compute rates when cycles are slow.
+     */
+    private void pruneRecentCycles(long now) {
+        while (recentCycles.size() > 2 && now - recentCycles.peekFirst()
+            .tick() > RECENT_WINDOW_TICKS) {
+            recentCycles.pollFirst();
+        }
+    }
+
+    private long getWorldTime() {
+        return getBaseMetaTileEntity().getWorld()
+            .getTotalWorldTime();
+    }
+
+    public boolean isMining() {
+        return getBaseMetaTileEntity().isActive() && isStartInitialized && !hasFinished && !isWaiting;
+    }
+
+    public int getCurrentRadius() {
+        return currentRadius;
+    }
+
+    public int getFortuneTier() {
+        return fortuneTier;
+    }
+
+    /**
+     * Mining cycles needed for the meteor, a sphere of the given radius around its center, from the given drill
+     * position (relative to the center) to the end. The drill scans y, then x, then (tier 1 only) z, each from
+     * {@code -radius} to {@code radius + 1}. Tier 1 mines one block per cycle and tier 2 one row per cycle, while empty
+     * space is skipped within a cycle, so it costs nothing.
+     */
+    static long sphereWork(int radius, int tier, int dxFrom, int dyFrom, int dzFrom) {
+        final long radiusSquared = (long) radius * radius;
+        long work = 0;
+        for (int dy = dyFrom; dy <= radius + 1; dy++) {
+            for (int dx = dy == dyFrom ? dxFrom : -radius; dx <= radius + 1; dx++) {
+                final long left = radiusSquared - (long) dx * dx - (long) dy * dy;
+                if (left < 0) continue; // the row misses the sphere
+                if (tier != 1) {
+                    work++;
+                    continue;
+                }
+                final int halfLength = (int) Math.sqrt(left); // blocks of the row at |dz| <= halfLength
+                final int firstDz = dy == dyFrom && dx == dxFrom ? Math.max(dzFrom, -halfLength) : -halfLength;
+                if (firstDz <= halfLength) work += halfLength - firstDz + 1;
+            }
+        }
+        return work;
+    }
+
+    private long getRemainingWork() {
+        return sphereWork(currentRadius, multiTier, xDrill - xStart, yDrill - yStart, zDrill - zStart);
+    }
+
+    private long getTotalWork() {
+        if (totalWorkRadius != currentRadius || totalWorkTier != multiTier) {
+            totalWork = sphereWork(currentRadius, multiTier, -currentRadius, -currentRadius, -currentRadius);
+            totalWorkRadius = currentRadius;
+            totalWorkTier = multiTier;
+        }
+        return totalWork;
+    }
+
+    /**
+     * Fraction (0-1) of the meteor already mined, counted in mining cycles: it grows at a steady pace.
+     */
+    public double getProgress() {
+        final long total = getTotalWork();
+        if (total <= 0) return 0;
+        return Math.max(0, Math.min(1, 1 - (double) getRemainingWork() / total));
+    }
+
+    /**
+     * Blocks mined per second over the recent cycles.
+     */
+    public double getBlocksPerSecond() {
+        pruneRecentCycles(getWorldTime());
+        if (recentCycles.size() < 2) return 0;
+        final long ticks = recentCycles.peekLast()
+            .tick()
+            - recentCycles.peekFirst()
+                .tick();
+        if (ticks <= 0) return 0;
+        int blocks = -recentCycles.peekFirst()
+            .blocksMined(); // the first cycle happened before the measured interval
+        for (MiningCycle cycle : recentCycles) blocks += cycle.blocksMined();
+        return blocks * 20.0 / ticks;
+    }
+
+    /**
+     * Seconds until the meteor is mined: the remaining mining cycles times the current cycle duration; -1 if unknown.
+     */
+    public int getEtaSeconds() {
+        if (mMaxProgresstime <= 0) return -1;
+        final long ticks = getRemainingWork() * mMaxProgresstime;
+        return (int) Math.min(Integer.MAX_VALUE, (ticks + 19) / 20);
+    }
+
+    private void addToMeteorOutputs(List<ItemStack> outputs) {
+        for (ItemStack output : outputs) {
+            MinedAmount same = null;
+            for (MinedAmount mined : meteorOutputs) {
+                if (GTUtility.areStacksEqual(mined.stack, output)) {
+                    same = mined;
+                    break;
+                }
+            }
+            if (same == null)
+                meteorOutputs.add(new MinedAmount(GTUtility.copyAmountUnsafe(1, output), output.stackSize));
+            else same.amount += output.stackSize;
+        }
+    }
+
+    /**
+     * Everything produced from the current meteor (or the last one, while waiting), biggest amounts first.
+     */
+    public List<ItemStackLong> getMeteorOutputs() {
+        final List<ItemStackLong> result = new ArrayList<>(meteorOutputs.size());
+        for (MinedAmount mined : meteorOutputs) result.add(new ItemStackLong(mined.stack, mined.amount));
+        result.sort(
+            Comparator.comparingLong(ItemStackLong::stackSize)
+                .reversed());
+        return result;
+    }
+
+    // endregion
 
     @Override
     public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
@@ -767,6 +1103,14 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
         aNBT.setBoolean("stopAllRendering", stopAllRendering);
         aNBT.setInteger("multiTier", multiTier);
         aNBT.setInteger("fortuneTier", fortuneTier);
+        NBTTagList outputsTag = new NBTTagList();
+        for (MinedAmount mined : meteorOutputs) {
+            NBTTagCompound tag = new NBTTagCompound();
+            mined.stack.writeToNBT(tag);
+            tag.setLong("amount", mined.amount); // ItemStack's own count is a byte
+            outputsTag.appendTag(tag);
+        }
+        aNBT.setTag("meteorOutputs", outputsTag);
     }
 
     @Override
@@ -785,6 +1129,13 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
         stopAllRendering = aNBT.getBoolean("stopAllRendering");
         multiTier = aNBT.getInteger("multiTier");
         fortuneTier = aNBT.getInteger("fortuneTier");
+        meteorOutputs.clear();
+        NBTTagList outputsTag = aNBT.getTagList("meteorOutputs", Constants.NBT.TAG_COMPOUND);
+        for (int i = 0; i < outputsTag.tagCount(); i++) {
+            NBTTagCompound tag = outputsTag.getCompoundTagAt(i);
+            ItemStack stack = ItemStack.loadItemStackFromNBT(tag);
+            if (stack != null) meteorOutputs.add(new MinedAmount(stack, tag.getLong("amount")));
+        }
     }
 
     // endregion
@@ -856,6 +1207,10 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
             // # considering the block right above the center of the meteor (like Warded Glass).
             // #zh_CN 顾及了中心正上方的方块(比如守卫者玻璃).
             .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.14"))
+            // #tr tst.common.machine.MeteorMiner.tooltip.info.hologram
+            // # Use the Hologram Projector on the controller to see where the Warded Glass (center of the meteor) and the Master Ritual Stone go.
+            // #zh_CN 对控制器使用全息投影仪, 可显示守卫者玻璃(陨星中心)与主仪式石的放置位置.
+            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.hologram"))
             // #tr tst.common.machine.MeteorMiner.tooltip.info.15
             // # The reset button will restart the machine without optimizing the radius.
             // #zh_CN 点击重启按钮将重启机器, 并且不进行半径适配优化.
@@ -864,6 +1219,10 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
             // # Machine need Meteor Miner Schematic put in controller slot to run.
             // #zh_CN 机器需要在控制器方块内放置陨星采矿场设计图才可运行.
             .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.16"))
+            // #tr tst.common.machine.MeteorMiner.tooltip.info.energy_hatches
+            // # Accepts normal energy hatches or TecTech multi Amp / laser energy hatches, but not mixed.
+            // #zh_CN 可使用普通能源仓, 或TecTech高电流/激光能源仓, 但不可混用.
+            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.energy_hatches"))
             // #tr tst.common.machine.MeteorMiner.tooltip.info.17
             // # {\RED}{\BOLD} TIER I
             // #zh_CN {\RED}{\BOLD} 等级 I
@@ -919,8 +1278,8 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
             .addEnergyHatch(tr("tst.common.machine.MeteorMiner.tooltip.structure.03"), 1)
             .addMaintenanceHatch(tr("tst.common.machine.MeteorMiner.tooltip.structure.03"), 1)
             // #tr tst.common.machine.MeteorMiner.tooltip.structure.04
-            // # Below the controller
-            // #zh_CN 控制器下侧
+            // # ULV only, below the controller
+            // #zh_CN 仅限ULV, 控制器下侧
             .addInputBus(tr("tst.common.machine.MeteorMiner.tooltip.structure.04"), 2)
             // #tr tst.common.machine.MeteorMiner.tooltip.structure.05
             // # {\GOLD}{\BOLD}TIER II
@@ -948,7 +1307,8 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     private boolean addInjector(IGregTechTileEntity aBaseMetaTileEntity, int aBaseCasingIndex) {
         IMetaTileEntity aMetaTileEntity = aBaseMetaTileEntity.getMetaTileEntity();
         if (aMetaTileEntity == null) return false;
-        if (!(aMetaTileEntity instanceof MTEHatchInputBus bus)) return false;
+        // Only an ULV input bus (a single slot) for the fortune pickaxe
+        if (!(aMetaTileEntity instanceof MTEHatchInputBus bus) || bus.mTier != 0) return false;
         bus.updateTexture(aBaseCasingIndex);
         addIfSmartInput(bus);
         return mInputBusses.add(bus);
