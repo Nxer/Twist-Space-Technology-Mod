@@ -1309,11 +1309,10 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
 
     @Override
     public int nextMachineMode() {
-        machineMode++;
-        if (machineMode >= totalMachineMode()) {
-            machineMode = 0;
+        if ((machineMode + 1) >= totalMachineMode()) {
+            return 0;
         }
-        return machineMode;
+        return machineMode + 1;
     }
 
     // endregion
