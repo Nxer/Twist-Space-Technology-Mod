@@ -13,7 +13,6 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_ElvenWorkshop;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_ElvenWorkshopLegacy;
-import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_HyperSpacetimeTransformer;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_HolySeparator;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IndustrialMagicMatrix;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
@@ -48,6 +47,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_GiantVacuumDryingFurnace;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_HephaestusAtelier;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_HyperSpacetimeTransformer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_HyperThermalConvector;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IncompactCyclotron;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
@@ -267,15 +267,15 @@ public final class MachineLoader {
         // #zh_CN 精灵工坊
         GTCMItemList.ElvenWorkshop
             .set(new GTCM_ElvenWorkshop(19018, "NameElvenWorkshop", TSTUtils.tr("tst.common.machine.ElvenWorkshop.name")));
-        // TODO: Remove the transitional controller (19299) in the next version.
+        // TODO: Remove the transitional controller (19500) in the next version.
         GTCMItemList.ElvenWorkshopLegacy
-            .set(new GTCM_ElvenWorkshopLegacy(19299, "NameElvenWorkshopLegacy", TSTUtils.tr("tst.common.machine.ElvenWorkshop.name")));
+            .set(new GTCM_ElvenWorkshopLegacy(19500, "NameElvenWorkshopLegacy", TSTUtils.tr("tst.common.machine.ElvenWorkshop.name")));
 
         // #tr tst.common.machine.HyperSpacetimeTransformer.name
         // # HyperSpacetimeTransformer
         // #zh_CN 极限时空转换仪
         GTCMItemList.HyperSpacetimeTransformer.set(
-            new GTCM_HyperSpacetimeTransformer(
+            new TST_HyperSpacetimeTransformer(
                 19019,
                 "NameHyperSpacetimeTransformer",
                 TSTUtils.tr("tst.common.machine.HyperSpacetimeTransformer.name")));

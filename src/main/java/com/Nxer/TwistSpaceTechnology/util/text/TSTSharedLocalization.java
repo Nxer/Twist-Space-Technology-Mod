@@ -159,6 +159,19 @@ public class TSTSharedLocalization {
             // #zh_CN {\AQUA}部件等级: {\GOLD}%s
             return TSTUtils.tr("tst.common.shared.machine_info.formatted.component_tier", componentTier);
         }
+
+        public static String perfectOverclockSupport(boolean supported) {
+            // #tr tst.common.shared.machine_info.formatted.perfect_overclock_supported
+            // # {\AQUA}Perfect Overclocking: {\GOLD}Supported
+            // #zh_CN {\AQUA}无损超频: {\GOLD}支持
+
+            // #tr tst.common.shared.machine_info.formatted.perfect_overclock_unsupported
+            // # {\AQUA}Perfect Overclocking: {\GOLD}Not Supported
+            // #zh_CN {\AQUA}无损超频: {\GOLD}不支持
+            return TSTUtils.tr(
+                supported ? "tst.common.shared.machine_info.formatted.perfect_overclock_supported"
+                    : "tst.common.shared.machine_info.formatted.perfect_overclock_unsupported");
+        }
     }
 
     public static class Waila {
