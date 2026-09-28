@@ -34,6 +34,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
@@ -54,6 +56,7 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.Bott
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ModularHatchBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.cleanroommc.modularui.utils.item.ItemStackHandler;
 import com.google.common.collect.ImmutableList;
@@ -107,6 +110,9 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private static final int RECIPE_CATEGORY_SLOT_COUNT = BottledChaosRecipeCategory.values().length;
     private static final String RECIPE_CATEGORY_SLOT_NBT = "bottledChaosRecipeCategorySlot";
     private static final String WAILA_CAPACITY = "bottledChaosCapacity";
+    private static final String WAILA_USED_CAPACITY = "bottledChaosUsedCapacity";
+    private static final String WAILA_CREDENTIAL_HATCHES = "bottledChaosCredentialHatches";
+    private static final String WAILA_CREDENTIAL_HATCH_LIMIT = "bottledChaosCredentialHatchLimit";
     private static final String WAILA_RECIPE_CATEGORIES = "bottledChaosRecipeCategories";
     private static final String WAILA_RECIPE_TOKENS = "bottledChaosRecipeTokens";
     private static final int THREAD_COUNT = 15;
@@ -116,6 +122,122 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         ModularHatchTypes.SPEED_CONTROLLER,
         ModularHatchTypes.POWER_CONSUMPTION_CONTROLLER,
         ModularHatchTypes.OVERCLOCK_CONTROLLER);
+
+    // #tr GT5U.gui.text.recipe_result.bottled_chaos.structure_incomplete
+    // # The Bottled Chaos structure is incomplete.
+    // #zh_CN 瓶中混沌结构不完整.
+
+    // #tr GT5U.gui.text.recipe_result.bottled_chaos.credential_changed
+    // # The credential for this processing group changed.
+    // #zh_CN 此加工组的凭证已变更.
+
+    // #tr GT5U.gui.text.recipe_result.bottled_chaos.insufficient_power_share
+    // # This processing group does not have enough allocated power.
+    // #zh_CN 此加工组分配到的电力不足.
+
+    // #tr GT5U.gui.text.recipe_result.bottled_chaos.capacity_exceeded
+    // # Installed credentials exceed the machine capacity.
+    // #zh_CN 已安装凭证超过主机容量.
+
+    // #tr GT5U.gui.text.recipe_result.bottled_chaos.unbound
+    // # This processing group has no valid credential.
+    // #zh_CN 此加工组没有有效凭证.
+
+    // #tr bottled_chaos.structure.invalid_capacity_region
+    // # Every capacity region must contain exactly one complete capacity tier.
+    // #zh_CN 每个容量区必须完整安装同一种容量等级.
+
+    // #tr bottled_chaos.structure.multiple_parallel_controllers
+    // # Install at most one parallel controller module.
+    // #zh_CN 最多只能安装一个并行控制器模块.
+
+    // #tr bottled_chaos.structure.incomplete_processing_group
+    // # Each processing group must contain a credential hatch, item input bus, and fluid input hatch together.
+    // #zh_CN 每个加工组必须同时安装凭证仓, 物品输入总线和流体输入仓.
+
+    // #tr bottled_chaos.structure.credential_hatch_limit
+    // # Installed credential hatches exceed the limit of the parallel controller module.
+    // #zh_CN 已安装凭证仓超过并行控制器模块提供的上限.
+
+    // #tr bottled_chaos.hatch.recipe_token
+    // # Bottled Chaos Credential Hatch
+    // #zh_CN 瓶中混沌凭证仓
+
+    // #tr bottled_chaos.capacity_usage
+    // # Capacity: %s / %s
+    // #zh_CN 容量: %s / %s
+
+    // #tr bottled_chaos.credential_hatches
+    // # Credential hatches: %s / %s
+    // #zh_CN 凭证仓: %s / %s
+
+    // #tr bottled_chaos.allowed_recipe_categories
+    // # Installed machine types: %s
+    // #zh_CN 已安装机器类型: %s
+
+    // #tr bottled_chaos.allowed_recipe_families
+    // # Installed credential families: %s
+    // #zh_CN 已安装凭证类型: %s
+
+    // #tr bottled_chaos.input_share
+    // # Power share: %s
+    // #zh_CN 电力份额: %s
+
+    // #tr bottled_chaos.running
+    // # Running
+    // #zh_CN 运行中
+
+    // #tr bottled_chaos.idle
+    // # Idle
+    // #zh_CN 待机
+
+    // #tr bottled_chaos.paused
+    // # Paused
+    // #zh_CN 已暂停
+
+    // #tr bottled_chaos.capacity_exceeded
+    // # Capacity exceeded
+    // #zh_CN 容量超限
+
+    // #tr bottled_chaos.unbound
+    // # No credential
+    // #zh_CN 无凭证
+
+    // #tr bottled_chaos.none
+    // # None
+    // #zh_CN 无
+
+    // #tr bottled_chaos.machine_type
+    // # Platinum Group Processing Multiblock
+    // #zh_CN 铂族处理多方块机器
+
+    // #tr bottled_chaos.tooltip.0
+    // # Runs multiple platinum-group processing chains with independent progress.
+    // #zh_CN 以独立进度同时运行多条铂族处理链.
+
+    // #tr bottled_chaos.tooltip.1
+    // # Shared power is drained once per tick; insufficient power pauses every processing group.
+    // #zh_CN 每tick统一扣除总耗电; 电力不足时全部加工组暂停.
+
+    // #tr bottled_chaos.structure.body
+    // # The main body uses the blocks shown in the structure projection.
+    // #zh_CN 主体使用结构投影中显示的方块.
+
+    // #tr bottled_chaos.structure.capacity_columns
+    // # Each of the 4 capacity regions must use one complete capacity tier.
+    // #zh_CN 4个容量区均须完整使用同一种容量等级.
+
+    // #tr bottled_chaos.structure.processing_groups
+    // # Up to 15 processing groups may be installed in any group positions allowed by the parallel module.
+    // #zh_CN 最多可在任意加工组位置安装15组设备, 实际数量由并行模块限制.
+
+    // #tr bottled_chaos.structure.parameter_modules
+    // # Install at most one parallel module; speed, power, and overclock modules affect final processing.
+    // #zh_CN 最多安装一个并行模块; 速度, 耗电和超频模块作用于最终加工.
+
+    // #tr bottled_chaos.mod_name
+    // # Twist Space Technology
+    // #zh_CN Twist Space Technology
 
     // spotless:off
     private static final String[][] SHAPE = {
@@ -396,6 +518,37 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     public long getBottledChaosCapacity() {
         return capacity;
+    }
+
+    public long getBottledChaosUsedCapacity() {
+        long used = 0;
+        for (TST_BottledChaosRecipeTokenHatch hatch : credentialHatches) {
+            if (hatch != null && hatch.isValid()) {
+                used += ItemBottledChaosCredential.getCapacity(hatch.getAuthorizationStack());
+            }
+        }
+        return used;
+    }
+
+    public int getInstalledCredentialHatchCount() {
+        int installed = 0;
+        for (TST_BottledChaosRecipeTokenHatch hatch : credentialHatches) {
+            if (hatch != null && hatch.isValid()) installed++;
+        }
+        return installed;
+    }
+
+    public int getCredentialHatchLimit() {
+        return credentialHatchLimit;
+    }
+
+    public boolean isBottledChaosRunning() {
+        IGregTechTileEntity base = getBaseMetaTileEntity();
+        if (!mMachine || base == null || !base.isAllowedToWork()) return false;
+        for (BottledChaosThread thread : threads) {
+            if ("bottled_chaos.running".equals(thread.status)) return true;
+        }
+        return false;
     }
 
     private boolean validGroup(int slot) {
@@ -827,6 +980,9 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         // Replace absolute EU/t with per-credential allocation percentages.
         tag.removeTag("energyUsage");
         tag.setLong(WAILA_CAPACITY, capacity);
+        tag.setLong(WAILA_USED_CAPACITY, getBottledChaosUsedCapacity());
+        tag.setInteger(WAILA_CREDENTIAL_HATCHES, getInstalledCredentialHatchCount());
+        tag.setInteger(WAILA_CREDENTIAL_HATCH_LIMIT, credentialHatchLimit);
         tag.setString(WAILA_RECIPE_CATEGORIES, getRecipeCategoryKeyList());
         tag.setString(WAILA_RECIPE_TOKENS, getRecipeTokenKeyList());
         tag.setBoolean("bottledChaosOverCapacity", overCapacity);
@@ -864,10 +1020,28 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 tag.getBoolean("isAllowedToWork"),
                 tag.getInteger("maxProgress"),
                 tag.getInteger("progress")));
-        currentTip.add("bottled_chaos.capacity: " + tag.getLong(WAILA_CAPACITY));
-        currentTip.add("bottled_chaos.allowed_recipe_categories: " + tag.getString(WAILA_RECIPE_CATEGORIES));
-        currentTip.add("bottled_chaos.allowed_recipe_families: " + tag.getString(WAILA_RECIPE_TOKENS));
-        if (tag.getBoolean("bottledChaosOverCapacity")) currentTip.add("bottled_chaos.capacity_exceeded");
+        currentTip.add(
+            EnumChatFormatting.WHITE + StatCollector.translateToLocalFormatted(
+                "bottled_chaos.capacity_usage",
+                tag.getLong(WAILA_USED_CAPACITY),
+                tag.getLong(WAILA_CAPACITY)));
+        currentTip.add(
+            EnumChatFormatting.WHITE + StatCollector.translateToLocalFormatted(
+                "bottled_chaos.credential_hatches",
+                tag.getInteger(WAILA_CREDENTIAL_HATCHES),
+                tag.getInteger(WAILA_CREDENTIAL_HATCH_LIMIT)));
+        currentTip.add(
+            EnumChatFormatting.WHITE + StatCollector.translateToLocalFormatted(
+                "bottled_chaos.allowed_recipe_categories",
+                localizeKeyList(tag.getString(WAILA_RECIPE_CATEGORIES))));
+        currentTip.add(
+            EnumChatFormatting.WHITE + StatCollector.translateToLocalFormatted(
+                "bottled_chaos.allowed_recipe_families",
+                localizeKeyList(tag.getString(WAILA_RECIPE_TOKENS))));
+        if (tag.getBoolean("bottledChaosOverCapacity")) {
+            currentTip
+                .add(EnumChatFormatting.WHITE + StatCollector.translateToLocal("bottled_chaos.capacity_exceeded"));
+        }
         NBTTagList jobs = tag.getTagList(THREAD_NBT, 10);
         for (int i = 0; i < Math.min(THREAD_COUNT, jobs.tagCount()); i++) {
             NBTTagCompound job = jobs.getCompoundTagAt(i);
@@ -877,11 +1051,16 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             currentTip.add(
                 "#" + job.getInteger("slot")
                     + " "
-                    + job.getString("family")
-                    + " | bottled_chaos.input_share: "
-                    + String.format(Locale.ROOT, "%.2f%%", percent)
+                    + StatCollector.translateToLocal(job.getString("family"))
+                    + EnumChatFormatting.WHITE
                     + " | "
-                    + job.getString("status"));
+                    + StatCollector.translateToLocalFormatted(
+                        "bottled_chaos.input_share",
+                        String.format(Locale.ROOT, "%.2f%%", percent))
+                    + " | "
+                    + getStatusColor(job.getString("status"))
+                    + StatCollector.translateToLocal(job.getString("status"))
+                    + EnumChatFormatting.RESET);
             if (job.getInteger("duration") > 0) {
                 currentTip
                     .add(GTWaila.getMachineProgressString(job.getInteger("duration"), job.getInteger("progress")));
@@ -907,19 +1086,31 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         return joiner.length() == 0 ? "bottled_chaos.none" : joiner.toString();
     }
 
+    private static String localizeKeyList(String keys) {
+        StringJoiner localized = new StringJoiner(", ");
+        for (String key : keys.split(", ")) localized.add(StatCollector.translateToLocal(key));
+        return localized.toString();
+    }
+
+    private static EnumChatFormatting getStatusColor(String status) {
+        if ("bottled_chaos.running".equals(status)) return EnumChatFormatting.GOLD;
+        if ("bottled_chaos.idle".equals(status)) return EnumChatFormatting.AQUA;
+        return EnumChatFormatting.WHITE;
+    }
+
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         if (tooltip == null) {
-            tooltip = new MultiblockTooltipBuilder().addMachineType("bottled_chaos.machine_type")
-                .addInfo("bottled_chaos.tooltip.0")
-                .addInfo("bottled_chaos.tooltip.1")
+            tooltip = new MultiblockTooltipBuilder().addMachineType(TSTUtils.tr("bottled_chaos.machine_type"))
+                .addInfo(TSTUtils.tr("bottled_chaos.tooltip.0"))
+                .addInfo(TSTUtils.tr("bottled_chaos.tooltip.1"))
                 .addSeparator()
                 .beginStructureBlock(29, 40, 29, false)
-                .addStructureInfo("bottled_chaos.structure.body")
-                .addStructureInfo("bottled_chaos.structure.capacity_columns")
-                .addStructureInfo("bottled_chaos.structure.processing_groups")
-                .addStructureInfo("bottled_chaos.structure.parameter_modules")
-                .toolTipFinisher("bottled_chaos.mod_name");
+                .addStructureInfo(TSTUtils.tr("bottled_chaos.structure.body"))
+                .addStructureInfo(TSTUtils.tr("bottled_chaos.structure.capacity_columns"))
+                .addStructureInfo(TSTUtils.tr("bottled_chaos.structure.processing_groups"))
+                .addStructureInfo(TSTUtils.tr("bottled_chaos.structure.parameter_modules"))
+                .toolTipFinisher(TSTUtils.tr("bottled_chaos.mod_name"));
         }
         return tooltip;
     }
