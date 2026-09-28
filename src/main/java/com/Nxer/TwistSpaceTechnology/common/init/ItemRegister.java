@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.init;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.ActualPattern;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.BottledChaosCredential;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.EcoSphereExecutionProtocol;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.EcoSphereUpgrade;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.InfinityDistilledWaterStorageCell;
@@ -21,6 +22,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosCredential;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -32,7 +34,7 @@ public class ItemRegister {
         // Keep the protocol and upgrade registry entries adjacent; saved worlds may still remap numeric IDs.
         Item[] itemsToReg = { MetaItem01, EcoSphereExecutionProtocol, EcoSphereUpgrade, ProofOfHeroes, ProofOfGods,
             MultiStructuresLinkTool, MetaItemRune, MetaItemIzumik, Yamato, ActualPattern, MetaItemNamedCircuit,
-            MetaItemFlask, InfinityDistilledWaterStorageCell, };
+            MetaItemFlask, InfinityDistilledWaterStorageCell, BottledChaosCredential, };
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.unlocalizedName);
@@ -41,6 +43,10 @@ public class ItemRegister {
     }
 
     public static void registryItemContainers() {
+
+        for (int meta = 0; meta <= ItemBottledChaosCredential.MAX_META; meta++) {
+            BottledChaosCredential.registerVariant(meta);
+        }
 
         /**
          * The order of arrangement is based on the registration order of the Minecraft Forge

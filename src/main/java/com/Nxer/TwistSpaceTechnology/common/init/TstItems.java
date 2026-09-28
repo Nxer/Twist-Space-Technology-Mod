@@ -9,6 +9,7 @@ import com.Nxer.TwistSpaceTechnology.common.item.ItemAdder01;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemAdderFlask;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemAdderIzumik;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemAdderRune;
+import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosCredential;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemCardigan;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemEcoSphereExecutionProtocol;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemEcoSphereUpgrade;
@@ -29,6 +30,7 @@ public class TstItems {
     public static final ItemAdderIzumik MetaItemIzumik = new ItemAdderIzumik();
     public static final ItemAdderFlask MetaItemFlask = new ItemAdderFlask();
     public static final ItemNamedCircuit MetaItemNamedCircuit = new ItemNamedCircuit();
+    public static final ItemBottledChaosCredential BottledChaosCredential = new ItemBottledChaosCredential();
 
     // #tr item.tst.common.proof_of_heroes.name
     // # 英雄の証
