@@ -302,6 +302,12 @@ public class GTCMRecipe {
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MassFabricatorGenesis.get(1)))
         .build();
 
+    public static final RecipeMap<TST_RecipeMapBackend> BottledChaosRecipes = RecipeMapBuilder
+        .of("tst.recipe.BottledChaosRecipes", TST_RecipeMapBackend::new)
+        .maxIO(64, 64, 64, 64)
+        .disableRegisterNEI()
+        .build();
+
     // #tr tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.name
     // # Eco-Sphere: Arboreal Genesis
     // #zh_CN 生态圈: 原木拟生

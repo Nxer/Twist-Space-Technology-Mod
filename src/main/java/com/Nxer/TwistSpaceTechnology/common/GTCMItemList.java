@@ -328,6 +328,7 @@ public enum GTCMItemList {
     DimensionallyTranscendentMatterPlasmaForgePrototypeMK2,
     LargeNeutronOscillator,
     IndistinctTentaclePrototypeMK2,
+    BottledChaos,
 
     // endregion
 
@@ -517,6 +518,7 @@ public enum GTCMItemList {
     CircuitImprintHatchT2,
     EcoSphereInputInterface,
     EcoSphereUpgradeInterface,
+    BottledChaosRecipeTokenHatch,
 
     // endregion
 

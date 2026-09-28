@@ -94,15 +94,18 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellInputBus;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellInputHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BloodOrbHatch;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BottledChaosRecipeTokenHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_CircuitImprintHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_EcoSphereInputInterfaceHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_EcoSphereUpgradeInterfaceHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_ManaHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_PatternAccessHatch;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_BottledChaos;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_IndistinctTentaclePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_LargeNeutronOscillator;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_MassFabricatorGenesis;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMetaTileEntityIds;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.AdvExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.ExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.PerfectExecutionCore;
@@ -807,6 +810,18 @@ public final class MachineLoader {
         // #zh_CN 巨型硅岩反应堆
         GTCMItemList.MegaNqReactor
             .set(new TST_MegaNqReactor(19081, "NameMegaNqReactor", TSTUtils.tr("tst.common.machine.MegaNqReactor.name")));
+
+        if (Config.EnableModularizedMachineSystem) {
+            // BottledChaosMetaTileEntityIds.PROTOTYPE is reserved for the deferred prototype implementation.
+            GTCMItemList.BottledChaos.set(
+                new MM_BottledChaos(BottledChaosMetaTileEntityIds.COMPLETE, "NameBottledChaos", "NameBottledChaos"));
+            GTCMItemList.BottledChaosRecipeTokenHatch.set(
+                new TST_BottledChaosRecipeTokenHatch(
+                    BottledChaosMetaTileEntityIds.RECIPE_TOKEN_HATCH,
+                    "NameBottledChaosRecipeTokenHatch",
+                    "NameBottledChaosRecipeTokenHatch",
+                    14));
+        }
 
         // endregion
 
