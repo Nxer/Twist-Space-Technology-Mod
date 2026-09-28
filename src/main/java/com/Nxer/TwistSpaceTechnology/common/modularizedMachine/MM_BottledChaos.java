@@ -23,6 +23,7 @@ import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -43,15 +44,19 @@ import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosCredential;
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_BottledChaos;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BottledChaosRecipeTokenHatch;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularHatchTypes;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedMachineSupportAllModuleBase;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosOutputBuffer;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosPowerAllocator;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosRecipeCategory;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosThread;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ModularHatchBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.cleanroommc.modularui.utils.item.ItemStackHandler;
+import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.IStructureElement;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -64,6 +69,7 @@ import gregtech.api.GregTechAPI;
 import gregtech.api.casing.Casings;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
+import gregtech.api.enums.VoltageIndex;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -105,6 +111,11 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private static final String WAILA_RECIPE_TOKENS = "bottledChaosRecipeTokens";
     private static final int THREAD_COUNT = 15;
     private static final String THREAD_NBT = "bottledChaosThreads";
+    private static final Collection<ModularHatchTypes> SUPPORTED_MODULE_TYPES = ImmutableList.of(
+        ModularHatchTypes.PARALLEL_CONTROLLER,
+        ModularHatchTypes.SPEED_CONTROLLER,
+        ModularHatchTypes.POWER_CONSUMPTION_CONTROLLER,
+        ModularHatchTypes.OVERCLOCK_CONTROLLER);
 
     // spotless:off
     private static final String[][] SHAPE = {
@@ -189,6 +200,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private long schedulerTick;
     private boolean authorizationDirty = true;
     private boolean overCapacity;
+    private int credentialHatchLimit;
 
     public MM_BottledChaos(int id, String name, String nameRegional) {
         super(id, name, nameRegional);
@@ -262,6 +274,11 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     }
 
     @Override
+    public Collection<ModularHatchTypes> getSupportedModularHatchTypes() {
+        return SUPPORTED_MODULE_TYPES;
+    }
+
+    @Override
     protected boolean canMultiplyModularHatchType() {
         return true;
     }
@@ -315,6 +332,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     @Override
     public boolean checkMachineMM(IGregTechTileEntity base, ItemStack stack, List<StructureError> errors) {
         capacity = 0;
+        credentialHatchLimit = 0;
         allocatedCapacity = -1;
         Arrays.fill(credentialHatches, null);
         Arrays.fill(threadInputBuses, null);
@@ -328,13 +346,33 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             errors.add(StructureErrors.of("bottled_chaos.structure.invalid_capacity_region"));
             return false;
         }
+        Collection<IModularHatch> parallelControllers = modularHatches.get(ModularHatchTypes.PARALLEL_CONTROLLER);
+        int parallelControllerCount = parallelControllers == null ? 0 : parallelControllers.size();
+        if (parallelControllerCount > 1) {
+            errors.add(StructureErrors.of("bottled_chaos.structure.multiple_parallel_controllers"));
+            return false;
+        }
+        if (parallelControllerCount == 1) {
+            IModularHatch controller = parallelControllers.iterator()
+                .next();
+            if (controller instanceof ModularHatchBase hatch) {
+                credentialHatchLimit = Math
+                    .min(THREAD_COUNT, Math.max(0, (hatch.getTierForStructure() - VoltageIndex.ZPM + 1) * 2 - 1));
+            }
+        }
+        int installedCredentialHatches = 0;
         for (int i = 0; i < THREAD_COUNT; i++) {
+            if (credentialHatches[i] != null) installedCredentialHatches++;
             int installed = (credentialHatches[i] == null ? 0 : 1) + (threadInputBuses[i] == null ? 0 : 1)
                 + (threadInputHatches[i] == null ? 0 : 1);
             if (installed != 0 && installed != 3) {
                 errors.add(StructureErrors.of("bottled_chaos.structure.incomplete_processing_group"));
                 return false;
             }
+        }
+        if (installedCredentialHatches > credentialHatchLimit) {
+            errors.add(StructureErrors.of("bottled_chaos.structure.credential_hatch_limit"));
+            return false;
         }
         return true;
     }
