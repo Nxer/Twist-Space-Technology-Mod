@@ -105,7 +105,6 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_DimensionallyT
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_IndistinctTentaclePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_LargeNeutronOscillator;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_MassFabricatorGenesis;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMetaTileEntityIds;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.AdvExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.ExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.PerfectExecutionCore;
@@ -812,12 +811,12 @@ public final class MachineLoader {
             .set(new TST_MegaNqReactor(19081, "NameMegaNqReactor", TSTUtils.tr("tst.common.machine.MegaNqReactor.name")));
 
         if (Config.EnableModularizedMachineSystem) {
-            // BottledChaosMetaTileEntityIds.PROTOTYPE is reserved for the deferred prototype implementation.
+            // 19082 is reserved for the deferred Bottled Chaos prototype implementation.
             GTCMItemList.BottledChaos.set(
-                new MM_BottledChaos(BottledChaosMetaTileEntityIds.COMPLETE, "NameBottledChaos", "NameBottledChaos"));
+                new MM_BottledChaos(19083, "NameBottledChaos", "NameBottledChaos"));
             GTCMItemList.BottledChaosRecipeTokenHatch.set(
                 new TST_BottledChaosRecipeTokenHatch(
-                    BottledChaosMetaTileEntityIds.RECIPE_TOKEN_HATCH,
+                    19085,
                     "NameBottledChaosRecipeTokenHatch",
                     "NameBottledChaosRecipeTokenHatch",
                     14));
