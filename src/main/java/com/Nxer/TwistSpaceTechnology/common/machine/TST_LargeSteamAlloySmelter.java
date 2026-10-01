@@ -66,11 +66,16 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
     public IStructureDefinition<TST_LargeSteamAlloySmelter> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_LargeSteamAlloySmelter>builder()
+                // spotless:off
                 .addShape(
                     mName,
                     transpose(
-                        new String[][] { { "BBBBB", "BBBBB", "BBBBB" }, { "BB~BB", "AAAAA", "BBBBB" },
-                            { "BBBBB", "BBBBB", "BBBBB" } }))
+                        new String[][]{
+                            {"BBBBB","BBBBB","BBBBB"},
+                            {"BB~BB","AAAAA","BBBBB"},
+                            {"BBBBB","BBBBB","BBBBB"}
+                        }))
+                // spotless:on
                 .addElement('A', ofBlock(GregTechAPI.sBlockCasings3, 14))
                 .addElement(
                     'B',

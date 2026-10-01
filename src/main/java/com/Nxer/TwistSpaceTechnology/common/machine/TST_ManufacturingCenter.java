@@ -95,10 +95,16 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
     public IStructureDefinition<TST_ManufacturingCenter> getStructureDefinition() {
         if (StructureDef == null) {
             StructureDef = StructureDefinition.<TST_ManufacturingCenter>builder()
+                // spotless:off
                 .addShape(
                     "main",
                     StructureUtility.transpose(
-                        new String[][] { { "CCC", "CCC", "CCC" }, { "C~C", "CAC", "CCC" }, { "CCC", "CCC", "CCC" } }))
+                        new String[][]{
+                            {"CCC","CCC","CCC"},
+                            {"C~C","CAC","CCC"},
+                            {"CCC","CCC","CCC"}
+                        }))
+                // spotless:on
                 .addElement(
                     'C',
                     GTStructureUtility.buildHatchAdder(TST_ManufacturingCenter.class)

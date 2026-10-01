@@ -99,10 +99,16 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
     public IStructureDefinition<TST_ProcessingArray> getStructureDefinition() {
         if (null == STRUCTURE_DEFINITION) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_ProcessingArray>builder()
+                // spotless:off
                 .addShape(
                     STRUCTURE_PIECE_MAIN,
                     transpose(
-                        new String[][] { { "hhh", "hhh", "hhh" }, { "h~h", "h h", "hhh" }, { "hhh", "hhh", "hhh" } }))
+                        new String[][]{
+                            {"hhh","hhh","hhh"},
+                            {"h~h","h h","hhh"},
+                            {"hhh","hhh","hhh"}
+                        }))
+                // spotless:on
                 .addElement(
                     'h',
                     HatchElementBuilder.<TST_ProcessingArray>builder()

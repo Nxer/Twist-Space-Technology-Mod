@@ -62,10 +62,16 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
     public IStructureDefinition<TST_LargeSteamForgeHammer> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_LargeSteamForgeHammer>builder()
+                // spotless:off
                 .addShape(
                     mName,
                     transpose(
-                        new String[][] { { "CCC", "CCC", "CCC" }, { "C~C", "C C", "CCC" }, { "CCC", "CCC", "CCC" }, }))
+                        new String[][]{
+                            {"CCC","CCC","CCC"},
+                            {"C~C","C C","CCC"},
+                            {"CCC","CCC","CCC"},
+                        }))
+                // spotless:on
                 .addElement(
                     'C',
                     ofChain(

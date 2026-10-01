@@ -60,8 +60,11 @@ public class GTCM_TestMultiMachine extends GTCM_MultiMachineBase<GTCM_TestMultiM
     private static final String STRUCTURE_PIECE_MAIN = "main";
 
     // spotless:off
-    private final String[][] shape = new String[][] { { "AAA", "AAA", "AAA" }, { "A~A", "AAA", "AAA" },
-        { "AAA", "AAA", "AAA" } };
+    private final String[][] shape = new String[][]{
+        {"AAA","AAA","AAA"},
+        {"A~A","AAA","AAA"},
+        {"AAA","AAA","AAA"}
+    };
     // spotless:on
 
     private static final int horizontalOffSet = 1;
