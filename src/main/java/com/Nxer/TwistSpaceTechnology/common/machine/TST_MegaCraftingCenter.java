@@ -939,7 +939,7 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.01
         // # molecularAssembler | extremeCraftTable
@@ -987,6 +987,7 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
             .addInfo(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.11"))
             .addInfo(Text_SeparatingLine)
             .addInfo(TSTSharedLocalization.MachineTooltip.MoreInfoCheckingInScanner)
+            .beginStructureBlock(SHAPE_MAIN)
             .toolTipFinisher();
         // spotless:on
         return tt;

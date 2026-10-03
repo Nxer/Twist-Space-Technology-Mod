@@ -468,7 +468,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.machine_type
         // # Vacuum Furnace | Dehydrator
@@ -506,7 +506,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
             // # Would anyone really need this machine to handle space ice cream?
             // #zh_CN 真的会有人需要这台机器来处理太空冰淇淋吗？
             .addInfo(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.08"))
-            .beginStructureBlock(11, 10, 23, true)
+            .beginStructureBlock("11x23x(8+7xn)", true)
             .addController(textFrontCenter)
 
             // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.structure.01

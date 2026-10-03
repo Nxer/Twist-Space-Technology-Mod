@@ -233,7 +233,7 @@ public class MM_LargeNeutronOscillator
     // endregion
 
     // region Tooltip
-    private static MultiblockTooltipBuilder tooltip;
+    private static TSTMultiblockTooltipBuilder tooltip;
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
@@ -260,6 +260,7 @@ public class MM_LargeNeutronOscillator
                 // # Installing module hatches near the controller block can significantly improve machine performance.
                 // #zh_CN 在主机附近安装模块仓室可以显著提升机器性能.
                 .addInfo(TSTUtils.tr("tst.modular.machine.LargeNeutronOscillator.tooltip.info.03"))
+                .beginStructureBlock(SHAPE_MAIN)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription01)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription02)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.OverclockControllerDescription)
@@ -269,7 +270,7 @@ public class MM_LargeNeutronOscillator
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ExecutionCoreDescription)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.NotMultiplyInstallSameTypeModule)
                 .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
-                .beginStructureBlock(23, 40, 13, false)
+
                 .addStructureInfo("  " + TSTSharedLocalization.ModularizedMachine.ModularHatch + ": " + TSTSharedLocalization.Structure.textUseBlueprint)
                 .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
                 .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 3)

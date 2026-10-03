@@ -198,7 +198,7 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.LargeSteamAlloySmelter.tooltip.machine_type
         // # Alloy Smelter
@@ -212,7 +212,7 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
             // # Steam Tech Operational
             // #zh_CN 蒸汽科技，启动！
             .addInfo(TSTUtils.tr("tst.common.machine.LargeSteamAlloySmelter.tooltip.info.01"))
-            .beginStructureBlock(5, 3, 3, false)
+            .beginStructureBlock(SHAPE_MAIN)
             .addController(TSTSharedLocalization.Structure.textFrontCenter)
             .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)
             .addOutputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)

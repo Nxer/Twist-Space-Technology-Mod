@@ -472,7 +472,7 @@ public class MM_IndistinctTentaclePrototypeMK2
     // endregion
 
     // region Tooltip
-    private static MultiblockTooltipBuilder tooltip;
+    private static TSTMultiblockTooltipBuilder tooltip;
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
@@ -500,6 +500,7 @@ public class MM_IndistinctTentaclePrototypeMK2
                 // #zh_CN 直接使用无线EU网络中的能量, 无需能源仓.
                 .addInfo(TSTUtils.tr("tst.modular.machine.IndistinctTentaclePrototypeMK2.tooltip.info.03"))
                 .addInfo(TSTSharedLocalization.ModularizedMachine.InstallingModuleNearControllerImproveMachine)
+                .beginStructureBlock(SHAPE_MAIN)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription01)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription02)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ParallelControllerDescription)
@@ -512,7 +513,7 @@ public class MM_IndistinctTentaclePrototypeMK2
                 .addStructureInfo(TSTUtils.tr("tst.modular.machine.IndistinctTentaclePrototypeMK2.tooltip.structure.01"))
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.NotMultiplyInstallSameTypeModule)
                 .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
-                .beginStructureBlock(35, 35, 131, false)
+
                 .addStructureInfo("  " + TSTSharedLocalization.ModularizedMachine.ModularHatch + ": " + TSTSharedLocalization.Structure.textUseBlueprint)
                 .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
                 .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)

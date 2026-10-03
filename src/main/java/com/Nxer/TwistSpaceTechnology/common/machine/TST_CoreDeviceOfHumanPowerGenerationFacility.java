@@ -274,7 +274,7 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.CoreDeviceOfHumanPowerGenerationFacility.tooltip.machine_type
         // # Fluid Heater
@@ -293,7 +293,7 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
             // #zh_CN 升级线圈以获得更快的速度.
             .addInfo(TSTUtils.tr("tst.common.machine.CoreDeviceOfHumanPowerGenerationFacility.tooltip.info.02"))
             .addInfo(TSTSharedLocalization.MachineTooltip.Tooltip_GlassTierLimitEnergyHatchTier)
-            .beginStructureBlock(15, 20, 15, false)
+            .beginStructureBlock(SHAPE_MAIN)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)

@@ -639,7 +639,7 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
     // endregion
 
     // region Tooltip
-    private static MultiblockTooltipBuilder tt = null;
+    private static TSTMultiblockTooltipBuilder tt = null;
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
@@ -662,6 +662,7 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
                 // # Can only be deployed in the Overworld, otherwise it will have a festive effect.
                 // #zh_CN 仅可部署在主世界, 否则将产生节庆效果.
                 .addInfo(TSTUtils.tr("tst.common.machine.EyeOfWood.tooltip.info.02"))
+                .beginStructureBlock(SHAPE_MAIN)
                 // #tr tst.common.machine.EyeOfWood.tooltip.structure.01
                 // # This machine will constantly consume {\BLUE}Water {\GRAY}and {\RED}Lava {\GRAY}in Input Hatches and store it inside the machine, like the Eye of Harmony.
                 // #zh_CN 机器会将输入仓中输入的{\BLUE}水{\GRAY}和{\RED}岩浆{\GRAY}存储于机器内部, 就像鸿蒙之眼一样.
@@ -718,7 +719,7 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
                  * <P>dW, dL 分别为已存储的水量与需求量(256,000L)的差值除以1000和已存储的岩浆量和需求量的差值除以1000, 并向下取整.</P>
                  */
                 .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
-                .beginStructureBlock(33, 33, 33, false)
+
                 .addController(TSTSharedLocalization.Structure.textFrontCenter)
                 .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)
                 .addOutputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)

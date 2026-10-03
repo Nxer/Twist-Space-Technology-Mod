@@ -222,7 +222,7 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.ElvenWorkshop.tooltip.machine_type
         // # Mana Infuser/Rune Engraver
@@ -234,7 +234,7 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
                 // # For its unique structure, you may need to use Blueprint to build the machine.
                 // #zh_CN 由于该机器独特的结构，你可能需要在建成之后重新摆放主机以通过结构检测。
                 TSTUtils.tr("tst.common.machine.ElvenWorkshop.tooltip.info.01"))
-            .beginStructureBlock(5, 3, 5, false)
+            .beginStructureBlock(shape)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)

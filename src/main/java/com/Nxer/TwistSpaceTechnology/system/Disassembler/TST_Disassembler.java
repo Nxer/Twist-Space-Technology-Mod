@@ -474,7 +474,7 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
     // endregion
 
     // region Tooltip
-    private static MultiblockTooltipBuilder tooltip;
+    private static TSTMultiblockTooltipBuilder tooltip;
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
@@ -505,6 +505,7 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
                 // # No energy consumption.
                 // #zh_CN 不消耗能源.
                 .addInfo(TSTUtils.tr("tst.common.machine.TSTDisassembler.tooltip.info.04"))
+                .beginStructureBlock(SHAPE_MAIN)
                 .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltip_Details)
                 // #tr tst.common.machine.TSTDisassembler.tooltip.structure.01
                 // # Supported:
@@ -534,7 +535,7 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
                 // # {\RED}NOT SUPPORTED CRAFTING TABLE RECIPES !
                 // #zh_CN {\RED}不兼容工作台配方!
                 .addStructureInfo(TSTUtils.tr("tst.common.machine.TSTDisassembler.tooltip.structure.07"))
-                .beginStructureBlock(27, 23, 28, false)
+
                 .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
                 .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
                 .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)

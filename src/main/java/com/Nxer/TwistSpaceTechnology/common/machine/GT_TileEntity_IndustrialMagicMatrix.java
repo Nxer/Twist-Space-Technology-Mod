@@ -812,7 +812,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         tt.addMachineType(
             // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.machine_type
@@ -915,6 +915,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
             // # Putting EssentiaCell_Creative in the controller GUI doesn't cost essentia, but if it's a hero's proof,maybe a little bit of an incredible change...
             // #zh_CN 在控制器GUI放入魔导源质元件则无需消耗源质，但如果是某位英雄的证明或许会发生一点不可思议的变化...
             .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.23"))
+            .beginStructureBlock(shape)
             // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.24
             // # Infusion Provider
             // #zh_CN 注魔供应器

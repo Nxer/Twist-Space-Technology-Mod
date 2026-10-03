@@ -474,7 +474,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
             // #zh_CN 最大并行为§b%sx§7最大电压等级。
             .addInfo(TSTUtils.tr("tst.common.machine.ManufacturingCenter.tooltip.info.07", MAX_PARALLEL_MODIFIER))
             .addPollutionAmount(getPollutionPerSecond(null))
-            .beginStructureBlock(3, 3, 3, false)
+            .beginStructureBlock(SHAPE_MAIN)
             .addController("Front Center")
             .addOtherStructurePart("MultiUse Core", "At Center")
             .addCasingInfoMin("Multi-Use Casings", 6, false)

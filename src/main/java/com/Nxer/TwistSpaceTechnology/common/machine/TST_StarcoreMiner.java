@@ -509,7 +509,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.StarcoreMiner.tooltip.info.01
         // # Void Miner
@@ -565,6 +565,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
             // #zh_CN {\RED}紧急情况可安装 ZeroPointBugFix mod 临时修复.
 //            .addInfo(TstUtils.tr("tst.common.machine.StarcoreMiner.tooltip.info.13"))
             .addInfo(TSTSharedLocalization.MachineTooltip.Tooltips_JoinWirelessNetWithoutEnergyHatch)
+            .beginStructureBlock("31x21x(26+1xn)", false)
             .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance)

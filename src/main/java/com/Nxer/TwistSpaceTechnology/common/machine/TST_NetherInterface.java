@@ -308,7 +308,7 @@ public class TST_NetherInterface extends GTCM_MultiMachineBase<TST_NetherInterfa
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.NetherInterface.tooltip.machine_type
         // # Otherworld Teleporter
@@ -326,7 +326,7 @@ public class TST_NetherInterface extends GTCM_MultiMachineBase<TST_NetherInterfa
           // # Machine takes 2A IV to maintain the teleporter, and 1A IV per parallel.
           // #zh_CN 需要消耗 2A IV 维持传送器, 并且每个并行消耗1A IV.
           .addInfo(TSTUtils.tr("tst.common.machine.NetherInterface.tooltip.info.03"))
-          .beginStructureBlock(15, 16, 3, false)
+          .beginStructureBlock(SHAPE_MAIN)
           .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
           .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
           .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)

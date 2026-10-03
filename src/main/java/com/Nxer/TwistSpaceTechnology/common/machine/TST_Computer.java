@@ -560,7 +560,7 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
     @Override
     public MultiblockTooltipBuilder createTooltip() {
         // spotless:off
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(translateToLocal("gt.blockmachines.multimachine.em.computer.name")) // Machine Type: Quantum
             // Computer
             .addInfo(translateToLocal("gt.blockmachines.multimachine.em.computer.desc.0")) // Controller block of
@@ -621,6 +621,7 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
             // # join TST Dyson Sphere Team to share your computation in the same channel!
             // #zh_CN 加入同一个tst戴森球团队以共享无线算力频道!
             .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.13"))
+            .beginStructureBlock(shape)
             // .beginVariableStructureBlock(2, 2, 4, 4, 5, 16, false)
             .addOtherStructurePart(
                 translateToLocal("gt.blockmachines.hatch.certain.tier.07.name"),

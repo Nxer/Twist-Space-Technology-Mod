@@ -249,7 +249,7 @@ public class MM_MassFabricatorGenesis extends ModularizedMachineSupportAllModule
     // endregion
 
     // region Tooltip
-    private static MultiblockTooltipBuilder tooltip;
+    private static TSTMultiblockTooltipBuilder tooltip;
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
@@ -271,11 +271,12 @@ public class MM_MassFabricatorGenesis extends ModularizedMachineSupportAllModule
                 // # Energy - Mass : Interface.
                 // #zh_CN 能量 - 质量 : 接口.
                 .addInfo(TSTUtils.tr("tst.modular.machine.MassFabricatorGenesis.tooltip.info.02"))
+                .beginStructureBlock(SHAPE_MAIN)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription01)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription02)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ParallelControllerDescription)
                 .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
-                .beginStructureBlock(55, 55, 56, false)
+
                 .addStructureInfo("  " + TSTSharedLocalization.ModularizedMachine.ModularHatch + ": " + TSTSharedLocalization.Structure.textUseBlueprint)
                 .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
                 .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)

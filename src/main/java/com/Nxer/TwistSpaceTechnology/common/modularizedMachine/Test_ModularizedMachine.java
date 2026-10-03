@@ -300,7 +300,7 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineSupportAll
     // endregion
 
     // region Tooltip
-    private static MultiblockTooltipBuilder tooltip;
+    private static TSTMultiblockTooltipBuilder tooltip;
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
@@ -308,7 +308,7 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineSupportAll
             tooltip = new TSTMultiblockTooltipBuilder();
             tooltip.addMachineType("test")
                 .addInfo("testing")
-                .beginStructureBlock(3, 3, 3, false)
+                .beginStructureBlock(shape)
                 .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
                 .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
                 .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)

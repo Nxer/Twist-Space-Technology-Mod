@@ -443,7 +443,7 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
     // endregion
 
     // region Tooltip
-    private static MultiblockTooltipBuilder tooltip;
+    private static TSTMultiblockTooltipBuilder tooltip;
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
@@ -481,6 +481,7 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
                 // #zh_CN 停止运行后燃料消耗减免率会在 {\RED}1{\GRAY} 小时内快速降低至 {\AQUA}0%%{\GRAY}.
                 .addInfo(TSTUtils.tr("tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.06"))
                 .addInfo(TSTSharedLocalization.ModularizedMachine.InstallingModuleNearControllerImproveMachine)
+                .beginStructureBlock(SHAPE_MAIN)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription01)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription02)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.OverclockControllerDescription)
@@ -490,7 +491,7 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ExecutionCoreDescription)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.NotMultiplyInstallSameTypeModule)
                 .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
-                .beginStructureBlock(65, 43, 65, false)
+
                 .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
                 .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
                 .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)

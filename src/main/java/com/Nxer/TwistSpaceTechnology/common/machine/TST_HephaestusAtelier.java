@@ -604,7 +604,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.HephaestusAtelier.tooltip.machine_type
         // # Furnace | Alloy Smelter
@@ -675,12 +675,13 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
             // # Otherwise same as T2.
             // #zh_CN 其他方面与 T2 相同.
             .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.15"))
+            .beginStructureBlock(SHAPE_MAIN)
             // #tr tst.common.machine.HephaestusAtelier.tooltip.structure.01
             // # Must install energy hatch when in T1.
             // #zh_CN T1等级线圈(普通模式)时必须安装能源仓.
             .addStructureInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.structure.01"))
             .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance)
-            .beginStructureBlock(33, 11, 33, false)
+
             .addController(TSTSharedLocalization.Structure.textFrontCenter)
             .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 1)
             .addOutputBus(TSTSharedLocalization.Structure.textAnyCasing, 1)

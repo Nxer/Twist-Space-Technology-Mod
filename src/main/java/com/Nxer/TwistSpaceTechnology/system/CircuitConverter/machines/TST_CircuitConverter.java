@@ -230,7 +230,7 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.CircuitConverter.tooltip.machine_type
         // # Circuit Converter
@@ -244,6 +244,7 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
             // # Transform input circuits to Any Circuit.
             // #zh_CN 将输入的电路板转换成通用电路板.
             .addInfo(TSTUtils.tr("tst.common.machine.CircuitConverter.tooltip.info.01"))
+            .beginStructureBlock(shapeMain)
             // #tr tst.common.machine.CircuitConverter.tooltip.structure.01
             // # Maximum 8 In/Output Buses.
             // #zh_CN 最多 8 个输入总线或输出总线.

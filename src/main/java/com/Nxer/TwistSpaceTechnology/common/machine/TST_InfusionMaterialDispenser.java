@@ -527,7 +527,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.InfusionMaterialDispenser.tooltip.machine_type
         // # Infusion Material Dispenser
@@ -565,7 +565,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
             // # Of course, if you are unsure, you can refer to the manual, which contains some hints.However, there is no diagram this time..
             // #zh_CN 当然如果实在不清楚可以翻看手册,里面留有一些提示.不过这次没有示意图.
             .addInfo(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.info.08"))
-            .beginStructureBlock(11, 10, 23, true)
+            .beginStructureBlock(true, shape)
             .addController(textFrontCenter)
             // #tr tst.common.machine.InfusionMaterialDispenser.tooltip.info.09
             // # Replace Magic mechanical blocks in any cabin

@@ -248,7 +248,7 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.AdvancedMegaOilCracker.tooltip.machine_type
         // # Cracker
@@ -282,6 +282,7 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
             // # Hypogen coil (or better) enable {\LIGHT_PURPLE}Perfect Overclocking{\GRAY}.
             // #zh_CN 海珀珍及以上等级线圈解锁{\LIGHT_PURPLE}无损超频{\GRAY}.
             .addInfo(TSTUtils.tr("tst.common.machine.AdvancedMegaOilCracker.tooltip.info.06"))
+            .beginStructureBlock(shapeMain)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)

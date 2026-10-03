@@ -338,7 +338,7 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        MultiblockTooltipBuilder tooltips = new TSTMultiblockTooltipBuilder();
+        TSTMultiblockTooltipBuilder tooltips = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.ProcessingArray.tooltip.machine_type
         // # Processing Array
@@ -365,7 +365,7 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
             // # Centrifuge, Electrolyzer, Mixer do their multiblock machine recipe
             // #zh_CN 离心机,电解机,搅拌机执行其对应多方块机器配方
             .addInfo(TSTUtils.tr("tst.common.machine.ProcessingArray.tooltip.info.05"))
-            .beginStructureBlock(3, 3, 3, true)
+            .beginStructureBlock(true, SHAPE_MAIN)
             .addController(TSTSharedLocalization.Structure.textFrontCenter)
             .addEnergyHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
             .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 1)

@@ -454,7 +454,7 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        MultiblockTooltipBuilder tooltip = new TSTMultiblockTooltipBuilder();
+        TSTMultiblockTooltipBuilder tooltip = new TSTMultiblockTooltipBuilder();
 
         tooltip
             // spotless:off
@@ -482,7 +482,7 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
             // # Can provide space-time seeds in dedicated input bus, consuming 1 space-time seed per run and doubling the output.
             // #zh_CN 可以在专用输入总线内提供时空之种, 每次运行消耗1个时空之种, 并将产物翻倍.
             .addInfo(TSTUtils.tr("tst.common.machine.MicroSpaceTimeFabricatorio.tooltip.info.05"))
-            .beginStructureBlock(19, 22, 22, false)
+            .beginStructureBlock(SHAPE_MAIN)
             // #tr tst.common.machine.MicroSpaceTimeFabricatorio.tooltip.structure.01
             // # Input Bus of The Seed of Space and Time
             // #zh_CN 时空之种输入总线

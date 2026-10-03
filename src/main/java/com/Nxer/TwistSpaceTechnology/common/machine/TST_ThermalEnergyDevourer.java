@@ -338,7 +338,7 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.ThermalEnergyDevourer.tooltip.machine_type
         // # Vacuum Freezer
@@ -405,12 +405,13 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
             // # Progress time is fixed at {\GOLD}6.4s{\GRAY}.
             // #zh_CN 处理时间固定为{\GOLD}6.4s{\GRAY}.
             .addInfo(TSTUtils.tr("tst.common.machine.ThermalEnergyDevourer.tooltip.info.14"))
+            .beginStructureBlock(SHAPE_MAIN)
             // #tr tst.common.machine.ThermalEnergyDevourer.tooltip.structure.01
             // # Check whether turn into Wireless mode when checking structure.
             // #zh_CN 检查结构时检测是否进入无线模式.
             .addStructureInfo(TSTUtils.tr("tst.common.machine.ThermalEnergyDevourer.tooltip.structure.01"))
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
-            .beginStructureBlock(15, 37, 15, false)
+
             .addController(TSTSharedLocalization.Structure.textFrontBottom)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)

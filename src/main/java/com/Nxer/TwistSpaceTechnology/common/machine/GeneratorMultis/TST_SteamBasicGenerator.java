@@ -272,7 +272,7 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.SteamBasicGenerator.tooltip.machine_type
         // # Steam generator
@@ -294,6 +294,7 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
             // # Accepts simple or buffered LV dynamo hatch
             // #zh_CN 兼容普通LV仓和缓冲LV动力仓
             .addInfo(TSTUtils.tr("tst.common.machine.SteamBasicGenerator.tooltip.info.04"))
+            .beginStructureBlock(shapeMain)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addDynamoHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .toolTipFinisher();
