@@ -16,7 +16,6 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachin
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IStaticModularHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ModularHatchBase;
-import com.Nxer.TwistSpaceTechnology.util.NBTUtils;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import gregtech.api.enums.VoidingMode;
@@ -25,7 +24,6 @@ import gregtech.api.interfaces.IOutputHatch;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.tileentity.IVoidable;
-import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.util.GTUtility;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
@@ -47,8 +45,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
 
     // region Logic
 
-    protected ItemStack[] outputItems;
-    protected FluidStack[] outputFluids;
+    protected final ExecutionCoreOutputBuffer outputBuffer = new ExecutionCoreOutputBuffer();
     protected int maxProgressingTime;
     protected int progressedTime;
     protected int boostedTime;
@@ -128,10 +125,8 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
             tag.setBoolean("hasBeenSetup", hasBeenSetup && mainMachine != null);
             tag.setInteger("maxProgressingTime", maxProgressingTime);
             if (maxProgressingTime > 0) {
-                int outputItemStackAmount = outputItems == null ? 0 : outputItems.length;
-                tag.setInteger("outputItemStackAmount", outputItemStackAmount);
-                int outputFluidStackAmount = outputFluids == null ? 0 : outputFluids.length;
-                tag.setInteger("outputFluidStackAmount", outputFluidStackAmount);
+                tag.setInteger("outputItemStackAmount", outputBuffer.getItemOutputCount());
+                tag.setInteger("outputFluidStackAmount", outputBuffer.getFluidOutputCount());
                 tag.setInteger("progressedTime", progressedTime);
                 tag.setInteger("boostedTime", boostedTime);
                 tag.setLong("usingEut", eut);
@@ -153,12 +148,9 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
         }
     }
 
-    public boolean setProcessing(ProcessingLogic processingLogic) {
-        setOutputItems(processingLogic.getOutputItems());
-        setOutputFluids(processingLogic.getOutputFluids());
-        setMaxProgressingTime(processingLogic.getDuration());
-        setEut(processingLogic.getCalculatedEut());
-        return done();
+    @Override
+    public ExecutionCoreOutputBuffer getOutputBuffer() {
+        return outputBuffer;
     }
 
     public void runExecutionCoreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
@@ -169,16 +161,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
                         progressedTime++;
                     } else {
                         // output and finish this work
-
-                        if (outputItems != null && outputItems.length > 0) {
-                            mainMachine.mergeOutputItems(outputItems);
-                            outputItems = null;
-                        }
-
-                        if (outputFluids != null && outputFluids.length > 0) {
-                            mainMachine.mergeOutputFluids(outputFluids);
-                            outputFluids = null;
-                        }
+                        outputBuffer.mergeInto(mainMachine);
 
                         if (useMainMachinePower()) {
                             if (!mainMachine.tryDecreaseUsedEut(eut)) {
@@ -235,8 +218,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
 
     @Override
     public void shutDown() {
-        outputItems = null;
-        outputFluids = null;
+        outputBuffer.clear();
         maxProgressingTime = 0;
         progressedTime = 0;
         eut = 0;
@@ -244,6 +226,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
     }
 
     public void resetParameters() {
+        outputBuffer.clear();
         maxProgressingTime = 0;
         progressedTime = 0;
         boostedTime = 0;
@@ -253,8 +236,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
 
     @Override
     public void reset() {
-        outputItems = null;
-        outputFluids = null;
+        outputBuffer.clear();
         maxProgressingTime = 0;
         progressedTime = 0;
         eut = 0;
@@ -300,26 +282,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
         aNBT.setInteger("progressedTime", progressedTime);
         aNBT.setInteger("boostedTime", boostedTime);
         aNBT.setLong("eut", eut);
-        saveNBTDataItemStacks(aNBT);
-        saveNBTDataFluidStacks(aNBT);
-    }
-
-    protected void saveNBTDataItemStacks(NBTTagCompound aNBT) {
-        if (outputItems != null && outputItems.length > 0) {
-            aNBT.setInteger("outputItemsLength", outputItems.length);
-            for (int i = 0; i < outputItems.length; i++) {
-                NBTUtils.saveItem(aNBT, "outputItems" + i, outputItems[i]);
-            }
-        }
-    }
-
-    protected void saveNBTDataFluidStacks(NBTTagCompound aNBT) {
-        if (outputFluids != null && outputFluids.length > 0) {
-            aNBT.setInteger("outputFluidsLength", outputFluids.length);
-            for (int i = 0; i < outputFluids.length; i++) {
-                NBTUtils.saveFluid(aNBT, "outputFluids" + i, outputFluids[i]);
-            }
-        }
+        outputBuffer.saveNBTData(aNBT);
     }
 
     @Override
@@ -331,28 +294,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
         progressedTime = aNBT.getInteger("progressedTime");
         boostedTime = aNBT.getInteger("boostedTime");
         eut = aNBT.getLong("eut");
-        loadNBTDataItemStacks(aNBT);
-        loadNBTDataFluidStacks(aNBT);
-    }
-
-    protected void loadNBTDataItemStacks(NBTTagCompound aNBT) {
-        int length = aNBT.getInteger("outputItemsLength");
-        if (length > 0) {
-            outputItems = new ItemStack[length];
-            for (int i = 0; i < length; i++) {
-                outputItems[i] = NBTUtils.loadItem(aNBT, "outputItems" + i);
-            }
-        }
-    }
-
-    protected void loadNBTDataFluidStacks(NBTTagCompound aNBT) {
-        int length = aNBT.getInteger("outputFluidsLength");
-        if (length > 0) {
-            outputFluids = new FluidStack[length];
-            for (int i = 0; i < length; i++) {
-                outputFluids[i] = NBTUtils.loadFluid(aNBT, "outputFluids" + i);
-            }
-        }
+        outputBuffer.loadNBTData(aNBT, "output");
     }
 
     @Override
@@ -411,26 +353,6 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
     // endregion
 
     // region Getter and Setter
-
-    public ItemStack[] getOutputItems() {
-        return outputItems;
-    }
-
-    @Override
-    public ExecutionCoreBase setOutputItems(ItemStack[] outputItems) {
-        this.outputItems = outputItems;
-        return this;
-    }
-
-    public FluidStack[] getOutputFluids() {
-        return outputFluids;
-    }
-
-    @Override
-    public ExecutionCoreBase setOutputFluids(FluidStack[] outputFluids) {
-        this.outputFluids = outputFluids;
-        return this;
-    }
 
     public long getMaxProgressingTime() {
         return maxProgressingTime;
