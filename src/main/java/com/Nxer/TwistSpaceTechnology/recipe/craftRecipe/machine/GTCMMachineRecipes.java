@@ -2284,7 +2284,7 @@ public class GTCMMachineRecipes {
                     ArcFurnaceUEV.get(16),
 
                     GTPP_Casing_UHV.get(64),
-                    new ItemStack(ItemRegistry.bw_realglas, 48, 14),
+                    new ItemStack(ItemRegistry.bw_realglas, 16, 7),
                     ItemRefer.Field_Restriction_Coil_T2.get(32),
                     ItemList.Field_Generator_UEV.get(16),
 
