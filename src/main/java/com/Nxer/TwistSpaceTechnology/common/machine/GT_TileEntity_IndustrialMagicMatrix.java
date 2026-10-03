@@ -29,11 +29,13 @@ import static thaumcraft.common.config.ConfigItems.itemEldritchObject;
 import static thaumcraft.common.lib.research.ResearchManager.getResearchForPlayer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
@@ -554,16 +556,8 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
     @Nonnull
     @Override
     public CheckRecipeResult checkProcessing() {
-        setupProcessingLogic(processingLogic);
-
-        CheckRecipeResult result = doCheckRecipe();
-        result = postCheckRecipe(result, processingLogic);
-        // inputs are consumed at this point
-        updateSlots();
+        CheckRecipeResult result = super.checkProcessing();
         if (!result.wasSuccessful()) return result;
-
-        mEfficiency = 10000;
-        mEfficiencyIncrease = 10000;
 
         if (GTCMItemList.ProofOfHeroes.equal(getControllerSlot())) {
             mMaxProgresstime = 1;
@@ -571,10 +565,12 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
             mMaxProgresstime = processingLogic.getDuration() + ExtraTime;
         }
 
-        setEnergyUsage(processingLogic);
         ItemStack PrimordialPearl = new ItemStack(itemEldritchObject, 1, 3);
         int size = 0;
-        for (ItemStack itemStack : processingLogic.getOutputItems()) {
+        List<ItemStack> outputItems = isMEOutputEnabled() ? getMEItemOutputInfo().stream()
+            .map(ItemStackLong::itemStack)
+            .collect(Collectors.toList()) : Arrays.asList(mOutputItems);
+        for (ItemStack itemStack : outputItems) {
             if (!(itemStack.isItemEqual(new ItemStack(LudicrousItems.bigPearl)))) {
                 InfusionRecipe Recipe = ThaumcraftApi.getInfusionRecipe(itemStack);
                 for (ItemStack itemStack1 : Recipe.getComponents()) {
@@ -583,23 +579,12 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                     }
                 }
             } else {
-                mOutputItems = processingLogic.getOutputItems();
-                mOutputFluids = processingLogic.getOutputFluids();
                 return result;
             }
         }
         if (size != 0) {
-            int index = 0;
-            ItemStack[] OutputItems = new ItemStack[processingLogic.getOutputItems().length + 1];
-            for (ItemStack itemStack : processingLogic.getOutputItems()) {
-                OutputItems[index] = itemStack;
-            }
-            OutputItems[OutputItems.length - 1] = new ItemStack(itemEldritchObject, size, 3);
-            mOutputItems = OutputItems;
-            mOutputFluids = processingLogic.getOutputFluids();
-        } else {
-            mOutputItems = processingLogic.getOutputItems();
-            mOutputFluids = processingLogic.getOutputFluids();
+            PrimordialPearl.stackSize = size;
+            mergeOutputItems(PrimordialPearl);
         }
 
         return result;

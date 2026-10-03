@@ -22,7 +22,6 @@ import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static tectech.thing.casing.TTCasingsContainer.StabilisationFieldGenerators;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -33,7 +32,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -339,77 +337,11 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
         if (fieldGeneratorTier < 3 && machineMode > 1) return CheckRecipeResultRegistry.INTERNAL_ERROR;
         if (fieldGeneratorTier < 11 && machineMode > 2) return CheckRecipeResultRegistry.INTERNAL_ERROR;
 
-        setupProcessingLogic(processingLogic);
-
-        CheckRecipeResult result = doCheckRecipe();
-        result = postCheckRecipe(result, processingLogic);
-        // inputs are consumed at this point
-        updateSlots();
+        CheckRecipeResult result = super.checkProcessing();
         if (!result.wasSuccessful()) return result;
 
-        mEfficiency = 10000;
-        mEfficiencyIncrease = 10000;
-        mMaxProgresstime = processingLogic.getDuration();
-        setEnergyUsage(processingLogic);
-
-        // if in this state , no extra settings is in need.
-        if (fieldGeneratorTier < 4) {
-            mOutputItems = processingLogic.getOutputItems();
-            mOutputFluids = processingLogic.getOutputFluids();
-            return result;
-        }
-
-        ItemStack[] outputItemStack = processingLogic.getOutputItems();
-        FluidStack[] outputFluidStack = processingLogic.getOutputFluids();
-
-        if (machineMode != 2) {
-            // compressor mode and extractor mode
-            mOutputItems = outputItemStack;
-            mOutputFluids = outputFluidStack;
-        } else {
-            // check in particle mode
-            if (fieldGeneratorTier < 3) return CheckRecipeResultRegistry.INTERNAL_ERROR;
-
-            // process Items
-            List<ItemStack> extraItems = new ArrayList<>();
-            for (ItemStack items : outputItemStack) {
-                if (items.stackSize <= Integer.MAX_VALUE / multiplier) {
-                    // set amount directly if in integer area
-                    items.stackSize *= multiplier;
-                } else {
-                    for (int i = 0; i < multiplier - 1; i++) {
-                        extraItems.add(items.copy());
-                    }
-                }
-            }
-
-            if (extraItems.isEmpty()) {
-                // no over integer amount
-                mOutputItems = outputItemStack;
-            } else {
-                extraItems.addAll(Arrays.asList(outputItemStack));
-                mOutputItems = extraItems.toArray(new ItemStack[] {});
-            }
-
-            // process Fluids
-            List<FluidStack> extraFluids = new ArrayList<>();
-            for (FluidStack fluids : outputFluidStack) {
-                if (fluids.amount <= Integer.MAX_VALUE / multiplier) {
-                    fluids.amount *= multiplier;
-                } else {
-                    for (int i = 0; i < multiplier - 1; i++) {
-                        extraFluids.add(fluids.copy());
-                    }
-                }
-            }
-
-            if (extraFluids.isEmpty()) {
-                mOutputFluids = outputFluidStack;
-            } else {
-                extraFluids.addAll(Arrays.asList(outputFluidStack));
-                mOutputFluids = extraFluids.toArray(new FluidStack[] {});
-            }
-
+        if (fieldGeneratorTier >= 4 && machineMode == 2) {
+            multiplyProcessingOutputs(multiplier);
         }
 
         return result;
