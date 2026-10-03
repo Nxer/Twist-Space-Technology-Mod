@@ -26,6 +26,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -358,67 +359,105 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     @Nonnull
     @Override
     public CheckRecipeResult checkProcessing() {
-        // If no logic is found, try legacy checkRecipe
-        if (processingLogic == null) {
-            return checkRecipe(mInventory[1]) ? CheckRecipeResultRegistry.SUCCESSFUL
-                : CheckRecipeResultRegistry.NO_RECIPE;
-        }
-
-        setupProcessingLogic(processingLogic);
-
-        CheckRecipeResult result = doCheckRecipe();
-        result = postCheckRecipe(result, processingLogic);
-        // inputs are consumed at this point
-        updateSlots();
-        if (!result.wasSuccessful()) {
-            return result;
-        }
+        CheckRecipeResult result = super.checkProcessing();
+        if (!result.wasSuccessful() || processingLogic == null) return result;
 
         mEfficiency = 10000;
-        mEfficiencyIncrease = 10000;
-        mMaxProgresstime = processingLogic.getDuration();
-        setEnergyUsage(processingLogic);
-
         if (isMEOutputEnabled()) {
-            if (processingLogic instanceof GTCM_ProcessingLogic tstLogic && tstLogic.hasLongOutputs()) {
-                replaceMEOutputQueues(tstLogic.getLongItemOutputs(), tstLogic.getLongFluidOutputs());
-            } else {
-                replaceMEOutputQueues(processingLogic.getOutputItems(), processingLogic.getOutputFluids());
-            }
-            // Avoid syncing split int stacks through GT's normal output arrays.
-            mOutputItems = null;
-            mOutputFluids = null;
-        } else {
-            mOutputItems = processingLogic.getOutputItems();
-            mOutputFluids = processingLogic.getOutputFluids();
+            clearProcessingOutputs();
+            mergeProcessingOutputs(processingLogic);
         }
 
         return result;
     }
 
-    private void replaceMEOutputQueues(List<ItemStackLong> itemOutputs, List<FluidStackLong> fluidOutputs) {
+    /** Reset both output paths before collecting a new processing cycle. */
+    protected void clearProcessingOutputs() {
         clearMEOutputQueues();
-        for (ItemStackLong output : itemOutputs) {
-            mergeItemIntoMEOutputQueue(output.itemStack(), output.stackSize());
+        mOutputItems = null;
+        mOutputFluids = null;
+    }
+
+    /** Capture each successful batch before its processing logic is reused. */
+    protected void mergeProcessingOutputs(ProcessingLogic logic) {
+        if (isMEOutputEnabled() && logic instanceof GTCM_ProcessingLogic tstLogic && tstLogic.hasLongOutputs()) {
+            mergeOutputItems(tstLogic.getLongItemOutputs());
+            mergeOutputFluids(tstLogic.getLongFluidOutputs());
+            return;
         }
-        for (FluidStackLong output : fluidOutputs) {
-            mergeFluidIntoMEOutputQueue(output.fluidStack(), output.amount());
+        mergeOutputItems(logic.getOutputItems());
+        mergeOutputFluids(logic.getOutputFluids());
+    }
+
+    public void mergeOutputItems(ItemStack... outputs) {
+        if (outputs == null) return;
+        if (isMEOutputEnabled()) {
+            for (ItemStack output : outputs) mergeItemIntoMEOutputQueue(output);
+        } else {
+            mOutputItems = ArrayUtils.addAll(mOutputItems, outputs);
         }
     }
 
-    private void replaceMEOutputQueues(ItemStack[] itemOutputs, FluidStack[] fluidOutputs) {
-        clearMEOutputQueues();
-        if (itemOutputs != null) {
-            for (ItemStack stack : itemOutputs) {
-                if (stack == null || stack.stackSize <= 0) continue;
-                mergeItemIntoMEOutputQueue(stack);
-            }
+    public void mergeOutputFluids(FluidStack... outputs) {
+        if (outputs == null) return;
+        if (isMEOutputEnabled()) {
+            for (FluidStack output : outputs) mergeFluidIntoMEOutputQueue(output);
+        } else {
+            mOutputFluids = ArrayUtils.addAll(mOutputFluids, outputs);
         }
-        if (fluidOutputs != null) {
-            for (FluidStack fluid : fluidOutputs) {
-                if (fluid == null || fluid.amount <= 0) continue;
-                mergeFluidIntoMEOutputQueue(fluid);
+    }
+
+    public void mergeOutputItems(List<ItemStackLong> outputs) {
+        if (isMEOutputEnabled()) {
+            for (ItemStackLong output : outputs) mergeItemIntoMEOutputQueue(output.itemStack(), output.stackSize());
+        } else {
+            ArrayList<ItemStack> stacks = new ArrayList<>();
+            for (ItemStackLong output : outputs) {
+                if (output.stackSize() > 0) TSTUtils.addStacksToList(stacks, output.itemStack(), output.stackSize());
             }
+            mergeOutputItems(stacks.toArray(new ItemStack[0]));
+        }
+    }
+
+    public void mergeOutputFluids(List<FluidStackLong> outputs) {
+        if (isMEOutputEnabled()) {
+            for (FluidStackLong output : outputs) mergeFluidIntoMEOutputQueue(output.fluidStack(), output.amount());
+        } else {
+            ArrayList<FluidStack> stacks = new ArrayList<>();
+            for (FluidStackLong output : outputs) {
+                if (output.amount() > 0) TSTUtils.addStacksToList(stacks, output.fluidStack(), output.amount());
+            }
+            mergeOutputFluids(stacks.toArray(new FluidStack[0]));
+        }
+    }
+
+    protected void multiplyProcessingOutputs(int multiplier) {
+        if (multiplier <= 1) return;
+        if (isMEOutputEnabled()) {
+            meOutputQueue.replaceAll(
+                output -> new ItemStackLong(
+                    output.itemStack(),
+                    output.stackSize() > Long.MAX_VALUE / multiplier ? Long.MAX_VALUE
+                        : output.stackSize() * multiplier));
+            meFluidOutputQueue.replaceAll(
+                output -> new FluidStackLong(
+                    output.fluidStack(),
+                    output.amount() > Long.MAX_VALUE / multiplier ? Long.MAX_VALUE : output.amount() * multiplier));
+            return;
+        }
+        if (mOutputItems != null) {
+            List<ItemStack> outputs = new ArrayList<>();
+            for (ItemStack output : mOutputItems) {
+                if (output != null) TSTUtils.addStacksToList(outputs, output, (long) output.stackSize * multiplier);
+            }
+            mOutputItems = outputs.toArray(new ItemStack[0]);
+        }
+        if (mOutputFluids != null) {
+            List<FluidStack> outputs = new ArrayList<>();
+            for (FluidStack output : mOutputFluids) {
+                if (output != null) TSTUtils.addStacksToList(outputs, output, (long) output.amount * multiplier);
+            }
+            mOutputFluids = outputs.toArray(new FluidStack[0]);
         }
     }
 

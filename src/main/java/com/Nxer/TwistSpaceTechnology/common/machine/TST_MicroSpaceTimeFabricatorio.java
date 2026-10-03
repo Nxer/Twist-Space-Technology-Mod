@@ -17,7 +17,6 @@ import static tectech.thing.casing.TTCasingsContainer.StabilisationFieldGenerato
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsBA0;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -25,7 +24,6 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -277,40 +275,11 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
             }
         }
 
-        setupProcessingLogic(processingLogic);
-
-        CheckRecipeResult result = doCheckRecipe();
-        result = postCheckRecipe(result, processingLogic);
-        // inputs are consumed at this point
-        updateSlots();
+        CheckRecipeResult result = super.checkProcessing();
         if (!result.wasSuccessful()) return result;
 
-        mEfficiency = 10000;
-        mEfficiencyIncrease = 10000;
-        mMaxProgresstime = processingLogic.getDuration();
-        setEnergyUsage(processingLogic);
-
-        mOutputItems = processingLogic.getOutputItems();
-        mOutputFluids = processingLogic.getOutputFluids();
-
         if (tryConsumeSpaceTimeSeed()) {
-            if (mOutputItems != null && mOutputItems.length > 0) {
-                List<ItemStack> o = new ArrayList<>();
-                for (ItemStack i : mOutputItems) {
-                    o.add(i.copy());
-                    o.add(i);
-                }
-                mOutputItems = o.toArray(new ItemStack[0]);
-            }
-
-            if (mOutputFluids != null && mOutputFluids.length > 0) {
-                List<FluidStack> o = new ArrayList<>();
-                for (FluidStack f : mOutputFluids) {
-                    o.add(f.copy());
-                    o.add(f);
-                }
-                mOutputFluids = o.toArray(new FluidStack[0]);
-            }
+            multiplyProcessingOutputs(2);
         }
 
         return result;
