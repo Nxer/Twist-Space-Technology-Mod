@@ -320,8 +320,11 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         long dominantInputVoltage = 0;
         int dominantInputTier = 0;
         for (MTEHatch energyHatch : validMTEList(getExoticAndNormalEnergyHatchList())) {
-            long inputVoltage = energyHatch.getBaseMetaTileEntity()
-                .getInputVoltage();
+            long inputVoltage = 0;
+            if (energyHatch.getBaseMetaTileEntity() != null) {
+                inputVoltage = energyHatch.getBaseMetaTileEntity()
+                    .getInputVoltage();
+            }
             long inputAmperage = energyHatch.maxWorkingAmperesIn();
             if (inputVoltage <= 0 || inputAmperage <= 0) continue;
 
