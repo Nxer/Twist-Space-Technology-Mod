@@ -336,7 +336,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
         long usedEU = 0;
         CheckRecipeResult powerOff = CheckRecipeResultRegistry.SUCCESSFUL;
 
-        while (true) {
+        for (int i = 0; i < Config.MaxRecipeBatches_Wireless_HephaestusAtelier; i++) {
             tryStartRecipeProcessing();
             CheckRecipeResult r = doCheckRecipe();
             if (!r.wasSuccessful()) break;

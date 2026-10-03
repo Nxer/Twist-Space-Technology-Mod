@@ -325,6 +325,7 @@ public class Config {
     public static int ConsumeEuPerSmelting_HephaestusAtelier = 2048;
     public static int DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier = 256;
     public static int DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier = 20;
+    public static int MaxRecipeBatches_Wireless_HephaestusAtelier = 1024;
 
     // endregion
 
@@ -706,6 +707,7 @@ public class Config {
         ConsumeEuPerSmelting_HephaestusAtelier = configuration.getInt("ConsumeEuPerSmelting_HephaestusAtelier", HephaestusAtelier, ConsumeEuPerSmelting_HephaestusAtelier, 1, 32767, "In wireless mode, how much EU per item smelting cost. Type: int");
         DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier = configuration.getInt("DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier", HephaestusAtelier, DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier, 1, 32767, "In wireless mode with T2 coil, how many ticks every processing cost. Type: int");
         DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier = configuration.getInt("DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier", HephaestusAtelier, DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier, 1, 32767, "In wireless mode with T3 coil, how many ticks every processing cost. Type: int");
+        MaxRecipeBatches_Wireless_HephaestusAtelier = configuration.getInt("MaxRecipeBatches_Wireless_HephaestusAtelier", HephaestusAtelier, MaxRecipeBatches_Wireless_HephaestusAtelier, 1, Integer.MAX_VALUE, "Maximum recipe batches per processing cycle in wireless alloy smelter mode. This does not limit parallel recipes within a batch. High values can cause long server stalls with debug or inexhaustible inputs. Type: int");
         // endregion
 
         // region VacuumFilterExtractor
