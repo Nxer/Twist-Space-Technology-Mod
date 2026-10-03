@@ -14,7 +14,6 @@ import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -47,6 +46,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.objects.GTChunkManager;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMapBackend;
@@ -57,7 +57,6 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
-import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.ParallelHelper;
 import gregtech.common.pollution.Pollution;
@@ -184,7 +183,6 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     private static ItemStack cokeCoal;
 
     private static ItemStack cokeCoalBlock;
-    private boolean usePrimitiveRecipes = false;
 
     // irons
     private static ItemStack iron;
@@ -202,8 +200,26 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     private boolean isMultiChunkloaded = true;
 
     @Override
+    public int totalMachineMode() {
+        return 2;
+    }
+
+    @Override
     public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
+        return new UITexture[] { GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_IOF_FORGE,
+            GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_STEAM };
+    }
+
+    @Override
+    public String getMachineModeName() {
+        // #tr tst.common.machine.MegaBrickedBlastFurnace.mode.0
+        // # Steelmaking
+        // #zh_CN 炼钢模式
+
+        // #tr tst.common.machine.MegaBrickedBlastFurnace.mode.1
+        // # Primitive Blast Furnace
+        // #zh_CN 原始高炉模式
+        return StatCollector.translateToLocal("tst.common.machine.MegaBrickedBlastFurnace.mode." + machineMode);
     }
 
     @Override
@@ -247,7 +263,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         // If running for max_efficiency_time_in_ticks then fuelEfficiency is at maximum.
         double time_percentage = running_time / max_efficiency_time_in_ticks;
         time_percentage = Math.min(time_percentage, 1.0d);
-        if (usePrimitiveRecipes) {
+        if (machineMode == 1) {
             GTRecipe recipe = findRecipe(tInputList);
             if (recipe == null) return CheckRecipeResultRegistry.NO_RECIPE;
             MaterialConsumption materialConsumption = calculateMaterialConsumption(recipe, tInputList);
@@ -344,16 +360,6 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         wroughtIron = GTOreDictUnificator.get(OrePrefixes.ingot, Materials.WroughtIron, 1L);
         steel = GTOreDictUnificator.get(OrePrefixes.ingot, Materials.Steel, 1L);
         ash = GTOreDictUnificator.get(OrePrefixes.dust, Materials.Ash, 1L);
-    }
-
-    @Override
-    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
-        ItemStack tool) {
-        usePrimitiveRecipes = !usePrimitiveRecipes;
-        GTUtility.sendChatTrans(
-            aPlayer,
-            usePrimitiveRecipes ? "Now Bricked DTPF accepts primitive blast furnace recipes"
-                : "Now Bricked DTPF only accepts iron/wrought iron and charcoal");
     }
 
     private GTRecipe findRecipe(ArrayList<ItemStack> inputList) {
@@ -572,7 +578,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     public void saveNBTData(NBTTagCompound aNBT) {
         aNBT.setLong("eRunningTime", running_time);
         aNBT.setDouble("eLongEfficiencyValue", fuelEfficiency);
-        aNBT.setBoolean("usePrimitiveRecipes", usePrimitiveRecipes);
+        aNBT.setBoolean("usePrimitiveRecipes", machineMode == 1);
         super.saveNBTData(aNBT);
     }
 
@@ -580,8 +586,8 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     public void loadNBTData(final NBTTagCompound aNBT) {
         running_time = aNBT.getLong("eRunningTime");
         fuelEfficiency = aNBT.getDouble("eLongEfficiencyValue");
-        usePrimitiveRecipes = aNBT.getBoolean("usePrimitiveRecipes");
         super.loadNBTData(aNBT);
+        machineMode = aNBT.getBoolean("usePrimitiveRecipes") ? 1 : 0;
     }
 
     // endregion
@@ -655,8 +661,8 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
             // #zh_CN {\YELLOW}建议在你有充足的资源之前不要强迫自己建造它!
             .addInfo(TSTUtils.tr("tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.09"))
             // #tr tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.10
-            // # {\AQUA}Use a screwdriver to switch to primitive mode so you can process all primitive recipes here, but you cannot use wrought iron anymore
-            // #zh_CN 使用螺丝刀切换到土高模式以处理原本的土高炉配方，但不再能通过锻铁加速
+            // # {\AQUA}Use the GUI mode button or a screwdriver to switch to primitive mode and process primitive blast furnace recipes, without wrought iron acceleration
+            // #zh_CN 切换到原始高炉模式可处理原始高炉配方, 不再通过锻铁加速.
             .addInfo(TSTUtils.tr("tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.10"))
             .addPollutionAmount(getPollutionPerSecond(null))
             .addInfo(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.info.16"))
