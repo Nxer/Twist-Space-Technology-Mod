@@ -278,7 +278,7 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.MegaStoneBreaker.tooltip.machine_type
         // # Stone Breaker
@@ -300,6 +300,7 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
             // # Basic increase in output by 4x, When water and lava are input from the side input hatch, Increase to 1024x of output
             // #zh_CN 基础增产4倍, 当侧面输入仓输入水和岩浆时增产1024倍
             .addInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.info.03"))
+            .beginStructureBlock(shapeMain)
             .addController(textFrontBottom)
             .addInputBus(textUseBlueprint, 1)
             .addOutputBus(textUseBlueprint, 1)

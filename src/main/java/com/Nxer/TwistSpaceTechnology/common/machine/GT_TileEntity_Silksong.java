@@ -379,7 +379,7 @@ public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_Ti
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.Silksong.tooltip.machine_type
         // # Wiremill
@@ -409,6 +409,7 @@ public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_Ti
             // # Additional {\RED}15%{\GRAY} reduction in time per Coil Tier, multiplication calculus.
             // #zh_CN 电压每提高1级, 额外降低{\RED}15%{\GRAY}配方耗时, 叠乘计算.
             .addInfo(TSTUtils.tr("tst.common.machine.Silksong.tooltip.info.06"))
+            .beginStructureBlock("(7+2xn)x7x7", false)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 3)
             .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 3)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 3)

@@ -282,7 +282,7 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.VacuumFilterExtractor.tooltip.machine_type
         // # Distillation Tower | Distillery
@@ -317,8 +317,9 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
             // # In distillery mode, machine will enable {\AQUA}Perfect Overclock{\GRAY}.
             // #zh_CN 蒸馏室模式将启用{\AQUA}无损超频{\GRAY}.
             .addInfo(TSTUtils.tr("tst.common.machine.VacuumFilterExtractor.tooltip.info.06"))
+            .beginStructureBlock(SHAPE)
             .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance)
-            .beginStructureBlock(13, 22, 14, false)
+
             .addController(TSTSharedLocalization.Structure.textUseBlueprint)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)

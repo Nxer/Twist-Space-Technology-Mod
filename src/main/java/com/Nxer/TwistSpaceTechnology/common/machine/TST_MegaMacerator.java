@@ -348,7 +348,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.MegaMacerator.tooltip.machine_type
         // # Macerator
@@ -382,6 +382,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
             // # Enable {\RED}8x{\GRAY} speed multiplier when glass tier > recipe tier.
             // #zh_CN 当玻璃等级高于配方等级时获得{\RED}8x{\GRAY}倍速
             .addInfo(TSTUtils.tr("tst.common.machine.MegaMacerator.tooltip.info.06"))
+            .beginStructureBlock(shape)
             .addController(textFrontBottom)
             .addInputBus(textUseBlueprint, 2)
             .addOutputBus(textUseBlueprint, 2)

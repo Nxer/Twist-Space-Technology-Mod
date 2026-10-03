@@ -562,7 +562,7 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.MiracleDoor.tooltip.machine_type
         // # Stellar Forge | Stellar Forge : Alloy Smelter
@@ -608,6 +608,7 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
             // # Put Integrated Circuit into Controller block to decrease process time interval.
             // #zh_CN 在控制器方块内放置编程电路以减少处理时间间隔.
             .addInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.info.09"))
+            .beginStructureBlock(shapeMain)
             .addStructureInfo(Tooltip_Details)
             // #tr tst.common.machine.MiracleDoor.tooltip.structure.01
             // # Each run takes the same amount of time, (ABS) 25.6s | (EBF) 64s default.

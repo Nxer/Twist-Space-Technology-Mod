@@ -62,15 +62,19 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
     // region Structure
     private static IStructureDefinition<TST_LargeSteamAlloySmelter> STRUCTURE_DEFINITION = null;
 
+    // spotless:off
+    private static final String[][] SHAPE_MAIN = new String[][]{
+        {"BBBBB","BBBBB","BBBBB"},
+        {"BB~BB","AAAAA","BBBBB"},
+        {"BBBBB","BBBBB","BBBBB"}
+    };
+    // spotless:on
+
     @Override
     public IStructureDefinition<TST_LargeSteamAlloySmelter> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_LargeSteamAlloySmelter>builder()
-                .addShape(
-                    mName,
-                    transpose(
-                        new String[][] { { "BBBBB", "BBBBB", "BBBBB" }, { "BB~BB", "AAAAA", "BBBBB" },
-                            { "BBBBB", "BBBBB", "BBBBB" } }))
+                .addShape(mName, transpose(SHAPE_MAIN))
                 .addElement('A', ofBlock(GregTechAPI.sBlockCasings3, 14))
                 .addElement(
                     'B',
@@ -194,7 +198,7 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.LargeSteamAlloySmelter.tooltip.machine_type
         // # Alloy Smelter
@@ -208,7 +212,7 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
             // # Steam Tech Operational
             // #zh_CN 蒸汽科技，启动！
             .addInfo(TSTUtils.tr("tst.common.machine.LargeSteamAlloySmelter.tooltip.info.01"))
-            .beginStructureBlock(5, 3, 3, false)
+            .beginStructureBlock(SHAPE_MAIN)
             .addController(TSTSharedLocalization.Structure.textFrontCenter)
             .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)
             .addOutputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)

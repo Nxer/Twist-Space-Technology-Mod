@@ -1184,7 +1184,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.machine_type
         // # Blast Furnace
@@ -1231,6 +1231,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             // # {\YELLOW}Do not open the cabin door while the machine is running!
             // #zh_CN {\YELLOW}禁止在机器运行时打开舱门!
             .addInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.09"))
+            .beginStructureBlock(shapeMainT1, shapeMainT2)
             .addStructureInfo(Text_SeparatingLine)
             // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.01
             // # {\GOLD}Heat {\WHITE}Upper Limit:

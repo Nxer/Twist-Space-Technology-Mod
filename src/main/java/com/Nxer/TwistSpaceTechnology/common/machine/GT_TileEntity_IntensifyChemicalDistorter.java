@@ -383,7 +383,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     // Tooltips
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.machine_type
         // # Intensify Chemical Distorter/Chemical Reactor
@@ -421,7 +421,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
             // # {\AQUA}1024x {\GRAY}Parallel and {\RED}900% {\GRAY}faster than using LCR of the same voltage.
             // #zh_CN 拥有 {\AQUA}1024x{\GRAY} 并行并且比相同电压的大型化学反应釜快 {\RED}900%{\GRAY}
             .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.08"))
-            .beginStructureBlock(11, 13, 11, false)
+            .beginStructureBlock(shape)
             .addController(TSTSharedLocalization.Structure.textFrontBottom)
             .addCasingInfoRange(TSTSharedLocalization.Structure.textCasing, 8, 26, false)
             .addInputHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)

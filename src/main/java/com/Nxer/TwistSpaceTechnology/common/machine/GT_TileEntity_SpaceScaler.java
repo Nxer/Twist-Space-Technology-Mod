@@ -498,7 +498,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.SpaceScaler.tooltip.machine_type
         // # Compressor | Extractor | Particle Collider | Electric Implosion Compressor | Neutronium Compressor
@@ -545,7 +545,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
             // #zh_CN 2级方块解锁HIP单元限制, 3级解锁稳定黑洞限制.
             .addInfo(TSTUtils.tr("tst.common.machine.SpaceScaler.tooltip.info.10"))
             .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
-            .beginStructureBlock(31, 31, 32, false)
+            .beginStructureBlock(shapeMain)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)

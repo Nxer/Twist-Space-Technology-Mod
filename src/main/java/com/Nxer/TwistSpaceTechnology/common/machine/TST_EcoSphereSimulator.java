@@ -76,6 +76,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_EcoSph
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.Style;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.StructureLibAPI;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
@@ -1403,7 +1404,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.ecosphere.machine.EcoSphereSimulator.tooltip.machine_type
         // # Arboreal Genesis | Aquatic Simulation | Artificial Greenhouse | Directed Mob Cloning
@@ -1467,11 +1468,12 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
             // # This multiblock can only output to ME output buses/hatches
             // #zh_CN 这台多方块机器只支持ME输出总线/输出仓
             .addInfo(tr("tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.13"))
+            .beginStructureBlock(shape)
             // #tr tst.ecosphere.machine.EcoSphereSimulator.tooltip.structure.01
             // # The complete blueprint includes the animated fluid area marked as air
             // #zh_CN 完整蓝图包含以空气标注的动态流体区域
             .addStructureInfo(tr("tst.ecosphere.machine.EcoSphereSimulator.tooltip.structure.01"))
-            .beginStructureBlock(33, 45, 33, false)
+
             // .addStructureInfo(Text_SeparatingLine)
             .addInputHatch(getBlueprintWithDot(1), 1)
             .addOutputHatch(getBlueprintWithDot(1), 1)

@@ -1173,7 +1173,7 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.MeteorMiner.tooltip.machine_type
         // # Meteor Miner
@@ -1263,6 +1263,7 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
             // # {\BLUE}{\BOLD}Finally some good Meteors!
             // #zh_CN {\BLUE}{\BOLD}终是好陨星! (Finally some good Meteors!)
             .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.26"))
+            .beginStructureBlock(shape_T1, shape_T2)
             // #tr tst.common.machine.MeteorMiner.tooltip.structure.01
             // # {\GOLD}{\BOLD}TIER I
             // #zh_CN {\GOLD}{\BOLD}等级 I

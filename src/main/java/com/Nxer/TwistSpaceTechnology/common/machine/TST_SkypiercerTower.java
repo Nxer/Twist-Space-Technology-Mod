@@ -911,7 +911,7 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.SkypiercerTower.tooltip.machine_type
         // #en_US Essentia Synthesizer
@@ -953,7 +953,7 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
             // #en_US Note: Non‑passive modes require blocking to ensure only one type of aspect is synthesized at a time; otherwise it may interfere or even jam (also does not support color input).
             // #zh_CN 注意,非被动模式下均需要阻挡,保证一次只合成一种要素,否则会相互干扰,甚至会卡住(另外不支持染色仓).
             .addInfo(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.09"))
-            .beginStructureBlock(11, 10, 23, true)
+            .beginStructureBlock("15x15x(19+5xn)", true)
             .addController(textFrontCenter)
 
             // #tr tst.common.machine.SkypiercerTower.tooltip.info.10

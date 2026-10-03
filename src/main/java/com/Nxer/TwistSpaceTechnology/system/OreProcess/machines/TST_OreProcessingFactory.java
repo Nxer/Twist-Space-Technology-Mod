@@ -523,7 +523,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.OreProcessingFactory.tooltip.machine_type
         // # Ore Processor
@@ -558,6 +558,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
             // # Non-ore inputs will be transferred to the output bus.
             // #zh_CN 非矿石输入物将被转移到输出总线.
             .addInfo(TSTUtils.tr("tst.common.machine.OreProcessingFactory.tooltip.info.06"))
+            .beginStructureBlock(shapeMain)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 3)
             .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 3)

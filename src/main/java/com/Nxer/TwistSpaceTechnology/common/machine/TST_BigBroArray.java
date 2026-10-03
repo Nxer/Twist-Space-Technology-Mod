@@ -1620,7 +1620,7 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        MultiblockTooltipBuilder gt_multiblock_tooltip_builder = new TSTMultiblockTooltipBuilder()
+        TSTMultiblockTooltipBuilder gt_multiblock_tooltip_builder = new TSTMultiblockTooltipBuilder()
             // spotless:off
             // #tr tst.common.machine.BigBroArray.tooltip.info.01
             // # Processing Array | Generator Array
@@ -1675,6 +1675,7 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
             // # The upgrade in energy/consumption/processing speed/parallelism will also take effect in energy generation. Structure of addon: parallelism casing*134, glassx530, framex64, coilx42，stainless steel casing*86, Assembly line casing*64
             // #zh_CN 能量消耗减少,并行度和处理速度提升对发电有效(其中能量消耗减少体现为发电量提升)。附加结构的方块为:并行机械方块*134, 玻璃x530, 框架x42, 线圈x42，洁净不锈钢方块*86,装配线机械方块*64
             .addInfo(TSTUtils.tr("tst.common.machine.BigBroArray.tooltip.info.13"));
+        gt_multiblock_tooltip_builder.beginStructureBlock("11x11x8, 15x28x26, 30x30x26, 30x45x26, 45x45x26", false);
         gt_multiblock_tooltip_builder.toolTipFinisher();
             // spotless:on
         return gt_multiblock_tooltip_builder;

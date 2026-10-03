@@ -396,7 +396,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.CrystallineInfinitier.tooltip.machine_type
         // # Autoclave | Crystalline Infinitier | Chemical Bath
@@ -432,7 +432,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
             .addInfo(TSTUtils.tr("tst.common.machine.CrystallineInfinitier.tooltip.info.07"))
             .addInfo(TSTSharedLocalization.MachineTooltip.Tooltip_GlassTierLimitEnergyHatchTier)
             .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
-            .beginStructureBlock(31, 36, 32, false)
+            .beginStructureBlock(shape)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
             .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)

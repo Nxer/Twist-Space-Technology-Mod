@@ -691,7 +691,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.MegaBrickedBlastFurnace.tooltip.machine_type
         // # Blast Furnace
@@ -743,6 +743,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
             .addInfo(TSTUtils.tr("tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.10"))
             .addPollutionAmount(getPollutionPerSecond(null))
             .addInfo(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.info.16"))
+            .beginStructureBlock(structure_string)
             // #tr tst.common.machine.MegaBrickedBlastFurnace.tooltip.structure.01
             // # {\YELLOW}Dirt must be Horizontal dirt in Chisel Mod!
             // #zh_CN {\YELLOW}泥土必须为Chisel模组中的水平花纹泥土!
