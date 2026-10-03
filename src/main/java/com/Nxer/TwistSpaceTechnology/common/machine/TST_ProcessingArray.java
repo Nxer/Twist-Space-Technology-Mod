@@ -95,14 +95,19 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
     protected static final String STRUCTURE_PIECE_MAIN = "main";
     protected static IStructureDefinition<TST_ProcessingArray> STRUCTURE_DEFINITION = null;
 
+    // spotless:off
+    private static final String[][] SHAPE_MAIN = new String[][]{
+        {"hhh","hhh","hhh"},
+        {"h~h","h h","hhh"},
+        {"hhh","hhh","hhh"}
+    };
+    // spotless:on
+
     @Override
     public IStructureDefinition<TST_ProcessingArray> getStructureDefinition() {
         if (null == STRUCTURE_DEFINITION) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_ProcessingArray>builder()
-                .addShape(
-                    STRUCTURE_PIECE_MAIN,
-                    transpose(
-                        new String[][] { { "hhh", "hhh", "hhh" }, { "h~h", "h h", "hhh" }, { "hhh", "hhh", "hhh" } }))
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(SHAPE_MAIN))
                 .addElement(
                     'h',
                     HatchElementBuilder.<TST_ProcessingArray>builder()

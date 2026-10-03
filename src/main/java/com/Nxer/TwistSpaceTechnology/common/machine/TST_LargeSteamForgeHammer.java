@@ -58,14 +58,19 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
     // region Structure
     protected static IStructureDefinition<TST_LargeSteamForgeHammer> STRUCTURE_DEFINITION = null;
 
+    // spotless:off
+    private static final String[][] SHAPE_MAIN = new String[][]{
+        {"CCC","CCC","CCC"},
+        {"C~C","C C","CCC"},
+        {"CCC","CCC","CCC"},
+    };
+    // spotless:on
+
     @Override
     public IStructureDefinition<TST_LargeSteamForgeHammer> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_LargeSteamForgeHammer>builder()
-                .addShape(
-                    mName,
-                    transpose(
-                        new String[][] { { "CCC", "CCC", "CCC" }, { "C~C", "C C", "CCC" }, { "CCC", "CCC", "CCC" }, }))
+                .addShape(mName, transpose(SHAPE_MAIN))
                 .addElement(
                     'C',
                     ofChain(

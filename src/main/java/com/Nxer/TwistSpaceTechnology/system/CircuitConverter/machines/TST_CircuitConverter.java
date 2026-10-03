@@ -73,8 +73,11 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
     private final int depthOffSet = 0;
 
     // spotless:off
-    private final String[][] shapeMain = new String[][] { { "AAA", "AAA", "AAA" }, { "A~A", "A A", "AAA" },
-        { "AAA", "AAA", "AAA" } };
+    private final String[][] shapeMain = new String[][]{
+        {"AAA","AAA","AAA"},
+        {"A~A","A A","AAA"},
+        {"AAA","AAA","AAA"}
+    };
     // spotless:on
 
     private final IStructureDefinition<TST_CircuitConverter> STRUCTURE = IStructureDefinition

@@ -91,14 +91,19 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
     // region Structure
     private static IStructureDefinition<TST_ManufacturingCenter> StructureDef = null;
 
+    // spotless:off
+    private static final String[][] SHAPE_MAIN = new String[][]{
+        {"CCC","CCC","CCC"},
+        {"C~C","CAC","CCC"},
+        {"CCC","CCC","CCC"}
+    };
+    // spotless:on
+
     @Override
     public IStructureDefinition<TST_ManufacturingCenter> getStructureDefinition() {
         if (StructureDef == null) {
             StructureDef = StructureDefinition.<TST_ManufacturingCenter>builder()
-                .addShape(
-                    "main",
-                    StructureUtility.transpose(
-                        new String[][] { { "CCC", "CCC", "CCC" }, { "C~C", "CAC", "CCC" }, { "CCC", "CCC", "CCC" } }))
+                .addShape("main", StructureUtility.transpose(SHAPE_MAIN))
                 .addElement(
                     'C',
                     GTStructureUtility.buildHatchAdder(TST_ManufacturingCenter.class)
