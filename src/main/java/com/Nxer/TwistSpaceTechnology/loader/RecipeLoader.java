@@ -99,7 +99,6 @@ public class RecipeLoader {
         // Original GTNH RecipeMap
         ChemicalReactorRecipePool.loadRecipes();
         CircuitAssemblerRecipePool.loadRecipes();
-        CircuitAssemblyLineWithoutImprintRecipePool.loadRecipes();
         DistillationRecipePool.loadRecipes();
         ExtractorRecipePool.loadRecipes();
         CompressorRecipePool.loadRecipes();
@@ -176,6 +175,9 @@ public class RecipeLoader {
         StellarForgeRecipePool.loadOnServerStarted();
         TreeGrowthSimulatorWithoutToolFakeRecipe.loadRecipes();
         MiracleTopRecipePool.loadRecipes();
+        // Copy the CAL recipe map here, not in loadRecipes(): at FMLLoadCompleteEvent the map only holds TST's own
+        // CAL recipes, so the ACAL ends up with no imprint recipes ("No valid recipe found").
+        CircuitAssemblyLineWithoutImprintRecipePool.loadRecipes();
         if (Config.Enable_IndustrialMagicMatrix) {
             new IndustrialMagicMatrixRecipePool().loadRecipes();
         }
