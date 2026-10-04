@@ -239,24 +239,7 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
         // check nanites
         prepareProcessing();
 
-        // general processing
-        setupProcessingLogic(processingLogic);
-
-        CheckRecipeResult result = doCheckRecipe();
-        result = postCheckRecipe(result, processingLogic);
-        // inputs are consumed at this point
-        updateSlots();
-        if (!result.wasSuccessful()) return result;
-
-        mEfficiency = 10000;
-        mEfficiencyIncrease = 10000;
-        mMaxProgresstime = processingLogic.getDuration();
-        setEnergyUsage(processingLogic);
-
-        mOutputItems = processingLogic.getOutputItems();
-        mOutputFluids = processingLogic.getOutputFluids();
-
-        return result;
+        return super.checkProcessing();
     }
 
     @Override
@@ -384,7 +367,7 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tttt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tttt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.IntegratedAssemblyMatrix.tooltip.machine_type
         // # Assembly Line
@@ -430,7 +413,7 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
             // # And {\YELLOW}double{\GRAY} the parallelism.
             // #zh_CN 并{\YELLOW}翻倍{\GRAY}并行数量.
             .addInfo(tr("tst.common.machine.IntegratedAssemblyMatrix.tooltip.info.10"))
-            .beginStructureBlock(9, 9, 52, false)
+            .beginStructureBlock(shape)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)

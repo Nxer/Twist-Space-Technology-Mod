@@ -614,7 +614,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         tt.addMachineType(
             // #tr tst.common.machine.LargeSolarBoiler.tooltip.machine_type
@@ -728,6 +728,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                     + steamProductionSteel
                     + " L/s"
                     + EnumChatFormatting.GRAY)
+            .beginStructureBlock(shapeMain)
             .toolTipFinisher();
         // spotless:on
         return tt;

@@ -425,7 +425,7 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.MiracleTop.tooltip.machine_type
         // # Circuit Assembler/Gravitation Breaker
@@ -463,6 +463,7 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
             // # {\AQUA}128x{\GRAY} Parallel per Ring.
             // #zh_CN 每环 {\AQUA}128x{\GRAY} 并行.
             .addInfo(TSTUtils.tr("tst.common.machine.MiracleTop.tooltip.info.08"))
+            .beginStructureBlock("(3+8xn)x21x21", false)
             .addController(TSTSharedLocalization.Structure.textFrontCenter)
             // #tr tst.common.machine.MiracleTop.tooltip.structure.01
             // # Outermost 12 blocks on the ring (outermost 3 on each side).

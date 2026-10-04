@@ -6,7 +6,6 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPer
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.tiered_structure_issue;
 import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.NEGATIVE_ONE;
-import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.addStacksToList;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -101,201 +100,27 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     private static final String STRUCTURE_PIECE_MAIN = "mainHephaestusAtelier";
     private static IStructureDefinition<TST_HephaestusAtelier> STRUCTURE_DEFINITION = null;
 
+    // spotless:off
+    private static final String[][] SHAPE_MAIN = new String[][]{
+        {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","               DDD               ","              DDDDD              ","              DDDDD              ","              DDDDD              ","               DDD               ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
+        {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","              DDDDD              ","             DD B DD             ","             D BBB D             ","             DBBBBBD             ","             D BBB D             ","             DD B DD             ","              DDDDD              ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
+        {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","              DDDDD              ","             D BBB D             ","            D BB BB D            ","            DBBCCCBBD            ","            DB CCC BD            ","            DBBCCCBBD            ","            D BB BB D            ","             D BBB D             ","              DDDDD              ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
+        {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","               DDD               ","             DD B DD             ","            D BB BB D            ","            DBCCCCCBD            ","           D BC   CB D           ","           DB C   C BD           ","           D BC   CB D           ","            DBCCCCCBD            ","            D BB BB D            ","             DD B DD             ","               DDD               ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
+        {"                                 ","             AAAAAAA             ","          AAA       AAA          ","        AA             AA        ","       A                 A       ","      A                   A      ","     A                     A     ","    A                       A    ","   A                         A   ","   A                         A   ","  A                           A  ","  A           DDDDD           A  ","  A          D BBB D          A  "," A          DBBCCCBBD          A "," A         D BC   CB D         A "," A         DBC     CBD         A "," A         DBC     CBD         A "," A         DBC     CBD         A "," A         D BC   CB D         A "," A          DBBCCCBBD          A ","  A          D BBB D          A  ","  A           DDDDD           A  ","  A                           A  ","   A                         A   ","   A                         A   ","    A                       A    ","     A                     A     ","      A                   A      ","       A                 A       ","        AA             AA        ","          AAA       AAA          ","             AAAAAAA             ","                                 "},
+        {"             AAA~AAA             ","          AAAEEEEEEEAAA          ","        AAEEE       EEEAA        ","       AEE             EEA       ","      AE                 EA      ","     AE                   EA     ","    AE                     EA    ","   AE                       EA   ","  AE                         EA  ","  AE                         EA  "," AE                           EA "," AE           DDDDD           EA "," AE          DBBBBBD          EA ","AE          DB CCC BD          EA","AE         DB C   C BD         EA","AE         DBC     CBD         EA","AE         DBC     CBD         EA","AE         DBC     CBD         EA","AE         DB C   C BD         EA","AE          DB CCC BD          EA"," AE          DBBBBBD          EA "," AE           DDDDD           EA "," AE                           EA ","  AE                         EA  ","  AE                         EA  ","   AE                       EA   ","    AE                     EA    ","     AE                   EA     ","      AE                 EA      ","       AEE             EEA       ","        AAEEE       EEEAA        ","          AAAEEEEEEEAAA          ","             AAAAAAA             "},
+        {"                                 ","             AAAAAAA             ","          AAA       AAA          ","        AA             AA        ","       A                 A       ","      A                   A      ","     A                     A     ","    A                       A    ","   A                         A   ","   A                         A   ","  A                           A  ","  A           DDDDD           A  ","  A          D BBB D          A  "," A          DBBCCCBBD          A "," A         D BC   CB D         A "," A         DBC     CBD         A "," A         DBC     CBD         A "," A         DBC     CBD         A "," A         D BC   CB D         A "," A          DBBCCCBBD          A ","  A          D BBB D          A  ","  A           DDDDD           A  ","  A                           A  ","   A                         A   ","   A                         A   ","    A                       A    ","     A                     A     ","      A                   A      ","       A                 A       ","        AA             AA        ","          AAA       AAA          ","             AAAAAAA             ","                                 "},
+        {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","               DDD               ","             DD B DD             ","            D BB BB D            ","            DBCCCCCBD            ","           D BC   CB D           ","           DB C   C BD           ","           D BC   CB D           ","            DBCCCCCBD            ","            D BB BB D            ","             DD B DD             ","               DDD               ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
+        {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","              DDDDD              ","             D BBB D             ","            D BB BB D            ","            DBBCCCBBD            ","            DB CCC BD            ","            DBBCCCBBD            ","            D BB BB D            ","             D BBB D             ","              DDDDD              ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
+        {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","              DDDDD              ","             DD B DD             ","             D BBB D             ","             DBBBBBD             ","             D BBB D             ","             DD B DD             ","              DDDDD              ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
+        {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","               DDD               ","              DDDDD              ","              DDDDD              ","              DDDDD              ","               DDD               ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "}
+    };
+    // spotless:on
+
     @Override
     public IStructureDefinition<TST_HephaestusAtelier> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_HephaestusAtelier>builder()
-                .addShape(
-                    STRUCTURE_PIECE_MAIN,
-                    transpose(
-                        new String[][] {
-                            { "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "               DDD               ", "              DDDDD              ",
-                                "              DDDDD              ", "              DDDDD              ",
-                                "               DDD               ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 " },
-                            { "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "              DDDDD              ",
-                                "             DD B DD             ", "             D BBB D             ",
-                                "             DBBBBBD             ", "             D BBB D             ",
-                                "             DD B DD             ", "              DDDDD              ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 " },
-                            { "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "              DDDDD              ", "             D BBB D             ",
-                                "            D BB BB D            ", "            DBBCCCBBD            ",
-                                "            DB CCC BD            ", "            DBBCCCBBD            ",
-                                "            D BB BB D            ", "             D BBB D             ",
-                                "              DDDDD              ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 " },
-                            { "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "               DDD               ",
-                                "             DD B DD             ", "            D BB BB D            ",
-                                "            DBCCCCCBD            ", "           D BC   CB D           ",
-                                "           DB C   C BD           ", "           D BC   CB D           ",
-                                "            DBCCCCCBD            ", "            D BB BB D            ",
-                                "             DD B DD             ", "               DDD               ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 " },
-                            { "                                 ", "             AAAAAAA             ",
-                                "          AAA       AAA          ", "        AA             AA        ",
-                                "       A                 A       ", "      A                   A      ",
-                                "     A                     A     ", "    A                       A    ",
-                                "   A                         A   ", "   A                         A   ",
-                                "  A                           A  ", "  A           DDDDD           A  ",
-                                "  A          D BBB D          A  ", " A          DBBCCCBBD          A ",
-                                " A         D BC   CB D         A ", " A         DBC     CBD         A ",
-                                " A         DBC     CBD         A ", " A         DBC     CBD         A ",
-                                " A         D BC   CB D         A ", " A          DBBCCCBBD          A ",
-                                "  A          D BBB D          A  ", "  A           DDDDD           A  ",
-                                "  A                           A  ", "   A                         A   ",
-                                "   A                         A   ", "    A                       A    ",
-                                "     A                     A     ", "      A                   A      ",
-                                "       A                 A       ", "        AA             AA        ",
-                                "          AAA       AAA          ", "             AAAAAAA             ",
-                                "                                 " },
-                            { "             AAA~AAA             ", "          AAAEEEEEEEAAA          ",
-                                "        AAEEE       EEEAA        ", "       AEE             EEA       ",
-                                "      AE                 EA      ", "     AE                   EA     ",
-                                "    AE                     EA    ", "   AE                       EA   ",
-                                "  AE                         EA  ", "  AE                         EA  ",
-                                " AE                           EA ", " AE           DDDDD           EA ",
-                                " AE          DBBBBBD          EA ", "AE          DB CCC BD          EA",
-                                "AE         DB C   C BD         EA", "AE         DBC     CBD         EA",
-                                "AE         DBC     CBD         EA", "AE         DBC     CBD         EA",
-                                "AE         DB C   C BD         EA", "AE          DB CCC BD          EA",
-                                " AE          DBBBBBD          EA ", " AE           DDDDD           EA ",
-                                " AE                           EA ", "  AE                         EA  ",
-                                "  AE                         EA  ", "   AE                       EA   ",
-                                "    AE                     EA    ", "     AE                   EA     ",
-                                "      AE                 EA      ", "       AEE             EEA       ",
-                                "        AAEEE       EEEAA        ", "          AAAEEEEEEEAAA          ",
-                                "             AAAAAAA             " },
-                            { "                                 ", "             AAAAAAA             ",
-                                "          AAA       AAA          ", "        AA             AA        ",
-                                "       A                 A       ", "      A                   A      ",
-                                "     A                     A     ", "    A                       A    ",
-                                "   A                         A   ", "   A                         A   ",
-                                "  A                           A  ", "  A           DDDDD           A  ",
-                                "  A          D BBB D          A  ", " A          DBBCCCBBD          A ",
-                                " A         D BC   CB D         A ", " A         DBC     CBD         A ",
-                                " A         DBC     CBD         A ", " A         DBC     CBD         A ",
-                                " A         D BC   CB D         A ", " A          DBBCCCBBD          A ",
-                                "  A          D BBB D          A  ", "  A           DDDDD           A  ",
-                                "  A                           A  ", "   A                         A   ",
-                                "   A                         A   ", "    A                       A    ",
-                                "     A                     A     ", "      A                   A      ",
-                                "       A                 A       ", "        AA             AA        ",
-                                "          AAA       AAA          ", "             AAAAAAA             ",
-                                "                                 " },
-                            { "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "               DDD               ",
-                                "             DD B DD             ", "            D BB BB D            ",
-                                "            DBCCCCCBD            ", "           D BC   CB D           ",
-                                "           DB C   C BD           ", "           D BC   CB D           ",
-                                "            DBCCCCCBD            ", "            D BB BB D            ",
-                                "             DD B DD             ", "               DDD               ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 " },
-                            { "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "              DDDDD              ", "             D BBB D             ",
-                                "            D BB BB D            ", "            DBBCCCBBD            ",
-                                "            DB CCC BD            ", "            DBBCCCBBD            ",
-                                "            D BB BB D            ", "             D BBB D             ",
-                                "              DDDDD              ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 " },
-                            { "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "              DDDDD              ",
-                                "             DD B DD             ", "             D BBB D             ",
-                                "             DBBBBBD             ", "             D BBB D             ",
-                                "             DD B DD             ", "              DDDDD              ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 " },
-                            { "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "               DDD               ", "              DDDDD              ",
-                                "              DDDDD              ", "              DDDDD              ",
-                                "               DDD               ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 ", "                                 ",
-                                "                                 " } }))
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(SHAPE_MAIN))
                 .addElement(
                     'A',
                     HatchElementBuilder.<TST_HephaestusAtelier>builder()
@@ -460,13 +285,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     }
 
     @Override
-    protected void setupProcessingLogic(ProcessingLogic logic) {
-        logic.clear();
-        logic.setMachine(this);
-        logic.setRecipeMapSupplier(this::getRecipeMap);
-        logic.setVoidProtection(protectsExcessItem(), protectsExcessFluid());
-        logic.setBatchSize(isBatchModeEnabled() ? getMaxBatchSize() : 1);
-        logic.setRecipeLocking(this, isRecipeLockingEnabled());
+    protected void setProcessingLogicPower(ProcessingLogic logic) {
         logic.setAvailableVoltage(isWirelessMode() ? Long.MAX_VALUE : getMaxInputEu());
         logic.setAvailableAmperage(1);
         logic.setAmperageOC(true);
@@ -504,33 +323,19 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     }
 
     public CheckRecipeResult checkProcessingAlloySmelter() {
+        if (!isWirelessMode()) return super.checkProcessing();
         setupProcessingLogic(processingLogic);
-        return isWirelessMode() ? wirelessAlloySmelter() : normalAlloySmelter();
-    }
-
-    public CheckRecipeResult normalAlloySmelter() {
-        CheckRecipeResult result = doCheckRecipe();
-        updateSlots();
-        if (!result.wasSuccessful()) return result;
-
-        mEfficiency = 10000;
-        mEfficiencyIncrease = 10000;
-        mMaxProgresstime = processingLogic.getDuration();
-        setEnergyUsage(processingLogic);
-
-        mOutputItems = processingLogic.getOutputItems();
-        mOutputFluids = processingLogic.getOutputFluids();
-
-        return result;
+        return wirelessAlloySmelter();
     }
 
     public CheckRecipeResult wirelessAlloySmelter() {
 
-        ArrayList<ItemStack> outputs = new ArrayList<>();
+        clearProcessingOutputs();
+        boolean succeeded = false;
         long usedEU = 0;
         CheckRecipeResult powerOff = CheckRecipeResultRegistry.SUCCESSFUL;
 
-        while (true) {
+        for (int i = 0; i < Config.MaxRecipeBatches_Wireless_HephaestusAtelier; i++) {
             tryStartRecipeProcessing();
             CheckRecipeResult r = doCheckRecipe();
             if (!r.wasSuccessful()) break;
@@ -559,12 +364,13 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
                 }
             }
 
-            outputs.addAll(Arrays.asList(processingLogic.getOutputItems()));
+            mergeProcessingOutputs(processingLogic);
+            succeeded = true;
             endRecipeProcessing();
         }
 
         updateSlots();
-        if (outputs.isEmpty()) {
+        if (!succeeded) {
             return powerOff.wasSuccessful() ? CheckRecipeResultRegistry.NO_RECIPE : powerOff;
         }
         if (usedEU > 0) {
@@ -572,8 +378,6 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
                 return CheckRecipeResultRegistry.insufficientPower(usedEU);
             }
         }
-
-        mOutputItems = outputs.toArray(new ItemStack[0]);
 
         mEfficiency = 10000;
         mEfficiencyIncrease = 10000;
@@ -615,22 +419,23 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     }
 
     public CheckRecipeResult wirelessFurnace(ArrayList<ItemStack> inputItems) {
-        ArrayList<ItemStack> outputs = new ArrayList<>();
+        List<ItemStackLong> outputs = new ArrayList<>();
         long smeltedAmount = 0;
         for (ItemStack items : inputItems) {
             ItemStack smeltedOutput = GTModHandler.getSmeltingOutput(items, false, null);
             if (smeltedOutput == null) {
                 // move to outputs
-                outputs.add(items.copy());
+                outputs.add(new ItemStackLong(items.copy(), items.stackSize));
                 items.stackSize = 0;
             } else {
-                addStacksToList(outputs, smeltedOutput, (long) items.stackSize * smeltedOutput.stackSize);
+                outputs.add(new ItemStackLong(smeltedOutput, (long) items.stackSize * smeltedOutput.stackSize));
                 smeltedAmount += items.stackSize;
                 items.stackSize = 0;
             }
         }
 
-        mOutputItems = outputs.toArray(new ItemStack[0]);
+        clearProcessingOutputs();
+        mergeOutputItems(outputs);
         updateSlots();
 
         // no smelting, just move garbage
@@ -660,22 +465,22 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
 
     public CheckRecipeResult normalFurnace(ArrayList<ItemStack> inputItems) {
         int canProcess = maxProcessNormalModeFurnace;
-        ArrayList<ItemStack> outputs = new ArrayList<>();
+        List<ItemStackLong> outputs = new ArrayList<>();
         for (ItemStack items : inputItems) {
             if (canProcess <= 0) break;
 
             ItemStack smeltedOutput = GTModHandler.getSmeltingOutput(items, false, null);
             if (smeltedOutput == null) {
                 // move to outputs
-                outputs.add(items.copy());
+                outputs.add(new ItemStackLong(items.copy(), items.stackSize));
                 items.stackSize = 0;
             } else {
                 if (canProcess >= items.stackSize) {
-                    addStacksToList(outputs, smeltedOutput, (long) items.stackSize * smeltedOutput.stackSize);
+                    outputs.add(new ItemStackLong(smeltedOutput, (long) items.stackSize * smeltedOutput.stackSize));
                     canProcess -= items.stackSize;
                     items.stackSize = 0;
                 } else {
-                    addStacksToList(outputs, smeltedOutput, (long) canProcess * smeltedOutput.stackSize);
+                    outputs.add(new ItemStackLong(smeltedOutput, (long) canProcess * smeltedOutput.stackSize));
                     items.stackSize -= canProcess;
                     canProcess = 0;
                     break;
@@ -683,7 +488,8 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
             }
         }
 
-        mOutputItems = outputs.toArray(new ItemStack[0]);
+        clearProcessingOutputs();
+        mergeOutputItems(outputs);
         updateSlots();
         // no smelting, just move garbage
         if (canProcess == maxProcessNormalModeFurnace) {
@@ -778,7 +584,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.HephaestusAtelier.tooltip.machine_type
         // # Furnace | Alloy Smelter
@@ -849,12 +655,13 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
             // # Otherwise same as T2.
             // #zh_CN 其他方面与 T2 相同.
             .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.15"))
+            .beginStructureBlock(SHAPE_MAIN)
             // #tr tst.common.machine.HephaestusAtelier.tooltip.structure.01
             // # Must install energy hatch when in T1.
             // #zh_CN T1等级线圈(普通模式)时必须安装能源仓.
             .addStructureInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.structure.01"))
             .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance)
-            .beginStructureBlock(33, 11, 33, false)
+
             .addController(TSTSharedLocalization.Structure.textFrontCenter)
             .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 1)
             .addOutputBus(TSTSharedLocalization.Structure.textAnyCasing, 1)

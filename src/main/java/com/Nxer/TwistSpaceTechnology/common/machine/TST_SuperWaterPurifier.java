@@ -329,7 +329,7 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.SuperWaterPurifier.tooltip.machine_type
         // # Perfect Water Creator
@@ -355,6 +355,7 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
             // # Each parallel requires 1 UMV amp
             // #zh_CN 每并行耗电 1A UMV
             .addInfo(TSTUtils.tr("tst.common.machine.SuperWaterPurifier.tooltip.info.05"))
+            .beginStructureBlock(shape)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addDynamoHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .toolTipFinisher();

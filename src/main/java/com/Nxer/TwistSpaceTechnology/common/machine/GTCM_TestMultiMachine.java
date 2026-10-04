@@ -60,8 +60,11 @@ public class GTCM_TestMultiMachine extends GTCM_MultiMachineBase<GTCM_TestMultiM
     private static final String STRUCTURE_PIECE_MAIN = "main";
 
     // spotless:off
-    private final String[][] shape = new String[][] { { "AAA", "AAA", "AAA" }, { "A~A", "AAA", "AAA" },
-        { "AAA", "AAA", "AAA" } };
+    private final String[][] shape = new String[][]{
+        {"AAA","AAA","AAA"},
+        {"A~A","AAA","AAA"},
+        {"AAA","AAA","AAA"}
+    };
     // spotless:on
 
     private static final int horizontalOffSet = 1;
@@ -196,7 +199,7 @@ public class GTCM_TestMultiMachine extends GTCM_MultiMachineBase<GTCM_TestMultiM
 
     // region Tooltip
     // Tooltips
-    private static MultiblockTooltipBuilder tooltip;
+    private static TSTMultiblockTooltipBuilder tooltip;
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
@@ -204,7 +207,7 @@ public class GTCM_TestMultiMachine extends GTCM_MultiMachineBase<GTCM_TestMultiM
             tooltip = new TSTMultiblockTooltipBuilder();
             tooltip.addMachineType("test")
                 .addInfo("testing")
-                .beginStructureBlock(3, 3, 3, false)
+                .beginStructureBlock(shape)
                 .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
                 .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
                 .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)

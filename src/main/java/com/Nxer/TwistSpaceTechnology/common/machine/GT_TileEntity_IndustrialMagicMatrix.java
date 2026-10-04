@@ -29,11 +29,13 @@ import static thaumcraft.common.config.ConfigItems.itemEldritchObject;
 import static thaumcraft.common.lib.research.ResearchManager.getResearchForPlayer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
@@ -554,16 +556,8 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
     @Nonnull
     @Override
     public CheckRecipeResult checkProcessing() {
-        setupProcessingLogic(processingLogic);
-
-        CheckRecipeResult result = doCheckRecipe();
-        result = postCheckRecipe(result, processingLogic);
-        // inputs are consumed at this point
-        updateSlots();
+        CheckRecipeResult result = super.checkProcessing();
         if (!result.wasSuccessful()) return result;
-
-        mEfficiency = 10000;
-        mEfficiencyIncrease = 10000;
 
         if (GTCMItemList.ProofOfHeroes.equal(getControllerSlot())) {
             mMaxProgresstime = 1;
@@ -571,10 +565,12 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
             mMaxProgresstime = processingLogic.getDuration() + ExtraTime;
         }
 
-        setEnergyUsage(processingLogic);
         ItemStack PrimordialPearl = new ItemStack(itemEldritchObject, 1, 3);
         int size = 0;
-        for (ItemStack itemStack : processingLogic.getOutputItems()) {
+        List<ItemStack> outputItems = isMEOutputEnabled() ? getMEItemOutputInfo().stream()
+            .map(ItemStackLong::itemStack)
+            .collect(Collectors.toList()) : Arrays.asList(mOutputItems);
+        for (ItemStack itemStack : outputItems) {
             if (!(itemStack.isItemEqual(new ItemStack(LudicrousItems.bigPearl)))) {
                 InfusionRecipe Recipe = ThaumcraftApi.getInfusionRecipe(itemStack);
                 for (ItemStack itemStack1 : Recipe.getComponents()) {
@@ -583,23 +579,12 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                     }
                 }
             } else {
-                mOutputItems = processingLogic.getOutputItems();
-                mOutputFluids = processingLogic.getOutputFluids();
                 return result;
             }
         }
         if (size != 0) {
-            int index = 0;
-            ItemStack[] OutputItems = new ItemStack[processingLogic.getOutputItems().length + 1];
-            for (ItemStack itemStack : processingLogic.getOutputItems()) {
-                OutputItems[index] = itemStack;
-            }
-            OutputItems[OutputItems.length - 1] = new ItemStack(itemEldritchObject, size, 3);
-            mOutputItems = OutputItems;
-            mOutputFluids = processingLogic.getOutputFluids();
-        } else {
-            mOutputItems = processingLogic.getOutputItems();
-            mOutputFluids = processingLogic.getOutputFluids();
+            PrimordialPearl.stackSize = size;
+            mergeOutputItems(PrimordialPearl);
         }
 
         return result;
@@ -812,7 +797,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         tt.addMachineType(
             // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.machine_type
@@ -915,6 +900,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
             // # Putting EssentiaCell_Creative in the controller GUI doesn't cost essentia, but if it's a hero's proof,maybe a little bit of an incredible change...
             // #zh_CN 在控制器GUI放入魔导源质元件则无需消耗源质，但如果是某位英雄的证明或许会发生一点不可思议的变化...
             .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.23"))
+            .beginStructureBlock(shape)
             // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.24
             // # Infusion Provider
             // #zh_CN 注魔供应器

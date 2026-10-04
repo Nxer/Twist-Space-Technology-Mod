@@ -86,29 +86,31 @@ public class TST_NetherInterface extends GTCM_MultiMachineBase<TST_NetherInterfa
     private static final String STRUCTURE_PIECE_MAIN = "main";
     private static IStructureDefinition<TST_NetherInterface> STRUCTURE_DEFINITION = null;
 
+    // spotless:off
+    private static final String[][] SHAPE_MAIN = new String[][] {
+        { "               ", " AAAAAAAAAAAAA ", " AAAAAAAAAAAAA ", " AAAAAAAAAAAAA " },
+        { "               ", " A           A ", " CCCCCCCCCCCCC ", " A           A " },
+        { "               ", " BCCCCCCCCCCCB ", " CDDDDDDDDDDDC ", " BCCCCCCCCCCCB " },
+        { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
+        { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
+        { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
+        { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
+        { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
+        { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
+        { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
+        { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
+        { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
+        { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
+        { "      A~A      ", " BCCCCCCCCCCCB ", " CDDDDDDDDDDDC ", " BCCCCCCCCCCCB " },
+        { "      AAA      ", "AAAAAAAAAAAAAAA", "ACCCCCCCCCCCCCA", "AAAAAAAAAAAAAAA" },
+        { "      AAA      ", "AAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAA" } };
+    // spotless:on
+
     @Override
     public IStructureDefinition<TST_NetherInterface> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_NetherInterface>builder()
-                .addShape(
-                    STRUCTURE_PIECE_MAIN,
-                    transpose(
-                        new String[][] { { "               ", " AAAAAAAAAAAAA ", " AAAAAAAAAAAAA ", " AAAAAAAAAAAAA " },
-                            { "               ", " A           A ", " CCCCCCCCCCCCC ", " A           A " },
-                            { "               ", " BCCCCCCCCCCCB ", " CDDDDDDDDDDDC ", " BCCCCCCCCCCCB " },
-                            { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
-                            { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
-                            { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
-                            { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
-                            { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
-                            { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
-                            { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
-                            { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
-                            { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
-                            { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
-                            { "      A~A      ", " BCCCCCCCCCCCB ", " CDDDDDDDDDDDC ", " BCCCCCCCCCCCB " },
-                            { "      AAA      ", "AAAAAAAAAAAAAAA", "ACCCCCCCCCCCCCA", "AAAAAAAAAAAAAAA" },
-                            { "      AAA      ", "AAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAA" } }))
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(SHAPE_MAIN))
                 .addElement(
                     'A',
                     HatchElementBuilder.<TST_NetherInterface>builder()
@@ -307,7 +309,7 @@ public class TST_NetherInterface extends GTCM_MultiMachineBase<TST_NetherInterfa
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.NetherInterface.tooltip.machine_type
         // # Otherworld Teleporter
@@ -325,7 +327,7 @@ public class TST_NetherInterface extends GTCM_MultiMachineBase<TST_NetherInterfa
           // # Machine takes 2A IV to maintain the teleporter, and 1A IV per parallel.
           // #zh_CN 需要消耗 2A IV 维持传送器, 并且每个并行消耗1A IV.
           .addInfo(TSTUtils.tr("tst.common.machine.NetherInterface.tooltip.info.03"))
-          .beginStructureBlock(15, 16, 3, false)
+          .beginStructureBlock(SHAPE_MAIN)
           .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
           .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
           .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)

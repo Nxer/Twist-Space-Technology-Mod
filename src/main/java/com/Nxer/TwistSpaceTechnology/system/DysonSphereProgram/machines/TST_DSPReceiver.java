@@ -732,7 +732,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.dyson.machine.DSPReceiver.tooltip.machine_type
         // # Dyson Sphere Program: Ray Receiving Station
@@ -774,6 +774,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             // # Joining the wireless EU network when without installing a dynamo hatch.
             // #zh_CN 未安装动力仓时自动进入无线电力网络模式.
             .addInfo(TSTUtils.tr("tst.dyson.machine.DSPReceiver.tooltip.info.09"))
+            .beginStructureBlock(shapeMain)
             .addStructureInfo(Tooltip_Details)
             // #tr tst.dyson.machine.DSPReceiver.tooltip.structure.01
             // # Requesting ratio = Integrated Circuit Number / Stack Size

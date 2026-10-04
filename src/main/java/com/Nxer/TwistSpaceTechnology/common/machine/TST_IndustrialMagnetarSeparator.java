@@ -198,7 +198,7 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.IndustrialMagnetarSeparator.tooltip.machine_type
         // # Electromagnetic Separator
@@ -221,6 +221,7 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
             // #zh_CN 每提升一个电压等级，每次运行可以多处理4个物品
             .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagnetarSeparator.tooltip.info.03"))
             .addPollutionAmount(300)
+            .beginStructureBlock(STRUCTURE)
             .addController(textFrontCenter)
             // #tr tst.common.machine.IndustrialMagnetarSeparator.tooltip.structure.01
             // # §69x §7Anti-Magnetic Casing (minimum)

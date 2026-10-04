@@ -251,19 +251,7 @@ public class TSTUtils {
      * @return Which voltage tier the machine's maximum EU/t from its energy hatches should be in.
      */
     public static int getMachineTotalPowerTier(@NotNull MTEExtendedPowerMultiBlockBase<?> machine) {
-        return getPowerTier(getMachineTotalPower(machine));
-    }
-
-    public static int getPowerTier(long power) {
-        if (power <= 8) return 0;
-        int tier = 0;
-        long tierPower = 8;
-        while (power > tierPower) {
-            tier++;
-            if (tierPower > Long.MAX_VALUE / 4) return tier;
-            tierPower *= 4;
-        }
-        return tier;
+        return GTUtility.getTierExtended(getMachineTotalPower(machine));
     }
 
     /**
@@ -415,7 +403,7 @@ public class TSTUtils {
      * @return the voltage tier in double
      */
     public static double calculateVoltageTier(double voltage) {
-        return 1 + Math.max(0, (Math.log(voltage) / LOG2) - 5) / 2;
+        return Math.max(0, ((Math.log(voltage) / LOG2) - 3) / 2);
     }
 
     /**

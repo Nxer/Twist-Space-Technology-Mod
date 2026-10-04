@@ -58,14 +58,19 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
     // region Structure
     protected static IStructureDefinition<TST_LargeSteamForgeHammer> STRUCTURE_DEFINITION = null;
 
+    // spotless:off
+    private static final String[][] SHAPE_MAIN = new String[][]{
+        {"CCC","CCC","CCC"},
+        {"C~C","C C","CCC"},
+        {"CCC","CCC","CCC"},
+    };
+    // spotless:on
+
     @Override
     public IStructureDefinition<TST_LargeSteamForgeHammer> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_LargeSteamForgeHammer>builder()
-                .addShape(
-                    mName,
-                    transpose(
-                        new String[][] { { "CCC", "CCC", "CCC" }, { "C~C", "C C", "CCC" }, { "CCC", "CCC", "CCC" }, }))
+                .addShape(mName, transpose(SHAPE_MAIN))
                 .addElement(
                     'C',
                     ofChain(
@@ -253,7 +258,7 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.LargeSteamForgeHammer.tooltip.machine_type
         // # Forge Hammer
@@ -267,7 +272,7 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
             // # He has a hammer. Who has the Sickle?
             // #zh_CN 他有一柄锤子. 谁有镰刀?
             .addInfo(TSTUtils.tr("tst.common.machine.LargeSteamForgeHammer.tooltip.info.01"))
-            .beginStructureBlock(3, 3, 3, true)
+            .beginStructureBlock(true, SHAPE_MAIN)
             .addController(TSTSharedLocalization.Structure.textFrontCenter)
             .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)
             .addOutputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)

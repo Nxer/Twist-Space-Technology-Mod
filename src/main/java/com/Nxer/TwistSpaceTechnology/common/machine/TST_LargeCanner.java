@@ -205,7 +205,7 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.LargeCanner.tooltip.machine_type
         // # Fluid/Solid Canner
@@ -227,7 +227,7 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
             // # Please use a screwdriver to switch modes.
             // #zh_CN 请使用螺丝刀来切换模式。
             .addInfo(TSTUtils.tr("tst.common.machine.LargeCanner.tooltip.info.03"))
-            .beginStructureBlock(13, 17, 13, false)
+            .beginStructureBlock(shapeMain)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint)
             .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint)

@@ -245,6 +245,7 @@ public enum GTCMItemList {
     NeutroniumPipeCasing,
     MechanicallyEnhancedObsidian,
     EnvironmentalIsolationCasing,
+    CryogenicCoolingCasing,
     Laser_Beacon,
     // endregion
 

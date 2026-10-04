@@ -535,16 +535,9 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     @Override
     public CheckRecipeResult checkProcessing() {
         checkTier();
-        setupProcessingLogic(processingLogic);
-
-        CheckRecipeResult result = doCheckRecipe();
-        result = postCheckRecipe(result, processingLogic);
-
-        updateSlots();
+        CheckRecipeResult result = super.checkProcessing();
         if (!result.wasSuccessful()) return result;
 
-        mEfficiency = 10000;
-        mEfficiencyIncrease = 10000;
         if (isWirelessMode) {
             lEUt = 0;
             flushOverclockParameter();
@@ -560,13 +553,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             if (!addEUToGlobalEnergyMap(ownerUUID, costingWirelessEUTemp.multiply(NEGATIVE_ONE))) {
                 return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp.longValue());
             }
-        } else {
-            mMaxProgresstime = processingLogic.getDuration();
-            setEnergyUsage(processingLogic);
         }
-
-        mOutputItems = processingLogic.getOutputItems();
-        mOutputFluids = processingLogic.getOutputFluids();
 
         return result;
     }
@@ -860,7 +847,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.BallLightning.tooltip.machine_type
         // # (Plasma / Electric) Arc Furnace / Fusion Reactor / Star Kernel Generator
@@ -974,6 +961,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             // # Eu Modifier = 1 - 9.9%% * (Field Generator Tier - 1)
             // #zh_CN 每升级一次力场发生器, 降低9.9%%功耗
             .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.26"))
+            .beginStructureBlock(shapeMK1, shapeMK2)
             // #tr tst.common.machine.BallLightning.tooltip.structure.01
             // # {\LIGHT_PURPLE}Wireless Mode :
             // #zh_CN {\LIGHT_PURPLE}无线模式 :

@@ -677,7 +677,7 @@ public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_Primordi
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.PrimordialDisjunctus.tooltip.machine_type
         // # Essentia Extractor
@@ -724,7 +724,7 @@ public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_Primordi
             // #zh_CN 本机最高支持1A UMV,超出的电力将被直接浪费.
             .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.10"))
             .addSeparator()
-            .beginStructureBlock(11, 10, 23, true)
+            .beginStructureBlock(true, shapePrimordialDisjunctus)
             .addController(textFrontCenter)
             // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.11
             // # Since EssentiaHatch has been removed and is now replaced by EssentiaProvider, it is still just a decoration and does not require input.

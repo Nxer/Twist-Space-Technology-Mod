@@ -1124,6 +1124,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell>
             // # Also a weird stranger told you that Armok splashes Blood everywhere in the machine.
             // #zh_CN 还有，一个奇怪的陌生人曾对你说过，阿蒙克在机器里会把血溅得到处都是。
             .addInfo(TSTUtils.tr("tst.common.machine.BloodyHell.tooltip.info.04"))
+            .beginStructureBlock(STRUCTURE_TIER_1, STRUCTURE_TIER_3, STRUCTURE_TIER_5, STRUCTURE_TIER_6)
             .addController(textUseBlueprint)
             .addInputBus(textAroundController+" "+getBlueprintWithDot(1))
             .addOutputBus(textAroundController+" "+getBlueprintWithDot(1))

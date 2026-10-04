@@ -316,7 +316,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tttt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tttt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.MegaSolarPanelFactory.tooltip.machine_type
         // # Solar Factory
@@ -334,7 +334,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
             // # Recipe Time Multiplier = 100% / Component Casing Tier.
             // #zh_CN 耗时倍率 = 100% / 部件装配线外壳等级.
             .addInfo(tr("tst.common.machine.MegaSolarPanelFactory.tooltip.info.03"))
-            .beginStructureBlock(13, 16, 13, false)
+            .beginStructureBlock(shape)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)

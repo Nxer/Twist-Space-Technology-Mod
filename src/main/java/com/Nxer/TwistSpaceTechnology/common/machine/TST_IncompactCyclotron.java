@@ -199,7 +199,7 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.IncompactCyclotron.tooltip.machine_type
         // # Particle Accelerator
@@ -237,6 +237,7 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
             // # But it requires additional 60%% of power to work
             // #zh_CN 但是需要额外60%%的供电来运行
             .addInfo(TSTUtils.tr("tst.common.machine.IncompactCyclotron.tooltip.info.07"))
+            .beginStructureBlock(shapeMain)
             .addController(textFrontCenter)
             .addInputHatch(getBlueprintWithDot(1))
             .addOutputHatch(getBlueprintWithDot(1))

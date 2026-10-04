@@ -500,7 +500,7 @@ public class GT_TileEntity_MegaEggGenerator extends TST_GeneratorBase<GT_TileEnt
     @SuppressWarnings("deprecation")
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.MegaEggGenerator.tooltip.machine_type
         // # Magical Energy Absorber
@@ -550,6 +550,7 @@ public class GT_TileEntity_MegaEggGenerator extends TST_GeneratorBase<GT_TileEnt
             // # Whether it is the {\DARK_PURPLE} Dragon Egg, {\DARK_GREEN} Creeper Egg, or the {\GOLD}Egg of Infinity, {\GRAY}only their presence can drive the full circulation of power.
             // #zh_CN 无论是{\DARK_PURPLE}龙蛋{\RESET}、{\GREEN}爬行者蛋{\GRAY}，抑或是{\ITALIC}{\GOLD}无尽之蛋{\GRAY}，唯有它们的存在，方能驱动力量的完满流转。
             .addInfo(TSTUtils.tr("tst.common.machine.MegaEggGenerator.tooltip.info.10"))
+            .beginStructureBlock("15x15x(2+2xn)", false)
             .addOtherStructurePart(
                 // #tr tst.common.machine.MegaEggGenerator.tooltip.info.11
                 // # Dynamo or TT Dynamo, one only

@@ -519,7 +519,7 @@ public class GT_TileEntity_StellarMaterialSiphon
      */
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.type"))
             .addInfo(loreTooltip != null ? ITALIC + loreTooltip : "")
             .addInfo(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.desc1"))
@@ -527,7 +527,7 @@ public class GT_TileEntity_StellarMaterialSiphon
             .addInfo(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.desc3"))
             .addInfo(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.desc4"))
             .addInfo(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.desc5"))
-            .beginStructureBlock(3, 7, 3, false)
+            .beginStructureBlock(shape)
             .addController(GCCoreUtil.translate("ig.siphon.structure.ControllerPos"))
             .addOtherStructurePart(
                 GCCoreUtil.translate("ig.siphon.structure.AdvMachineFrame"),

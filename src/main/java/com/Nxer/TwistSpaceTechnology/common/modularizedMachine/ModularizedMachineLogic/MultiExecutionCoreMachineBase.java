@@ -17,9 +17,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
@@ -29,10 +27,10 @@ import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeR
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.AdvExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.ExecutionCore;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.ExecutionCoreOutputBuffer;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.IExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.PerfectExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
-import com.Nxer.TwistSpaceTechnology.util.NBTUtils;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -250,20 +248,15 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
 
     // region Of an Execution core
 
-    protected ItemStack[] eOutputItems;
-    protected FluidStack[] eOutputFluids;
+    protected final ExecutionCoreOutputBuffer outputBuffer = new ExecutionCoreOutputBuffer();
     protected int eMaxProgressingTime;
     protected int eProgressedTime;
     protected int eBoostedTime;
     protected long eEut;
 
     @Override
-    public boolean setProcessing(ProcessingLogic processingLogic) {
-        setOutputItems(processingLogic.getOutputItems());
-        setOutputFluids(processingLogic.getOutputFluids());
-        setMaxProgressingTime(processingLogic.getDuration());
-        setEut(processingLogic.getCalculatedEut());
-        return done();
+    public ExecutionCoreOutputBuffer getOutputBuffer() {
+        return outputBuffer;
     }
 
     @Override
@@ -291,16 +284,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
                 eProgressedTime++;
             } else {
                 // output and finish this work
-
-                if (eOutputItems != null && eOutputItems.length > 0) {
-                    this.mergeOutputItems(eOutputItems);
-                    eOutputItems = null;
-                }
-
-                if (eOutputFluids != null && eOutputFluids.length > 0) {
-                    this.mergeOutputFluids(eOutputFluids);
-                    eOutputFluids = null;
-                }
+                outputBuffer.mergeInto(this);
 
                 if (useMainMachinePower()) {
                     if (!this.tryDecreaseUsedEut(eEut)) {
@@ -427,10 +411,8 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         if (tileEntity != null) {
             tag.setInteger("maxProgressingTime", eMaxProgressingTime);
             if (eMaxProgressingTime > 0) {
-                int outputItemStackAmount = eOutputItems == null ? 0 : eOutputItems.length;
-                tag.setInteger("outputItemStackAmount", outputItemStackAmount);
-                int outputFluidStackAmount = eOutputFluids == null ? 0 : eOutputFluids.length;
-                tag.setInteger("outputFluidStackAmount", outputFluidStackAmount);
+                tag.setInteger("outputItemStackAmount", outputBuffer.getItemOutputCount());
+                tag.setInteger("outputFluidStackAmount", outputBuffer.getFluidOutputCount());
                 tag.setInteger("progressedTime", eProgressedTime);
                 tag.setInteger("boostedTime", eBoostedTime);
                 tag.setLong("usingEut", eEut);
@@ -440,44 +422,6 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     }
     // endregion
 
-    protected void saveNBTDataItemStacks(NBTTagCompound aNBT) {
-        if (eOutputItems != null && eOutputItems.length > 0) {
-            aNBT.setInteger("eOutputItemsLength", eOutputItems.length);
-            for (int i = 0; i < eOutputItems.length; i++) {
-                NBTUtils.saveItem(aNBT, "eOutputItems" + i, eOutputItems[i]);
-            }
-        }
-    }
-
-    protected void saveNBTDataFluidStacks(NBTTagCompound aNBT) {
-        if (eOutputFluids != null && eOutputFluids.length > 0) {
-            aNBT.setInteger("eOutputFluidsLength", eOutputFluids.length);
-            for (int i = 0; i < eOutputFluids.length; i++) {
-                NBTUtils.saveFluid(aNBT, "eOutputFluids" + i, eOutputFluids[i]);
-            }
-        }
-    }
-
-    protected void loadNBTDataItemStacks(NBTTagCompound aNBT) {
-        int length = aNBT.getInteger("eOutputItemsLength");
-        if (length > 0) {
-            eOutputItems = new ItemStack[length];
-            for (int i = 0; i < length; i++) {
-                eOutputItems[i] = NBTUtils.loadItem(aNBT, "eOutputItems" + i);
-            }
-        }
-    }
-
-    protected void loadNBTDataFluidStacks(NBTTagCompound aNBT) {
-        int length = aNBT.getInteger("eOutputFluidsLength");
-        if (length > 0) {
-            eOutputFluids = new FluidStack[length];
-            for (int i = 0; i < length; i++) {
-                eOutputFluids[i] = NBTUtils.loadFluid(aNBT, "eOutputFluids" + i);
-            }
-        }
-    }
-
     @Override
     public boolean setup(ISupportExecutionCore mainMachine) {
         return true;
@@ -485,8 +429,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
 
     @Override
     public void reset() {
-        eOutputItems = null;
-        eOutputFluids = null;
+        outputBuffer.clear();
         eMaxProgressingTime = 0;
         eProgressedTime = 0;
         eBoostedTime = 0;
@@ -495,8 +438,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
 
     @Override
     public void shutDown() {
-        eOutputItems = null;
-        eOutputFluids = null;
+        outputBuffer.clear();
         eMaxProgressingTime = 0;
         eProgressedTime = 0;
         eBoostedTime = 0;
@@ -511,18 +453,6 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     @Override
     public boolean isWorking() {
         return this.eMaxProgressingTime > 0;
-    }
-
-    @Override
-    public IExecutionCore setOutputItems(ItemStack[] outputItems) {
-        this.eOutputItems = outputItems;
-        return this;
-    }
-
-    @Override
-    public IExecutionCore setOutputFluids(FluidStack[] outputFluids) {
-        this.eOutputFluids = outputFluids;
-        return this;
     }
 
     @Override
@@ -585,14 +515,6 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         ret[origin.length] = getOverclockType().getDescription();
 
         return ret;
-    }
-
-    public void mergeOutputItems(ItemStack... outputs) {
-        mOutputItems = ArrayUtils.addAll(mOutputItems, outputs);
-    }
-
-    public void mergeOutputFluids(FluidStack... outputs) {
-        mOutputFluids = ArrayUtils.addAll(mOutputFluids, outputs);
     }
 
     public boolean tryUseEut(long eut) {
@@ -735,8 +657,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         aNBT.setInteger("eProgressedTime", eProgressedTime);
         aNBT.setInteger("eBoostedTime", eBoostedTime);
         aNBT.setLong("eEut", eEut);
-        saveNBTDataItemStacks(aNBT);
-        saveNBTDataFluidStacks(aNBT);
+        outputBuffer.saveNBTData(aNBT);
     }
 
     @Override
@@ -751,8 +672,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         eProgressedTime = aNBT.getInteger("eProgressedTime");
         eBoostedTime = aNBT.getInteger("eBoostedTime");
         eEut = aNBT.getLong("eEut");
-        loadNBTDataItemStacks(aNBT);
-        loadNBTDataFluidStacks(aNBT);
+        outputBuffer.loadNBTData(aNBT, "eOutput");
     }
 
     public long getEutCanUse() {
@@ -792,32 +712,21 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
 
     @Override
     protected void setupProcessingLogic(ProcessingLogic logic) {
-        logic.clear();
-        logic.setMachine(this);
-        logic.setRecipeMapSupplier(this::getRecipeMap);
+        super.setupProcessingLogic(logic);
         logic.setVoidProtection(false, false);
-        logic.setBatchSize(isBatchModeEnabled() ? getMaxBatchSize() : 1);
         logic.setRecipeLocking(this, false);
-        logic.setAvailableVoltage(getEutCanUse());
-        logic.setAvailableAmperage(1);
         logic.setMaxParallel(getParallelOfEveryNormalExecutionCore());
     }
 
-    protected void setupProcessingLogicWirelessEU(ProcessingLogic logic) {
-        logic.clear();
-        logic.setMachine(this);
-        logic.setRecipeMapSupplier(this::getRecipeMap);
-        logic.setVoidProtection(false, false);
-        logic.setBatchSize(isBatchModeEnabled() ? getMaxBatchSize() : 1);
-        logic.setRecipeLocking(this, false);
+    @Override
+    protected void setProcessingLogicPower(ProcessingLogic logic) {
         logic.setAvailableVoltage(getEutCanUse());
         logic.setAvailableAmperage(1);
-        logic.setMaxParallel(Integer.MAX_VALUE);
     }
 
-    @Nonnull
-    protected CheckRecipeResult doCheckRecipe() {
-        return super.doCheckRecipe();
+    protected void setupProcessingLogicWirelessEU(ProcessingLogic logic) {
+        setupProcessingLogic(logic);
+        logic.setMaxParallel(Integer.MAX_VALUE);
     }
 
     @Override

@@ -573,7 +573,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.dyson.machine.DSPLauncher.tooltip.machine_type
         // # Dyson Sphere Program: Launch Site
@@ -607,6 +607,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
             // # Joining the wireless EU network when without installing an energy hatch.
             // #zh_CN 未安装能源仓时自动进入无线电力网络模式.
             .addInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.info.07"))
+            .beginStructureBlock(shapeMain)
             .addStructureInfo(Tooltip_Details)
             // #tr tst.dyson.machine.DSPLauncher.tooltip.structure.01
             // # Final progress time = recipe time / ( module tier * overload mode parameter )

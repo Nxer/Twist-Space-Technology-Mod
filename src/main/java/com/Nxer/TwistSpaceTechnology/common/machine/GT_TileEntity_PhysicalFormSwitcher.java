@@ -336,7 +336,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.PhysicalFormSwitcher.tooltip.machine_type
         // # Fluid Solidifier | Fluid Extractor
@@ -366,7 +366,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
             // # The Glass Tier limit the recipe voltage tier.
             // #zh_CN 玻璃等级限制可执行配方等级.
             .addInfo(TSTUtils.tr("tst.common.machine.PhysicalFormSwitcher.tooltip.info.06"))
-            .beginStructureBlock(15, 20, 15, false)
+            .beginStructureBlock(shape)
             .addInputHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
             .addOutputHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
             .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 1)

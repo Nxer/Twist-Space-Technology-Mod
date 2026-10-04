@@ -213,7 +213,7 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.Scavenger.tooltip.machine_type
         // # Sifter
@@ -239,6 +239,7 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
             // # Additional {\RED}20%{\GRAY} reduction in time per Voltage Tier, multiplication calculus.
             // #zh_CN 电压每提高1级, 额外降低{\RED}20%{\GRAY}配方耗时, 叠乘计算.
             .addInfo(TSTUtils.tr("tst.common.machine.Scavenger.tooltip.info.04"))
+            .beginStructureBlock(shapeMain)
             .addController(textFrontBottom)
             .addInputHatch(textUseBlueprint, 1)
             .addOutputHatch(textUseBlueprint, 2)

@@ -1,10 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic;
 
 import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.FluidStackLong;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.IExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
@@ -110,6 +113,10 @@ public interface IModularizedMachine {
         void mergeOutputItems(ItemStack... outputs);
 
         void mergeOutputFluids(FluidStack... outputs);
+
+        void mergeOutputItems(List<ItemStackLong> outputs);
+
+        void mergeOutputFluids(List<FluidStackLong> outputs);
 
         boolean tryUseEut(long eut);
 

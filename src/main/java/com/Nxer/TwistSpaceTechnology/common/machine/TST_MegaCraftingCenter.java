@@ -133,6 +133,17 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
     protected Collection<ICraftingPatternDetails> patternDetails = new HashSet<>();
     protected static IStructureDefinition<TST_MegaCraftingCenter> STRUCTURE_DEFINITION;
 
+    // spotless:off
+    private static final String[][] SHAPE_MAIN = new String[][]{
+    {"BBBBBBB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BBBBBBB"},
+    {"BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
+    {"BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
+    {"BEE~EEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
+    {"BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
+    {"BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
+    {"BBBBBBB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BBBBBBB"}};
+    // spotless:on
+
     @Override
     public IStructureDefinition<TST_MegaCraftingCenter> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
@@ -141,14 +152,7 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
                     "MAIN",
                     transpose(
                         // spotless:off
-                        new String[][]{
-                            {"BBBBBBB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BBBBBBB"},
-                            {"BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
-                            {"BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
-                            {"BEE~EEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
-                            {"BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
-                            {"BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
-                            {"BBBBBBB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BBBBBBB"}}))
+                        SHAPE_MAIN))
                 // spotless:on
                 .addElement(
                     'B',
@@ -935,7 +939,7 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.01
         // # molecularAssembler | extremeCraftTable
@@ -983,6 +987,7 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
             .addInfo(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.11"))
             .addInfo(Text_SeparatingLine)
             .addInfo(TSTSharedLocalization.MachineTooltip.MoreInfoCheckingInScanner)
+            .beginStructureBlock(SHAPE_MAIN)
             .toolTipFinisher();
         // spotless:on
         return tt;

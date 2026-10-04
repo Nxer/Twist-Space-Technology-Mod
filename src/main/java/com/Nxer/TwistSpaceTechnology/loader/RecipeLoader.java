@@ -99,7 +99,6 @@ public class RecipeLoader {
         // Original GTNH RecipeMap
         ChemicalReactorRecipePool.loadRecipes();
         CircuitAssemblerRecipePool.loadRecipes();
-        CircuitAssemblyLineWithoutImprintRecipePool.loadRecipes();
         DistillationRecipePool.loadRecipes();
         ExtractorRecipePool.loadRecipes();
         CompressorRecipePool.loadRecipes();
@@ -173,6 +172,7 @@ public class RecipeLoader {
         }
         hasLoadedRecipesServerStarted = true;
 
+        CircuitAssemblyLineWithoutImprintRecipePool.loadRecipes();
         StellarForgeRecipePool.loadOnServerStarted();
         TreeGrowthSimulatorWithoutToolFakeRecipe.loadRecipes();
         MiracleTopRecipePool.loadRecipes();

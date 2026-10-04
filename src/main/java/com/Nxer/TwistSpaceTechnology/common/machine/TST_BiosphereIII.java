@@ -479,7 +479,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.BiosphereIII.tooltip.machine_type
         // # Bacterial Vat | Brewing Machine | Fermenter
@@ -541,7 +541,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
             .addInfo(TSTUtils.tr("tst.common.machine.BiosphereIII.tooltip.info.09"))
             .addInfo(TSTUtils.tr("tst.common.machine.BiosphereIII.tooltip.info.10"))
             .addInfo(TSTUtils.tr("tst.common.machine.BiosphereIII.tooltip.info.11"))
-            .beginStructureBlock(13, 19, 17, false)
+            .beginStructureBlock(shapeMain)
             .addController(textFrontBottom)
             // #tr tst.common.machine.BiosphereIII.tooltip.structure.01
             // # Any Bottom Clean Stainless Steel Machine Casing

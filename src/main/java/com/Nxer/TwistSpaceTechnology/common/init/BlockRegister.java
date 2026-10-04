@@ -335,6 +335,11 @@ public class BlockRegister {
             MetaBlockCasing02
                 .registerVariantWithTooltips(6, new String[] { TSTUtils.tr("tile.tst.common.MetaBlockCasing02.6.tooltip") }));
 
+        // #tr tile.tst.common.MetaBlockCasing02.7.name
+        // # Cryogenic Cooling Casing
+        // #zh_CN 低温冷却机械方块
+        GTCMItemList.CryogenicCoolingCasing.set(MetaBlockCasing02.registerVariant(7));
+
         // region SpaceTimeOscillator
 
         // #tr tile.tst.common.space_time_oscillator.0.name

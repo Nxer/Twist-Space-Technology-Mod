@@ -95,14 +95,19 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
     protected static final String STRUCTURE_PIECE_MAIN = "main";
     protected static IStructureDefinition<TST_ProcessingArray> STRUCTURE_DEFINITION = null;
 
+    // spotless:off
+    private static final String[][] SHAPE_MAIN = new String[][]{
+        {"hhh","hhh","hhh"},
+        {"h~h","h h","hhh"},
+        {"hhh","hhh","hhh"}
+    };
+    // spotless:on
+
     @Override
     public IStructureDefinition<TST_ProcessingArray> getStructureDefinition() {
         if (null == STRUCTURE_DEFINITION) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_ProcessingArray>builder()
-                .addShape(
-                    STRUCTURE_PIECE_MAIN,
-                    transpose(
-                        new String[][] { { "hhh", "hhh", "hhh" }, { "h~h", "h h", "hhh" }, { "hhh", "hhh", "hhh" } }))
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(SHAPE_MAIN))
                 .addElement(
                     'h',
                     HatchElementBuilder.<TST_ProcessingArray>builder()
@@ -333,7 +338,7 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        MultiblockTooltipBuilder tooltips = new TSTMultiblockTooltipBuilder();
+        TSTMultiblockTooltipBuilder tooltips = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.ProcessingArray.tooltip.machine_type
         // # Processing Array
@@ -360,7 +365,7 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
             // # Centrifuge, Electrolyzer, Mixer do their multiblock machine recipe
             // #zh_CN 离心机,电解机,搅拌机执行其对应多方块机器配方
             .addInfo(TSTUtils.tr("tst.common.machine.ProcessingArray.tooltip.info.05"))
-            .beginStructureBlock(3, 3, 3, true)
+            .beginStructureBlock(true, SHAPE_MAIN)
             .addController(TSTSharedLocalization.Structure.textFrontCenter)
             .addEnergyHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
             .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 1)

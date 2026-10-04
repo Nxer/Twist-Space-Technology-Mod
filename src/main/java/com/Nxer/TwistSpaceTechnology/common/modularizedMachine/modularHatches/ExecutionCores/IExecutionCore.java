@@ -1,8 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores;
 
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.IModularizedMachine;
 
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -55,7 +52,14 @@ public interface IExecutionCore extends IVoidable {
      * @param processingLogic Calculated parameters stored in.
      * @return Success to set processing
      */
-    boolean setProcessing(ProcessingLogic processingLogic);
+    default boolean setProcessing(ProcessingLogic processingLogic) {
+        getOutputBuffer().capture(processingLogic);
+        setMaxProgressingTime(processingLogic.getDuration());
+        setEut(processingLogic.getCalculatedEut());
+        return done();
+    }
+
+    ExecutionCoreOutputBuffer getOutputBuffer();
 
     /**
      * @return The tick amount of maxProgressingTime - progressedTime
@@ -69,10 +73,6 @@ public interface IExecutionCore extends IVoidable {
     IExecutionCore boostTick(int tick);
 
     // region Getters and Setters
-    IExecutionCore setOutputItems(ItemStack[] outputItems);
-
-    IExecutionCore setOutputFluids(FluidStack[] outputFluids);
-
     IExecutionCore setMaxProgressingTime(int maxProgressingTime);
 
     IExecutionCore setEut(long eut);

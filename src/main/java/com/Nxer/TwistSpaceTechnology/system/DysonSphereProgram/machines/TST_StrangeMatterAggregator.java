@@ -1832,7 +1832,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     // endregion
 
     // region Tooltip
-    private static MultiblockTooltipBuilder tooltip;
+    private static TSTMultiblockTooltipBuilder tooltip;
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
@@ -1963,6 +1963,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 // #zh_CN 同时副产物产量翻倍.
                 .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.29"))
                 .addInfo(TSTSharedLocalization.ModularizedMachine.InstallingModuleNearControllerImproveMachine)
+                .beginStructureBlock("(8+16xn)x35x35", false)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription01)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription02)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.PowerConsumptionControllerDescription)

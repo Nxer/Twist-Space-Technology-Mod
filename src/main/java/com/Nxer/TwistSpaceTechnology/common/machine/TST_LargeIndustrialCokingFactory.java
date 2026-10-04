@@ -204,7 +204,7 @@ public class TST_LargeIndustrialCokingFactory extends GTCM_MultiMachineBase<TST_
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.LargeIndustrialCokingFactory.tooltip.machine_type
         // # Coke Oven
@@ -226,6 +226,7 @@ public class TST_LargeIndustrialCokingFactory extends GTCM_MultiMachineBase<TST_
             // # Higher tier of coil make machine more faster.
             // #zh_CN 更高级的线圈可以让机器更快.
             .addInfo(TSTUtils.tr("tst.common.machine.LargeIndustrialCokingFactory.tooltip.info.03"))
+            .beginStructureBlock(shapeMain)
             .addController(textFrontBottom)
             .addInputHatch(textUseBlueprint, 1)
             .addOutputHatch(textUseBlueprint, 1)

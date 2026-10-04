@@ -430,7 +430,7 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.UniversalGenerator.tooltip.machine_type
         // # Universal Generator
@@ -452,6 +452,7 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
             // # Fuel Efficiency: 100%
             // #zh_CN 燃料效率: 100%
             .addInfo(TSTUtils.tr("tst.common.machine.UniversalGenerator.tooltip.info.04"))
+            .beginStructureBlock(shapeGas, shapeFuel)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addDynamoHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .toolTipFinisher();

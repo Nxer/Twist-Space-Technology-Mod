@@ -347,7 +347,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     // tooltips
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.machine_type
         // # Photon Controller/Laser Engraver
@@ -393,7 +393,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
             // # {\AQUA}256x{\GRAY} Parallel | Extra reduce {\RED}50%{\GRAY} recipe time spent
             // #zh_CN {\AQUA}256x{\GRAY} 并行 | 额外降低{\RED}50%{\GRAY}耗时
             .addInfo(TSTUtils.tr("tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.info.10"))
-            .beginStructureBlock(15, 7, 9, false)
+            .beginStructureBlock(shape)
             .addController(TSTSharedLocalization.Structure.textFrontCenter)
             .addCasingInfoRange(TSTSharedLocalization.Structure.textCasingAdvIrPlated, 296, 347, false)
             .addCasingInfoRange(TSTSharedLocalization.Structure.textCasingTT_0, 0, 78, false)
