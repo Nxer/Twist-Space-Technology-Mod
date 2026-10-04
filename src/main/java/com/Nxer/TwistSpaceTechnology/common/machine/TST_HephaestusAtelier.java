@@ -6,7 +6,6 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPer
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.tiered_structure_issue;
 import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.NEGATIVE_ONE;
-import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.addStacksToList;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -460,13 +459,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     }
 
     @Override
-    protected void setupProcessingLogic(ProcessingLogic logic) {
-        logic.clear();
-        logic.setMachine(this);
-        logic.setRecipeMapSupplier(this::getRecipeMap);
-        logic.setVoidProtection(protectsExcessItem(), protectsExcessFluid());
-        logic.setBatchSize(isBatchModeEnabled() ? getMaxBatchSize() : 1);
-        logic.setRecipeLocking(this, isRecipeLockingEnabled());
+    protected void setProcessingLogicPower(ProcessingLogic logic) {
         logic.setAvailableVoltage(isWirelessMode() ? Long.MAX_VALUE : getMaxInputEu());
         logic.setAvailableAmperage(1);
         logic.setAmperageOC(true);
@@ -504,33 +497,19 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     }
 
     public CheckRecipeResult checkProcessingAlloySmelter() {
+        if (!isWirelessMode()) return super.checkProcessing();
         setupProcessingLogic(processingLogic);
-        return isWirelessMode() ? wirelessAlloySmelter() : normalAlloySmelter();
-    }
-
-    public CheckRecipeResult normalAlloySmelter() {
-        CheckRecipeResult result = doCheckRecipe();
-        updateSlots();
-        if (!result.wasSuccessful()) return result;
-
-        mEfficiency = 10000;
-        mEfficiencyIncrease = 10000;
-        mMaxProgresstime = processingLogic.getDuration();
-        setEnergyUsage(processingLogic);
-
-        mOutputItems = processingLogic.getOutputItems();
-        mOutputFluids = processingLogic.getOutputFluids();
-
-        return result;
+        return wirelessAlloySmelter();
     }
 
     public CheckRecipeResult wirelessAlloySmelter() {
 
-        ArrayList<ItemStack> outputs = new ArrayList<>();
+        clearProcessingOutputs();
+        boolean succeeded = false;
         long usedEU = 0;
         CheckRecipeResult powerOff = CheckRecipeResultRegistry.SUCCESSFUL;
 
-        while (true) {
+        for (int i = 0; i < Config.MaxRecipeBatches_Wireless_HephaestusAtelier; i++) {
             tryStartRecipeProcessing();
             CheckRecipeResult r = doCheckRecipe();
             if (!r.wasSuccessful()) break;
@@ -559,12 +538,13 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
                 }
             }
 
-            outputs.addAll(Arrays.asList(processingLogic.getOutputItems()));
+            mergeProcessingOutputs(processingLogic);
+            succeeded = true;
             endRecipeProcessing();
         }
 
         updateSlots();
-        if (outputs.isEmpty()) {
+        if (!succeeded) {
             return powerOff.wasSuccessful() ? CheckRecipeResultRegistry.NO_RECIPE : powerOff;
         }
         if (usedEU > 0) {
@@ -572,8 +552,6 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
                 return CheckRecipeResultRegistry.insufficientPower(usedEU);
             }
         }
-
-        mOutputItems = outputs.toArray(new ItemStack[0]);
 
         mEfficiency = 10000;
         mEfficiencyIncrease = 10000;
@@ -615,22 +593,23 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     }
 
     public CheckRecipeResult wirelessFurnace(ArrayList<ItemStack> inputItems) {
-        ArrayList<ItemStack> outputs = new ArrayList<>();
+        List<ItemStackLong> outputs = new ArrayList<>();
         long smeltedAmount = 0;
         for (ItemStack items : inputItems) {
             ItemStack smeltedOutput = GTModHandler.getSmeltingOutput(items, false, null);
             if (smeltedOutput == null) {
                 // move to outputs
-                outputs.add(items.copy());
+                outputs.add(new ItemStackLong(items.copy(), items.stackSize));
                 items.stackSize = 0;
             } else {
-                addStacksToList(outputs, smeltedOutput, (long) items.stackSize * smeltedOutput.stackSize);
+                outputs.add(new ItemStackLong(smeltedOutput, (long) items.stackSize * smeltedOutput.stackSize));
                 smeltedAmount += items.stackSize;
                 items.stackSize = 0;
             }
         }
 
-        mOutputItems = outputs.toArray(new ItemStack[0]);
+        clearProcessingOutputs();
+        mergeOutputItems(outputs);
         updateSlots();
 
         // no smelting, just move garbage
@@ -660,22 +639,22 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
 
     public CheckRecipeResult normalFurnace(ArrayList<ItemStack> inputItems) {
         int canProcess = maxProcessNormalModeFurnace;
-        ArrayList<ItemStack> outputs = new ArrayList<>();
+        List<ItemStackLong> outputs = new ArrayList<>();
         for (ItemStack items : inputItems) {
             if (canProcess <= 0) break;
 
             ItemStack smeltedOutput = GTModHandler.getSmeltingOutput(items, false, null);
             if (smeltedOutput == null) {
                 // move to outputs
-                outputs.add(items.copy());
+                outputs.add(new ItemStackLong(items.copy(), items.stackSize));
                 items.stackSize = 0;
             } else {
                 if (canProcess >= items.stackSize) {
-                    addStacksToList(outputs, smeltedOutput, (long) items.stackSize * smeltedOutput.stackSize);
+                    outputs.add(new ItemStackLong(smeltedOutput, (long) items.stackSize * smeltedOutput.stackSize));
                     canProcess -= items.stackSize;
                     items.stackSize = 0;
                 } else {
-                    addStacksToList(outputs, smeltedOutput, (long) canProcess * smeltedOutput.stackSize);
+                    outputs.add(new ItemStackLong(smeltedOutput, (long) canProcess * smeltedOutput.stackSize));
                     items.stackSize -= canProcess;
                     canProcess = 0;
                     break;
@@ -683,7 +662,8 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
             }
         }
 
-        mOutputItems = outputs.toArray(new ItemStack[0]);
+        clearProcessingOutputs();
+        mergeOutputItems(outputs);
         updateSlots();
         // no smelting, just move garbage
         if (canProcess == maxProcessNormalModeFurnace) {

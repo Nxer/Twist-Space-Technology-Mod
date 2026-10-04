@@ -172,6 +172,7 @@ public class RecipeLoader {
         }
         hasLoadedRecipesServerStarted = true;
 
+        CircuitAssemblyLineWithoutImprintRecipePool.loadRecipes();
         StellarForgeRecipePool.loadOnServerStarted();
         TreeGrowthSimulatorWithoutToolFakeRecipe.loadRecipes();
         MiracleTopRecipePool.loadRecipes();

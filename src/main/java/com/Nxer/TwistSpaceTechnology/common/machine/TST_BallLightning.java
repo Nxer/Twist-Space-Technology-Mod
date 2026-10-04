@@ -535,16 +535,9 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     @Override
     public CheckRecipeResult checkProcessing() {
         checkTier();
-        setupProcessingLogic(processingLogic);
-
-        CheckRecipeResult result = doCheckRecipe();
-        result = postCheckRecipe(result, processingLogic);
-
-        updateSlots();
+        CheckRecipeResult result = super.checkProcessing();
         if (!result.wasSuccessful()) return result;
 
-        mEfficiency = 10000;
-        mEfficiencyIncrease = 10000;
         if (isWirelessMode) {
             lEUt = 0;
             flushOverclockParameter();
@@ -560,13 +553,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             if (!addEUToGlobalEnergyMap(ownerUUID, costingWirelessEUTemp.multiply(NEGATIVE_ONE))) {
                 return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp.longValue());
             }
-        } else {
-            mMaxProgresstime = processingLogic.getDuration();
-            setEnergyUsage(processingLogic);
         }
-
-        mOutputItems = processingLogic.getOutputItems();
-        mOutputFluids = processingLogic.getOutputFluids();
 
         return result;
     }
