@@ -369,7 +369,7 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.HolySeparator.tooltip.machine_type
         // # Cutter | Slicer | Lathe
@@ -400,6 +400,7 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
             // #zh_CN 电压每提高1级, 额外降低{\RED}10%{\GRAY}配方耗时, 叠乘计算.
             .addInfo(TSTUtils.tr("tst.common.machine.HolySeparator.tooltip.info.06"))
             .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
+            .beginStructureBlock("15x15x(8+4xn)", false)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)

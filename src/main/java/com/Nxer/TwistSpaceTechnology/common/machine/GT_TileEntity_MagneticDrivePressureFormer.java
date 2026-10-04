@@ -357,7 +357,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
     // tooltips
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.MagneticDrivePressureFormer.tooltip.machine_type
         // # Extruder | Bending Machine | Forming Press | Forge Hammer
@@ -404,7 +404,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
             // # Need Infinity Glass to use Laser energy hatch.
             // #zh_CN 无尽强化硼玻璃解锁激光仓.
             .addInfo(TSTUtils.tr("tst.common.machine.MagneticDrivePressureFormer.tooltip.info.10"))
-            .beginStructureBlock(15, 25, 15, false)
+            .beginStructureBlock(shape)
             .addController(TSTSharedLocalization.Structure.textTopCenter)
             // #tr tst.common.machine.MagneticDrivePressureFormer.tooltip.structure.01
             // # Frame location, Osmiridium Casing.

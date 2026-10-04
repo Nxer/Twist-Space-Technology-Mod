@@ -299,7 +299,7 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.BeeEngineer.tooltip.machine_type
         // # Bee Engineer
@@ -333,6 +333,7 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
             // # In case of failure, all consumed ingredients will not be returned.
             // #zh_CN 在失败的情况下, 所有投入的原料都不会返还.
             .addInfo(TSTUtils.tr("tst.common.machine.BeeEngineer.tooltip.info.06"))
+            .beginStructureBlock(STRUCTURE)
             // #tr tst.common.machine.BeeEngineer.tooltip.info.07
             // # Don't put too many drones in at once, that will result in a long run time!
             // #zh_CN 不要一次性放入太多雄蜂, 那会导致运行时间过长!

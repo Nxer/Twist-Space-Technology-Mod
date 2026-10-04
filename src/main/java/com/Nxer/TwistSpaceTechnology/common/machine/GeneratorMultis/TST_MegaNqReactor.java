@@ -791,7 +791,7 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.MegaNqReactor.tooltip.machine_type
         // # Naquadah Reactor,LNR
@@ -817,6 +817,7 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
             // # §cEnsure sufficient dynamo size, or the machine will shut down.§7
             // #zh_CN §c请保持动力仓足够大, 否则机器会停机§7.
             .addInfo(tr("tst.common.machine.MegaNqReactor.tooltip.info.05"))
+            .beginStructureBlock(SHAPE_MAIN)
             .toolTipFinisher();
         // spotless:on
         return tt;

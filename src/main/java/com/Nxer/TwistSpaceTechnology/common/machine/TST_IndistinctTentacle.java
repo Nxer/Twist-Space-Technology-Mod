@@ -500,7 +500,7 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.IndistinctTentacle.tooltip.machine_type
         // # Assembly Line | Component Assembly Line | Assembler | Precise Assembler
@@ -546,6 +546,7 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
             // # Watch out your Global energy storage if use wireless mode, you should not want to see the power drain's landscape.
             // #zh_CN 注意你的无线电网电量, 你应该不会想看到跳电的风景对吧.
             .addInfo(TSTUtils.tr("tst.common.machine.IndistinctTentacle.tooltip.info.09"))
+            .beginStructureBlock(shapeMain)
             .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltip_Details)
             // #tr tst.common.machine.IndistinctTentacle.tooltip.structure.01
             // # Speed (default) of mode:

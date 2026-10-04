@@ -739,7 +739,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.dyson.machine.ArtificialStar.tooltip.machine_type
         // # Dyson Sphere Program: Annihilation Generator
@@ -785,6 +785,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
             // # Use screwdriver to enable/disable animations.
             // #zh_CN 使用螺丝刀开启/关闭动画特效.
             .addInfo(TSTUtils.tr("tst.dyson.machine.ArtificialStar.tooltip.info.09"))
+            .beginStructureBlock(shapeMain)
             .addStructureInfo(Tooltip_Details)
             // #tr tst.dyson.machine.ArtificialStar.tooltip.structure.01
             // # Output multiplier = tTime^0.25 * tDim^0.25 * 1.588186^(tStabilisation - 2)

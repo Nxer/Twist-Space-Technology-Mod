@@ -350,7 +350,7 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.AdvCircuitAssemblyLine.tooltip.machine_type
         // # Circuit Assembly Line
@@ -380,6 +380,7 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             // # Install imprint circuit hatch for more recipe support (more than one hatch is not allowed)
             // #zh_CN 安装压印电路仓以获得更多配方支持 (只允许安装一个压印电路仓)
             .addInfo(TSTUtils.tr("tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.05"))
+            .beginStructureBlock(shapeMain)
             .addEnergyHatch(textUseBlueprint, 2)
             .addInputBus(textUseBlueprint, 1)
             .addInputHatch(textUseBlueprint, 1)

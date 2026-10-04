@@ -409,7 +409,7 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.MoleculeDeconstructor.tooltip.machine_type
         // # Electrolyzer | Centrifuge
@@ -440,6 +440,7 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
             // #zh_CN 玻璃等级限制能源仓等级.
             .addInfo(TSTUtils.tr("tst.common.machine.MoleculeDeconstructor.tooltip.info.06"))
             .addInfo(textScrewdriverChangeMode)
+            .beginStructureBlock("(1+4xn)x15x10", false)
             .addController(textFrontBottom)
             .addInputHatch(textUseBlueprint, 4)
             .addOutputHatch(textUseBlueprint, 2)

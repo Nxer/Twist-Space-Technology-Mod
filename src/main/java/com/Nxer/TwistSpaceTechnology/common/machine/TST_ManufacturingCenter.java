@@ -91,14 +91,19 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
     // region Structure
     private static IStructureDefinition<TST_ManufacturingCenter> StructureDef = null;
 
+    // spotless:off
+    private static final String[][] SHAPE_MAIN = new String[][]{
+        {"CCC","CCC","CCC"},
+        {"C~C","CAC","CCC"},
+        {"CCC","CCC","CCC"}
+    };
+    // spotless:on
+
     @Override
     public IStructureDefinition<TST_ManufacturingCenter> getStructureDefinition() {
         if (StructureDef == null) {
             StructureDef = StructureDefinition.<TST_ManufacturingCenter>builder()
-                .addShape(
-                    "main",
-                    StructureUtility.transpose(
-                        new String[][] { { "CCC", "CCC", "CCC" }, { "C~C", "CAC", "CCC" }, { "CCC", "CCC", "CCC" } }))
+                .addShape("main", StructureUtility.transpose(SHAPE_MAIN))
                 .addElement(
                     'C',
                     GTStructureUtility.buildHatchAdder(TST_ManufacturingCenter.class)
@@ -469,7 +474,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
             // #zh_CN 最大并行为§b%sx§7最大电压等级。
             .addInfo(TSTUtils.tr("tst.common.machine.ManufacturingCenter.tooltip.info.07", MAX_PARALLEL_MODIFIER))
             .addPollutionAmount(getPollutionPerSecond(null))
-            .beginStructureBlock(3, 3, 3, false)
+            .beginStructureBlock(SHAPE_MAIN)
             .addController("Front Center")
             .addOtherStructurePart("MultiUse Core", "At Center")
             .addCasingInfoMin("Multi-Use Casings", 6, false)

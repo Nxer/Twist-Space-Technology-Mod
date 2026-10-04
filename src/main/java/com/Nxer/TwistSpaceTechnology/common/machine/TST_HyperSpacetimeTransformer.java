@@ -383,7 +383,7 @@ public class TST_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<TST_Hyp
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.HyperSpacetimeTransformer.tooltip.machine_type
         // # {\AQUA}Hyper Spacetime Transformer
@@ -406,6 +406,7 @@ public class TST_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<TST_Hyp
             // # Upgrade the central cooling casings to unlock {\GOLD}perfect overclocking{\GRAY}.
             // #zh_CN 升级中央区域的冷却方块, 解锁{\GOLD}无损超频{\GRAY}.
             .addInfo(TSTUtils.tr("tst.common.machine.HyperSpacetimeTransformer.tooltip.info.04"))
+            .beginStructureBlock(shape)
             // #tr tst.common.machine.HyperSpacetimeTransformer.tooltip.controller
             // # Front center of the base. Use the blueprint for the exact position.
             // #zh_CN 底座正面中央, 具体位置参见蓝图.

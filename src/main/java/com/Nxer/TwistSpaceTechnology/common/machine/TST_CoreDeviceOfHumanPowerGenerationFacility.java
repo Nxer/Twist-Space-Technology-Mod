@@ -78,94 +78,36 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
     private static final String STRUCTURE_PIECE_MAIN = "mainCoreDeviceOfHumanPowerGenerationFacility";
     private static IStructureDefinition<TST_CoreDeviceOfHumanPowerGenerationFacility> STRUCTURE_DEFINITION = null;
 
+    // spotless:off
+    private static final String[][] SHAPE_MAIN = new String[][]{
+        {"               ","               ","               ","               ","               ","      FFF      ","     FFFFF     ","     FFFFF     ","     FFFFF     ","      FFF      ","               ","               ","               ","               ","               "},
+        {"               ","      BBB      ","    BBBBBBB    ","   BBBBBBBBB   ","  BBBBBBBBBBB  ","  BBBBFFFBBBB  "," BBBBFFFFFBBBB "," BBBBFFDFFBBBB "," BBBBFFFFFBBBB ","  BBBBFFFBBBB  ","  BBBBBBBBBBB  ","   BBBBBBBBB   ","    BBBBBBB    ","      BBB      ","               "},
+        {"               ","      AAA      ","    AA   AA    ","   A       A   ","  A         A  ","  A         A  "," A           A "," A     D     A "," A           A ","  A         A  ","  A         A  ","   A       A   ","    AA   AA    ","      AAA      ","               "},
+        {"               ","      AAA      ","    AAEEEAA    ","   AEE   EEA   ","  AE       EA  ","  AE       EA  "," AE         EA "," AE GGGDGGG EA "," AE         EA ","  AE       EA  ","  AE       EA  ","   AEE   EEA   ","    AAEEEAA    ","      AAA      ","               "},
+        {"               ","      AAA      ","    AA   AA    ","   A       A   ","  A         A  ","  A         A  "," A           A "," A  GGGDGGG  A "," A           A ","  A         A  ","  A         A  ","   A       A   ","    AA   AA    ","      AAA      ","               "},
+        {"               ","      AAA      ","    AA   AA    ","   A       A   ","  A         A  ","  A      G  A  "," A      G    A "," A     D     A "," A    G      A ","  A  G      A  ","  A         A  ","   A       A   ","    AA   AA    ","      AAA      ","               "},
+        {"               ","      AAA      ","    AA   AA    ","   A       A   ","  A         A  ","  A      G  A  "," A      G    A "," A     D     A "," A    G      A ","  A  G      A  ","  A         A  ","   A       A   ","    AA   AA    ","      AAA      ","               "},
+        {"               ","      AAA      ","    AAEEEAA    ","   AEE   EEA   ","  AE   G   EA  ","  AE   G   EA  "," AE    G    EA "," AE    D    EA "," AE    G    EA ","  AE   G   EA  ","  AE   G   EA  ","   AEE   EEA   ","    AAEEEAA    ","      AAA      ","               "},
+        {"               ","      AAA      ","    AA   AA    ","   A       A   ","  A    G    A  ","  A    G    A  "," A     G     A "," A     D     A "," A     G     A ","  A    G    A  ","  A    G    A  ","   A       A   ","    AA   AA    ","      AAA      ","               "},
+        {"               ","      AAA      ","    AA   AA    ","   A       A   ","  A         A  ","  A  G      A  "," A    G      A "," A     D     A "," A      G    A ","  A      G  A  ","  A         A  ","   A       A   ","    AA   AA    ","      AAA      ","               "},
+        {"               ","      AAA      ","    AA   AA    ","   A       A   ","  A         A  ","  A  G      A  "," A    G      A "," A     D     A "," A      G    A ","  A      G  A  ","  A         A  ","   A       A   ","    AA   AA    ","      AAA      ","               "},
+        {"               ","      AAA      ","    AAEEEAA    ","   AEE   EEA   ","  AE       EA  ","  AE       EA  "," AE         EA "," AE GGGDGGG EA "," AE         EA ","  AE       EA  ","  AE       EA  ","   AEE   EEA   ","    AAEEEAA    ","      AAA      ","               "},
+        {"               ","      AAA      ","    AA   AA    ","   A       A   ","  A         A  ","  A         A  "," A           A "," A  GGGDGGG  A "," A           A ","  A         A  ","  A         A  ","   A       A   ","    AA   AA    ","      AAA      ","               "},
+        {"               ","      AAA      ","    AA   AA    ","   A       A   ","  A         A  ","  A      G  A  "," A      G    A "," A     D     A "," A    G      A ","  A  G      A  ","  A         A  ","   A       A   ","    AA   AA    ","      AAA      ","               "},
+        {"               ","      AAA      ","    AA   AA    ","   A       A   ","  A         A  ","  A      G  A  "," A      G    A "," A     D     A "," A    G      A ","  A  G      A  ","  A         A  ","   A       A   ","    AA   AA    ","      AAA      ","               "},
+        {"               ","      AAA      ","    AAEEEAA    ","   AEE   EEA   ","  AE   G   EA  ","  AE   G   EA  "," AE    G    EA "," AE    D    EA "," AE    G    EA ","  AE   G   EA  ","  AE   G   EA  ","   AEE   EEA   ","    AAEEEAA    ","      AAA      ","               "},
+        {"               ","      AAA      ","    AA   AA    ","   A       A   ","  A    G    A  ","  A    G    A  "," A     G     A "," A     D     A "," A     G     A ","  A    G    A  ","  A    G    A  ","   A       A   ","    AA   AA    ","      AAA      ","               "},
+        {"               ","      BBB      ","    BBBBBBB    ","   BBBBBBBBB   ","  BBBBBBBBBBB  ","  BBBBFFFBBBB  "," BBBBFFFFFBBBB "," BBBBFFDFFBBBB "," BBBBFFFFFBBBB ","  BBBBFFFBBBB  ","  BBBBBBBBBBB  ","   BBBBBBBBB   ","    BBBBBBB    ","      BBB      ","               "},
+        {"     CC~CC     ","   CCCCCCCCC   ","  CCCCCCCCCCC  "," CCCCCCCCCCCCC "," CCCCCCCCCCCCC ","CCCCCCFFFCCCCCC","CCCCCFFFFFCCCCC","CCCCCFFFFFCCCCC","CCCCCFFFFFCCCCC","CCCCCCFFFCCCCCC"," CCCCCCCCCCCCC "," CCCCCCCCCCCCC ","  CCCCCCCCCCC  ","   CCCCCCCCC   ","     CCCCC     "},
+        {"     CCCCC     ","   CCCCCCCCC   ","  CCCCCCCCCCC  "," CCCCCCCCCCCCC "," CCCCCCCCCCCCC ","CCCCCCFFFCCCCCC","CCCCCFFFFFCCCCC","CCCCCFFFFFCCCCC","CCCCCFFFFFCCCCC","CCCCCCFFFCCCCCC"," CCCCCCCCCCCCC "," CCCCCCCCCCCCC ","  CCCCCCCCCCC  ","   CCCCCCCCC   ","     CCCCC     "}
+    };
+    // spotless:on
+
     @Override
     public IStructureDefinition<TST_CoreDeviceOfHumanPowerGenerationFacility> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_CoreDeviceOfHumanPowerGenerationFacility>builder()
-                .addShape(
-                    STRUCTURE_PIECE_MAIN,
-                    transpose(
-                        new String[][] {
-                            { "               ", "               ", "               ", "               ",
-                                "               ", "      FFF      ", "     FFFFF     ", "     FFFFF     ",
-                                "     FFFFF     ", "      FFF      ", "               ", "               ",
-                                "               ", "               ", "               " },
-                            { "               ", "      BBB      ", "    BBBBBBB    ", "   BBBBBBBBB   ",
-                                "  BBBBBBBBBBB  ", "  BBBBFFFBBBB  ", " BBBBFFFFFBBBB ", " BBBBFFDFFBBBB ",
-                                " BBBBFFFFFBBBB ", "  BBBBFFFBBBB  ", "  BBBBBBBBBBB  ", "   BBBBBBBBB   ",
-                                "    BBBBBBB    ", "      BBB      ", "               " },
-                            { "               ", "      AAA      ", "    AA   AA    ", "   A       A   ",
-                                "  A         A  ", "  A         A  ", " A           A ", " A     D     A ",
-                                " A           A ", "  A         A  ", "  A         A  ", "   A       A   ",
-                                "    AA   AA    ", "      AAA      ", "               " },
-                            { "               ", "      AAA      ", "    AAEEEAA    ", "   AEE   EEA   ",
-                                "  AE       EA  ", "  AE       EA  ", " AE         EA ", " AE GGGDGGG EA ",
-                                " AE         EA ", "  AE       EA  ", "  AE       EA  ", "   AEE   EEA   ",
-                                "    AAEEEAA    ", "      AAA      ", "               " },
-                            { "               ", "      AAA      ", "    AA   AA    ", "   A       A   ",
-                                "  A         A  ", "  A         A  ", " A           A ", " A  GGGDGGG  A ",
-                                " A           A ", "  A         A  ", "  A         A  ", "   A       A   ",
-                                "    AA   AA    ", "      AAA      ", "               " },
-                            { "               ", "      AAA      ", "    AA   AA    ", "   A       A   ",
-                                "  A         A  ", "  A      G  A  ", " A      G    A ", " A     D     A ",
-                                " A    G      A ", "  A  G      A  ", "  A         A  ", "   A       A   ",
-                                "    AA   AA    ", "      AAA      ", "               " },
-                            { "               ", "      AAA      ", "    AA   AA    ", "   A       A   ",
-                                "  A         A  ", "  A      G  A  ", " A      G    A ", " A     D     A ",
-                                " A    G      A ", "  A  G      A  ", "  A         A  ", "   A       A   ",
-                                "    AA   AA    ", "      AAA      ", "               " },
-                            { "               ", "      AAA      ", "    AAEEEAA    ", "   AEE   EEA   ",
-                                "  AE   G   EA  ", "  AE   G   EA  ", " AE    G    EA ", " AE    D    EA ",
-                                " AE    G    EA ", "  AE   G   EA  ", "  AE   G   EA  ", "   AEE   EEA   ",
-                                "    AAEEEAA    ", "      AAA      ", "               " },
-                            { "               ", "      AAA      ", "    AA   AA    ", "   A       A   ",
-                                "  A    G    A  ", "  A    G    A  ", " A     G     A ", " A     D     A ",
-                                " A     G     A ", "  A    G    A  ", "  A    G    A  ", "   A       A   ",
-                                "    AA   AA    ", "      AAA      ", "               " },
-                            { "               ", "      AAA      ", "    AA   AA    ", "   A       A   ",
-                                "  A         A  ", "  A  G      A  ", " A    G      A ", " A     D     A ",
-                                " A      G    A ", "  A      G  A  ", "  A         A  ", "   A       A   ",
-                                "    AA   AA    ", "      AAA      ", "               " },
-                            { "               ", "      AAA      ", "    AA   AA    ", "   A       A   ",
-                                "  A         A  ", "  A  G      A  ", " A    G      A ", " A     D     A ",
-                                " A      G    A ", "  A      G  A  ", "  A         A  ", "   A       A   ",
-                                "    AA   AA    ", "      AAA      ", "               " },
-                            { "               ", "      AAA      ", "    AAEEEAA    ", "   AEE   EEA   ",
-                                "  AE       EA  ", "  AE       EA  ", " AE         EA ", " AE GGGDGGG EA ",
-                                " AE         EA ", "  AE       EA  ", "  AE       EA  ", "   AEE   EEA   ",
-                                "    AAEEEAA    ", "      AAA      ", "               " },
-                            { "               ", "      AAA      ", "    AA   AA    ", "   A       A   ",
-                                "  A         A  ", "  A         A  ", " A           A ", " A  GGGDGGG  A ",
-                                " A           A ", "  A         A  ", "  A         A  ", "   A       A   ",
-                                "    AA   AA    ", "      AAA      ", "               " },
-                            { "               ", "      AAA      ", "    AA   AA    ", "   A       A   ",
-                                "  A         A  ", "  A      G  A  ", " A      G    A ", " A     D     A ",
-                                " A    G      A ", "  A  G      A  ", "  A         A  ", "   A       A   ",
-                                "    AA   AA    ", "      AAA      ", "               " },
-                            { "               ", "      AAA      ", "    AA   AA    ", "   A       A   ",
-                                "  A         A  ", "  A      G  A  ", " A      G    A ", " A     D     A ",
-                                " A    G      A ", "  A  G      A  ", "  A         A  ", "   A       A   ",
-                                "    AA   AA    ", "      AAA      ", "               " },
-                            { "               ", "      AAA      ", "    AAEEEAA    ", "   AEE   EEA   ",
-                                "  AE   G   EA  ", "  AE   G   EA  ", " AE    G    EA ", " AE    D    EA ",
-                                " AE    G    EA ", "  AE   G   EA  ", "  AE   G   EA  ", "   AEE   EEA   ",
-                                "    AAEEEAA    ", "      AAA      ", "               " },
-                            { "               ", "      AAA      ", "    AA   AA    ", "   A       A   ",
-                                "  A    G    A  ", "  A    G    A  ", " A     G     A ", " A     D     A ",
-                                " A     G     A ", "  A    G    A  ", "  A    G    A  ", "   A       A   ",
-                                "    AA   AA    ", "      AAA      ", "               " },
-                            { "               ", "      BBB      ", "    BBBBBBB    ", "   BBBBBBBBB   ",
-                                "  BBBBBBBBBBB  ", "  BBBBFFFBBBB  ", " BBBBFFFFFBBBB ", " BBBBFFDFFBBBB ",
-                                " BBBBFFFFFBBBB ", "  BBBBFFFBBBB  ", "  BBBBBBBBBBB  ", "   BBBBBBBBB   ",
-                                "    BBBBBBB    ", "      BBB      ", "               " },
-                            { "     CC~CC     ", "   CCCCCCCCC   ", "  CCCCCCCCCCC  ", " CCCCCCCCCCCCC ",
-                                " CCCCCCCCCCCCC ", "CCCCCCFFFCCCCCC", "CCCCCFFFFFCCCCC", "CCCCCFFFFFCCCCC",
-                                "CCCCCFFFFFCCCCC", "CCCCCCFFFCCCCCC", " CCCCCCCCCCCCC ", " CCCCCCCCCCCCC ",
-                                "  CCCCCCCCCCC  ", "   CCCCCCCCC   ", "     CCCCC     " },
-                            { "     CCCCC     ", "   CCCCCCCCC   ", "  CCCCCCCCCCC  ", " CCCCCCCCCCCCC ",
-                                " CCCCCCCCCCCCC ", "CCCCCCFFFCCCCCC", "CCCCCFFFFFCCCCC", "CCCCCFFFFFCCCCC",
-                                "CCCCCFFFFFCCCCC", "CCCCCCFFFCCCCCC", " CCCCCCCCCCCCC ", " CCCCCCCCCCCCC ",
-                                "  CCCCCCCCCCC  ", "   CCCCCCCCC   ", "     CCCCC     " } }))
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(SHAPE_MAIN))
                 .addElement('A', chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier))
                 .addElement(
                     'B', // gt.blockcasings, 11 : Fluid IO Hatches
@@ -332,7 +274,7 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.CoreDeviceOfHumanPowerGenerationFacility.tooltip.machine_type
         // # Fluid Heater
@@ -351,7 +293,7 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
             // #zh_CN 升级线圈以获得更快的速度.
             .addInfo(TSTUtils.tr("tst.common.machine.CoreDeviceOfHumanPowerGenerationFacility.tooltip.info.02"))
             .addInfo(TSTSharedLocalization.MachineTooltip.Tooltip_GlassTierLimitEnergyHatchTier)
-            .beginStructureBlock(15, 20, 15, false)
+            .beginStructureBlock(SHAPE_MAIN)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)

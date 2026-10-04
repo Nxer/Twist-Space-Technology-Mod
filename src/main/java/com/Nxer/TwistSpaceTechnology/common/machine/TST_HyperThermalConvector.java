@@ -497,7 +497,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.HyperThermalConvector.tooltip.machine_type
         // # Heat Exchanger | Heat Cooler
@@ -523,6 +523,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
             // # This device complies with {\YELLOW}GB/T 28712{\RESET} standards and will not explode!
             // #zh_CN 本设备符合GB/T 28712标准，不会爆炸！
             .addInfo(TSTUtils.tr("tst.common.machine.HyperThermalConvector.tooltip.info.04"))
+            .beginStructureBlock(shapeMain)
             // #tr tst.common.machine.HyperThermalConvector.tooltip.structure.01
             // # Hot fluid input hatch
             // #zh_CN 热流体输入仓

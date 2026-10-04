@@ -847,7 +847,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.BallLightning.tooltip.machine_type
         // # (Plasma / Electric) Arc Furnace / Fusion Reactor / Star Kernel Generator
@@ -961,6 +961,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             // # Eu Modifier = 1 - 9.9%% * (Field Generator Tier - 1)
             // #zh_CN 每升级一次力场发生器, 降低9.9%%功耗
             .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.26"))
+            .beginStructureBlock(shapeMK1, shapeMK2)
             // #tr tst.common.machine.BallLightning.tooltip.structure.01
             // # {\LIGHT_PURPLE}Wireless Mode :
             // #zh_CN {\LIGHT_PURPLE}无线模式 :

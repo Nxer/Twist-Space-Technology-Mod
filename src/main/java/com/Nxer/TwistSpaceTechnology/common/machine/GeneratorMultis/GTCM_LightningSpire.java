@@ -534,7 +534,7 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.LightningSpire.tooltip.machine_type
         // # Multi Lightning Rod
@@ -590,7 +590,7 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
             // # Use a wire cutter to enable/disable lightning animation.
             // #zh_CN 使用剪线钳开启/关闭闪电特效
             .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.12"))
-            .beginStructureBlock(11, 23, 11, false)
+            .beginStructureBlock(shapeMain)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint)
             .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint)
