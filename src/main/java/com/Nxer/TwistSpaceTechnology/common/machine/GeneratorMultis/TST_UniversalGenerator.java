@@ -205,9 +205,9 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
         DYNAMO_TIER = getTierDynamo();
 
         checkHasInputHatch(errors);
-        checkCasingMin(errors, mCasing, 45);
+        checkCasingMin(errors, mCasing, 39);
         checkHatchMin(errors, Dynamo, 1);
-        checkHatchMax(errors, Dynamo, 2);
+        checkHatchMax(errors, Dynamo, 8);
         if (checkMixedDynamo() || (!setDynamoTier(3, false))) {
             errors.add(hatch_tier_incompatible);
         }
