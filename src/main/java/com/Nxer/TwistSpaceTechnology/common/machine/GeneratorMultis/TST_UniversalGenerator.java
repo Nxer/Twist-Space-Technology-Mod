@@ -275,7 +275,7 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
 
                 if (tRecipe == null) continue;
                 // checkProcessing
-                int fuelValue = tRecipe.mSpecialValue * 1_000;
+                int fuelValue = tRecipe.mSpecialValue * 1_500;
                 euPerTick = DYNAMO_TIER * DYNAMO_AMP;
                 fuelBurning = (double) fuelValue / (euPerTick * 20);
                 fuelName = tFluid.getLocalizedName();
@@ -441,16 +441,16 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
             // #zh_CN 拥有两种模式: 燃气 | 燃油
             .addInfo(TSTUtils.tr("tst.common.machine.UniversalGenerator.tooltip.info.01"))
             // #tr tst.common.machine.UniversalGenerator.tooltip.info.02
-            // # Maximum 2 dynamo hatches
-            // #zh_CN 最多2个动力仓
+            // # Maximum 8 dynamo hatches
+            // #zh_CN 最多8个动力仓
             .addInfo(TSTUtils.tr("tst.common.machine.UniversalGenerator.tooltip.info.02"))
             // #tr tst.common.machine.UniversalGenerator.tooltip.info.03
             // # Dynamo hatches Lv-Hv tier
             // #zh_CN 动力仓等级 LV-HV
             .addInfo(TSTUtils.tr("tst.common.machine.UniversalGenerator.tooltip.info.03"))
             // #tr tst.common.machine.UniversalGenerator.tooltip.info.04
-            // # Fuel Efficiency: 100%
-            // #zh_CN 燃料效率: 100%
+            // # Fuel Efficiency: 150%
+            // #zh_CN 燃料效率: 150%
             .addInfo(TSTUtils.tr("tst.common.machine.UniversalGenerator.tooltip.info.04"))
             .beginStructureBlock(shapeGas, shapeFuel)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
