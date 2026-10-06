@@ -291,8 +291,8 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
             // #zh_CN 燃料效率:§c 140%§7
             .addInfo(TSTUtils.tr("tst.common.machine.SteamBasicGenerator.tooltip.info.03"))
             // #tr tst.common.machine.SteamBasicGenerator.tooltip.info.04
-            // # Accepts simple or buffered LV dynamo hatch
-            // #zh_CN 兼容普通LV仓和缓冲LV动力仓
+            // # Accepts LV dynamo hatch
+            // #zh_CN 兼容普通LV仓
             .addInfo(TSTUtils.tr("tst.common.machine.SteamBasicGenerator.tooltip.info.04"))
             .beginStructureBlock(shapeMain)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
