@@ -421,7 +421,12 @@ public class Config {
 
     public static boolean activateCombatStats = false;
     public static boolean Enable_LargeCanner = true;
+
+    // region Lightning Spire
     public static boolean Enable_LightningSpire = true;
+    public static boolean MoreSafetyPowerGeneration_LightningSpire = false;
+
+    // endregion
 
     // region IndustrialMagicMatrix
     public static boolean Enable_IndustrialMagicMatrix = true;
@@ -601,6 +606,11 @@ public class Config {
         // region Recipe
         Registry_DragonBlood_ExtraRecipe = configuration.getBoolean("Registry_DragonBlood_ExtraRecipe", RECIPE, Registry_DragonBlood_ExtraRecipe, "Registry Dragon Blood Extra Recipes.");
         Registry_DTPF_ExtraRecipe = configuration.getBoolean("Registry_DTPF_ExtraRecipe", RECIPE, Registry_DTPF_ExtraRecipe, "Enable Registry of DTPF Extra Recipes about Infinity Hypogen and SpaceTime.");
+        // endregion
+
+        // region Lightning Spire
+        Enable_LightningSpire = configuration.getBoolean("Enable_LightningSpire", "Lightning Spire", Enable_LightningSpire, "Enable Lightning Spire.");
+        MoreSafetyPowerGeneration_LightningSpire = configuration.getBoolean("MoreSafetyPowerGeneration_LightningSpire", "Lightning Spire", MoreSafetyPowerGeneration_LightningSpire, "If true, the Lightning Spire will generate the power after a progressing complete, instead generating power instantly. This'll make the power generating more in line with expectations.");
         // endregion
 
         // region Integrated Assembly Matrix

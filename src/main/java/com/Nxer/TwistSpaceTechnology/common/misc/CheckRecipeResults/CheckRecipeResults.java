@@ -81,4 +81,10 @@ public final class CheckRecipeResults {
     public static final CheckRecipeResult ExecutionProtocolInputMismatch = SimpleResultWithText
         .ofFailure("tst.ecosphere.machine.EcoSphereSimulator.result.execution_protocol_input_mismatch");
 
+    // #tr tst.common.no_lightning_rods
+    // # No Lightning Rods
+    // #zh_CN 没有避雷针
+    public static final CheckRecipeResult NoLightningRods = SimpleResultWithText
+        .ofFailure("tst.common.no_lightning_rods");
+
 }
