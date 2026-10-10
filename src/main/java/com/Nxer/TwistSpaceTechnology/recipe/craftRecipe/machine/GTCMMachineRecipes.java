@@ -810,7 +810,7 @@ public class GTCMMachineRecipes {
             .itemOutputs(getModItem("gregtech", "gt.blockcasings2", 1, 8))
 
 
-            .eut(RECIPE_UV)
+            .eut(RECIPE_ZPM)
             .duration(20 * 30)
             .addTo(assembler);
 

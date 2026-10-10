@@ -31,7 +31,7 @@ public class DTPFRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(ItemList.NaquadriaSupersolid.get(1))
             .fluidInputs(
-                Materials.Neutronium.getPlasma(144 * 8),
+                Materials.DarkIron.getMolten(144 * 64),
                 GGMaterial.extremelyUnstableNaquadah.getMolten(144 * 12),
                 MaterialPool.ConcentratedUUMatter.getFluidOrGas(1),
 
@@ -47,7 +47,7 @@ public class DTPFRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(ItemList.NaquadriaSupersolid.get(2))
             .fluidInputs(
-                Materials.Neutronium.getPlasma(144 * 8 * 2),
+                Materials.DarkIron.getMolten(144 * 64 * 2),
                 GGMaterial.extremelyUnstableNaquadah.getMolten(144 * 12 * 2),
                 MaterialPool.ConcentratedUUMatter.getFluidOrGas(10),
 
@@ -63,7 +63,7 @@ public class DTPFRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(ItemList.NaquadriaSupersolid.get(3))
             .fluidInputs(
-                Materials.Neutronium.getPlasma(144 * 8 * 2 * 3),
+                Materials.DarkIron.getMolten(144 * 64 * 2 * 3),
                 GGMaterial.extremelyUnstableNaquadah.getMolten(144 * 12 * 2 * 3),
                 MaterialPool.ConcentratedUUMatter.getFluidOrGas(100),
 
@@ -79,7 +79,7 @@ public class DTPFRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(ItemList.NaquadriaSupersolid.get(4))
             .fluidInputs(
-                Materials.Neutronium.getPlasma(144 * 8 * 2 * 3 * 4),
+                Materials.DarkIron.getMolten(144 * 64 * 2 * 3 * 4),
                 GGMaterial.extremelyUnstableNaquadah.getMolten(144 * 12 * 2 * 3 * 4),
                 MaterialPool.ConcentratedUUMatter.getFluidOrGas(1000),
 

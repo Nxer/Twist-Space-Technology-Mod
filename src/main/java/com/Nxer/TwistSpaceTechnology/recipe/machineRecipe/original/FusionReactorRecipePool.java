@@ -5,8 +5,12 @@ import static gregtech.api.recipe.RecipeMaps.fusionRecipes;
 
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
+
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.TierEU;
+import gregtech.api.recipe.RecipeMaps;
 import gtPlusPlus.core.material.MaterialsElements;
 
 public class FusionReactorRecipePool {
@@ -45,13 +49,13 @@ public class FusionReactorRecipePool {
 
         // AxonisAlloy + Protomatter = Axonium
 
-        // GTValues.RA.stdBuilder()
-        // .fluidInputs(MaterialsTST.AxonisAlloy.getMolten(144), Materials.Protomatter.getFluid(1000))
-        // .fluidOutputs(MaterialsTST.Axonium.getMolten(144))
-        // .eut(TierEU.RECIPE_UEV)
-        // .duration(20 * 20)
-        // .specialValue(2_000_000_000)
-        // .addTo(RecipeMaps.fusionRecipes);
+        GTValues.RA.stdBuilder()
+            .fluidInputs(MaterialsTST.AxonisAlloy.getMolten(144), Materials.Protomatter.getFluid(1000))
+            .fluidOutputs(MaterialsTST.Axonium.getMolten(144))
+            .eut(TierEU.RECIPE_UEV)
+            .duration(20 * 20)
+            .specialValue(2_000_000_000)
+            .addTo(RecipeMaps.fusionRecipes);
 
         // Californium + Calcium = Dubnium
 
