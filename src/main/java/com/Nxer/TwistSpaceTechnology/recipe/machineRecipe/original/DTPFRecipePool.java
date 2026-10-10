@@ -8,6 +8,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 
 import goodgenerator.items.GGMaterial;
@@ -33,10 +34,12 @@ public class DTPFRecipePool {
             .fluidInputs(
                 Materials.DarkIron.getMolten(144 * 64),
                 GGMaterial.extremelyUnstableNaquadah.getMolten(144 * 12),
-                MaterialPool.ConcentratedUUMatter.getFluidOrGas(1),
+                MaterialsTST.Dubnium.getPlasma(144 * 8),
 
+                MaterialPool.ConcentratedUUMatter.getFluidOrGas(1),
                 Materials.Space.getMolten(144),
                 Materials.DimensionallyShiftedSuperfluid.getFluid(500),
+
                 Materials.ExcitedDTPC.getFluid(1000))
             .fluidOutputs(MaterialPool.EntropicFlux.getFluidOrGas(500), Materials.DTR.getFluid(250))
             .specialValue(10800)
@@ -49,10 +52,12 @@ public class DTPFRecipePool {
             .fluidInputs(
                 Materials.DarkIron.getMolten(144 * 64 * 2),
                 GGMaterial.extremelyUnstableNaquadah.getMolten(144 * 12 * 2),
-                MaterialPool.ConcentratedUUMatter.getFluidOrGas(10),
+                MaterialsTST.Dubnium.getPlasma(144 * 16),
 
+                MaterialPool.ConcentratedUUMatter.getFluidOrGas(10),
                 Materials.Space.getMolten(144 * 2),
                 Materials.DimensionallyShiftedSuperfluid.getFluid(500 * 2),
+
                 Materials.ExcitedDTRC.getFluid(2000))
             .fluidOutputs(MaterialPool.EntropicFlux.getFluidOrGas(500 * 4), Materials.DTR.getFluid(1000))
             .specialValue(11700)
@@ -65,10 +70,12 @@ public class DTPFRecipePool {
             .fluidInputs(
                 Materials.DarkIron.getMolten(144 * 64 * 2 * 3),
                 GGMaterial.extremelyUnstableNaquadah.getMolten(144 * 12 * 2 * 3),
-                MaterialPool.ConcentratedUUMatter.getFluidOrGas(100),
+                MaterialsTST.Dubnium.getPlasma(144 * 32),
 
+                MaterialPool.ConcentratedUUMatter.getFluidOrGas(100),
                 Materials.Space.getMolten(144 * 4),
                 Materials.DimensionallyShiftedSuperfluid.getFluid(500 * 4),
+
                 Materials.ExcitedDTEC.getFluid(4000))
             .fluidOutputs(MaterialPool.EntropicFlux.getFluidOrGas(500 * 16), Materials.DTR.getFluid(4000))
             .specialValue(12600)
@@ -81,10 +88,12 @@ public class DTPFRecipePool {
             .fluidInputs(
                 Materials.DarkIron.getMolten(144 * 64 * 2 * 3 * 4),
                 GGMaterial.extremelyUnstableNaquadah.getMolten(144 * 12 * 2 * 3 * 4),
-                MaterialPool.ConcentratedUUMatter.getFluidOrGas(1000),
+                MaterialsTST.Dubnium.getPlasma(144 * 64),
 
+                MaterialPool.ConcentratedUUMatter.getFluidOrGas(1000),
                 Materials.Space.getMolten(144 * 8),
                 Materials.DimensionallyShiftedSuperfluid.getFluid(500 * 8),
+
                 Materials.ExcitedDTSC.getFluid(8000))
             .fluidOutputs(MaterialPool.EntropicFlux.getFluidOrGas(500 * 64), Materials.DTR.getFluid(16000))
             .specialValue(13500)
