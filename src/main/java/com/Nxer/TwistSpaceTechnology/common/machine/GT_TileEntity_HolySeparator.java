@@ -260,7 +260,7 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(RecipeMaps.latheRecipes, RecipeMaps.cutterRecipes);
+        return Arrays.asList(RecipeMaps.latheRecipes, RecipeMaps.cutterFakeRecipes);
     }
 
     @Override
@@ -372,8 +372,8 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.HolySeparator.tooltip.machine_type
-        // # Cutter | Slicer | Lathe
-        // #zh_CN 切割机 | 切片机 | 车床
+        // # Cutter | Lathe
+        // #zh_CN 切割机 | 车床
         tt.addMachineType(TSTUtils.tr("tst.common.machine.HolySeparator.tooltip.machine_type"))
             // #tr tst.common.machine.HolySeparator.tooltip.info.01
             // # Controller block for the Holy Separator

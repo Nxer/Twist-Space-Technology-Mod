@@ -822,7 +822,7 @@ public class Config {
         // endregion
 
         // region Holy Separator
-        Mode_Default_HolySeparator = Byte.parseByte(configuration.getString("Mode_Default_HolySeparator", HolySeparator, String.valueOf(Mode_Default_HolySeparator), "The default mode when deploy a machine. 0=Cutter, 1=Slicer, 2=Lathe. Type: byte"));
+        Mode_Default_HolySeparator = Byte.parseByte(configuration.getString("Mode_Default_HolySeparator", HolySeparator, String.valueOf(Mode_Default_HolySeparator), "The default mode when deploy a machine. 0=Cutter,  1=Lathe. Type: byte"));
         Piece_EnablePerfectOverclock_HolySeparator = configuration.getInt("Piece_EnablePerfectOverclock_HolySeparator", HolySeparator, Piece_EnablePerfectOverclock_HolySeparator, 1, 64, "How many piece to enable perfect overclock. Type: int");
         ParallelPerPiece_HolySeparator = configuration.getInt("ParallelPerPiece_HolySeparator", HolySeparator, ParallelPerPiece_HolySeparator, 1, 255, "How many parallel per tier add. Type: int");
         SpeedBonus_MultiplyPerTier_HolySeparator = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerTier_HolySeparator", HolySeparator, String.valueOf(SpeedBonus_MultiplyPerTier_HolySeparator), "The speed bonus = this ^ tier . Type: float"));
