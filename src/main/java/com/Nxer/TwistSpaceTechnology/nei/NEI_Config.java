@@ -6,7 +6,9 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.Tags;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 
+import codechicken.nei.NEIClientConfig;
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 
@@ -27,6 +29,27 @@ public class NEI_Config implements IConfigureNEI {
         isAdded = true;
 
         hide(TstBlocks.BlockLargeSolarBoilerRender);
+        BottledChaosNEIHandler.register();
+        BottledChaosStructureNEIHandler.register();
+
+        // NEI loads its ordering file before loading plugins; these entries only change the in-memory order.
+        String[] pages = { "blockrenderer6343.integration.gregtech.GTNEIMultiblockHandler",
+            GTCMRecipe.BottledChaosCredentialRecipes.unlocalizedName,
+            GTCMRecipe.BottledChaosStructureRecipes.unlocalizedName,
+            GTCMRecipe.BottledChaosTitaniumCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosTungstenCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosPlatinumCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosLanthanideCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosNaquadahCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosPurifiedWaterCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosKevlarCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosBiologicalCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosRadoxCategory.unlocalizedName, GTCMRecipe.BottledChaosRecipes.unlocalizedName,
+            GTCMRecipe.BottledChaosExpandedRecipes.unlocalizedName,
+            GTCMRecipe.BottledChaosPrismaticCategory.unlocalizedName };
+        for (int index = 0; index < pages.length; index++) {
+            NEIClientConfig.handlerOrdering.put(pages[index], -1000 + index);
+        }
     }
 
     @Override

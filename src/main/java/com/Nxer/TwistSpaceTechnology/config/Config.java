@@ -393,6 +393,8 @@ public class Config {
     // region Recipe
     public static boolean Registry_DragonBlood_ExtraRecipe = true;
     public static boolean Registry_DTPF_ExtraRecipe = false;
+    public static boolean EnableBottledChaosCrystallineAlloyRecipe = false;
+    public static int BottledChaosMaxChainedRecipeBatches = 1024;
 
     // endregion
 
@@ -601,6 +603,8 @@ public class Config {
         // region Recipe
         Registry_DragonBlood_ExtraRecipe = configuration.getBoolean("Registry_DragonBlood_ExtraRecipe", RECIPE, Registry_DragonBlood_ExtraRecipe, "Registry Dragon Blood Extra Recipes.");
         Registry_DTPF_ExtraRecipe = configuration.getBoolean("Registry_DTPF_ExtraRecipe", RECIPE, Registry_DTPF_ExtraRecipe, "Enable Registry of DTPF Extra Recipes about Infinity Hypogen and SpaceTime.");
+        EnableBottledChaosCrystallineAlloyRecipe = configuration.getBoolean("EnableBottledChaosCrystallineAlloyRecipe", RECIPE, EnableBottledChaosCrystallineAlloyRecipe, "Enable the single-step molten crystalline alloy recipes in Bottled Chaos, using oganesson or xenon protective gas. When disabled, the prismatic acid recipe remains on the default NEI page. Requires a restart.");
+        BottledChaosMaxChainedRecipeBatches = configuration.getInt("BottledChaosMaxChainedRecipeBatches", RECIPE, 1024, 1, 10000, "Maximum integer batches of each cached processing stage per external feed batch. Serial batch mode uses a ten-second time budget. Final overclocking stops at two seconds. Unused intermediates remain in the credential hatch cache.");
         // endregion
 
         // region Integrated Assembly Matrix

@@ -32,6 +32,18 @@ public final class BottledChaosOutputBuffer {
     private final List<ItemStackLong> items = new ArrayList<>();
     private final List<FluidStackLong> fluids = new ArrayList<>();
 
+    public List<ItemStackLong> itemOutputs() {
+        return Collections.unmodifiableList(items);
+    }
+
+    public List<FluidStackLong> fluidOutputs() {
+        return Collections.unmodifiableList(fluids);
+    }
+
+    public boolean isEmpty() {
+        return items.isEmpty() && fluids.isEmpty();
+    }
+
     public void clear() {
         items.clear();
         fluids.clear();
@@ -45,6 +57,35 @@ public final class BottledChaosOutputBuffer {
         for (FluidStackLong output : fluidOutputs) {
             fluids.add(new FluidStackLong(GTUtility.copyAmount(1, output.fluidStack()), output.amount()));
         }
+    }
+
+    public NBTTagCompound getWailaSummary() {
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setInteger("total", items.size() + fluids.size());
+        NBTTagList outputs = new NBTTagList();
+        int itemCount = Math.min(10, items.size());
+        for (int i = 0; i < itemCount; i++) {
+            ItemStackLong output = items.get(i);
+            NBTTagCompound entry = new NBTTagCompound();
+            entry.setTag(
+                "item",
+                output.itemStack()
+                    .writeToNBT(new NBTTagCompound()));
+            entry.setLong("amount", output.stackSize());
+            outputs.appendTag(entry);
+        }
+        for (int i = 0; i < Math.min(10 - itemCount, fluids.size()); i++) {
+            FluidStackLong output = fluids.get(i);
+            NBTTagCompound entry = new NBTTagCompound();
+            entry.setTag(
+                "fluid",
+                output.fluidStack()
+                    .writeToNBT(new NBTTagCompound()));
+            entry.setLong("amount", output.amount());
+            outputs.appendTag(entry);
+        }
+        tag.setTag("entries", outputs);
+        return tag;
     }
 
     public NBTTagCompound save() {
@@ -101,8 +142,13 @@ public final class BottledChaosOutputBuffer {
         private final boolean protectFluids;
 
         public Transaction(IVoidable machine, boolean recipeCheck) {
-            protectItems = machine.protectsExcessItem();
-            protectFluids = machine.protectsExcessFluid();
+            this(machine, recipeCheck, false);
+        }
+
+        /** Cache exports always protect paid materials, independently of the controller's voiding mode. */
+        public Transaction(IVoidable machine, boolean recipeCheck, boolean forceProtect) {
+            protectItems = forceProtect || machine.protectsExcessItem();
+            protectFluids = forceProtect || machine.protectsExcessFluid();
             List<IOutputBus> buses = new ArrayList<>();
             for (IOutputBus bus : machine.getOutputBusses()) {
                 if (bus instanceof MTEHatchOutputBusME me) {

@@ -830,7 +830,7 @@ public final class MachineLoader {
                     19085,
                     "NameBottledChaosRecipeTokenHatch",
                     TSTUtils.tr("tst.modular.machine.BottledChaosRecipeTokenHatch.name"),
-                    14));
+                    7));
         }
 
         // endregion

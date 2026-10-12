@@ -1,5 +1,35 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.AceticAcid;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.AmmoniaGas;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.AmmoniumNitrateDust;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.AmmoniumNitrateSolution;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.BoricAcid;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.CalciumFluorideFluid;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.DilutedHydrochloricAcid;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.DilutedSulfuricAcid;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.FermentationBase;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.FormicAcid;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.HexafluorosilicicAcid;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.HydrochloricAcid;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.HydrofluoricAcid;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.LiquidNitrogen;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.MagnesiumChlorideDust;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.NaphthenicAcid;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.NitricAcid;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.Nitrobenzene;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.NitrogenDioxideGas;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.NitrogenMonoxideGas;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.OxalicAcid;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.PhosphoricAcid;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.PhthalicAcid;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.PotassiumNitrateDust;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.SodiumChlorideDust;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.SodiumNitrateDust;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.SulfurDioxideGas;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.SulfurTrioxideGas;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.SulfuricAcid;
+
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerRecipeCache;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBlastFurnace;
@@ -20,6 +50,23 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.AssemblyLineW
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BOTRecipe.BOTRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BOTRecipe.RuneEngraverRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BloodyHellRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosAdvancedMaterialRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosBiologicalRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosExoticMatterRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosFakeRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosIndiumRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosKevlarRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosLanthanideRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosNaquadahRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosNetheriteRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosPlatinumRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosPrismaticRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosPurifiedWaterRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRadoxRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosStructureRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosTitaniumRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosTungstenRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CircuitAssemblyLineWithoutImprintRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CokingFactoryRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CrystalEssentiaRecipePool;
@@ -156,6 +203,63 @@ public class RecipeLoader {
         }
 
         CropsMutationRecipes.loadRecipes();
+
+        BottledChaosRecipeProcessor.initializeRecipeCache(catalog -> {
+            BottledChaosTitaniumRecipes.registerRecipeChains(catalog);
+            BottledChaosTungstenRecipes.registerRecipeChains(catalog);
+            BottledChaosIndiumRecipes.registerRecipeChains(catalog);
+            BottledChaosPlatinumRecipes.registerRecipeChains(catalog);
+            BottledChaosNetheriteRecipes.registerRecipeChains(catalog);
+            BottledChaosPrismaticRecipes.registerRecipeChains(catalog);
+            BottledChaosLanthanideRecipes.registerRecipeChains(catalog);
+            BottledChaosNaquadahRecipes.registerRecipeChains(catalog);
+            BottledChaosBiologicalRecipes.registerRecipeChains(catalog);
+            BottledChaosRadoxRecipes.registerRecipeChains(catalog);
+            BottledChaosKevlarRecipes.registerRecipeChains(catalog);
+            BottledChaosPurifiedWaterRecipes.registerRecipeChains(catalog);
+            BottledChaosExoticMatterRecipes.registerRecipeChains(catalog);
+            BottledChaosAdvancedMaterialRecipes.registerRecipeChains(catalog);
+            BottledChaosIndiumRecipes.registerCombRecipeChain(catalog);
+            BottledChaosPlatinumRecipes.registerCombRecipeChains(catalog);
+            catalog.registerDeferredReagents(AmmoniaGas);
+            catalog.registerInputSyntheses(
+                Nitrobenzene,
+                LiquidNitrogen,
+                SodiumNitrateDust,
+                AmmoniumNitrateDust,
+                AmmoniumNitrateSolution,
+                AmmoniaGas,
+                OxalicAcid,
+                HexafluorosilicicAcid,
+                AceticAcid,
+                BoricAcid,
+                FormicAcid,
+                FermentationBase);
+            catalog.registerOutputDecompositions(
+                MagnesiumChlorideDust,
+                AmmoniaGas,
+                NitrogenMonoxideGas,
+                NitrogenDioxideGas,
+                SulfurDioxideGas,
+                SulfurTrioxideGas,
+                CalciumFluorideFluid);
+            // Apply reagent boundaries last so every family retains these inputs and recovered acids can cancel.
+            catalog.registerExternalReagents(
+                NitricAcid,
+                HydrofluoricAcid,
+                HydrochloricAcid,
+                SulfuricAcid,
+                PhosphoricAcid,
+                PhthalicAcid,
+                NaphthenicAcid,
+                DilutedSulfuricAcid,
+                DilutedHydrochloricAcid,
+                SodiumChlorideDust,
+                PotassiumNitrateDust);
+        });
+        BottledChaosFakeRecipes.registerRecipes();
+        BottledChaosFakeRecipes.registerCredentialRecipes();
+        BottledChaosStructureRecipes.registerRecipes();
 
     }
 

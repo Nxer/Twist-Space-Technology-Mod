@@ -340,6 +340,16 @@ public class BlockRegister {
         // #zh_CN 低温冷却机械方块
         GTCMItemList.CryogenicCoolingCasing.set(MetaBlockCasing02.registerVariant(7));
 
+        // #tr tile.tst.common.MetaBlockCasing02.8.name
+        // # Neutronium Load-Bearing Casing
+        // #zh_CN 中子承载机械方块
+        GTCMItemList.NeutroniumSupportCasing.set(MetaBlockCasing02.registerVariant(8));
+
+        // #tr tile.tst.common.MetaBlockCasing02.9.name
+        // # Energy Conduction Glass
+        // #zh_CN 能量传导玻璃
+        GTCMItemList.EnergyFluxContainmentGlass.set(MetaBlockCasing02.registerGlassVariant(9));
+
         // region SpaceTimeOscillator
 
         // #tr tile.tst.common.space_time_oscillator.0.name

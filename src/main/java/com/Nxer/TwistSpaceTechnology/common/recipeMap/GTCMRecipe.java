@@ -11,10 +11,15 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosStructureDisplay;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.ArtificialStar_SpecialValueFormatter;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.DSP_Receiver_SpecialValueFormatter;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_AquaticZoneSimulatorFronted;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_ArtificialGreenHouseFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_BottledChaosCredentialFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_BottledChaosExpandedFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_BottledChaosFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_BottledChaosStructureFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_DirectedMobClonerFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_IndustrialMagicMatrixFrontend;
@@ -25,6 +30,7 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_Ste
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StrangeMatterAggregatorFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_SuperWaterPurifierFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_TreeGrowthSimulatorFrontend;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor;
 import com.gtnewhorizons.modularui.api.drawable.UITexture;
 
 import goodgenerator.client.GUI.GGUITextures;
@@ -302,10 +308,176 @@ public class GTCMRecipe {
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MassFabricatorGenesis.get(1)))
         .build();
 
+    // #tr tst.common.recipe.BottledChaosRecipes.name
+    // # Bottled Chaos
+    // #zh_CN 瓶中混沌
     public static final RecipeMap<TST_RecipeMapBackend> BottledChaosRecipes = RecipeMapBuilder
-        .of("tst.recipe.BottledChaosRecipes", TST_RecipeMapBackend::new)
-        .maxIO(64, 64, 64, 64)
+        .of("tst.common.recipe.BottledChaosRecipes.name", TST_RecipeMapBackend::new)
+        .maxIO(16, 16, 16, 16)
         .disableRegisterNEI()
+        .frontend(TST_BottledChaosFrontend::new)
+        .useSpecialSlot()
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .neiHandlerInfo(builder -> {
+            int maxMaps = BottledChaosRecipeProcessor.createDisplayRecipes()
+                .stream()
+                .mapToInt(
+                    display -> display.processingTimes()
+                        .size())
+                .max()
+                .orElse(12);
+            return builder.setDisplayStack(GTCMItemList.BottledChaos.get(1))
+                .setHeight(200 + 10 * maxMaps)
+                .setMultipleWidgetsAllowed(true);
+        })
+        .build();
+
+    // #tr tst.common.recipe.BottledChaosExpandedRecipes.name
+    // # Bottled Chaos - Extended Recipes
+    // #zh_CN 瓶中混沌 - 扩展配方
+    public static final RecipeMap<TST_RecipeMapBackend> BottledChaosExpandedRecipes = RecipeMapBuilder
+        .of("tst.common.recipe.BottledChaosExpandedRecipes.name", TST_RecipeMapBackend::new)
+        .maxIO(72, 16, 16, 16)
+        .disableRegisterNEI()
+        .frontend(TST_BottledChaosExpandedFrontend::new)
+        .useSpecialSlot()
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .neiHandlerInfo(builder -> {
+            int maxMaps = BottledChaosRecipeProcessor.createDisplayRecipes()
+                .stream()
+                .mapToInt(
+                    display -> display.processingTimes()
+                        .size())
+                .max()
+                .orElse(12);
+            return builder.setDisplayStack(GTCMItemList.BottledChaos.get(1))
+                .setHeight(340 + 10 * maxMaps)
+                .setMultipleWidgetsAllowed(true);
+        })
+        .build();
+
+    // #tr tst.common.recipe.BottledChaosPurifiedWaterCategory.name
+    // # Bottled Chaos - Water Purification
+    // #zh_CN 瓶中混沌 - 净化水
+    public static final RecipeCategory BottledChaosPurifiedWaterCategory = new RecipeCategory(
+        "tst.common.recipe.BottledChaosPurifiedWaterCategory.name",
+        BottledChaosRecipes,
+        RecipeCategorySetting::getDefault,
+        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+
+    // #tr tst.common.recipe.BottledChaosTitaniumCategory.name
+    // # Bottled Chaos - Titanium
+    // #zh_CN 瓶中混沌 - 钛
+    public static final RecipeCategory BottledChaosTitaniumCategory = new RecipeCategory(
+        "tst.common.recipe.BottledChaosTitaniumCategory.name",
+        BottledChaosRecipes,
+        RecipeCategorySetting::getDefault,
+        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+
+    // #tr tst.common.recipe.BottledChaosTungstenCategory.name
+    // # Bottled Chaos - Tungsten
+    // #zh_CN 瓶中混沌 - 钨
+    public static final RecipeCategory BottledChaosTungstenCategory = new RecipeCategory(
+        "tst.common.recipe.BottledChaosTungstenCategory.name",
+        BottledChaosRecipes,
+        RecipeCategorySetting::getDefault,
+        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+
+    // #tr tst.common.recipe.BottledChaosPlatinumCategory.name
+    // # Bottled Chaos - Platinum Group
+    // #zh_CN 瓶中混沌 - 铂系
+    public static final RecipeCategory BottledChaosPlatinumCategory = new RecipeCategory(
+        "tst.common.recipe.BottledChaosPlatinumCategory.name",
+        BottledChaosRecipes,
+        RecipeCategorySetting::getDefault,
+        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+
+    // #tr tst.common.recipe.BottledChaosLanthanideCategory.name
+    // # Bottled Chaos - Lanthanides
+    // #zh_CN 瓶中混沌 - 镧系
+    public static final RecipeCategory BottledChaosLanthanideCategory = new RecipeCategory(
+        "tst.common.recipe.BottledChaosLanthanideCategory.name",
+        BottledChaosRecipes,
+        RecipeCategorySetting::getDefault,
+        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+
+    // #tr tst.common.recipe.BottledChaosNaquadahCategory.name
+    // # Bottled Chaos - Naquadah Processing
+    // #zh_CN 瓶中混沌 - 硅岩处理
+    public static final RecipeCategory BottledChaosNaquadahCategory = new RecipeCategory(
+        "tst.common.recipe.BottledChaosNaquadahCategory.name",
+        BottledChaosRecipes,
+        RecipeCategorySetting::getDefault,
+        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+
+    // #tr tst.common.recipe.BottledChaosPrismaticCategory.name
+    // # Bottled Chaos - Prismatic
+    // #zh_CN 瓶中混沌 - 海晶线
+    public static final RecipeCategory BottledChaosPrismaticCategory = new RecipeCategory(
+        "tst.common.recipe.BottledChaosPrismaticCategory.name",
+        BottledChaosRecipes,
+        RecipeCategorySetting::getDefault,
+        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+
+    // #tr tst.common.recipe.BottledChaosRadoxCategory.name
+    // # Bottled Chaos - Radox
+    // #zh_CN 瓶中混沌 - 拉多X
+    public static final RecipeCategory BottledChaosRadoxCategory = new RecipeCategory(
+        "tst.common.recipe.BottledChaosRadoxCategory.name",
+        BottledChaosRecipes,
+        RecipeCategorySetting::getDefault,
+        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+
+    // #tr tst.common.recipe.BottledChaosKevlarCategory.name
+    // # Bottled Chaos - Kevlar
+    // #zh_CN 瓶中混沌 - 凯芙拉
+    public static final RecipeCategory BottledChaosKevlarCategory = new RecipeCategory(
+        "tst.common.recipe.BottledChaosKevlarCategory.name",
+        BottledChaosRecipes,
+        RecipeCategorySetting::getDefault,
+        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+
+    // #tr tst.common.recipe.BottledChaosBiologicalCategory.name
+    // # Bottled Chaos - Biological Processing
+    // #zh_CN 瓶中混沌 - 生物线
+    public static final RecipeCategory BottledChaosBiologicalCategory = new RecipeCategory(
+        "tst.common.recipe.BottledChaosBiologicalCategory.name",
+        BottledChaosRecipes,
+        RecipeCategorySetting::getDefault,
+        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+
+    // #tr tst.common.recipe.BottledChaosCredentialRecipes.name
+    // # Bottled Chaos - Credential Injection
+    // #zh_CN 瓶中混沌 - 凭证注入
+    public static final RecipeMap<TST_RecipeMapBackend> BottledChaosCredentialRecipes = RecipeMapBuilder
+        .of("tst.common.recipe.BottledChaosCredentialRecipes.name", TST_RecipeMapBackend::new)
+        .maxIO(9, 2, 0, 0)
+        .frontend(TST_BottledChaosCredentialFrontend::new)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .neiRecipeComparator((r1, r2) -> 0)
+        .neiHandlerInfo(
+            builder -> builder.setDisplayStack(GTCMItemList.BottledChaos.get(1))
+                .setHeight(64)
+                .setMultipleWidgetsAllowed(true))
+        .build();
+
+    // #tr tst.common.recipe.BottledChaosStructureRecipes.name
+    // # Bottled Chaos - Machine Structure Packaging
+    // #zh_CN 瓶中混沌 - 机器结构封装
+    public static final RecipeMap<TST_RecipeMapBackend> BottledChaosStructureRecipes = RecipeMapBuilder
+        .of("tst.common.recipe.BottledChaosStructureRecipes.name", TST_RecipeMapBackend::new)
+        .maxIO(TST_BottledChaosStructureFrontend.INPUT_SLOTS, 2, 0, 0)
+        .disableRegisterNEI()
+        .frontend(TST_BottledChaosStructureFrontend::new)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .neiRecipeComparator(Comparator.comparingInt(recipe -> {
+            var display = recipe.getMetadata(BottledChaosStructureDisplay.DISPLAY);
+            return display == null ? Integer.MAX_VALUE : display.poolOrder();
+        }))
+        .neiHandlerInfo(
+            builder -> builder.setDisplayStack(GTCMItemList.BottledChaos.get(1))
+                .setHeight(TST_BottledChaosStructureFrontend.PAGE_HEIGHT)
+                .setMultipleWidgetsAllowed(true))
         .build();
 
     // #tr tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.name

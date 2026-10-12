@@ -1,8 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos;
 
 import java.math.BigInteger;
+import java.util.stream.IntStream;
 
-/** Pure, deterministic scheduling in structure-slot order; idle credentials retain their share. */
+/** Round-by-round allocation in hatch-number order; enabled credentials retain their share. */
 public final class BottledChaosPowerAllocator {
 
     private BottledChaosPowerAllocator() {}
@@ -31,11 +32,44 @@ public final class BottledChaosPowerAllocator {
         return shares;
     }
 
+    public static int[] priorityOrder(int count) {
+        return IntStream.range(0, count)
+            .toArray();
+    }
+
     public static long powerForShare(long power, long share, long totalCapacity) {
         if (power <= 0 || share <= 0 || totalCapacity <= 0 || share > totalCapacity) return 0;
-        return BigInteger.valueOf(power)
-            .multiply(BigInteger.valueOf(share))
-            .divide(BigInteger.valueOf(totalCapacity))
-            .longValueExact();
+        // Splitting before multiplication keeps the ordinary <=1024 capacity path entirely in long arithmetic.
+        try {
+            return power / totalCapacity * share + Math.multiplyExact(power % totalCapacity, share) / totalCapacity;
+        } catch (ArithmeticException exception) {
+            return BigInteger.valueOf(power)
+                .multiply(BigInteger.valueOf(share))
+                .divide(BigInteger.valueOf(totalCapacity))
+                .longValueExact();
+        }
+    }
+
+    /** Shares power by actual credential cost; lower hatch numbers receive indivisible EU/t remainders first. */
+    public static long[] concentratedBudgets(long power, long[] capacities) {
+        long total = 0;
+        for (long capacity : capacities) {
+            if (capacity < 0) throw new IllegalArgumentException("Negative capacity");
+            total = Math.addExact(total, capacity);
+        }
+        long[] budgets = new long[capacities.length];
+        if (power <= 0 || total == 0) return budgets;
+        long remaining = power;
+        for (int i = 0; i < capacities.length; i++) {
+            budgets[i] = powerForShare(power, capacities[i], total);
+            remaining -= budgets[i];
+        }
+        for (int slot = 0; slot < capacities.length; slot++) {
+            if (remaining == 0) break;
+            if (capacities[slot] == 0) continue;
+            budgets[slot]++;
+            remaining--;
+        }
+        return budgets;
     }
 }

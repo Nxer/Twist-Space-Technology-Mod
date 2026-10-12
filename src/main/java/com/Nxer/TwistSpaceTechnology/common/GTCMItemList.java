@@ -185,6 +185,12 @@ public enum GTCMItemList {
     EcoSphereUpgrade5,
     EcoSphereUpgrade6,
     EcoSphereUpgrade7,
+    BottledChaosCredentialFrame1,
+    BottledChaosCredentialFrame2,
+    BottledChaosCredentialFrame3,
+    BottledChaosCredentialFrame4,
+    BottledChaosCredentialFrame5,
+    BottledChaosMachineModule,
 
     LvFlask,
     MvFlask,
@@ -246,6 +252,8 @@ public enum GTCMItemList {
     MechanicallyEnhancedObsidian,
     EnvironmentalIsolationCasing,
     CryogenicCoolingCasing,
+    NeutroniumSupportCasing,
+    EnergyFluxContainmentGlass,
     Laser_Beacon,
     // endregion
 
