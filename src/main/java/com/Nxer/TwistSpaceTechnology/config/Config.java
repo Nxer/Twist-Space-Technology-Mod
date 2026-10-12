@@ -423,7 +423,12 @@ public class Config {
 
     public static boolean activateCombatStats = false;
     public static boolean Enable_LargeCanner = true;
+
+    // region Lightning Spire
     public static boolean Enable_LightningSpire = true;
+    public static boolean MoreSafetyPowerGeneration_LightningSpire = false;
+
+    // endregion
 
     // region IndustrialMagicMatrix
     public static boolean Enable_IndustrialMagicMatrix = true;
@@ -605,6 +610,11 @@ public class Config {
         Registry_DTPF_ExtraRecipe = configuration.getBoolean("Registry_DTPF_ExtraRecipe", RECIPE, Registry_DTPF_ExtraRecipe, "Enable Registry of DTPF Extra Recipes about Infinity Hypogen and SpaceTime.");
         EnableBottledChaosCrystallineAlloyRecipe = configuration.getBoolean("EnableBottledChaosCrystallineAlloyRecipe", RECIPE, EnableBottledChaosCrystallineAlloyRecipe, "Enable the single-step molten crystalline alloy recipes in Bottled Chaos, using oganesson or xenon protective gas. When disabled, the prismatic acid recipe remains on the default NEI page. Requires a restart.");
         BottledChaosMaxChainedRecipeBatches = configuration.getInt("BottledChaosMaxChainedRecipeBatches", RECIPE, 1024, 1, 10000, "Maximum integer batches of each cached processing stage per external feed batch. Serial batch mode uses a ten-second time budget. Final overclocking stops at two seconds. Unused intermediates remain in the credential hatch cache.");
+        // endregion
+
+        // region Lightning Spire
+        Enable_LightningSpire = configuration.getBoolean("Enable_LightningSpire", "Lightning Spire", Enable_LightningSpire, "Enable Lightning Spire.");
+        MoreSafetyPowerGeneration_LightningSpire = configuration.getBoolean("MoreSafetyPowerGeneration_LightningSpire", "Lightning Spire", MoreSafetyPowerGeneration_LightningSpire, "If true, the Lightning Spire will generate the power after a progressing complete, instead generating power instantly. This'll make the power generating more in line with expectations.");
         // endregion
 
         // region Integrated Assembly Matrix
@@ -816,7 +826,7 @@ public class Config {
         // endregion
 
         // region Holy Separator
-        Mode_Default_HolySeparator = Byte.parseByte(configuration.getString("Mode_Default_HolySeparator", HolySeparator, String.valueOf(Mode_Default_HolySeparator), "The default mode when deploy a machine. 0=Cutter, 1=Slicer, 2=Lathe. Type: byte"));
+        Mode_Default_HolySeparator = Byte.parseByte(configuration.getString("Mode_Default_HolySeparator", HolySeparator, String.valueOf(Mode_Default_HolySeparator), "The default mode when deploy a machine. 0=Cutter,  1=Lathe. Type: byte"));
         Piece_EnablePerfectOverclock_HolySeparator = configuration.getInt("Piece_EnablePerfectOverclock_HolySeparator", HolySeparator, Piece_EnablePerfectOverclock_HolySeparator, 1, 64, "How many piece to enable perfect overclock. Type: int");
         ParallelPerPiece_HolySeparator = configuration.getInt("ParallelPerPiece_HolySeparator", HolySeparator, ParallelPerPiece_HolySeparator, 1, 255, "How many parallel per tier add. Type: int");
         SpeedBonus_MultiplyPerTier_HolySeparator = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerTier_HolySeparator", HolySeparator, String.valueOf(SpeedBonus_MultiplyPerTier_HolySeparator), "The speed bonus = this ^ tier . Type: float"));

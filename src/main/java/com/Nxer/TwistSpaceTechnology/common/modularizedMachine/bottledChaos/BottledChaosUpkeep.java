@@ -68,9 +68,8 @@ public final class BottledChaosUpkeep {
         IdentityHashMap<FluidStack, Boolean> seen = new IdentityHashMap<>();
         for (FluidStack input : inputs) {
             if (input == null || input.amount <= 0 || seen.put(input, Boolean.TRUE) != null) continue;
-            amounts.computeIfPresent(
-                fluidId(input),
-                (key, amount) -> amount.subtract(BigInteger.valueOf(input.amount)));
+            amounts
+                .computeIfPresent(fluidId(input), (key, amount) -> amount.subtract(BigInteger.valueOf(input.amount)));
         }
         return amounts.values()
             .stream()
@@ -190,13 +189,12 @@ public final class BottledChaosUpkeep {
             NBTTagCompound tag = list.getCompoundTagAt(i);
             FluidStack fluid = FluidStack.loadFluidStackFromNBT(tag);
             byte[] rate = tag.getByteArray("rate");
-            if (fluid != null && rate.length > 0)
-                demands.add(
-                    new Demand(
-                        tag.getString("pool"),
-                        fluid,
-                        new BigInteger(1, rate),
-                        tag.getInteger("startupReserveSeconds")));
+            if (fluid != null && rate.length > 0) demands.add(
+                new Demand(
+                    tag.getString("pool"),
+                    fluid,
+                    new BigInteger(1, rate),
+                    tag.getInteger("startupReserveSeconds")));
         }
         return Collections.unmodifiableList(demands);
     }

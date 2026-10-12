@@ -123,7 +123,8 @@ final class BottledChaosRecipeSupport {
             recipe.getMetadataOrDefault(CentrifugeRecipeKey.INSTANCE, false),
             special == null ? null : recipeItemId(special.copy()),
             map == TecTechRecipeMaps.godforgePlasmaRecipes
-                ? recipe.getMetadataOrDefault(GTRecipeConstants.FOG_PLASMA_TIER, 0) : 0,
+                ? recipe.getMetadataOrDefault(GTRecipeConstants.FOG_PLASMA_TIER, 0)
+                : 0,
             map == TecTechRecipeMaps.godforgePlasmaRecipes
                 && recipe.getMetadataOrDefault(GTRecipeConstants.FOG_PLASMA_MULTISTEP, false));
     }

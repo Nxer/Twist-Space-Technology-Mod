@@ -54,17 +54,16 @@ public abstract class MixinContainerPatternTermEncode {
         }
         // FMLLog.info("[TST Mixin] encode() RETURN reached");
         ItemStack out = this.patternSlotOUT.getStack();
-        /*
-         * if (out == null) {
-         * FMLLog.info("[TST Mixin] patternSlotOUT stack is null");
-         * return;
-         * }
-         * if (!out.hasTagCompound()) {
-         * FMLLog.info("[TST Mixin] patternSlotOUT stack has no NBT tag");
-         * return;
-         * }
-         * FMLLog.info("[TST Mixin] pattern NBT: %s", out.getTagCompound().toString());
-         */
+
+        if (out == null) {
+            // FMLLog.info("[TST Mixin] patternSlotOUT stack is null");
+            return;
+        }
+        if (!out.hasTagCompound()) {
+            // FMLLog.info("[TST Mixin] patternSlotOUT stack has no NBT tag");
+            return;
+        }
+        // FMLLog.info("[TST Mixin] pattern NBT: %s", out.getTagCompound().toString());
 
         if (ItemEssentiaHelper.convertPatternNBT(out.getTagCompound(), convertAmpoule, convertCrystal)) {
             // FMLLog.info("[TST Mixin] Converted glass ampoules on encode() RETURN");

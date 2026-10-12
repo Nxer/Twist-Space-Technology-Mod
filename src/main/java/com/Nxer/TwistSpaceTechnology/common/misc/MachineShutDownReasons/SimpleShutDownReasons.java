@@ -5,25 +5,25 @@ import gregtech.api.util.shutdown.SimpleShutDownReason;
 
 public final class SimpleShutDownReasons {
 
-    // #tr GT5U.gui.text.recipe_result.SimpleShutDownReasons.NoSpaceTimeMaintenanceFluidInput
+    // #tr GT5U.gui.text.shutdown_reason.SimpleShutDownReasons.NoSpaceTimeMaintenanceFluidInput
     // # No Space Time Maintenance Fluid Input
     // #zh_CN 没有时空维护流体输入
     public static final ShutDownReason NoSpaceTimeMaintenanceFluidInput = SimpleShutDownReason
         .ofCritical("SimpleShutDownReasons.NoSpaceTimeMaintenanceFluidInput");
 
-    // #tr GT5U.gui.text.recipe_result.SimpleShutDownReasons.NoCorrectFluidInput
+    // #tr GT5U.gui.text.shutdown_reason.SimpleShutDownReasons.NoCorrectFluidInput
     // # No Correct Fluid Input
     // #zh_CN 没有正确的流体输入
     public static final ShutDownReason NoCorrectFluidInput = SimpleShutDownReason
         .ofCritical("SimpleShutDownReasons.NoCorrectFluidInput");
 
-    // #tr GT5U.gui.text.recipe_result.SimpleShutDownReasons.NoEnoughCriticalPhotonInput
+    // #tr GT5U.gui.text.shutdown_reason.SimpleShutDownReasons.NoEnoughCriticalPhotonInput
     // # No Enough Critical Photon Input
     // #zh_CN 没有足够临界光子输入
     public static final ShutDownReason NoCriticalPhotonInput = SimpleShutDownReason
         .ofCritical("SimpleShutDownReasons.NoEnoughCriticalPhotonInput");
 
-    // #tr GT5U.gui.text.recipe_result.SimpleShutDownReasons.NoAnnihilationConstrainerInput
+    // #tr GT5U.gui.text.shutdown_reason.SimpleShutDownReasons.NoAnnihilationConstrainerInput
     // # No Annihilation Constrainer Input
     // #zh_CN 没有湮灭约束器输入
     public static final ShutDownReason NoAnnihilationConstrainerInput = SimpleShutDownReason

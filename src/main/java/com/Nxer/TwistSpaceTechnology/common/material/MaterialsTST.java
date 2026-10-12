@@ -37,7 +37,7 @@ public class MaterialsTST implements IMaterialHandler {
         NeutroniumAlloy = withMetaItemSubID(
             new MaterialBuilder().setName("NeutroniumAlloy")
                 .setDefaultLocalName("Neutronium Alloy")
-                .setChemicalFormula("Nt₇Du₂Fl҉?")
+                .setChemicalFormula("Nt₈Du₂Fl[Fe/C]")
                 .setIconSet(TextureSet.SET_SHINY)
                 .setColor(Dyes._NULL)
                 .setARGB(0x00D9DCCB)

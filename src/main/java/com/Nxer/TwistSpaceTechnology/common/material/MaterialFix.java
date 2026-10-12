@@ -1,6 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.material;
 
 import static gregtech.api.util.GTRecipeBuilder.TICKS;
+import static gregtech.api.util.GTRecipeConstants.ADDITIVE_AMOUNT;
+import static gregtech.api.util.GTRecipeConstants.BlastFurnaceWithGas;
 import static gregtech.api.util.GTRecipeConstants.COIL_HEAT;
 import static gregtech.api.util.GTRecipeConstants.FOG_PLASMA_MULTISTEP;
 import static gregtech.api.util.GTRecipeConstants.FOG_PLASMA_TIER;
@@ -16,6 +18,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TierEU;
 import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.util.BlastFurnaceGasStat;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.material.MaterialsElements;
@@ -39,18 +42,17 @@ public class MaterialFix {
         // Neutronium Alloy
 
                 addBlastRecipe(MaterialsTST.NeutroniumAlloy, (int) TierEU.RECIPE_UIV, 54 * 20, 12500, true,true);
-                addVacuumFreezerRecipe(MaterialsTST.NeutroniumAlloy,(int)TierEU.RECIPE_UEV,18 * 20);
+                addVacuumFreezerRecipe(MaterialsTST.NeutroniumAlloy,(int)TierEU.RECIPE_UHV,18 * 20);
 
                 GTValues.RA.stdBuilder()
                     .itemInputs(
-                        Materials.Neutronium.getDust(7),
+                        Materials.Neutronium.getDust(8),
                         Materials.Duranium.getDust(2),
                         Materials.Flerovium.getDust(1),
-        //                MaterialsElements.STANDALONE.WHITE_METAL.getDust(1),
-                        Materials.DarkIron.getDust(1),
+                        Materials.Unstable.getDust(1),
                         GTUtility.getIntegratedCircuit(2)
                     )
-                    .fluidInputs(Materials.Hydrogen.getPlasma(1000 * 14))
+                    .fluidInputs(Materials.Hydrogen.getPlasma(1000 * 12))
                     .itemOutputs(MaterialsTST.NeutroniumAlloy.getDust(12))
                     .eut(TierEU.RECIPE_UHV)
                     .duration(12 * 20)
@@ -58,14 +60,13 @@ public class MaterialFix {
 
                 GTValues.RA.stdBuilder()
                     .itemInputs(
-                        GTUtility.getIntegratedCircuit(6),
-                        Materials.Neutronium.getDust(7),
+                        GTUtility.getIntegratedCircuit(5),
+                        Materials.Neutronium.getDust(8),
                         Materials.Duranium.getDust(2),
                         Materials.Flerovium.getDust(1),
-        //                MaterialsElements.STANDALONE.WHITE_METAL.getDust(1),
-                        Materials.DarkIron.getDust(1))
-                    .fluidInputs(Materials.Hydrogen.getGas(1000 * 14))
-                    .fluidOutputs(MaterialsTST.NeutroniumAlloy.getMolten(16 * 144))
+                        Materials.Unstable.getDust(1))
+                    .fluidInputs(Materials.Hydrogen.getGas(1000 * 12))
+                    .fluidOutputs(MaterialsTST.NeutroniumAlloy.getMolten(12 * 144))
                     .eut(TierEU.RECIPE_UEV)
                     .duration(600 * 20)
                     .addTo(RecipeMaps.alloyBlastSmelterRecipes);
@@ -127,12 +128,12 @@ public class MaterialFix {
                 if (gas) {
                     GTValues.RA.stdBuilder()
                         .itemInputs(input, GTUtility.getIntegratedCircuit(11))
-                        .fluidInputs(Materials.Helium.getGas(1000))
                         .itemOutputs(output)
                         .eut(EUt)
-                        .duration(duration * TICKS)
+                        .duration((int) Math.ceil(duration * TICKS / BlastFurnaceGasStat.Helium.recipeTimeMultiplier))
                         .metadata(COIL_HEAT, level)
-                        .addTo(RecipeMaps.blastFurnaceRecipes);
+                        .metadata(ADDITIVE_AMOUNT, 1000)
+                        .addTo(BlastFurnaceWithGas);
                 } else {
                     GTValues.RA.stdBuilder()
                         .itemInputs(input, GTUtility.getIntegratedCircuit(1))

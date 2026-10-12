@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static gregtech.api.enums.ItemList.Machine_HV_LightningRod;
 import static gregtech.api.util.GTModHandler.getModItem;
 import static tectech.thing.CustomItemList.astralArrayFabricator;
 
@@ -11,6 +12,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
@@ -24,6 +26,8 @@ public class MiscHelper {
     public static Item BoundPickaxe;
     public static Item TerraShatterer;
 
+    public static TST_ItemID LightningRod;
+
     public static Fluid UnknowWater;
     public static FluidStack water;
     public static FluidStack distilledWater;
@@ -33,6 +37,7 @@ public class MiscHelper {
         ASTRAL_ARRAY_FABRICATOR = astralArrayFabricator.get(1);
         CRITICAL_PHOTON = GTCMItemList.CriticalPhoton.get(1);
         water = new FluidStack(FluidRegistry.WATER, 1);
+        LightningRod = TST_ItemID.createNoNBT(Machine_HV_LightningRod.get(1));
 
         ItemStack pickaxeOfTheCore = getModItem(Mods.Thaumcraft.ID, "ItemPickaxeElemental", 1);
         if (pickaxeOfTheCore != null) {

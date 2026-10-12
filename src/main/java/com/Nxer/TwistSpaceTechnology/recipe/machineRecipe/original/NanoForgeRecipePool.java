@@ -1,5 +1,15 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 
+import static gregtech.api.enums.TierEU.RECIPE_MAX;
+import static gregtech.api.recipe.RecipeMaps.nanoForgeRecipes;
+import static gregtech.api.util.GTRecipeConstants.NANO_FORGE_TIER;
+
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
+
+import gregtech.api.enums.GTValues;
+import gregtech.api.enums.Materials;
+
 public class NanoForgeRecipePool {
 
     public static void loadRecipes() {
@@ -22,22 +32,22 @@ public class NanoForgeRecipePool {
         // .addTo(nanoForgeRecipes);
 
         // Axonium
-        // GTValues.RA.stdBuilder()
-        // .itemInputs(
-        // GTCMItemList.EnergyFluctuationSelfHarmonizer.get(0),
-        // GTCMItemList.CoreElement.get(0),
-        // MaterialsTST.Axonium.getBlocks(8),
-        // GTCMItemList.AnnihilationConstrainer.get(1),
-        // GTCMItemList.PerfectEngravedEnergyChip.get(4),
-        // GTCMItemList.InformationHorizonInterventionShell.get(16))
-        // .fluidInputs(
-        // Materials.UUMatter.getFluid(2000000),
-        // Materials.PhononMedium.getFluid(4000),
-        // Materials.Infinity.getPlasma(8000))
-        // .itemOutputs(MaterialsTST.Axonium.getNanite(2))
-        // .metadata(NANO_FORGE_TIER, 3)
-        // .eut(RECIPE_MAX)
-        // .duration(20 * 750)
-        // .addTo(nanoForgeRecipes);
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                GTCMItemList.EnergyFluctuationSelfHarmonizer.get(0),
+                GTCMItemList.CoreElement.get(0),
+                MaterialsTST.Axonium.getBlocks(8),
+                GTCMItemList.AnnihilationConstrainer.get(1),
+                GTCMItemList.PerfectEngravedEnergyChip.get(4),
+                GTCMItemList.InformationHorizonInterventionShell.get(16))
+            .fluidInputs(
+                Materials.UUMatter.getFluid(2000000),
+                Materials.PhononMedium.getFluid(4000),
+                Materials.Infinity.getPlasma(8000))
+            .itemOutputs(MaterialsTST.Axonium.getNanite(2))
+            .metadata(NANO_FORGE_TIER, 3)
+            .eut(RECIPE_MAX)
+            .duration(20 * 750)
+            .addTo(nanoForgeRecipes);
     }
 }

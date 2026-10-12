@@ -103,9 +103,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
                     overClockPowerIncrease) / speedBoost);
             PreparedPlan fallback = planner.fitDownstream(baseline, maximumWork);
             PreparedPlan chosen = fallback;
-            int upper = batchSize > 1 && baseline.durationTicks() <= maximumWork
-                ? baseline.externalBatchLimit()
-                : 1;
+            int upper = batchSize > 1 && baseline.durationTicks() <= maximumWork ? baseline.externalBatchLimit() : 1;
             long lower = 2;
             int chosenBatches = 1;
             while (lower <= upper) {

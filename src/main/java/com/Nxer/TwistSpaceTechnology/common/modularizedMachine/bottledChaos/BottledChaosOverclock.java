@@ -52,8 +52,7 @@ public final class BottledChaosOverclock {
             || Math.ceil(basePower) > availablePower) {
             throw new IllegalArgumentException("Invalid recipe power");
         }
-        if (!Double.isFinite(timeReduction)
-            || timeReduction < 1
+        if (!Double.isFinite(timeReduction) || timeReduction < 1
             || !Double.isFinite(powerIncrease)
             || powerIncrease < 1) {
             throw new IllegalArgumentException("Invalid overclock parameters");

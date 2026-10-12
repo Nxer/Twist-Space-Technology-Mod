@@ -76,10 +76,10 @@ public class TST_Gui_MegaCraftingCenter extends TST_Gui<TST_MegaCraftingCenter> 
                                     .marginBottom(4))
                     .childIf(
                         // spotless:off
-                                                         // #tr tst.common.machine.ExtremeCraftCenter.gui.magnification.configuration_description.text
-                                                         // # Set actual pattern magnification, actual input/output numbers of patterns will be multiplied by this number.
-                                                         // #zh_CN 设置样板实际运行倍率, 实际合成输入输出等于样板数值乘以此参数.
-                                                         // spotless:on
+                        // #tr tst.common.machine.ExtremeCraftCenter.gui.magnification.configuration_description.text
+                        // # Set actual pattern magnification, actual input/output numbers of patterns will be multiplied by this number.
+                        // #zh_CN 设置样板实际运行倍率, 实际合成输入输出等于样板数值乘以此参数.
+                        // spotless:on
                         showMaxParallelRow(),
                         () -> IKey.lang(
                             "tst.common.machine.ExtremeCraftCenter.gui.magnification.configuration_description.text")
@@ -97,8 +97,8 @@ public class TST_Gui_MegaCraftingCenter extends TST_Gui<TST_MegaCraftingCenter> 
     public IWidget makeParallelSetter(PanelSyncManager syncManager) {
 
         IntSyncValue magnificationPanelSyncer = new IntSyncValue(
-            multiblock::getPowerPanelMaxParallel,
-            multiblock::setPowerPanelMaxParallel).allowC2S();
+            multiblock::getMagnification,
+            multiblock::setMagnification).allowC2S();
         syncManager.syncValue("magnificationPanelSyncer", magnificationPanelSyncer);
 
         return Flow.row()

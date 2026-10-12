@@ -198,7 +198,9 @@ public final class BottledChaosRecipeProcessor {
             return prepare(externalBatches, null);
         }
 
-        /** Keep downstream batch ratios before adding more external feed; every probe rebuilds exact material deltas. */
+        /**
+         * Keep downstream batch ratios before adding more external feed; every probe rebuilds exact material deltas.
+         */
         public PreparedPlan fitDownstream(PreparedPlan full, double maximumWork) {
             if (full.duration <= maximumWork) return full;
             long[] limits = new long[full.batches.length];
@@ -251,7 +253,8 @@ public final class BottledChaosRecipeProcessor {
             for (int batches = externalBatches - 1; batches >= Math.max(1, externalBatches - 16); batches--) {
                 PreparedPlan candidate = prepare(batches);
                 if (candidate != null && candidate.duration <= maximumWork
-                    && chosen.outputs.entrySet().stream()
+                    && chosen.outputs.entrySet()
+                        .stream()
                         .allMatch(output -> candidate.outputs.getOrDefault(output.getKey(), 0L) >= output.getValue())
                     && clearsCarry(candidate)) return candidate;
             }
@@ -352,7 +355,8 @@ public final class BottledChaosRecipeProcessor {
                     progressed = true;
                     categories |= route.data.categories;
                     requiredPools |= route.poolMask;
-                    // 2. Spend old carry, then this job's intermediates, then external inputs. No real storage is touched.
+                    // 2. Spend old carry, then this job's intermediates, then external inputs. No real storage is
+                    // touched.
                     for (var input : route.data.inputs.entrySet()) {
                         Object key = input.getKey();
                         long needed = Math.multiplyExact(input.getValue(), count);
