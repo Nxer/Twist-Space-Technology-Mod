@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere;
 
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,6 +21,8 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.util.GTUtility;
 
 public final class EcoSphereModeSupport {
+
+    public static final String FORMATTING_CODE_REGEX = "(?i)\u00a7[0-9A-FK-OR]";
 
     private EcoSphereModeSupport() {}
 
@@ -168,14 +169,13 @@ public final class EcoSphereModeSupport {
     }
 
     public static String formatRunningInputs(String label, List<String> names) {
-        String text = names.stream()
-            .map(EnumChatFormatting::getTextWithoutFormattingCodes)
-            .collect(Collectors.joining(", "))
+        String text = String.join(", ", names)
+            .replaceAll(FORMATTING_CODE_REGEX, "")
             .replace('\n', ' ')
             .replace('\r', ' ');
         int limit = Math.max(
             0,
-            24 - EnumChatFormatting.getTextWithoutFormattingCodes(label)
+            24 - label.replaceAll(FORMATTING_CODE_REGEX, "")
                 .length() - 3);
         if (text.length() > limit) text = text.substring(0, Math.max(0, limit - 3)) + "...";
         return EnumChatFormatting.WHITE + label + " : " + EnumChatFormatting.GOLD + text + EnumChatFormatting.RESET;

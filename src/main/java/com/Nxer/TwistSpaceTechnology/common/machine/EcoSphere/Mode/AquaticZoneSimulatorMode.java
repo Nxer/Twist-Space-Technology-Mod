@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport.FORMATTING_CODE_REGEX;
 import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport.addItemOutput;
 import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport.getItemStackString;
 import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.ExecutionProtocolInputMismatch;
@@ -114,7 +115,8 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
                 + StatCollector.translateToLocal("tst.ecosphere.machine.EcoSphereSimulator.gui.focus_on")
                 + " "
                 + EnumChatFormatting.GOLD
-                + EnumChatFormatting.getTextWithoutFormattingCodes(focusStack.getDisplayName())
+                + focusStack.getDisplayName()
+                    .replaceAll(FORMATTING_CODE_REGEX, "")
                 + EnumChatFormatting.RESET);
     }
 
