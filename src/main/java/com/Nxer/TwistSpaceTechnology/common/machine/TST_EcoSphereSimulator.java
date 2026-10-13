@@ -14,7 +14,6 @@ import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Stru
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockHint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static gregtech.api.enums.HatchElement.Energy;
@@ -330,60 +329,48 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                             machine -> 0)))
                 .addElement(
                     'Q',
-                    ofChain(
-                        ofBlock(ModBlocks.blockCasings2Misc, 15),
-                        HatchElementBuilder.<TST_EcoSphereSimulator>builder()
-                            .anyOf(InputBus, OutputBus, InputHatch, OutputHatch)
-                            .hint(1)
-                            .casingIndex(TAE.getIndexFromPage(1, 15))
-                            .build()))
+                    HatchElementBuilder.<TST_EcoSphereSimulator>builder()
+                        .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
+                        .hint(1)
+                        .casingIndex(TAE.getIndexFromPage(1, 15))
+                        .buildAndChain(ModBlocks.blockCasings2Misc, 15))
                 .addElement(
                     'q',
-                    ofChain(
-                        ofBlock(MetaBlockCasing01, 13),
-                        HatchElementBuilder.<TST_EcoSphereSimulator>builder()
-                            .anyOf(InputBus, OutputBus, InputHatch, OutputHatch)
-                            .hint(1)
-                            .casingIndex(MetaBlockCasing01.getTextureIndex(13))
-                            .build()))
+                    HatchElementBuilder.<TST_EcoSphereSimulator>builder()
+                        .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
+                        .hint(1)
+                        .casingIndex(MetaBlockCasing01.getTextureIndex(13))
+                        .buildAndChain(MetaBlockCasing01, 13))
                 .addElement(
                     'R',
-                    ofChain(
-                        ofBlock(ModBlocks.blockCasings2Misc, 15),
-                        HatchElementBuilder.<TST_EcoSphereSimulator>builder()
-                            .atLeast(Energy.or(ExoticEnergy))
-                            .adder(TST_EcoSphereSimulator::addToMachineList)
-                            .hint(2)
-                            .casingIndex(TAE.getIndexFromPage(1, 15))
-                            .build()))
+                    HatchElementBuilder.<TST_EcoSphereSimulator>builder()
+                        .atLeast(Energy.or(ExoticEnergy))
+                        .adder(TST_EcoSphereSimulator::addToMachineList)
+                        .hint(2)
+                        .casingIndex(TAE.getIndexFromPage(1, 15))
+                        .buildAndChain(ModBlocks.blockCasings2Misc, 15))
                 .addElement(
                     'r',
-                    ofChain(
-                        ofBlock(MetaBlockCasing01, 13),
-                        HatchElementBuilder.<TST_EcoSphereSimulator>builder()
-                            .atLeast(Energy.or(ExoticEnergy))
-                            .adder(TST_EcoSphereSimulator::addToMachineList)
-                            .hint(2)
-                            .casingIndex(MetaBlockCasing01.getTextureIndex(13))
-                            .build()))
+                    HatchElementBuilder.<TST_EcoSphereSimulator>builder()
+                        .atLeast(Energy.or(ExoticEnergy))
+                        .adder(TST_EcoSphereSimulator::addToMachineList)
+                        .hint(2)
+                        .casingIndex(MetaBlockCasing01.getTextureIndex(13))
+                        .buildAndChain(MetaBlockCasing01, 13))
                 .addElement(
                     'T',
-                    ofChain(
-                        ofBlock(ModBlocks.blockCasings2Misc, 15),
-                        HatchElementBuilder.<TST_EcoSphereSimulator>builder()
-                            .atLeast(EcoSphereHatchElement.InputInterface, EcoSphereHatchElement.UpgradeInterface)
-                            .hint(3)
-                            .casingIndex(TAE.getIndexFromPage(1, 15))
-                            .build()))
+                    HatchElementBuilder.<TST_EcoSphereSimulator>builder()
+                        .atLeast(EcoSphereHatchElement.InputInterface, EcoSphereHatchElement.UpgradeInterface)
+                        .hint(3)
+                        .casingIndex(TAE.getIndexFromPage(1, 15))
+                        .buildAndChain(ModBlocks.blockCasings2Misc, 15))
                 .addElement(
                     't',
-                    ofChain(
-                        ofBlock(MetaBlockCasing01, 13),
-                        HatchElementBuilder.<TST_EcoSphereSimulator>builder()
-                            .atLeast(EcoSphereHatchElement.InputInterface, EcoSphereHatchElement.UpgradeInterface)
-                            .hint(3)
-                            .casingIndex(MetaBlockCasing01.getTextureIndex(13))
-                            .build()))
+                    HatchElementBuilder.<TST_EcoSphereSimulator>builder()
+                        .atLeast(EcoSphereHatchElement.InputInterface, EcoSphereHatchElement.UpgradeInterface)
+                        .hint(3)
+                        .casingIndex(MetaBlockCasing01.getTextureIndex(13))
+                        .buildAndChain(MetaBlockCasing01, 13))
                 .addElement('S', ofFrame(Materials.Mytryl))
                 .addElement('s', ofFrame(Materials.AstralSilver))
                 .build();
