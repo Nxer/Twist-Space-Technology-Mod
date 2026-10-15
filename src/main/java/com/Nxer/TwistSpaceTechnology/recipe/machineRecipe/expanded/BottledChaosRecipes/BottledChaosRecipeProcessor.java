@@ -350,11 +350,6 @@ public final class BottledChaosRecipeProcessor {
                     }
 
                     @Override
-                    public boolean checkInputs(int index, long count, Map<Object, Long> allocated) {
-                        return true; // Native rules are checked jointly against the actual slots below.
-                    }
-
-                    @Override
                     public long retainedOutput(int index, Object key, long amount) {
                         return snapshot.hasAuthorizedConsumer(index, routeMask, key) ? amount : 0;
                     }

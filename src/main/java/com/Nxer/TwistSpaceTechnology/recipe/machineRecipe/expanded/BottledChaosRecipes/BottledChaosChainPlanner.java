@@ -29,8 +29,6 @@ final class BottledChaosChainPlanner {
 
         boolean canProcess(int stage, long voltage);
 
-        boolean checkInputs(int stage, long count, Map<Object, Long> allocated);
-
         long retainedOutput(int stage, Object key, long amount);
     }
 
@@ -124,13 +122,11 @@ final class BottledChaosChainPlanner {
         }
         state.voltage = voltage;
         state.active[index] = true;
-        Map<Object, Long> allocated = new LinkedHashMap<>();
         Map<Object, Long> missing = new LinkedHashMap<>();
         // Reserve every available input before making any supplier run. Shared inputs belong to this goal first.
         for (var input : stage.inputs.entrySet()) {
             long needed = Math.multiplyExact(input.getValue(), count);
             long taken = takeInput(index, input.getKey(), needed);
-            allocated.put(input.getKey(), needed);
             if (taken < needed) missing.put(input.getKey(), needed - taken);
         }
         for (var input : missing.entrySet()) {
@@ -139,11 +135,11 @@ final class BottledChaosChainPlanner {
         }
         for (var catalyst : stage.catalysts.entrySet()) {
             Object key = catalyst.getKey();
-            long needed = Math.max(0, catalyst.getValue() - allocated.getOrDefault(key, 0L));
+            long needed = Math.max(
+                0,
+                catalyst.getValue() - Math.multiplyExact(stage.inputs.getOrDefault(key, 0L), count));
             if (!(needed == 1 && virtualItems.contains(key)) && !supply(index, key, needed)) return false;
-            allocated.merge(key, needed, Math::addExact);
         }
-        if (!conditions.checkInputs(index, count, allocated)) return false;
         for (var output : stage.outputs.entrySet()) {
             Object key = output.getKey();
             long amount = Math.multiplyExact(output.getValue(), count);
