@@ -973,7 +973,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             CheckRecipeResult result = threadResults[slot];
             if (threads[slot].isBusy() && threads[slot].progress >= threads[slot].duration
                 && (result == CheckRecipeResultRegistry.ITEM_OUTPUT_FULL
-                    || result == CheckRecipeResultRegistry.FLUID_OUTPUT_FULL)) return result;
+                    || result == CheckRecipeResultRegistry.FLUID_OUTPUT_FULL))
+                return result;
         }
         if (activeConcentratedPower) return checkConcentratedProcessing();
         if (concentratedPower != activeConcentratedPower) return CheckRecipeResultRegistry.SUCCESSFUL;

@@ -125,7 +125,10 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
         GTRecipe copy = recipe.copy();
         return GTValues.RA.stdBuilder()
             // Cached animation frames pad the input grid; the builder requires compact material arrays.
-            .itemInputsUnsafe(Arrays.stream(copy.mInputs).filter(Objects::nonNull).toArray(ItemStack[]::new))
+            .itemInputsUnsafe(
+                Arrays.stream(copy.mInputs)
+                    .filter(Objects::nonNull)
+                    .toArray(ItemStack[]::new))
             .itemOutputs(copy.mOutputs)
             .metadata(BottledChaosStructureDisplay.DISPLAY, recipe.getMetadata(BottledChaosStructureDisplay.DISPLAY))
             .recipeCategory(recipe.getRecipeCategory())

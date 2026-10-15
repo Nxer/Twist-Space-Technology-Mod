@@ -135,9 +135,8 @@ final class BottledChaosChainPlanner {
         }
         for (var catalyst : stage.catalysts.entrySet()) {
             Object key = catalyst.getKey();
-            long needed = Math.max(
-                0,
-                catalyst.getValue() - Math.multiplyExact(stage.inputs.getOrDefault(key, 0L), count));
+            long needed = Math
+                .max(0, catalyst.getValue() - Math.multiplyExact(stage.inputs.getOrDefault(key, 0L), count));
             if (!(needed == 1 && virtualItems.contains(key)) && !supply(index, key, needed)) return false;
         }
         for (var output : stage.outputs.entrySet()) {
