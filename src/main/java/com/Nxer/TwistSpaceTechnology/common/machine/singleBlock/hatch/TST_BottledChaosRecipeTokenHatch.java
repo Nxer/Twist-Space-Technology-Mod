@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.StringJoiner;
@@ -23,25 +22,31 @@ import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosCredential;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_BottledChaos;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMaterialCache;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
-import com.gtnewhorizons.modularui.api.drawable.IDrawable;
-import com.gtnewhorizons.modularui.api.drawable.TextRenderer;
-import com.gtnewhorizons.modularui.api.math.Alignment;
-import com.gtnewhorizons.modularui.api.math.Color;
-import com.gtnewhorizons.modularui.api.screen.ModularWindow;
-import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
-import com.gtnewhorizons.modularui.common.widget.ButtonWidget;
-import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
-import com.gtnewhorizons.modularui.common.widget.TextWidget;
+import com.cleanroommc.modularui.api.drawable.IKey;
+import com.cleanroommc.modularui.drawable.DynamicDrawable;
+import com.cleanroommc.modularui.drawable.text.TextRenderer;
+import com.cleanroommc.modularui.factory.PosGuiData;
+import com.cleanroommc.modularui.screen.ModularPanel;
+import com.cleanroommc.modularui.screen.UISettings;
+import com.cleanroommc.modularui.utils.Alignment;
+import com.cleanroommc.modularui.utils.Color;
+import com.cleanroommc.modularui.value.sync.BooleanSyncValue;
+import com.cleanroommc.modularui.value.sync.IntSyncValue;
+import com.cleanroommc.modularui.value.sync.InteractionSyncHandler;
+import com.cleanroommc.modularui.value.sync.PanelSyncManager;
+import com.cleanroommc.modularui.widgets.ButtonWidget;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.modularui2.GTGuiTextures;
+import gregtech.api.modularui2.GTGuis;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.GTWaila;
+import gregtech.common.modularui2.widget.builder.ItemSlotGridBuilder;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.overlay.tooltiprenderers.TTRenderStack;
@@ -327,15 +332,23 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
     }
 
     @Override
-    public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
-        super.addUIWidgets(builder, buildContext);
-        builder
-            .widget(
-                new FakeSyncWidget.IntegerSyncer(this::getControllerHatchNumber, value -> displayedHatchNumber = value))
-            .widget(
-                new FakeSyncWidget.IntegerSyncer(
-                    this::getControllerInputPeerMask,
-                    value -> displayedInputPeerMask = value));
+    protected boolean forceUseMui2() {
+        return true;
+    }
+
+    @Override
+    public ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager, UISettings uiSettings) {
+        syncManager.syncValue(
+            "bottledChaosHatchNumber",
+            new IntSyncValue(this::getControllerHatchNumber, value -> displayedHatchNumber = value));
+        syncManager.syncValue(
+            "bottledChaosInputPeerMask",
+            new IntSyncValue(this::getControllerInputPeerMask, value -> displayedInputPeerMask = value));
+        BooleanSyncValue execution = new BooleanSyncValue(this::isExecutionEnabled);
+        syncManager.syncValue("bottledChaosExecutionEnabled", execution);
+        InteractionSyncHandler executionAction = new InteractionSyncHandler().setOnMousePressed(
+            mouse -> { if (mouse.mouseButton == 0 && !mouse.isClient()) setExecutionEnabled(!executionEnabled); });
+        syncManager.syncValue("bottledChaosToggleExecution", executionAction);
         // #tr tst.modular.machine.BottledChaosRecipeTokenHatch.pause
         // # Pause this processing group.
         // #zh_CN 暂停此加工组.
@@ -347,61 +360,70 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
         // #tr tst.modular.machine.BottledChaosRecipeTokenHatch.clear
         // # Clear this processing group's current job and cached materials.
         // #zh_CN 清空此加工组的当前运行状态和缓存材料.
-        ButtonWidget executionButton = new ButtonWidget()
-            .setOnClick(
-                (clickData, widget) -> { if (clickData.mouseButton == 0) setExecutionEnabled(!executionEnabled); })
-            .setPlayClickSound(true);
-        executionButton
-            .setBackground(
-                () -> new IDrawable[] {
-                    executionEnabled ? GTUITextures.BUTTON_STANDARD : GTUITextures.BUTTON_STANDARD_PRESSED,
-                    executionEnabled ? GTUITextures.OVERLAY_BUTTON_POWER_SWITCH_ON
-                        : GTUITextures.OVERLAY_BUTTON_POWER_SWITCH_OFF })
-            .attachSyncer(
-                new FakeSyncWidget.BooleanSyncer(this::isExecutionEnabled, this::setExecutionEnabledFromController),
-                builder)
-            .dynamicTooltip(
-                () -> Collections.singletonList(
-                    StatCollector.translateToLocal(
-                        executionEnabled ? "tst.modular.machine.BottledChaosRecipeTokenHatch.pause"
+        ButtonWidget<?> executionButton = new ButtonWidget<>().syncHandler(executionAction)
+            .onMousePressed(mouseButton -> mouseButton == 0 && executionAction.onMousePressed(mouseButton))
+            .playClickSound(true)
+            .background(
+                new DynamicDrawable(
+                    () -> execution.getBoolValue() ? GTGuiTextures.BUTTON_STANDARD
+                        : GTGuiTextures.BUTTON_STANDARD_PRESSED))
+            .overlay(
+                new DynamicDrawable(
+                    () -> execution.getBoolValue() ? GTGuiTextures.OVERLAY_BUTTON_POWER_SWITCH_ON
+                        : GTGuiTextures.OVERLAY_BUTTON_POWER_SWITCH_OFF))
+            .tooltipBuilder(
+                tooltip -> tooltip.addLine(
+                    IKey.lang(
+                        execution.getBoolValue() ? "tst.modular.machine.BottledChaosRecipeTokenHatch.pause"
                             : "tst.modular.machine.BottledChaosRecipeTokenHatch.resume")))
-            .setUpdateTooltipEveryTick(true)
-            .setPos(52, 62)
-            .setSize(18, 18);
+            .tooltipAutoUpdate(true)
+            .pos(52, 62)
+            .size(18, 18);
         long[] clearPressedUntil = { 0 };
-        ButtonWidget clearButton = new ButtonWidget().setOnClick((clickData, widget) -> {
-            if (clickData.mouseButton != 0) return;
+        InteractionSyncHandler clearAction = new InteractionSyncHandler().setOnMousePressed(mouse -> {
+            if (mouse.mouseButton != 0) return;
             clearPressedUntil[0] = System.currentTimeMillis() + 120;
-            if (!widget.isClient()) {
+            if (!mouse.isClient()) {
                 materialCache.clearMaterials();
                 clearRunningStateRequested = true;
                 markDirty();
             }
-        })
-            .setPlayClickSound(true);
-        clearButton
-            .setBackground(
-                () -> new IDrawable[] {
-                    System.currentTimeMillis() < clearPressedUntil[0] ? GTUITextures.BUTTON_STANDARD_PRESSED
-                        : GTUITextures.BUTTON_STANDARD,
-                    GTUITextures.OVERLAY_BUTTON_CROSS })
-            .addTooltip(StatCollector.translateToLocal("tst.modular.machine.BottledChaosRecipeTokenHatch.clear"))
-            .setPos(106, 62)
-            .setSize(18, 18);
-        builder.widget(executionButton)
-            .widget(clearButton)
-            .widget(
-                new TextWidget().setStringSupplier(() -> getFittedHatchDisplayText())
-                    .setDefaultColor(Color.WHITE.normal)
-                    .setTextAlignment(Alignment.Center)
-                    .setBackground(GTUITextures.BACKGROUND_TEXT_FIELD)
-                    .dynamicTooltip(
-                        () -> Collections.singletonList(
+        });
+        syncManager.syncValue("bottledChaosClearRunningState", clearAction);
+        ButtonWidget<?> clearButton = new ButtonWidget<>().syncHandler(clearAction)
+            .onMousePressed(mouseButton -> mouseButton == 0 && clearAction.onMousePressed(mouseButton))
+            .playClickSound(true)
+            .background(
+                new DynamicDrawable(
+                    () -> System.currentTimeMillis() < clearPressedUntil[0] ? GTGuiTextures.BUTTON_STANDARD_PRESSED
+                        : GTGuiTextures.BUTTON_STANDARD))
+            .overlay(GTGuiTextures.OVERLAY_BUTTON_CROSS)
+            .tooltipBuilder(
+                tooltip -> tooltip.addLine(IKey.lang("tst.modular.machine.BottledChaosRecipeTokenHatch.clear")))
+            .pos(106, 62)
+            .size(18, 18);
+        return GTGuis.mteTemplatePanelBuilder(this, guiData, syncManager, uiSettings)
+            .build()
+            .child(
+                new ItemSlotGridBuilder(inventoryHandler, syncManager).size(1)
+                    .filter(this::isAuthorizationItem)
+                    .build()
+                    .pos(79, 34))
+            .child(executionButton)
+            .child(clearButton)
+            .child(
+                IKey.dynamic(() -> getFittedHatchDisplayText())
+                    .asWidget()
+                    .color(Color.WHITE.main)
+                    .textAlign(Alignment.Center)
+                    .background(GTGuiTextures.BACKGROUND_TEXT_FIELD)
+                    .tooltipBuilder(
+                        tooltip -> tooltip.addLine(
                             displayedHatchNumber > 0 ? getHatchDisplayText()
                                 : StatCollector
                                     .translateToLocal("tst.modular.machine.BottledChaosRecipeTokenHatch.disconnected")))
-                    .setUpdateTooltipEveryTick(true)
-                    .setPos(14, 8)
-                    .setSize(148, 18));
+                    .tooltipAutoUpdate(true)
+                    .pos(14, 8)
+                    .size(148, 18));
     }
 }
