@@ -2,10 +2,9 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaos
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -58,7 +57,7 @@ public final class BottledChaosRecipeResources {
 
     public static final int PLATINUM_LEAVES_PER_POWDER = 4;
     private static final Map<TST_ItemID, TST_ItemID> UNIFIED_DUSTS = new HashMap<>();
-    private static final Set<TST_ItemID> FRUIT_INPUTS = new HashSet<>();
+    private static final List<ItemStack> FRUIT_INPUTS = GTOreDictUnificator.getOresImmutable("listAllfruit");
 
     /** Stable credential identities; capacity costs are published by route registration. */
     public static final class CredentialModel {
@@ -1017,8 +1016,6 @@ public final class BottledChaosRecipeResources {
     static {
         // The rocket-fuel source produces the same ore-dictionary reagent; cache the native Werkstoff powder.
         UNIFIED_DUSTS.put(TST_ItemID.create(GregtechItemList.AmmoniumNitrateDust.get(1)), AmmoniumNitrateDust);
-        for (ItemStack fruit : GTOreDictUnificator.getOresImmutable("listAllfruit"))
-            FRUIT_INPUTS.add(TST_ItemID.create(fruit));
     }
 
     /** Runtime lookup and consumption share the cached fruit and native full-dust identities. */
@@ -1026,12 +1023,26 @@ public final class BottledChaosRecipeResources {
         // Native chemical catalysts match item and metadata even after their wear NBT changes.
         if (MTEChemicalPlant.isCatalyst(stack)) return TST_ItemID.createNoNBT(stack);
         TST_ItemID physical = TST_ItemID.create(stack);
-        return FRUIT_INPUTS.contains(physical) ? Fruit : UNIFIED_DUSTS.getOrDefault(physical, physical);
+        for (ItemStack fruit : FRUIT_INPUTS) {
+            if (GTUtility.areStacksEqual(fruit, stack, true)) return Fruit;
+        }
+        return UNIFIED_DUSTS.getOrDefault(physical, physical);
     }
 
     /** Source preprocessing uses the same normalization as runtime input lookup. */
     public static TST_ItemID recipeItemId(ItemStack stack) {
         return inputItemId(stack);
+    }
+
+    /** Sensitive source inputs keep their exact identity instead of joining a permissive fruit group. */
+    static TST_ItemID recipeItemId(ItemStack stack, boolean nbtSensitive) {
+        if (nbtSensitive) {
+            TST_ItemID physical = TST_ItemID.create(stack);
+            return UNIFIED_DUSTS.getOrDefault(physical, physical);
+        }
+        ItemStack template = stack.copy();
+        template.setTagCompound(null);
+        return inputItemId(template);
     }
 
     private static TST_ItemID modItem(Mods mod, String name, int metadata) {

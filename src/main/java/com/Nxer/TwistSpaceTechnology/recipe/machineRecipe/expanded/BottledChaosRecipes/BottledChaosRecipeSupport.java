@@ -4,15 +4,18 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 import static com.Nxer.TwistSpaceTechnology.util.MathUtils.getGCD;
 import static com.Nxer.TwistSpaceTechnology.util.MathUtils.getLCM;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosItemInputs.Requirement;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
 
@@ -21,12 +24,15 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.metadata.CentrifugeRecipeKey;
 import gregtech.api.recipe.metadata.CompressionTierKey;
+import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTRecipe.RecipeItemInput;
 import gregtech.api.util.GTRecipeConstants;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.OverclockCalculator;
 import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.processing.MTEIsaMill;
 import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.MTEQuantumForceTransformer;
+import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.chemplant.MTEChemicalPlant;
 import tectech.recipe.TecTechRecipeMaps;
 
 /** Bottled Chaos recipe preprocessing and source-machine duration calculations. */
@@ -80,15 +86,38 @@ final class BottledChaosRecipeSupport {
         long probabilityBatch = probabilityBatch(recipe, roundedOutputChanceBatch);
         Map<Object, Long> inputs = new LinkedHashMap<>();
         Map<Object, Long> outputs = new LinkedHashMap<>();
+        List<Requirement> itemRequirements = new ArrayList<>();
+        RecipeItemInput[] nativeInputs = recipe.copy()
+            .getCachedCombinedItemInputs();
 
         // Scale all four chance arrays into deterministic whole-batch resource totals.
-        addItems(inputs, catalysts, recipe.mInputs, recipe.mInputChances, probabilityBatch, 0);
+        addItems(
+            inputs,
+            catalysts,
+            recipe.mInputs,
+            recipe.mInputChances,
+            probabilityBatch,
+            0,
+            itemRequirements,
+            nativeInputs);
         addFluids(inputs, recipe.mFluidInputs, recipe.mFluidInputChances, probabilityBatch);
-        addItems(outputs, null, recipe.mOutputs, recipe.mOutputChances, probabilityBatch, roundedOutputChanceBatch);
+        addItems(
+            outputs,
+            null,
+            recipe.mOutputs,
+            recipe.mOutputChances,
+            probabilityBatch,
+            roundedOutputChanceBatch,
+            null,
+            null);
         addFluids(outputs, recipe.mFluidOutputs, recipe.mFluidOutputChances, probabilityBatch);
         // Culture dishes are non-consumed special-slot requirements in native bacterial-vat recipes.
-        if (map == BottledChaosRecipeResources.RecipePools.BacterialVat && requirements.specialInput() != null)
+        if (map == BottledChaosRecipeResources.RecipePools.BacterialVat && requirements.specialInput() != null) {
             catalysts.merge(requirements.specialInput(), 1L, Math::max);
+            itemRequirements.add(BottledChaosItemInputs.exact(requirements.specialInput(), 0));
+        }
+        if (map == BottledChaosRecipeResources.RecipePools.QuantumForceTransformer)
+            itemRequirements.add(BottledChaosItemInputs.exact(requirements.specialInput(), 0));
         if (inputs.isEmpty() || outputs.isEmpty() || inputs.equals(outputs)) {
             throw new IllegalStateException("invalid marked recipe");
         }
@@ -98,7 +127,7 @@ final class BottledChaosRecipeSupport {
         times.put(
             new TimeKey(map, recipe.mEUt, recipe.mDuration, requirements),
             Math.multiplyExact((long) recipe.mDuration, probabilityBatch));
-        return new RecipeData(inputs, outputs, catalysts, times, categories);
+        return new RecipeData(inputs, outputs, catalysts, times, categories, itemRequirements);
     }
 
     private static SourceRequirements sourceRequirements(RecipeMap<?> map, GTRecipe recipe) {
@@ -269,20 +298,40 @@ final class BottledChaosRecipeSupport {
     }
 
     private static void addItems(Map<Object, Long> target, Map<Object, Long> catalysts, ItemStack[] stacks,
-        int[] chances, long probabilityBatch, int roundedOutputChanceBatch) {
+        int[] chances, long probabilityBatch, int roundedOutputChanceBatch, List<Requirement> requirements,
+        RecipeItemInput[] nativeInputs) {
         if (stacks == null) return;
         for (int i = 0; i < stacks.length; i++) {
             ItemStack stack = stacks[i];
             if (stack == null || GTUtility.isAnyIntegratedCircuit(stack)) continue;
-            if (stack.stackSize == 0 && catalysts != null) {
-                catalysts.merge(Objects.requireNonNull(recipeItemId(stack.copy()), "item identity"), 1L, Math::max);
+            RecipeItemInput nativeInput = null;
+            if (requirements != null) {
+                for (RecipeItemInput candidate : nativeInputs) {
+                    // Cached templates are unified; original temporary recipes may still use another ore variant.
+                    if (candidate.matchesRecipe(GTOreDictUnificator.getAssociation(stack), stack)) {
+                        nativeInput = candidate;
+                        break;
+                    }
+                }
+                if (nativeInput == null) throw new IllegalStateException("missing native item input matcher");
+                // Preserve the existing native wear-independent catalyst handling.
+                if (MTEChemicalPlant.isCatalyst(stack) || MTEIsaMill.isMillingBall(stack)) {
+                    ItemStack template = stack.copy();
+                    template.setTagCompound(null);
+                    nativeInput = new RecipeItemInput(template, false);
+                }
+            }
+            TST_ItemID key = requirements == null ? recipeItemId(stack.copy())
+                : BottledChaosRecipeResources.recipeItemId(stack.copy(), nativeInput.usesNbtMatching);
+            if (catalysts != null && stack.stackSize == 0) {
+                catalysts.merge(Objects.requireNonNull(key, "item identity"), 1L, Math::max);
+                requirements.add(new Requirement(key, 0, Collections.singletonList(nativeInput)));
             } else if (stack.stackSize > 0) {
                 long amount = applyChance(stack.stackSize, chances, i, probabilityBatch, roundedOutputChanceBatch);
                 if (amount > 0) {
-                    target.merge(
-                        Objects.requireNonNull(recipeItemId(stack.copy()), "item identity"),
-                        amount,
-                        Math::addExact);
+                    target.merge(Objects.requireNonNull(key, "item identity"), amount, Math::addExact);
+                    if (requirements != null)
+                        requirements.add(new Requirement(key, amount, Collections.singletonList(nativeInput)));
                 }
             }
         }
@@ -317,12 +366,15 @@ final class BottledChaosRecipeSupport {
         final Map<Object, Long> catalysts;
         final Map<TimeKey, Long> times;
         final long categories;
+        final List<Requirement> itemRequirements;
 
         /** Add a fixed non-consumed selector after material balancing and batch reduction. */
         RecipeData requireCatalyst(Object key) {
             Map<Object, Long> required = new LinkedHashMap<>(catalysts);
             required.put(key, Math.max(1, required.getOrDefault(key, 0L)));
-            return new RecipeData(inputs, outputs, required, times, categories);
+            List<Requirement> items = new ArrayList<>(itemRequirements);
+            if (key instanceof TST_ItemID item) items.add(BottledChaosItemInputs.exact(item, 0));
+            return new RecipeData(inputs, outputs, required, times, categories, items);
         }
 
         RecipeData appendBalancedRecipe(RecipeData downstream, Object intermediate) {
@@ -349,12 +401,15 @@ final class BottledChaosRecipeSupport {
             }
             Map<TimeKey, Long> combinedTimes = multiplyAmounts(times, upstreamScale);
             mergeAmounts(combinedTimes, downstream.times, downstreamScale);
+            List<Requirement> items = BottledChaosItemInputs.scale(itemRequirements, upstreamScale, 1, null);
+            items.addAll(BottledChaosItemInputs.scale(downstream.itemRequirements, downstreamScale, 1, intermediate));
             return new RecipeData(
                 combinedInputs,
                 combinedOutputs,
                 combinedCatalysts,
                 combinedTimes,
-                categories | downstream.categories);
+                categories | downstream.categories,
+                items);
         }
 
         /** Cancel matching materials before deferred reagents reveal the final entry input. */
@@ -378,6 +433,7 @@ final class BottledChaosRecipeSupport {
             long divisor = 0;
             for (long amount : inputs.values()) divisor = getGCD(divisor, amount);
             for (long amount : outputs.values()) divisor = getGCD(divisor, amount);
+            for (Requirement input : itemRequirements) if (input.amount > 0) divisor = getGCD(divisor, input.amount);
             if (divisor <= 1) return this;
             Map<TimeKey, Long> reducedTimes = new LinkedHashMap<>();
             for (var entry : times.entrySet())
@@ -387,7 +443,8 @@ final class BottledChaosRecipeSupport {
                 divideAmounts(outputs, divisor),
                 catalysts,
                 reducedTimes,
-                categories);
+                categories,
+                BottledChaosItemInputs.scale(itemRequirements, 1, divisor, null));
         }
 
         /** Reuse an already available coproduct before expanding its remaining demand or surplus. */
@@ -428,12 +485,15 @@ final class BottledChaosRecipeSupport {
             conversion.catalysts.forEach((key, value) -> combinedCatalysts.merge(key, value, Math::max));
             Map<TimeKey, Long> combinedTimes = multiplyAmounts(net.times, routeScale);
             mergeAmounts(combinedTimes, conversion.times, conversionScale);
+            List<Requirement> items = BottledChaosItemInputs.scale(net.itemRequirements, routeScale, 1, null);
+            items.addAll(BottledChaosItemInputs.scale(conversion.itemRequirements, conversionScale, 1, null));
             return new RecipeData(
                 combinedInputs,
                 combinedOutputs,
                 combinedCatalysts,
                 combinedTimes,
-                net.categories | conversion.categories);
+                net.categories | conversion.categories,
+                BottledChaosItemInputs.retain(items, combinedInputs));
         }
 
         RecipeData withAlternativeInput(Object original, Object alternative, long multiplier) {
@@ -443,16 +503,27 @@ final class BottledChaosRecipeSupport {
             Map<Object, Long> alternativeInputs = new LinkedHashMap<>(inputs);
             alternativeInputs.remove(original);
             alternativeInputs.merge(alternative, Math.multiplyExact(amount, multiplier), Math::addExact);
-            return new RecipeData(alternativeInputs, outputs, this);
+            List<Requirement> items = new ArrayList<>();
+            for (Requirement input : itemRequirements)
+                if (input.amount == 0 || !input.key.equals(original)) items.add(input);
+            if (alternative instanceof TST_ItemID item)
+                items.add(BottledChaosItemInputs.exact(item, Math.multiplyExact(amount, multiplier)));
+            return new RecipeData(alternativeInputs, outputs, catalysts, times, categories, items);
         }
 
         RecipeData(Map<Object, Long> inputs, Map<Object, Long> outputs, Map<Object, Long> catalysts,
             Map<TimeKey, Long> times, long categories) {
+            this(inputs, outputs, catalysts, times, categories, BottledChaosItemInputs.defaults(inputs, catalysts));
+        }
+
+        private RecipeData(Map<Object, Long> inputs, Map<Object, Long> outputs, Map<Object, Long> catalysts,
+            Map<TimeKey, Long> times, long categories, List<Requirement> itemRequirements) {
             this.inputs = immutableMap(inputs);
             this.outputs = immutableMap(outputs);
             this.catalysts = immutableMap(catalysts);
             this.times = immutableMap(times);
             this.categories = categories;
+            this.itemRequirements = Collections.unmodifiableList(BottledChaosItemInputs.compact(itemRequirements));
         }
 
         private RecipeData(Map<Object, Long> inputs, Map<Object, Long> outputs, RecipeData source) {
@@ -461,6 +532,36 @@ final class BottledChaosRecipeSupport {
             this.catalysts = source.catalysts;
             this.times = source.times;
             this.categories = source.categories;
+            this.itemRequirements = Collections
+                .unmodifiableList(BottledChaosItemInputs.retain(source.itemRequirements, inputs));
+        }
+
+        /** Equal registered GT variants may differ only in which native items fulfill their input slots. */
+        RecipeData withInputAlternatives(RecipeData variant) {
+            if (itemRequirements.size() != variant.itemRequirements.size()) return this;
+            List<Requirement> items = new ArrayList<>();
+            boolean[] used = new boolean[variant.itemRequirements.size()];
+            int changed = 0;
+            for (Requirement input : itemRequirements) {
+                int selected = -1;
+                for (int i = 0; i < used.length; i++) {
+                    Requirement candidate = variant.itemRequirements.get(i);
+                    if (used[i] || !input.key.equals(candidate.key) || input.amount != candidate.amount) continue;
+                    // Ambiguous duplicate slots retain the first complete native recipe instead of mixing constraints.
+                    if (selected >= 0) return this;
+                    selected = i;
+                }
+                if (selected < 0) return this;
+                used[selected] = true;
+                Requirement alternative = variant.itemRequirements.get(selected);
+                if (input.sameRules(alternative) && alternative.sameRules(input)) items.add(input);
+                else {
+                    // Do not turn correlated alternatives in separate slots into a new, unregistered combination.
+                    if (++changed > 1) return this;
+                    items.add(input.withAlternative(alternative));
+                }
+            }
+            return new RecipeData(inputs, outputs, catalysts, times, categories, items);
         }
     }
 

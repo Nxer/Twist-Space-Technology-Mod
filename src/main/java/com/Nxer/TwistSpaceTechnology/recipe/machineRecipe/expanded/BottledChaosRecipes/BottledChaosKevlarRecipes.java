@@ -165,9 +165,11 @@ public final class BottledChaosKevlarRecipes {
         catalog.registerAlternativeChain("kevlar", TierEU.RECIPE_UV, EthyleneGas,
             new Object[] { EthyleneGlycol }, new Object[] { EthyleneGlycol },
             catalog.markRecipe(LargeChemicalReactor, new Object[] { EthyleneOxideGas, Water }, EthyleneGlycol, 1));
+        catalog.requireCircuit("kevlar", 1);
         catalog.registerAlternativeChain("kevlar", TierEU.RECIPE_UV, SiliconDust,
             new Object[] { SiliconeOil }, new Object[] { SiliconeOil },
             catalog.markRecipe(LargeChemicalReactor, new Object[] { EthyleneOxideGas, Dimethyldichlorosilane, Water }, SiliconeOil, 2));
+        catalog.requireCircuit("kevlar", 2);
 
         // Shared upstream paths stop at the registered precursor outputs, keeping the finishing stage separate.
         catalog.registerInputSynthesis(Assembler, GoldenBrownCelluloseFiber, GoldenBrownAlgaeBiomass, -1);

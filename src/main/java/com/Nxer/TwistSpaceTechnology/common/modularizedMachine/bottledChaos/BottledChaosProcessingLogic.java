@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import net.minecraft.item.ItemStack;
 
@@ -93,30 +94,17 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
                 failure = result;
                 continue;
             }
-            // 2. First spend the 10-second work allowance on downstream batches, then on additional external feed.
-            double maximumWork = Math.min(
-                Double.MAX_VALUE,
-                MAX_BATCH_TICKS * BottledChaosOverclock.maximumSpeed(
-                    baseline.baseEUt() * euModifier,
-                    availableVoltage,
-                    overClockTimeReduction,
-                    overClockPowerIncrease) / speedBoost);
-            PreparedPlan fallback = planner.fitDownstream(baseline, maximumWork);
-            PreparedPlan chosen = fallback;
-            int upper = batchSize > 1 && baseline.durationTicks() <= maximumWork ? baseline.externalBatchLimit() : 1;
-            long lower = 2;
-            int chosenBatches = 1;
-            while (lower <= upper) {
-                int middle = (int) (lower + (upper - lower) / 2);
-                PreparedPlan candidate = planner.prepare(middle);
-                if (candidate != null && candidate.durationTicks() <= maximumWork
-                    && validatePlan(candidate).wasSuccessful()) {
-                    chosen = candidate;
-                    chosenBatches = middle;
-                    lower = (long) middle + 1;
-                } else upper = middle - 1;
-            }
-            chosen = planner.balanceCarry(chosen, chosenBatches, maximumWork);
+            // 2. Grow final-product targets; every probe derives its own upstream feed and serial voltage.
+            PreparedPlan fallback = baseline;
+            Predicate<PreparedPlan> fitsWork = candidate -> validatePlan(candidate).wasSuccessful()
+                && candidate.durationTicks() <= Math.min(
+                    Double.MAX_VALUE,
+                    MAX_BATCH_TICKS * BottledChaosOverclock.maximumSpeed(
+                        candidate.baseEUt() * euModifier,
+                        availableVoltage,
+                        overClockTimeReduction,
+                        overClockPowerIncrease) / speedBoost);
+            PreparedPlan chosen = planner.fitDownstream(baseline, fitsWork);
             result = validatePlan(chosen);
             if (!result.wasSuccessful()) {
                 failure = result;
@@ -124,6 +112,15 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
             }
             // 3. Reserve outputs before changing even the caller's input copies; a smaller plan may still fit.
             result = outputCheck.apply(chosen.outputPlan());
+            if (!result.wasSuccessful() && chosen != fallback) {
+                // Probe smaller targets only after output blockage, avoiding extra ME simulations on normal starts.
+                chosen = planner.fitDownstream(
+                    fallback,
+                    candidate -> fitsWork.test(candidate)
+                        && (candidate == fallback || outputCheck.apply(candidate.outputPlan())
+                            .wasSuccessful()));
+                result = outputCheck.apply(chosen.outputPlan());
+            }
             if (!result.wasSuccessful() && chosen != fallback) {
                 chosen = fallback;
                 result = outputCheck.apply(chosen.outputPlan());
