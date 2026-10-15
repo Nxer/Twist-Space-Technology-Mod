@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosMachineModule;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosStructureCatalog.Rule;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosStructureCatalog.Structure;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
 
@@ -32,7 +33,8 @@ public final class BottledChaosStructureDisplay {
 
     /** Both material regions and the output describe the same validated one-set configuration. */
     @Desugar
-    public record Frame(ItemStack[] fixed, ItemStack[] variable, ItemStack carrier, ItemStack[] outputs, int profile) {
+    public record Frame(ItemStack[] fixed, ItemStack[] variable, ItemStack carrier, ItemStack[] outputs, int profile,
+        Structure structure) {
 
         public ItemStack[] inputs() {
             ItemStack[] result = new ItemStack[fixed.length + variable.length + 1];
@@ -175,7 +177,8 @@ public final class BottledChaosStructureDisplay {
             orderVariableMaterials(rule, variant, variable),
             GTCMItemList.BottledChaosMachineModule.get(1),
             new ItemStack[] { ItemBottledChaosMachineModule.createDisplay(structure) },
-            rule.profile());
+            rule.profile(),
+            structure);
     }
 
     /** Keep upgrade groups in stable slots even when a replacement has a different registry item ID. */

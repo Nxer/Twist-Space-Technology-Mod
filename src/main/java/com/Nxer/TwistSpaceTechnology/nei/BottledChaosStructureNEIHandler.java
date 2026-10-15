@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosMachineModule;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosComplexStructures;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosStructureDisplay;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_BottledChaosStructureFrontend;
@@ -165,6 +166,9 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
             addInputs(new ItemStack[] { frame.carrier() }, TST_BottledChaosStructureFrontend.CARRIER_SLOT);
             mRecipe.mOutputs = frame.outputs();
             mRecipe.mSpecialValue = frame.profile();
+            mRecipe.setNeiDesc(
+                BottledChaosComplexStructures.notes(frame.structure())
+                    .toArray(new String[0]));
             for (int i = 0; i < frame.outputs().length; i++) {
                 Pos2d output = TST_BottledChaosStructureFrontend.OUTPUT_POSITION.add(i * 18, 0)
                     .add(WINDOW_OFFSET);

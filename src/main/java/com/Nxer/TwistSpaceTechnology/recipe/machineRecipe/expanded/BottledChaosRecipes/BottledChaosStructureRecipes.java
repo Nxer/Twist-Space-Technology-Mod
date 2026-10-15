@@ -82,7 +82,8 @@ public final class BottledChaosStructureRecipes {
                                 new ItemStack[0],
                                 GTCMItemList.BottledChaosMachineModule.get(1),
                                 new ItemStack[] { module.copy(), emptyDisk.copy() },
-                                0))))
+                                0,
+                                structure))))
                         registered++;
                     if (disk != null && add(
                         new BottledChaosStructureDisplay(
@@ -91,7 +92,8 @@ public final class BottledChaosStructureRecipes {
                                 new ItemStack[0],
                                 module.copy(),
                                 new ItemStack[] { GTCMItemList.BottledChaosMachineModule.get(1), disk.copy() },
-                                0))))
+                                0,
+                                null))))
                         registered++;
                     diskExample = true;
                 }

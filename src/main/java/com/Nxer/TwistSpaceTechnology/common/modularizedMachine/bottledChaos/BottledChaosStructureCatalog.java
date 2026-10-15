@@ -82,9 +82,12 @@ public final class BottledChaosStructureCatalog {
         }
 
         public boolean sameConfiguration(Structure other) {
-            return other != null && machineKey.equals(other.machineKey)
-                && profile == other.profile
-                && materialTag().equals(other.materialTag());
+            if (other == null || !machineKey.equals(other.machineKey)
+                || profile != other.profile
+                || materials.length != other.materials.length) return false;
+            for (int i = 0; i < materials.length; i++)
+                if (!ItemStack.areItemStacksEqual(materials[i], other.materials[i])) return false;
+            return true;
         }
     }
 

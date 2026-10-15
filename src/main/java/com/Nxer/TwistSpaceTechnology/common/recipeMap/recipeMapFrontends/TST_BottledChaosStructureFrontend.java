@@ -8,9 +8,6 @@ import net.minecraft.util.StatCollector;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosMachineModule;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosComplexStructures;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosStructureCatalog;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosStructureDisplay;
 import com.gtnewhorizons.modularui.api.ModularUITextures;
 import com.gtnewhorizons.modularui.api.math.Alignment;
@@ -148,15 +145,8 @@ public final class TST_BottledChaosStructureFrontend extends RecipeMapFrontend {
         drawLines(
             info,
             StatCollector.translateToLocalFormatted("item.tst.bottled_chaos.machine_module.pool", display.poolNames()));
-        if (info.recipe.mOutputs.length == 0) return;
-        var output = info.recipe.mOutputs[0];
-        if (!ItemBottledChaosMachineModule.isModule(output)) return;
-        var data = ItemBottledChaosMachineModule.assembly(output);
-        var structure = BottledChaosStructureCatalog.resolve(
-            data.getString("machine"),
-            data.getInteger("profile"),
-            ItemBottledChaosMachineModule.materials(output));
-        for (String note : BottledChaosComplexStructures.notes(structure)) drawLines(info, note);
+        String[] notes = info.recipe.getNeiDesc();
+        if (notes != null) for (String note : notes) drawLines(info, note);
     }
 
     private static void drawLines(RecipeDisplayInfo info, String text) {
