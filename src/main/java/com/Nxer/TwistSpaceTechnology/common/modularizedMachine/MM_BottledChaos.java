@@ -121,6 +121,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private static final int CAPACITY_REGION_COUNT = 4;
     private static final int CAPACITY_REGION_BLOCK_COUNT = 64;
     private static final int CAPACITY_LEVEL_COUNT = 5;
+    private static final int OUTPUT_RETRY_TICKS = 20;
     private static final int CREDENTIAL_INJECTION_TARGET_SLOT = 0;
     private static final int CREDENTIAL_INJECTION_SOURCE_SLOT_START = 1;
     private static final int CREDENTIAL_INJECTION_OUTPUT_SLOT = 9;
@@ -969,6 +970,13 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         refreshAllocation();
         refreshPowerRound();
         if (overCapacity) return SimpleCheckRecipeResult.ofFailure("bottled_chaos.capacity_exceeded");
+        // Finished jobs retry delivery only in runMachine; recipe searches reuse their last result.
+        for (int slot = 0; slot < THREAD_COUNT; slot++) {
+            CheckRecipeResult result = threadResults[slot];
+            if (threads[slot].isBusy() && threads[slot].progress >= threads[slot].duration
+                && (result == CheckRecipeResultRegistry.ITEM_OUTPUT_FULL
+                    || result == CheckRecipeResultRegistry.FLUID_OUTPUT_FULL)) return result;
+        }
         if (activeConcentratedPower) return checkConcentratedProcessing();
         if (concentratedPower != activeConcentratedPower) return CheckRecipeResultRegistry.SUCCESSFUL;
         CheckRecipeResult failure = null;
@@ -1536,7 +1544,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             }
             if (thread.progress >= thread.duration && canRunThread(i).wasSuccessful()
                 && (advancing[i] || tick >= thread.nextCheckTick)) {
-                BottledChaosOutputBuffer.Transaction output = new BottledChaosOutputBuffer.Transaction(this, false);
+                // Recheck current capacity: another producer may have occupied the reserved space.
+                BottledChaosOutputBuffer.Transaction output = new BottledChaosOutputBuffer.Transaction(this, true);
                 CheckRecipeResult result = output.reserve(thread.outputs);
                 threadResults[i] = result;
                 if (result.wasSuccessful()) {
@@ -1550,11 +1559,16 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                     markDirty();
                 } else {
                     thread.status = result.getDisplayString();
-                    thread.nextCheckTick = tick + 20;
+                    thread.nextCheckTick = tick + OUTPUT_RETRY_TICKS;
                     failure = result;
                 }
             }
-            if (thread.isBusy() && advancing[i] && thread.duration > mMaxProgresstime) {
+            if (thread.isBusy() && thread.progress >= thread.duration && !threadResults[i].wasSuccessful()) {
+                // Keep the output failure visible between the bounded delivery retries.
+                failure = threadResults[i];
+            }
+            if (thread.isBusy() && (advancing[i] || thread.progress >= thread.duration)
+                && thread.duration > mMaxProgresstime) {
                 mMaxProgresstime = thread.duration;
                 mProgresstime = thread.progress;
             }
