@@ -30,12 +30,17 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
         + "-----------------------------------------"
         + EnumChatFormatting.RESET;
 
-    // #tr item.tst.bottled_chaos.machine_module.0.name
+    // #tr tst.bottledchaos.machine_module.0.name
     // # Bottled Chaos Machine Structure Module
     // #zh_CN 瓶中混沌机器结构模组
     public ItemBottledChaosMachineModule() {
         super("BottledChaosMachineModule", "bottled_chaos.machine_module");
         setMaxStackSize(1);
+    }
+
+    @Override
+    public String getItemStackDisplayName(ItemStack stack) {
+        return StatCollector.translateToLocal("tst.bottledchaos.machine_module.0.name");
     }
 
     public static boolean isModule(ItemStack stack) {
@@ -166,25 +171,25 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
                 }
         }
         if (!display && quantity <= 0) {
-            // #tr item.tst.bottled_chaos.machine_module.empty
+            // #tr tst.bottledchaos.machine_module.empty
             // # Empty structure carrier. Package structures on the controller's injection page.
             // #zh_CN 空白结构载体. 在主机的注入页面封装机器结构.
-            lines.add(StatCollector.translateToLocal("item.tst.bottled_chaos.machine_module.empty"));
+            lines.add(StatCollector.translateToLocal("tst.bottledchaos.machine_module.empty"));
             return;
         }
         if (BottledChaosStructureCatalog.isAuxiliaryController(controller)) {
             lines.add(PARAMETER_SEPARATOR);
-            // #tr item.tst.bottled_chaos.machine_module.plant_capacity
+            // #tr tst.bottledchaos.machine_module.plant_capacity
             // # Each purification unit's quantity is limited by this plant; no processing parameters
             // #zh_CN 限制每台净化水机器的堆叠组数, 不参与配方折算
-            lines.add(StatCollector.translateToLocal("item.tst.bottled_chaos.machine_module.plant_capacity"));
+            lines.add(StatCollector.translateToLocal("tst.bottledchaos.machine_module.plant_capacity"));
             if (!display) {
-                // #tr item.tst.bottled_chaos.machine_module.plant_quantity
+                // #tr tst.bottledchaos.machine_module.plant_quantity
                 // # Complete structures: x%s
                 // #zh_CN 完整结构: x%s
                 lines.add(
                     EnumChatFormatting.GRAY + StatCollector.translateToLocalFormatted(
-                        "item.tst.bottled_chaos.machine_module.plant_quantity",
+                        "tst.bottledchaos.machine_module.plant_quantity",
                         EnumChatFormatting.GOLD.toString() + quantity));
             }
             return;
@@ -205,22 +210,22 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
         }
         for (var group : parameterGroups.entrySet()) {
             lines.add(PARAMETER_SEPARATOR);
-            // #tr item.tst.bottled_chaos.machine_module.pool
+            // #tr tst.bottledchaos.machine_module.pool
             // # Recipe pool: %s
             // #zh_CN 配方池: %s
             lines.add(
                 EnumChatFormatting.AQUA + StatCollector.translateToLocalFormatted(
-                    "item.tst.bottled_chaos.machine_module.pool",
+                    "tst.bottledchaos.machine_module.pool",
                     EnumChatFormatting.WHITE.toString() + group.getValue()));
             lines.addAll(group.getKey());
         }
         if (display) return;
-        // #tr item.tst.bottled_chaos.machine_module.quantity
+        // #tr tst.bottledchaos.machine_module.quantity
         // # Complete structures: x%s, speed: x%s
         // #zh_CN 完整结构: x%s, 速度: x%s
         lines.add(
             EnumChatFormatting.GRAY + StatCollector.translateToLocalFormatted(
-                "item.tst.bottled_chaos.machine_module.quantity",
+                "tst.bottledchaos.machine_module.quantity",
                 EnumChatFormatting.GOLD.toString() + quantity + EnumChatFormatting.GRAY,
                 EnumChatFormatting.GREEN.toString() + quantitySpeed(quantity)));
     }

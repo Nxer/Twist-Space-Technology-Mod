@@ -100,34 +100,32 @@ public class TST_BottledChaosFrontend extends TST_GeneralFrontend {
             recipeInfo.drawText(
                 StatCollector.translateToLocalFormatted("GT5U.nei.display.usage", formatNumber(display.baseEUt()), ""));
         }
-        // #tr tst.common.recipe.BottledChaosRecipes.total_time
+        // #tr tst.bottledchaos.recipe.total_time
         // # Reference Time: %s s
         // #zh_CN 参考用时: %s秒
         drawFittedText(
             recipeInfo,
             StatCollector.translateToLocalFormatted(
-                "tst.common.recipe.BottledChaosRecipes.total_time",
+                "tst.bottledchaos.recipe.total_time",
                 formatNumber(
                     display.plan()
                         .durationTicks() / 20.0)));
-        // #tr tst.common.recipe.BottledChaosRecipes.time_adjustment
-        // # Actual processing time is adjusted according to controller parameters
-        // #zh_CN 实际用时根据主机参数折算
-        drawFittedText(
-            recipeInfo,
-            StatCollector.translateToLocal("tst.common.recipe.BottledChaosRecipes.time_adjustment"));
-        // #tr tst.common.recipe.BottledChaosRecipes.recipe_maps
+        // #tr tst.bottledchaos.recipe.time_adjustment
+        // # Actual duration reflects installed modules and controller parameters
+        // #zh_CN 实际耗时根据已装模组及主机参数折算
+        drawFittedText(recipeInfo, StatCollector.translateToLocal("tst.bottledchaos.recipe.time_adjustment"));
+        // #tr tst.bottledchaos.recipe.recipe_maps
         // # Recipe Maps:
         // #zh_CN 配方池:
-        recipeInfo.drawText(StatCollector.translateToLocal("tst.common.recipe.BottledChaosRecipes.recipe_maps"));
-        // #tr tst.common.recipe.BottledChaosRecipes.recipe_map_time
+        recipeInfo.drawText(StatCollector.translateToLocal("tst.bottledchaos.recipe.recipe_maps"));
+        // #tr tst.bottledchaos.recipe.recipe_map_time
         // # %s: %s s
         // #zh_CN %s: %s秒
         for (var process : display.processingTimes()) {
             drawFittedText(
                 recipeInfo,
                 StatCollector.translateToLocalFormatted(
-                    "tst.common.recipe.BottledChaosRecipes.recipe_map_time",
+                    "tst.bottledchaos.recipe.recipe_map_time",
                     BottledChaosMachineConfiguration.poolName(process.map()),
                     formatNumber(process.durationTicks() / 20.0)));
         }

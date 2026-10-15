@@ -813,23 +813,23 @@ public final class MachineLoader {
         if (Config.EnableModularizedMachineSystem) {
             // 19082 is reserved for the deferred Bottled Chaos prototype implementation.
 
-            // #tr tst.modular.machine.BottledChaos.name
+            // #tr tst.bottledchaos.name
             // # Bottled Chaos
             // #zh_CN 瓶中混沌
             GTCMItemList.BottledChaos.set(
                 new MM_BottledChaos(
                     19083,
                     "NameBottledChaos",
-                    TSTUtils.tr("tst.modular.machine.BottledChaos.name")));
+                    TSTUtils.tr("tst.bottledchaos.name")));
 
-            // #tr tst.modular.machine.BottledChaosRecipeTokenHatch.name
+            // #tr tst.bottledchaos.credential_hatch.name
             // # Bottled Chaos Credential Hatch
             // #zh_CN 瓶中混沌凭证仓
             GTCMItemList.BottledChaosRecipeTokenHatch.set(
                 new TST_BottledChaosRecipeTokenHatch(
                     19085,
                     "NameBottledChaosRecipeTokenHatch",
-                    TSTUtils.tr("tst.modular.machine.BottledChaosRecipeTokenHatch.name"),
+                    TSTUtils.tr("tst.bottledchaos.credential_hatch.name"),
                     7));
         }
 

@@ -308,11 +308,11 @@ public class GTCMRecipe {
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MassFabricatorGenesis.get(1)))
         .build();
 
-    // #tr tst.common.recipe.BottledChaosRecipes.name
+    // #tr tst.bottledchaos.recipe.name
     // # Bottled Chaos
     // #zh_CN 瓶中混沌
     public static final RecipeMap<TST_RecipeMapBackend> BottledChaosRecipes = RecipeMapBuilder
-        .of("tst.common.recipe.BottledChaosRecipes.name", TST_RecipeMapBackend::new)
+        .of("tst.bottledchaos.recipe.name", TST_RecipeMapBackend::new)
         .maxIO(16, 16, 16, 16)
         .disableRegisterNEI()
         .frontend(TST_BottledChaosFrontend::new)
@@ -332,11 +332,11 @@ public class GTCMRecipe {
         })
         .build();
 
-    // #tr tst.common.recipe.BottledChaosExpandedRecipes.name
+    // #tr tst.bottledchaos.recipe.expanded.name
     // # Bottled Chaos - Extended Recipes
     // #zh_CN 瓶中混沌 - 扩展配方
     public static final RecipeMap<TST_RecipeMapBackend> BottledChaosExpandedRecipes = RecipeMapBuilder
-        .of("tst.common.recipe.BottledChaosExpandedRecipes.name", TST_RecipeMapBackend::new)
+        .of("tst.bottledchaos.recipe.expanded.name", TST_RecipeMapBackend::new)
         .maxIO(72, 16, 16, 16)
         .disableRegisterNEI()
         .frontend(TST_BottledChaosExpandedFrontend::new)
@@ -356,101 +356,101 @@ public class GTCMRecipe {
         })
         .build();
 
-    // #tr tst.common.recipe.BottledChaosPurifiedWaterCategory.name
+    // #tr tst.bottledchaos.recipe.category.purified_water.name
     // # Bottled Chaos - Water Purification
     // #zh_CN 瓶中混沌 - 净化水
     public static final RecipeCategory BottledChaosPurifiedWaterCategory = new RecipeCategory(
-        "tst.common.recipe.BottledChaosPurifiedWaterCategory.name",
+        "tst.bottledchaos.recipe.category.purified_water.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
-    // #tr tst.common.recipe.BottledChaosTitaniumCategory.name
+    // #tr tst.bottledchaos.recipe.category.titanium.name
     // # Bottled Chaos - Titanium
     // #zh_CN 瓶中混沌 - 钛
     public static final RecipeCategory BottledChaosTitaniumCategory = new RecipeCategory(
-        "tst.common.recipe.BottledChaosTitaniumCategory.name",
+        "tst.bottledchaos.recipe.category.titanium.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
-    // #tr tst.common.recipe.BottledChaosTungstenCategory.name
+    // #tr tst.bottledchaos.recipe.category.tungsten.name
     // # Bottled Chaos - Tungsten
     // #zh_CN 瓶中混沌 - 钨
     public static final RecipeCategory BottledChaosTungstenCategory = new RecipeCategory(
-        "tst.common.recipe.BottledChaosTungstenCategory.name",
+        "tst.bottledchaos.recipe.category.tungsten.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
-    // #tr tst.common.recipe.BottledChaosPlatinumCategory.name
+    // #tr tst.bottledchaos.recipe.category.platinum.name
     // # Bottled Chaos - Platinum Group
     // #zh_CN 瓶中混沌 - 铂系
     public static final RecipeCategory BottledChaosPlatinumCategory = new RecipeCategory(
-        "tst.common.recipe.BottledChaosPlatinumCategory.name",
+        "tst.bottledchaos.recipe.category.platinum.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
-    // #tr tst.common.recipe.BottledChaosLanthanideCategory.name
+    // #tr tst.bottledchaos.recipe.category.lanthanide.name
     // # Bottled Chaos - Lanthanides
     // #zh_CN 瓶中混沌 - 镧系
     public static final RecipeCategory BottledChaosLanthanideCategory = new RecipeCategory(
-        "tst.common.recipe.BottledChaosLanthanideCategory.name",
+        "tst.bottledchaos.recipe.category.lanthanide.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
-    // #tr tst.common.recipe.BottledChaosNaquadahCategory.name
+    // #tr tst.bottledchaos.recipe.category.naquadah.name
     // # Bottled Chaos - Naquadah Processing
     // #zh_CN 瓶中混沌 - 硅岩处理
     public static final RecipeCategory BottledChaosNaquadahCategory = new RecipeCategory(
-        "tst.common.recipe.BottledChaosNaquadahCategory.name",
+        "tst.bottledchaos.recipe.category.naquadah.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
-    // #tr tst.common.recipe.BottledChaosPrismaticCategory.name
+    // #tr tst.bottledchaos.recipe.category.prismatic.name
     // # Bottled Chaos - Prismatic
     // #zh_CN 瓶中混沌 - 海晶线
     public static final RecipeCategory BottledChaosPrismaticCategory = new RecipeCategory(
-        "tst.common.recipe.BottledChaosPrismaticCategory.name",
+        "tst.bottledchaos.recipe.category.prismatic.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
-    // #tr tst.common.recipe.BottledChaosRadoxCategory.name
+    // #tr tst.bottledchaos.recipe.category.radox.name
     // # Bottled Chaos - Radox
     // #zh_CN 瓶中混沌 - 拉多X
     public static final RecipeCategory BottledChaosRadoxCategory = new RecipeCategory(
-        "tst.common.recipe.BottledChaosRadoxCategory.name",
+        "tst.bottledchaos.recipe.category.radox.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
-    // #tr tst.common.recipe.BottledChaosKevlarCategory.name
+    // #tr tst.bottledchaos.recipe.category.kevlar.name
     // # Bottled Chaos - Kevlar
     // #zh_CN 瓶中混沌 - 凯芙拉
     public static final RecipeCategory BottledChaosKevlarCategory = new RecipeCategory(
-        "tst.common.recipe.BottledChaosKevlarCategory.name",
+        "tst.bottledchaos.recipe.category.kevlar.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
-    // #tr tst.common.recipe.BottledChaosBiologicalCategory.name
+    // #tr tst.bottledchaos.recipe.category.biological.name
     // # Bottled Chaos - Biological Processing
     // #zh_CN 瓶中混沌 - 生物线
     public static final RecipeCategory BottledChaosBiologicalCategory = new RecipeCategory(
-        "tst.common.recipe.BottledChaosBiologicalCategory.name",
+        "tst.bottledchaos.recipe.category.biological.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
-    // #tr tst.common.recipe.BottledChaosCredentialRecipes.name
+    // #tr tst.bottledchaos.recipe.credential.name
     // # Bottled Chaos - Credential Injection
     // #zh_CN 瓶中混沌 - 凭证注入
     public static final RecipeMap<TST_RecipeMapBackend> BottledChaosCredentialRecipes = RecipeMapBuilder
-        .of("tst.common.recipe.BottledChaosCredentialRecipes.name", TST_RecipeMapBackend::new)
+        .of("tst.bottledchaos.recipe.credential.name", TST_RecipeMapBackend::new)
         .maxIO(9, 2, 0, 0)
         .frontend(TST_BottledChaosCredentialFrontend::new)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
@@ -461,11 +461,11 @@ public class GTCMRecipe {
                 .setMultipleWidgetsAllowed(true))
         .build();
 
-    // #tr tst.common.recipe.BottledChaosStructureRecipes.name
+    // #tr tst.bottledchaos.recipe.structure.name
     // # Bottled Chaos - Machine Structure Packaging
     // #zh_CN 瓶中混沌 - 机器结构封装
     public static final RecipeMap<TST_RecipeMapBackend> BottledChaosStructureRecipes = RecipeMapBuilder
-        .of("tst.common.recipe.BottledChaosStructureRecipes.name", TST_RecipeMapBackend::new)
+        .of("tst.bottledchaos.recipe.structure.name", TST_RecipeMapBackend::new)
         .maxIO(TST_BottledChaosStructureFrontend.INPUT_SLOTS, 2, 0, 0)
         .disableRegisterNEI()
         .frontend(TST_BottledChaosStructureFrontend::new)

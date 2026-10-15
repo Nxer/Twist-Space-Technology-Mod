@@ -78,19 +78,19 @@ public final class TST_BottledChaosStructureFrontend extends RecipeMapFrontend {
                     .setPos(new Pos2d(x, 20).add(ctx.windowOffset))
                     .setSize(78, 223));
         }
-        // #tr tst.common.recipe.BottledChaosStructureRecipes.fixed_inputs
+        // #tr tst.bottledchaos.recipe.structure.fixed_inputs
         // # Fixed inputs
         // #zh_CN 固定输入
         builder.widget(
-            TextWidget.localised("tst.common.recipe.BottledChaosStructureRecipes.fixed_inputs")
+            TextWidget.localised("tst.bottledchaos.recipe.structure.fixed_inputs")
                 .setTextAlignment(Alignment.Center)
                 .setPos(new Pos2d(4, 6).add(ctx.windowOffset))
                 .setSize(78, 12));
-        // #tr tst.common.recipe.BottledChaosStructureRecipes.variable_inputs
+        // #tr tst.bottledchaos.recipe.structure.variable_inputs
         // # Variable inputs
         // #zh_CN 可变输入
         builder.widget(
-            TextWidget.localised("tst.common.recipe.BottledChaosStructureRecipes.variable_inputs")
+            TextWidget.localised("tst.bottledchaos.recipe.structure.variable_inputs")
                 .setTextAlignment(Alignment.Center)
                 .setPos(new Pos2d(88, 6).add(ctx.windowOffset))
                 .setSize(78, 12));
@@ -124,13 +124,13 @@ public final class TST_BottledChaosStructureFrontend extends RecipeMapFrontend {
         }
         addProgressBar(builder, ctx);
         addGregTechLogo(builder, ctx.windowOffset);
-        // #tr tst.common.recipe.BottledChaosStructureRecipes.disk
+        // #tr tst.bottledchaos.recipe.structure.disk
         // # ME disk: load / unload
         // #zh_CN ME磁盘: 加载 / 卸载
 
-        // #tr tst.common.recipe.BottledChaosStructureRecipes.capacity
-        // # Insufficient space: unload fails
-        // #zh_CN 磁盘容量不足时卸载失败.
+        // #tr tst.bottledchaos.recipe.structure.capacity
+        // # Unloading requires free capacity and item-type slots.
+        // #zh_CN 磁盘容量或物品类型槽不足时无法卸载.
         return builder;
     }
 
@@ -139,12 +139,12 @@ public final class TST_BottledChaosStructureFrontend extends RecipeMapFrontend {
         var display = info.recipe.getMetadata(BottledChaosStructureDisplay.DISPLAY);
         if (display == null) return;
         if (info.recipe.mSpecialValue == 0) {
-            drawLines(info, StatCollector.translateToLocal("tst.common.recipe.BottledChaosStructureRecipes.disk"));
-            drawLines(info, StatCollector.translateToLocal("tst.common.recipe.BottledChaosStructureRecipes.capacity"));
+            drawLines(info, StatCollector.translateToLocal("tst.bottledchaos.recipe.structure.disk"));
+            drawLines(info, StatCollector.translateToLocal("tst.bottledchaos.recipe.structure.capacity"));
         }
         drawLines(
             info,
-            StatCollector.translateToLocalFormatted("item.tst.bottled_chaos.machine_module.pool", display.poolNames()));
+            StatCollector.translateToLocalFormatted("tst.bottledchaos.machine_module.pool", display.poolNames()));
         String[] notes = info.recipe.getNeiDesc();
         if (notes != null) for (String note : notes) drawLines(info, note);
     }

@@ -140,7 +140,7 @@ public final class BottledChaosRecipeResources {
 
         public static String translationKey(int index) {
             String name = tag(index);
-            return name == null ? null : "tst.modular.machine.BottledChaos.route." + name;
+            return name == null ? null : "tst.bottledchaos.route." + name;
         }
 
         public static long readRouteMask(NBTTagCompound tag) {

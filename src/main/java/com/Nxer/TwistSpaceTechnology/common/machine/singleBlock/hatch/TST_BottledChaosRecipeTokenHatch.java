@@ -68,16 +68,15 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
     private int displayedHatchNumber;
     private int displayedInputPeerMask;
 
-    // #tr tst.modular.machine.BottledChaosRecipeTokenHatch.tooltip.info.01
+    // #tr tst.bottledchaos.credential_hatch.tooltip.info.01
     // # Holds one Bottled Chaos credential for one processing group.
     // #zh_CN 为一个加工组容纳一个瓶中混沌凭证.
 
-    // #tr tst.modular.machine.BottledChaosRecipeTokenHatch.tooltip.info.02
+    // #tr tst.bottledchaos.credential_hatch.tooltip.info.02
     // # The parallel controller module determines how many credential hatches may be installed.
     // #zh_CN 并行控制器模块决定可安装的凭证仓数量.
-    private static final String[] DESCRIPTION = {
-        TSTUtils.tr("tst.modular.machine.BottledChaosRecipeTokenHatch.tooltip.info.01"),
-        TSTUtils.tr("tst.modular.machine.BottledChaosRecipeTokenHatch.tooltip.info.02") };
+    private static final String[] DESCRIPTION = { TSTUtils.tr("tst.bottledchaos.credential_hatch.tooltip.info.01"),
+        TSTUtils.tr("tst.bottledchaos.credential_hatch.tooltip.info.02") };
 
     public TST_BottledChaosRecipeTokenHatch(int id, String name, String nameRegional, int tier) {
         super(id, name, nameRegional, tier, DESCRIPTION);
@@ -150,12 +149,11 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
         for (int slot = 0; slot < 15; slot++) {
             if ((peerMask & (1 << slot)) != 0) peers.add("#" + (slot + 1));
         }
-        // #tr tst.modular.machine.BottledChaosRecipeTokenHatch.bound_inputs
+        // #tr tst.bottledchaos.credential_hatch.bound_inputs
         // # Bound to %s
         // #zh_CN 与%s绑定
-        return StatCollector.translateToLocalFormatted(
-            "tst.modular.machine.BottledChaosRecipeTokenHatch.bound_inputs",
-            peers.toString());
+        return StatCollector
+            .translateToLocalFormatted("tst.bottledchaos.credential_hatch.bound_inputs", peers.toString());
     }
 
     @SideOnly(Side.CLIENT)
@@ -210,11 +208,10 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
         NBTTagCompound job = tag.getCompoundTag(WAILA_THREAD_NBT);
         int duration = job.getInteger("duration");
         if (!tag.hasKey(WAILA_THREAD_NBT, 10)) {
-            // #tr tst.modular.machine.BottledChaosRecipeTokenHatch.disconnected
+            // #tr tst.bottledchaos.credential_hatch.disconnected
             // # Not connected to a formed Bottled Chaos controller.
             // #zh_CN 未连接到成型的瓶中混沌主机.
-            currentTip
-                .add(StatCollector.translateToLocal("tst.modular.machine.BottledChaosRecipeTokenHatch.disconnected"));
+            currentTip.add(StatCollector.translateToLocal("tst.bottledchaos.credential_hatch.disconnected"));
             if (!showCache) return;
         } else {
             currentTip.add(
@@ -228,7 +225,7 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
             long eut = job.getLong("eut");
             double inputPower = job.getDouble("inputPower");
             byte energyTier = (byte) job.getLong("energyTier");
-            // #tr tst.modular.machine.BottledChaosRecipeTokenHatch.power_share
+            // #tr tst.bottledchaos.credential_hatch.power_share
             // # Total usable power share: %s%%
             // #zh_CN 占总可用功率: %s%%
             currentTip.add(
@@ -244,7 +241,7 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
                         GTUtility.getColoredTierNameFromVoltage(eut)))
                     + " | "
                     + StatCollector.translateToLocalFormatted(
-                        "tst.modular.machine.BottledChaosRecipeTokenHatch.power_share",
+                        "tst.bottledchaos.credential_hatch.power_share",
                         String.format(
                             Locale.ROOT,
                             "%.2f",
@@ -256,23 +253,23 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
         NBTTagCompound outputs = showCache ? tag.getCompoundTag(WAILA_CACHE_NBT) : job.getCompoundTag("outputs");
         int total = outputs.getInteger("total");
         if (total <= 0 && !showCache) return;
-        // #tr tst.modular.machine.BottledChaosRecipeTokenHatch.expected_outputs
+        // #tr tst.bottledchaos.credential_hatch.expected_outputs
         // # Expected outputs (%s types):
         // #zh_CN 预计产物(%s种):
 
-        // #tr tst.modular.machine.BottledChaosRecipeTokenHatch.pending_outputs
+        // #tr tst.bottledchaos.credential_hatch.pending_outputs
         // # Pending outputs (%s types):
         // #zh_CN 待输出产物(%s种):
 
-        // #tr tst.modular.machine.BottledChaosRecipeTokenHatch.cached_materials
+        // #tr tst.bottledchaos.credential_hatch.cached_materials
         // # Cached materials (%s types):
         // #zh_CN 缓存材料(%s种):
         currentTip.add(
             StatCollector.translateToLocalFormatted(
-                showCache ? "tst.modular.machine.BottledChaosRecipeTokenHatch.cached_materials"
+                showCache ? "tst.bottledchaos.credential_hatch.cached_materials"
                     : duration > 0 && job.getInteger("progress") >= duration
-                        ? "tst.modular.machine.BottledChaosRecipeTokenHatch.pending_outputs"
-                        : "tst.modular.machine.BottledChaosRecipeTokenHatch.expected_outputs",
+                        ? "tst.bottledchaos.credential_hatch.pending_outputs"
+                        : "tst.bottledchaos.credential_hatch.expected_outputs",
                 formatNumber(total)));
         NBTTagList entries = outputs.getTagList("entries", 10);
         int shown = 0;
@@ -349,15 +346,15 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
         InteractionSyncHandler executionAction = new InteractionSyncHandler().setOnMousePressed(
             mouse -> { if (mouse.mouseButton == 0 && !mouse.isClient()) setExecutionEnabled(!executionEnabled); });
         syncManager.syncValue("bottledChaosToggleExecution", executionAction);
-        // #tr tst.modular.machine.BottledChaosRecipeTokenHatch.pause
+        // #tr tst.bottledchaos.credential_hatch.pause
         // # Pause this processing group.
         // #zh_CN 暂停此加工组.
 
-        // #tr tst.modular.machine.BottledChaosRecipeTokenHatch.resume
+        // #tr tst.bottledchaos.credential_hatch.resume
         // # Resume this processing group.
         // #zh_CN 恢复此加工组运行.
 
-        // #tr tst.modular.machine.BottledChaosRecipeTokenHatch.clear
+        // #tr tst.bottledchaos.credential_hatch.clear
         // # Clear this processing group's current job and cached materials.
         // #zh_CN 清空此加工组的当前运行状态和缓存材料.
         ButtonWidget<?> executionButton = new ButtonWidget<>().syncHandler(executionAction)
@@ -374,8 +371,8 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
             .tooltipBuilder(
                 tooltip -> tooltip.addLine(
                     IKey.lang(
-                        execution.getBoolValue() ? "tst.modular.machine.BottledChaosRecipeTokenHatch.pause"
-                            : "tst.modular.machine.BottledChaosRecipeTokenHatch.resume")))
+                        execution.getBoolValue() ? "tst.bottledchaos.credential_hatch.pause"
+                            : "tst.bottledchaos.credential_hatch.resume")))
             .tooltipAutoUpdate(true)
             .pos(52, 62)
             .size(18, 18);
@@ -398,8 +395,7 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
                     () -> System.currentTimeMillis() < clearPressedUntil[0] ? GTGuiTextures.BUTTON_STANDARD_PRESSED
                         : GTGuiTextures.BUTTON_STANDARD))
             .overlay(GTGuiTextures.OVERLAY_BUTTON_CROSS)
-            .tooltipBuilder(
-                tooltip -> tooltip.addLine(IKey.lang("tst.modular.machine.BottledChaosRecipeTokenHatch.clear")))
+            .tooltipBuilder(tooltip -> tooltip.addLine(IKey.lang("tst.bottledchaos.credential_hatch.clear")))
             .pos(106, 62)
             .size(18, 18);
         return GTGuis.mteTemplatePanelBuilder(this, guiData, syncManager, uiSettings)
@@ -420,8 +416,7 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
                     .tooltipBuilder(
                         tooltip -> tooltip.addLine(
                             displayedHatchNumber > 0 ? getHatchDisplayText()
-                                : StatCollector
-                                    .translateToLocal("tst.modular.machine.BottledChaosRecipeTokenHatch.disconnected")))
+                                : StatCollector.translateToLocal("tst.bottledchaos.credential_hatch.disconnected")))
                     .tooltipAutoUpdate(true)
                     .pos(14, 8)
                     .size(148, 18));

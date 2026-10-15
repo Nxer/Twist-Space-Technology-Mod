@@ -35,11 +35,10 @@ public final class BottledChaosMissingCategoriesResult implements CheckRecipeRes
         for (int slot = 0; slot < BottledChaosMachineConfiguration.poolCount(); slot++) {
             if ((missing & (1L << slot)) != 0) names.add(BottledChaosMachineConfiguration.poolName(slot));
         }
-        // #tr tst.modular.machine.BottledChaos.missing_recipe_types
+        // #tr tst.bottledchaos.missing_recipe_types
         // # Missing machines for recipe pools: %s
         // #zh_CN 缺少配方池对应的机器: %s
-        return StatCollector
-            .translateToLocalFormatted("tst.modular.machine.BottledChaos.missing_recipe_types", names.toString());
+        return StatCollector.translateToLocalFormatted("tst.bottledchaos.missing_recipe_types", names.toString());
     }
 
     @Override

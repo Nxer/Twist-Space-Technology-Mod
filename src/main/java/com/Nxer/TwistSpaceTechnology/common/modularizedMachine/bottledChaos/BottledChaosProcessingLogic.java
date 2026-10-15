@@ -11,12 +11,12 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosCredential;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.PreparedPlan;
 
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 
 /** Folds only the cached recipe chains, against the input snapshot of one processing group. */
 public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
@@ -68,16 +68,16 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
     public @NotNull CheckRecipeResult process() {
         preparedPlan = null;
         if (routeMask == 0) {
-            // #tr GT5U.gui.text.recipe_result.bottled_chaos.missing_recipe_token
+            // #tr tst.bottledchaos.result.missing_recipe_token
             // # Missing a valid Bottled Chaos credential.
             // #zh_CN 缺少有效的瓶中混沌凭证.
-            return SimpleCheckRecipeResult.ofFailure("bottled_chaos.missing_recipe_token");
+            return SimpleResultWithText.ofFailure("tst.bottledchaos.result.missing_recipe_token");
         }
         if (!BottledChaosRecipeProcessor.isReady()) {
-            // #tr GT5U.gui.text.recipe_result.bottled_chaos.recipe_cache_unavailable
+            // #tr tst.bottledchaos.result.recipe_cache_unavailable
             // # Bottled Chaos processing recipes are unavailable. Check the startup log.
             // #zh_CN 瓶中混沌处理配方不可用. 请检查启动日志.
-            return SimpleCheckRecipeResult.ofFailure("bottled_chaos.recipe_cache_unavailable");
+            return SimpleResultWithText.ofFailure("tst.bottledchaos.result.recipe_cache_unavailable");
         }
         CheckRecipeResult failure = CheckRecipeResultRegistry.NO_RECIPE;
         // 1. Try the last successful family first. Failures may select another entry/family without any consumption.
@@ -144,10 +144,10 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
         if (failure == CheckRecipeResultRegistry.NO_RECIPE
             && machineParameters instanceof BottledChaosMachineConfiguration.RuntimeParameters runtime
             && runtime.rejectedSource()) {
-            // #tr GT5U.gui.text.recipe_result.bottled_chaos.source_machine_limit
+            // #tr tst.bottledchaos.result.source_machine_limit
             // # The configured source machine cannot satisfy the recipe requirements.
             // #zh_CN 已配置的来源机器无法满足配方要求.
-            return SimpleCheckRecipeResult.ofFailure("bottled_chaos.source_machine_limit");
+            return SimpleResultWithText.ofFailure("tst.bottledchaos.result.source_machine_limit");
         }
         return failure;
     }
@@ -156,10 +156,10 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
         long baseRecipeVoltage = plan.baseEUt();
         long requiredPools = plan.requiredPools();
         if (baseRecipeVoltage > maximumRecipeVoltage) {
-            // #tr GT5U.gui.text.recipe_result.bottled_chaos.recipe_voltage_limit
+            // #tr tst.bottledchaos.result.recipe_voltage_limit
             // # Recipe voltage exceeds the structure upgrade limit.
             // #zh_CN 配方电压超过结构升级上限.
-            return SimpleCheckRecipeResult.ofFailure("bottled_chaos.recipe_voltage_limit");
+            return SimpleResultWithText.ofFailure("tst.bottledchaos.result.recipe_voltage_limit");
         }
         if ((pools & requiredPools) != requiredPools) return missingPools(requiredPools, pools);
         double power = baseRecipeVoltage * euModifier;

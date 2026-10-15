@@ -412,27 +412,24 @@ public final class BottledChaosComplexStructures {
 
     public static String godforgeUpgradeName(GodforgeProfile profile) {
         StringJoiner branches = new StringJoiner(" + ");
-        // #tr tst.common.recipe.BottledChaosStructureRecipes.godforge_heat
+        // #tr tst.bottledchaos.recipe.structure.godforge_heat
         // # Heat
         // #zh_CN 热量
         if (profile.upgrades()
             .contains(ForgeOfGodsUpgrade.SEFCP))
-            branches
-                .add(StatCollector.translateToLocal("tst.common.recipe.BottledChaosStructureRecipes.godforge_heat"));
-        // #tr tst.common.recipe.BottledChaosStructureRecipes.godforge_parallel
+            branches.add(StatCollector.translateToLocal("tst.bottledchaos.recipe.structure.godforge_heat"));
+        // #tr tst.bottledchaos.recipe.structure.godforge_parallel
         // # Parallel
         // #zh_CN 并行
         if (profile.upgrades()
             .contains(ForgeOfGodsUpgrade.TCT))
-            branches.add(
-                StatCollector.translateToLocal("tst.common.recipe.BottledChaosStructureRecipes.godforge_parallel"));
-        // #tr tst.common.recipe.BottledChaosStructureRecipes.godforge_overclock
+            branches.add(StatCollector.translateToLocal("tst.bottledchaos.recipe.structure.godforge_parallel"));
+        // #tr tst.bottledchaos.recipe.structure.godforge_overclock
         // # Overclock
         // #zh_CN 超频
         if (profile.upgrades()
             .contains(ForgeOfGodsUpgrade.GGEBE))
-            branches.add(
-                StatCollector.translateToLocal("tst.common.recipe.BottledChaosStructureRecipes.godforge_overclock"));
+            branches.add(StatCollector.translateToLocal("tst.bottledchaos.recipe.structure.godforge_overclock"));
         return branches.toString();
     }
 
@@ -448,42 +445,40 @@ public final class BottledChaosComplexStructures {
         List<String> lines = new ArrayList<>();
         GodforgeProfile godforge = godforge(structure);
         if (godforge != null) {
-            // #tr tst.common.recipe.BottledChaosStructureRecipes.godforge_modules
+            // #tr tst.bottledchaos.recipe.structure.godforge_modules
             // # Rings: %s
             // #zh_CN 环数: %s
             lines.add(
-                StatCollector.translateToLocalFormatted(
-                    "tst.common.recipe.BottledChaosStructureRecipes.godforge_modules",
-                    godforge.rings()));
-            // #tr tst.common.recipe.BottledChaosStructureRecipes.godforge_upgrades
+                StatCollector
+                    .translateToLocalFormatted("tst.bottledchaos.recipe.structure.godforge_modules", godforge.rings()));
+            // #tr tst.bottledchaos.recipe.structure.godforge_upgrades
             // # Upgrade configuration: %s; all available bonuses included
             // #zh_CN 升级配置: %s; 包含全部可用增益
             lines.add(
                 StatCollector.translateToLocalFormatted(
-                    "tst.common.recipe.BottledChaosStructureRecipes.godforge_upgrades",
+                    "tst.bottledchaos.recipe.structure.godforge_upgrades",
                     godforgeUpgradeName(godforge)));
-            // #tr tst.common.recipe.BottledChaosStructureRecipes.godforge_maximum_operation
+            // #tr tst.bottledchaos.recipe.structure.godforge_maximum_operation
             // # Fuel: MHDCSM; factor: %s; battery: long, half-full
             // #zh_CN 燃料: MHDCSM; 系数: %s; 电池: long, 半满
             lines.add(
                 StatCollector.translateToLocalFormatted(
-                    "tst.common.recipe.BottledChaosStructureRecipes.godforge_maximum_operation",
+                    "tst.bottledchaos.recipe.structure.godforge_maximum_operation",
                     godforge.fuelFactor() == Integer.MAX_VALUE ? "int" : Integer.toString(godforge.fuelFactor())));
         }
         if (isFoundry(structure)) {
-            // #tr tst.common.recipe.BottledChaosStructureRecipes.foundry_modules
+            // #tr tst.bottledchaos.recipe.structure.foundry_modules
             // # Modules: %s; upgrade configuration: %s
             // #zh_CN 模块数: %s; 升级配置: %s
             lines.add(
                 StatCollector.translateToLocalFormatted(
-                    "tst.common.recipe.BottledChaosStructureRecipes.foundry_modules",
+                    "tst.bottledchaos.recipe.structure.foundry_modules",
                     structure.profile() + 1,
                     foundryUpgradeName(structure)));
-            // #tr tst.common.recipe.BottledChaosStructureRecipes.foundry_expectation
+            // #tr tst.bottledchaos.recipe.structure.foundry_expectation
             // # Module and pairing bonuses included; random bonuses use expected values
             // #zh_CN 包含模块和组合增益; 随机增益取期望值
-            lines.add(
-                StatCollector.translateToLocal("tst.common.recipe.BottledChaosStructureRecipes.foundry_expectation"));
+            lines.add(StatCollector.translateToLocal("tst.bottledchaos.recipe.structure.foundry_expectation"));
         }
         return lines;
     }

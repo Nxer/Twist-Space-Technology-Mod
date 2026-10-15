@@ -32,6 +32,11 @@ public class BottledChaosCapacityBlock extends AbstractTstMetaBlock {
     }
 
     @Override
+    public String getUnlocalizedName() {
+        return "tst.bottledchaos.capacity_block";
+    }
+
+    @Override
     public String getHarvestTool(int meta) {
         return "wrench";
     }

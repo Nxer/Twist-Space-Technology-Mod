@@ -45,9 +45,7 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
     private static int purificationPlantSlot = -1;
     private static long purificationPools;
 
-    // #tr item.tst.bottled_chaos.machine_module.purification_plant
-    // # Main Water Purification Plant
-    // #zh_CN 主净水厂
+    // This pool identifier is also the NBT key for installed plant modules.
     private static final String PURIFICATION_PLANT_KEY = "item.tst.bottled_chaos.machine_module.purification_plant";
 
     private final double[] machineSpeeds = new double[MAX_POOLS];
@@ -174,20 +172,25 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
     }
 
     public static String poolName(String key) {
+        if (key.equals(PURIFICATION_PLANT_KEY)) {
+            // #tr tst.bottledchaos.machine_module.purification_plant
+            // # Main Water Purification Plant
+            // #zh_CN 主净水厂
+            return StatCollector.translateToLocal("tst.bottledchaos.machine_module.purification_plant");
+        }
         if (key.equals(GTCMRecipe.NeutronActivatorWithEURecipeMap.unlocalizedName)
             || key.equals("gg.recipe.neutron_activator")) {
-            // #tr item.tst.bottled_chaos.machine_module.neutron_pool
+            // #tr tst.bottledchaos.machine_module.neutron_pool
             // # Neutron Activator
             // #zh_CN 中子活化器
-            return StatCollector.translateToLocal("item.tst.bottled_chaos.machine_module.neutron_pool");
+            return StatCollector.translateToLocal("tst.bottledchaos.machine_module.neutron_pool");
         }
         String name = StatCollector.translateToLocal(key);
         if (key.startsWith("gt.recipe.purificationplant")) {
-            // #tr item.tst.bottled_chaos.machine_module.purification_pool
+            // #tr tst.bottledchaos.machine_module.purification_pool
             // # Purified Water-%s
             // #zh_CN 净化水-%s
-            return StatCollector
-                .translateToLocalFormatted("item.tst.bottled_chaos.machine_module.purification_pool", name);
+            return StatCollector.translateToLocalFormatted("tst.bottledchaos.machine_module.purification_pool", name);
         }
         return name.replaceFirst("^(大型|工业|巨型|Large |Industrial |Mega )", "");
     }
