@@ -1,8 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.nei;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
@@ -21,6 +24,7 @@ import codechicken.nei.PositionedStack;
 import codechicken.nei.api.API;
 import codechicken.nei.api.IOverlayHandler;
 import codechicken.nei.recipe.GuiOverlayButton.ItemOverlayState;
+import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.IRecipeHandler;
 import codechicken.nei.recipe.IUsageHandler;
 import codechicken.nei.recipe.RecipeInfo;
@@ -39,6 +43,8 @@ import gregtech.nei.GTNEIDefaultHandler;
 public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
 
     private int structureCycleTicks;
+    private List<CachedDefaultRecipe> sourceCache;
+    private List<CachedDefaultRecipe> structureCache;
 
     public BottledChaosStructureNEIHandler() {
         this(GTCMRecipe.BottledChaosStructureRecipes.getDefaultRecipeCategory());
@@ -66,13 +72,40 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (!GuiScreen.isShiftKeyDown()) structureCycleTicks++;
+        if (!structureCyclePaused()) structureCycleTicks++;
+    }
+
+    private boolean structureCyclePaused() {
+        if (GuiScreen.isShiftKeyDown()) return true;
+        if (Minecraft.getMinecraft().currentScreen instanceof GuiRecipe<?>gui && gui.getHandler() == this) {
+            for (int index : gui.getRecipeIndices()) {
+                for (PositionedStack input : ((CachedDefaultRecipe) arecipes.get(index)).mInputs)
+                    if (gui.isMouseOver(input, index)) return true;
+            }
+        }
+        return false;
     }
 
     @Override
-    public void drawBackground(int recipe) {
-        if (arecipes.get(recipe) instanceof StructureRecipe structure) structure.update(structureCycleTicks / 40);
-        super.drawBackground(recipe);
+    public List<PositionedStack> getIngredientStacks(int recipe) {
+        // NEI snapshots inputs and outputs together when refreshing its recipe widget. Drawing is too late:
+        // the widget can keep an older snapshot while a hovered slot or overlay button pauses its cycle.
+        if (!structureCyclePaused() && arecipes.get(recipe) instanceof StructureRecipe structure)
+            structure.update(structureCycleTicks);
+        return super.getIngredientStacks(recipe);
+    }
+
+    @Override
+    public List<CachedDefaultRecipe> getCache() {
+        List<CachedDefaultRecipe> source = super.getCache();
+        if (sourceCache != source) {
+            List<CachedDefaultRecipe> isolated = new ArrayList<>();
+            for (CachedDefaultRecipe recipe : source) isolated.add(createCachedRecipe(recipe.mRecipe));
+            sourceCache = source;
+            structureCache = isolated;
+        }
+        // GT shares its cache by category. Each viewer must own its animated stacks and transfer snapshot.
+        return structureCache;
     }
 
     @Override
@@ -90,7 +123,8 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
     private static GTRecipe copyDisplayRecipe(GTRecipe recipe) {
         GTRecipe copy = recipe.copy();
         return GTValues.RA.stdBuilder()
-            .itemInputsUnsafe(copy.mInputs)
+            // Cached animation frames pad the input grid; the builder requires compact material arrays.
+            .itemInputsUnsafe(Arrays.stream(copy.mInputs).filter(Objects::nonNull).toArray(ItemStack[]::new))
             .itemOutputs(copy.mOutputs)
             .metadata(BottledChaosStructureDisplay.DISPLAY, recipe.getMetadata(BottledChaosStructureDisplay.DISPLAY))
             .recipeCategory(recipe.getRecipeCategory())
@@ -108,6 +142,7 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
         private final BottledChaosStructureDisplay display;
         private BottledChaosStructureDisplay.Frame currentFrame;
         private int currentCycle = -1;
+        private int lastCycleTick;
 
         private StructureRecipe(GTRecipe recipe) {
             // Never mutate the map's fake recipe while animating the client cache.
@@ -116,10 +151,11 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
             update(0);
         }
 
-        private void update(int cycle) {
-            if (cycle == currentCycle) return;
-            var frame = display.frame(cycle);
-            currentCycle = cycle;
+        private void update(int tick) {
+            if (currentCycle >= 0 && tick - lastCycleTick < 40) return;
+            // A hovered overlay can delay NEI's refresh. Resume with the next complete frame, without skipping ahead.
+            lastCycleTick = tick;
+            var frame = display.frame(++currentCycle);
             if (frame == currentFrame) return;
             mInputs.clear();
             mOutputs.clear();
