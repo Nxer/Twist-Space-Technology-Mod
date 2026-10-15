@@ -80,8 +80,7 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
         if (GuiScreen.isShiftKeyDown()) return true;
         if (Minecraft.getMinecraft().currentScreen instanceof GuiRecipe<?>gui && gui.getHandler() == this) {
             for (int index : gui.getRecipeIndices()) {
-                for (PositionedStack input : ((CachedDefaultRecipe) arecipes.get(index)).mInputs)
-                    if (gui.isMouseOver(input, index)) return true;
+                for (PositionedStack input : getIngredientStacks(index)) if (gui.isMouseOver(input, index)) return true;
             }
         }
         return false;
@@ -91,8 +90,7 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
     public List<PositionedStack> getIngredientStacks(int recipe) {
         // NEI snapshots inputs and outputs together when refreshing its recipe widget. Drawing is too late:
         // the widget can keep an older snapshot while a hovered slot or overlay button pauses its cycle.
-        if (!structureCyclePaused() && arecipes.get(recipe) instanceof StructureRecipe structure)
-            structure.update(structureCycleTicks);
+        if (arecipes.get(recipe) instanceof StructureRecipe structure) structure.update(structureCycleTicks);
         return super.getIngredientStacks(recipe);
     }
 
