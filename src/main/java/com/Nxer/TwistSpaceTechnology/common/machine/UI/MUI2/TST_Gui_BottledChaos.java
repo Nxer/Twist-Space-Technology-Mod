@@ -88,10 +88,6 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
     // # Item Materials
     // #zh_CN 物品材料
 
-    // #tr tst.bottledchaos.gui.credential_injection.result
-    // # Result
-    // #zh_CN 结果
-
     // #tr tst.bottledchaos.gui.credential_injection.target
     // # Credential frame or structure module
     // #zh_CN 凭证框架或结构模组
@@ -211,9 +207,6 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
         GenericSyncValue<NBTTagCompound, ?> status = syncManager
             .findSyncHandler("bottledChaosStatusSummary", GenericSyncValue.class);
 
-        // #tr tst.bottledchaos.gui.running_normally
-        // # Running normally
-        // #zh_CN 运行正常
         terminal.child(
             IKey.dynamic(() -> getStatusSummaryText(status.getValue()))
                 .asWidget()
@@ -464,8 +457,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             .mainAxisAlignment(Alignment.MainAxis.CENTER)
             .crossAxisAlignment(Alignment.CrossAxis.CENTER)
             .child(
-                new TextWidget<>(IKey.lang("tst.bottledchaos.gui.credential_injection.result"))
-                    .textAlign(Alignment.Center)
+                new TextWidget<>(IKey.lang("GTPP.nei.result")).textAlign(Alignment.Center)
                     .fullWidth()
                     .height(10))
             .child(

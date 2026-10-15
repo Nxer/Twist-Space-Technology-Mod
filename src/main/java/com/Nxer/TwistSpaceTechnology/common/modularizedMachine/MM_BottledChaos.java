@@ -67,6 +67,7 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.Mo
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.cleanroommc.modularui.utils.item.ItemStackHandler;
 import com.google.common.collect.ImmutableList;
@@ -97,8 +98,10 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.ErrorType;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.structure.error.StructureErrors;
+import gregtech.api.structure.error.TranslatableText;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.GTWaila;
 import gregtech.api.util.HatchElementBuilder;
@@ -141,9 +144,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         ModularHatchTypes.POWER_CONSUMPTION_CONTROLLER,
         ModularHatchTypes.OVERCLOCK_CONTROLLER);
 
-    // #tr tst.bottledchaos.result.structure_incomplete
-    // # The Bottled Chaos structure is incomplete.
-    // #zh_CN 瓶中混沌结构不完整.
+    // spotless:off
 
     // #tr tst.bottledchaos.result.credential_changed
     // # The credential for this processing group changed.
@@ -173,14 +174,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     // # Dedicated input positions require a credential hatch; both inputs are optional and accept buses or hatches.
     // #zh_CN 专用输入位需要对应的凭证仓; 两个输入位均可留空, 或安装物品输入总线或流体输入仓.
 
-    // #tr tst.bottledchaos.structure.credential_hatch_limit
-    // # Installed credential hatches exceed the limit of the parallel controller module.
-    // #zh_CN 已安装凭证仓超过并行控制器模块提供的上限.
-
-    // #tr tst.bottledchaos.hatch.recipe_token
-    // # Bottled Chaos Credential Hatch
-    // #zh_CN 瓶中混沌凭证仓
-
     // #tr tst.bottledchaos.capacity_usage
     // # Capacity: %s / %s
     // #zh_CN 容量: %s / %s
@@ -201,14 +194,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     // # Power share: %s
     // #zh_CN 电力份额: %s
 
-    // #tr tst.bottledchaos.running
-    // # Running
-    // #zh_CN 运行中
-
-    // #tr tst.bottledchaos.idle
-    // # Idle
-    // #zh_CN 待机
-
     // #tr tst.bottledchaos.paused
     // # Paused
     // #zh_CN 已暂停
@@ -220,10 +205,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     // #tr tst.bottledchaos.unbound
     // # No credential
     // #zh_CN 无凭证
-
-    // #tr tst.bottledchaos.none
-    // # None
-    // #zh_CN 无
 
     // #tr tst.bottledchaos.tooltip.machine_type
     // # Production Chain Processor
@@ -265,11 +246,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     // # Install at most one parallel module; speed, power, and overclock modules affect final processing.
     // #zh_CN 最多安装一个并行模块; 速度, 耗电和超频模块作用于最终加工.
 
-    // #tr tst.bottledchaos.mod_name
-    // # Twist Space Technology
-    // #zh_CN Twist Space Technology
-
-    // spotless:off
     // a marks the immediate capacity enclosures and controller-shaft glass; A remains outer glass.
     private static final String[][] SHAPE = {
         {"                             ","                             ","                             ","     JJJJJJ       JJJJJJ     ","    J                   J    ","   J                     J   ","   J                     J   ","   J                     J   ","   J                     J   ","   J                     J   ","   J                     J   ","                             ","                             ","                             ","                             ","                             ","                             ","                             ","   J                     J   ","   J                     J   ","   J                     J   ","   J                     J   ","   J                     J   ","   J                     J   ","    J                   J    ","     JJJJJJ       JJJJJJ     ","                             ","                             ","                             "},
@@ -614,7 +590,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             return false;
         }
         if (!checkPiece(STRUCTURE_PIECE_MAIN, HORIZONTAL_OFFSET, VERTICAL_OFFSET, DEPTH_OFFSET, errors)) {
-            if (errors.isEmpty()) errors.add(StructureErrors.of("tst.bottledchaos.result.structure_incomplete"));
+            if (errors.isEmpty()) errors.add(StructureErrors.of("GT5U.gui.multimachine.incomplete_structure"));
             return false;
         }
         if (generatorLevel > 0 && (minimumUpgradeGlassTier != VoltageIndex.UHV + generatorLevel
@@ -652,7 +628,12 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             }
         }
         if (installedCredentialHatches > credentialHatchLimit) {
-            errors.add(StructureErrors.of("tst.bottledchaos.structure.credential_hatch_limit"));
+            errors.add(
+                StructureErrors.hatchCount(
+                    ErrorType.TOO_MANY,
+                    TranslatableText.lang("tst.bottledchaos.credential_hatch.name"),
+                    installedCredentialHatches,
+                    credentialHatchLimit));
             return false;
         }
         for (int slot = 0; slot < THREAD_COUNT; slot++) {
@@ -703,7 +684,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         IGregTechTileEntity base = getBaseMetaTileEntity();
         if (!mMachine || base == null || !base.isAllowedToWork()) return false;
         for (BottledChaosThread thread : threads) {
-            if ("tst.bottledchaos.running".equals(thread.status)) return true;
+            if ("GT5U.gui.text.status.active".equals(thread.status)) return true;
         }
         return false;
     }
@@ -786,7 +767,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                     thread.complete();
                     threadLogics[slot] = new BottledChaosProcessingLogic();
                 }
-                thread.status = hatch.isExecutionEnabled() ? "tst.bottledchaos.idle" : "tst.bottledchaos.paused";
+                thread.status = hatch.isExecutionEnabled() ? "GT5U.waila.machine.idle" : "tst.bottledchaos.paused";
                 threadResults[slot] = CheckRecipeResultRegistry.SUCCESSFUL;
                 thread.nextCheckTick = schedulerTick + 20;
                 changed = true;
@@ -797,7 +778,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                     changed = true;
                 }
             } else if (!thread.isBusy() && "tst.bottledchaos.paused".equals(thread.status)) {
-                thread.status = "tst.bottledchaos.idle";
+                thread.status = "GT5U.waila.machine.idle";
                 changed = true;
             }
         }
@@ -961,7 +942,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     @Override
     public @NotNull CheckRecipeResult checkProcessingMM() {
-        if (!mMachine) return SimpleResultWithText.ofFailure("tst.bottledchaos.result.structure_incomplete");
+        if (!mMachine) return SimpleResultWithText.ofFailure("GT5U.gui.multimachine.incomplete_structure");
         refreshAllocation();
         refreshPowerRound();
         if (overCapacity) return SimpleResultWithText.ofFailure("tst.bottledchaos.result.capacity_exceeded");
@@ -1101,7 +1082,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 : BottledChaosPowerAllocator.powerForShare(capacity, credentialCosts[slot], weightSum);
             if ((candidates & (1 << slot)) == 0) continue;
             if (inputs.prepared[slot]) commitPreparedThread(slot);
-            threads[slot].status = "tst.bottledchaos.running";
+            threads[slot].status = "GT5U.gui.text.status.active";
             threadResults[slot] = CheckRecipeResultRegistry.SUCCESSFUL;
         }
         markDirty();
@@ -1110,8 +1091,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     private void setThreadSearchResult(int slot, CheckRecipeResult result) {
         threadResults[slot] = result;
-        threads[slot].status = result.wasSuccessful() ? "tst.bottledchaos.running"
-            : result == CheckRecipeResultRegistry.NO_RECIPE ? "tst.bottledchaos.idle" : result.getDisplayString();
+        threads[slot].status = result.wasSuccessful() ? "GT5U.gui.text.status.active"
+            : result == CheckRecipeResultRegistry.NO_RECIPE ? "GT5U.waila.machine.idle" : result.getDisplayString();
         threads[slot].nextCheckTick = schedulerTick + 20;
     }
 
@@ -1132,7 +1113,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     }
 
     private CheckRecipeResult startThread(int slot) {
-        if (!validGroup(slot)) return SimpleResultWithText.ofFailure("tst.bottledchaos.result.structure_incomplete");
+        if (!validGroup(slot)) return SimpleResultWithText.ofFailure("GT5U.gui.multimachine.incomplete_structure");
         if (!ItemBottledChaosCredential.isBound(installedCredentials[slot])) {
             return SimpleResultWithText.ofFailure("tst.bottledchaos.result.unbound");
         }
@@ -1534,7 +1515,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             if (isThreadExecutionDisabled(i)) continue;
             if (advancing[i]) {
                 thread.progress++;
-                thread.status = "tst.bottledchaos.running";
+                thread.status = "GT5U.gui.text.status.active";
                 markDirty();
             }
             if (thread.progress >= thread.duration && canRunThread(i).wasSuccessful()
@@ -1574,7 +1555,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             CheckRecipeResult result = checkProcessing();
             if (failure == null) setCheckRecipeResult(result);
             for (BottledChaosThread thread : threads) {
-                if (thread.isBusy() && thread.status.equals("tst.bottledchaos.running")
+                if (thread.isBusy() && thread.status.equals("GT5U.gui.text.status.active")
                     && thread.duration > mMaxProgresstime) {
                     mMaxProgresstime = thread.duration;
                     mProgresstime = thread.progress;
@@ -1817,7 +1798,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                     .filter(Objects::nonNull)
                     .count())
                 .withMteClass(TST_BottledChaosRecipeTokenHatch.class)
-                .withDisplayName(StatCollector.translateToLocal("tst.bottledchaos.hatch.recipe_token"));
+                .withDisplayName(StatCollector.translateToLocal("tst.bottledchaos.credential_hatch.name"));
         } else {
             element = InputBus.or(InputHatch)
                 .<MM_BottledChaos>withCount(machine -> {
@@ -1834,7 +1815,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if (kind == 0) {
             // GT's withMteClass retains InputBus.matchesHatch; override the placement and skip filters explicitly.
             builder.hatchClass(TST_BottledChaosRecipeTokenHatch.class)
-                .description(() -> "tst.bottledchaos.hatch.recipe_token");
+                .description(() -> "tst.bottledchaos.credential_hatch.name");
         }
         return hatchElement(builder, 2 + kind);
     }
@@ -1915,9 +1896,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         job.setString("status", getThreadWailaStatus(slot));
         job.setLong(
             "eut",
-            lEUt < 0 && thread.progress < thread.duration && "tst.bottledchaos.running".equals(job.getString("status"))
-                ? thread.eut
-                : 0);
+            lEUt < 0 && thread.progress < thread.duration
+                && "GT5U.gui.text.status.active".equals(job.getString("status")) ? thread.eut : 0);
         // Normalize the display against GT's practical recipe power, excluding its 1/16 cable-loss headroom.
         job.setDouble("inputPower", Math.max(0, inputPower) * 15.0 / 16.0);
         job.setLong("energyTier", getInputVoltageTier());
@@ -1940,18 +1920,13 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         NBTTagCompound summary = new NBTTagCompound();
         NBTTagList entries = new NBTTagList();
         IGregTechTileEntity base = getBaseMetaTileEntity();
-        if (!mMachine) addSummaryResult(
-            entries,
-            SimpleResultWithText.ofFailure("tst.bottledchaos.result.structure_incomplete"),
-            0);
+        if (!mMachine)
+            addSummaryResult(entries, SimpleResultWithText.ofFailure("GT5U.gui.multimachine.incomplete_structure"), 0);
         if (overCapacity)
             addSummaryResult(entries, SimpleResultWithText.ofFailure("tst.bottledchaos.result.capacity_exceeded"), 0);
         if (shouldCheckMaintenance() && getRepairStatus() < getIdealStatus()) {
-            // #tr tst.bottledchaos.maintenance_required
-            // # Maintenance required.
-            // #zh_CN 需要维护.
             NBTTagCompound entry = new NBTTagCompound();
-            entry.setString("key", "tst.bottledchaos.maintenance_required");
+            entry.setString("key", "GT5U.turbine.maintenance.true");
             entries.appendTag(entry);
         }
         if (mMachine && base != null && base.wasShutdown()) {
@@ -1970,7 +1945,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 if (hatch == null || !hatch.isValid() || isThreadExecutionDisabled(slot)) continue;
                 CheckRecipeResult result;
                 if (!validGroup(slot)) {
-                    result = SimpleResultWithText.ofFailure("tst.bottledchaos.result.structure_incomplete");
+                    result = SimpleResultWithText.ofFailure("GT5U.gui.multimachine.incomplete_structure");
                 } else if (!ItemBottledChaosCredential.isBound(hatch.getAuthorizationStack())) {
                     result = SimpleResultWithText.ofFailure("tst.bottledchaos.result.unbound");
                 } else if (threads[slot].isBusy()) {
@@ -1994,8 +1969,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             NBTTagCompound entry = new NBTTagCompound();
             entry.setString(
                 "key",
-                base != null && !base.isAllowedToWork() ? "tst.bottledchaos.paused"
-                    : "tst.bottledchaos.gui.running_normally");
+                base != null && !base.isAllowedToWork() ? "tst.bottledchaos.paused" : "GT5U.gui.hoverable.runningfine");
             entries.appendTag(entry);
         }
         summary.setTag("entries", entries);
@@ -2125,7 +2099,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         for (int slot = 0; slot < BottledChaosMachineConfiguration.poolCount(); slot++) {
             if ((mask & (1L << slot)) != 0) joiner.add(BottledChaosMachineConfiguration.poolKey(slot));
         }
-        return joiner.length() == 0 ? "tst.bottledchaos.none" : joiner.toString();
+        return joiner.length() == 0 ? "GT5U.gui.text.nil" : joiner.toString();
     }
 
     private String getRecipeTokenKeyList() {
@@ -2136,7 +2110,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 for (String key : ItemBottledChaosCredential.getRouteKeyList(token)) joiner.add(key);
             }
         }
-        return joiner.length() == 0 ? "tst.bottledchaos.none" : joiner.toString();
+        return joiner.length() == 0 ? "GT5U.gui.text.nil" : joiner.toString();
     }
 
     private static String getCredentialRouteKeyList(ItemStack credential) {
@@ -2158,8 +2132,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     }
 
     public static EnumChatFormatting getStatusColor(String status) {
-        if ("tst.bottledchaos.running".equals(status)) return EnumChatFormatting.GOLD;
-        if ("tst.bottledchaos.idle".equals(status)) return EnumChatFormatting.AQUA;
+        if ("GT5U.gui.text.status.active".equals(status)) return EnumChatFormatting.GOLD;
+        if ("GT5U.waila.machine.idle".equals(status)) return EnumChatFormatting.AQUA;
         return EnumChatFormatting.WHITE;
     }
 
@@ -2179,7 +2153,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.processing_groups"))
                 .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.shared_inputs"))
                 .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.parameter_modules"))
-                .toolTipFinisher(TSTUtils.tr("tst.bottledchaos.mod_name"));
+                .toolTipFinisher(TSTSharedLocalization.General.ModName);
         }
         return tooltip;
     }

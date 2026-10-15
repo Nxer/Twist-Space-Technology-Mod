@@ -418,18 +418,12 @@ public final class BottledChaosComplexStructures {
         if (profile.upgrades()
             .contains(ForgeOfGodsUpgrade.SEFCP))
             branches.add(StatCollector.translateToLocal("tst.bottledchaos.recipe.structure.godforge_heat"));
-        // #tr tst.bottledchaos.recipe.structure.godforge_parallel
-        // # Parallel
-        // #zh_CN 并行
         if (profile.upgrades()
             .contains(ForgeOfGodsUpgrade.TCT))
-            branches.add(StatCollector.translateToLocal("tst.bottledchaos.recipe.structure.godforge_parallel"));
-        // #tr tst.bottledchaos.recipe.structure.godforge_overclock
-        // # Overclock
-        // #zh_CN 超频
+            branches.add(StatCollector.translateToLocal("tst.common.shared.general.word_parallel"));
         if (profile.upgrades()
             .contains(ForgeOfGodsUpgrade.GGEBE))
-            branches.add(StatCollector.translateToLocal("tst.bottledchaos.recipe.structure.godforge_overclock"));
+            branches.add(StatCollector.translateToLocal("tst.common.shared.general.word_overclock"));
         return branches.toString();
     }
 

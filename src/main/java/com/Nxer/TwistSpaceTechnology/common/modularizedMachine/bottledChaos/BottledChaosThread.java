@@ -23,7 +23,7 @@ public final class BottledChaosThread {
     public int progress;
     public int parallels;
     public long nextCheckTick;
-    public String status = "tst.bottledchaos.idle";
+    public String status = "GT5U.waila.machine.idle";
 
     public boolean isBusy() {
         return duration > 0;
@@ -37,7 +37,7 @@ public final class BottledChaosThread {
         credential = null;
         duration = progress = parallels = 0;
         eut = recipeVoltage = requiredPools = nextCheckTick = 0;
-        status = "tst.bottledchaos.idle";
+        status = "GT5U.waila.machine.idle";
     }
 
     public NBTTagCompound save() {

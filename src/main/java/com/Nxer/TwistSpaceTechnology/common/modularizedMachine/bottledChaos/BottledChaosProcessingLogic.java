@@ -68,10 +68,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
     public @NotNull CheckRecipeResult process() {
         preparedPlan = null;
         if (routeMask == 0) {
-            // #tr tst.bottledchaos.result.missing_recipe_token
-            // # Missing a valid Bottled Chaos credential.
-            // #zh_CN 缺少有效的瓶中混沌凭证.
-            return SimpleResultWithText.ofFailure("tst.bottledchaos.result.missing_recipe_token");
+            return SimpleResultWithText.ofFailure("tst.bottledchaos.result.unbound");
         }
         if (!BottledChaosRecipeProcessor.isReady()) {
             // #tr tst.bottledchaos.result.recipe_cache_unavailable

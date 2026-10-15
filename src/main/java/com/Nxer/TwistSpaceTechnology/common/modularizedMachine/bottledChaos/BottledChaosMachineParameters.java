@@ -798,7 +798,9 @@ public final class BottledChaosMachineParameters {
         String eu = base == null ? "-" : number(base.euMultiplier());
         String time = base == null ? "-" : number(base.timeMultiplier() / quantitySpeed);
         String oc = base == null ? "-" : clock(base.powerMultiplier(), base.timeDivisor());
-        String restrictions = base == null ? text("structure") : base.restrictions();
+        String restrictions = base == null
+            ? StatCollector.translateToLocal("GT5U.gui.multimachine.incomplete_structure")
+            : base.restrictions();
         String special = base == null ? "" : base.special();
         Upgrades u = new Upgrades(structure == null ? new ItemStack[0] : structure.materials());
         int shape = structure == null ? 1 : structure.profile();
@@ -982,13 +984,14 @@ public final class BottledChaosMachineParameters {
                     machine == Machine.BLAST_FURNACE
                         ? (structure == null ? 0 : structure.heat()) + " + 100 x max(T - 2, 0)"
                         : base.heat()));
-        if (restrictions.isEmpty()) restrictions = text("none");
+        if (restrictions.isEmpty()) restrictions = StatCollector.translateToLocal("GT5U.gui.text.nil");
         // #tr tst.bottledchaos.machine_module.limits
         // # Recipe limits: %s
         // #zh_CN 配方限制: %s
         lines.add(EnumChatFormatting.GRAY + text("limits", EnumChatFormatting.YELLOW + restrictions));
-        if (recipeHeat && base != null && base.heat() > 0 && machine != Machine.BLAST_FURNACE)
-            special = append(special, text("heat_value", base.heat()));
+        if (recipeHeat && base != null && base.heat() > 0 && machine != Machine.BLAST_FURNACE) special = append(
+            special,
+            StatCollector.translateToLocalFormatted("GT5U.tooltip.fluid.temperature", base.heat()));
         if (machine == Machine.BIO_VAT || machine == Machine.BIOSPHERE && pool != RecipeMaps.brewingRecipes
             && pool != RecipeMaps.fermentingRecipes) special = append(special, text("radiation"));
         if (recipeHeat && (machine == Machine.DEHYDRATOR || machine == Machine.ADVANCED_BLAST
@@ -1044,10 +1047,6 @@ public final class BottledChaosMachineParameters {
         return tier >= 0 && tier < GTValues.VN.length ? GTValues.VN[tier] : "-";
     }
 
-    // #tr tst.bottledchaos.machine_module.none
-    // # None
-    // #zh_CN 无
-
     // #tr tst.bottledchaos.machine_module.godforge_configuration
     // # Rings: %s; upgrade configuration: %s; bonuses included
     // #zh_CN 环数: %s; 升级配置: %s; 包含增益
@@ -1067,10 +1066,6 @@ public final class BottledChaosMachineParameters {
     // #tr tst.bottledchaos.machine_module.foundry_eternity
     // # Eternity 25 L/s
     // #zh_CN 永恒25 L/s
-
-    // #tr tst.bottledchaos.machine_module.structure
-    // # Invalid structure
-    // #zh_CN 结构无效
 
     // #tr tst.bottledchaos.machine_module.recipe_tier
     // # recipe tier
@@ -1127,10 +1122,6 @@ public final class BottledChaosMachineParameters {
     // #tr tst.bottledchaos.machine_module.voltage_heat
     // # Coil heat %s K + 100 x max(T - 2, 0) K; one perfect OC per 1800 K excess heat
     // #zh_CN 线圈炉温%s K + 100 x max(T - 2, 0) K; 每1800 K余热增加一档无损超频
-
-    // #tr tst.bottledchaos.machine_module.heat_value
-    // # Temperature: %s K
-    // #zh_CN 炉温: %s K
 
     // #tr tst.bottledchaos.machine_module.thermal_oc
     // # Excess heat = temperature - required heat; one perfect OC per 1800 K excess heat
