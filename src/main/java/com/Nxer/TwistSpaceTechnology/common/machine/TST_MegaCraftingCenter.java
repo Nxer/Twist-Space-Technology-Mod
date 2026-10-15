@@ -726,6 +726,7 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
      */
     @Override
     public boolean pushPattern(ICraftingPatternDetails patternDetails, InventoryCrafting table) {
+        recipeCheckImmediately = true;
         return cachedOutput.merge(patternDetails, 1L, Long::sum) >= 1;
     }
 

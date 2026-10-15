@@ -141,7 +141,6 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Hatch_Air_Inta
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_MassFab;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Mega_AlloyBlastSmelter;
-import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.TransmissionComponent_UV;
 import static tectech.thing.CustomItemList.EOH_Infinite_Energy_Casing;
 import static tectech.thing.CustomItemList.EOH_Reinforced_Temporal_Casing;
 import static tectech.thing.CustomItemList.LASERpipe;
@@ -2320,11 +2319,12 @@ public class GTCMMachineRecipes {
                     ItemRefer.Advanced_Radiation_Protection_Plate.get(64),
                     ItemList.UHTResistantMesh.get(64),
 
-                    TransmissionComponent_UV.get(16),
+                    ItemList.Emitter_UV.get(16),
+                    ItemList.Sensor_UV.get(16),
                     ItemList.Electric_Piston_UHV.get(8),
                     HighEnergyFlowCircuit.get(8),
-                    new Object[]{OrePrefixes.circuit.get(Materials.UEV), 4},
 
+                    new Object[]{OrePrefixes.circuit.get(Materials.UEV), 4},
                     PicoWafer.get(8),
                     GGMaterial.incoloy903.get(OrePrefixes.pipeHuge, 64),
                     MaterialsElements.STANDALONE.CHRONOMATIC_GLASS.getFineWire(64)
@@ -2772,7 +2772,8 @@ public class GTCMMachineRecipes {
                 .itemInputs(
                     GregtechItemList.GTPP_Casing_IV.get(1),
                     GregtechItemList.Energy_Core_EV.get(4),
-                    GregtechItemList.TransmissionComponent_IV.get(2),
+                    ItemList.Emitter_IV.get(2),
+                    ItemList.Sensor_IV.get(2),
                     ItemList.Field_Generator_HV.get(4),
                     MaterialsAlloy.NITINOL_60.getGear(4),
                     MaterialsElements.getInstance().GERMANIUM.getBolt(16),
@@ -3316,7 +3317,8 @@ public class GTCMMachineRecipes {
                 GregtechItemList.Casing_Adv_BlastFurnace.get(2),
 
                 GregtechItemList.Hatch_Input_Pyrotheum.get(1),
-                GregtechItemList.TransmissionComponent_LuV.get(4),
+                ItemList.Emitter_LuV.get(4),
+                ItemList.Sensor_LuV.get(4),
                 ItemList.UHTResistantMesh.get(6),
 
                 MaterialsAlloy.PIKYONIUM.getPlateDense(3),
