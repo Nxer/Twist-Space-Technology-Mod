@@ -433,6 +433,8 @@ public final class BottledChaosMachineParameters {
                 var preset = BottledChaosComplexStructures.godforge(structure);
                 if (preset == null) return null;
                 value.set(preset.parallel(), preset.eu(), preset.time());
+                // This package aggregates multiple native modules, each retaining its own int parallel limit.
+                value.parallelLimit = Long.MAX_VALUE;
                 value.timeDivisor = preset.overclock();
                 value.heat = preset.heat();
                 value.plasmaTier = preset.plasmaTier();
@@ -615,6 +617,7 @@ public final class BottledChaosMachineParameters {
     private static final class Values {
 
         long parallel = 1;
+        long parallelLimit = Integer.MAX_VALUE;
         double euMultiplier = 1;
         double timeMultiplier = 1;
         double timeDivisor = 2;
@@ -649,7 +652,7 @@ public final class BottledChaosMachineParameters {
                 || !Double.isFinite(timeMultiplier)
                 || timeMultiplier <= 0) return null;
             return new Profile(
-                Math.min(Integer.MAX_VALUE, parallel),
+                Math.min(parallelLimit, parallel),
                 euMultiplier,
                 timeMultiplier,
                 timeDivisor,
