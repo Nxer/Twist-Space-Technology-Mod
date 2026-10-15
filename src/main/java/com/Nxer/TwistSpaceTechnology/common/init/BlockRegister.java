@@ -68,6 +68,10 @@ public class BlockRegister {
             TstBlocks.EnergySustainmentMatrix,
             TstMetaBlockItem.class,
             TstBlocks.EnergySustainmentMatrix.unlocalizedName);
+        GameRegistry.registerBlock(
+            TstBlocks.BottledChaosCapacity,
+            TstMetaBlockItem.class,
+            TstBlocks.BottledChaosCapacity.unlocalizedName);
 
         if (Config.activateMegaSpaceStation) {
             GameRegistry.registerBlock(
@@ -540,6 +544,31 @@ public class BlockRegister {
         GTCMItemList.EnergySustainmentMatrixMAX.set(
             TstBlocks.EnergySustainmentMatrix
                 .registerVariantWithTooltips(5, new String[] { TSTUtils.tr("tile.tst.common.energy_sustainment_matrix.5.tooltip") }));
+
+        // #tr tile.tst.common.bottled_chaos_capacity.0.name
+        // # Bottled Chaos Capacity Block I
+        // #zh_CN 瓶中混沌容量方块 I
+        GTCMItemList.BottledChaosCapacityTier1.set(TstBlocks.BottledChaosCapacity.registerVariant(0));
+
+        // #tr tile.tst.common.bottled_chaos_capacity.1.name
+        // # Bottled Chaos Capacity Block II
+        // #zh_CN 瓶中混沌容量方块 II
+        GTCMItemList.BottledChaosCapacityTier2.set(TstBlocks.BottledChaosCapacity.registerVariant(1));
+
+        // #tr tile.tst.common.bottled_chaos_capacity.2.name
+        // # Bottled Chaos Capacity Block III
+        // #zh_CN 瓶中混沌容量方块 III
+        GTCMItemList.BottledChaosCapacityTier3.set(TstBlocks.BottledChaosCapacity.registerVariant(2));
+
+        // #tr tile.tst.common.bottled_chaos_capacity.3.name
+        // # Bottled Chaos Capacity Block IV
+        // #zh_CN 瓶中混沌容量方块 IV
+        GTCMItemList.BottledChaosCapacityTier4.set(TstBlocks.BottledChaosCapacity.registerVariant(3));
+
+        // #tr tile.tst.common.bottled_chaos_capacity.4.name
+        // # Bottled Chaos Capacity Block V
+        // #zh_CN 瓶中混沌容量方块 V
+        GTCMItemList.BottledChaosCapacityTier5.set(TstBlocks.BottledChaosCapacity.registerVariant(4));
 
         // end region
 

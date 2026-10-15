@@ -11,6 +11,7 @@ import com.Nxer.TwistSpaceTechnology.common.block.BlockPowerChair;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockStar;
 import com.Nxer.TwistSpaceTechnology.common.block.bloodMagic.BlockTimeBendingSpeedRune;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.BlockNuclearReactor;
+import com.Nxer.TwistSpaceTechnology.common.block.meta.BottledChaosCapacityBlock;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.TstMetaBlock;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.casing.PhotonControllerUpgradeCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.casing.TstMetaBlockCasing;
@@ -41,6 +42,8 @@ public class TstBlocks {
     public static final TstMetaBlockGlassCasing MetaBlockCasing02 = new TstMetaBlockGlassCasing(
         "MetaBlockCasing02",
         (byte) 16);
+
+    public static final BottledChaosCapacityBlock BottledChaosCapacity = new BottledChaosCapacityBlock();
 
     public static final PhotonControllerUpgradeCasing PhotonControllerUpgrade = new PhotonControllerUpgradeCasing();
 

@@ -162,8 +162,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     // #zh_CN 此加工组没有有效凭证.
 
     // #tr tst.modular.machine.BottledChaos.structure.invalid_capacity_region
-    // # Every capacity region must contain exactly one complete capacity tier.
-    // #zh_CN 每个容量区必须完整安装同一种容量等级.
+    // # Every capacity region must be empty or contain exactly one complete capacity tier.
+    // #zh_CN 每个容量区必须全为空气或完整安装同一种容量等级.
 
     // #tr tst.modular.machine.BottledChaos.structure.multiple_parallel_controllers
     // # Install at most one parallel controller module.
@@ -242,8 +242,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     // #zh_CN 主体使用结构投影中显示的方块.
 
     // #tr tst.modular.machine.BottledChaos.structure.capacity_columns
-    // # Each capacity region uses 64 matching motors of one of five tiers for capacity 1/4/16/64/256; air also gives 1.
-    // #zh_CN 每个容量区使用64个同级电梯电机, 五级电机分别对应容量1/4/16/64/256; 空气同样提供1容量.
+    // # Each capacity region provides 1/4/16/64/256 with 64 same-tier capacity blocks, or 0 when empty.
+    // #zh_CN 每个容量区完整安装64个同级容量方块时提供1/4/16/64/256容量; 全为空气时容量为0.
 
     // #tr tst.modular.machine.BottledChaos.structure.voltage_upgrades
     // # Matching field and energy generators limit recipes to UHV, UEV, UIV, UMV, or UXV/MAX.
@@ -672,8 +672,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 if (selectedTier >= 0 || count != CAPACITY_REGION_BLOCK_COUNT) return false;
                 selectedTier = tier;
             }
-            if (selectedTier < 0) return false;
-            calculatedCapacity += 1L << (selectedTier * 2);
+            if (selectedTier >= 0) calculatedCapacity += 1L << (selectedTier * 2);
         }
         capacity = calculatedCapacity;
         return true;
@@ -1859,13 +1858,12 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private static IStructureElement<MM_BottledChaos> capacityElement() {
         List<IStructureElement<MM_BottledChaos>> levels = new ArrayList<>();
         for (int tier = 0; tier < CAPACITY_LEVEL_COUNT; tier++) {
-            levels.add(ofBlock(GregTechAPI.sBlockCasingsSEMotor, tier));
+            levels.add(ofBlock(TstBlocks.BottledChaosCapacity, tier));
         }
         IStructureElementCheckOnly<MM_BottledChaos> check = (machine, world, x, y, z) -> {
+            if (world.isAirBlock(x, y, z)) return true;
             int tier = world.getBlockMetadata(x, y, z);
-            if (world.isAirBlock(x, y, z)) tier = 0;
-            else if (world.getBlock(x, y, z) != GregTechAPI.sBlockCasingsSEMotor || tier >= CAPACITY_LEVEL_COUNT)
-                return false;
+            if (world.getBlock(x, y, z) != TstBlocks.BottledChaosCapacity || tier >= CAPACITY_LEVEL_COUNT) return false;
             IGregTechTileEntity base = machine.getBaseMetaTileEntity();
             int dx = x - base.getXCoord();
             int dz = z - base.getZCoord();

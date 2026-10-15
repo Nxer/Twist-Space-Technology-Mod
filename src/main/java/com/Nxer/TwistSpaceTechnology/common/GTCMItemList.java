@@ -191,6 +191,11 @@ public enum GTCMItemList {
     BottledChaosCredentialFrame4,
     BottledChaosCredentialFrame5,
     BottledChaosMachineModule,
+    BottledChaosCapacityTier1,
+    BottledChaosCapacityTier2,
+    BottledChaosCapacityTier3,
+    BottledChaosCapacityTier4,
+    BottledChaosCapacityTier5,
 
     LvFlask,
     MvFlask,
