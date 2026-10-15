@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos;
 
 import java.math.BigInteger;
-import java.util.stream.IntStream;
 
 /** Round-by-round allocation in hatch-number order; enabled credentials retain their share. */
 public final class BottledChaosPowerAllocator {
@@ -30,11 +29,6 @@ public final class BottledChaosPowerAllocator {
             }
         } while (changed);
         return shares;
-    }
-
-    public static int[] priorityOrder(int count) {
-        return IntStream.range(0, count)
-            .toArray();
     }
 
     public static long powerForShare(long power, long share, long totalCapacity) {

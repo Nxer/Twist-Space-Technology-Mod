@@ -25,8 +25,6 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
 
     private long routeMask;
     private long pools;
-    private long requiredPools;
-    private long baseRecipeVoltage;
     private long maximumRecipeVoltage = Long.MAX_VALUE;
     private BottledChaosMaterialCache materials;
     private PreparedPlan preparedPlan;
@@ -47,15 +45,14 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
         routeMask = ItemBottledChaosCredential.isBound(credential) ? ItemBottledChaosCredential.getRouteMask(credential)
             : 0;
         pools = poolMask;
-        requiredPools = 0;
     }
 
     public long getRequiredPools() {
-        return requiredPools;
+        return preparedPlan.requiredPools();
     }
 
     public long getBaseRecipeVoltage() {
-        return baseRecipeVoltage;
+        return preparedPlan.baseEUt();
     }
 
     public List<BottledChaosUpkeep.Demand> getUpkeep() {
@@ -137,8 +134,6 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
             }
             chosen.consumeInputCopies(inputItems, inputFluids);
             preparedPlan = chosen;
-            baseRecipeVoltage = chosen.baseEUt();
-            requiredPools = chosen.requiredPools();
             calculatedEut = clock.eut();
             duration = Math.max(1, clock.duration());
             BottledChaosRecipeProcessor.Plan outputs = chosen.outputPlan();
@@ -158,8 +153,8 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
     }
 
     private CheckRecipeResult validatePlan(PreparedPlan plan) {
-        baseRecipeVoltage = plan.baseEUt();
-        requiredPools = plan.requiredPools();
+        long baseRecipeVoltage = plan.baseEUt();
+        long requiredPools = plan.requiredPools();
         if (baseRecipeVoltage > maximumRecipeVoltage) {
             // #tr GT5U.gui.text.recipe_result.bottled_chaos.recipe_voltage_limit
             // # Recipe voltage exceeds the structure upgrade limit.

@@ -362,7 +362,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private final long[] powerBudgets = new long[THREAD_COUNT];
     private final boolean[] advancing = new boolean[THREAD_COUNT];
     private final BottledChaosUpkeep structureUpkeep = new BottledChaosUpkeep();
-    private int[] executionOrder;
     private long[] allocatedShares = new long[THREAD_COUNT];
     private int generatorLevel = -1;
     private int minimumUpgradeGlassTier;
@@ -399,7 +398,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             threadLogics[i] = new BottledChaosProcessingLogic();
             threadResults[i] = CheckRecipeResultRegistry.SUCCESSFUL;
         }
-        executionOrder = BottledChaosPowerAllocator.priorityOrder(THREAD_COUNT);
     }
 
     @Override
@@ -981,7 +979,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if (concentratedPower != activeConcentratedPower) return CheckRecipeResultRegistry.SUCCESSFUL;
         CheckRecipeResult failure = null;
         boolean hasWork = false;
-        for (int slot : executionOrder) {
+        for (int slot = 0; slot < THREAD_COUNT; slot++) {
             BottledChaosThread thread = threads[slot];
             if (isThreadExecutionDisabled(slot)) {
                 thread.status = "tst.modular.machine.BottledChaos.paused";
@@ -1002,15 +1000,14 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private CheckRecipeResult checkConcentratedProcessing() {
         if (powerRoundMask != 0) return CheckRecipeResultRegistry.SUCCESSFUL;
         int candidates = 0;
-        for (int slot : executionOrder) {
+        for (int slot = 0; slot < THREAD_COUNT; slot++) {
             BottledChaosThread thread = threads[slot];
             if (isThreadExecutionDisabled(slot)) {
                 thread.status = "tst.modular.machine.BottledChaos.paused";
                 continue;
             }
             if (schedulerTick < thread.nextCheckTick || thread.isBusy() && !hasAuthorizedWork(slot)) continue;
-            if (!validGroup(slot) || ItemBottledChaosCredential.getRecipeFamily(installedCredentials[slot]) == null)
-                continue;
+            if (!validGroup(slot) || !ItemBottledChaosCredential.isBound(installedCredentials[slot])) continue;
             candidates |= 1 << slot;
         }
         if (candidates == 0) return CheckRecipeResultRegistry.NO_RECIPE;
@@ -1027,7 +1024,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         try {
             startRecipeProcessing();
             // A full-power probe discovers work without changing any real or shared input.
-            for (int slot : executionOrder) {
+            for (int slot = 0; slot < THREAD_COUNT; slot++) {
                 if ((candidates & (1 << slot)) == 0) continue;
                 CheckRecipeResult result = threads[slot].isBusy()
                     ? threads[slot].eut <= inputPower ? CheckRecipeResultRegistry.SUCCESSFUL
@@ -1048,7 +1045,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 budgets = BottledChaosPowerAllocator.concentratedBudgets(inputPower, weights);
                 inputs = new InputTransaction();
                 int failed = -1;
-                for (int slot : executionOrder) {
+                for (int slot = 0; slot < THREAD_COUNT; slot++) {
                     if ((candidates & (1 << slot)) == 0) continue;
                     CheckRecipeResult result = threads[slot].isBusy()
                         ? threads[slot].eut <= budgets[slot] ? CheckRecipeResultRegistry.SUCCESSFUL
@@ -1059,9 +1056,9 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                         failure = result;
                         // Prefer a feasible higher-priority subset when simultaneous base power does not fit.
                         if ("insufficient_power".equals(result.getID())) {
-                            for (int i = executionOrder.length - 1; i >= 0; i--) {
-                                if ((candidates & (1 << executionOrder[i])) != 0) {
-                                    failed = executionOrder[i];
+                            for (int candidate = THREAD_COUNT - 1; candidate >= 0; candidate--) {
+                                if ((candidates & (1 << candidate)) != 0) {
+                                    failed = candidate;
                                     break;
                                 }
                             }
@@ -1139,7 +1136,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     private CheckRecipeResult startThread(int slot) {
         if (!validGroup(slot)) return SimpleCheckRecipeResult.ofFailure("bottled_chaos.structure_incomplete");
-        if (ItemBottledChaosCredential.getRecipeFamily(installedCredentials[slot]) == null) {
+        if (!ItemBottledChaosCredential.isBound(installedCredentials[slot])) {
             return SimpleCheckRecipeResult.ofFailure("bottled_chaos.unbound");
         }
         if (powerBudgets[slot] <= 0) return SimpleCheckRecipeResult.ofFailure("bottled_chaos.insufficient_power_share");
