@@ -332,6 +332,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private final BottledChaosThread[] threads = new BottledChaosThread[THREAD_COUNT];
     private final BottledChaosProcessingLogic[] threadLogics = new BottledChaosProcessingLogic[THREAD_COUNT];
     private final ItemStack[] installedCredentials = new ItemStack[THREAD_COUNT];
+    private final boolean[] matchingCredentials = new boolean[THREAD_COUNT];
     private final int[] inputPeerMasks = new int[THREAD_COUNT];
     private final long[] credentialCosts = new long[THREAD_COUNT];
     private final CheckRecipeResult[] threadResults = new CheckRecipeResult[THREAD_COUNT];
@@ -704,7 +705,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         return thread.isBusy() && thread.progress < thread.duration
             && !isThreadExecutionDisabled(slot)
             && validGroup(slot)
-            && ItemStack.areItemStacksEqual(thread.credential, installedCredentials[slot])
+            && matchingCredentials[slot]
             && thread.recipeVoltage <= getMaximumRecipeVoltage()
             && (poolMask & thread.requiredPools) == thread.requiredPools;
     }
@@ -780,48 +781,43 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     }
 
     private void refreshAllocation() {
-        boolean changed = authorizationDirty || allocatedCapacity != capacity;
-        boolean inputGroupsChanged = inputGroupingDirty;
         int newValidInputGroupMask = 0;
+        for (int slot = 0; slot < THREAD_COUNT; slot++) if (validGroup(slot)) newValidInputGroupMask |= 1 << slot;
+        boolean changed = authorizationDirty || allocatedCapacity != capacity
+            || inputGroupingDirty
+            || validInputGroupMask != newValidInputGroupMask;
         authorizationDirty = false;
-        for (int i = 0; i < THREAD_COUNT; i++) {
-            TST_BottledChaosRecipeTokenHatch hatch = credentialHatches[i];
-            boolean validHatch = hatch != null && hatch.isValid();
-            if (validGroup(i)) newValidInputGroupMask |= 1 << i;
-            ItemStack credential = validHatch ? hatch.getAuthorizationStack() : null;
-            if (!ItemStack.areItemStacksEqual(credential, installedCredentials[i])) {
-                installedCredentials[i] = credential == null ? null : credential.copy();
-                // Credential changes also discard recipe-search caches, never already-paid jobs.
-                threadLogics[i] = new BottledChaosProcessingLogic();
-                if (!threads[i].isBusy()) threadResults[i] = CheckRecipeResultRegistry.SUCCESSFUL;
-                inputGroupsChanged = true;
-                changed = true;
-            }
-        }
         if (changed) {
+            boolean inputGroupsChanged = inputGroupingDirty;
+            for (int slot = 0; slot < THREAD_COUNT; slot++) {
+                TST_BottledChaosRecipeTokenHatch hatch = credentialHatches[slot];
+                ItemStack credential = hatch != null && hatch.isValid() ? hatch.getAuthorizationStack() : null;
+                if (!ItemStack.areItemStacksEqual(credential, installedCredentials[slot])) {
+                    installedCredentials[slot] = credential == null ? null : credential.copy();
+                    // Credential changes also discard recipe-search caches, never already-paid jobs.
+                    threadLogics[slot] = new BottledChaosProcessingLogic();
+                    if (!threads[slot].isBusy()) threadResults[slot] = CheckRecipeResultRegistry.SUCCESSFUL;
+                    inputGroupsChanged = true;
+                }
+                matchingCredentials[slot] = ItemStack
+                    .areItemStacksEqual(threads[slot].credential, installedCredentials[slot]);
+            }
             long installedTags = 0;
             for (ItemStack credential : installedCredentials)
                 installedTags |= ItemBottledChaosCredential.getRouteMask(credential);
             machineConfiguration.updateRequiredPools(BottledChaosRecipeProcessor.requiredPoolMask(installedTags));
-        }
-        long newMask = machineConfiguration.installedPoolMask();
-        changed |= poolMask != newMask;
-        poolMask = newMask;
-        if (inputGroupsChanged || validInputGroupMask != newValidInputGroupMask) {
-            refreshInputPeerMasks(newValidInputGroupMask);
-            changed = true;
-        }
-        changed |= normalizeInputGroupExecution();
-        for (int slot = 0; slot < THREAD_COUNT; slot++) {
-            long cost = validGroup(slot) && !isThreadExecutionDisabled(slot)
-                && ItemBottledChaosCredential.isBound(installedCredentials[slot])
-                    ? (long) ItemBottledChaosCredential
-                        .getRequiredWeight(ItemBottledChaosCredential.getRouteMask(installedCredentials[slot]))
-                        * (Integer.bitCount(getInputPeerMask(slot)) + 1)
-                    : 0;
-            if (credentialCosts[slot] != cost) {
-                credentialCosts[slot] = cost;
-                changed = true;
+            poolMask = machineConfiguration.installedPoolMask();
+            if (inputGroupsChanged || validInputGroupMask != newValidInputGroupMask) {
+                refreshInputPeerMasks(newValidInputGroupMask);
+            }
+            normalizeInputGroupExecution();
+            for (int slot = 0; slot < THREAD_COUNT; slot++) {
+                credentialCosts[slot] = validGroup(slot) && !isThreadExecutionDisabled(slot)
+                    && ItemBottledChaosCredential.isBound(installedCredentials[slot])
+                        ? (long) ItemBottledChaosCredential
+                            .getRequiredWeight(ItemBottledChaosCredential.getRouteMask(installedCredentials[slot]))
+                            * (Integer.bitCount(getInputPeerMask(slot)) + 1)
+                        : 0;
             }
         }
         long power = changed || schedulerTick % 20 == 0 ? Math.max(0, getMaxInputEu()) : inputPower;
@@ -840,6 +836,12 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             powerBudgets[i] = BottledChaosPowerAllocator.powerForShare(inputPower, allocatedShares[i], capacity);
             threads[i].nextCheckTick = 0;
         }
+    }
+
+    public void onCredentialHatchContentsChanged(TST_BottledChaosRecipeTokenHatch hatch, int slot) {
+        if (!isCredentialHatchConnected(hatch, slot)) return;
+        authorizationDirty = true;
+        scheduleRecipeCheckImmediate();
     }
 
     public void onCredentialHatchExecutionChanged(TST_BottledChaosRecipeTokenHatch hatch, int slot, boolean enabled) {
@@ -920,7 +922,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     private CheckRecipeResult canRunThread(int slot) {
         BottledChaosThread thread = threads[slot];
-        if (!validGroup(slot) || !ItemStack.areItemStacksEqual(thread.credential, installedCredentials[slot])) {
+        if (!validGroup(slot) || !matchingCredentials[slot]) {
             return SimpleResultWithText.ofFailure("tst.bottledchaos.result.credential_changed");
         }
         if (thread.recipeVoltage > getMaximumRecipeVoltage())
@@ -1146,6 +1148,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         BottledChaosProcessingLogic logic = threadLogics[slot];
         BottledChaosThread thread = threads[slot];
         thread.credential = installedCredentials[slot].copy();
+        matchingCredentials[slot] = true;
         thread.requiredPools = logic.getRequiredPools();
         thread.upkeep = logic.getUpkeep();
         thread.recipeVoltage = logic.getBaseRecipeVoltage();

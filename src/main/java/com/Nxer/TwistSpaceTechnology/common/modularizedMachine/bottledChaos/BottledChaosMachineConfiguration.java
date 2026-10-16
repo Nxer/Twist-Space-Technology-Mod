@@ -52,6 +52,10 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
     private static final String PURIFICATION_PLANT_KEY = "item.tst.bottled_chaos.machine_module.purification_plant";
 
     private final double[] machineSpeeds = new double[MAX_POOLS];
+    private final BottledChaosStructureCatalog.Structure[] machineStructures = new BottledChaosStructureCatalog.Structure[MAX_POOLS];
+    private final long[] machineQuantities = new long[MAX_POOLS];
+    private long supportedPools;
+    private long debugPools;
     private NBTTagCompound pendingMachines;
     private long requiredPools;
     private final ItemStackHandler machines;
@@ -84,9 +88,19 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
             @Override
             protected void onContentsChanged(int slot) {
                 ItemStack stack = getStackInSlot(slot);
-                machineSpeeds[slot] = ItemBottledChaosMachineModule.isModule(stack)
-                    ? ItemBottledChaosMachineModule.quantitySpeed(ItemBottledChaosMachineModule.quantity(stack))
-                    : stack == null ? 1 : quantitySpeed(stack.stackSize);
+                // Paid structure validation belongs to inventory changes, never the controller's tick loop.
+                machineStructures[slot] = ItemBottledChaosMachineModule.isModule(stack)
+                    ? ItemBottledChaosMachineModule.structure(stack)
+                    : null;
+                machineQuantities[slot] = quantity(stack);
+                machineSpeeds[slot] = ItemBottledChaosMachineModule.quantitySpeed(machineQuantities[slot]);
+                long bit = 1L << slot;
+                boolean debug = GTCMItemList.TestItem0.equal(stack);
+                debugPools = debug ? debugPools | bit : debugPools & ~bit;
+                boolean supported = stack != null && stack.stackSize > 0
+                    && (debug || machineStructures[slot] != null && machineQuantities[slot] > 0
+                        && (machineStructures[slot].poolMask() & bit) != 0);
+                supportedPools = supported ? supportedPools | bit : supportedPools & ~bit;
                 changed.run();
             }
         };
@@ -288,21 +302,18 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
 
     public long installedPoolMask() {
         loadPendingMachines();
-        long mask = 0;
+        long mask = requiredPools & supportedPools;
         long plantQuantity = purificationPlantQuantity();
         for (int slot = 0; slot < poolCount(); slot++) {
-            ItemStack stack = machines.getStackInSlot(slot);
-            if (!isPoolRequired(slot) || !supportsPool(slot, stack)) continue;
-            if ((purificationPools & (1L << slot)) != 0 && quantity(stack) > plantQuantity) continue;
-            mask |= 1L << slot;
+            long bit = 1L << slot;
+            if ((purificationPools & bit) != 0 && machineQuantities[slot] > plantQuantity) mask &= ~bit;
         }
         return mask;
     }
 
     private long purificationPlantQuantity() {
         if (purificationPlantSlot < 0) return 0;
-        ItemStack stack = machines.getStackInSlot(purificationPlantSlot);
-        return supportsPool(purificationPlantSlot, stack) ? quantity(stack) : 0;
+        return (supportedPools & purificationPlantMask()) != 0 ? machineQuantities[purificationPlantSlot] : 0;
     }
 
     private static long quantity(ItemStack stack) {
@@ -374,17 +385,12 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
             purificationPlantQuantity = purificationPlantQuantity();
             for (int slot = 0; slot < pools.length; slot++) {
                 ItemStack stack = machines.getStackInSlot(slot);
-                quantities[slot] = 0;
                 if (stack == null) continue;
-                debug[slot] = GTCMItemList.TestItem0.equal(stack);
-                if (ItemBottledChaosMachineModule.isModule(stack)) {
-                    structures[slot] = ItemBottledChaosMachineModule.structure(stack);
-                    if (structures[slot] != null) controllers[slot] = structures[slot].controller();
-                    quantities[slot] = ItemBottledChaosMachineModule.quantity(stack);
-                } else {
-                    controllers[slot] = stack;
-                    quantities[slot] = stack.stackSize;
-                }
+                debug[slot] = (debugPools & (1L << slot)) != 0;
+                structures[slot] = machineStructures[slot];
+                controllers[slot] = structures[slot] != null ? structures[slot].controller()
+                    : ItemBottledChaosMachineModule.isModule(stack) ? null : stack;
+                quantities[slot] = machineQuantities[slot];
             }
         }
 

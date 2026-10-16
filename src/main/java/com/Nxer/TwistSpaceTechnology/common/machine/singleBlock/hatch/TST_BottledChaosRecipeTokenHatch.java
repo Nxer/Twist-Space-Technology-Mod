@@ -96,6 +96,16 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
         return ItemBottledChaosCredential.getCapacity(stack) > 0;
     }
 
+    @Override
+    public void onContentsChanged(int slot) {
+        super.onContentsChanged(slot);
+        if (slot == 0 && controller != null
+            && getBaseMetaTileEntity() != null
+            && getBaseMetaTileEntity().isServerSide()) {
+            controller.onCredentialHatchContentsChanged(this, processingGroup);
+        }
+    }
+
     public boolean isExecutionEnabled() {
         return executionEnabled;
     }
