@@ -336,6 +336,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private final long[] credentialCosts = new long[THREAD_COUNT];
     private final CheckRecipeResult[] threadResults = new CheckRecipeResult[THREAD_COUNT];
     private CheckRecipeResult cacheExportResult = CheckRecipeResultRegistry.NONE;
+    private long cacheExportResultExpiresAt;
     private int processingGroupMask;
     private final long[] powerBudgets = new long[THREAD_COUNT];
     private final boolean[] advancing = new boolean[THREAD_COUNT];
@@ -1381,6 +1382,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     /** Export available carry, including paused hatches, without voiding or touching unfinished job outputs. */
     public void exportMaterialCaches() {
+        cacheExportResultExpiresAt = getBaseMetaTileEntity().getWorld()
+            .getTotalWorldTime() + 60;
         boolean empty = true;
         for (TST_BottledChaosRecipeTokenHatch hatch : credentialHatches) {
             if (hatch != null && hatch.isValid() && !hatch.getMaterialCache().isEmpty()) empty = false;
@@ -1421,7 +1424,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     }
 
     public CheckRecipeResult getCacheExportResult() {
-        return cacheExportResult;
+        return getBaseMetaTileEntity().getWorld()
+            .getTotalWorldTime() < cacheExportResultExpiresAt ? cacheExportResult : CheckRecipeResultRegistry.NONE;
     }
 
     private static final class InputTransaction {
