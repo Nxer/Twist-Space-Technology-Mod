@@ -45,6 +45,7 @@ import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.common.gui.modularui.adapter.CheckRecipeResultAdapter;
 
 public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
 
@@ -187,6 +188,12 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                 .copy(tag -> (NBTTagCompound) tag.copy())
                 .build());
         syncManager.syncValue(
+            "bottledChaosCacheExportResult",
+            GenericSyncValue.builder(CheckRecipeResult.class)
+                .getter(multiblock::getCacheExportResult)
+                .adapter(new CheckRecipeResultAdapter())
+                .build());
+        syncManager.syncValue(
             "bottledChaosConcentratedPower",
             new BooleanSyncValue(multiblock::isConcentratedPowerEnabled, multiblock::setConcentratedPowerEnabled)
                 .allowC2S());
@@ -230,6 +237,20 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                 .asWidget()
                 .fullWidth()
                 .marginBottom(2));
+        GenericSyncValue<CheckRecipeResult, ?> cacheExport = syncManager
+            .findSyncHandler("bottledChaosCacheExportResult", GenericSyncValue.class);
+        // #tr tst.bottledchaos.gui.cache_export_result
+        // # Cache export: %s
+        // #zh_CN 缓存导出: %s
+        terminal.child(
+            IKey.dynamic(
+                () -> (cacheExport.getValue().wasSuccessful() ? EnumChatFormatting.AQUA : EnumChatFormatting.RED)
+                    + StatCollector.translateToLocalFormatted(
+                        "tst.bottledchaos.gui.cache_export_result",
+                        cacheExport.getValue().getDisplayString()))
+                .asWidget()
+                .fullWidth()
+                .setEnabledIf(widget -> !CheckRecipeResultRegistry.NONE.equals(cacheExport.getValue())));
         return terminal;
     }
 
@@ -239,10 +260,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
         NBTTagList entries = summary.getTagList("entries", 10);
         for (int i = 0; i < entries.tagCount(); i++) {
             NBTTagCompound entry = entries.getCompoundTagAt(i);
-            StringJoiner slots = new StringJoiner("");
-            for (int slot = 0; slot < 15; slot++) {
-                if ((entry.getInteger("slots") & (1 << slot)) != 0) slots.add("#" + (slot + 1));
-            }
+            String slots = MM_BottledChaos.formatProcessingGroups(entry.getInteger("slots"));
             String text;
             if (entry.hasKey("resultId", 8)) {
                 CheckRecipeResult result = CheckRecipeResultRegistry.getSampleFromRegistry(entry.getString("resultId"))
@@ -533,6 +551,8 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             .height(104);
         for (int slot = 0; slot < BottledChaosMachineConfiguration.poolCount(); slot++) {
             final int poolSlot = slot;
+            IntSyncValue users = new IntSyncValue(() -> multiblock.getRecipePoolUsers(poolSlot));
+            syncManager.syncValue("bottledChaosPoolUsers" + poolSlot, users);
             BooleanSupplier visible = () -> (required.getLongValue() & (1L << poolSlot)) != 0
                 || multiblock.getMachineConfiguration()
                     .machines()
@@ -559,7 +579,20 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                     .child(
                         new TextWidget<>(IKey.str(BottledChaosMachineConfiguration.poolName(poolSlot))).width(168)
                             .height(18)
-                            .textAlign(Alignment.CenterLeft)));
+                            .textAlign(Alignment.CenterLeft)
+                            .tooltipBuilder(tooltip -> {
+                                // #tr tst.bottledchaos.gui.pool_users
+                                // # Processing groups: %s
+                                // #zh_CN 加工组: %s
+                                String groups = MM_BottledChaos.formatProcessingGroups(users.getValue());
+                                tooltip.addLine(
+                                    IKey.str(
+                                        StatCollector.translateToLocalFormatted(
+                                            "tst.bottledchaos.gui.pool_users",
+                                            groups.isEmpty() ? StatCollector.translateToLocal("GT5U.gui.text.nil")
+                                                : groups)));
+                            })
+                            .tooltipAutoUpdate(true)));
         }
         return new ModularPanel(RECIPE_CATEGORY_PANEL) {
 

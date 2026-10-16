@@ -218,7 +218,7 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
                 "#" + job.getInteger("slot")
                     + " "
                     + MM_BottledChaos.getStatusColor(job.getString("status"))
-                    + StatCollector.translateToLocal(job.getString("status"))
+                    + MM_BottledChaos.getWailaStatusText(job)
                     + EnumChatFormatting.RESET);
             int boundSlots = job.getInteger("boundSlots");
             if (boundSlots != 0) currentTip.add(getBoundInputText(boundSlots));

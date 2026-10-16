@@ -139,13 +139,8 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
             return CheckRecipeResultRegistry.SUCCESSFUL;
         }
         if (failure == CheckRecipeResultRegistry.NO_RECIPE
-            && machineParameters instanceof BottledChaosMachineConfiguration.RuntimeParameters runtime
-            && runtime.rejectedSource()) {
-            // #tr tst.bottledchaos.result.source_machine_limit
-            // # The configured source machine cannot satisfy the recipe requirements.
-            // #zh_CN 已配置的来源机器无法满足配方要求.
-            return SimpleResultWithText.ofFailure("tst.bottledchaos.result.source_machine_limit");
-        }
+            && machineParameters instanceof BottledChaosMachineConfiguration.RuntimeParameters runtime)
+            return runtime.sourceFailure();
         return failure;
     }
 

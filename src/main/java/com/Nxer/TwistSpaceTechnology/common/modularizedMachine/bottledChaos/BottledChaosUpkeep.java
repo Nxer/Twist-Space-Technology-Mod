@@ -8,6 +8,7 @@ import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -15,6 +16,8 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.github.bsideup.jabel.Desugar;
 
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.util.GTUtility;
 
 /** Bills active structure pools once per tick, with fractional mB carried across jobs and pauses. */
@@ -22,6 +25,7 @@ public final class BottledChaosUpkeep {
 
     private static final BigInteger TICKS_PER_SECOND = BigInteger.valueOf(20);
     private final Map<RateKey, Integer> remainders = new HashMap<>();
+    private CheckRecipeResult failure = CheckRecipeResultRegistry.SUCCESSFUL;
 
     /** A type template and an unbounded per-second amount; no int-sized stack expansion. */
     @Desugar
@@ -45,7 +49,7 @@ public final class BottledChaosUpkeep {
     }
 
     /** Check startup reserves and the next running tick without draining fluid or advancing fractional billing. */
-    public boolean canStart(List<Demand> active, List<Demand> starting, FluidStack[] inputs) {
+    public CheckRecipeResult checkStart(List<Demand> active, List<Demand> starting, FluidStack[] inputs) {
         Map<RateKey, BigInteger> needed = new LinkedHashMap<>();
         for (Demand demand : active) {
             RateKey key = new RateKey(demand.pool(), fluidId(demand.fluid()));
@@ -71,13 +75,29 @@ public final class BottledChaosUpkeep {
             amounts
                 .computeIfPresent(fluidId(input), (key, amount) -> amount.subtract(BigInteger.valueOf(input.amount)));
         }
-        return amounts.values()
-            .stream()
-            .noneMatch(amount -> amount.signum() > 0);
+        for (var entry : amounts.entrySet()) {
+            if (entry.getValue().signum() > 0)
+                return missingFluid(needed, entry.getKey(), entry.getValue());
+        }
+        return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    private static CheckRecipeResult missingFluid(Map<RateKey, BigInteger> needed, GTUtility.FluidId fluid,
+        BigInteger amount) {
+        StringJoiner pools = new StringJoiner(";");
+        for (var entry : needed.entrySet()) {
+            if (entry.getValue().signum() > 0 && entry.getKey().fluid().equals(fluid)) pools.add(entry.getKey().pool());
+        }
+        return BottledChaosPoolFailure.missingFluid(pools.toString(), fluid.getFluidStack(), amount);
+    }
+
+    public CheckRecipeResult getFailure() {
+        return failure;
     }
 
     /** All fluids are checked before any input changes. Duplicate use of a pool does not multiply its rate. */
     public Transaction prepare(List<Demand> active, FluidStack[] inputs) {
+        failure = CheckRecipeResultRegistry.SUCCESSFUL;
         Map<RateKey, Demand> rates = new LinkedHashMap<>();
         for (Demand demand : active) {
             RateKey key = new RateKey(demand.pool(), fluidId(demand.fluid()));
@@ -86,6 +106,7 @@ public final class BottledChaosUpkeep {
                 .compareTo(demand.perSecond()) < 0) rates.put(key, demand);
         }
         Map<RateKey, Integer> nextRemainders = new HashMap<>();
+        Map<RateKey, BigInteger> perPool = new LinkedHashMap<>();
         Map<GTUtility.FluidId, BigInteger> amounts = new LinkedHashMap<>();
         for (var entry : rates.entrySet()) {
             BigInteger[] tick = entry.getValue()
@@ -93,6 +114,7 @@ public final class BottledChaosUpkeep {
                 .add(BigInteger.valueOf(remainders.getOrDefault(entry.getKey(), 0)))
                 .divideAndRemainder(TICKS_PER_SECOND);
             nextRemainders.put(entry.getKey(), tick[1].intValue());
+            perPool.put(entry.getKey(), tick[0]);
             amounts.merge(
                 entry.getKey()
                     .fluid(),
@@ -115,7 +137,10 @@ public final class BottledChaosUpkeep {
                 remaining.put(input, available - taken);
                 needed = needed.subtract(BigInteger.valueOf(taken));
             }
-            if (needed.signum() > 0) return null;
+            if (needed.signum() > 0) {
+                failure = missingFluid(perPool, entry.getKey(), needed);
+                return null;
+            }
         }
         return new Transaction(remaining, nextRemainders);
     }

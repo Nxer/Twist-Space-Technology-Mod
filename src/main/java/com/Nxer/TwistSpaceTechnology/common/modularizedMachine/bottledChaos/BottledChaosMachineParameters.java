@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -36,6 +37,7 @@ import gregtech.api.items.MetaGeneratedTool;
 import gregtech.api.metatileentity.implementations.MTEBasicMachine;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.GlassTier;
 import gregtech.common.blocks.BlockCyclotronCoils;
@@ -164,6 +166,29 @@ public final class BottledChaosMachineParameters {
         long inputVoltage, long inputPower, ItemStack[] items, FluidStack[] fluids, double masterTime, double masterEU,
         long masterParallel, int requiredHeat, int requiredGlassTier, ItemStack requiredSpecialInput,
         boolean heavyCentrifuge) {
+        return evaluate(
+            controller,
+            structure,
+            pool,
+            recipeVoltage,
+            inputVoltage,
+            inputPower,
+            items,
+            fluids,
+            masterTime,
+            masterEU,
+            masterParallel,
+            requiredHeat,
+            requiredGlassTier,
+            requiredSpecialInput,
+            heavyCentrifuge,
+            ignored -> {});
+    }
+
+    public static Profile evaluate(ItemStack controller, Structure structure, RecipeMap<?> pool, long recipeVoltage,
+        long inputVoltage, long inputPower, ItemStack[] items, FluidStack[] fluids, double masterTime, double masterEU,
+        long masterParallel, int requiredHeat, int requiredGlassTier, ItemStack requiredSpecialInput,
+        boolean heavyCentrifuge, Consumer<CheckRecipeResult> failure) {
         if (controller == null || pool == null
             || recipeVoltage <= 0
             || inputVoltage <= 0
@@ -299,7 +324,9 @@ public final class BottledChaosMachineParameters {
                     value.set(powerOfTwo(Math.max(2L * u.glass - 6, 0)), 1, 0.25);
                 else {
                     long dishes = count(items, requiredSpecialInput);
-                    if (requiredSpecialInput == null || dishes <= 0 || u.glass < requiredGlassTier) return null;
+                    if (requiredSpecialInput == null || dishes <= 0)
+                        return reject(pool, "culture", dishes, 1, failure);
+                    if (u.glass < requiredGlassTier) return reject(pool, "glass", u.glass, requiredGlassTier, failure);
                     value.set(dishes, 1, 1 / (1.6 + 0.6 * (u.glass - requiredGlassTier)));
                     value.restrictions = text("culture");
                 }
@@ -461,7 +488,7 @@ public final class BottledChaosMachineParameters {
                             : foundry.allowEternity && contains(fluids, Materials.Eternity.getMolten(1))
                                 ? Materials.Eternity
                                 : null;
-                    if (coolant == null) return null;
+                    if (coolant == null) return reject(pool, "coolant", 0, 1, failure);
                     additional = coolant == Materials.SuperCoolant ? 1 : coolant == Materials.SpaceTime ? 2 : 3;
                     value.upkeep = new FluidStack[] { coolant == Materials.SuperCoolant ? coolant.getFluid(100)
                         : coolant.getMolten(coolant == Materials.SpaceTime ? 50 : 25) };
@@ -504,7 +531,7 @@ public final class BottledChaosMachineParameters {
                 if (u.rotorScore <= 0) return null;
                 boolean boost = contains(fluids, Materials.BiocatalyzedPropulsionFluid.getFluid(1));
                 value.heavyCentrifuge = shape >= 3 && boost;
-                if (heavyCentrifuge && !value.heavyCentrifuge) return null;
+                if (heavyCentrifuge && !value.heavyCentrifuge) return reject(pool, "heavy_centrifuge", 0, 1, failure);
                 value.set(
                     Math.max(1, (long) Math.floor(4 * u.rotorScore * (boost ? 1.25 : 1) / (heavyCentrifuge ? 32 : 1))),
                     heavyCentrifuge ? 11.2 : 0.7,
@@ -523,7 +550,8 @@ public final class BottledChaosMachineParameters {
             }
             case QUANTUM -> {
                 long catalyst = count(items, requiredSpecialInput);
-                if (requiredSpecialInput == null || catalyst <= 0 || u.quantumTier < 1) return null;
+                if (requiredSpecialInput == null || catalyst <= 0) return reject(pool, "catalyst", catalyst, 1, failure);
+                if (u.quantumTier < 1) return reject(pool, "casing", u.quantumTier, 1, failure);
                 value.parallel = Math.min(Integer.MAX_VALUE, catalyst);
                 value.casingTier = u.quantumTier;
                 value.restrictions = text("catalyst");
@@ -559,10 +587,18 @@ public final class BottledChaosMachineParameters {
             value.euMultiplier *= Math.pow(value.heatDiscount, excess / 900);
             value.heatOverclocks = (int) Math.min(Integer.MAX_VALUE, excess / 1800);
         }
-        if (value.requiresHeat && (value.heat <= 0 || requiredHeat > value.heat)) return null;
-        if (requiredGlassTier > value.glassTier || value.maximumRecipeTier >= 0 && recipeTier > value.maximumRecipeTier)
-            return null;
+        if (value.requiresHeat && (value.heat <= 0 || requiredHeat > value.heat))
+            return reject(pool, "heat", value.heat, Math.max(1, requiredHeat), failure);
+        if (requiredGlassTier > value.glassTier) return reject(pool, "glass", value.glassTier, requiredGlassTier, failure);
+        if (value.maximumRecipeTier >= 0 && recipeTier > value.maximumRecipeTier)
+            return reject(pool, "voltage", GTValues.V[value.maximumRecipeTier], recipeVoltage, failure);
         return value.profile();
+    }
+
+    private static Profile reject(RecipeMap<?> pool, String parameter, long available, long required,
+        Consumer<CheckRecipeResult> failure) {
+        failure.accept(BottledChaosPoolFailure.parameter(pool.unlocalizedName, parameter, available, required));
+        return null;
     }
 
     /** Cross-upgrade requirements shared by packaging, saved modules and NEI examples. */

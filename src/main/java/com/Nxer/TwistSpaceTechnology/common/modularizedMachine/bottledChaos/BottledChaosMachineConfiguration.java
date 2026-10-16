@@ -19,6 +19,7 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosMachineModule;
+import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.MachineParameters;
@@ -31,6 +32,8 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.RecipeMapWorkable;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.util.GTUtility;
 import gregtech.common.tileentities.machines.multi.purification.MTEPurificationPlant;
 
@@ -356,7 +359,8 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
         private final Map<SourceKey, BottledChaosMachineParameters.Profile> profiles = new HashMap<>();
         private final List<BottledChaosUpkeep.Demand> sourceUsage = new ArrayList<>();
         private final BottledChaosMachineParameters.Profile[] currentProfiles = new BottledChaosMachineParameters.Profile[MAX_POOLS];
-        private boolean rejectedSource;
+        private final CheckRecipeResult[] currentFailures = new CheckRecipeResult[MAX_POOLS];
+        private CheckRecipeResult sourceFailure = CheckRecipeResultRegistry.NO_RECIPE;
 
         private RuntimeParameters(long inputVoltage, long inputPower, ItemStack[] items, FluidStack[] fluids,
             double masterTime, double masterEU, long masterParallel) {
@@ -397,6 +401,7 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
                 requiredGlassTier,
                 requiredSpecialInput == null ? null : GTUtility.ItemId.createNoCopy(requiredSpecialInput),
                 heavyCentrifuge);
+            currentFailures[slot] = null;
             currentProfiles[slot] = profiles.computeIfAbsent(
                 key,
                 ignored -> BottledChaosMachineParameters.evaluate(
@@ -414,7 +419,8 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
                     requiredHeat,
                     requiredGlassTier,
                     requiredSpecialInput,
-                    heavyCentrifuge));
+                    heavyCentrifuge,
+                    failure -> currentFailures[slot] = failure));
         }
 
         private BottledChaosMachineParameters.Profile profile(RecipeMap<?> map) {
@@ -429,31 +435,50 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
             Integer slot = poolIndexes.get(map);
             if (slot != null && (purificationPools & (1L << slot)) != 0
                 && (quantities[slot] <= 0 || quantities[slot] > purificationPlantQuantity)) {
-                rejectedSource = true;
-                return false;
+                return reject(slot, "purification_capacity", purificationPlantQuantity, Math.max(1, quantities[slot]));
             }
             var profile = profile(map);
             // Missing pools are reported by ProcessingLogic; TestItem deliberately supplies unrestricted defaults.
             if (profile == null) {
                 boolean allowed = slot == null || !configured[slot];
-                rejectedSource |= !allowed;
+                // #tr tst.bottledchaos.result.invalid_source_configuration
+                // # Source structure configuration is not valid for this recipe pool.
+                // #zh_CN 来源结构配置不适用于此配方池.
+                if (!allowed)
+                    sourceFailure = currentFailures[slot] != null ? currentFailures[slot]
+                        : BottledChaosPoolFailure.of(
+                            poolKey(slot),
+                            SimpleResultWithText.ofFailure("tst.bottledchaos.result.invalid_source_configuration"));
                 return allowed;
             }
-            boolean allowed = (profile.maximumRecipeTier() < 0
-                || mergedRecipeVoltage <= gregtech.api.enums.GTValues.V[profile.maximumRecipeTier()])
-                && requiredHeat <= profile.heat()
-                && requiredGlassTier <= profile.glassTier()
-                && (requiredCasingTier <= 0 || requiredCasingTier <= profile.casingTier())
-                && (requiredCompressionTier <= 0 || requiredCompressionTier <= profile.compressionTier())
-                && (!heavyCentrifuge || profile.heavyCentrifuge())
-                && requiredPlasmaTier <= profile.plasmaTier()
-                && (!multiStepPlasma || profile.multiStepPlasma());
-            rejectedSource |= !allowed;
-            return allowed;
+            if (profile.maximumRecipeTier() >= 0
+                && mergedRecipeVoltage > gregtech.api.enums.GTValues.V[profile.maximumRecipeTier()])
+                return reject(
+                    slot,
+                    "voltage",
+                    gregtech.api.enums.GTValues.V[profile.maximumRecipeTier()],
+                    mergedRecipeVoltage);
+            if (requiredHeat > profile.heat()) return reject(slot, "heat", profile.heat(), requiredHeat);
+            if (requiredGlassTier > profile.glassTier())
+                return reject(slot, "glass", profile.glassTier(), requiredGlassTier);
+            if (requiredCasingTier > 0 && requiredCasingTier > profile.casingTier())
+                return reject(slot, "casing", profile.casingTier(), requiredCasingTier);
+            if (requiredCompressionTier > 0 && requiredCompressionTier > profile.compressionTier())
+                return reject(slot, "compression", profile.compressionTier(), requiredCompressionTier);
+            if (heavyCentrifuge && !profile.heavyCentrifuge()) return reject(slot, "heavy_centrifuge", 0, 1);
+            if (requiredPlasmaTier > profile.plasmaTier())
+                return reject(slot, "plasma", profile.plasmaTier(), requiredPlasmaTier);
+            if (multiStepPlasma && !profile.multiStepPlasma()) return reject(slot, "multi_step_plasma", 0, 1);
+            return true;
         }
 
-        public boolean rejectedSource() {
-            return rejectedSource;
+        private boolean reject(int slot, String parameter, long available, long required) {
+            sourceFailure = BottledChaosPoolFailure.parameter(poolKey(slot), parameter, available, required);
+            return false;
+        }
+
+        public CheckRecipeResult sourceFailure() {
+            return sourceFailure;
         }
 
         @Override

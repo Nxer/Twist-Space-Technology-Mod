@@ -10,6 +10,8 @@ import net.minecraft.nbt.NBTTagList;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.util.GTUtility.FluidId;
 
 /** Per-hatch, paid intermediate inventory. Only a selected family's compact quantities enter the planner. */
@@ -86,11 +88,16 @@ public final class BottledChaosMaterialCache {
     }
 
     /** Reserve every family before exporting anything; a blocked output leaves the cache untouched. */
-    public boolean reserveExport(BottledChaosOutputBuffer.Transaction transaction) {
+    public CheckRecipeResult reserveExport(BottledChaosOutputBuffer.Transaction transaction) {
         for (BottledChaosOutputBuffer inventory : inventories) {
-            if (!transaction.reserve(inventory)
-                .wasSuccessful()) return false;
+            CheckRecipeResult result = transaction.reserve(inventory);
+            if (!result.wasSuccessful()) return result;
         }
+        return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    public boolean isEmpty() {
+        for (BottledChaosOutputBuffer inventory : inventories) if (!inventory.isEmpty()) return false;
         return true;
     }
 

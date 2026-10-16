@@ -335,6 +335,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private final int[] inputPeerMasks = new int[THREAD_COUNT];
     private final long[] credentialCosts = new long[THREAD_COUNT];
     private final CheckRecipeResult[] threadResults = new CheckRecipeResult[THREAD_COUNT];
+    private CheckRecipeResult cacheExportResult = CheckRecipeResultRegistry.NONE;
+    private int processingGroupMask;
     private final long[] powerBudgets = new long[THREAD_COUNT];
     private final boolean[] advancing = new boolean[THREAD_COUNT];
     private final BottledChaosUpkeep structureUpkeep = new BottledChaosUpkeep();
@@ -1285,6 +1287,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     private CheckRecipeResult prepareThread(int slot, List<ItemStack> storedItems, List<FluidStack> storedFluids,
         long budget, InputTransaction inputs) {
+        processingGroupMask = 1 << slot;
         ItemStack[] originals = uniqueItemReferences(storedItems);
         FluidStack[] originalFluids = uniqueFluidReferences(storedFluids);
         ItemStack[] itemCopies = Arrays.stream(originals)
@@ -1342,8 +1345,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             if (hasAuthorizedWork(other)) active.addAll(threads[other].upkeep);
             if (inputs != null && inputs.prepared[other]) starting.addAll(threadLogics[other].getUpkeep());
         }
-        if (!structureUpkeep.canStart(active, starting, supply))
-            return SimpleResultWithText.ofFailure("tst.bottledchaos.result.missing_upkeep");
+        result = structureUpkeep.checkStart(active, starting, supply);
+        if (!result.wasSuccessful()) return result;
         if (inputs != null && inputs.probeOnly) return CheckRecipeResultRegistry.SUCCESSFUL;
 
         if (inputs != null) {
@@ -1387,20 +1390,30 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     /** Export available carry, including paused hatches, without voiding or touching unfinished job outputs. */
     public void exportMaterialCaches() {
-        BottledChaosOutputBuffer.Transaction check = new BottledChaosOutputBuffer.Transaction(this, true, true);
-        if (!reserveRunningOutputs(check).wasSuccessful()) return;
+        boolean empty = true;
         for (TST_BottledChaosRecipeTokenHatch hatch : credentialHatches) {
-            if (hatch != null && hatch.isValid()
-                && !hatch.getMaterialCache()
-                    .reserveExport(check))
-                return;
+            if (hatch != null && hatch.isValid() && !hatch.getMaterialCache().isEmpty()) empty = false;
+        }
+        if (empty) {
+            // #tr tst.bottledchaos.gui.cache_empty
+            // # No materials to export.
+            // #zh_CN 无可导出的材料.
+            cacheExportResult = SimpleResultWithText.ofSuccess("tst.bottledchaos.gui.cache_empty");
+            return;
+        }
+        BottledChaosOutputBuffer.Transaction check = new BottledChaosOutputBuffer.Transaction(this, true, true);
+        cacheExportResult = reserveRunningOutputs(check);
+        if (!cacheExportResult.wasSuccessful()) return;
+        for (TST_BottledChaosRecipeTokenHatch hatch : credentialHatches) {
+            if (hatch == null || !hatch.isValid()) continue;
+            cacheExportResult = hatch.getMaterialCache().reserveExport(check);
+            if (!cacheExportResult.wasSuccessful()) return;
         }
         BottledChaosOutputBuffer.Transaction output = new BottledChaosOutputBuffer.Transaction(this, false, true);
         for (TST_BottledChaosRecipeTokenHatch hatch : credentialHatches) {
-            if (hatch != null && hatch.isValid()
-                && !hatch.getMaterialCache()
-                    .reserveExport(output))
-                return;
+            if (hatch == null || !hatch.isValid()) continue;
+            cacheExportResult = hatch.getMaterialCache().reserveExport(output);
+            if (!cacheExportResult.wasSuccessful()) return;
         }
         output.commit();
         for (TST_BottledChaosRecipeTokenHatch hatch : credentialHatches) {
@@ -1409,7 +1422,15 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 .clearMaterials();
             hatch.markDirty();
         }
+        // #tr tst.bottledchaos.gui.cache_exported
+        // # Complete.
+        // #zh_CN 完成.
+        cacheExportResult = SimpleResultWithText.ofSuccess("tst.bottledchaos.gui.cache_exported");
         markDirty();
+    }
+
+    public CheckRecipeResult getCacheExportResult() {
+        return cacheExportResult;
     }
 
     private static final class InputTransaction {
@@ -1463,6 +1484,13 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     @Override
     protected void runMachine(IGregTechTileEntity base, long tick) {
+        if (base.isAllowedToWork()) {
+            processingGroupMask = 0;
+            for (int slot = 0; slot < THREAD_COUNT; slot++) {
+                if (!isThreadExecutionDisabled(slot) && (installedCredentials[slot] != null || threads[slot].isBusy()))
+                    processingGroupMask |= 1 << slot;
+            }
+        }
         schedulerTick = tick;
         applyCredentialHatchControls();
         refreshAllocation();
@@ -1501,10 +1529,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         lEUt = -usage;
         if ((activeConcentratedPower || concentratedPower != activeConcentratedPower) && usage > inputPower) {
             lEUt = 0;
-            for (int slot = 0; slot < THREAD_COUNT; slot++) {
-                if (advancing[slot]) threads[slot].status = "tst.bottledchaos.paused";
-            }
-            setCheckRecipeResult(CheckRecipeResultRegistry.insufficientPower(usage));
+            recordRunningFailure(CheckRecipeResultRegistry.insufficientPower(usage));
             return;
         }
         if (usage > 0 && !payRunningCosts(usage)) return;
@@ -1520,6 +1545,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             }
             if (thread.progress >= thread.duration && canRunThread(i).wasSuccessful()
                 && (advancing[i] || tick >= thread.nextCheckTick)) {
+                processingGroupMask = 1 << i;
                 // Recheck current capacity: another producer may have occupied the reserved space.
                 BottledChaosOutputBuffer.Transaction output = new BottledChaosOutputBuffer.Transaction(this, true);
                 CheckRecipeResult result = output.reserve(thread.outputs);
@@ -1568,9 +1594,13 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     /** Precheck all upkeep fluids, then pay energy and commit through GT's normal ME input lifecycle. */
     private boolean payRunningCosts(long usage) {
+        processingGroupMask = 0;
         List<BottledChaosUpkeep.Demand> demands = new ArrayList<>();
         for (int slot = 0; slot < THREAD_COUNT; slot++) {
-            if (advancing[slot]) demands.addAll(threads[slot].upkeep);
+            if (advancing[slot]) {
+                processingGroupMask |= 1 << slot;
+                demands.addAll(threads[slot].upkeep);
+            }
         }
         if (demands.isEmpty()) {
             if (drainEnergyInput(usage)) return true;
@@ -1611,16 +1641,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if (payment == null) {
             endRecipeProcessing();
             lEUt = 0;
-            // #tr tst.bottledchaos.result.missing_upkeep
-            // # Insufficient fluid supply for the active machine structures.
-            // #zh_CN 运行中的机器结构缺少持续供液.
-            CheckRecipeResult result = SimpleResultWithText.ofFailure("tst.bottledchaos.result.missing_upkeep");
-            for (int slot = 0; slot < THREAD_COUNT; slot++) {
-                if (!advancing[slot]) continue;
-                threadResults[slot] = result;
-                threads[slot].status = result.getDisplayString();
-            }
-            setCheckRecipeResult(result);
+            recordRunningFailure(structureUpkeep.getFailure());
             return false;
         }
         if (!drainEnergyInput(usage)) {
@@ -1634,11 +1655,21 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         // Extraction failures follow GT's failure-consumption rule; the jobs do not advance.
         if (!checkRecipeResult.wasSuccessful()) {
             lEUt = 0;
+            recordRunningFailure(checkRecipeResult);
             return false;
         }
         payment.commitAccounting();
         updateSlots();
         return true;
+    }
+
+    private void recordRunningFailure(CheckRecipeResult result) {
+        for (int slot = 0; slot < THREAD_COUNT; slot++) {
+            if (!advancing[slot]) continue;
+            threadResults[slot] = result;
+            threads[slot].status = result.getDisplayString();
+        }
+        setCheckRecipeResult(result);
     }
 
     @Override
@@ -1893,7 +1924,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         job.setInteger("boundSlots", getCredentialHatchInputPeerMask(hatch, slot));
         job.setInteger("progress", thread.progress);
         job.setInteger("duration", thread.duration);
-        job.setString("status", getThreadWailaStatus(slot));
+        writeThreadWailaStatus(job, slot);
         job.setLong(
             "eut",
             lEUt < 0 && thread.progress < thread.duration
@@ -1910,10 +1941,69 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if (overCapacity) return "tst.bottledchaos.capacity_exceeded";
         if (validGroup(slot) && !ItemBottledChaosCredential.isBound(installedCredentials[slot]))
             return "tst.bottledchaos.unbound";
-        if (!mMachine || !getBaseMetaTileEntity().isAllowedToWork()) {
-            return "tst.bottledchaos.paused";
-        }
+        if (!mMachine) return "tst.bottledchaos.paused";
+        CheckRecipeResult result = getThreadDisplayResult(slot);
+        if (isFailure(result)) return "";
+        if (!getBaseMetaTileEntity().isAllowedToWork()) return "tst.bottledchaos.paused";
         return threads[slot].status;
+    }
+
+    private void writeThreadWailaStatus(NBTTagCompound job, int slot) {
+        String status = getThreadWailaStatus(slot);
+        job.setString("status", status);
+        if (status.isEmpty()) {
+            CheckRecipeResult result = getThreadDisplayResult(slot);
+            job.setString("resultId", result.getID());
+            job.setTag("result", result.writeToNBT(new NBTTagCompound()));
+        }
+    }
+
+    public static String getWailaStatusText(NBTTagCompound job) {
+        if (!job.hasKey("resultId", 8)) return StatCollector.translateToLocal(job.getString("status"));
+        CheckRecipeResult result = CheckRecipeResultRegistry.getSampleFromRegistry(job.getString("resultId"))
+            .newInstance();
+        result.readFromNBT(job.getCompoundTag("result"));
+        return result.getDisplayString();
+    }
+
+    private static boolean isFailure(CheckRecipeResult result) {
+        return !result.wasSuccessful() && !CheckRecipeResultRegistry.NO_RECIPE.equals(result)
+            && !CheckRecipeResultRegistry.NONE.equals(result);
+    }
+
+    private CheckRecipeResult getGlobalFailure() {
+        IGregTechTileEntity base = getBaseMetaTileEntity();
+        if (base == null || base.isAllowedToWork()) return CheckRecipeResultRegistry.NONE;
+        if (isFailure(checkRecipeResult) && checkRecipeResult.persistsOnShutdown()) return checkRecipeResult;
+        if (base.wasShutdown()) {
+            NBTTagCompound reason = base.getLastShutDownReason()
+                .writeToNBT(new NBTTagCompound());
+            if (reason.hasKey("key", 8) && !"none".equals(reason.getString("key")))
+                return SimpleResultWithText.ofFailure("GT5U.gui.text.shutdown_reason." + reason.getString("key"));
+        }
+        return CheckRecipeResultRegistry.NONE;
+    }
+
+    private CheckRecipeResult getThreadDisplayResult(int slot) {
+        CheckRecipeResult global = getGlobalFailure();
+        return isFailure(global) && (processingGroupMask & (1 << slot)) != 0 ? global : threadResults[slot];
+    }
+
+    public static String formatProcessingGroups(int mask) {
+        StringJoiner groups = new StringJoiner("");
+        for (int slot = 0; slot < THREAD_COUNT; slot++) if ((mask & (1 << slot)) != 0) groups.add("#" + (slot + 1));
+        return groups.toString();
+    }
+
+    public int getRecipePoolUsers(int poolSlot) {
+        int users = 0;
+        for (int slot = 0; slot < THREAD_COUNT; slot++) {
+            long required = BottledChaosRecipeProcessor
+                .requiredPoolMask(ItemBottledChaosCredential.getRouteMask(installedCredentials[slot]));
+            if (threads[slot].isBusy()) required |= threads[slot].requiredPools;
+            if ((BottledChaosMachineConfiguration.withDependencies(required) & (1L << poolSlot)) != 0) users |= 1 << slot;
+        }
+        return users;
     }
 
     public NBTTagCompound getBottledChaosStatusSummary() {
@@ -1929,16 +2019,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             entry.setString("key", "GT5U.turbine.maintenance.true");
             entries.appendTag(entry);
         }
-        if (mMachine && base != null && base.wasShutdown()) {
-            NBTTagCompound reason = base.getLastShutDownReason()
-                .writeToNBT(new NBTTagCompound());
-            if (reason.hasKey("key", 8)) {
-                NBTTagCompound entry = new NBTTagCompound();
-                entry.setString("key", "GT5U.gui.text.shutdown_reason." + reason.getString("key"));
-                entries.appendTag(entry);
-            }
-        }
+        CheckRecipeResult global = getGlobalFailure();
+        if (mMachine && isFailure(global)) addSummaryResult(entries, global, processingGroupMask);
         long usage = 0;
+        int usageGroups = 0;
         if (mMachine) {
             for (int slot = 0; slot < THREAD_COUNT; slot++) {
                 TST_BottledChaosRecipeTokenHatch hatch = credentialHatches[slot];
@@ -1951,19 +2035,23 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 } else if (threads[slot].isBusy()) {
                     result = canRunThread(slot);
                     if (result.wasSuccessful()) {
-                        if (threads[slot].progress < threads[slot].duration) usage += threads[slot].eut;
-                        else result = threadResults[slot];
+                        if (threads[slot].progress < threads[slot].duration) {
+                            usage += threads[slot].eut;
+                            usageGroups |= 1 << slot;
+                        }
+                        result = getThreadDisplayResult(slot);
                     }
                 } else {
-                    result = threadResults[slot];
+                    result = getThreadDisplayResult(slot);
                 }
-                if (!result.wasSuccessful() && !CheckRecipeResultRegistry.NO_RECIPE.equals(result))
+                if (isFailure(result))
                     addSummaryResult(entries, result, 1 << slot);
             }
         }
         if (base != null && base.isAllowedToWork()
             && (activeConcentratedPower || concentratedPower != activeConcentratedPower)
-            && usage > inputPower) addSummaryResult(entries, CheckRecipeResultRegistry.insufficientPower(usage), 0);
+            && usage > inputPower)
+            addSummaryResult(entries, CheckRecipeResultRegistry.insufficientPower(usage), usageGroups);
         summary.setBoolean("errors", entries.tagCount() > 0);
         if (entries.tagCount() == 0) {
             NBTTagCompound entry = new NBTTagCompound();
@@ -2024,7 +2112,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             job.setInteger("duration", thread.duration);
             ItemStack family = ItemBottledChaosCredential.getRecipeFamily(installedCredentials[i]);
             job.setString("family", family == null ? "tst.bottledchaos.unbound" : getCredentialRouteKeyList(family));
-            job.setString("status", getThreadWailaStatus(i));
+            writeThreadWailaStatus(job, i);
             jobs.appendTag(job);
         }
         tag.setTag(THREAD_NBT, jobs);
@@ -2084,7 +2172,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                         String.format(Locale.ROOT, "%.2f%%", percent))
                     + " | "
                     + getStatusColor(job.getString("status"))
-                    + StatCollector.translateToLocal(job.getString("status"))
+                    + getWailaStatusText(job)
                     + EnumChatFormatting.RESET);
             if (job.getInteger("duration") > 0) {
                 currentTip
