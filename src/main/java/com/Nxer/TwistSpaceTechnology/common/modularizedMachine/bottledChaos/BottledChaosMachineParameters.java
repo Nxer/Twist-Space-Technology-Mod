@@ -509,6 +509,7 @@ public final class BottledChaosMachineParameters {
                 value.heat = shape > 1 ? (long) (Math.floor(Math.pow(value.heat, 1.08) / 100) * 100 + 1) : value.heat;
                 value.heatDiscount = 0.9;
                 value.upkeep = pyrotheum(shape > 1 ? (int) Math.min(Integer.MAX_VALUE, value.heat / 5) : 1000);
+                value.special = StatCollector.translateToLocalFormatted("GT5U.tooltip.fluid.temperature", value.heat);
             }
             case CHEMICAL_PLANT -> {
                 if (u.fluidPipe < 1 || u.machineCasing < 0 || u.solidCasing < 0 || c < 0) return null;
@@ -587,6 +588,8 @@ public final class BottledChaosMachineParameters {
             value.euMultiplier *= Math.pow(value.heatDiscount, excess / 900);
             value.heatOverclocks = (int) Math.min(Integer.MAX_VALUE, excess / 1800);
         }
+        // Swelegfyr's operating heat affects discounts and OC, but does not raise its recipe admission limit.
+        if (machine == Machine.SWELEGFYR) value.heat = structure.heat() + 100L * Math.max(t - 2, 0);
         if (value.requiresHeat && (value.heat <= 0 || requiredHeat > value.heat))
             return reject(pool, "heat", value.heat, Math.max(1, requiredHeat), failure);
         if (requiredGlassTier > value.glassTier)
@@ -1017,7 +1020,7 @@ public final class BottledChaosMachineParameters {
             restrictions,
             text(
                 "heat_limit",
-                machine == Machine.BLAST_FURNACE
+                machine == Machine.BLAST_FURNACE || machine == Machine.SWELEGFYR
                     ? (structure == null ? 0 : structure.heat()) + " + 100 x max(T - 2, 0)"
                     : base.heat()));
         // #tr tst.bottledchaos.machine_module.limits
@@ -1031,7 +1034,8 @@ public final class BottledChaosMachineParameters {
         if (!compact && recipeHeat
             && base != null
             && base.heat() > 0
-            && machine != Machine.BLAST_FURNACE)
+            && machine != Machine.BLAST_FURNACE
+            && machine != Machine.SWELEGFYR)
             special = append(
                 special,
                 StatCollector.translateToLocalFormatted("GT5U.tooltip.fluid.temperature", base.heat()));
@@ -1057,7 +1061,8 @@ public final class BottledChaosMachineParameters {
             special = append(special, text("laser_oc_limit", tierName(u.laserTier + 1)));
         if (parallel.contains("T") || parallel.contains("P")
             || time.contains("P")
-            || machine == Machine.BLAST_FURNACE) special = append(special, text("host_tiers"));
+            || machine == Machine.BLAST_FURNACE
+            || machine == Machine.SWELEGFYR) special = append(special, text("host_tiers"));
         if (!special.isEmpty()) {
             // #tr tst.bottledchaos.machine_module.special
             // # Special: %s
