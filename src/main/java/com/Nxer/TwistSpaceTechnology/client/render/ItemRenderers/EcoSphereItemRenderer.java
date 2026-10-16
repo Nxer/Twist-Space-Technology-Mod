@@ -16,7 +16,6 @@ import org.lwjgl.opengl.GL11;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.init.TstItems;
-import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosCredential;
 import com.gtnewhorizon.cropsnh.api.CropsNHItemList;
 
 import WayofTime.alchemicalWizardry.ModItems;
@@ -29,29 +28,22 @@ import gregtech.api.interfaces.IGT_ItemWithMaterialRenderer;
 import gregtech.api.util.GTModHandler;
 import gregtech.common.render.items.InfinityRenderer;
 
-/** Shared card layers for Eco-Sphere components and Bottled Chaos credentials. */
-public final class FramedItemRenderer implements IItemRenderer {
+public final class EcoSphereItemRenderer implements IItemRenderer {
 
     private static final float CONTENT_SCALE = 0.875F;
     private static final float ITEM_THICKNESS = 1.0F / 16.0F;
     /** Shrinks GT's 36px halo down to the 16px frame area. */
     private static final float HALO_SCALE = 16.0F / 36.0F;
     private static final CosmicItemRenderer COSMIC_RENDERER = new CosmicItemRenderer();
-    private ItemStack credentialContent;
 
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
         return item != null
-            && (item.getItem() == TstItems.EcoSphereExecutionProtocol || item.getItem() == TstItems.EcoSphereUpgrade
-                || item.getItem() == TstItems.BottledChaosCredential && item.getItemDamage() >= 0
-                    && item.getItemDamage() <= ItemBottledChaosCredential.MAX_META);
+            && (item.getItem() == TstItems.EcoSphereExecutionProtocol || item.getItem() == TstItems.EcoSphereUpgrade);
     }
 
     @Override
     public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-        if (item.getItem() == TstItems.BottledChaosCredential) {
-            return helper == ItemRendererHelper.ENTITY_ROTATION || helper == ItemRendererHelper.ENTITY_BOBBING;
-        }
         ItemStack displayStack = getDisplayStack(item);
         if (displayStack.getItem() == LudicrousItems.infinity_sword) {
             return COSMIC_RENDERER.shouldUseRenderHelper(type, displayStack, helper);
@@ -61,10 +53,6 @@ public final class FramedItemRenderer implements IItemRenderer {
 
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-        if (item.getItem() == TstItems.BottledChaosCredential) {
-            renderCredential(type, item);
-            return;
-        }
         int meta = item.getItemDamage();
         boolean upgrade = item.getItem() == TstItems.EcoSphereUpgrade;
         IIcon background = upgrade ? TstItems.EcoSphereUpgrade.getBackgroundIcon()
@@ -104,41 +92,6 @@ public final class FramedItemRenderer implements IItemRenderer {
 
         // Draw the frame last so it always stays above the center item.
         renderLayerIcon(type, frame, item.getItemSpriteNumber(), 2);
-    }
-
-    private void renderCredential(ItemRenderType type, ItemStack item) {
-        int meta = item.getItemDamage();
-        if (meta < 0 || meta > ItemBottledChaosCredential.MAX_META) return;
-        IIcon frame = TstItems.BottledChaosCredential.getFrameIcon(meta);
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT | GL11.GL_CURRENT_BIT | GL11.GL_COLOR_BUFFER_BIT);
-        renderBase(type, TstItems.BottledChaosCredential.getBackgroundIcon(), frame, item.getItemSpriteNumber());
-        if (credentialContent == null) credentialContent = Materials.Platinum.getDust(1);
-        ItemStack content = credentialContent;
-        if (content != null && content.getItem() != null) {
-            GL11.glPushMatrix();
-            applyContentTransform(type, -1);
-            if (type != ItemRenderType.INVENTORY
-                && content.getItem() instanceof IGT_ItemWithMaterialRenderer material) {
-                short[] rgba = material.getRGBa(content);
-                int color = rgba[0] << 16 | rgba[1] << 8 | rgba[2];
-                renderLayerIcon(
-                    type,
-                    material.getIcon(content.getItemDamage(), 0),
-                    content.getItemSpriteNumber(),
-                    2,
-                    color);
-                renderLayerIcon(
-                    type,
-                    material.getOverlayIcon(content.getItemDamage(), 0),
-                    content.getItemSpriteNumber(),
-                    3);
-            } else {
-                renderVanillaItem(type, content, 2);
-            }
-            GL11.glPopMatrix();
-        }
-        renderLayerIcon(type, frame, item.getItemSpriteNumber(), 4);
-        GL11.glPopAttrib();
     }
 
     private static void applyLayerDepth(ItemRenderType type, float offset) {
@@ -250,22 +203,18 @@ public final class FramedItemRenderer implements IItemRenderer {
     }
 
     private static void renderVanillaItem(ItemRenderType type, ItemStack displayStack) {
-        renderVanillaItem(type, displayStack, 1);
-    }
-
-    private static void renderVanillaItem(ItemRenderType type, ItemStack displayStack, int layer) {
         if (type == ItemRenderType.INVENTORY) {
             // Use Minecraft's normal GUI renderer to keep item colors and lighting.
             Minecraft minecraft = Minecraft.getMinecraft();
             RenderHelper.enableGUIStandardItemLighting();
-            GL11.glTranslatef(0.0F, 0.0F, layer * 2.0F);
+            GL11.glTranslatef(0.0F, 0.0F, 2.0F);
             RenderItem.getInstance()
                 .renderItemIntoGUI(minecraft.fontRenderer, minecraft.getTextureManager(), displayStack, 0, 0, true);
             return;
         }
 
         IIcon icon = displayStack.getIconIndex();
-        renderLayerIcon(type, icon, displayStack.getItemSpriteNumber(), layer);
+        renderLayerIcon(type, icon, displayStack.getItemSpriteNumber(), 1);
     }
 
     private static void renderInfinityItem(ItemRenderType type, ItemStack displayStack) {
@@ -361,10 +310,6 @@ public final class FramedItemRenderer implements IItemRenderer {
     }
 
     private static void renderLayerIcon(ItemRenderType type, IIcon icon, int spriteNumber, int layer) {
-        renderLayerIcon(type, icon, spriteNumber, layer, 0xFFFFFF);
-    }
-
-    private static void renderLayerIcon(ItemRenderType type, IIcon icon, int spriteNumber, int layer, int color) {
         if (type == ItemRenderType.INVENTORY) {
             // GUI layers use simple depth values and do not need model thickness.
             renderIcon(type, icon, spriteNumber, layer * 2.0F);
@@ -379,7 +324,7 @@ public final class FramedItemRenderer implements IItemRenderer {
                     .getTextureManager()
                     .getResourceLocation(spriteNumber));
         GL11.glPushMatrix();
-        GL11.glColor4f((color >> 16 & 0xFF) / 255.0F, (color >> 8 & 0xFF) / 255.0F, (color & 0xFF) / 255.0F, 1.0F);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         applyLayerDepth(type, -layer);

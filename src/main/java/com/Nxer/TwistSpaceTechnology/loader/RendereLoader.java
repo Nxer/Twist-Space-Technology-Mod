@@ -9,8 +9,8 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 
+import com.Nxer.TwistSpaceTechnology.client.render.ItemRenderers.EcoSphereItemRenderer;
 import com.Nxer.TwistSpaceTechnology.client.render.ItemRenderers.EyeOfWoodRender;
-import com.Nxer.TwistSpaceTechnology.client.render.ItemRenderers.FramedItemRenderer;
 import com.Nxer.TwistSpaceTechnology.client.render.ItemRenderers.PowerChairRenderer;
 import com.Nxer.TwistSpaceTechnology.client.render.ItemRenderers.YamatoRenderer;
 import com.Nxer.TwistSpaceTechnology.client.render.MeteorMinerRenderer;
@@ -38,10 +38,8 @@ public class RendereLoader {
         MinecraftForgeClient.registerItemRenderer(
             TstItems.Yamato,
             new YamatoRenderer(YamatoModel, new ResourceLocation("gtnhcommunitymod", "model/Yamato.png")));
-        FramedItemRenderer framedItemRenderer = new FramedItemRenderer();
-        MinecraftForgeClient.registerItemRenderer(TstItems.EcoSphereExecutionProtocol, framedItemRenderer);
-        MinecraftForgeClient.registerItemRenderer(TstItems.EcoSphereUpgrade, framedItemRenderer);
-        MinecraftForgeClient.registerItemRenderer(TstItems.BottledChaosCredential, framedItemRenderer);
+        MinecraftForgeClient.registerItemRenderer(TstItems.EcoSphereExecutionProtocol, new EcoSphereItemRenderer());
+        MinecraftForgeClient.registerItemRenderer(TstItems.EcoSphereUpgrade, new EcoSphereItemRenderer());
     }
 
     public static void registerTileEntityRenderers() {

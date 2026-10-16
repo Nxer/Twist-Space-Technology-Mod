@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
@@ -29,6 +30,8 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
         + EnumChatFormatting.STRIKETHROUGH
         + "-----------------------------------------"
         + EnumChatFormatting.RESET;
+
+    private IIcon packedIcon;
 
     // #tr tst.bottledchaos.machine_module.0.name
     // # Bottled Chaos Machine Structure Module
@@ -144,8 +147,20 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
 
     @Override
     public void registerIcons(IIconRegister register) {
-        itemIcon = register.registerIcon(TwistSpaceTechnology.RESOURCE_ROOT_ID + ":BottledChaosCredential/frame_0");
+        String path = TwistSpaceTechnology.RESOURCE_ROOT_ID + ":BottledChaosMachineModule/";
+        itemIcon = register.registerIcon(path + "structure_module_blank");
+        packedIcon = register.registerIcon(path + "structure_module_packed");
         iconMap.put(0, itemIcon);
+    }
+
+    @Override
+    public IIcon getIconIndex(ItemStack stack) {
+        return quantity(stack) > 0 || assembly(stack).getBoolean("display") ? packedIcon : itemIcon;
+    }
+
+    @Override
+    public IIcon getIcon(ItemStack stack, int pass) {
+        return getIconIndex(stack);
     }
 
     @Override

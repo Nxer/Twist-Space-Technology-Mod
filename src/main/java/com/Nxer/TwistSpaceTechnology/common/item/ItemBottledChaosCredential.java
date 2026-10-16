@@ -20,8 +20,7 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
     public static final int MAX_META = 4;
     private static final String DISPLAY_TAG_MASK_NBT_KEY = "bottledChaosDisplayTagMask";
 
-    private IIcon backgroundIcon;
-    private final IIcon[] frameIcons = new IIcon[MAX_META + 1];
+    private final IIcon[] boundIcons = new IIcon[MAX_META + 1];
 
     // #tr tst.bottledchaos.credential.0.name
     // # Bottled Chaos Credential Frame 1
@@ -127,21 +126,21 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
     @Override
     public void registerIcons(IIconRegister register) {
         String path = TwistSpaceTechnology.RESOURCE_ROOT_ID + ":BottledChaosCredential/";
-        backgroundIcon = register.registerIcon(path + "background");
         for (int meta : usedMetaIds) {
-            frameIcons[meta] = register.registerIcon(path + "frame_" + meta);
-            // A complete icon is also available to GUI widgets that draw IIcons directly.
-            iconMap.put(meta, register.registerIcon(path + meta));
+            iconMap.put(meta, register.registerIcon(path + "credential_t" + (meta + 1) + "_blank"));
+            boundIcons[meta] = register.registerIcon(path + "credential_t" + (meta + 1) + "_bound");
         }
         itemIcon = iconMap.get(0);
     }
 
-    public IIcon getBackgroundIcon() {
-        return backgroundIcon;
+    @Override
+    public IIcon getIconIndex(ItemStack stack) {
+        return isBound(stack) ? boundIcons[stack.getItemDamage()] : getIconFromDamage(stack.getItemDamage());
     }
 
-    public IIcon getFrameIcon(int meta) {
-        return frameIcons[meta];
+    @Override
+    public IIcon getIcon(ItemStack stack, int pass) {
+        return getIconIndex(stack);
     }
 
     @Override
