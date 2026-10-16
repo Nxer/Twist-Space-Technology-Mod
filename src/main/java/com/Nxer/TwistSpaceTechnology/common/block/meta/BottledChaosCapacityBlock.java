@@ -20,11 +20,9 @@ import gregtech.api.GregTechAPI;
 public class BottledChaosCapacityBlock extends AbstractTstMetaBlock {
 
     @SideOnly(Side.CLIENT)
-    private IIcon[][] sideIcons;
+    private IIcon[][][] sideIcons;
     @SideOnly(Side.CLIENT)
-    private IIcon[] topIcons;
-    @SideOnly(Side.CLIENT)
-    private IIcon[] bottomIcons;
+    private IIcon[][] capIcons;
 
     public BottledChaosCapacityBlock() {
         super("BottledChaosCapacity");
@@ -65,43 +63,48 @@ public class BottledChaosCapacityBlock extends AbstractTstMetaBlock {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister register) {
-        sideIcons = new IIcon[5][16];
-        topIcons = new IIcon[5];
-        bottomIcons = new IIcon[5];
+        sideIcons = new IIcon[5][5][];
+        capIcons = new IIcon[5][];
         for (int tier = 0; tier < sideIcons.length; tier++) {
-            String path = RESOURCE_ROOT_ID + ":"
-                + (tier == 0 ? "EnergyStorageLightBlue" : "EnergyStorageT" + (tier + 1));
-            for (int layer = 0; layer < sideIcons[tier].length; layer++) {
-                sideIcons[tier][layer] = register.registerIcon(path + "/layer_" + (layer < 10 ? "0" : "") + layer);
+            String path = RESOURCE_ROOT_ID + ":BottledChaosCapacity/" + (tier + 1);
+            for (int variant = 0; variant < 5; variant++) {
+                sideIcons[tier][variant] = BottledChaosCapacityRenderer
+                    .splitAtlas(register.registerIcon(path + "/side_" + variant), 16);
             }
-            topIcons[tier] = register.registerIcon(path + "/top");
-            bottomIcons[tier] = tier == 0 ? topIcons[tier] : register.registerIcon(path + "/bottom");
+            capIcons[tier] = BottledChaosCapacityRenderer.splitAtlas(register.registerIcon(path + "/caps"), 10);
         }
-        blockIcon = sideIcons[0][0];
+        blockIcon = sideIcons[0][1][0];
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
+        return getCapacityIcon(side, meta, 0, 1);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public IIcon getCapacityIcon(int side, int meta, int layer, int variant) {
         int tier = meta >= 0 && meta < sideIcons.length ? meta : 0;
-        return switch (side) {
-            case 0 -> bottomIcons[tier];
-            case 1 -> topIcons[tier];
-            default -> sideIcons[tier][0];
-        };
+        return side < 2 ? capIcons[tier][(side == 0 ? 5 : 0) + variant] : sideIcons[tier][variant][layer];
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
         int meta = world.getBlockMetadata(x, y, z);
-        if (side < 2) return getIcon(side, meta);
+        return BottledChaosCapacityRenderer
+            .getWorldIcon(getCapacityIcon(side, meta, side < 2 ? 0 : getColumnLayer(world, x, y, z), 1));
+    }
+
+    @SideOnly(Side.CLIENT)
+    public int getColumnLayer(IBlockAccess world, int x, int y, int z) {
+        int meta = world.getBlockMetadata(x, y, z);
         IBlockAccess column = BottledChaosCapacityRenderer.getColumnAccess(world);
         int layer = 0;
         while (layer < 15 && y > layer
             && column.getBlock(x, y - layer - 1, z) == this
             && column.getBlockMetadata(x, y - layer - 1, z) == meta) layer++;
-        return sideIcons[meta >= 0 && meta < sideIcons.length ? meta : 0][layer];
+        return layer;
     }
 
     @Override
@@ -134,7 +137,7 @@ public class BottledChaosCapacityBlock extends AbstractTstMetaBlock {
     @Override
     public boolean onBlockEventReceived(World world, int x, int y, int z, int eventId, int eventParameter) {
         if (eventId != 0) return super.onBlockEventReceived(world, x, y, z, eventId, eventParameter);
-        // A changed base affects the next fifteen layers; include their CTM neighbors as well.
+        // A changed base affects the next fifteen layers; include their connected neighbors as well.
         if (world.isRemote) world.markBlockRangeForRenderUpdate(x - 1, y - 1, z - 1, x + 1, y + 16, z + 1);
         return true;
     }
