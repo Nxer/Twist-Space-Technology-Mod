@@ -771,9 +771,7 @@ public final class BottledChaosRecipeProcessor {
             internalResources.add(resourceKey(input));
             internalResources.add(resourceKey(output));
             RecipeMark mark = new RecipeMark(map, input, output, circuit, false);
-            if (resolved.putIfAbsent(
-                mark,
-                BottledChaosRecipeSupport.prepareSourceRecipe(map, recipe)) != null)
+            if (resolved.putIfAbsent(mark, BottledChaosRecipeSupport.prepareSourceRecipe(map, recipe)) != null)
                 throw new IllegalArgumentException("duplicate temporary recipe mark " + mark);
             return mark;
         }
@@ -937,10 +935,8 @@ public final class BottledChaosRecipeProcessor {
                         if (mark.map != pool || !matchesIdentities(inputs, mark.input)
                             || !matchesIdentities(outputs, mark.output)
                             || mark.circuit >= 0 && !circuits.contains(mark.circuit)) continue;
-                        var prepared = BottledChaosRecipeSupport.prepareSourceRecipe(
-                            pool,
-                            recipe,
-                            roundedOutputChanceBatches.getOrDefault(mark, 0));
+                        var prepared = BottledChaosRecipeSupport
+                            .prepareSourceRecipe(pool, recipe, roundedOutputChanceBatches.getOrDefault(mark, 0));
                         TST_ItemID[] replacements = substitutedInputs.get(mark);
                         if (replacements != null) {
                             Object[] originals = mark.input() instanceof Object[]markedInputs ? markedInputs
@@ -1206,8 +1202,7 @@ public final class BottledChaosRecipeProcessor {
             return order;
         }
 
-        // Internal inputs need the route root or an incoming link; outputs need a link or explicit final
-        // status.
+        // Internal inputs need the route root or an incoming link; outputs need a link or explicit final status.
         private void validateRouteConnections(RecipeData[] routes) {
             for (int i = 0; i < routes.length; i++) {
                 RecipeData route = routes[i];
@@ -1662,7 +1657,11 @@ public final class BottledChaosRecipeProcessor {
         List<ItemStackLong> items = new ArrayList<>();
         List<FluidStackLong> fluids = new ArrayList<>();
         outputs.forEach((key, amount) -> appendResourceStack(key, amount, items, fluids));
-        return new Plan(duration, Collections.unmodifiableList(items), Collections.unmodifiableList(fluids), executions);
+        return new Plan(
+            duration,
+            Collections.unmodifiableList(items),
+            Collections.unmodifiableList(fluids),
+            executions);
     }
 
     private static void appendResourceStack(Object key, long amount, List<ItemStackLong> items,

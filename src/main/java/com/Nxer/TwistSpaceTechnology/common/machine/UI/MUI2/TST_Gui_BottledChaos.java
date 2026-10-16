@@ -244,10 +244,12 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
         // #zh_CN 缓存导出: %s
         terminal.child(
             IKey.dynamic(
-                () -> (cacheExport.getValue().wasSuccessful() ? EnumChatFormatting.AQUA : EnumChatFormatting.RED)
+                () -> (cacheExport.getValue()
+                    .wasSuccessful() ? EnumChatFormatting.AQUA : EnumChatFormatting.RED)
                     + StatCollector.translateToLocalFormatted(
                         "tst.bottledchaos.gui.cache_export_result",
-                        cacheExport.getValue().getDisplayString()))
+                        cacheExport.getValue()
+                            .getDisplayString()))
                 .asWidget()
                 .fullWidth()
                 .setEnabledIf(widget -> !CheckRecipeResultRegistry.NONE.equals(cacheExport.getValue())));

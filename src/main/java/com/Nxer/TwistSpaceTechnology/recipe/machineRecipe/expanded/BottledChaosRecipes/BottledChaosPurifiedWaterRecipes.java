@@ -283,7 +283,7 @@ public final class BottledChaosPurifiedWaterRecipes {
                 catalysts,
                 Collections
                     .singletonMap(new TimeKey(pool, source.mEUt), Math.multiplyExact((long) source.mDuration, batches)))
-                    .netInputsAndOutputs(FluidId.create(source.mFluidInputs[0]));
+                        .netInputsAndOutputs(FluidId.create(source.mFluidInputs[0]));
         }
 
         private static void add(Map<Object, Amount> amounts, Object key, long numerator, long denominator) {

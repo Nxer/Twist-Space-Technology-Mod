@@ -1386,7 +1386,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             .getTotalWorldTime() + 60;
         boolean empty = true;
         for (TST_BottledChaosRecipeTokenHatch hatch : credentialHatches) {
-            if (hatch != null && hatch.isValid() && !hatch.getMaterialCache().isEmpty()) empty = false;
+            if (hatch != null && hatch.isValid()
+                && !hatch.getMaterialCache()
+                    .isEmpty())
+                empty = false;
         }
         if (empty) {
             // #tr tst.bottledchaos.gui.cache_empty
@@ -1400,13 +1403,15 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if (!cacheExportResult.wasSuccessful()) return;
         for (TST_BottledChaosRecipeTokenHatch hatch : credentialHatches) {
             if (hatch == null || !hatch.isValid()) continue;
-            cacheExportResult = hatch.getMaterialCache().reserveExport(check);
+            cacheExportResult = hatch.getMaterialCache()
+                .reserveExport(check);
             if (!cacheExportResult.wasSuccessful()) return;
         }
         BottledChaosOutputBuffer.Transaction output = new BottledChaosOutputBuffer.Transaction(this, false, true);
         for (TST_BottledChaosRecipeTokenHatch hatch : credentialHatches) {
             if (hatch == null || !hatch.isValid()) continue;
-            cacheExportResult = hatch.getMaterialCache().reserveExport(output);
+            cacheExportResult = hatch.getMaterialCache()
+                .reserveExport(output);
             if (!cacheExportResult.wasSuccessful()) return;
         }
         output.commit();
@@ -1996,7 +2001,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             long required = BottledChaosRecipeProcessor
                 .requiredPoolMask(ItemBottledChaosCredential.getRouteMask(installedCredentials[slot]));
             if (threads[slot].isBusy()) required |= threads[slot].requiredPools;
-            if ((BottledChaosMachineConfiguration.withDependencies(required) & (1L << poolSlot)) != 0) users |= 1 << slot;
+            if ((BottledChaosMachineConfiguration.withDependencies(required) & (1L << poolSlot)) != 0)
+                users |= 1 << slot;
         }
         return users;
     }
@@ -2039,8 +2045,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 } else {
                     result = getThreadDisplayResult(slot);
                 }
-                if (isFailure(result))
-                    addSummaryResult(entries, result, 1 << slot);
+                if (isFailure(result)) addSummaryResult(entries, result, 1 << slot);
             }
         }
         if (base != null && base.isAllowedToWork()

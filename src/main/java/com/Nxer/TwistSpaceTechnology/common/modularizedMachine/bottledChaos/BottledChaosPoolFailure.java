@@ -65,7 +65,8 @@ public final class BottledChaosPoolFailure implements CheckRecipeResult {
         if (data.hasKey("fluid", 10)) {
             reason = StatCollector.translateToLocalFormatted(
                 "GT5U.gui.text.out_of_fluid",
-                FluidStack.loadFluidStackFromNBT(data.getCompoundTag("fluid")).getLocalizedName(),
+                FluidStack.loadFluidStackFromNBT(data.getCompoundTag("fluid"))
+                    .getLocalizedName(),
                 formatNumber(new BigInteger(data.getString("amount"))));
         } else if (data.hasKey("resultId", 8)) {
             CheckRecipeResult result = CheckRecipeResultRegistry.getSampleFromRegistry(data.getString("resultId"))
@@ -73,9 +74,11 @@ public final class BottledChaosPoolFailure implements CheckRecipeResult {
             result.readFromNBT(data.getCompoundTag("result"));
             reason = result.getDisplayString();
         } else if ("heat".equals(data.getString("parameter"))) {
-            reason = CheckRecipeResultRegistry.insufficientHeat((int) data.getLong("required")).getDisplayString();
+            reason = CheckRecipeResultRegistry.insufficientHeat((int) data.getLong("required"))
+                .getDisplayString();
         } else if ("voltage".equals(data.getString("parameter"))) {
-            reason = CheckRecipeResultRegistry.insufficientVoltage(data.getLong("required")).getDisplayString();
+            reason = CheckRecipeResultRegistry.insufficientVoltage(data.getLong("required"))
+                .getDisplayString();
         } else {
             // #tr tst.bottledchaos.result.parameter_limit
             // # %s insufficient: %s / %s
@@ -87,7 +90,8 @@ public final class BottledChaosPoolFailure implements CheckRecipeResult {
                 formatNumber(data.getLong("required")));
         }
         StringJoiner pools = new StringJoiner(", ");
-        for (String pool : data.getString("pool").split(";")) pools.add(BottledChaosMachineConfiguration.poolName(pool));
+        for (String pool : data.getString("pool")
+            .split(";")) pools.add(BottledChaosMachineConfiguration.poolName(pool));
         return pools + ": " + reason;
     }
 
@@ -99,7 +103,8 @@ public final class BottledChaosPoolFailure implements CheckRecipeResult {
 
     @Override
     public void readFromNBT(@NotNull NBTTagCompound tag) {
-        data = (NBTTagCompound) tag.getCompoundTag("detail").copy();
+        data = (NBTTagCompound) tag.getCompoundTag("detail")
+            .copy();
     }
 
     @Override

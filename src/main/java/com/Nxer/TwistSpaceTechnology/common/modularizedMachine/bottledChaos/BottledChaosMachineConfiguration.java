@@ -444,11 +444,10 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
                 // #tr tst.bottledchaos.result.invalid_source_configuration
                 // # Source structure configuration is not valid for this recipe pool.
                 // #zh_CN 来源结构配置不适用于此配方池.
-                if (!allowed)
-                    sourceFailure = currentFailures[slot] != null ? currentFailures[slot]
-                        : BottledChaosPoolFailure.of(
-                            poolKey(slot),
-                            SimpleResultWithText.ofFailure("tst.bottledchaos.result.invalid_source_configuration"));
+                if (!allowed) sourceFailure = currentFailures[slot] != null ? currentFailures[slot]
+                    : BottledChaosPoolFailure.of(
+                        poolKey(slot),
+                        SimpleResultWithText.ofFailure("tst.bottledchaos.result.invalid_source_configuration"));
                 return allowed;
             }
             if (profile.maximumRecipeTier() >= 0

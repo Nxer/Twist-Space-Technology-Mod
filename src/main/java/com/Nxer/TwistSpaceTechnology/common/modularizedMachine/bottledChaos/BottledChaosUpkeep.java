@@ -76,8 +76,8 @@ public final class BottledChaosUpkeep {
                 .computeIfPresent(fluidId(input), (key, amount) -> amount.subtract(BigInteger.valueOf(input.amount)));
         }
         for (var entry : amounts.entrySet()) {
-            if (entry.getValue().signum() > 0)
-                return missingFluid(needed, entry.getKey(), entry.getValue());
+            if (entry.getValue()
+                .signum() > 0) return missingFluid(needed, entry.getKey(), entry.getValue());
         }
         return CheckRecipeResultRegistry.SUCCESSFUL;
     }
@@ -86,7 +86,13 @@ public final class BottledChaosUpkeep {
         BigInteger amount) {
         StringJoiner pools = new StringJoiner(";");
         for (var entry : needed.entrySet()) {
-            if (entry.getValue().signum() > 0 && entry.getKey().fluid().equals(fluid)) pools.add(entry.getKey().pool());
+            if (entry.getValue()
+                .signum() > 0 && entry.getKey()
+                    .fluid()
+                    .equals(fluid))
+                pools.add(
+                    entry.getKey()
+                        .pool());
         }
         return BottledChaosPoolFailure.missingFluid(pools.toString(), fluid.getFluidStack(), amount);
     }
