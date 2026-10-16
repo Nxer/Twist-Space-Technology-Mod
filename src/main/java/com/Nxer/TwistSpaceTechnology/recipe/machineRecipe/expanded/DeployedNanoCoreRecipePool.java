@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
 import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.DeployedNanoCoreRecipeMap;
-import static com.Nxer.TwistSpaceTechnology.util.RecipeMathUtils.getLCM;
+import static com.Nxer.TwistSpaceTechnology.util.MathUtils.getLCM;
 import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.copyAmount;
 
 import java.util.ArrayList;
