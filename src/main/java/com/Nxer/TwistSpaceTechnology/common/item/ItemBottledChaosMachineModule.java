@@ -187,8 +187,8 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
         }
         if (!display && quantity <= 0) {
             // #tr tst.bottledchaos.machine_module.empty
-            // # Empty structure carrier. Package structures on the controller's injection page.
-            // #zh_CN 空白结构载体. 在主机的注入页面封装机器结构.
+            // # Package machine structures on the controller's injection page.
+            // #zh_CN 在主机注入页面封装机器结构.
             lines.add(StatCollector.translateToLocal("tst.bottledchaos.machine_module.empty"));
             return;
         }
@@ -197,11 +197,11 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
             // #tr tst.bottledchaos.machine_module.plant_capacity
             // # Each purification unit's quantity is limited by this plant; no processing parameters
             // #zh_CN 限制每台净化水机器的堆叠组数, 不参与配方折算
-            lines.add(StatCollector.translateToLocal("tst.bottledchaos.machine_module.plant_capacity"));
-            if (!display) {
+            if (display) lines.add(StatCollector.translateToLocal("tst.bottledchaos.machine_module.plant_capacity"));
+            else {
                 // #tr tst.bottledchaos.machine_module.plant_quantity
-                // # Complete structures: x%s
-                // #zh_CN 完整结构: x%s
+                // # Structure quantity limit per purification unit: %s
+                // #zh_CN 每台净化水机器的结构数量上限: %s
                 lines.add(
                     EnumChatFormatting.GRAY + StatCollector.translateToLocalFormatted(
                         "tst.bottledchaos.machine_module.plant_quantity",
@@ -219,7 +219,8 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
                         controller,
                         structure,
                         BottledChaosMachineConfiguration.pool(slot),
-                        quantitySpeedExponent(quantity)),
+                        quantitySpeedExponent(quantity),
+                        !display),
                     parameters -> new StringJoiner(", "))
                 .add(BottledChaosMachineConfiguration.poolName(slot));
         }
@@ -236,12 +237,11 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
         }
         if (display) return;
         // #tr tst.bottledchaos.machine_module.quantity
-        // # Complete structures: x%s, speed: x%s
-        // #zh_CN 完整结构: x%s, 速度: x%s
+        // # Structure quantity: x%s
+        // #zh_CN 结构数量: x%s
         lines.add(
             EnumChatFormatting.GRAY + StatCollector.translateToLocalFormatted(
                 "tst.bottledchaos.machine_module.quantity",
-                EnumChatFormatting.GOLD.toString() + quantity + EnumChatFormatting.GRAY,
-                EnumChatFormatting.GREEN.toString() + quantitySpeed(quantity)));
+                EnumChatFormatting.GOLD.toString() + quantity));
     }
 }

@@ -324,8 +324,7 @@ public final class BottledChaosMachineParameters {
                     value.set(powerOfTwo(Math.max(2L * u.glass - 6, 0)), 1, 0.25);
                 else {
                     long dishes = count(items, requiredSpecialInput);
-                    if (requiredSpecialInput == null || dishes <= 0)
-                        return reject(pool, "culture", dishes, 1, failure);
+                    if (requiredSpecialInput == null || dishes <= 0) return reject(pool, "culture", dishes, 1, failure);
                     if (u.glass < requiredGlassTier) return reject(pool, "glass", u.glass, requiredGlassTier, failure);
                     value.set(dishes, 1, 1 / (1.6 + 0.6 * (u.glass - requiredGlassTier)));
                     value.restrictions = text("culture");
@@ -550,7 +549,8 @@ public final class BottledChaosMachineParameters {
             }
             case QUANTUM -> {
                 long catalyst = count(items, requiredSpecialInput);
-                if (requiredSpecialInput == null || catalyst <= 0) return reject(pool, "catalyst", catalyst, 1, failure);
+                if (requiredSpecialInput == null || catalyst <= 0)
+                    return reject(pool, "catalyst", catalyst, 1, failure);
                 if (u.quantumTier < 1) return reject(pool, "casing", u.quantumTier, 1, failure);
                 value.parallel = Math.min(Integer.MAX_VALUE, catalyst);
                 value.casingTier = u.quantumTier;
@@ -589,7 +589,8 @@ public final class BottledChaosMachineParameters {
         }
         if (value.requiresHeat && (value.heat <= 0 || requiredHeat > value.heat))
             return reject(pool, "heat", value.heat, Math.max(1, requiredHeat), failure);
-        if (requiredGlassTier > value.glassTier) return reject(pool, "glass", value.glassTier, requiredGlassTier, failure);
+        if (requiredGlassTier > value.glassTier)
+            return reject(pool, "glass", value.glassTier, requiredGlassTier, failure);
         if (value.maximumRecipeTier >= 0 && recipeTier > value.maximumRecipeTier)
             return reject(pool, "voltage", GTValues.V[value.maximumRecipeTier], recipeVoltage, failure);
         return value.profile();
@@ -808,7 +809,7 @@ public final class BottledChaosMachineParameters {
     }
 
     public static List<String> describe(ItemStack controller, Structure structure, RecipeMap<?> pool,
-        int quantitySpeedExponent) {
+        int quantitySpeedExponent, boolean compact) {
         List<String> lines = new ArrayList<>();
         if (controller == null || pool == null) return lines;
         controller = BottledChaosComplexStructures.parameterController(controller, structure);
@@ -1012,22 +1013,28 @@ public final class BottledChaosMachineParameters {
             restrictions = append(restrictions, text("casing_limit", base.casingTier()));
         if (base != null && base.compressionTier() >= 0)
             restrictions = append(restrictions, text("compression_limit", base.compressionTier()));
-        if (recipeHeat && base != null && base.heat() > 0)
-            restrictions = append(
-                restrictions,
-                text(
-                    "heat_limit",
-                    machine == Machine.BLAST_FURNACE
-                        ? (structure == null ? 0 : structure.heat()) + " + 100 x max(T - 2, 0)"
-                        : base.heat()));
-        if (restrictions.isEmpty()) restrictions = StatCollector.translateToLocal("GT5U.gui.text.nil");
+        if (recipeHeat && base != null && base.heat() > 0) restrictions = append(
+            restrictions,
+            text(
+                "heat_limit",
+                machine == Machine.BLAST_FURNACE
+                    ? (structure == null ? 0 : structure.heat()) + " + 100 x max(T - 2, 0)"
+                    : base.heat()));
         // #tr tst.bottledchaos.machine_module.limits
         // # Recipe limits: %s
         // #zh_CN 配方限制: %s
-        lines.add(EnumChatFormatting.GRAY + text("limits", EnumChatFormatting.YELLOW + restrictions));
-        if (recipeHeat && base != null && base.heat() > 0 && machine != Machine.BLAST_FURNACE) special = append(
-            special,
-            StatCollector.translateToLocalFormatted("GT5U.tooltip.fluid.temperature", base.heat()));
+        if (!compact || !restrictions.isEmpty()) lines.add(
+            EnumChatFormatting.GRAY + text(
+                "limits",
+                EnumChatFormatting.YELLOW
+                    + (restrictions.isEmpty() ? StatCollector.translateToLocal("GT5U.gui.text.nil") : restrictions)));
+        if (!compact && recipeHeat
+            && base != null
+            && base.heat() > 0
+            && machine != Machine.BLAST_FURNACE)
+            special = append(
+                special,
+                StatCollector.translateToLocalFormatted("GT5U.tooltip.fluid.temperature", base.heat()));
         if (machine == Machine.BIO_VAT || machine == Machine.BIOSPHERE && pool != RecipeMaps.brewingRecipes
             && pool != RecipeMaps.fermentingRecipes) special = append(special, text("radiation"));
         if (recipeHeat && (machine == Machine.DEHYDRATOR || machine == Machine.ADVANCED_BLAST
@@ -1048,8 +1055,9 @@ public final class BottledChaosMachineParameters {
             && machine != Machine.LASER_ENGRAVER) special = append(special, text("oc_limit", base.maximumOverclocks()));
         if (machine == Machine.LASER_ENGRAVER)
             special = append(special, text("laser_oc_limit", tierName(u.laserTier + 1)));
-        if (parallel.contains("T") || parallel.contains("P") || time.contains("P") || machine == Machine.BLAST_FURNACE)
-            special = append(special, text("host_tiers"));
+        if (parallel.contains("T") || parallel.contains("P")
+            || time.contains("P")
+            || machine == Machine.BLAST_FURNACE) special = append(special, text("host_tiers"));
         if (!special.isEmpty()) {
             // #tr tst.bottledchaos.machine_module.special
             // # Special: %s

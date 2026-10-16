@@ -49,6 +49,14 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
+        if (isBound(stack) && !stack.getTagCompound()
+            .hasKey(DISPLAY_TAG_MASK_NBT_KEY)) {
+            // #tr tst.bottledchaos.credential.bound.name
+            // # Bottled Chaos Credential %s
+            // #zh_CN 瓶中混沌凭证 %s
+            return StatCollector
+                .translateToLocalFormatted("tst.bottledchaos.credential.bound.name", getCapacity(stack));
+        }
         return StatCollector.translateToLocal("tst.bottledchaos.credential." + stack.getItemDamage() + ".name");
     }
 
@@ -154,7 +162,10 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
                 getOccupiedWeight(stack),
                 getCapacity(stack)));
         if (!isBound(stack)) {
-            lines.add(StatCollector.translateToLocal("tst.bottledchaos.unbound"));
+            // #tr tst.bottledchaos.credential.tooltip.empty
+            // # Inject route tags on the controller's injection page.
+            // #zh_CN 在主机注入页面写入路线标签.
+            lines.add(StatCollector.translateToLocal("tst.bottledchaos.credential.tooltip.empty"));
         } else {
             long displayTagMask = stack.getTagCompound()
                 .getLong(DISPLAY_TAG_MASK_NBT_KEY);
