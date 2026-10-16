@@ -12,10 +12,7 @@ import net.minecraft.util.StatCollector;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.init.TstItems;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.CredentialModel;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.CredentialRoute;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.CredentialRoutes;
 
 /** Capacity is selected by metadata; the route binding is stored on each individual stack. */
 public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
@@ -127,29 +124,6 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
         return mask != 0 && weight >= getRequiredWeight(mask) && weight <= getCapacity(stack);
     }
 
-    public static ItemStack getPrimaryDisplayStack(ItemStack stack) {
-        if (!isBound(stack)) return null;
-        long mask = getRouteMask(stack);
-        if (mask == CredentialModel.ALL_ROUTE_MASK) {
-            return BottledChaosRecipeResources.PlatinumDust.getItemStack();
-        }
-        for (int index : CredentialModel.displayOrder()) {
-            if ((mask & (1L << index)) == 0) continue;
-            CredentialRoute route = CredentialRoutes.get(index);
-            return route == null ? null : route.displayStack();
-        }
-        return null;
-    }
-
-    public static List<String> getRouteKeyList(ItemStack stack) {
-        List<String> keys = new ArrayList<>();
-        long mask = isBound(stack) ? getRouteMask(stack) : 0;
-        for (int index : CredentialModel.displayOrder()) {
-            if ((mask & (1L << index)) != 0) keys.add(CredentialModel.translationKey(index));
-        }
-        return keys;
-    }
-
     @Override
     public void registerIcons(IIconRegister register) {
         String path = TwistSpaceTechnology.RESOURCE_ROOT_ID + ":BottledChaosCredential/";
@@ -206,7 +180,7 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
         }
     }
 
-    public static String getFamilyKey(ItemStack stack) {
+    public static List<String> getRouteKeyList(ItemStack stack) {
         // #tr tst.bottledchaos.route.platinum_metallic_powder
         // # Platinum Metallic Powder
         // #zh_CN 铂金属粉
@@ -390,7 +364,11 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
         // #tr tst.bottledchaos.route.honeycomb
         // # Honeycomb Processing
         // #zh_CN 蜂窝处理
-        List<String> keys = getRouteKeyList(stack);
-        return keys.isEmpty() ? "tst.bottledchaos.unbound" : keys.get(0);
+        List<String> keys = new ArrayList<>();
+        long mask = isBound(stack) ? getRouteMask(stack) : 0;
+        for (int index : CredentialModel.displayOrder()) {
+            if ((mask & (1L << index)) != 0) keys.add(CredentialModel.translationKey(index));
+        }
+        return keys;
     }
 }

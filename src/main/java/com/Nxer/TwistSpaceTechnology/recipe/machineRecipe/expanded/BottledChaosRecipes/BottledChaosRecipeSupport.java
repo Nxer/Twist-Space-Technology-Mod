@@ -43,12 +43,11 @@ final class BottledChaosRecipeSupport {
      * Converts one live recipe into exact whole-batch data. Item and fluid chances use one shared LCM batch;
      * programming circuits are selectors, and zero-sized item inputs remain unscaled catalysts.
      */
-    static RecipeData prepareSourceRecipe(RecipeMap<?> map, GTRecipe recipe, long categories) {
-        return prepareSourceRecipe(map, recipe, categories, 0);
+    static RecipeData prepareSourceRecipe(RecipeMap<?> map, GTRecipe recipe) {
+        return prepareSourceRecipe(map, recipe, 0);
     }
 
-    static RecipeData prepareSourceRecipe(RecipeMap<?> map, GTRecipe recipe, long categories,
-        int roundedOutputChanceBatch) {
+    static RecipeData prepareSourceRecipe(RecipeMap<?> map, GTRecipe recipe, int roundedOutputChanceBatch) {
         Objects.requireNonNull(map, "recipe map");
         Objects.requireNonNull(recipe, "recipe");
         if (recipe.mDuration <= 0 || recipe.mEUt <= 0) {
@@ -127,7 +126,7 @@ final class BottledChaosRecipeSupport {
         times.put(
             new TimeKey(map, recipe.mEUt, recipe.mDuration, requirements),
             Math.multiplyExact((long) recipe.mDuration, probabilityBatch));
-        return new RecipeData(inputs, outputs, catalysts, times, categories, itemRequirements);
+        return new RecipeData(inputs, outputs, catalysts, times, itemRequirements);
     }
 
     private static SourceRequirements sourceRequirements(RecipeMap<?> map, GTRecipe recipe) {
@@ -365,7 +364,6 @@ final class BottledChaosRecipeSupport {
         final Map<Object, Long> outputs;
         final Map<Object, Long> catalysts;
         final Map<TimeKey, Long> times;
-        final long categories;
         final List<Requirement> itemRequirements;
 
         /** Add a fixed non-consumed selector after material balancing and batch reduction. */
@@ -374,7 +372,7 @@ final class BottledChaosRecipeSupport {
             required.put(key, Math.max(1, required.getOrDefault(key, 0L)));
             List<Requirement> items = new ArrayList<>(itemRequirements);
             if (key instanceof TST_ItemID item) items.add(BottledChaosItemInputs.exact(item, 0));
-            return new RecipeData(inputs, outputs, required, times, categories, items);
+            return new RecipeData(inputs, outputs, required, times, items);
         }
 
         RecipeData appendBalancedRecipe(RecipeData downstream, Object intermediate) {
@@ -394,7 +392,7 @@ final class BottledChaosRecipeSupport {
             mergeAmountsExcept(combinedOutputs, outputs, upstreamScale, intermediate);
             mergeAmounts(combinedOutputs, downstream.outputs, downstreamScale);
 
-            // Catalysts remain templates; work and categories follow the exact material batch scaling.
+            // Catalysts remain templates; source work follows the exact material batch scaling.
             Map<Object, Long> combinedCatalysts = new LinkedHashMap<>(catalysts);
             for (Map.Entry<Object, Long> entry : downstream.catalysts.entrySet()) {
                 combinedCatalysts.merge(entry.getKey(), entry.getValue(), Math::max);
@@ -403,13 +401,7 @@ final class BottledChaosRecipeSupport {
             mergeAmounts(combinedTimes, downstream.times, downstreamScale);
             List<Requirement> items = BottledChaosItemInputs.scale(itemRequirements, upstreamScale, 1, null);
             items.addAll(BottledChaosItemInputs.scale(downstream.itemRequirements, downstreamScale, 1, intermediate));
-            return new RecipeData(
-                combinedInputs,
-                combinedOutputs,
-                combinedCatalysts,
-                combinedTimes,
-                categories | downstream.categories,
-                items);
+            return new RecipeData(combinedInputs, combinedOutputs, combinedCatalysts, combinedTimes, items);
         }
 
         /** Cancel matching materials before deferred reagents reveal the final entry input. */
@@ -443,7 +435,6 @@ final class BottledChaosRecipeSupport {
                 divideAmounts(outputs, divisor),
                 catalysts,
                 reducedTimes,
-                categories,
                 BottledChaosItemInputs.scale(itemRequirements, 1, divisor, null));
         }
 
@@ -492,7 +483,6 @@ final class BottledChaosRecipeSupport {
                 combinedOutputs,
                 combinedCatalysts,
                 combinedTimes,
-                net.categories | conversion.categories,
                 BottledChaosItemInputs.retain(items, combinedInputs));
         }
 
@@ -508,21 +498,20 @@ final class BottledChaosRecipeSupport {
                 if (input.amount == 0 || !input.key.equals(original)) items.add(input);
             if (alternative instanceof TST_ItemID item)
                 items.add(BottledChaosItemInputs.exact(item, Math.multiplyExact(amount, multiplier)));
-            return new RecipeData(alternativeInputs, outputs, catalysts, times, categories, items);
+            return new RecipeData(alternativeInputs, outputs, catalysts, times, items);
         }
 
         RecipeData(Map<Object, Long> inputs, Map<Object, Long> outputs, Map<Object, Long> catalysts,
-            Map<TimeKey, Long> times, long categories) {
-            this(inputs, outputs, catalysts, times, categories, BottledChaosItemInputs.defaults(inputs, catalysts));
+            Map<TimeKey, Long> times) {
+            this(inputs, outputs, catalysts, times, BottledChaosItemInputs.defaults(inputs, catalysts));
         }
 
         private RecipeData(Map<Object, Long> inputs, Map<Object, Long> outputs, Map<Object, Long> catalysts,
-            Map<TimeKey, Long> times, long categories, List<Requirement> itemRequirements) {
+            Map<TimeKey, Long> times, List<Requirement> itemRequirements) {
             this.inputs = immutableMap(inputs);
             this.outputs = immutableMap(outputs);
             this.catalysts = immutableMap(catalysts);
             this.times = immutableMap(times);
-            this.categories = categories;
             this.itemRequirements = Collections.unmodifiableList(BottledChaosItemInputs.compact(itemRequirements));
         }
 
@@ -531,7 +520,6 @@ final class BottledChaosRecipeSupport {
             this.outputs = immutableMap(outputs);
             this.catalysts = source.catalysts;
             this.times = source.times;
-            this.categories = source.categories;
             this.itemRequirements = Collections
                 .unmodifiableList(BottledChaosItemInputs.retain(source.itemRequirements, inputs));
         }
@@ -561,7 +549,7 @@ final class BottledChaosRecipeSupport {
                     items.add(input.withAlternative(alternative));
                 }
             }
-            return new RecipeData(inputs, outputs, catalysts, times, categories, items);
+            return new RecipeData(inputs, outputs, catalysts, times, items);
         }
     }
 

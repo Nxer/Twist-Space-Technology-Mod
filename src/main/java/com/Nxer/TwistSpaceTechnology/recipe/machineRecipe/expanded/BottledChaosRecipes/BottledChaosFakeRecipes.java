@@ -119,7 +119,6 @@ public final class BottledChaosFakeRecipes {
                     .itemOutputs(itemOutputs)
                     .fluidOutputs(fluidOutputs)
                     .special(credential)
-                    .metadata(BottledChaosRecipeMetadata.REQUIRED_CATEGORY_MASK, plan.requiredCategories())
                     .metadata(BottledChaosRecipeMetadata.DISPLAY_BATCH, display)
                     .duration((int) Math.min(Integer.MAX_VALUE, Math.ceil(plan.durationTicks())))
                     .eut(display.baseEUt())

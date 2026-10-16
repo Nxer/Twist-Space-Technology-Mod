@@ -18,7 +18,6 @@ import java.util.Objects;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosRecipeCategory;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeCatalog;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeSupport.RecipeData;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeSupport.TimeKey;
@@ -283,8 +282,7 @@ public final class BottledChaosPurifiedWaterRecipes {
                 wholeAmounts(outputs, batches),
                 catalysts,
                 Collections
-                    .singletonMap(new TimeKey(pool, source.mEUt), Math.multiplyExact((long) source.mDuration, batches)),
-                BottledChaosRecipeCategory.SPECIAL.getMask())
+                    .singletonMap(new TimeKey(pool, source.mEUt), Math.multiplyExact((long) source.mDuration, batches)))
                     .netInputsAndOutputs(FluidId.create(source.mFluidInputs[0]));
         }
 

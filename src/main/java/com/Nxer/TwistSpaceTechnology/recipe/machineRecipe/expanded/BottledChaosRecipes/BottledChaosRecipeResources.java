@@ -45,7 +45,6 @@ import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.ch
 import gtnhlanth.api.recipe.LanthanidesRecipeMaps;
 import gtnhlanth.common.register.BotWerkstoffMaterialPool;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
-import tectech.recipe.TecTechRecipeMaps;
 
 /**
  * Shared recipe resources. Access after material and fluid registration (recipe loading at load-complete).
@@ -311,22 +310,12 @@ public final class BottledChaosRecipeResources {
         public static final RecipeMap<?> Extractor = RecipeMaps.extractorRecipes;
         public static final RecipeMap<?> Assembler = RecipeMaps.assemblerRecipes;
         public static final RecipeMap<?> IndustrialCokeOven = RecipeMaps.industrialCokeOvenRecipes;
-        public static final RecipeMap<?> PurificationClarifier = RecipeMaps.purificationClarifierRecipes;
-        public static final RecipeMap<?> PurificationOzonation = RecipeMaps.purificationOzonationRecipes;
-        public static final RecipeMap<?> PurificationFlocculation = RecipeMaps.purificationFlocculationRecipes;
-        public static final RecipeMap<?> PurificationPhAdjustment = RecipeMaps.purificationPhAdjustmentRecipes;
-        public static final RecipeMap<?> PurificationPlasmaHeating = RecipeMaps.purificationPlasmaHeatingRecipes;
-        public static final RecipeMap<?> PurificationUVTreatment = RecipeMaps.purificationUVTreatmentRecipes;
-        public static final RecipeMap<?> PurificationDegasifier = RecipeMaps.purificationDegasifierRecipes;
-        public static final RecipeMap<?> PurificationParticleExtraction = RecipeMaps.purificationParticleExtractionRecipes;
-        public static final RecipeMap<?> GodforgePlasma = TecTechRecipeMaps.godforgePlasmaRecipes;
-        public static final RecipeMap<?> GodforgeExoticMatter = TecTechRecipeMaps.godforgeExoticMatterRecipes;
         public static final RecipeMap<?> QuantumForceTransformer = RecipeMaps.quantumForceTransformerRecipes;
         // spotless:on
     }
 
     // spotless:off
-    // Elemental full dusts, ordered by atomic number. Only registered forms are listed.
+    // Elemental full dusts, ordered by atomic number. Initializers also register native dust aliases.
     public static final TST_ItemID LithiumDust = dust(Materials.Lithium);
     public static final TST_ItemID BerylliumDust = dust(Materials.Beryllium);
     public static final TST_ItemID BoronDust = dust(Materials.Boron);
@@ -429,7 +418,6 @@ public final class BottledChaosRecipeResources {
     public static final TST_ItemID HotEnrichedNaquadahIngot = TST_ItemID.create(GTOreDictUnificator.get(OrePrefixes.ingotHot, Materials.NaquadahEnriched, 1));
     public static final TST_ItemID NaquadriaIngot = TST_ItemID.create(Materials.Naquadria.getIngots(1));
     public static final TST_ItemID HotNaquadriaIngot = TST_ItemID.create(GTOreDictUnificator.get(OrePrefixes.ingotHot, Materials.Naquadria, 1));
-    public static final TST_ItemID PrismaticNaquadahIngot = TST_ItemID.create(Materials.PrismaticNaquadah.getIngots(1));
     public static final TST_ItemID HafniumIngot = TST_ItemID.create(WerkstoffMaterialPool.Hafnium.get(OrePrefixes.ingot, 1));
     public static final TST_ItemID HotHafniumIngot = TST_ItemID.create(WerkstoffMaterialPool.Hafnium.get(OrePrefixes.ingotHot, 1));
     public static final TST_ItemID ZirconiumIngot = TST_ItemID.create(WerkstoffLoader.Zirconium.get(OrePrefixes.ingot, 1));
@@ -554,15 +542,11 @@ public final class BottledChaosRecipeResources {
     public static final TST_ItemID EnergiumDust = TST_ItemID.create(ItemList.IC2_Energium_Dust.get(1));
     public static final TST_ItemID StemCells = TST_ItemID.create(ItemList.Circuit_Chip_Stemcell.get(1));
     public static final TST_ItemID BioCells = TST_ItemID.create(ItemList.Circuit_Chip_Biocell.get(1));
-    public static final TST_ItemID Collagen = modItem(Mods.NewHorizonsCoreMod, "GTNHBioItems", 0);
-    public static final TST_ItemID Gelatin = modItem(Mods.NewHorizonsCoreMod, "GTNHBioItems", 1);
     public static final TST_ItemID Agar = modItem(Mods.NewHorizonsCoreMod, "GTNHBioItems", 2);
     public static final TST_ItemID UnknownCrystal = modItem(Mods.GalaxySpace, "item.UnknowCrystal", 0);
     public static final TST_ItemID TauCetiESeaweed = modItem(Mods.GalaxySpace, "tcetiedandelions", 0);
     public static final TST_ItemID TauCetiESeaweedExtract = modItem(Mods.NewHorizonsCoreMod, "TCetiESeaweedExtract", 0);
     public static final TST_ItemID PamSeaweed = modItem(Mods.PamsHarvestCraft, "seaweedItem", 0);
-    public static final TST_ItemID BarnardaCLog = modItem(Mods.GalaxySpace, "barnardaClog", 0);
-    public static final TST_ItemID RadoxPolymerPlate = TST_ItemID.create(Materials.RadoxPolymer.getPlates(1));
     public static final TST_ItemID KevlarPlate = TST_ItemID.create(Materials.Kevlar.getPlates(1));
     public static final TST_ItemID KevlarFiber = TST_ItemID.create(ItemList.KevlarFiber.get(1));
     public static final TST_ItemID WovenKevlar = TST_ItemID.create(ItemList.WovenKevlar.get(1));
@@ -714,111 +698,14 @@ public final class BottledChaosRecipeResources {
 
     // Elemental gases, liquids and melts, ordered by atomic number.
     public static final Fluid HydrogenGas = fluid(Materials.Hydrogen.getGas(1));
-    public static final Fluid HeliumGas = fluid(Materials.Helium.getGas(1));
-    public static final Fluid LithiumMolten = fluid(Materials.Lithium.getMolten(1));
-    public static final Fluid BerylliumMolten = fluid(Materials.Beryllium.getMolten(1));
-    public static final Fluid BoronMolten = fluid(Materials.Boron.getMolten(1));
     public static final Fluid NitrogenGas = fluid(Materials.Nitrogen.getGas(1));
     public static final Fluid OxygenGas = fluid(Materials.Oxygen.getGas(1));
     public static final Fluid FluorineGas = fluid(Materials.Fluorine.getGas(1));
-    public static final Fluid NeonGas = fluid(WerkstoffLoader.Neon.getFluidOrGas(1));
-    public static final Fluid SodiumLiquid = fluid(Materials.Sodium.getFluid(1));
-    public static final Fluid MagnesiumMolten = fluid(Materials.Magnesium.getMolten(1));
-    public static final Fluid AluminiumMolten = fluid(Materials.Aluminium.getMolten(1));
-    public static final Fluid SiliconMolten = fluid(Materials.Silicon.getMolten(1));
     public static final Fluid ChlorineGas = fluid(Materials.Chlorine.getGas(1));
-    public static final Fluid ArgonGas = fluid(Materials.Argon.getGas(1));
     public static final Fluid PotassiumMolten = fluid(Materials.Potassium.getMolten(1));
-    public static final Fluid CalciumMolten = fluid(WerkstoffLoader.Calcium.getMolten(1));
-    public static final Fluid ScandiumMolten = fluid(Materials.Scandium.getMolten(1));
-    public static final Fluid TitaniumMolten = fluid(Materials.Titanium.getMolten(1));
-    public static final Fluid VanadiumMolten = fluid(Materials.Vanadium.getMolten(1));
-    public static final Fluid ChromiumMolten = fluid(Materials.Chrome.getMolten(1));
-    public static final Fluid ManganeseMolten = fluid(Materials.Manganese.getMolten(1));
-    public static final Fluid IronMolten = fluid(Materials.Iron.getMolten(1));
-    public static final Fluid CobaltMolten = fluid(Materials.Cobalt.getMolten(1));
-    public static final Fluid NickelMolten = fluid(Materials.Nickel.getMolten(1));
-    public static final Fluid CopperMolten = fluid(Materials.Copper.getMolten(1));
-    public static final Fluid ZincMolten = fluid(Materials.Zinc.getMolten(1));
-    public static final Fluid GalliumMolten = fluid(Materials.Gallium.getMolten(1));
-    public static final Fluid GermaniumMolten = fluid(MaterialsElements.getInstance().GERMANIUM.getFluidStack(1));
-    public static final Fluid ArsenicMolten = fluid(Materials.Arsenic.getMolten(1));
-    public static final Fluid SeleniumMolten = fluid(MaterialsElements.getInstance().SELENIUM.getFluidStack(1));
-    public static final Fluid BromineLiquid = fluid(MaterialsElements.getInstance().BROMINE.getFluidStack(1));
-    public static final Fluid KryptonGas = fluid(WerkstoffLoader.Krypton.getFluidOrGas(1));
-    public static final Fluid RubidiumMolten = fluid(Materials.Rubidium.getMolten(1));
     public static final Fluid StrontiumMolten = fluid(Materials.Strontium.getMolten(1));
-    public static final Fluid YttriumMolten = fluid(Materials.Yttrium.getMolten(1));
-    public static final Fluid ZirconiumMolten = fluid(MaterialsElements.getInstance().ZIRCONIUM.getFluidStack(1));
-    public static final Fluid NiobiumMolten = fluid(Materials.Niobium.getMolten(1));
-    public static final Fluid MolybdenumMolten = fluid(Materials.Molybdenum.getMolten(1));
-    public static final Fluid TechnetiumMolten = fluid(MaterialsElements.getInstance().TECHNETIUM.getFluidStack(1));
-    public static final Fluid RutheniumMolten = fluid(WerkstoffLoader.Ruthenium.getMolten(1));
-    public static final Fluid RhodiumMolten = fluid(WerkstoffLoader.Rhodium.getMolten(1));
-    public static final Fluid PalladiumMolten = fluid(Materials.Palladium.getMolten(1));
-    public static final Fluid SilverMolten = fluid(Materials.Silver.getMolten(1));
-    public static final Fluid IndiumMolten = fluid(Materials.Indium.getMolten(1));
-    public static final Fluid TinMolten = fluid(Materials.Tin.getMolten(1));
-    public static final Fluid AntimonyMolten = fluid(Materials.Antimony.getMolten(1));
-    public static final Fluid TelluriumMolten = fluid(Materials.Tellurium.getMolten(1));
-    public static final Fluid IodineMolten = fluid(MaterialsElements.getInstance().IODINE.getFluidStack(1));
     public static final Fluid XenonGas = fluid(WerkstoffLoader.Xenon.getFluidOrGas(1));
-    public static final Fluid CaesiumMolten = fluid(Materials.Caesium.getMolten(1));
-    public static final Fluid BariumMolten = fluid(Materials.Barium.getMolten(1));
-    public static final Fluid LanthanumMolten = fluid(Materials.Lanthanum.getMolten(1));
-    public static final Fluid CeriumMolten = fluid(Materials.Cerium.getMolten(1));
-    public static final Fluid PraseodymiumMolten = fluid(Materials.Praseodymium.getMolten(1));
-    public static final Fluid NeodymiumMolten = fluid(Materials.Neodymium.getMolten(1));
-    public static final Fluid PromethiumMolten = fluid(Materials.Promethium.getMolten(1));
-    public static final Fluid SamariumMolten = fluid(Materials.Samarium.getMolten(1));
-    public static final Fluid EuropiumMolten = fluid(Materials.Europium.getMolten(1));
-    public static final Fluid GadoliniumMolten = fluid(Materials.Gadolinium.getMolten(1));
-    public static final Fluid TerbiumMolten = fluid(Materials.Terbium.getMolten(1));
-    public static final Fluid DysprosiumMolten = fluid(Materials.Dysprosium.getMolten(1));
-    public static final Fluid HolmiumMolten = fluid(Materials.Holmium.getMolten(1));
-    public static final Fluid ErbiumMolten = fluid(Materials.Erbium.getMolten(1));
-    public static final Fluid ThuliumMolten = fluid(Materials.Thulium.getMolten(1));
-    public static final Fluid YtterbiumMolten = fluid(Materials.Ytterbium.getMolten(1));
-    public static final Fluid LutetiumMolten = fluid(Materials.Lutetium.getMolten(1));
-    public static final Fluid HafniumMolten = fluid(MaterialsElements.getInstance().HAFNIUM.getFluidStack(1));
-    public static final Fluid TantalumMolten = fluid(Materials.Tantalum.getMolten(1));
-    public static final Fluid TungstenMolten = fluid(Materials.Tungsten.getMolten(1));
-    public static final Fluid RheniumMolten = fluid(MaterialsElements.getInstance().RHENIUM.getFluidStack(1));
-    public static final Fluid OsmiumMolten = fluid(Materials.Osmium.getMolten(1));
-    public static final Fluid IridiumMolten = fluid(Materials.Iridium.getMolten(1));
-    public static final Fluid PlatinumMolten = fluid(Materials.Platinum.getMolten(1));
-    public static final Fluid GoldMolten = fluid(Materials.Gold.getMolten(1));
-    public static final Fluid MercuryLiquid = fluid(Materials.Mercury.getFluid(1));
-    public static final Fluid ThalliumMolten = fluid(MaterialsElements.getInstance().THALLIUM.getFluidStack(1));
-    public static final Fluid LeadMolten = fluid(Materials.Lead.getMolten(1));
-    public static final Fluid BismuthMolten = fluid(Materials.Bismuth.getMolten(1));
-    public static final Fluid PoloniumMolten = fluid(MaterialsElements.getInstance().POLONIUM.getFluidStack(1));
-    public static final Fluid RadonGas = fluid(Materials.Radon.getGas(1));
-    public static final Fluid RadiumMolten = fluid(MaterialsElements.getInstance().RADIUM.getFluidStack(1));
-    public static final Fluid ThoriumMolten = fluid(Materials.Thorium.getMolten(1));
-    public static final Fluid ProtactiniumMolten = fluid(MaterialsElements.getInstance().PROTACTINIUM.getFluidStack(1));
-    public static final Fluid UraniumMolten = fluid(Materials.Uranium.getMolten(1));
-    public static final Fluid NeptuniumMolten = fluid(MaterialsElements.getInstance().NEPTUNIUM.getFluidStack(1));
-    public static final Fluid PlutoniumMolten = fluid(Materials.Plutonium.getMolten(1));
-    public static final Fluid AmericiumMolten = fluid(Materials.Americium.getMolten(1));
-    public static final Fluid CuriumMolten = fluid(MaterialsElements.getInstance().CURIUM.getFluidStack(1));
-    public static final Fluid CaliforniumMolten = fluid(WerkstoffLoader.Californium.getMolten(1));
-    public static final Fluid FermiumLiquid = fluid(MaterialsElements.getInstance().FERMIUM.getFluidStack(1));
-    public static final Fluid DubniumMolten = fluid(MaterialsTST.Dubnium.getMolten(1));
-    public static final Fluid FleroviumMolten = fluid(Materials.Flerovium.getMolten(1));
     public static final Fluid OganessonGas = fluid(WerkstoffLoader.Oganesson.getFluidOrGas(1));
-
-    // Elemental isotope gases and melts.
-    public static final Fluid DeuteriumGas = fluid(Materials.Deuterium.getGas(1));
-    public static final Fluid TritiumGas = fluid(Materials.Tritium.getGas(1));
-    public static final Fluid Helium3Gas = fluid(Materials.Helium3.getGas(1));
-    public static final Fluid Lithium7Molten = fluid(MaterialsElements.getInstance().LITHIUM7.getFluidStack(1));
-    public static final Fluid Thorium232Molten = fluid(MaterialsElements.getInstance().THORIUM232.getFluidStack(1));
-    public static final Fluid Uranium232Molten = fluid(MaterialsElements.getInstance().URANIUM232.getFluidStack(1));
-    public static final Fluid Uranium233Molten = fluid(MaterialsElements.getInstance().URANIUM233.getFluidStack(1));
-    public static final Fluid Uranium235Molten = fluid(Materials.Uranium235.getMolten(1));
-    public static final Fluid Plutonium238Molten = fluid(MaterialsElements.getInstance().PLUTONIUM238.getFluidStack(1));
-    public static final Fluid Plutonium241Molten = fluid(Materials.Plutonium241.getMolten(1));
 
     // Compound fluids currently used by recipes.
     public static final Fluid TitaniumTetrachloride = fluid(Materials.Titaniumtetrachloride.getFluid(1));
@@ -875,7 +762,6 @@ public final class BottledChaosRecipeResources {
     public static final Fluid Anthracene = fluid(new FluidStack(GTPPFluids.Anthracene, 1));
     public static final Fluid DistilledWater = fluid(GTModHandler.getDistilledWater(1));
     public static final Fluid LiquidNitrogen = fluid(Materials.LiquidNitrogen.getGas(1));
-    public static final Fluid IodineGas = fluid(WerkstoffMaterialPool.Iodine.getFluidOrGas(1));
     public static final Fluid HafniumTetrachlorideSolution = fluid(WerkstoffMaterialPool.HafniumTetrachlorideSolution.getFluidOrGas(1));
     public static final Fluid ZirconiumTetrachlorideSolution = fluid(WerkstoffMaterialPool.ZirconiumTetrachlorideSolution.getFluidOrGas(1));
 
@@ -891,9 +777,6 @@ public final class BottledChaosRecipeResources {
     public static final Fluid CrackedRadox = fluid(Materials.RadoxCracked.getGas(1));
     public static final Fluid RadoxGas = fluid(Materials.RadoxGas.getGas(1));
     public static final Fluid RadoxPolymerMolten = fluid(Materials.RadoxPolymer.getMolten(1));
-    public static final Fluid OxygenPlasma = fluid(Materials.Oxygen.getPlasma(1));
-    public static final Fluid TitaniumPlasma = fluid(Materials.Titanium.getPlasma(1));
-    public static final Fluid SilverPlasma = fluid(Materials.Silver.getPlasma(1));
     public static final Fluid GrowthMediumRaw = fluid(Materials.GrowthMediumRaw.getFluid(1));
     public static final Fluid GrowthMediumSterilized = fluid(Materials.GrowthMediumSterilized.getFluid(1));
     public static final Fluid BioMediumRaw = fluid(Materials.BioMediumRaw.getFluid(1));
@@ -912,7 +795,6 @@ public final class BottledChaosRecipeResources {
     public static final Fluid GammaButyrolactone = fluid(Materials.GammaButyrolactone.getFluid(1));
     public static final Fluid AcetyleneGas = fluid(Materials.Acetylene.getGas(1));
     public static final Fluid Butyraldehyde = fluid(Materials.Butyraldehyde.getFluid(1));
-    public static final Fluid PropeneGas = fluid(Materials.Propene.getGas(1));
     public static final Fluid Nitroaniline = fluid(Materials.IVNitroaniline.getFluid(1));
     public static final Fluid NitrationMixture = fluid(Materials.NitrationMixture.getFluid(1));
     public static final Fluid NMethylpyrrolidone = fluid(Materials.NMethylIIPyrrolidone.getFluid(1));
@@ -930,11 +812,9 @@ public final class BottledChaosRecipeResources {
     public static final Fluid IronIIIChloride = fluid(Materials.IronIIIChloride.getFluid(1));
     public static final Fluid SulfurDioxideGas = fluid(Materials.SulfurDioxide.getGas(1));
     public static final Fluid DilutedHydrochloricAcid = fluid(Materials.DilutedHydrochloricAcid.getFluid(1));
-    public static final Fluid GelatinMixture = Objects.requireNonNull(FluidRegistry.getFluid("gelatinmixture"), "gelatinmixture");
     public static final Fluid MeatExtract = Objects.requireNonNull(FluidRegistry.getFluid("meatextract"), "meatextract");
     public static final Fluid UnknownNutrientAgar = Objects.requireNonNull(FluidRegistry.getFluid("unknownnutrientagar"), "unknownnutrientagar");
     public static final Fluid SeaweedBroth = Objects.requireNonNull(FluidRegistry.getFluid("seaweedbroth"), "seaweedbroth");
-    public static final Fluid UnknownWater = Objects.requireNonNull(FluidRegistry.getFluid("unknowwater"), "unknowwater");
     public static final Fluid BacterialSludge = Objects.requireNonNull(FluidRegistry.getFluid("bacterialsludge"), "bacterialsludge");
     public static final Fluid Mutagen = Objects.requireNonNull(FluidRegistry.getFluid("mutagen"), "mutagen");
     public static final Fluid Butanediol = Objects.requireNonNull(FluidRegistry.getFluid("1,4-butanediol"), "1,4-butanediol");
@@ -1000,7 +880,6 @@ public final class BottledChaosRecipeResources {
     public static final Fluid LowQualityNaquadriaSolution = fluid(GGMaterial.lowQualityNaquadriaSolution.getFluidOrGas(1));
     public static final Fluid FluorineRichWasteLiquid = fluid(GGMaterial.fluorineRichWasteLiquid.getFluidOrGas(1));
     public static final Fluid NaquadahWasteLiquid = fluid(GGMaterial.wasteLiquid.getFluidOrGas(1));
-    public static final Fluid P507Extractant = fluid(GGMaterial.P507.getFluidOrGas(1));
     public static final Fluid PrismarineSolution = fluid(Materials.PrismarineSolution.getFluid(1));
     public static final Fluid PrismarineContaminatedHydrogenPeroxide = fluid(Materials.PrismarineContaminatedHydrogenPeroxide.getFluid(1));
     public static final Fluid PrismarineRichNitrobenzeneSolution = fluid(Materials.PrismarineRichNitrobenzeneSolution.getFluid(1));
@@ -1010,7 +889,6 @@ public final class BottledChaosRecipeResources {
     public static final Fluid PhononCrystalSolution = fluid(Materials.PhononCrystalSolution.getFluid(1));
     public static final Fluid PhononMedium = fluid(Materials.PhononMedium.getFluid(1));
     public static final Fluid EternityMolten = fluid(Materials.Eternity.getMolten(1));
-    public static final Fluid PrismaticNaquadahMolten = fluid(Materials.PrismaticNaquadah.getMolten(1));
     // spotless:on
 
     static {

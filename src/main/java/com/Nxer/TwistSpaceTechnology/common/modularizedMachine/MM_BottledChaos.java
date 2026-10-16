@@ -682,15 +682,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         return credentialHatchLimit;
     }
 
-    public boolean isBottledChaosRunning() {
-        IGregTechTileEntity base = getBaseMetaTileEntity();
-        if (!mMachine || base == null || !base.isAllowedToWork()) return false;
-        for (BottledChaosThread thread : threads) {
-            if ("GT5U.gui.text.status.active".equals(thread.status)) return true;
-        }
-        return false;
-    }
-
     public boolean isConcentratedPowerEnabled() {
         return concentratedPower;
     }

@@ -134,22 +134,6 @@ public final class BottledChaosStructureCatalog {
             return example(0);
         }
 
-        /** Number of steps needed to show every choice at least once. */
-        public int exampleCount() {
-            if (BottledChaosComplexStructures.isFoundry(this))
-                return BottledChaosComplexStructures.foundryExampleCount(profile);
-            int count = 1;
-            for (int group = 1; group <= groups; group++) {
-                int alternatives = 0;
-                for (Part part : parts) if (part.group == group) alternatives++;
-                count = Math.max(count, alternatives);
-            }
-            for (Requirement requirement : requirements) {
-                count = Math.max(count, requirement.alternatives.length);
-            }
-            return count;
-        }
-
         public Structure example(int variant) {
             if (BottledChaosComplexStructures.isFoundry(this))
                 return BottledChaosComplexStructures.foundryExample(this, variant);

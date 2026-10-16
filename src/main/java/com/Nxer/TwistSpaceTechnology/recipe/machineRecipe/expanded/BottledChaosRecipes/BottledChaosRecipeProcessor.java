@@ -1,19 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes;
 
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.AlloyBlastSmelter;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.BlastFurnace;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.ChemicalBath;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.ChemicalPlant;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.Digester;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.DissolutionTank;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.DistillationTower;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.Furnace;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.LargeChemicalReactor;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.MixerNonCell;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.NeutronActivator;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.OilCracker;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.VacuumFreezer;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.VacuumFurnace;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.recipeItemId;
 
 import java.util.ArrayList;
@@ -39,7 +26,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineConfiguration;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMaterialCache;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosRecipeCategory;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosUpkeep;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosItemInputs.Requirement;
@@ -57,7 +43,6 @@ import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.GTUtility.FluidId;
-import tectech.recipe.TecTechRecipeMaps;
 
 /**
  * Shared startup preprocessing, route cache and execution planning for Bottled Chaos.
@@ -377,7 +362,6 @@ public final class BottledChaosRecipeProcessor {
             }
             if (itemConsumption == null) return null;
             double duration = 0;
-            long categories = 0;
             long requiredPools = 0;
             int family = snapshot.familyOfEntry[entry];
             for (int index : snapshot.familyEntries[family]) {
@@ -385,7 +369,6 @@ public final class BottledChaosRecipeProcessor {
                 if (!checkSources(index, result.voltage)) return null;
                 duration = BottledChaosRecipeSupport
                     .addDuration(duration, sourceChecks(result.voltage).costs[index], result.batches[index]);
-                categories |= snapshot.routes[index].data.categories;
                 requiredPools |= snapshot.routes[index].poolMask;
                 for (var time : snapshot.routes[index].data.times.entrySet()) {
                     configureSource(time.getKey(), parameters, result.voltage);
@@ -400,7 +383,6 @@ public final class BottledChaosRecipeProcessor {
                 result.voltage,
                 duration,
                 parameters.upkeepDemands(),
-                categories,
                 requiredPools,
                 result.consumed,
                 result.outputs,
@@ -468,7 +450,7 @@ public final class BottledChaosRecipeProcessor {
                     Collections.unmodifiableList(items),
                     Collections.unmodifiableList(fluids),
                     Collections.unmodifiableList(processingTimes),
-                    createOutputPlan(route.outputs, totalDuration, route.categories, 1)));
+                    createOutputPlan(route.outputs, totalDuration, 1)));
         }
         return Collections.unmodifiableList(result);
     }
@@ -501,7 +483,6 @@ public final class BottledChaosRecipeProcessor {
         private final List<ReagentRecycling> reagentRecycling = new ArrayList<>();
         private final Set<Object> deferredReagents = new LinkedHashSet<>();
         private final Set<RecipeMark> marks = new LinkedHashSet<>();
-        private final Set<RecipeMark> returnedInputMarks = new LinkedHashSet<>();
         private final Map<RecipeMark, TST_ItemID[]> substitutedInputs = new LinkedHashMap<>();
         private final Map<RecipeMark, Integer> roundedOutputChanceBatches = new LinkedHashMap<>();
         private final Map<Integer, Integer> substitutedChains = new LinkedHashMap<>();
@@ -763,13 +744,6 @@ public final class BottledChaosRecipeProcessor {
             return mark;
         }
 
-        /** Close a source's self-return loop using its exact chance-adjusted net input, retaining all work. */
-        public RecipeMark markRecipeWithReturnedInputs(RecipeMap<?> map, Object input, Object output, int circuit) {
-            RecipeMark mark = markRecipe(map, input, output, circuit);
-            returnedInputMarks.add(mark);
-            return mark;
-        }
-
         /** Balance a finite source sequence and cancel its returned input once during startup. */
         public RecipeMark markRecipeSequence(RecipeMap<?> map, Object input, Object output, RecipeMark... steps) {
             if (steps.length == 0) throw new IllegalArgumentException("empty recipe sequence");
@@ -799,7 +773,7 @@ public final class BottledChaosRecipeProcessor {
             RecipeMark mark = new RecipeMark(map, input, output, circuit, false);
             if (resolved.putIfAbsent(
                 mark,
-                BottledChaosRecipeSupport.prepareSourceRecipe(map, recipe, processingCategoryMask(map))) != null)
+                BottledChaosRecipeSupport.prepareSourceRecipe(map, recipe)) != null)
                 throw new IllegalArgumentException("duplicate temporary recipe mark " + mark);
             return mark;
         }
@@ -966,7 +940,6 @@ public final class BottledChaosRecipeProcessor {
                         var prepared = BottledChaosRecipeSupport.prepareSourceRecipe(
                             pool,
                             recipe,
-                            processingCategoryMask(pool),
                             roundedOutputChanceBatches.getOrDefault(mark, 0));
                         TST_ItemID[] replacements = substitutedInputs.get(mark);
                         if (replacements != null) {
@@ -1002,12 +975,6 @@ public final class BottledChaosRecipeProcessor {
                     new Object[] { sequence.output() }).netInputsAndOutputs(sequence.input());
                 if (resolved.putIfAbsent(sequence.mark(), prepared) != null)
                     throw new IllegalArgumentException("duplicate prepared recipe sequence");
-            }
-            for (RecipeMark mark : returnedInputMarks) {
-                resolved.put(
-                    mark,
-                    resolved.get(mark)
-                        .netInputsAndOutputs(resourceKey(mark.input())));
             }
         }
 
@@ -1278,40 +1245,6 @@ public final class BottledChaosRecipeProcessor {
 
     private static Object resourceKey(Object resource) {
         return resource instanceof Fluid fluid ? FluidId.create(fluid) : resource;
-    }
-
-    private static long processingCategoryMask(RecipeMap<?> map) {
-        if (map == LargeChemicalReactor) {
-            return BottledChaosRecipeCategory.CHEMICAL.getMask();
-        }
-        if (map == DistillationTower || map == MixerNonCell
-            || map == ChemicalBath
-            || map == OilCracker
-            || map == Digester
-            || map == DissolutionTank
-            || map == ChemicalPlant) {
-            return BottledChaosRecipeCategory.CHEMICAL.getMask();
-        }
-        if (map == Furnace || map == BlastFurnace
-            || map == RecipeMaps.arcFurnaceRecipes
-            || map == VacuumFurnace
-            || map == VacuumFreezer
-            || map == AlloyBlastSmelter) {
-            return BottledChaosRecipeCategory.SMELTING_AND_HEAT_TREATMENT.getMask();
-        }
-        if (map == NeutronActivator || map == TecTechRecipeMaps.godforgePlasmaRecipes
-            || map == RecipeMaps.quantumForceTransformerRecipes
-            || map == TecTechRecipeMaps.godforgeExoticMatterRecipes
-            || map == RecipeMaps.purificationClarifierRecipes
-            || map == RecipeMaps.purificationOzonationRecipes
-            || map == RecipeMaps.purificationFlocculationRecipes
-            || map == RecipeMaps.purificationPhAdjustmentRecipes
-            || map == RecipeMaps.purificationPlasmaHeatingRecipes
-            || map == RecipeMaps.purificationUVTreatmentRecipes
-            || map == RecipeMaps.purificationDegasifierRecipes
-            || map == RecipeMaps.purificationParticleExtractionRecipes)
-            return BottledChaosRecipeCategory.SPECIAL.getMask();
-        return BottledChaosRecipeCategory.GENERAL_PROCESSING.getMask();
     }
 
     private static boolean containsFractionalPowder(ItemStack[] stacks) {
@@ -1635,7 +1568,6 @@ public final class BottledChaosRecipeProcessor {
         private final long baseEUt;
         private final double duration;
         private final List<BottledChaosUpkeep.Demand> upkeep;
-        private final long categories;
         private final long requiredPools;
         private final Map<Object, Long> consumed;
         private final Map<Object, Long> outputs;
@@ -1646,7 +1578,7 @@ public final class BottledChaosRecipeProcessor {
         private final BottledChaosItemInputs.Consumption itemConsumption;
 
         private PreparedPlan(String family, int entry, long baseEUt, double duration,
-            List<BottledChaosUpkeep.Demand> upkeep, long categories, long requiredPools, Map<Object, Long> consumed,
+            List<BottledChaosUpkeep.Demand> upkeep, long requiredPools, Map<Object, Long> consumed,
             Map<Object, Long> outputs, Map<Object, Long> remainingCache, Map<Object, Long> pendingCache, int executions,
             long[] targets, BottledChaosItemInputs.Consumption itemConsumption) {
             this.family = family;
@@ -1654,7 +1586,6 @@ public final class BottledChaosRecipeProcessor {
             this.baseEUt = baseEUt;
             this.duration = duration;
             this.upkeep = Collections.unmodifiableList(new ArrayList<>(upkeep));
-            this.categories = categories;
             this.requiredPools = requiredPools;
             this.consumed = consumed;
             this.outputs = outputs;
@@ -1690,7 +1621,7 @@ public final class BottledChaosRecipeProcessor {
         }
 
         public Plan outputPlan() {
-            return createOutputPlan(outputs, duration, categories, executions);
+            return createOutputPlan(outputs, duration, executions);
         }
 
         public Plan pendingCache() {
@@ -1724,19 +1655,14 @@ public final class BottledChaosRecipeProcessor {
 
     /** Reuse the long output representation and NBT codec for material cache snapshots. */
     public static Plan materialPlan(Map<Object, Long> amounts) {
-        return createOutputPlan(amounts, 0, 0, 0);
+        return createOutputPlan(amounts, 0, 0);
     }
 
-    private static Plan createOutputPlan(Map<Object, Long> outputs, double duration, long categories, int executions) {
+    private static Plan createOutputPlan(Map<Object, Long> outputs, double duration, int executions) {
         List<ItemStackLong> items = new ArrayList<>();
         List<FluidStackLong> fluids = new ArrayList<>();
         outputs.forEach((key, amount) -> appendResourceStack(key, amount, items, fluids));
-        return new Plan(
-            duration,
-            categories,
-            Collections.unmodifiableList(items),
-            Collections.unmodifiableList(fluids),
-            executions);
+        return new Plan(duration, Collections.unmodifiableList(items), Collections.unmodifiableList(fluids), executions);
     }
 
     private static void appendResourceStack(Object key, long amount, List<ItemStackLong> items,
@@ -1758,8 +1684,8 @@ public final class BottledChaosRecipeProcessor {
      * Independent long outputs and actual entry batch count; runtime duration includes every executed stage.
      */
     @Desugar
-    public record Plan(double durationTicks, long requiredCategories, List<ItemStackLong> itemOutputs,
-        List<FluidStackLong> fluidOutputs, int executions) {}
+    public record Plan(double durationTicks, List<ItemStackLong> itemOutputs, List<FluidStackLong> fluidOutputs,
+        int executions) {}
 
     // NEI display result types.
     /**
