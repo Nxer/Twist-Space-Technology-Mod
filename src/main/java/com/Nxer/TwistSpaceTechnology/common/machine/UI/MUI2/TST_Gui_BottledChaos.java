@@ -648,7 +648,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
     private static final class MachineSlotSyncHandler extends ItemSlotSH {
 
         private static final int SYNC_MACHINE_STACK = 2;
-        private ItemStack lastMachineStack;
+        private boolean machineStackChanged;
 
         private MachineSlotSyncHandler(ModularSlot slot) {
             super(slot);
@@ -672,11 +672,17 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             syncMachineStack(true);
         }
 
+        @Override
+        protected void onSlotUpdate(ItemStack stack, boolean onlyAmountChanged, boolean client, boolean init) {
+            super.onSlotUpdate(stack, onlyAmountChanged, client, init);
+            if (!client) machineStackChanged = true;
+        }
+
         private void syncMachineStack(boolean force) {
             if (!isValid() || getSyncManager().isClient()) return;
+            if (!force && !machineStackChanged) return;
+            machineStackChanged = false;
             ItemStack stack = getSlot().getStack();
-            if (!force && ItemStack.areItemStacksEqual(lastMachineStack, stack)) return;
-            lastMachineStack = stack == null ? null : stack.copy();
             ItemStack template = stack == null ? null : stack.copy();
             if (template != null) template.stackSize = 1;
             syncToClient(SYNC_MACHINE_STACK, buffer -> {
