@@ -16,10 +16,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosItemInputs.Requirement;
+import com.Nxer.TwistSpaceTechnology.util.recipes.RecipeMaterialUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
 
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
+import gregtech.api.enums.OrePrefixes;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.metadata.CentrifugeRecipeKey;
@@ -139,6 +141,8 @@ final class BottledChaosRecipeSupport {
         if (map == GoodGeneratorRecipeMaps.preciseAssemblerRecipes)
             casing = recipe.getMetadataOrDefault(GTRecipeConstants.PRECISE_ASSEMBLER_CASING_TIER, recipe.mSpecialValue);
         if (map == BottledChaosRecipeResources.RecipePools.QuantumForceTransformer) casing = recipe.mSpecialValue;
+        if (map == BottledChaosRecipeResources.RecipePools.FusionCrafting)
+            casing = recipe.getMetadataOrDefault(GTRecipeConstants.DEFC_CASING_TIER, 1);
         ItemStack special = map == BottledChaosRecipeResources.RecipePools.QuantumForceTransformer
             ? recipe.getMetadata(GTRecipeConstants.QFT_CATALYST)
             : map == BottledChaosRecipeResources.RecipePools.BacterialVat
@@ -365,6 +369,35 @@ final class BottledChaosRecipeSupport {
         final Map<Object, Long> catalysts;
         final Map<TimeKey, Long> times;
         final List<Requirement> itemRequirements;
+
+        /** Consolidate native small/tiny coproducts into exact full-dust batches without changing source work. */
+        RecipeData withFullDustOutputs() {
+            Map<Object, Integer> divisors = new LinkedHashMap<>();
+            Map<Object, Object> fullDusts = new LinkedHashMap<>();
+            long scale = 1;
+            for (var output : outputs.entrySet()) {
+                if (!(output.getKey() instanceof TST_ItemID item)) continue;
+                var association = GTOreDictUnificator.getAssociation(item.getItemStack(1));
+                if (association == null) continue;
+                int divisor = association.mPrefix == OrePrefixes.dustSmall ? 4
+                    : association.mPrefix == OrePrefixes.dustTiny ? 9 : 1;
+                if (divisor == 1) continue;
+                divisors.put(item, divisor);
+                fullDusts.put(item, recipeItemId(RecipeMaterialUtils.nativeDust(association.mMaterial.mMaterial)));
+                scale = getLCM(scale, divisor / getGCD(output.getValue(), divisor));
+            }
+            Map<Object, Long> fullOutputs = new LinkedHashMap<>();
+            for (var output : outputs.entrySet()) fullOutputs.merge(
+                fullDusts.getOrDefault(output.getKey(), output.getKey()),
+                Math.multiplyExact(output.getValue(), scale) / divisors.getOrDefault(output.getKey(), 1),
+                Math::addExact);
+            return new RecipeData(
+                multiplyAmounts(inputs, scale),
+                fullOutputs,
+                catalysts,
+                multiplyAmounts(times, scale),
+                BottledChaosItemInputs.scale(itemRequirements, scale, 1, null));
+        }
 
         /** Add a fixed non-consumed selector after material balancing and batch reduction. */
         RecipeData requireCatalyst(Object key) {

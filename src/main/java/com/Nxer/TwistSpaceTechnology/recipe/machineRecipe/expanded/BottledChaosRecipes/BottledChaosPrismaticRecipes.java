@@ -34,6 +34,7 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.MixerNonCell;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.VacuumFreezer;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.VacuumFurnace;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RedAlgaeBiomass;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.StrontiumDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.StrontiumHydroxideDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.StrontiumIngot;
@@ -44,8 +45,13 @@ import net.minecraftforge.fluids.Fluid;
 
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeCatalog;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeMark;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.Mods;
 import gregtech.api.enums.TierEU;
+import gregtech.common.items.CombType;
+import gregtech.loaders.misc.GTBees;
 
 /** Prismarine shard processing through prismatic acid. */
 public final class BottledChaosPrismaticRecipes {
@@ -62,7 +68,20 @@ public final class BottledChaosPrismaticRecipes {
             catalog.markRecipe(VacuumFurnace, PrismaticCrystal, PrismaticGas, -1),
             catalog.markRecipe(VacuumFreezer, PrismaticGas, PrismaticAcid, -1));
 
-        catalog.setQueryMarkers("prismatic_acid", null, new Object[] { PrismaticAcid, CrystallineAlloyMolten });
+        catalog.setQueryMarkers("prismatic_acid", new Object[] { PrismarineShard, CrystallineAlloyMolten }, null);
+
+        // Independent shard supply; the honeycomb source replaces quartz and doubles the native yield.
+        catalog.registerAlternativeChain("prismatic_acid", TierEU.RECIPE_LuV, RedAlgaeBiomass,
+            new Object[] { PrismarineShard }, new Object[] { PrismarineShard },
+            catalog.markRecipe(Autoclave,
+                new Object[] { RedAlgaeBiomass, TST_ItemID.create(Materials.CertusQuartz.getDust(1)) }, PrismarineShard, -1));
+        if (Mods.Forestry.isModLoaded() && GTBees.combs != null) {
+            catalog.registerAugmentedChain("prismatic_acid", "honeycomb", TierEU.RECIPE_LuV, RedAlgaeBiomass,
+                new Object[] { PrismarineShard }, new Object[] { PrismarineShard },
+                catalog.markRecipe(Autoclave,
+                    new Object[] { RedAlgaeBiomass, TST_ItemID.create(GTBees.combs.getStackForType(CombType.PRISMATIC, 1)) }, PrismarineShard, -1));
+        }
+        catalog.orderDisplayRecipes("prismatic", DiamondGem, RedAlgaeBiomass, PrismarineShard);
 
         // Input branches: supplement extraction, then reuse the contaminated peroxide in looped leaching.
         catalog.registerInputSynthesis(ChemicalBath, PrismarineRichNitrobenzeneSolution,

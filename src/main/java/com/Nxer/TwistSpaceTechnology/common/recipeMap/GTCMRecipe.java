@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosRecipeMetadata;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosStructureDisplay;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.ArtificialStar_SpecialValueFormatter;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.DSP_Receiver_SpecialValueFormatter;
@@ -18,7 +19,6 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_Aqu
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_ArtificialGreenHouseFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_BottledChaosCredentialFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_BottledChaosExpandedFrontend;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_BottledChaosFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_BottledChaosStructureFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_DirectedMobClonerFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
@@ -41,6 +41,7 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMapBackend;
 import gregtech.api.recipe.RecipeMapBuilder;
 import gregtech.api.recipe.maps.AssemblyLineFrontend;
+import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.nei.formatter.HeatingCoilSpecialValueFormatter;
 import gregtech.nei.formatter.SimpleSpecialValueFormatter;
@@ -308,38 +309,21 @@ public class GTCMRecipe {
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MassFabricatorGenesis.get(1)))
         .build();
 
+    private static final Comparator<GTRecipe> BOTTLED_CHAOS_RECIPE_ORDER = Comparator.comparingInt(recipe -> {
+        var display = recipe.getMetadata(BottledChaosRecipeMetadata.DISPLAY_BATCH);
+        return display == null ? Integer.MAX_VALUE : display.displayOrder();
+    });
+
     // #tr tst.bottledchaos.recipe.name
     // # Bottled Chaos
     // #zh_CN 瓶中混沌
     public static final RecipeMap<TST_RecipeMapBackend> BottledChaosRecipes = RecipeMapBuilder
         .of("tst.bottledchaos.recipe.name", TST_RecipeMapBackend::new)
-        .maxIO(16, 16, 16, 16)
-        .disableRegisterNEI()
-        .frontend(TST_BottledChaosFrontend::new)
-        .useSpecialSlot()
-        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
-        .neiHandlerInfo(builder -> {
-            int maxMaps = BottledChaosRecipeProcessor.createDisplayRecipes()
-                .stream()
-                .mapToInt(
-                    display -> display.processingTimes()
-                        .size())
-                .max()
-                .orElse(12);
-            return builder.setDisplayStack(GTCMItemList.BottledChaos.get(1))
-                .setHeight(200 + 10 * maxMaps)
-                .setMultipleWidgetsAllowed(true);
-        })
-        .build();
-
-    // #tr tst.bottledchaos.recipe.expanded.name
-    // # Bottled Chaos - Extended Recipes
-    // #zh_CN 瓶中混沌 - 扩展配方
-    public static final RecipeMap<TST_RecipeMapBackend> BottledChaosExpandedRecipes = RecipeMapBuilder
-        .of("tst.bottledchaos.recipe.expanded.name", TST_RecipeMapBackend::new)
-        .maxIO(72, 16, 16, 16)
+        .maxIO(72, 18, 18, 18)
         .disableRegisterNEI()
         .frontend(TST_BottledChaosExpandedFrontend::new)
+        .neiRecipeComparator(BOTTLED_CHAOS_RECIPE_ORDER)
+        .useCustomFilterForNEI()
         .useSpecialSlot()
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> {
@@ -351,7 +335,7 @@ public class GTCMRecipe {
                 .max()
                 .orElse(12);
             return builder.setDisplayStack(GTCMItemList.BottledChaos.get(1))
-                .setHeight(340 + 10 * maxMaps)
+                .setHeight(350 + 10 * maxMaps)
                 .setMultipleWidgetsAllowed(true);
         })
         .build();
@@ -383,6 +367,24 @@ public class GTCMRecipe {
         RecipeCategorySetting::getDefault,
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
+    // #tr tst.bottledchaos.recipe.category.indium.name
+    // # Bottled Chaos - Indium
+    // #zh_CN 瓶中混沌 - 铟
+    public static final RecipeCategory BottledChaosIndiumCategory = new RecipeCategory(
+        "tst.bottledchaos.recipe.category.indium.name",
+        BottledChaosRecipes,
+        RecipeCategorySetting::getDefault,
+        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+
+    // #tr tst.bottledchaos.recipe.category.isamill.name
+    // # Bottled Chaos - IsaMill Processing
+    // #zh_CN 瓶中混沌 - 艾萨矿物处理
+    public static final RecipeCategory BottledChaosIsaMillCategory = new RecipeCategory(
+        "tst.bottledchaos.recipe.category.isamill.name",
+        BottledChaosRecipes,
+        RecipeCategorySetting::getDefault,
+        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+
     // #tr tst.bottledchaos.recipe.category.platinum.name
     // # Bottled Chaos - Platinum Group
     // #zh_CN 瓶中混沌 - 铂系
@@ -410,9 +412,18 @@ public class GTCMRecipe {
         RecipeCategorySetting::getDefault,
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
+    // #tr tst.bottledchaos.recipe.category.netherite.name
+    // # Bottled Chaos - Netherite
+    // #zh_CN 瓶中混沌 - 下界合金
+    public static final RecipeCategory BottledChaosNetheriteCategory = new RecipeCategory(
+        "tst.bottledchaos.recipe.category.netherite.name",
+        BottledChaosRecipes,
+        RecipeCategorySetting::getDefault,
+        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+
     // #tr tst.bottledchaos.recipe.category.prismatic.name
-    // # Bottled Chaos - Prismatic
-    // #zh_CN 瓶中混沌 - 海晶线
+    // # Bottled Chaos - Prismatic Acid
+    // #zh_CN 瓶中混沌 - 海晶酸
     public static final RecipeCategory BottledChaosPrismaticCategory = new RecipeCategory(
         "tst.bottledchaos.recipe.category.prismatic.name",
         BottledChaosRecipes,

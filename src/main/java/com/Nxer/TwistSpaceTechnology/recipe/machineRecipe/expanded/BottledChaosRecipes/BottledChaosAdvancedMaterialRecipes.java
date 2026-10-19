@@ -44,7 +44,7 @@ public final class BottledChaosAdvancedMaterialRecipes {
             new Object[] { PhononMedium },
             crystalSolution,
             catalog.markRecipe(AlloyBlastSmelter, PhononCrystalSolution, PhononMedium, 5));
-        catalog.setQueryMarkers("phonon_medium", new Object[] { MagMatterRound }, new Object[] { PhononMedium });
+        catalog.setQueryMarkers("phonon_medium", new Object[] {}, new Object[] { PhononMedium });
 
         // 2. Prepare the chronic singularity in the arc furnace, then retain every expected QFT coproduct.
         if (!Mods.EternalSingularity.isModLoaded()) return;
@@ -58,6 +58,6 @@ public final class BottledChaosAdvancedMaterialRecipes {
             new Object[] { EternityMolten },
             catalog.markRecipe(ArcFurnace, EternalSingularity, ChronicSingularity, -1),
             catalog.markRecipe(QuantumForceTransformer, ChronicSingularity, EternityMolten, -1));
-        catalog.setQueryMarkers("eternity", new Object[] { EternalSingularity }, new Object[] { EternityMolten });
+        catalog.setQueryMarkers("eternity", new Object[] {}, new Object[] { EternityMolten });
     }
 }

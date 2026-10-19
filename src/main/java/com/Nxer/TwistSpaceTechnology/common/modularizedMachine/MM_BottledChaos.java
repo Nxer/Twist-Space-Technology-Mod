@@ -469,7 +469,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
         return ImmutableList.of(
             GTCMRecipe.BottledChaosRecipes,
-            GTCMRecipe.BottledChaosExpandedRecipes,
             GTCMRecipe.BottledChaosCredentialRecipes,
             GTCMRecipe.BottledChaosStructureRecipes);
     }

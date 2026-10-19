@@ -17,7 +17,6 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.ModItem;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.recipes.RecipeMaterialUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
@@ -45,6 +44,7 @@ import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.ch
 import gtnhlanth.api.recipe.LanthanidesRecipeMaps;
 import gtnhlanth.common.register.BotWerkstoffMaterialPool;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
+import kubatech.loaders.DEFCRecipes;
 
 /**
  * Shared recipe resources. Access after material and fluid registration (recipe loading at load-complete).
@@ -61,11 +61,11 @@ public final class BottledChaosRecipeResources {
     /** Stable credential identities; capacity costs are published by route registration. */
     public static final class CredentialModel {
 
+        // Item names are queried during post-init, before all recipe resources have been registered.
         private static final boolean HAS_HONEYCOMBS = Mods.Forestry.isModLoaded() && GTBees.combs != null;
         private static final boolean HAS_NETHERITE = Mods.EtFuturumRequiem.isModLoaded();
         private static final boolean HAS_ETERNITY = Mods.EternalSingularity.isModLoaded();
-        private static final boolean HAS_CRYSTALLINE_ALLOY = Config.EnableBottledChaosCrystallineAlloyRecipe
-            && BottledChaosReagentRecipes.getInputSynthesis(HotCrystallineAlloyIngot) != null;
+        private static final boolean HAS_CRYSTALLINE_ALLOY = Mods.EnderIO.isModLoaded();
         public static final String ROUTE_MASK_NBT_KEY = "bottledChaosRouteMask";
         public static final String OCCUPIED_WEIGHT_NBT_KEY = "bottledChaosOccupiedWeight";
 
@@ -82,7 +82,7 @@ public final class BottledChaosRecipeResources {
             "kevlar",
             "purified_water_1", "purified_water_2", "purified_water_3", "purified_water_4", "purified_water_5", "purified_water_6", "purified_water_7", "purified_water_8",
             "magmatter", "quark_gluon_plasma",
-            "titanium", "tungsten", "indium", "phonon_medium", "eternity", "honeycomb"
+            "titanium", "tungsten", "indium", "phonon_medium", "eternity", "honeycomb", "isamill"
         };
         // spotless:on
         public static final int ROUTE_COUNT = TAGS.length - (HAS_NETHERITE ? 0 : 1)
@@ -90,6 +90,22 @@ public final class BottledChaosRecipeResources {
             - (HAS_ETERNITY ? 0 : 1)
             - (HAS_HONEYCOMBS ? 0 : 1);
         public static final long ALL_ROUTE_MASK = (1L << ROUTE_COUNT) - 1;
+
+        // Unlock progression is presentation only; TAGS keeps the saved credential bit identities.
+        // Individual stages follow their unlock tier; shared NEI pages use their earliest stage separately.
+        // spotless:off
+        private static final int[] DISPLAY_ORDER = Arrays.stream(new String[] {
+            "titanium", "tungsten", "indium",
+            "platinum_metallic_powder", "palladium_metallic_powder", "platinum_residue", "leach_residue", "rarest_metal_residue", "iridium_metal_residue", "crude_rhodium_metal",
+            "monazite", "bastnasite", "cerium", "rare_earth_cerium", "samarium",
+            "naquadah", "enriched_naquadah", "naquadria", "ancient_debris", "isamill", "crystalline_alloy_molten", "purified_water_1", "purified_water_2",
+            "prismatic_acid", "purified_water_3", "purified_water_4",
+            "kevlar", "super_heavy_radox", "heavy_radox", "light_radox", "super_light_radox", "purified_water_5", "purified_water_6",
+            "growth_medium_sterilized", "stem_cells", "seaweed_broth", "tau_ceti_e_seaweed_extract", "bio_medium_sterilized", "bio_cells", "xenoxene",
+            "purified_water_7", "purified_water_8",
+            "quark_gluon_plasma", "eternity", "magmatter", "phonon_medium", "honeycomb"
+        }).mapToInt(CredentialModel::indexForTag).filter(index -> index >= 0).toArray();
+        // spotless:on
 
         private static volatile int[] registeredCapacityCosts;
 
@@ -101,16 +117,25 @@ public final class BottledChaosRecipeResources {
         }
 
         public static int[] displayOrder() {
-            int[] order = new int[ROUTE_COUNT];
-            Arrays.setAll(order, index -> index);
-            return order;
+            return DISPLAY_ORDER.clone();
+        }
+
+        /** Honeycomb variants share their production tag's position, regardless of the authorization bit. */
+        public static int displayIndex(long requiredTagMask) {
+            if (HAS_HONEYCOMBS) requiredTagMask &= ~(1L << indexForTag("honeycomb"));
+            int tagIndex = Long.numberOfTrailingZeros(requiredTagMask);
+            for (int order = 0; order < DISPLAY_ORDER.length; order++) {
+                if (DISPLAY_ORDER[order] == tagIndex) return order;
+            }
+            return Integer.MAX_VALUE;
         }
 
         public static String tag(int index) {
             if (index < 0 || index >= ROUTE_COUNT) return null;
             if (!HAS_NETHERITE && index >= 7) index++;
             if (!HAS_CRYSTALLINE_ALLOY && index >= 8) index++;
-            if (!HAS_ETERNITY && index >= TAGS.length - 2) index++;
+            if (!HAS_ETERNITY && index >= TAGS.length - 3) index++;
+            if (!HAS_HONEYCOMBS && index >= TAGS.length - 2) index++;
             return TAGS[index];
         }
 
@@ -123,6 +148,7 @@ public final class BottledChaosRecipeResources {
 
         /** Processing families are independent of NEI pages; additional honeycomb authorization keeps its owner. */
         public static String processingFamily(long requiredTagMask) {
+            if (HAS_HONEYCOMBS) requiredTagMask &= ~(1L << indexForTag("honeycomb"));
             String name = tag(Long.numberOfTrailingZeros(requiredTagMask));
             if (name == null) return null;
             return switch (name) {
@@ -242,6 +268,7 @@ public final class BottledChaosRecipeResources {
             register("phonon_medium", MagMatterRound, PhononMedium);
             if (CredentialModel.HAS_ETERNITY) register("eternity", EternalSingularity, EternityMolten);
             if (CredentialModel.HAS_HONEYCOMBS) register("honeycomb", recipeItemId(GTBees.combs.getStackForType(CombType.INDIUM, 1)), recipeItemId(GTBees.combs.getStackForType(CombType.INDIUM, 1)));
+            register("isamill", MilledSphalerite, MilledSphalerite);
             // spotless:on
         }
 
@@ -311,6 +338,7 @@ public final class BottledChaosRecipeResources {
         public static final RecipeMap<?> Assembler = RecipeMaps.assemblerRecipes;
         public static final RecipeMap<?> IndustrialCokeOven = RecipeMaps.industrialCokeOvenRecipes;
         public static final RecipeMap<?> QuantumForceTransformer = RecipeMaps.quantumForceTransformerRecipes;
+        public static final RecipeMap<?> FusionCrafting = DEFCRecipes.fusionCraftingRecipes;
         // spotless:on
     }
 
@@ -506,6 +534,7 @@ public final class BottledChaosRecipeResources {
     public static final TST_ItemID TriniumSulfateDust = dust(GGMaterial.triniumSulphate);
     public static final TST_ItemID GalliumHydroxideDust = dust(GGMaterial.galliumHydroxide);
     public static final TST_ItemID IndiumPhosphateDust = dust(GGMaterial.indiumPhosphate);
+    public static final TST_ItemID RoquesiteDust = dust(WerkstoffLoader.Roquesit);
     public static final TST_ItemID SodiumOxideDust = dust(Materials.SodiumOxide);
     public static final TST_ItemID QuicklimeDust = dust(Materials.Quicklime);
     public static final TST_ItemID BariumSulfateDust = dust(Materials.Barite);
@@ -584,6 +613,14 @@ public final class BottledChaosRecipeResources {
     public static final TST_ItemID CrushedBauxite = TST_ItemID.create(GTOreDictUnificator.get(OrePrefixes.crushed, Materials.Bauxite, 1));
     public static final TST_ItemID PurifiedSphalerite = TST_ItemID.create(GTOreDictUnificator.get(OrePrefixes.crushedPurified, Materials.Sphalerite, 1));
     public static final TST_ItemID PurifiedGalena = TST_ItemID.create(GTOreDictUnificator.get(OrePrefixes.crushedPurified, Materials.Galena, 1));
+
+    // Native crushed inputs and milled intermediates for indium flotation.
+    public static final TST_ItemID CrushedSphalerite = TST_ItemID.create(GTOreDictUnificator.get(OrePrefixes.crushed, Materials.Sphalerite, 1));
+    public static final TST_ItemID CrushedChalcopyrite = TST_ItemID.create(GTOreDictUnificator.get(OrePrefixes.crushed, Materials.Chalcopyrite, 1));
+    public static final TST_ItemID MilledSphalerite = TST_ItemID.create(GTOreDictUnificator.get(OrePrefixes.milled, Materials.Sphalerite, 1));
+    public static final TST_ItemID MilledChalcopyrite = TST_ItemID.create(GTOreDictUnificator.get(OrePrefixes.milled, Materials.Chalcopyrite, 1));
+    public static final TST_ItemID CrushedPineMaterials = TST_ItemID.create(GregtechItemList.CrushedPineMaterials.get(1));
+
     public static final TST_ItemID CrystallineAlloyDust = dust(Materials.CrystallineAlloy);
     public static final TST_ItemID PulsatingIronDust = dust(Materials.PulsatingIron);
     public static final TST_ItemID RedstoneAlloyDust = dust(Materials.RedstoneAlloy);
@@ -674,7 +711,10 @@ public final class BottledChaosRecipeResources {
     public static final TST_ItemID HotNetheriteScrap = TST_ItemID.create(ItemList.Hot_Netherite_Scrap.get(1));
     public static final TST_ItemID BrittleNetheriteScrap = TST_ItemID.create(ItemList.Brittle_Netherite_Scrap.get(1));
     public static final TST_ItemID NetheriteNanoparticles = TST_ItemID.create(ItemList.Netherite_Nanoparticles.get(1));
+    public static final TST_ItemID IntenselyBondedNetheriteNanoparticles = TST_ItemID.create(ItemList.Intensely_Bonded_Netherite_Nanoparticles.get(1));
     public static final TST_ItemID HeavyHellishMud = TST_ItemID.create(ItemList.Heavy_Hellish_Mud.get(1));
+    public static final TST_ItemID HellishMetalBlock = TST_ItemID.create(GTOreDictUnificator.get(OrePrefixes.block, Materials.HellishMetal, 1));
+    public static final TST_ItemID RhodiumBlock = TST_ItemID.create(MaterialsElements.getInstance().RHODIUM.getBlock(1));
     public static final TST_ItemID Netherrack = TST_ItemID.create(new ItemStack(Blocks.netherrack));
     public static final TST_ItemID MilledNetherrack = TST_ItemID.create(GTOreDictUnificator.get(OrePrefixes.milled, Materials.Netherrack, 1));
     public static final TST_ItemID AluminaMillingBall = TST_ItemID.create(GregtechItemList.Milling_Ball_Alumina.get(1));
@@ -716,6 +756,8 @@ public final class BottledChaosRecipeResources {
     public static final Fluid HydrochloricAcid = fluid(Materials.HydrochloricAcid.getFluid(1));
     public static final Fluid AmmoniaGas = fluid(Materials.Ammonia.getGas(1));
     public static final Fluid Water = fluid(Materials.Water.getFluid(1));
+    public static final Fluid Steam = fluid(Materials.Steam.getGas(1));
+    public static final Fluid SuperheatedSteam = fluid(GTModHandler.getSuperHeatedSteam(1));
     public static final Fluid Grade2PurifiedWater = fluid(Materials.Grade2PurifiedWater.getFluid(1));
     public static final Fluid Air = fluid(Materials.Air.getGas(1));
     public static final Fluid OzoneGas = fluid(Materials.Ozone.getGas(1));
@@ -840,7 +882,12 @@ public final class BottledChaosRecipeResources {
     public static final Fluid NetherSemiFluid = fluid(Materials.NetherSemiFluid.getFluid(1));
     public static final Fluid NefariousGas = fluid(Materials.NefariousGas.getFluid(1));
     public static final Fluid NefariousOil = fluid(Materials.NefariousOil.getFluid(1));
+    public static final Fluid HellishMetalMolten = fluid(Materials.HellishMetal.getMolten(1));
     public static final Fluid NetherrackFlotationFroth = fluid(new FluidStack(GTPPFluids.NetherrackFlotationFroth, 1));
+    public static final Fluid SphaleriteFlotationFroth = fluid(new FluidStack(GTPPFluids.SphaleriteFlotationFroth, 1));
+    public static final Fluid ChalcopyriteFlotationFroth = fluid(new FluidStack(GTPPFluids.ChalcopyriteFlotationFroth, 1));
+    public static final Fluid PineOil = fluid(new FluidStack(GTPPFluids.PineOil, 1));
+    public static final Fluid RedMud = fluid(new FluidStack(GTPPFluids.RedMud, 1));
     public static final Fluid HydrofluoricAcid = fluid(Materials.HydrofluoricAcid.getFluid(1));
     public static final Fluid PhthalicAcid = fluid(Materials.PhthalicAcid.getFluid(1));
     public static final Fluid PlatinumConcentrateFluid = fluid(WerkstoffLoader.PTConcentrate.getFluidOrGas(1));

@@ -12,6 +12,7 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.FormicAcid;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.HotRutheniumTetroxideSolution;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.HydrofluoricAcid;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.IndiumDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.IridiumChlorideDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.IridiumDioxideDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.IridiumDust;
@@ -185,6 +186,13 @@ public final class BottledChaosPlatinumRecipes {
             "platinum_metallic_powder",
             TST_ItemID.create(platinumCandidates[1]),
             platinumCandidates[1].stackSize / platinumCandidates[0].stackSize);
+
+        catalog.setQueryMarkers(
+            "platinum_metallic_powder",
+            null,
+            new Object[] { PlatinumDust, PlatinumResidueDust, PalladiumMetallicPowder });
+        catalog.setQueryMarkers("leach_residue", null, new Object[] { RutheniumDust, RarestMetalResidueDust });
+        catalog.setQueryMarkers("rarest_metal_residue", null, new Object[] { OsmiumDust, IridiumMetalResidueDust });
     }
 
     private static void registerCropHammerChains(RecipeCatalog catalog) {
@@ -320,5 +328,12 @@ public final class BottledChaosPlatinumRecipes {
                     .orElseThrow(() -> new IllegalStateException("invalid fixed iridium comb recipe"))),
             catalog.markRecipe(LargeChemicalReactor, AcidicIridiumSolution, IridiumChlorideDust, -1),
             catalog.markRecipe(LargeChemicalReactor, IridiumChlorideDust, IridiumDust, -1));
+
+        // Keep every entry's products under the shared comb tag; NEI matches only its actual output slots.
+        catalog.setQueryMarkers(
+            "honeycomb",
+            null,
+            new Object[] { IndiumDust, PlatinumDust, PlatinumMetallicPowder, PalladiumMetallicPowder, PalladiumDust,
+                OsmiumDust, IridiumDust });
     }
 }

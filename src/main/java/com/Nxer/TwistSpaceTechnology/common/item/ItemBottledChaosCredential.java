@@ -374,6 +374,10 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
         // #tr tst.bottledchaos.route.honeycomb
         // # Honeycomb Processing
         // #zh_CN 蜂窝处理
+
+        // #tr tst.bottledchaos.route.isamill
+        // # IsaMill Processing
+        // #zh_CN 艾萨矿物处理
         List<String> keys = new ArrayList<>();
         long mask = isBound(stack) ? getRouteMask(stack) : 0;
         for (int index : CredentialModel.displayOrder()) {

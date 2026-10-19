@@ -1,9 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes;
 
+import static com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_BottledChaosExpandedFrontend.usesExpandedLayout;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.Fruit;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -18,7 +16,6 @@ import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.recipe.RecipeCategory;
-import gregtech.api.recipe.RecipeMap;
 import gregtech.api.util.GTUtility;
 
 /** Display-only batches read from the same prepared routes used by machine execution. */
@@ -27,18 +24,14 @@ public final class BottledChaosFakeRecipes {
     public static void registerRecipes() {
         GTCMRecipe.BottledChaosRecipes.getBackend()
             .clearRecipes();
-        GTCMRecipe.BottledChaosExpandedRecipes.getBackend()
-            .clearRecipes();
         var displays = BottledChaosRecipeProcessor.createDisplayRecipes();
-        Map<RecipeCategory, Integer> familySizes = new LinkedHashMap<>();
-        for (var display : displays) familySizes.merge(categoryForRoute(display), 1, Integer::sum);
         int registered = 0;
         for (var display : displays) {
             try {
                 var plan = display.plan();
                 ItemStack[] candidates = display.inputAlternatives();
                 int inputMultiplier = candidates == null ? 0 : candidates[1].stackSize / candidates[0].stackSize;
-                RecipeMap<?> recipeMap = displayMap(display);
+                var recipeMap = GTCMRecipe.BottledChaosRecipes;
                 var ui = recipeMap.getFrontend()
                     .getUIProperties();
                 if (display.itemInputs()
@@ -110,9 +103,7 @@ public final class BottledChaosFakeRecipes {
                 if (credential == null)
                     throw new IllegalStateException("no credential frame can hold route " + display.routeIndex());
                 var recipeBuilder = GTValues.RA.stdBuilder();
-                RecipeCategory category = categoryForRoute(display);
-                if (recipeMap == GTCMRecipe.BottledChaosRecipes && familySizes.get(category) > 1)
-                    recipeBuilder.recipeCategory(category);
+                recipeBuilder.recipeCategory(categoryForRoute(display));
                 if (alternativeInputs == null) recipeBuilder.itemInputsUnsafe(itemInputs);
                 else recipeBuilder.itemInputs(alternativeInputs);
                 registered += recipeBuilder.fluidInputs(fluidInputs)
@@ -209,14 +200,29 @@ public final class BottledChaosFakeRecipes {
         TwistSpaceTechnology.LOG.info("Registered {} Bottled Chaos credential NEI examples.", registered);
     }
 
-    /** Family tabs use the stable registered tags; a single recipe remains on the default machine tab. */
+    /** Dedicated family tabs use the stable registered tags, including families with a single recipe. */
     private static RecipeCategory categoryForRoute(BottledChaosRecipeProcessor.DisplayRecipe display) {
+        if (usesExpandedLayout(
+            display.itemInputs()
+                .size(),
+            display.plan()
+                .itemOutputs()
+                .size(),
+            display.fluidInputs()
+                .size(),
+            display.plan()
+                .fluidOutputs()
+                .size()))
+            return GTCMRecipe.BottledChaosRecipes.getDefaultRecipeCategory();
         int routeIndex = display.routeIndex();
         if ("honeycomb".equals(CredentialModel.tag(routeIndex)))
             routeIndex = Long.numberOfTrailingZeros(display.requiredTagMask() & ~(1L << routeIndex));
         return switch (CredentialModel.tag(routeIndex)) {
             case "titanium" -> GTCMRecipe.BottledChaosTitaniumCategory;
             case "tungsten" -> GTCMRecipe.BottledChaosTungstenCategory;
+            case "indium" -> GTCMRecipe.BottledChaosIndiumCategory;
+            case "isamill" -> GTCMRecipe.BottledChaosIsaMillCategory;
+            case "ancient_debris" -> GTCMRecipe.BottledChaosNetheriteCategory;
             case "platinum_metallic_powder", "platinum_residue", "crude_rhodium_metal", "leach_residue", "palladium_metallic_powder", "rarest_metal_residue", "iridium_metal_residue" -> GTCMRecipe.BottledChaosPlatinumCategory;
             case "crystalline_alloy_molten", "prismatic_acid" -> GTCMRecipe.BottledChaosPrismaticCategory;
             case "bastnasite", "monazite", "rare_earth_cerium", "cerium", "samarium" -> GTCMRecipe.BottledChaosLanthanideCategory;
@@ -227,22 +233,6 @@ public final class BottledChaosFakeRecipes {
             case "purified_water_1", "purified_water_2", "purified_water_3", "purified_water_4", "purified_water_5", "purified_water_6", "purified_water_7", "purified_water_8" -> GTCMRecipe.BottledChaosPurifiedWaterCategory;
             default -> GTCMRecipe.BottledChaosRecipes.getDefaultRecipeCategory();
         };
-    }
-
-    /** Oversized entries have their own format; existing recipe slot geometry is unchanged. */
-    private static RecipeMap<?> displayMap(BottledChaosRecipeProcessor.DisplayRecipe display) {
-        var ui = GTCMRecipe.BottledChaosRecipes.getFrontend()
-            .getUIProperties();
-        return display.itemInputs()
-            .size() > ui.maxItemInputs
-            || display.fluidInputs()
-                .size() > ui.maxFluidInputs
-            || display.plan()
-                .itemOutputs()
-                .size() > ui.maxItemOutputs
-            || display.plan()
-                .fluidOutputs()
-                .size() > ui.maxFluidOutputs ? GTCMRecipe.BottledChaosExpandedRecipes : GTCMRecipe.BottledChaosRecipes;
     }
 
     private static int displayAmount(long amount) {

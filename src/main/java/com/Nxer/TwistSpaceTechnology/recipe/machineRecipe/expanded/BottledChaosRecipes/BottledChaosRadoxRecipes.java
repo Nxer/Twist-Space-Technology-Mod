@@ -67,6 +67,10 @@ public final class BottledChaosRadoxRecipes {
         // Light fraction: light -> closed return -> polymer.
         catalog.registerChain("light_radox", 1, TierEU.RECIPE_UHV, LightRadox,
             new Object[] { RadoxPolymerMolten }, new Object[] {}, lightCracking, recoveredGas, polymerization);
+
+        catalog.setQueryMarkers("xenoxene", null,
+            new Object[] { SuperHeavyRadox, HeavyRadox, LightRadox, SuperLightRadox, Mutagen });
+        catalog.orderDisplayRecipes("radox", Xenoxene, SuperHeavyRadox, HeavyRadox, LightRadox, SuperLightRadox);
         // spotless:on
     }
 }

@@ -265,7 +265,7 @@ public final class BottledChaosCrafting {
         long sourceMask = ItemBottledChaosCredential.getRouteMask(source);
         List<Integer> routeIndices = new ArrayList<>();
         long individualCostSum = 0;
-        for (int index : CredentialModel.displayOrder()) {
+        for (int index = 0; index < CredentialModel.ROUTE_COUNT; index++) {
             if ((sourceMask & (1L << index)) == 0) continue;
             routeIndices.add(index);
             individualCostSum += ItemBottledChaosCredential.getRequiredWeight(1L << index);

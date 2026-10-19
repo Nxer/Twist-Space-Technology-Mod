@@ -83,8 +83,8 @@ public final class BottledChaosRecipeProcessor {
                 routes[i] = new CachedRoute(
                     preparedRoutes[i],
                     chain.root(),
-                    catalog.queryInputs.getOrDefault(i, new Object[] { chain.root() }),
-                    catalog.queryOutputs.getOrDefault(i, chain.terminals()),
+                    catalog.keyInputs(i),
+                    catalog.keyOutputs(i),
                     targets,
                     chain.baseEUt(),
                     chain.tagIndex(),
@@ -97,7 +97,11 @@ public final class BottledChaosRecipeProcessor {
                             .reduce(0L, (left, right) -> left | right)));
             }
             // 5. Publish complete routes and immutable input checkers; no scanned source recipe survives startup.
-            cache = new RouteCache(routes, catalog.entryOrder(), catalog.links.toArray(new ChainLink[0]));
+            cache = new RouteCache(
+                routes,
+                catalog.entryOrder(),
+                catalog.displayOrder(),
+                catalog.links.toArray(new ChainLink[0]));
             TwistSpaceTechnology.LOG.info("Bottled Chaos resolved {} processing steps.", catalog.resolved.size());
         } catch (RuntimeException exception) {
             TwistSpaceTechnology.LOG
@@ -221,14 +225,13 @@ public final class BottledChaosRecipeProcessor {
         public PreparedPlan prepare(int targetBatches) {
             if (snapshot == null || !snapshot.routes[entry].isAuthorized(routeMask)) return null;
             if (external == null) {
-                int family = snapshot.familyOfEntry[entry];
-                external = snapshot.collectAvailableInputs(family, items, fluids, virtualItems);
-                remaining = materials.snapshot(snapshot.familyNames[family]);
+                external = snapshot.collectAvailableInputs(routeMask, items, fluids, virtualItems);
+                remaining = materials.snapshot();
                 released = new LinkedHashMap<>();
                 for (var iterator = remaining.entrySet()
                     .iterator(); iterator.hasNext();) {
                     var carry = iterator.next();
-                    if (snapshot.hasAuthorizedCacheConsumer(family, routeMask, carry.getKey())) continue;
+                    if (snapshot.hasAuthorizedCacheConsumer(routeMask, carry.getKey())) continue;
                     released.put(carry.getKey(), carry.getValue());
                     iterator.remove();
                 }
@@ -245,7 +248,7 @@ public final class BottledChaosRecipeProcessor {
                         }
                     }
                 } while (changed);
-                int[] entries = snapshot.familyEntries[family];
+                int[] entries = snapshot.entryOrder;
                 goalOrder = new int[entries.length];
                 int size = 0;
                 long[] complete = new long[snapshot.routes.length];
@@ -364,7 +367,7 @@ public final class BottledChaosRecipeProcessor {
             double duration = 0;
             long requiredPools = 0;
             int family = snapshot.familyOfEntry[entry];
-            for (int index : snapshot.familyEntries[family]) {
+            for (int index : snapshot.entryOrder) {
                 if (result.batches[index] == 0) continue;
                 if (!checkSources(index, result.voltage)) return null;
                 duration = BottledChaosRecipeSupport
@@ -399,8 +402,9 @@ public final class BottledChaosRecipeProcessor {
         RouteCache snapshot = cache;
         if (snapshot == null) return Collections.emptyList();
         List<DisplayRecipe> result = new ArrayList<>(snapshot.routes.length);
-        // 1. Read net materials in entry order; folded input variants share their primary display entry.
-        for (int routeIndex : snapshot.entryOrder) {
+        // 1. Read net materials in production order; folded input variants share their primary display entry.
+        for (int displayOrder = 0; displayOrder < snapshot.displayOrder.length; displayOrder++) {
+            int routeIndex = snapshot.displayOrder[displayOrder];
             CachedRoute cachedRoute = snapshot.routes[routeIndex];
             if (cachedRoute.inputMultiplier > 0) continue;
             ItemStack[] inputAlternatives = null;
@@ -442,6 +446,7 @@ public final class BottledChaosRecipeProcessor {
             result.add(
                 new DisplayRecipe(
                     cachedRoute.tagIndex,
+                    displayOrder,
                     cachedRoute.requiredTagMask,
                     inputAlternatives,
                     cachedRoute.lookupInputs.clone(),
@@ -483,13 +488,14 @@ public final class BottledChaosRecipeProcessor {
         private final List<ReagentRecycling> reagentRecycling = new ArrayList<>();
         private final Set<Object> deferredReagents = new LinkedHashSet<>();
         private final Set<RecipeMark> marks = new LinkedHashSet<>();
-        private final Map<RecipeMark, TST_ItemID[]> substitutedInputs = new LinkedHashMap<>();
+        private final Map<RecipeMark, InputSubstitution[]> substitutedInputs = new LinkedHashMap<>();
         private final Map<RecipeMark, Integer> roundedOutputChanceBatches = new LinkedHashMap<>();
         private final Map<Integer, Integer> substitutedChains = new LinkedHashMap<>();
         private final Map<Integer, TST_ItemID> selectorCircuits = new LinkedHashMap<>();
         private final Map<Integer, Object[]> queryInputs = new LinkedHashMap<>();
         private final Map<Integer, Object[]> queryOutputs = new LinkedHashMap<>();
         private final Map<Integer, Object[]> executionTargets = new LinkedHashMap<>();
+        private final Map<String, List<Object>> displayRoots = new LinkedHashMap<>();
         private final Set<Object> registeredReagentSyntheses = new LinkedHashSet<>();
         private final Set<Object> registeredReagentDecompositions = new LinkedHashSet<>();
         private final Set<RecipeMap<?>> pools = new LinkedHashSet<>();
@@ -503,7 +509,7 @@ public final class BottledChaosRecipeProcessor {
             registerChain(tag, capacityCost, baseEUt, root, terminals, null, steps);
         }
 
-        /** Explicit outputs may feed later authorized routes; null retains the legacy later-root behavior. */
+        /** Preserve explicit resource boundaries during source composition; key markers determine runtime links. */
         public void registerChain(String tag, int capacityCost, long baseEUt, Object root, Object[] terminals,
             Object[] chainableOutputs, RecipeMark... steps) {
             registerChain(tag, capacityCost, baseEUt, root, terminals, chainableOutputs, 0, steps);
@@ -594,7 +600,10 @@ public final class BottledChaosRecipeProcessor {
                     (1L << tagIndex) | additionalTags));
         }
 
-        /** Override currently registered entries of this tag; null keeps defaults, an empty array disables a side. */
+        /**
+         * Override NEI lookup keys for currently registered entries of this tag; input keys also accept chained
+         * supply. Null keeps defaults, an empty array disables a side.
+         */
         public void setQueryMarkers(String tag, Object[] inputs, Object[] outputs) {
             int tagIndex = CredentialModel.indexForTag(tag);
             if (tagIndex < 0) throw new IllegalArgumentException("unknown query tag: " + tag);
@@ -614,6 +623,29 @@ public final class BottledChaosRecipeProcessor {
             }
         }
 
+        /** Override only the latest entry's key inputs; no inputs disables lookup and incoming recipe links. */
+        public void setLatestQueryInputs(String tag, Object... inputs) {
+            queryInputs.put(
+                latestChainIndex(tag),
+                Arrays.stream(inputs)
+                    .map(BottledChaosRecipeProcessor::resourceKey)
+                    .toArray());
+        }
+
+        private Object[] keyInputs(int entry) {
+            return queryInputs.getOrDefault(
+                entry,
+                new Object[] { chains.get(entry)
+                    .root() });
+        }
+
+        private Object[] keyOutputs(int entry) {
+            return queryOutputs.getOrDefault(
+                entry,
+                chains.get(entry)
+                    .terminals());
+        }
+
         /** Select main products for demand planning without changing protected coproducts or NEI markers. */
         public void setExecutionTargets(String tag, Object... outputs) {
             if (outputs.length == 0) throw new IllegalArgumentException("empty execution targets: " + tag);
@@ -622,6 +654,13 @@ public final class BottledChaosRecipeProcessor {
                 Arrays.stream(outputs)
                     .map(BottledChaosRecipeProcessor::resourceKey)
                     .toArray());
+        }
+
+        /** Order a family's independent NEI stages without changing credential bits or runtime priorities. */
+        public void orderDisplayRecipes(String family, Object... roots) {
+            List<Object> keys = new ArrayList<>(roots.length);
+            for (Object root : roots) keys.add(resourceKey(root));
+            displayRoots.put(family, keys);
         }
 
         /** Require a non-consumed programming circuit for the latest registered entry of this tag. */
@@ -729,6 +768,15 @@ public final class BottledChaosRecipeProcessor {
                 circuit);
         }
 
+        /** Convert a source material form using its exact whole-item ratio, preserving native processing work. */
+        public RecipeMark markRecipeWithSubstitutedInput(RecipeMap<?> map, TST_ItemID original, TST_ItemID replacement,
+            int multiplier, Object output, int circuit) {
+            if (multiplier <= 0) throw new IllegalArgumentException("input substitution requires a positive ratio");
+            RecipeMark mark = markRecipeWithSubstitutedInput(map, original, replacement, output, circuit);
+            substitutedInputs.put(mark, new InputSubstitution[] { new InputSubstitution(replacement, multiplier) });
+            return mark;
+        }
+
         /** Replace multiple source item forms in one startup step; matching still uses all native identities. */
         public RecipeMark markRecipeWithSubstitutedInputs(RecipeMap<?> map, TST_ItemID[] originals,
             TST_ItemID[] replacements, Object output, int circuit) {
@@ -740,7 +788,11 @@ public final class BottledChaosRecipeProcessor {
                 output,
                 circuit);
             Collections.addAll(internalResources, replacements);
-            substitutedInputs.put(mark, replacements.clone());
+            substitutedInputs.put(
+                mark,
+                Arrays.stream(replacements)
+                    .map(item -> new InputSubstitution(item, 1))
+                    .toArray(InputSubstitution[]::new));
             return mark;
         }
 
@@ -937,13 +989,16 @@ public final class BottledChaosRecipeProcessor {
                             || mark.circuit >= 0 && !circuits.contains(mark.circuit)) continue;
                         var prepared = BottledChaosRecipeSupport
                             .prepareSourceRecipe(pool, recipe, roundedOutputChanceBatches.getOrDefault(mark, 0));
-                        TST_ItemID[] replacements = substitutedInputs.get(mark);
+                        InputSubstitution[] replacements = substitutedInputs.get(mark);
                         if (replacements != null) {
                             Object[] originals = mark.input() instanceof Object[]markedInputs ? markedInputs
                                 : new Object[] { mark.input() };
                             for (int index = 0; index < replacements.length; index++) {
                                 prepared = Objects.requireNonNull(
-                                    prepared.withAlternativeInput(originals[index], replacements[index], 1),
+                                    prepared.withAlternativeInput(
+                                        originals[index],
+                                        replacements[index].item(),
+                                        replacements[index].multiplier()),
                                     "missing source input for substitution: " + mark);
                             }
                         }
@@ -996,18 +1051,8 @@ public final class BottledChaosRecipeProcessor {
             return values.contains(condition);
         }
 
-        // Store routes by stable tag index, then resolve forward links in display/execution order.
+        // Store routes by stable tag index, then resolve key-material links in display/execution order.
         private RecipeData[] composeRecipeChains() {
-            Set<Object> roots = new LinkedHashSet<>();
-            for (RecipeChain chain : chains) roots.add(chain.root());
-            Set<Object> declaredOutputs = new LinkedHashSet<>();
-            for (RecipeChain chain : chains)
-                if (chain.chainableOutputs() != null) Collections.addAll(declaredOutputs, chain.chainableOutputs());
-            for (RecipeChain chain : chains) for (Object terminal : chain.terminals()) {
-                // Intermediate terminals still feed later routes; only final products leave the internal set.
-                if (!roots.contains(terminal) && !declaredOutputs.contains(terminal))
-                    internalResources.remove(terminal);
-            }
             RecipeData[] routes = new RecipeData[chains.size()];
             for (int i = 0; i < routes.length; i++) {
                 RecipeChain chain = chains.get(i);
@@ -1052,52 +1097,23 @@ public final class BottledChaosRecipeProcessor {
                 TST_ItemID selector = selectorCircuits.get(i);
                 if (selector != null) routes[i] = routes[i].requireCatalyst(selector);
             }
-            // 4. Connect declared resources within a family, including reverse links for bounded runtime recycling.
+            // 4. Any actual output may supply a marked key input; output markers only control NEI lookup.
             int[] executionOrder = entryOrder();
             for (int sourcePosition = 0; sourcePosition < executionOrder.length; sourcePosition++) {
                 int source = executionOrder[sourcePosition];
-                Object[] declared = chains.get(source)
-                    .chainableOutputs();
-                if (declared == null) {
+                for (Object key : routes[source].outputs.keySet()) {
                     for (int targetPosition = 0; targetPosition < executionOrder.length; targetPosition++) {
                         int target = executionOrder[targetPosition];
-                        if (source == target || !canConnectChains(source, target)) continue;
-                        Object key = chains.get(target)
-                            .root();
-                        if (routes[source].outputs.containsKey(key)) links.add(new ChainLink(source, target, key));
-                    }
-                    continue;
-                }
-                Set<Object> unique = new LinkedHashSet<>(Arrays.asList(declared));
-                for (Object key : unique) {
-                    if (!routes[source].outputs.containsKey(key))
-                        throw new IllegalStateException("chainable output is not a final route output: " + key);
-                    for (int targetPosition = 0; targetPosition < executionOrder.length; targetPosition++) {
-                        int target = executionOrder[targetPosition];
-                        if (source == target || !canConnectChains(source, target)) continue;
+                        if (source == target || !Arrays.asList(keyInputs(target))
+                            .contains(key)) continue;
                         if (routes[target].inputs.containsKey(key) || routes[target].catalysts.containsKey(key))
                             links.add(new ChainLink(source, target, key));
                     }
                 }
             }
-            // 5. Remove explicit final products from the internal set, then reject unresolved connections.
-            for (Object key : declaredOutputs) {
-                boolean hasConsumer = false;
-                for (ChainLink link : links) if (link.key()
-                    .equals(key)) hasConsumer = true;
-                if (!roots.contains(key) && !hasConsumer) internalResources.remove(key);
-            }
+            // 5. Reject unfinished local intermediates; a standalone route may use boundary materials directly.
             validateRouteConnections(routes);
             return routes;
-        }
-
-        /** Recycled intermediates may enter another route of the same family; execution folds their voltage. */
-        private boolean canConnectChains(int source, int target) {
-            RecipeChain from = chains.get(source);
-            RecipeChain to = chains.get(target);
-            return Objects.equals(
-                CredentialModel.processingFamily(from.requiredTagMask()),
-                CredentialModel.processingFamily(to.requiredTagMask()));
         }
 
         // Chain each marked main line through its declared internal intermediates.
@@ -1183,7 +1199,8 @@ public final class BottledChaosRecipeProcessor {
         private int[] entryOrder() {
             int[] order = new int[chains.size()];
             int next = 0;
-            for (int tag : CredentialModel.displayOrder()) {
+            // Runtime priorities retain the stable registration order, independently of display progression.
+            for (int tag = 0; tag < CredentialModel.ROUTE_COUNT; tag++) {
                 // Preparations follow registration order; insert the primary before its same-root variants.
                 boolean primaryAdded = false;
                 for (int entry = CredentialModel.ROUTE_COUNT; entry < chains.size(); entry++) {
@@ -1202,35 +1219,66 @@ public final class BottledChaosRecipeProcessor {
             return order;
         }
 
-        // Internal inputs need the route root or an incoming link; outputs need a link or explicit final status.
+        private int[] displayOrder() {
+            List<Integer> order = new ArrayList<>(chains.size());
+            for (int entry = 0; entry < chains.size(); entry++) order.add(entry);
+            int honeycomb = CredentialModel.indexForTag("honeycomb");
+            long honeycombMask = honeycomb < 0 ? 0 : 1L << honeycomb;
+            order.sort(
+                Comparator.comparingInt(
+                    (Integer entry) -> CredentialModel.displayIndex(
+                        chains.get(entry)
+                            .requiredTagMask()))
+                    .thenComparingInt(
+                        entry -> (chains.get(entry)
+                            .requiredTagMask() & honeycombMask) != 0 ? 1 : 0));
+            Map<String, Map<Object, List<Integer>>> families = new LinkedHashMap<>();
+            for (int entry : order) {
+                RecipeChain chain = chains.get(entry);
+                String family = CredentialModel.processingFamily(chain.requiredTagMask());
+                var roots = families.computeIfAbsent(family, key -> {
+                    Map<Object, List<Integer>> stages = new LinkedHashMap<>();
+                    for (Object root : displayRoots.getOrDefault(key, Collections.emptyList()))
+                        stages.put(root, new ArrayList<>());
+                    return stages;
+                });
+                Object root = chain.root();
+                // Standalone comb sources follow their production tag's primary when no ordinary root matches.
+                if ((chain.requiredTagMask() & honeycombMask) != 0 && !roots.containsKey(root))
+                    root = chains.get(Long.numberOfTrailingZeros(chain.requiredTagMask() & ~honeycombMask))
+                        .root();
+                roots.computeIfAbsent(root, ignored -> new ArrayList<>())
+                    .add(entry);
+            }
+            int[] result = new int[order.size()];
+            int next = 0;
+            for (var roots : families.values())
+                for (var variants : roots.values()) for (int entry : variants) result[next++] = entry;
+            return result;
+        }
+
+        // Material boundaries remain valid external inputs/outputs even when key markers forbid chaining them.
         private void validateRouteConnections(RecipeData[] routes) {
+            Set<Object> boundaries = new LinkedHashSet<>(externalInputs);
+            for (int entry = 0; entry < chains.size(); entry++) {
+                RecipeChain chain = chains.get(entry);
+                boundaries.add(chain.root());
+                Collections.addAll(boundaries, chain.terminals());
+                Collections.addAll(boundaries, keyInputs(entry));
+                Collections.addAll(boundaries, keyOutputs(entry));
+                if (chain.chainableOutputs() != null) Collections.addAll(boundaries, chain.chainableOutputs());
+            }
             for (int i = 0; i < routes.length; i++) {
                 RecipeData route = routes[i];
                 RecipeChain chain = chains.get(i);
                 RecipeChain markedChain = chain.inputMultiplier() > 0 ? chains.get(chain.tagIndex()) : chain;
                 Set<Object> connections = collectMarkedResources(chainSteps, markedChain.start(), markedChain.end());
                 connections.retainAll(internalResources);
+                connections.removeAll(boundaries);
                 for (Object key : connections) {
-                    boolean incoming = false;
-                    boolean outgoing = false;
-                    for (ChainLink link : links) {
-                        if (!link.key()
-                            .equals(key)) continue;
-                        incoming |= link.target() == i;
-                        outgoing |= link.source() == i;
-                        if (incoming && outgoing) break;
-                    }
-                    if (!key.equals(chain.root()) && !externalInputs.contains(key)
-                        && (route.inputs.containsKey(key) || route.catalysts.containsKey(key))
-                        && !incoming)
+                    if (route.inputs.containsKey(key) || route.catalysts.containsKey(key))
                         throw new IllegalStateException("unresolved intermediate input in route " + i + ": " + key);
-                    if (!route.outputs.containsKey(key)) continue;
-                    boolean explicitOutput = chain.chainableOutputs() != null
-                        && (Arrays.asList(chain.chainableOutputs())
-                            .contains(key)
-                            || Arrays.asList(chain.terminals())
-                                .contains(key));
-                    if (!outgoing && !explicitOutput)
+                    if (route.outputs.containsKey(key))
                         throw new IllegalStateException("unfinished or backward output in route " + i + ": " + key);
                 }
             }
@@ -1266,6 +1314,9 @@ public final class BottledChaosRecipeProcessor {
     @Desugar
     public record RecipeMark(RecipeMap<?> map, Object input, Object output, int circuit, boolean optional) {}
 
+    @Desugar
+    private record InputSubstitution(TST_ItemID item, int multiplier) {}
+
     /** A startup-only contiguous source range, folded into one reusable cached processing step. */
     @Desugar
     private record RecipeSequence(RecipeMark mark, Object input, Object output, int start, int end) {}
@@ -1300,11 +1351,12 @@ public final class BottledChaosRecipeProcessor {
         }
     }
 
-    // Runtime directory: rows are processing families, columns retain their registered entry order.
+    // Families prioritize entry lookup and label saved materials; they do not constrain the execution graph.
     private static final class RouteCache {
 
         final CachedRoute[] routes;
         final int[] entryOrder;
+        final int[] displayOrder;
         final ChainLink[] links;
         final int[][] familyEntries;
         final String[] familyNames;
@@ -1312,9 +1364,10 @@ public final class BottledChaosRecipeProcessor {
         final BottledChaosChainPlanner.Stage[] stages;
         final List<Map<Object, int[]>> suppliers = new ArrayList<>();
 
-        RouteCache(CachedRoute[] routes, int[] entryOrder, ChainLink[] links) {
+        RouteCache(CachedRoute[] routes, int[] entryOrder, int[] displayOrder, ChainLink[] links) {
             this.routes = routes;
             this.entryOrder = entryOrder;
+            this.displayOrder = displayOrder;
             this.links = links;
             stages = new BottledChaosChainPlanner.Stage[routes.length];
             for (int entry = 0; entry < routes.length; entry++) {
@@ -1359,14 +1412,15 @@ public final class BottledChaosRecipeProcessor {
             }
         }
 
-        private Map<Object, Long> collectAvailableInputs(int family, ItemStack[] items, FluidStack[] fluids,
+        private Map<Object, Long> collectAvailableInputs(long routeMask, ItemStack[] items, FluidStack[] fluids,
             Set<TST_ItemID> virtualItems) {
             Map<Object, Long> available = new LinkedHashMap<>();
             if (items != null) for (ItemStack stack : items) {
                 if (stack == null || stack.stackSize < 0) continue;
                 ItemData association = GTOreDictUnificator.getAssociation(stack);
                 Set<TST_ItemID> matching = new LinkedHashSet<>();
-                for (int entry : familyEntries[family]) {
+                for (int entry : entryOrder) {
+                    if (!routes[entry].isAuthorized(routeMask)) continue;
                     for (Requirement input : routes[entry].data.itemRequirements)
                         if (input.matches(association, stack)) matching.add(input.key);
                 }
@@ -1379,13 +1433,14 @@ public final class BottledChaosRecipeProcessor {
             if (fluids != null) for (FluidStack stack : fluids) {
                 if (stack == null || stack.amount <= 0) continue;
                 FluidId key = FluidId.create(stack);
-                if (isRequiredInput(family, key)) available.merge(key, (long) stack.amount, Math::addExact);
+                if (isRequiredInput(routeMask, key)) available.merge(key, (long) stack.amount, Math::addExact);
             }
             return available;
         }
 
-        private boolean isRequiredInput(int family, Object key) {
-            for (int entry : familyEntries[family]) {
+        private boolean isRequiredInput(long routeMask, Object key) {
+            for (int entry : entryOrder) {
+                if (!routes[entry].isAuthorized(routeMask)) continue;
                 RecipeData data = routes[entry].data;
                 if (data.inputs.containsKey(key) || data.catalysts.containsKey(key)) return true;
             }
@@ -1400,10 +1455,9 @@ public final class BottledChaosRecipeProcessor {
             return false;
         }
 
-        private boolean hasAuthorizedCacheConsumer(int family, long mask, Object key) {
+        private boolean hasAuthorizedCacheConsumer(long mask, Object key) {
             for (ChainLink link : links) {
-                if (familyOfEntry[link.target] == family && link.key.equals(key)
-                    && routes[link.target].isAuthorized(mask)) return true;
+                if (link.key.equals(key) && routes[link.target].isAuthorized(mask)) return true;
             }
             return false;
         }
@@ -1444,7 +1498,9 @@ public final class BottledChaosRecipeProcessor {
             parameters.heatOverclocks(
                 key.map(),
                 key.requirements()
-                    .heat()),
+                    .heat(),
+                key.requirements()
+                    .casingTier()),
             parameters.overclockLimitAlternatives(key.map()));
     }
 
@@ -1541,7 +1597,7 @@ public final class BottledChaosRecipeProcessor {
             return null;
         }
 
-        default int heatOverclocks(RecipeMap<?> map, int requiredHeat) {
+        default int heatOverclocks(RecipeMap<?> map, int requiredHeat, int requiredCasingTier) {
             return 0;
         }
 
@@ -1699,7 +1755,7 @@ public final class BottledChaosRecipeProcessor {
      * and grouped processing times. Lookup identities do not remove any displayed material.
      */
     @Desugar
-    public record DisplayRecipe(int routeIndex, long requiredTagMask, ItemStack[] inputAlternatives,
+    public record DisplayRecipe(int routeIndex, int displayOrder, long requiredTagMask, ItemStack[] inputAlternatives,
         Object[] lookupInputs, Object[] lookupOutputs, long baseEUt, List<ItemStackLong> itemInputs,
         List<FluidStackLong> fluidInputs, List<RecipeMapDuration> processingTimes, Plan plan) {}
 

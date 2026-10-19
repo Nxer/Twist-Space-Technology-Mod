@@ -66,6 +66,7 @@ public final class BottledChaosTitaniumRecipes {
             catalog.markRecipe(FluidHeater, BauxiteSlurry, HeatedBauxiteSlurry, -1),
             catalog.markRecipe(LargeChemicalReactor, HeatedBauxiteSlurry, BauxiteSlagDust, -1),
             catalog.markRecipe(CentrifugeNonCell, BauxiteSlagDust, RutileDust, -1));
+        catalog.orderDisplayRecipes("titanium", IlmeniteDust, BauxiteDust, RutileDust);
 
         // 4. Bauxite coproducts: recover sluice metals and decompose the remaining mineral compounds.
         catalog.registerChainOutputDecomposition("titanium", CentrifugeNonCell, SluiceJuice, IronDust, -1);

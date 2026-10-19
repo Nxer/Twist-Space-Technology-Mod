@@ -55,6 +55,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosR
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosExoticMatterRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosFakeRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosIndiumRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosIsaMillRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosKevlarRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosLanthanideRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosNaquadahRecipes;
@@ -219,7 +220,8 @@ public class RecipeLoader {
             BottledChaosPurifiedWaterRecipes.registerRecipeChains(catalog);
             BottledChaosExoticMatterRecipes.registerRecipeChains(catalog);
             BottledChaosAdvancedMaterialRecipes.registerRecipeChains(catalog);
-            BottledChaosIndiumRecipes.registerCombRecipeChain(catalog);
+            BottledChaosIndiumRecipes.registerCombRecipeChains(catalog);
+            BottledChaosIsaMillRecipes.registerRecipeChains(catalog);
             BottledChaosPlatinumRecipes.registerCombRecipeChains(catalog);
             catalog.registerDeferredReagents(AmmoniaGas);
             catalog.registerInputSyntheses(

@@ -36,6 +36,7 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.util.GTUtility;
 import gregtech.common.tileentities.machines.multi.purification.MTEPurificationPlant;
+import kubatech.loaders.DEFCRecipes;
 
 /** Startup machine directory and per-controller pool inventory; no runtime registry scans. */
 public final class BottledChaosMachineConfiguration implements MachineParameters {
@@ -540,8 +541,10 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
         }
 
         @Override
-        public int heatOverclocks(RecipeMap<?> map, int requiredHeat) {
+        public int heatOverclocks(RecipeMap<?> map, int requiredHeat, int requiredCasingTier) {
             var profile = profile(map);
+            if (profile != null && map == DEFCRecipes.fusionCraftingRecipes)
+                return Math.max(0, profile.casingTier() - requiredCasingTier);
             return profile == null ? 0 : profile.heatOverclocks();
         }
 

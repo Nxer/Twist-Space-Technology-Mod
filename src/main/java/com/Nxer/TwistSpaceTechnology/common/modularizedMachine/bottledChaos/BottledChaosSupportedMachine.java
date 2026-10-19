@@ -95,7 +95,8 @@ public enum BottledChaosSupportedMachine {
     MTEMEGA_ALLOY_BLAST_SMELTER("gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.mega.MTEMegaAlloyBlastSmelter", "main"),
     MTEDIGESTER("gtnhlanth.common.tileentity.MTEDigester", "$"),
     MTEDISSOLUTION_TANK("gtnhlanth.common.tileentity.MTEDissolutionTank", "$"),
-    MTEINDUSTRIAL_ARC_FURNACE("kubatech.tileentity.gregtech.multiblock.MTEIndustrialArcFurnace", "main");
+    MTEINDUSTRIAL_ARC_FURNACE("kubatech.tileentity.gregtech.multiblock.MTEIndustrialArcFurnace", "main"),
+    MTEDEFUSION_CRAFTER("kubatech.tileentity.gregtech.multiblock.MTEDEFusionCrafter", "main");
     // spotless:on
 
     final String className;

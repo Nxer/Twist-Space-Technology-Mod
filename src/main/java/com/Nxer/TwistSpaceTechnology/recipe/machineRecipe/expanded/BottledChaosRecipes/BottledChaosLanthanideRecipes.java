@@ -268,7 +268,7 @@ public final class BottledChaosLanthanideRecipes {
             catalog.markRecipe(Digester, SamariumOreConcentrateDust, MuddySamariumRareEarthSolution, -1),
             samariumSolutionProcessing);
         catalog.registerOutputDecomposition(CentrifugeNonCell, DephosphatedSamariumConcentrateDust, SamariumDust, -1);
-        catalog.setQueryMarkers("samarium", new Object[] { SamariumOreConcentrateDust }, new Object[] { SamariumDust });
+        catalog.setQueryMarkers("samarium", new Object[] { SamariumOreConcentrateDust }, new Object[] { SamariumDust, CeriumDioxideDust, CeriumRichMixtureDust });
 
         catalog.setQueryMarkers("bastnasite",
             new Object[] { BastnasiteDust, RoastedRareEarthOxidesDust, SamaricRareEarthConcentrateDust, SamariumOreConcentrateDust },
@@ -276,6 +276,9 @@ public final class BottledChaosLanthanideRecipes {
         catalog.setQueryMarkers("monazite",
             new Object[] { MonaziteDust, DilutedMonaziteMud, AcidicMonaziteDust, NitricMonaziteLeachedConcentrate },
             new Object[] { DilutedMonaziteMud, HafniumDust, ZirconiumDust, ThoriumDust, AcidicMonaziteDust, UraniumDust, Uranium235Dust, CeriumDioxideDust, NitricMonaziteLeachedConcentrate, SamariumDust, GadoliniumDust, EuropiumDust });
+        catalog.orderDisplayRecipes("lanthanide", MonaziteDust, DilutedMonaziteMud, AcidicMonaziteDust,
+            NitricMonaziteLeachedConcentrate, BastnasiteDust, RoastedRareEarthOxidesDust, SamaricRareEarthConcentrateDust,
+            SamariumOreConcentrateDust, CeriumRichMixtureDust, CeriumDioxideDust);
 
         // 4. Mineral coproducts and the remaining elemental output branches.
         catalog.registerOutputDecomposition(LargeChemicalReactor, NeodymicRareEarthConcentrateDust, LanthanumChlorideDust, -1);

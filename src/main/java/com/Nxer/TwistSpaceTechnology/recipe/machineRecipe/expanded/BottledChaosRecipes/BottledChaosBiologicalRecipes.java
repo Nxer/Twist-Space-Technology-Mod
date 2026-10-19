@@ -128,6 +128,8 @@ public final class BottledChaosBiologicalRecipes {
         catalog.registerInputSynthesis(LargeChemicalReactor, HydrogenSulfideGas, new Object[] { SulfurDust, HydrogenGas }, 1);
 
         catalog.setQueryMarkers("growth_medium_sterilized", new Object[] { Agar, Mutagen }, null);
+        catalog.setQueryMarkers("stem_cells", null, new Object[] { StemCells, Mutagen });
+        catalog.setQueryMarkers("bio_cells", null, new Object[] { BioCells, Mutagen });
 
         catalog.registerExternalInputs(Agar, StemCells, RawMeatDust, Mutagen);
         // spotless:on

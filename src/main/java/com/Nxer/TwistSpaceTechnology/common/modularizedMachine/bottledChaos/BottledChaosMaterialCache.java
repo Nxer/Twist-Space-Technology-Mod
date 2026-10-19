@@ -14,7 +14,9 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.util.GTUtility.FluidId;
 
-/** Per-hatch, paid intermediate inventory. Only a selected family's compact quantities enter the planner. */
+/**
+ * Per-hatch, paid intermediate inventory shared by every authorized route. Family labels only identify saved buckets.
+ */
 public final class BottledChaosMaterialCache {
 
     private String[] families = new String[0];
@@ -35,18 +37,15 @@ public final class BottledChaosMaterialCache {
         lastEntry = entry;
     }
 
-    public Map<Object, Long> snapshot(String family) {
+    public Map<Object, Long> snapshot() {
         Map<Object, Long> amounts = new LinkedHashMap<>();
-        int index = indexOf(family);
-        if (index >= 0) collect(inventories[index], amounts);
+        for (BottledChaosOutputBuffer inventory : inventories) collect(inventory, amounts);
         return amounts;
     }
 
     /** Merge all families for a bounded Waila summary without changing their stored inventories. */
     public NBTTagCompound getWailaSummary() {
-        Map<Object, Long> amounts = new LinkedHashMap<>();
-        for (BottledChaosOutputBuffer inventory : inventories) collect(inventory, amounts);
-        BottledChaosRecipeProcessor.Plan materials = BottledChaosRecipeProcessor.materialPlan(amounts);
+        BottledChaosRecipeProcessor.Plan materials = BottledChaosRecipeProcessor.materialPlan(snapshot());
         BottledChaosOutputBuffer summary = new BottledChaosOutputBuffer();
         summary.set(materials.itemOutputs(), materials.fluidOutputs());
         return summary.getWailaSummary();
@@ -68,21 +67,24 @@ public final class BottledChaosMaterialCache {
             if (remaining.itemOutputs()
                 .isEmpty()
                 && remaining.fluidOutputs()
-                    .isEmpty())
+                    .isEmpty()) {
+                clearMaterials();
                 return;
+            }
             index = families.length;
             families = Arrays.copyOf(families, index + 1);
             inventories = Arrays.copyOf(inventories, index + 1);
             families[index] = family;
             inventories[index] = new BottledChaosOutputBuffer();
         }
+        clearMaterials();
         inventories[index].set(remaining.itemOutputs(), remaining.fluidOutputs());
     }
 
     /** Newly produced intermediates become available only after the paid job finishes. */
     public void add(String family, BottledChaosOutputBuffer produced) {
         if (produced.isEmpty()) return;
-        Map<Object, Long> amounts = snapshot(family);
+        Map<Object, Long> amounts = snapshot();
         collect(produced, amounts);
         replace(family, BottledChaosRecipeProcessor.materialPlan(amounts));
     }

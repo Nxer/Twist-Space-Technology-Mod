@@ -52,6 +52,7 @@ import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.core.fluids.GTPPFluids;
 import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
 import kubatech.loaders.ArcFurnaceElectrode;
+import kubatech.loaders.BlockLoader;
 import tectech.thing.casing.TTCasingsContainer;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoTunnel;
 
@@ -94,7 +95,7 @@ public final class BottledChaosMachineParameters {
         MOLECULE("GT_TileEntity_MoleculeDeconstructor"), GIANT_DRYER("TST_GiantVacuumDryingFurnace"),
         DEHYDRATOR("MTEIndustrialDehydrator"), MIXER("MTEIndustrialMixer"), THERMAL_CENTRIFUGE("MTEIndustrialThermalCentrifuge"),
         THERMAL_DEVOURER("TST_ThermalEnergyDevourer"), SOLIDIFIER("MTEMassSolidifier"), ISA_MILL("MTEIsaMill"),
-        CRYOGENIC_FREEZER("MTECryogenicFreezer"), ARC_FURNACE("MTEIndustrialArcFurnace"),
+        CRYOGENIC_FREEZER("MTECryogenicFreezer"), ARC_FURNACE("MTEIndustrialArcFurnace"), DE_FUSION("MTEDEFusionCrafter"),
         INDISTINCT_PROTOTYPE("MM_IndistinctTentaclePrototypeMK2"), ADVANCED_BLAST("MTEAdvEBF"),
         GODFORGE_SMELTING("MTESmeltingModule"), HEARTH("MTEExothermicHearth"), SWELEGFYR("TST_SwelegfyrBlastFurnace"),
         CHEMICAL_PLANT("MTEChemicalPlant"), GODFORGE_EXOTIC("MTEExoticModule"), GODFORGE_PLASMA("MTEPlasmaModule"), FOUNDRY("MTEExoFoundry"),
@@ -557,6 +558,10 @@ public final class BottledChaosMachineParameters {
                 value.casingTier = u.quantumTier;
                 value.restrictions = text("catalyst");
             }
+            case DE_FUSION -> {
+                value.casingTier = u.draconicTier;
+                value.heatOverclocks = Math.max(0, u.draconicTier - 1);
+            }
             case FRIDGE -> {
                 value.set(256, 1, 2d / 3);
                 if (u.fridgeTier > 1) {
@@ -609,12 +614,14 @@ public final class BottledChaosMachineParameters {
     static boolean isValidStructure(ItemStack controller, ItemStack[] materials) {
         Machine machine = Machine.find(ItemMachines.getMetaTileEntity(controller));
         if (machine != Machine.BALL_LIGHTNING && machine != Machine.PRECISE_ASSEMBLER
-            && machine != Machine.LASER_ENGRAVER) return true;
+            && machine != Machine.LASER_ENGRAVER
+            && machine != Machine.DE_FUSION) return true;
         Upgrades u = new Upgrades(materials);
         return switch (machine) {
             case BALL_LIGHTNING -> u.coil.getTier() >= HeatingCoilLevel.UMV.getTier();
             case PRECISE_ASSEMBLER -> u.precision >= -1 && u.machineCasing >= 0 && u.glass >= VoltageIndex.EV;
             case LASER_ENGRAVER -> u.laserTier >= 0 && u.glass >= u.laserTier;
+            case DE_FUSION -> u.draconicTier >= 1 && (u.draconicTier <= 3 || u.draconicFusionTier >= 2);
             default -> true;
         };
     }
@@ -737,6 +744,8 @@ public final class BottledChaosMachineParameters {
         int laserParallel;
         int quantumTier = -1;
         int focusingTier = -1;
+        int draconicTier;
+        int draconicFusionTier;
         int magnet = -1;
         long photonSpeed;
         boolean photonPerfect;
@@ -784,6 +793,9 @@ public final class BottledChaosMachineParameters {
                 if (block == gtPlusPlus.core.block.ModBlocks.blockCasings5Misc && meta >= 7 && meta <= 10)
                     quantumTier = meta - 6;
                 if (block == ModBlocks.blockCasings5Misc && meta >= 11 && meta <= 14) focusingTier = meta - 10;
+                if (block == BlockLoader.defcCasingBlock && meta >= 8 && meta <= 12) draconicTier = meta - 7;
+                if (block == GregTechAPI.sBlockCasings4 && (meta == 6 || meta == 8))
+                    draconicFusionTier = meta == 6 ? 1 : 2;
                 if (block == ModBlocks.blockCasingsMisc && (meta == 2 || meta == 3)) cokeTier = meta - 2;
                 if (block == ModBlocks.blockCasingsMisc && meta == 14) basicAlloyCoil = true;
                 if (block == GregTechAPI.sBlockCasings2 && meta == 1) fridgeTier = Math.max(fridgeTier, 1);
@@ -1050,6 +1062,8 @@ public final class BottledChaosMachineParameters {
                 special += (special.isEmpty() ? "" : "; ") + text("upkeep", fluid.getLocalizedName(), fluid.amount);
         if (base != null && base.heatOverclocks() > 0 && machine == Machine.FRIDGE)
             special += "; " + text("perfect_stages", base.heatOverclocks());
+        if (base != null && base.heatOverclocks() > 0 && machine == Machine.DE_FUSION)
+            special = append(special, text("perfect_stages", base.heatOverclocks()));
         if (machine == Machine.QUANTUM && u.quantumTier >= 1)
             special = append(special, text("quantum_tiers", u.quantumTier, u.focusingTier));
         if (base != null && base.maximumOverclocks() >= 0
