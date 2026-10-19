@@ -63,7 +63,7 @@ public final class ValueEnum {
     public static final int GlassTier_LimitLaserHatch_MagneticDrivePressureFormer = Config.GlassTier_LimitLaserHatch_MagneticDrivePressureFormer
         > 0 && Config.GlassTier_LimitLaserHatch_MagneticDrivePressureFormer <= 12
             ? Config.GlassTier_LimitLaserHatch_MagneticDrivePressureFormer
-            : 11;
+            : 10;
     public static final int CoilTier_EnablePerfectOverclockExtruderMode_MagneticDrivePressureFormer = Config.CoilTier_EnablePerfectOverclockExtruderMode_MagneticDrivePressureFormer;
 
     // endregion
