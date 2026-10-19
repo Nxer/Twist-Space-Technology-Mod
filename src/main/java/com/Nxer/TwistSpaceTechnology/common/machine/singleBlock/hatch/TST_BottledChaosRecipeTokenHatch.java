@@ -233,7 +233,7 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
             int boundSlots = job.getInteger("boundSlots");
             if (boundSlots != 0) currentTip.add(getBoundInputText(boundSlots));
             long eut = job.getLong("eut");
-            double inputPower = job.getDouble("inputPower");
+            long capacity = job.getLong("capacity");
             byte energyTier = (byte) job.getLong("energyTier");
             // #tr tst.bottledchaos.credential_hatch.power_share
             // # Total usable power share: %s%%
@@ -252,10 +252,8 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
                     + " | "
                     + StatCollector.translateToLocalFormatted(
                         "tst.bottledchaos.credential_hatch.power_share",
-                        String.format(
-                            Locale.ROOT,
-                            "%.2f",
-                            inputPower > 0 ? Math.min(100, 100.0 * eut / inputPower) : 0)));
+                        String
+                            .format(Locale.ROOT, "%.2f", capacity > 0 ? 100.0 * job.getLong("share") / capacity : 0)));
             if (duration > 0) {
                 currentTip.add(GTWaila.getMachineProgressString(duration, job.getInteger("progress")));
             }

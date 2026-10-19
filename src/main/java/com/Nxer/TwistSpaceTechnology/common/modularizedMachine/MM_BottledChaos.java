@@ -838,7 +838,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                     && ItemBottledChaosCredential.isBound(installedCredentials[slot])
                         ? (long) ItemBottledChaosCredential
                             .getRequiredWeight(ItemBottledChaosCredential.getRouteMask(installedCredentials[slot]))
-                            * (Integer.bitCount(getInputPeerMask(slot)) + 1)
+                            * (activeConcentratedPower ? Integer.bitCount(getInputPeerMask(slot)) + 1 : 1)
                         : 0;
             }
         }
@@ -1976,8 +1976,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             "eut",
             lEUt < 0 && thread.progress < thread.duration
                 && "GT5U.gui.text.status.active".equals(job.getString("status")) ? thread.eut : 0);
-        // Normalize the display against GT's practical recipe power, excluding its 1/16 cable-loss headroom.
-        job.setDouble("inputPower", Math.max(0, inputPower) * 15.0 / 16.0);
+        job.setLong("share", allocatedShares[slot]);
+        job.setLong("capacity", capacity);
         job.setLong("energyTier", getInputVoltageTier());
         job.setTag("outputs", thread.outputs.getWailaSummary());
         return job;
