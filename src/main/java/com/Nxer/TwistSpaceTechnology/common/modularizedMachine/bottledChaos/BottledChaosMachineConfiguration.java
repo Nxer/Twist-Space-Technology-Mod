@@ -398,7 +398,7 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
 
         @Override
         public void configureSource(RecipeMap<?> map, long recipeVoltage, int requiredHeat, int requiredGlassTier,
-            ItemStack requiredSpecialInput, boolean heavyCentrifuge) {
+            ItemStack requiredSpecialInput, boolean heavyCentrifuge, long requiredSourceVoltage, long fusionThreshold) {
             Integer slot = poolIndexes.get(map);
             if (slot == null || debug[slot] || controllers[slot] == null) return;
             configured[slot] = true;
@@ -408,7 +408,9 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
                 requiredHeat,
                 requiredGlassTier,
                 requiredSpecialInput == null ? null : GTUtility.ItemId.createNoCopy(requiredSpecialInput),
-                heavyCentrifuge);
+                heavyCentrifuge,
+                requiredSourceVoltage,
+                fusionThreshold);
             currentFailures[slot] = null;
             currentProfiles[slot] = profiles.computeIfAbsent(
                 key,
@@ -428,12 +430,20 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
                     requiredGlassTier,
                     requiredSpecialInput,
                     heavyCentrifuge,
-                    failure -> currentFailures[slot] = failure));
+                    failure -> currentFailures[slot] = failure,
+                    requiredSourceVoltage,
+                    fusionThreshold));
         }
 
         private BottledChaosMachineParameters.Profile profile(RecipeMap<?> map) {
             Integer slot = poolIndexes.get(map);
             return slot == null ? null : currentProfiles[slot];
+        }
+
+        @Override
+        public long maximumSourcePower(RecipeMap<?> map) {
+            var profile = profile(map);
+            return profile == null ? Long.MAX_VALUE : profile.maximumSourcePower();
         }
 
         @Override
@@ -595,7 +605,7 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
 
     @Desugar
     private record SourceKey(int pool, long voltage, int heat, int glass, GTUtility.ItemId special,
-        boolean heavyCentrifuge) {}
+        boolean heavyCentrifuge, long sourceVoltage, long fusionThreshold) {}
 
     public void save(NBTTagCompound nbt) {
         loadPendingMachines();

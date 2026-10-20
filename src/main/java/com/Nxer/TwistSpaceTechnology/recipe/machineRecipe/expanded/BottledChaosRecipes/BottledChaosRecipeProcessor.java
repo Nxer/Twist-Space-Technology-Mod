@@ -70,6 +70,7 @@ public final class BottledChaosRecipeProcessor {
             // 4. Balance, expand and validate the routes, preserving their registered entry indexes.
             RecipeData[] preparedRoutes = catalog.composeRecipeChains();
             Set<RecipeMap<?>> selectedPools = new LinkedHashSet<>();
+            selectedPools.add(RecipeMaps.fusionRecipes);
             for (RecipeData route : preparedRoutes)
                 for (TimeKey time : route.times.keySet()) selectedPools.add(time.map());
             BottledChaosMachineConfiguration.initialize(selectedPools.toArray(new RecipeMap<?>[0]));
@@ -1532,7 +1533,7 @@ public final class BottledChaosRecipeProcessor {
         return BottledChaosOverclock.calculateNormalizedDuration(
             rawTicks,
             key.eut(),
-            recipeVoltage,
+            Math.min(recipeVoltage, parameters.maximumSourcePower(key.map())),
             parameters.parallel(key.map()),
             key.recipeTicks() / sourceDuration * parameters.quantitySpeedMultiplier(key.map()),
             parameters.euMultiplier(
@@ -1586,7 +1587,9 @@ public final class BottledChaosRecipeProcessor {
                 : requirements.specialInput()
                     .getItemStack(1)
                     .copy(),
-            requirements.heavyCentrifuge());
+            requirements.heavyCentrifuge(),
+            requirements.requiredSourceVoltage(),
+            requirements.fusionThreshold());
     }
 
     /** Source-machine hooks use the final serial power without rebuilding material routes. */
@@ -1601,7 +1604,12 @@ public final class BottledChaosRecipeProcessor {
         }
 
         default void configureSource(RecipeMap<?> map, long recipeVoltage, int requiredHeat,
-            int requiredGlassTier, ItemStack requiredSpecialInput, boolean heavyCentrifuge) {}
+            int requiredGlassTier, ItemStack requiredSpecialInput, boolean heavyCentrifuge, long requiredSourceVoltage,
+            long fusionThreshold) {}
+
+        default long maximumSourcePower(RecipeMap<?> map) {
+            return Long.MAX_VALUE;
+        }
 
         default boolean canProcess(RecipeMap<?> map, long recipeVoltage, int requiredHeat, int requiredGlassTier,
             int requiredCasingTier, int requiredCompressionTier, boolean heavyCentrifuge, int requiredPlasmaTier,

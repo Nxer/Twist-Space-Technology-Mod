@@ -160,7 +160,8 @@ final class BottledChaosRecipeSupport {
                 : 0,
             map == TecTechRecipeMaps.godforgePlasmaRecipes
                 && recipe.getMetadataOrDefault(GTRecipeConstants.FOG_PLASMA_MULTISTEP, false),
-            map == RecipeMaps.fusionRecipes ? recipe.mEUt : 0);
+            map == RecipeMaps.fusionRecipes ? recipe.mEUt : 0,
+            map == RecipeMaps.fusionRecipes ? recipe.getMetadataOrDefault(GTRecipeConstants.FUSION_THRESHOLD, 0L) : 0);
     }
 
     public static double addDuration(double current, double perBatch, long batches) {
@@ -549,9 +550,10 @@ final class BottledChaosRecipeSupport {
     /** Only immutable source requirements survive startup; radiation is satisfied by the packaged radio hatch. */
     @Desugar
     record SourceRequirements(int heat, int glassTier, int casingTier, int compressionTier, boolean heavyCentrifuge,
-        TST_ItemID specialInput, int plasmaTier, boolean multiStepPlasma, long requiredSourceVoltage) {
+        TST_ItemID specialInput, int plasmaTier, boolean multiStepPlasma, long requiredSourceVoltage,
+        long fusionThreshold) {
 
-        private static final SourceRequirements NONE = new SourceRequirements(0, 0, 0, 0, false, null, 0, false, 0);
+        private static final SourceRequirements NONE = new SourceRequirements(0, 0, 0, 0, false, null, 0, false, 0, 0);
     }
 
     /**

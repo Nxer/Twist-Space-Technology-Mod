@@ -24,6 +24,8 @@ import com.github.bsideup.jabel.Desugar;
 
 import bartworks.API.recipe.BartWorksRecipeMaps;
 import goodgenerator.blocks.tileEntity.MTEPreciseAssembler;
+import goodgenerator.blocks.tileEntity.base.MTELargeFusionComputer;
+import goodgenerator.blocks.tileEntity.base.MTELargeFusionComputerPP;
 import goodgenerator.loader.Loaders;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.GTValues;
@@ -43,6 +45,7 @@ import gregtech.api.util.GTUtility;
 import gregtech.api.util.GlassTier;
 import gregtech.common.blocks.BlockCyclotronCoils;
 import gregtech.common.blocks.ItemMachines;
+import gregtech.common.tileentities.machines.multi.MTEFusionComputer;
 import gregtech.common.tileentities.machines.multi.MTEIndustrialElectromagneticSeparator;
 import gregtech.common.tileentities.machines.multi.MTENaquadahFuelRefinery;
 import gregtech.common.tileentities.machines.multi.foundry.FoundryData;
@@ -50,6 +53,7 @@ import gregtech.common.tools.ToolTurbineHuge;
 import gregtech.common.tools.ToolTurbineLarge;
 import gregtech.common.tools.ToolTurbineNormal;
 import gregtech.common.tools.ToolTurbineSmall;
+import gregtech.nei.formatter.FusionSpecialValueFormatter;
 import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.core.fluids.GTPPFluids;
 import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
@@ -67,7 +71,7 @@ public final class BottledChaosMachineParameters {
         double powerMultiplier, int maximumRecipeTier, long heat, int glassTier, FluidStack[] upkeep,
         String restrictions, String special, int maximumOverclocks, int perfectOverclocks, int casingTier,
         int compressionTier, double minimumSourceDuration, boolean heavyCentrifuge, int plasmaTier,
-        boolean multiStepPlasma, int startupReserveSeconds) {}
+        boolean multiStepPlasma, int startupReserveSeconds, long maximumSourcePower) {}
 
     /** One case per machine, with mode-specific pools handled explicitly below. */
     private enum Machine {
@@ -108,7 +112,7 @@ public final class BottledChaosMachineParameters {
         PURIFICATION_PLASMA("MTEPurificationUnitPlasmaHeater"), PURIFICATION_BARYONIC("MTEPurificationUnitBaryonicPerfection"),
         PURIFICATION_UV("MTEPurificationUnitUVTreatment"), QUANTUM("MTEQuantumForceTransformer"),
         FRIDGE("MTEEndothermicFridge"), NEUTRON("MTENeutronActivator"), MODULAR_NEUTRON("MM_LargeNeutronOscillator"),
-        NAQUADAH_REFINERY("MTENaquadahFuelRefinery");
+        NAQUADAH_REFINERY("MTENaquadahFuelRefinery"), FUSION("MTEFusionComputer");
         // spotless:on
 
         private final String type;
@@ -118,6 +122,7 @@ public final class BottledChaosMachineParameters {
         }
 
         static Machine find(IMetaTileEntity controller) {
+            if (controller instanceof MTEFusionComputer || controller instanceof MTELargeFusionComputer) return FUSION;
             String type = controller.getClass()
                 .getSimpleName();
             for (Machine machine : values()) if (machine.type.equals(type)) return machine;
@@ -186,13 +191,16 @@ public final class BottledChaosMachineParameters {
             requiredGlassTier,
             requiredSpecialInput,
             heavyCentrifuge,
-            ignored -> {});
+            ignored -> {},
+            0,
+            0);
     }
 
     public static Profile evaluate(ItemStack controller, Structure structure, RecipeMap<?> pool, long recipeVoltage,
         long inputVoltage, long inputPower, ItemStack[] items, FluidStack[] fluids, double masterTime, double masterEU,
         long masterParallel, int requiredHeat, int requiredGlassTier, ItemStack requiredSpecialInput,
-        boolean heavyCentrifuge, Consumer<CheckRecipeResult> failure) {
+        boolean heavyCentrifuge, Consumer<CheckRecipeResult> failure, long requiredSourceVoltage,
+        long fusionThreshold) {
         if (controller == null || pool == null
             || recipeVoltage <= 0
             || inputVoltage <= 0
@@ -230,6 +238,26 @@ public final class BottledChaosMachineParameters {
         value.glassTier = u.glass;
         value.heat = structure == null ? 0 : structure.heat();
         switch (machine) {
+            case FUSION -> {
+                if (pool != RecipeMaps.fusionRecipes) return null;
+                int tier;
+                boolean advanced;
+                if (original instanceof MTELargeFusionComputer fusion) {
+                    tier = fusion.tier();
+                    value.parallel = (long) fusion.getMaxPara() * fusion.extraPara(fusionThreshold);
+                    value.maximumSourcePower = GTValues.V[tier] * fusion.getMaxPara() * fusion.extraPara(100);
+                    advanced = fusion instanceof MTELargeFusionComputerPP;
+                } else {
+                    tier = ((MTEFusionComputer) original).tier();
+                    value.maximumSourcePower = GTValues.V[tier];
+                    advanced = tier >= VoltageIndex.UHV;
+                }
+                value.maximumRecipeTier = tier;
+                value.powerMultiplier = value.timeDivisor = advanced ? 4 : 2;
+                value.maximumOverclocks = Math.max(
+                    0,
+                    tier - 5 - FusionSpecialValueFormatter.getFusionTier(fusionThreshold, requiredSourceVoltage));
+            }
             case AUTO_CRAFTER -> value.set(2L * Math.max(1, t), 1, 1d / 3);
             case BREWERY -> value.set(4L * t, 1, 2d / 3);
             case CHEMICAL_BATH -> value.set(4L * t, 1, 0.2);
@@ -694,6 +722,7 @@ public final class BottledChaosMachineParameters {
         int plasmaTier;
         boolean multiStepPlasma;
         int startupReserveSeconds = 1;
+        long maximumSourcePower = Long.MAX_VALUE;
         double heatDiscount;
         boolean requiresHeat;
 
@@ -728,7 +757,8 @@ public final class BottledChaosMachineParameters {
                 heavyCentrifuge,
                 plasmaTier,
                 multiStepPlasma,
-                startupReserveSeconds);
+                startupReserveSeconds,
+                maximumSourcePower);
         }
     }
 

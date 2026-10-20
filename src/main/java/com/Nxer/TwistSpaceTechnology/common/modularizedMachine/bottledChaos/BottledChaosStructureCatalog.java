@@ -28,6 +28,7 @@ import com.github.bsideup.jabel.Desugar;
 import com.gtnewhorizon.structurelib.structure.IStructureElement;
 import com.gtnewhorizon.structurelib.structure.StructureUtility;
 
+import goodgenerator.blocks.tileEntity.base.MTELargeFusionComputer;
 import gregtech.api.GregTechAPI;
 import gregtech.api.casing.Casings;
 import gregtech.api.enums.HeatingCoilLevel;
@@ -50,6 +51,7 @@ import gregtech.common.GTDummyWorld;
 import gregtech.common.blocks.ItemMachines;
 import gregtech.common.items.IDMetaTool01;
 import gregtech.common.items.MetaGeneratedTool01;
+import gregtech.common.tileentities.machines.multi.MTEFusionComputer;
 import gregtech.common.tileentities.machines.multi.purification.MTEPurificationPlant;
 import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
@@ -650,6 +652,23 @@ public final class BottledChaosStructureCatalog {
             default -> {}
         }
         List<Requirement> requirements = dedicatedMaterials(supported, shape);
+        // These fixed hatch counts supply the complete power caps used by the fusion profiles.
+        if (machine instanceof MTEFusionComputer fusion) require(
+            requirements,
+            "fusion_energy_hatches",
+            16,
+            16,
+            false,
+            items(fusionEnergyHatch(fusion.tier())),
+            new ItemStack(fusion.getCasing(), 16, fusion.getCasingMeta()));
+        else if (machine instanceof MTELargeFusionComputer fusion) require(
+            requirements,
+            "fusion_energy_hatches",
+            32,
+            32,
+            false,
+            items(fusionEnergyHatch(fusion.energyHatchTier())),
+            new ItemStack(fusion.getCasingBlock(), 32, fusion.getCasingMeta()));
         groups = moveMixedPhotonUpgrades(supported, parts, requirements, groups);
         if (parts.size() <= 1) throw new IllegalArgumentException("No structure materials");
         return new Rule(
@@ -991,6 +1010,17 @@ public final class BottledChaosStructureCatalog {
 
     private static ItemStack casing(Casings casing, int positions) {
         return new ItemStack(casing.getBlock(), positions, casing.getBlockMeta());
+    }
+
+    private static ItemList fusionEnergyHatch(int tier) {
+        return switch (tier) {
+            case VoltageIndex.LuV -> ItemList.Hatch_Energy_LuV;
+            case VoltageIndex.ZPM -> ItemList.Hatch_Energy_ZPM;
+            case VoltageIndex.UV -> ItemList.Hatch_Energy_UV;
+            case VoltageIndex.UHV -> ItemList.Hatch_Energy_UHV;
+            case VoltageIndex.UEV -> ItemList.Hatch_Energy_UEV;
+            default -> throw new IllegalArgumentException("Unsupported fusion energy hatch tier " + tier);
+        };
     }
 
     private static ItemStack[] items(ItemList... entries) {
