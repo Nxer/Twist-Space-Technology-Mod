@@ -151,6 +151,22 @@ public final class BottledChaosRecipeProcessor {
         return Arrays.copyOf(result, size);
     }
 
+    /** Waila groups final targets before other key outputs, then unmarked coproducts. */
+    public static Map<Object, Integer> outputPriorities(long routeMask) {
+        RouteCache snapshot = cache;
+        if (snapshot == null || routeMask == 0) return Collections.emptyMap();
+        Map<Object, Integer> priorities = new LinkedHashMap<>();
+        for (int entry : snapshot.entryOrder) {
+            CachedRoute route = snapshot.routes[entry];
+            if (!route.isAuthorized(routeMask)) continue;
+            for (Object key : route.lookupOutputs) priorities.putIfAbsent(key, 1);
+            for (Object key : route.targetOutputs) {
+                if (!snapshot.hasAuthorizedConsumer(entry, routeMask, key)) priorities.put(key, 0);
+            }
+        }
+        return priorities;
+    }
+
     /** Integer final-product targets determine upstream supply; graph cycles require already available seed. */
     public static PreparedPlan prepareExecution(long routeMask, int entry, int externalBatches, ItemStack[] items,
         FluidStack[] fluids, MachineParameters parameters, BottledChaosMaterialCache materials) {

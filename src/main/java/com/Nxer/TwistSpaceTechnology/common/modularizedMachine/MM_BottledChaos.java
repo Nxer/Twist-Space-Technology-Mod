@@ -1978,7 +1978,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         job.setLong("share", allocatedShares[slot]);
         job.setLong("capacity", capacity);
         job.setLong("energyTier", getInputVoltageTier());
-        job.setTag("outputs", thread.outputs.getWailaSummary());
+        job.setTag(
+            "outputs",
+            thread.outputs
+                .getWailaSummary(ItemBottledChaosCredential.getRouteMask(thread.credential), thread.pendingCache));
         return job;
     }
 

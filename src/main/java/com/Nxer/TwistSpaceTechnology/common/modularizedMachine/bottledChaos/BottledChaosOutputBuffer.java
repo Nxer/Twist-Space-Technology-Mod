@@ -2,7 +2,9 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,6 +14,8 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.FluidStackLong;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.TSTMEOutputTransaction;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import appeng.api.storage.data.IAEFluidStack;
 import appeng.api.storage.data.IAEItemStack;
@@ -28,6 +32,8 @@ import gregtech.common.tileentities.machines.outputme.MTEHatchOutputME;
 
 /** Long quantities stay compact in memory and NBT, including while outputs are blocked. */
 public final class BottledChaosOutputBuffer {
+
+    public static final int WAILA_OUTPUT_LIMIT = 20;
 
     private final List<ItemStackLong> items = new ArrayList<>();
     private final List<FluidStackLong> fluids = new ArrayList<>();
@@ -59,33 +65,58 @@ public final class BottledChaosOutputBuffer {
         }
     }
 
-    public NBTTagCompound getWailaSummary() {
+    public NBTTagCompound getWailaSummary(long routeMask) {
         NBTTagCompound tag = new NBTTagCompound();
         tag.setInteger("total", items.size() + fluids.size());
         NBTTagList outputs = new NBTTagList();
-        int itemCount = Math.min(10, items.size());
-        for (int i = 0; i < itemCount; i++) {
-            ItemStackLong output = items.get(i);
-            NBTTagCompound entry = new NBTTagCompound();
-            entry.setTag(
-                "item",
-                output.itemStack()
-                    .writeToNBT(new NBTTagCompound()));
-            entry.setLong("amount", output.stackSize());
-            outputs.appendTag(entry);
-        }
-        for (int i = 0; i < Math.min(10 - itemCount, fluids.size()); i++) {
-            FluidStackLong output = fluids.get(i);
-            NBTTagCompound entry = new NBTTagCompound();
-            entry.setTag(
-                "fluid",
-                output.fluidStack()
-                    .writeToNBT(new NBTTagCompound()));
-            entry.setLong("amount", output.amount());
-            outputs.appendTag(entry);
+        Map<Object, Integer> priorities = isEmpty() ? Collections.emptyMap()
+            : BottledChaosRecipeProcessor.outputPriorities(routeMask);
+        for (int priority = 0; priority < 3 && outputs.tagCount() < WAILA_OUTPUT_LIMIT; priority++) {
+            for (ItemStackLong output : items) {
+                if (outputs.tagCount() >= WAILA_OUTPUT_LIMIT) break;
+                if (priorities.getOrDefault(TST_ItemID.create(output.itemStack()), 2) != priority) continue;
+                NBTTagCompound entry = new NBTTagCompound();
+                entry.setTag(
+                    "item",
+                    output.itemStack()
+                        .writeToNBT(new NBTTagCompound()));
+                entry.setLong("amount", output.stackSize());
+                outputs.appendTag(entry);
+            }
+            for (FluidStackLong output : fluids) {
+                if (outputs.tagCount() >= WAILA_OUTPUT_LIMIT) break;
+                if (priorities.getOrDefault(GTUtility.FluidId.create(output.fluidStack()), 2) != priority) continue;
+                NBTTagCompound entry = new NBTTagCompound();
+                entry.setTag(
+                    "fluid",
+                    output.fluidStack()
+                        .writeToNBT(new NBTTagCompound()));
+                entry.setLong("amount", output.amount());
+                outputs.appendTag(entry);
+            }
         }
         tag.setTag("entries", outputs);
         return tag;
+    }
+
+    /** Show normal outputs and this job's newly produced cache materials as one bounded list. */
+    public NBTTagCompound getWailaSummary(long routeMask, BottledChaosOutputBuffer pendingCache) {
+        Map<Object, Long> amounts = new LinkedHashMap<>();
+        collectAmounts(amounts);
+        pendingCache.collectAmounts(amounts);
+        var plan = BottledChaosRecipeProcessor.materialPlan(amounts);
+        BottledChaosOutputBuffer summary = new BottledChaosOutputBuffer();
+        summary.set(plan.itemOutputs(), plan.fluidOutputs());
+        return summary.getWailaSummary(routeMask);
+    }
+
+    void collectAmounts(Map<Object, Long> amounts) {
+        for (ItemStackLong output : items) {
+            amounts.merge(TST_ItemID.create(output.itemStack()), output.stackSize(), Math::addExact);
+        }
+        for (FluidStackLong output : fluids) {
+            amounts.merge(GTUtility.FluidId.create(output.fluidStack()), output.amount(), Math::addExact);
+        }
     }
 
     public NBTTagCompound save() {

@@ -8,11 +8,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor;
-import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.util.GTUtility.FluidId;
 
 /**
  * Per-hatch, paid intermediate inventory shared by every authorized route. Family labels only identify saved buckets.
@@ -39,25 +37,16 @@ public final class BottledChaosMaterialCache {
 
     public Map<Object, Long> snapshot() {
         Map<Object, Long> amounts = new LinkedHashMap<>();
-        for (BottledChaosOutputBuffer inventory : inventories) collect(inventory, amounts);
+        for (BottledChaosOutputBuffer inventory : inventories) inventory.collectAmounts(amounts);
         return amounts;
     }
 
     /** Merge all families for a bounded Waila summary without changing their stored inventories. */
-    public NBTTagCompound getWailaSummary() {
+    public NBTTagCompound getWailaSummary(long routeMask) {
         BottledChaosRecipeProcessor.Plan materials = BottledChaosRecipeProcessor.materialPlan(snapshot());
         BottledChaosOutputBuffer summary = new BottledChaosOutputBuffer();
         summary.set(materials.itemOutputs(), materials.fluidOutputs());
-        return summary.getWailaSummary();
-    }
-
-    private static void collect(BottledChaosOutputBuffer buffer, Map<Object, Long> amounts) {
-        for (var item : buffer.itemOutputs()) {
-            amounts.merge(TST_ItemID.create(item.itemStack()), item.stackSize(), Math::addExact);
-        }
-        for (var fluid : buffer.fluidOutputs()) {
-            amounts.merge(FluidId.create(fluid.fluidStack()), fluid.amount(), Math::addExact);
-        }
+        return summary.getWailaSummary(routeMask);
     }
 
     /** Called once after real inputs and output reservations have committed. */
@@ -85,7 +74,7 @@ public final class BottledChaosMaterialCache {
     public void add(String family, BottledChaosOutputBuffer produced) {
         if (produced.isEmpty()) return;
         Map<Object, Long> amounts = snapshot();
-        collect(produced, amounts);
+        produced.collectAmounts(amounts);
         replace(family, BottledChaosRecipeProcessor.materialPlan(amounts));
     }
 
