@@ -1,8 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos;
 
-import gregtech.api.util.OverclockCalculator;
-
-/** Keeps GT's whole overclocks, with a partial final overclock up to the two-second stopping point. */
+/** Shared source normalization and final execution overclocks. Only final execution has a two-second stop. */
 public final class BottledChaosOverclock {
 
     private static final int MIN_OVERCLOCK_TICKS = 40;
@@ -24,6 +22,76 @@ public final class BottledChaosOverclock {
         public int duration() {
             return duration;
         }
+    }
+
+    /** Normalize original source work once; stochastic limits average costs rather than overclock counts. */
+    public static double calculateNormalizedDuration(long duration, long recipeEUt, long targetEUt, long parallelLimit,
+        double speedMultiplier, double euMultiplier, double timeDivisor, double powerMultiplier, int maximumOverclocks,
+        int perfectOverclocks, int[] overclockLimitAlternatives) {
+        if (duration <= 0 || recipeEUt <= 0
+            || targetEUt <= 0
+            || parallelLimit <= 0
+            || !Double.isFinite(speedMultiplier)
+            || speedMultiplier <= 0
+            || !Double.isFinite(euMultiplier)
+            || euMultiplier <= 0
+            || maximumOverclocks < -1
+            || perfectOverclocks < 0) {
+            throw new IllegalArgumentException("Invalid source overclock parameters");
+        }
+        validateMultipliers(timeDivisor, powerMultiplier);
+        long parallelTier = 1;
+        int parallelOverclocks = 0;
+        while (parallelTier <= parallelLimit / 4) {
+            parallelTier *= 4;
+            parallelOverclocks++;
+        }
+        // User-defined approximation: 12 parallel grants one 4/4 step and a 12/16 power multiplier.
+        double parallelPower = parallelLimit == parallelTier ? 1 : parallelLimit / (parallelTier * 4.0);
+        double modifiedPower = recipeEUt * euMultiplier * parallelPower;
+        double work = duration / speedMultiplier;
+        if (!Double.isFinite(modifiedPower) || modifiedPower <= 0 || modifiedPower >= Long.MAX_VALUE)
+            throw new ArithmeticException("Recipe power overflow");
+        if (!Double.isFinite(work) || work <= 0) throw new ArithmeticException("Duration overflow");
+        // Modes explicitly disabling overclocks keep their fixed source speed, including at 1/1.
+        if (powerMultiplier == 1) return work;
+        long basePower = (long) Math.ceil(modifiedPower);
+        while (basePower > targetEUt) {
+            basePower = (long) Math.ceil(basePower / powerMultiplier);
+            work *= timeDivisor;
+            if (!Double.isFinite(work)) throw new ArithmeticException("Duration overflow");
+        }
+        // Parallel capacity adds stages independently of the source machine's native overclock limit.
+        // Keep native 4/4 or stronger steps; 2/2 machines still need the parallel capacity's 4/4 steps.
+        long finitePerfect = timeDivisor >= powerMultiplier && timeDivisor >= 4 ? 0
+            : (long) perfectOverclocks + parallelOverclocks;
+        double normalized;
+        if (overclockLimitAlternatives == null || overclockLimitAlternatives.length == 0) {
+            normalized = work / overclockSpeed(
+                basePower,
+                targetEUt,
+                timeDivisor,
+                powerMultiplier,
+                maximumOverclocks < 0 ? -1 : (long) maximumOverclocks + parallelOverclocks,
+                finitePerfect,
+                false);
+        } else {
+            normalized = 0;
+            for (int limit : overclockLimitAlternatives) {
+                if (limit < -1) throw new IllegalArgumentException("Invalid source overclock limit");
+                normalized += work / overclockSpeed(
+                    basePower,
+                    targetEUt,
+                    timeDivisor,
+                    powerMultiplier,
+                    limit < 0 ? -1 : (long) limit + parallelOverclocks,
+                    finitePerfect,
+                    false) / overclockLimitAlternatives.length;
+            }
+        }
+        if (!Double.isFinite(normalized) || normalized <= 0)
+            throw new ArithmeticException("Duration overflow or underflow");
+        return normalized;
     }
 
     public static Result calculate(double basePower, double workTicks, long availablePower, double timeReduction,
@@ -52,38 +120,37 @@ public final class BottledChaosOverclock {
             || Math.ceil(basePower) > availablePower) {
             throw new IllegalArgumentException("Invalid recipe power");
         }
-        if (!Double.isFinite(timeReduction) || timeReduction < 1
-            || !Double.isFinite(powerIncrease)
-            || powerIncrease < 1) {
-            throw new IllegalArgumentException("Invalid overclock parameters");
-        }
+        validateMultipliers(timeReduction, powerIncrease);
         if (timeReduction == 1) return 1;
         if (powerIncrease == 1) return Double.MAX_VALUE;
-        OverclockCalculator calculator = new OverclockCalculator().setRecipeEUt((long) Math.ceil(basePower))
-            .setEUt(availablePower)
-            .setAmperage(1)
-            .setAmperageOC(true)
-            .setParallel(1)
-            .setDuration(1)
-            .setDurationDecreasePerOC(timeReduction)
-            .setEUtIncreasePerOC(powerIncrease);
-        if (powerIncrease > 1) {
-            int powerLimitedOverclocks = 0;
-            double consumption = Math.ceil(basePower);
-            while (consumption <= availablePower / powerIncrease) {
-                consumption *= powerIncrease;
-                powerLimitedOverclocks++;
+        return overclockSpeed(Math.ceil(basePower), availablePower, timeReduction, powerIncrease, -1, 0, true);
+    }
+
+    private static void validateMultipliers(double timeDivisor, double powerMultiplier) {
+        if (!Double.isFinite(timeDivisor) || timeDivisor < 1
+            || !Double.isFinite(powerMultiplier)
+            || powerMultiplier < 1) throw new IllegalArgumentException("Invalid overclock parameters");
+    }
+
+    /** Whole source steps and the master's optional fractional last step follow the same power curve. */
+    private static double overclockSpeed(double basePower, long availablePower, double timeDivisor,
+        double powerMultiplier, long maximumOverclocks, long perfectOverclocks, boolean fractionalLastStep) {
+        double power = basePower;
+        double speed = 1;
+        int count = 0;
+        while (maximumOverclocks < 0 || count < maximumOverclocks) {
+            double nextPower = count < perfectOverclocks ? 4 : powerMultiplier;
+            double nextSpeed = count < perfectOverclocks ? 4 : timeDivisor;
+            if (power > availablePower / nextPower) {
+                if (fractionalLastStep) speed *= Math.pow(
+                    Math.max(1, availablePower / power),
+                    Math.log(nextSpeed) / Math.log(nextPower));
+                break;
             }
-            calculator.setMaxOverclocks(powerLimitedOverclocks);
+            power *= nextPower;
+            speed *= nextSpeed;
+            count++;
         }
-        calculator.setCurrentParallel(1)
-            .calculate();
-        int overclocks = calculator.getPerformedOverclocks();
-        double power = Math.ceil(basePower) * Math.pow(powerIncrease, overclocks);
-        // A fractional step also works when there is not enough power for the next complete tier.
-        double fraction = Math.max(1, Math.min(powerIncrease, availablePower / power));
-        double speed = Math.pow(timeReduction, overclocks)
-            * Math.pow(fraction, Math.log(timeReduction) / Math.log(powerIncrease));
         return Double.isFinite(speed) ? speed : Double.MAX_VALUE;
     }
 }

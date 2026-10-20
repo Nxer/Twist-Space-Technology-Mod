@@ -65,7 +65,7 @@ public final class BottledChaosMachineParameters {
     @Desugar
     public record Profile(long parallel, double euMultiplier, double timeMultiplier, double timeDivisor,
         double powerMultiplier, int maximumRecipeTier, long heat, int glassTier, FluidStack[] upkeep,
-        String restrictions, String special, int maximumOverclocks, int heatOverclocks, int casingTier,
+        String restrictions, String special, int maximumOverclocks, int perfectOverclocks, int casingTier,
         int compressionTier, double minimumSourceDuration, boolean heavyCentrifuge, int plasmaTier,
         boolean multiStepPlasma, int startupReserveSeconds) {}
 
@@ -565,7 +565,7 @@ public final class BottledChaosMachineParameters {
             }
             case DE_FUSION -> {
                 value.casingTier = u.draconicTier;
-                value.heatOverclocks = Math.max(0, u.draconicTier - 1);
+                value.perfectOverclocks = Math.max(0, u.draconicTier - 1);
             }
             case NAQUADAH_REFINERY -> {
                 if (u.refineryCoil < 1) return reject(pool, "casing", u.refineryCoil, 1, failure);
@@ -577,7 +577,7 @@ public final class BottledChaosMachineParameters {
             case FRIDGE -> {
                 value.set(256, 1, 2d / 3);
                 if (u.fridgeTier > 1) {
-                    value.heatOverclocks = 3;
+                    value.perfectOverclocks = 3;
                     value.upkeep = new FluidStack[] { Materials.Eternity.getMolten(20) };
                 }
             }
@@ -603,7 +603,7 @@ public final class BottledChaosMachineParameters {
             var godforge = BottledChaosComplexStructures.godforge(structure);
             long excess = Math.max((godforge == null ? value.heat : godforge.overclockHeat()) - requiredHeat, 0);
             value.euMultiplier *= Math.pow(value.heatDiscount, excess / 900);
-            value.heatOverclocks = (int) Math.min(Integer.MAX_VALUE, excess / 1800);
+            value.perfectOverclocks = (int) Math.min(Integer.MAX_VALUE, excess / 1800);
         }
         // Swelegfyr's operating heat affects discounts and OC, but does not raise its recipe admission limit.
         if (machine == Machine.SWELEGFYR) value.heat = structure.heat() + 100L * Math.max(t - 2, 0);
@@ -611,8 +611,6 @@ public final class BottledChaosMachineParameters {
             return reject(pool, "heat", value.heat, Math.max(1, requiredHeat), failure);
         if (requiredGlassTier > value.glassTier)
             return reject(pool, "glass", value.glassTier, requiredGlassTier, failure);
-        if (value.maximumRecipeTier >= 0 && recipeTier > value.maximumRecipeTier)
-            return reject(pool, "voltage", GTValues.V[value.maximumRecipeTier], recipeVoltage, failure);
         return value.profile();
     }
 
@@ -688,7 +686,7 @@ public final class BottledChaosMachineParameters {
         String restrictions = "";
         String special = "";
         int maximumOverclocks = -1;
-        int heatOverclocks;
+        int perfectOverclocks;
         int casingTier = -1;
         int compressionTier = -1;
         double minimumSourceDuration;
@@ -723,7 +721,7 @@ public final class BottledChaosMachineParameters {
                 restrictions,
                 special,
                 maximumOverclocks,
-                heatOverclocks,
+                perfectOverclocks,
                 casingTier,
                 compressionTier,
                 minimumSourceDuration,
@@ -1076,10 +1074,10 @@ public final class BottledChaosMachineParameters {
         if (base != null && base.upkeep().length > 0 && machine != Machine.SPINMATRON)
             for (FluidStack fluid : base.upkeep())
                 special += (special.isEmpty() ? "" : "; ") + text("upkeep", fluid.getLocalizedName(), fluid.amount);
-        if (base != null && base.heatOverclocks() > 0 && machine == Machine.FRIDGE)
-            special += "; " + text("perfect_stages", base.heatOverclocks());
-        if (base != null && base.heatOverclocks() > 0 && machine == Machine.DE_FUSION)
-            special = append(special, text("perfect_stages", base.heatOverclocks()));
+        if (base != null && base.perfectOverclocks() > 0 && machine == Machine.FRIDGE)
+            special += "; " + text("perfect_stages", base.perfectOverclocks());
+        if (base != null && base.perfectOverclocks() > 0 && machine == Machine.DE_FUSION)
+            special = append(special, text("perfect_stages", base.perfectOverclocks()));
         if (machine == Machine.QUANTUM && u.quantumTier >= 1)
             special = append(special, text("quantum_tiers", u.quantumTier, u.focusingTier));
         if (base != null && base.maximumOverclocks() >= 0

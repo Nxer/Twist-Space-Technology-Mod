@@ -397,14 +397,14 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
         }
 
         @Override
-        public void configureSource(RecipeMap<?> map, long mergedRecipeVoltage, int requiredHeat, int requiredGlassTier,
+        public void configureSource(RecipeMap<?> map, long recipeVoltage, int requiredHeat, int requiredGlassTier,
             ItemStack requiredSpecialInput, boolean heavyCentrifuge) {
             Integer slot = poolIndexes.get(map);
             if (slot == null || debug[slot] || controllers[slot] == null) return;
             configured[slot] = true;
             SourceKey key = new SourceKey(
                 slot,
-                mergedRecipeVoltage,
+                recipeVoltage,
                 requiredHeat,
                 requiredGlassTier,
                 requiredSpecialInput == null ? null : GTUtility.ItemId.createNoCopy(requiredSpecialInput),
@@ -416,7 +416,7 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
                     controllers[slot],
                     structures[slot],
                     map,
-                    mergedRecipeVoltage,
+                    recipeVoltage,
                     inputVoltage,
                     inputPower,
                     items,
@@ -437,9 +437,9 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
         }
 
         @Override
-        public boolean canProcess(RecipeMap<?> map, long mergedRecipeVoltage, int requiredHeat, int requiredGlassTier,
+        public boolean canProcess(RecipeMap<?> map, long recipeVoltage, int requiredHeat, int requiredGlassTier,
             int requiredCasingTier, int requiredCompressionTier, boolean heavyCentrifuge, int requiredPlasmaTier,
-            boolean multiStepPlasma) {
+            boolean multiStepPlasma, long requiredSourceVoltage) {
             Integer slot = poolIndexes.get(map);
             if (slot != null && (purificationPools & (1L << slot)) != 0
                 && (quantities[slot] <= 0 || quantities[slot] > purificationPlantQuantity)) {
@@ -458,13 +458,14 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
                         SimpleResultWithText.ofFailure("tst.bottledchaos.result.invalid_source_configuration"));
                 return allowed;
             }
+            long requiredVoltage = requiredSourceVoltage > 0 ? requiredSourceVoltage : recipeVoltage;
             if (profile.maximumRecipeTier() >= 0
-                && mergedRecipeVoltage > gregtech.api.enums.GTValues.V[profile.maximumRecipeTier()])
+                && requiredVoltage > gregtech.api.enums.GTValues.V[profile.maximumRecipeTier()])
                 return reject(
                     slot,
                     "voltage",
                     gregtech.api.enums.GTValues.V[profile.maximumRecipeTier()],
-                    mergedRecipeVoltage);
+                    requiredVoltage);
             if (requiredHeat > profile.heat()) return reject(slot, "heat", profile.heat(), requiredHeat);
             if (requiredGlassTier > profile.glassTier())
                 return reject(slot, "glass", profile.glassTier(), requiredGlassTier);
@@ -550,11 +551,11 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
         }
 
         @Override
-        public int heatOverclocks(RecipeMap<?> map, int requiredHeat, int requiredCasingTier) {
+        public int perfectOverclocks(RecipeMap<?> map, int requiredHeat, int requiredCasingTier) {
             var profile = profile(map);
             if (profile != null && map == DEFCRecipes.fusionCraftingRecipes)
                 return Math.max(0, profile.casingTier() - requiredCasingTier);
-            return profile == null ? 0 : profile.heatOverclocks();
+            return profile == null ? 0 : profile.perfectOverclocks();
         }
 
         @Override

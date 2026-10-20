@@ -31,7 +31,6 @@ import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTRecipe.RecipeItemInput;
 import gregtech.api.util.GTRecipeConstants;
 import gregtech.api.util.GTUtility;
-import gregtech.api.util.OverclockCalculator;
 import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.processing.MTEIsaMill;
 import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.MTEQuantumForceTransformer;
 import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.chemplant.MTEChemicalPlant;
@@ -160,122 +159,8 @@ final class BottledChaosRecipeSupport {
                 ? recipe.getMetadataOrDefault(GTRecipeConstants.FOG_PLASMA_TIER, 0)
                 : 0,
             map == TecTechRecipeMaps.godforgePlasmaRecipes
-                && recipe.getMetadataOrDefault(GTRecipeConstants.FOG_PLASMA_MULTISTEP, false));
-    }
-
-    /** Average actual normalized costs, rather than rounding a fractional expected overclock count. */
-    public static double calculateNormalizedDuration(long duration, long recipeEUt, long targetEUt, long parallelLimit,
-        double speedMultiplier, double euMultiplier, double timeDivisor, double powerMultiplier, int maximumOverclocks,
-        int heatOverclocks, int[] overclockLimitAlternatives) {
-        if (overclockLimitAlternatives == null || overclockLimitAlternatives.length == 0)
-            return calculateNormalizedDuration(
-                duration,
-                recipeEUt,
-                targetEUt,
-                parallelLimit,
-                speedMultiplier,
-                euMultiplier,
-                timeDivisor,
-                powerMultiplier,
-                maximumOverclocks,
-                heatOverclocks);
-        double mean = 0;
-        for (int limit : overclockLimitAlternatives) mean += calculateNormalizedDuration(
-            duration,
-            recipeEUt,
-            targetEUt,
-            parallelLimit,
-            speedMultiplier,
-            euMultiplier,
-            timeDivisor,
-            powerMultiplier,
-            limit,
-            heatOverclocks) / overclockLimitAlternatives.length;
-        return mean;
-    }
-
-    /** Applies source-machine modifiers and whole overclocks, preserving fractional work for composition. */
-    public static double calculateNormalizedDuration(long duration, long recipeEUt, long targetEUt, long parallelLimit,
-        double speedMultiplier, double euMultiplier, double timeDivisor, double powerMultiplier) {
-        return calculateNormalizedDuration(
-            duration,
-            recipeEUt,
-            targetEUt,
-            parallelLimit,
-            speedMultiplier,
-            euMultiplier,
-            timeDivisor,
-            powerMultiplier,
-            -1,
-            0);
-    }
-
-    public static double calculateNormalizedDuration(long duration, long recipeEUt, long targetEUt, long parallelLimit,
-        double speedMultiplier, double euMultiplier, double timeDivisor, double powerMultiplier, int maximumOverclocks,
-        int heatOverclocks) {
-        if (duration <= 0 || recipeEUt <= 0
-            || targetEUt <= 0
-            || parallelLimit <= 0
-            || !Double.isFinite(speedMultiplier)
-            || speedMultiplier <= 0
-            || !Double.isFinite(euMultiplier)
-            || euMultiplier <= 0
-            || !Double.isFinite(timeDivisor)
-            || timeDivisor < 1
-            || !Double.isFinite(powerMultiplier)
-            || powerMultiplier < 1
-            || maximumOverclocks < -1
-            || heatOverclocks < 0) {
-            throw new IllegalArgumentException("invalid overclock parameters");
-        }
-        // Apply machine speed and EU multipliers before counting available overclocks.
-        double modifiedEUt = recipeEUt * euMultiplier;
-        double result = duration / speedMultiplier;
-        if (!Double.isFinite(modifiedEUt) || modifiedEUt <= 0 || modifiedEUt >= Long.MAX_VALUE) {
-            throw new ArithmeticException("recipe power overflow");
-        }
-        if (!Double.isFinite(result) || result <= 0) throw new ArithmeticException("duration overflow");
-        long eut = (long) Math.ceil(modifiedEUt);
-        if (powerMultiplier == 1) return result;
-        // Reverse overclocks until the recipe fits the target power.
-        while (eut > targetEUt) {
-            eut = (long) Math.ceil(eut / powerMultiplier);
-            result *= timeDivisor;
-            if (!Double.isFinite(result)) throw new ArithmeticException("duration overflow");
-        }
-        int overclocks;
-        if (powerMultiplier == 4) {
-            // Native GT counts power-limited whole overclocks; recover fractional work from its count.
-            overclocks = new OverclockCalculator().setRecipeEUt(eut)
-                .setEUt(targetEUt)
-                .setAmperageOC(true)
-                .setDuration(1)
-                .setMaxOverclocks(maximumOverclocks < 0 ? Integer.MAX_VALUE : maximumOverclocks)
-                .calculate()
-                .getPerformedOverclocks();
-        } else {
-            overclocks = 0;
-            double power = eut;
-            while (power <= targetEUt / powerMultiplier && (maximumOverclocks < 0 || overclocks < maximumOverclocks)) {
-                power *= powerMultiplier;
-                overclocks++;
-            }
-        }
-        double best = Double.POSITIVE_INFINITY;
-        for (int count = 0; count <= overclocks; count++) {
-            long power = (long) Math.ceil(eut * GTUtility.powInt(powerMultiplier, count));
-            if (power <= 0 || power > targetEUt) continue;
-            int perfect = Math.min(count, heatOverclocks);
-            double candidate = result / GTUtility.powInt(4, perfect) / GTUtility.powInt(timeDivisor, count - perfect);
-            // Only replace lossy costs. Never trade available perfect heat OCs for extra parallelism.
-            if (timeDivisor < powerMultiplier && count >= heatOverclocks) {
-                long parallel = Math.min(parallelLimit, targetEUt / power);
-                candidate /= parallel;
-            }
-            best = Math.min(best, candidate);
-        }
-        if (!Double.isFinite(best) || best <= 0) throw new ArithmeticException("duration overflow or underflow");
-        return best;
+                && recipe.getMetadataOrDefault(GTRecipeConstants.FOG_PLASMA_MULTISTEP, false),
+            map == RecipeMaps.fusionRecipes ? recipe.mEUt : 0);
     }
 
     public static double addDuration(double current, double perBatch, long batches) {
@@ -664,9 +549,9 @@ final class BottledChaosRecipeSupport {
     /** Only immutable source requirements survive startup; radiation is satisfied by the packaged radio hatch. */
     @Desugar
     record SourceRequirements(int heat, int glassTier, int casingTier, int compressionTier, boolean heavyCentrifuge,
-        TST_ItemID specialInput, int plasmaTier, boolean multiStepPlasma) {
+        TST_ItemID specialInput, int plasmaTier, boolean multiStepPlasma, long requiredSourceVoltage) {
 
-        private static final SourceRequirements NONE = new SourceRequirements(0, 0, 0, 0, false, null, 0, false);
+        private static final SourceRequirements NONE = new SourceRequirements(0, 0, 0, 0, false, null, 0, false, 0);
     }
 
     /**

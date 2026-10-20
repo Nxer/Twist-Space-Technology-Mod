@@ -26,6 +26,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineConfiguration;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMaterialCache;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosOverclock;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosUpkeep;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosItemInputs.Requirement;
@@ -223,15 +224,17 @@ public final class BottledChaosRecipeProcessor {
             SourceChecks checks = sourceChecks(voltage);
             if (!checks.checked[index]) {
                 checks.checked[index] = true;
-                RecipeData data = snapshot.routes[index].data;
-                checks.allowed[index] = canProcessSources(data, parameters, voltage);
-                if (checks.allowed[index]) {
-                    for (var time : data.times.entrySet()) {
-                        checks.costs[index] = BottledChaosRecipeSupport.addDuration(
-                            checks.costs[index],
-                            calculateTimePart(time.getKey(), time.getValue(), parameters, voltage),
-                            1);
+                checks.allowed[index] = true;
+                for (var time : snapshot.routes[index].data.times.entrySet()) {
+                    configureSource(time.getKey(), parameters, voltage);
+                    if (!canProcessSource(time.getKey(), parameters, voltage)) {
+                        checks.allowed[index] = false;
+                        break;
                     }
+                    checks.costs[index] = BottledChaosRecipeSupport.addDuration(
+                        checks.costs[index],
+                        calculateTimePart(time.getKey(), time.getValue(), parameters, voltage),
+                        1);
                 }
             }
             return checks.allowed[index];
@@ -389,10 +392,11 @@ public final class BottledChaosRecipeProcessor {
             for (int index : snapshot.entryOrder) {
                 if (result.batches[index] == 0) continue;
                 if (!checkSources(index, result.voltage)) return null;
+                CachedRoute route = snapshot.routes[index];
                 duration = BottledChaosRecipeSupport
                     .addDuration(duration, sourceChecks(result.voltage).costs[index], result.batches[index]);
-                requiredPools |= snapshot.routes[index].poolMask;
-                for (var time : snapshot.routes[index].data.times.entrySet()) {
+                requiredPools |= route.poolMask;
+                for (var time : route.data.times.entrySet()) {
                     configureSource(time.getKey(), parameters, result.voltage);
                     parameters.recordSourceUsage(
                         time.getKey()
@@ -1522,14 +1526,13 @@ public final class BottledChaosRecipeProcessor {
         return taken;
     }
 
-    private static double calculateTimePart(TimeKey key, long rawTicks, MachineParameters parameters, long baseEUt) {
-        configureSource(key, parameters, baseEUt);
+    private static double calculateTimePart(TimeKey key, long rawTicks, MachineParameters parameters, long recipeVoltage) {
         double sourceSpeed = parameters.speedMultiplier(key.map());
         double sourceDuration = Math.max(parameters.minimumSourceDuration(key.map()), key.recipeTicks() / sourceSpeed);
-        return BottledChaosRecipeSupport.calculateNormalizedDuration(
+        return BottledChaosOverclock.calculateNormalizedDuration(
             rawTicks,
             key.eut(),
-            baseEUt,
+            recipeVoltage,
             parameters.parallel(key.map()),
             key.recipeTicks() / sourceDuration * parameters.quantitySpeedMultiplier(key.map()),
             parameters.euMultiplier(
@@ -1548,7 +1551,7 @@ public final class BottledChaosRecipeProcessor {
                 key.map(),
                 key.requirements()
                     .casingTier()),
-            parameters.heatOverclocks(
+            parameters.perfectOverclocks(
                 key.map(),
                 key.requirements()
                     .heat(),
@@ -1557,29 +1560,26 @@ public final class BottledChaosRecipeProcessor {
             parameters.overclockLimitAlternatives(key.map()));
     }
 
-    private static boolean canProcessSources(RecipeData data, MachineParameters parameters, long mergedRecipeVoltage) {
-        for (TimeKey key : data.times.keySet()) {
-            configureSource(key, parameters, mergedRecipeVoltage);
-            var requirements = key.requirements();
-            if (!parameters.canProcess(
-                key.map(),
-                mergedRecipeVoltage,
-                requirements.heat(),
-                requirements.glassTier(),
-                requirements.casingTier(),
-                requirements.compressionTier(),
-                requirements.heavyCentrifuge(),
-                requirements.plasmaTier(),
-                requirements.multiStepPlasma())) return false;
-        }
-        return true;
+    private static boolean canProcessSource(TimeKey key, MachineParameters parameters, long recipeVoltage) {
+        var requirements = key.requirements();
+        return parameters.canProcess(
+            key.map(),
+            recipeVoltage,
+            requirements.heat(),
+            requirements.glassTier(),
+            requirements.casingTier(),
+            requirements.compressionTier(),
+            requirements.heavyCentrifuge(),
+            requirements.plasmaTier(),
+            requirements.multiStepPlasma(),
+            requirements.requiredSourceVoltage());
     }
 
-    private static void configureSource(TimeKey key, MachineParameters parameters, long mergedRecipeVoltage) {
+    private static void configureSource(TimeKey key, MachineParameters parameters, long recipeVoltage) {
         var requirements = key.requirements();
         parameters.configureSource(
             key.map(),
-            mergedRecipeVoltage,
+            recipeVoltage,
             requirements.heat(),
             requirements.glassTier(),
             requirements.specialInput() == null ? null
@@ -1589,7 +1589,7 @@ public final class BottledChaosRecipeProcessor {
             requirements.heavyCentrifuge());
     }
 
-    /** Source-machine hooks are evaluated at runtime without rebuilding material routes. */
+    /** Source-machine hooks use the final serial power without rebuilding material routes. */
     public interface MachineParameters {
 
         default void resetSourceUsage() {}
@@ -1600,12 +1600,12 @@ public final class BottledChaosRecipeProcessor {
             return Collections.emptyList();
         }
 
-        default void configureSource(RecipeMap<?> map, long mergedRecipeVoltage, int requiredHeat,
+        default void configureSource(RecipeMap<?> map, long recipeVoltage, int requiredHeat,
             int requiredGlassTier, ItemStack requiredSpecialInput, boolean heavyCentrifuge) {}
 
-        default boolean canProcess(RecipeMap<?> map, long mergedRecipeVoltage, int requiredHeat, int requiredGlassTier,
+        default boolean canProcess(RecipeMap<?> map, long recipeVoltage, int requiredHeat, int requiredGlassTier,
             int requiredCasingTier, int requiredCompressionTier, boolean heavyCentrifuge, int requiredPlasmaTier,
-            boolean multiStepPlasma) {
+            boolean multiStepPlasma, long requiredSourceVoltage) {
             return true;
         }
 
@@ -1654,7 +1654,7 @@ public final class BottledChaosRecipeProcessor {
             return null;
         }
 
-        default int heatOverclocks(RecipeMap<?> map, int requiredHeat, int requiredCasingTier) {
+        default int perfectOverclocks(RecipeMap<?> map, int requiredHeat, int requiredCasingTier) {
             return 0;
         }
 
