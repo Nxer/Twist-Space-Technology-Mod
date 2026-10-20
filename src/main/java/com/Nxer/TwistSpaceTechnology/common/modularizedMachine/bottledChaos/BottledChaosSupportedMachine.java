@@ -68,6 +68,7 @@ public enum BottledChaosSupportedMachine {
     MTEMULTI_AUTOCLAVE("gregtech.common.tileentities.machines.multi.MTEMultiAutoclave", "main"),
     MTEMULTI_FURNACE("gregtech.common.tileentities.machines.multi.MTEMultiFurnace", "main"),
     MTEOIL_CRACKER("gregtech.common.tileentities.machines.multi.MTEOilCracker", "main"),
+    MTENAQUADAH_FUEL_REFINERY("gregtech.common.tileentities.machines.multi.MTENaquadahFuelRefinery", "$"),
     MTESPINMATRON("gregtech.common.tileentities.machines.multi.MTESpinmatron", "t1"),
     MTEVACUUM_FREEZER("gregtech.common.tileentities.machines.multi.MTEVacuumFreezer", "$"),
     MTEEXO_FOUNDRY("gregtech.common.tileentities.machines.multi.foundry.MTEExoFoundry", "main"),

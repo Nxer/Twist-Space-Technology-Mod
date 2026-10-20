@@ -43,6 +43,7 @@ import gregtech.api.util.GlassTier;
 import gregtech.common.blocks.BlockCyclotronCoils;
 import gregtech.common.blocks.ItemMachines;
 import gregtech.common.tileentities.machines.multi.MTEIndustrialElectromagneticSeparator;
+import gregtech.common.tileentities.machines.multi.MTENaquadahFuelRefinery;
 import gregtech.common.tileentities.machines.multi.foundry.FoundryData;
 import gregtech.common.tools.ToolTurbineHuge;
 import gregtech.common.tools.ToolTurbineLarge;
@@ -105,7 +106,8 @@ public final class BottledChaosMachineParameters {
         PURIFICATION_OZONATION("MTEPurificationUnitOzonation"), PURIFICATION_PH("MTEPurificationUnitPhAdjustment"),
         PURIFICATION_PLASMA("MTEPurificationUnitPlasmaHeater"), PURIFICATION_BARYONIC("MTEPurificationUnitBaryonicPerfection"),
         PURIFICATION_UV("MTEPurificationUnitUVTreatment"), QUANTUM("MTEQuantumForceTransformer"),
-        FRIDGE("MTEEndothermicFridge"), NEUTRON("MTENeutronActivator"), MODULAR_NEUTRON("MM_LargeNeutronOscillator");
+        FRIDGE("MTEEndothermicFridge"), NEUTRON("MTENeutronActivator"), MODULAR_NEUTRON("MM_LargeNeutronOscillator"),
+        NAQUADAH_REFINERY("MTENaquadahFuelRefinery");
         // spotless:on
 
         private final String type;
@@ -562,6 +564,13 @@ public final class BottledChaosMachineParameters {
                 value.casingTier = u.draconicTier;
                 value.heatOverclocks = Math.max(0, u.draconicTier - 1);
             }
+            case NAQUADAH_REFINERY -> {
+                if (u.refineryCoil < 1) return reject(pool, "casing", u.refineryCoil, 1, failure);
+                value.parallel = 4L * u.refineryCoil;
+                value.casingTier = u.refineryCoil;
+                value.timeDivisor = 4;
+                value.powerMultiplier = 4;
+            }
             case FRIDGE -> {
                 value.set(256, 1, 2d / 3);
                 if (u.fridgeTier > 1) {
@@ -746,6 +755,7 @@ public final class BottledChaosMachineParameters {
         int focusingTier = -1;
         int draconicTier;
         int draconicFusionTier;
+        int refineryCoil;
         int magnet = -1;
         long photonSpeed;
         boolean photonPerfect;
@@ -796,6 +806,9 @@ public final class BottledChaosMachineParameters {
                 if (block == BlockLoader.defcCasingBlock && meta >= 8 && meta <= 12) draconicTier = meta - 7;
                 if (block == GregTechAPI.sBlockCasings4 && (meta == 6 || meta == 8))
                     draconicFusionTier = meta == 6 ? 1 : 2;
+                Integer refineryTier = MTENaquadahFuelRefinery.fieldCoilTierConverter()
+                    .convert(block, meta);
+                if (refineryTier != null) refineryCoil = refineryTier;
                 if (block == ModBlocks.blockCasingsMisc && (meta == 2 || meta == 3)) cokeTier = meta - 2;
                 if (block == ModBlocks.blockCasingsMisc && meta == 14) basicAlloyCoil = true;
                 if (block == GregTechAPI.sBlockCasings2 && meta == 1) fridgeTier = Math.max(fridgeTier, 1);

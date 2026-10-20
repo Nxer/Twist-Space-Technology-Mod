@@ -143,6 +143,8 @@ final class BottledChaosRecipeSupport {
         if (map == BottledChaosRecipeResources.RecipePools.QuantumForceTransformer) casing = recipe.mSpecialValue;
         if (map == BottledChaosRecipeResources.RecipePools.FusionCrafting)
             casing = recipe.getMetadataOrDefault(GTRecipeConstants.DEFC_CASING_TIER, 1);
+        if (map == GoodGeneratorRecipeMaps.naquadahFuelRefineFactoryRecipes)
+            casing = recipe.getMetadataOrDefault(GTRecipeConstants.NFR_COIL_TIER, recipe.mSpecialValue);
         ItemStack special = map == BottledChaosRecipeResources.RecipePools.QuantumForceTransformer
             ? recipe.getMetadata(GTRecipeConstants.QFT_CATALYST)
             : map == BottledChaosRecipeResources.RecipePools.BacterialVat

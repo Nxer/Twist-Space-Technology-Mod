@@ -1510,7 +1510,10 @@ public final class BottledChaosRecipeProcessor {
                 key.map(),
                 key.requirements()
                     .heat()),
-            parameters.maximumOverclocks(key.map()),
+            parameters.maximumOverclocks(
+                key.map(),
+                key.requirements()
+                    .casingTier()),
             parameters.heatOverclocks(
                 key.map(),
                 key.requirements()
@@ -1606,6 +1609,10 @@ public final class BottledChaosRecipeProcessor {
 
         default int maximumOverclocks(RecipeMap<?> map) {
             return -1;
+        }
+
+        default int maximumOverclocks(RecipeMap<?> map, int requiredCasingTier) {
+            return maximumOverclocks(map);
         }
 
         /** Optional equiprobable native limits; ordinary machines use the single limit without allocation. */

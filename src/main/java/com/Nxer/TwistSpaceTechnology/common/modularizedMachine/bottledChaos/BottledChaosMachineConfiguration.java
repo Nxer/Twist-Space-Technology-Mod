@@ -26,6 +26,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosR
 import com.cleanroommc.modularui.utils.item.ItemStackHandler;
 import com.github.bsideup.jabel.Desugar;
 
+import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.blocks.tileEntity.MTENeutronActivator;
 import gregtech.api.GregTechAPI;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -528,6 +529,14 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
         public int maximumOverclocks(RecipeMap<?> map) {
             var profile = profile(map);
             return profile == null ? -1 : profile.maximumOverclocks();
+        }
+
+        @Override
+        public int maximumOverclocks(RecipeMap<?> map, int requiredCasingTier) {
+            var profile = profile(map);
+            if (profile != null && map == GoodGeneratorRecipeMaps.naquadahFuelRefineFactoryRecipes)
+                return Math.max(0, profile.casingTier() - requiredCasingTier);
+            return maximumOverclocks(map);
         }
 
         @Override
