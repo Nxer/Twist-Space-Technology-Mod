@@ -90,6 +90,9 @@ public final class BottledChaosRecipeProcessor {
                     chain.tagIndex(),
                     chain.inputMultiplier(),
                     chain.requiredTagMask(),
+                    catalog.availableInputChains.contains(i),
+                    catalog.displayInputAlternatives.get(i),
+                    catalog.hiddenDisplayEntries.contains(i),
                     BottledChaosMachineConfiguration.withDependencies(
                         preparedRoutes[i].times.keySet()
                             .stream()
@@ -422,14 +425,14 @@ public final class BottledChaosRecipeProcessor {
         for (int displayOrder = 0; displayOrder < snapshot.displayOrder.length; displayOrder++) {
             int routeIndex = snapshot.displayOrder[displayOrder];
             CachedRoute cachedRoute = snapshot.routes[routeIndex];
-            if (cachedRoute.inputMultiplier > 0) continue;
-            ItemStack[] inputAlternatives = null;
+            if (cachedRoute.inputMultiplier > 0 || cachedRoute.hiddenDisplay) continue;
+            ItemStack[][] inputAlternatives = cachedRoute.displayInputAlternatives;
             if (routeIndex == cachedRoute.tagIndex) for (CachedRoute alternative : snapshot.routes) {
                 if (alternative.tagIndex != cachedRoute.tagIndex || alternative.inputMultiplier == 0) continue;
-                inputAlternatives = new ItemStack[] { ((TST_ItemID) cachedRoute.root).getItemStack(1)
+                inputAlternatives = new ItemStack[][] { { ((TST_ItemID) cachedRoute.root).getItemStack(1)
                     .copy(),
                     ((TST_ItemID) alternative.root).getItemStack(alternative.inputMultiplier)
-                        .copy() };
+                        .copy() } };
                 break;
             }
             RecipeData route = cachedRoute.data;
@@ -508,10 +511,13 @@ public final class BottledChaosRecipeProcessor {
         private final Map<RecipeMark, Integer> roundedOutputChanceBatches = new LinkedHashMap<>();
         private final Map<Integer, Integer> substitutedChains = new LinkedHashMap<>();
         private final Map<Integer, TST_ItemID> selectorCircuits = new LinkedHashMap<>();
+        private final Set<Integer> availableInputChains = new LinkedHashSet<>();
         private final Map<Integer, Object[]> queryInputs = new LinkedHashMap<>();
         private final Map<Integer, Object[]> queryOutputs = new LinkedHashMap<>();
         private final Map<Integer, Object[]> executionTargets = new LinkedHashMap<>();
         private final Map<String, List<Object>> displayRoots = new LinkedHashMap<>();
+        private final Map<Integer, ItemStack[][]> displayInputAlternatives = new LinkedHashMap<>();
+        private final Set<Integer> hiddenDisplayEntries = new LinkedHashSet<>();
         private final Set<Object> registeredReagentSyntheses = new LinkedHashSet<>();
         private final Set<Object> registeredReagentDecompositions = new LinkedHashSet<>();
         private final Set<RecipeMap<?>> pools = new LinkedHashSet<>();
@@ -679,6 +685,22 @@ public final class BottledChaosRecipeProcessor {
             displayRoots.put(family, keys);
         }
 
+        /** Fold explicitly registered independent combinations into one NEI row; runtime entries stay separate. */
+        public void groupLatestDisplayRecipes(String tag, int variants, ItemStack[]... inputs) {
+            int last = latestChainIndex(tag);
+            int first = last - variants + 1;
+            for (int entry = first; entry <= last; entry++) {
+                if (entry < 0 || chains.get(entry) == null
+                    || chains.get(entry)
+                        .tagIndex()
+                        != chains.get(last)
+                            .tagIndex())
+                    throw new IllegalArgumentException("invalid display recipe group: " + tag);
+                if (entry != first) hiddenDisplayEntries.add(entry);
+            }
+            displayInputAlternatives.put(first, inputs);
+        }
+
         /** Require a non-consumed programming circuit for the latest registered entry of this tag. */
         public void requireCircuit(String tag, int configuration) {
             int tagIndex = CredentialModel.indexForTag(tag);
@@ -686,6 +708,11 @@ public final class BottledChaosRecipeProcessor {
                 throw new IllegalArgumentException("invalid route circuit: " + tag);
             selectorCircuits
                 .put(latestChainIndex(tag), TST_ItemID.create(GTUtility.getIntegratedCircuit(configuration)));
+        }
+
+        /** Recycle existing feed without recursively synthesizing more of that feed. */
+        public void useAvailableInputsOnly(String tag) {
+            availableInputChains.add(latestChainIndex(tag));
         }
 
         /** Use one branch's synthesis only for the latest same-tag entry; shared paths remain unchanged. */
@@ -846,11 +873,16 @@ public final class BottledChaosRecipeProcessor {
 
         /** Cache a dynamic source's deterministic long-quantity equivalent during startup. */
         public RecipeMark markPreparedRecipe(RecipeMap<?> map, Object input, Object output, RecipeData data) {
+            return markPreparedRecipe(map, input, output, -1, data);
+        }
+
+        public RecipeMark markPreparedRecipe(RecipeMap<?> map, Object input, Object output, int circuit,
+            RecipeData data) {
             if (data == null || data.inputs.isEmpty() || data.outputs.isEmpty() || data.times.isEmpty())
                 throw new IllegalArgumentException("invalid prepared recipe");
             internalResources.add(resourceKey(input));
             internalResources.add(resourceKey(output));
-            RecipeMark mark = new RecipeMark(map, input, output, -1, false);
+            RecipeMark mark = new RecipeMark(map, input, output, circuit, false);
             if (resolved.putIfAbsent(mark, data) != null)
                 throw new IllegalArgumentException("duplicate prepared recipe mark " + mark);
             return mark;
@@ -1360,7 +1392,8 @@ public final class BottledChaosRecipeProcessor {
      */
     @Desugar
     private record CachedRoute(RecipeData data, Object root, Object[] lookupInputs, Object[] lookupOutputs,
-        Object[] targetOutputs, long baseEUt, int tagIndex, int inputMultiplier, long requiredTagMask, long poolMask) {
+        Object[] targetOutputs, long baseEUt, int tagIndex, int inputMultiplier, long requiredTagMask,
+        boolean availableInputsOnly, ItemStack[][] displayInputAlternatives, boolean hiddenDisplay, long poolMask) {
 
         boolean isAuthorized(long routeMask) {
             return (routeMask & requiredTagMask) == requiredTagMask;
@@ -1392,7 +1425,8 @@ public final class BottledChaosRecipeProcessor {
                     data.inputs,
                     data.outputs,
                     data.catalysts,
-                    routes[entry].baseEUt);
+                    routes[entry].baseEUt,
+                    routes[entry].availableInputsOnly);
                 Map<Object, List<Integer>> incoming = new LinkedHashMap<>();
                 for (ChainLink link : links) {
                     if (link.target == entry) incoming.computeIfAbsent(link.key, ignored -> new ArrayList<>())
@@ -1774,11 +1808,11 @@ public final class BottledChaosRecipeProcessor {
     public record RecipeMapDuration(RecipeMap<?> map, double durationTicks) {}
 
     /**
-     * NEI row data: authorization, optional root alternatives, searchable entry/endpoints, complete long quantities
+     * NEI row data: authorization, independent item alternatives, searchable entry/endpoints, complete long quantities
      * and grouped processing times. Lookup identities do not remove any displayed material.
      */
     @Desugar
-    public record DisplayRecipe(int routeIndex, int displayOrder, long requiredTagMask, ItemStack[] inputAlternatives,
+    public record DisplayRecipe(int routeIndex, int displayOrder, long requiredTagMask, ItemStack[][] inputAlternatives,
         Object[] lookupInputs, Object[] lookupOutputs, long baseEUt, List<ItemStackLong> itemInputs,
         List<FluidStackLong> fluidInputs, List<RecipeMapDuration> processingTimes, Plan plan) {}
 

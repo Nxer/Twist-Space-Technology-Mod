@@ -29,8 +29,7 @@ public final class BottledChaosFakeRecipes {
         for (var display : displays) {
             try {
                 var plan = display.plan();
-                ItemStack[] candidates = display.inputAlternatives();
-                int inputMultiplier = candidates == null ? 0 : candidates[1].stackSize / candidates[0].stackSize;
+                ItemStack[][] inputGroups = display.inputAlternatives();
                 var recipeMap = GTCMRecipe.BottledChaosRecipes;
                 var ui = recipeMap.getFrontend()
                     .getUIProperties();
@@ -55,13 +54,26 @@ public final class BottledChaosFakeRecipes {
                         if (alternativeInputs == null) alternativeInputs = new Object[itemInputs.length];
                         alternativeInputs[i] = new Object[] { "listAllfruit", itemInputs[i].stackSize };
                     }
-                    if (candidates != null && input.stackSize() > 0
-                        && input.stackSize() <= Integer.MAX_VALUE / inputMultiplier
-                        && TST_ItemID.create(candidates[0])
-                            .equalItemStack(input.itemStack())) {
+                    if (inputGroups != null && input.stackSize() > 0) for (ItemStack[] candidates : inputGroups) {
+                        if (!TST_ItemID.create(candidates[0])
+                            .equalItemStack(input.itemStack())) continue;
+                        if (input.stackSize() > Integer.MAX_VALUE) continue;
+                        if (input.stackSize() % candidates[0].stackSize != 0)
+                            throw new IllegalArgumentException("fractional display input alternative");
+                        ItemStack[] scaled = new ItemStack[candidates.length];
+                        for (int j = 0; j < candidates.length; j++) {
+                            long amount = Math
+                                .multiplyExact(input.stackSize() / candidates[0].stackSize, candidates[j].stackSize);
+                            if (amount > Integer.MAX_VALUE) {
+                                scaled = null;
+                                break;
+                            }
+                            scaled[j] = GTUtility.copyAmountUnsafe((int) amount, candidates[j]);
+                        }
+                        if (scaled == null) continue;
                         if (alternativeInputs == null) alternativeInputs = new Object[itemInputs.length];
-                        alternativeInputs[i] = new ItemStack[] { itemInputs[i],
-                            GTUtility.copyAmountUnsafe((int) (input.stackSize() * inputMultiplier), candidates[1]) };
+                        alternativeInputs[i] = scaled;
+                        break;
                     }
                 }
                 if (alternativeInputs != null) for (int i = 0; i < itemInputs.length; i++) {

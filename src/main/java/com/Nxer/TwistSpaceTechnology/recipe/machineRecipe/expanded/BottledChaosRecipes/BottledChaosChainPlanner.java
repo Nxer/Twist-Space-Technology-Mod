@@ -16,12 +16,15 @@ final class BottledChaosChainPlanner {
         final Map<Object, Long> outputs;
         final Map<Object, Long> catalysts;
         final long voltage;
+        final boolean availableInputsOnly;
 
-        Stage(Map<Object, Long> inputs, Map<Object, Long> outputs, Map<Object, Long> catalysts, long voltage) {
+        Stage(Map<Object, Long> inputs, Map<Object, Long> outputs, Map<Object, Long> catalysts, long voltage,
+            boolean availableInputsOnly) {
             this.inputs = inputs;
             this.outputs = outputs;
             this.catalysts = catalysts;
             this.voltage = voltage;
+            this.availableInputsOnly = availableInputsOnly;
         }
     }
 
@@ -129,6 +132,8 @@ final class BottledChaosChainPlanner {
             long taken = takeInput(index, input.getKey(), needed);
             if (taken < needed) missing.put(input.getKey(), needed - taken);
         }
+        // Recycling may use paid carry or supplied feed, but must not manufacture new feed for itself.
+        if (stage.availableInputsOnly && !missing.isEmpty()) return false;
         for (var input : missing.entrySet()) {
             if (!supply(index, input.getKey(), input.getValue())) return false;
             if (takeInput(index, input.getKey(), input.getValue()) != input.getValue()) return false;
@@ -137,6 +142,8 @@ final class BottledChaosChainPlanner {
             Object key = catalyst.getKey();
             long needed = Math
                 .max(0, catalyst.getValue() - Math.multiplyExact(stage.inputs.getOrDefault(key, 0L), count));
+            if (stage.availableInputsOnly && available(index, key) < needed
+                && !(needed == 1 && virtualItems.contains(key))) return false;
             if (!(needed == 1 && virtualItems.contains(key)) && !supply(index, key, needed)) return false;
         }
         for (var output : stage.outputs.entrySet()) {

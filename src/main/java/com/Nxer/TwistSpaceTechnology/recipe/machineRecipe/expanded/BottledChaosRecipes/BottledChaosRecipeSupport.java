@@ -410,6 +410,21 @@ final class BottledChaosRecipeSupport {
             return new RecipeData(inputs, outputs, required, times, items);
         }
 
+        /** Combine independent routes at fixed batch counts, preserving their native input rules and work. */
+        RecipeData combineRecipe(RecipeData other, long ownBatches, long otherBatches) {
+            Map<Object, Long> combinedInputs = multiplyAmounts(inputs, ownBatches);
+            mergeAmounts(combinedInputs, other.inputs, otherBatches);
+            Map<Object, Long> combinedOutputs = multiplyAmounts(outputs, ownBatches);
+            mergeAmounts(combinedOutputs, other.outputs, otherBatches);
+            Map<Object, Long> combinedCatalysts = new LinkedHashMap<>(catalysts);
+            other.catalysts.forEach((key, value) -> combinedCatalysts.merge(key, value, Math::max));
+            Map<TimeKey, Long> combinedTimes = multiplyAmounts(times, ownBatches);
+            mergeAmounts(combinedTimes, other.times, otherBatches);
+            List<Requirement> items = BottledChaosItemInputs.scale(itemRequirements, ownBatches, 1, null);
+            items.addAll(BottledChaosItemInputs.scale(other.itemRequirements, otherBatches, 1, null));
+            return new RecipeData(combinedInputs, combinedOutputs, combinedCatalysts, combinedTimes, items);
+        }
+
         RecipeData appendBalancedRecipe(RecipeData downstream, Object intermediate) {
             Objects.requireNonNull(downstream, "downstream route");
             Objects.requireNonNull(intermediate, "route intermediate");

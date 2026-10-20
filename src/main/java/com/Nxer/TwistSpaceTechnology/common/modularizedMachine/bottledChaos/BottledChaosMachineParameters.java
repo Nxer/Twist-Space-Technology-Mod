@@ -22,6 +22,7 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.Bott
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.github.bsideup.jabel.Desugar;
 
+import bartworks.API.recipe.BartWorksRecipeMaps;
 import goodgenerator.blocks.tileEntity.MTEPreciseAssembler;
 import goodgenerator.loader.Loaders;
 import gregtech.api.GregTechAPI;
@@ -363,7 +364,9 @@ public final class BottledChaosMachineParameters {
                 value.set(8L * u.itemPipe, 0.85, 1d / 3);
             }
             case SPACE_SCALER -> {
-                if (pool != RecipeMaps.extractorRecipes || u.field < 1) return null;
+                if (pool == BartWorksRecipeMaps.electricImplosionCompressorRecipes) {
+                    if (u.field < 11) return null;
+                } else if (pool != RecipeMaps.extractorRecipes || u.field < 1) return null;
                 value.set(Integer.MAX_VALUE, 1, u.field >= 2 ? 0.1 : 1);
                 value.timeDivisor = u.field >= 2 ? 4 : 2;
             }
