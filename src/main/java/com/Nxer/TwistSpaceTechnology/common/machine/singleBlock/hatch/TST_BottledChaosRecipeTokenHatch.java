@@ -5,6 +5,7 @@ import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.fo
 import java.util.List;
 import java.util.Locale;
 import java.util.StringJoiner;
+import java.util.regex.Pattern;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -23,6 +24,7 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_BottledChaos;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMaterialCache;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosOutputBuffer;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.cleanroommc.modularui.api.IPanelHandler;
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.drawable.DynamicDrawable;
 import com.cleanroommc.modularui.drawable.text.TextRenderer;
@@ -34,8 +36,10 @@ import com.cleanroommc.modularui.utils.Color;
 import com.cleanroommc.modularui.value.sync.BooleanSyncValue;
 import com.cleanroommc.modularui.value.sync.IntSyncValue;
 import com.cleanroommc.modularui.value.sync.InteractionSyncHandler;
+import com.cleanroommc.modularui.value.sync.LongSyncValue;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.widgets.ButtonWidget;
+import com.cleanroommc.modularui.widgets.textfield.TextFieldWidget;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -344,6 +348,48 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
         return true;
     }
 
+    private ModularPanel createCacheSettingsPanel(ModularPanel parent) {
+        LongSyncValue limit = new LongSyncValue(materialCache::amountLimit, value -> {
+            materialCache.setAmountLimit(value);
+            if (getBaseMetaTileEntity().isServerSide()) markDirty();
+        }).allowC2S();
+        return GTGuis.createPopUpPanel("bottledChaosCacheSettings")
+            .relative(parent)
+            .leftRel(1)
+            .topRel(0)
+            .size(164, 78)
+            .child(
+                // #tr tst.bottledchaos.credential_hatch.cache_limit
+                // # Cache limit
+                // #zh_CN 缓存上限
+                IKey.lang("tst.bottledchaos.credential_hatch.cache_limit")
+                    .asWidget()
+                    .pos(8, 18)
+                    .size(148, 14))
+            .child(
+                new TextFieldWidget().value(limit)
+                    .setPattern(Pattern.compile("[0-9]*"))
+                    .setMaxLength(19)
+                    // MUI's numbersLong parses through double; keep all 63 integer bits here.
+                    .setValidator(text -> {
+                        try {
+                            return Long.toString(Math.max(0, Long.parseLong(text)));
+                        } catch (NumberFormatException invalid) {
+                            return Long.toString(limit.getLongValue());
+                        }
+                    })
+                    .setTextAlignment(Alignment.Center)
+                    .tooltipBuilder(
+                        tooltip -> tooltip
+                            .addLine(IKey.lang("GT5U.gui.text.recipe_result.rangedvalue", 0, Long.MAX_VALUE))
+                            // #tr tst.bottledchaos.credential_hatch.cache_limit.info
+                            // # Each item or fluid has this limit. Excess is sent to normal outputs.
+                            // #zh_CN 每种物品或流体分别使用此上限, 超出部分正常输出.
+                            .addLine(IKey.lang("tst.bottledchaos.credential_hatch.cache_limit.info")))
+                    .pos(8, 40)
+                    .size(148, 18));
+    }
+
     @Override
     public ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager, UISettings uiSettings) {
         syncManager.syncValue(
@@ -409,15 +455,30 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
             .tooltipBuilder(tooltip -> tooltip.addLine(IKey.lang("tst.bottledchaos.credential_hatch.clear")))
             .pos(106, 62)
             .size(18, 18);
-        return GTGuis.mteTemplatePanelBuilder(this, guiData, syncManager, uiSettings)
-            .build()
-            .child(
-                new ItemSlotGridBuilder(inventoryHandler, syncManager).size(1)
-                    .filter(this::isAuthorizationItem)
-                    .build()
-                    .pos(79, 34))
+        ModularPanel panel = GTGuis.mteTemplatePanelBuilder(this, guiData, syncManager, uiSettings)
+            .build();
+        IPanelHandler cacheSettings = syncManager
+            .syncedPanel("bottledChaosCacheSettings", true, (manager, handler) -> createCacheSettingsPanel(panel));
+        return panel.child(
+            new ItemSlotGridBuilder(inventoryHandler, syncManager).size(1)
+                .filter(this::isAuthorizationItem)
+                .build()
+                .pos(79, 34))
             .child(executionButton)
             .child(clearButton)
+            .child(
+                new ButtonWidget<>().overlay(GTGuiTextures.OVERLAY_BUTTON_CYCLIC)
+                    .onMousePressed(button -> {
+                        if (button != 0) return false;
+                        if (cacheSettings.isPanelOpen()) cacheSettings.closePanel();
+                        else cacheSettings.openPanel();
+                        return true;
+                    })
+                    .playClickSound(true)
+                    .tooltipBuilder(
+                        tooltip -> tooltip.addLine(IKey.lang("tst.bottledchaos.credential_hatch.cache_limit")))
+                    .pos(142, 62)
+                    .size(18, 18))
             .child(
                 IKey.dynamic(() -> getFittedHatchDisplayText())
                     .asWidget()

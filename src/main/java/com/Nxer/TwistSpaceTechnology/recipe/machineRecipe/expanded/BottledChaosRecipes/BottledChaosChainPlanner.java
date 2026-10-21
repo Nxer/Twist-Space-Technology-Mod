@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -69,6 +70,28 @@ final class BottledChaosChainPlanner {
             active = other.active.clone();
             voltage = other.voltage;
         }
+    }
+
+    /** Split carry only after chaining. Check every output sum before changing any candidate inventory. */
+    static void releaseExcess(long limit, Map<Object, Long> remaining, Map<Object, Long> produced,
+        Map<Object, Long> outputs) {
+        Set<Object> keys = new LinkedHashSet<>(remaining.keySet());
+        keys.addAll(produced.keySet());
+        Map<Object, Long> excessOutputs = new LinkedHashMap<>();
+        for (Object key : keys) {
+            long stored = remaining.getOrDefault(key, 0L);
+            long excess = Math.addExact(
+                Math.max(0, stored - limit),
+                Math.max(0, produced.getOrDefault(key, 0L) - Math.max(0, limit - stored)));
+            if (excess > 0) excessOutputs.put(key, Math.addExact(outputs.getOrDefault(key, 0L), excess));
+        }
+        produced.replaceAll((key, amount) -> Math.min(amount, Math.max(0, limit - remaining.getOrDefault(key, 0L))));
+        remaining.replaceAll((key, amount) -> Math.min(amount, limit));
+        produced.values()
+            .removeIf(amount -> amount == 0);
+        remaining.values()
+            .removeIf(amount -> amount == 0);
+        outputs.putAll(excessOutputs);
     }
 
     private final Stage[] stages;

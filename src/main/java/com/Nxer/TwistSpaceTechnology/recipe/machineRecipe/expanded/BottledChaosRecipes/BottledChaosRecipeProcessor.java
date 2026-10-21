@@ -415,6 +415,7 @@ public final class BottledChaosRecipeProcessor {
                 result.outputs,
                 result.remaining,
                 result.produced,
+                materials.amountLimit(),
                 (int) Math.max(1, result.batches[entry]),
                 result.targets,
                 itemConsumption);
@@ -1689,14 +1690,16 @@ public final class BottledChaosRecipeProcessor {
         private final Map<Object, Long> outputs;
         private final Map<Object, Long> remainingCache;
         private final Map<Object, Long> pendingCache;
+        private final long cacheLimit;
+        private Plan outputPlan;
         private final int executions;
         private final long[] targets;
         private final BottledChaosItemInputs.Consumption itemConsumption;
 
         private PreparedPlan(String family, int entry, long baseEUt, double duration,
             List<BottledChaosUpkeep.Demand> upkeep, long requiredPools, Map<Object, Long> consumed,
-            Map<Object, Long> outputs, Map<Object, Long> remainingCache, Map<Object, Long> pendingCache, int executions,
-            long[] targets, BottledChaosItemInputs.Consumption itemConsumption) {
+            Map<Object, Long> outputs, Map<Object, Long> remainingCache, Map<Object, Long> pendingCache, long cacheLimit,
+            int executions, long[] targets, BottledChaosItemInputs.Consumption itemConsumption) {
             this.family = family;
             this.entry = entry;
             this.baseEUt = baseEUt;
@@ -1707,6 +1710,7 @@ public final class BottledChaosRecipeProcessor {
             this.outputs = outputs;
             this.remainingCache = remainingCache;
             this.pendingCache = pendingCache;
+            this.cacheLimit = cacheLimit;
             this.executions = executions;
             this.targets = targets;
             this.itemConsumption = itemConsumption;
@@ -1737,7 +1741,11 @@ public final class BottledChaosRecipeProcessor {
         }
 
         public Plan outputPlan() {
-            return createOutputPlan(outputs, duration, executions);
+            if (outputPlan == null) {
+                BottledChaosChainPlanner.releaseExcess(cacheLimit, remainingCache, pendingCache, outputs);
+                outputPlan = createOutputPlan(outputs, duration, executions);
+            }
+            return outputPlan;
         }
 
         public Plan pendingCache() {
