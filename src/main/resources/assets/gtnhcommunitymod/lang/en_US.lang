@@ -885,6 +885,7 @@ tst.bottledchaos.result.capacity_exceeded=Installed credentials exceed the machi
 tst.bottledchaos.result.credential_changed=The credential for this processing group changed.
 tst.bottledchaos.result.insufficient_power_share=This processing group does not have enough allocated power.
 tst.bottledchaos.result.invalid_source_configuration=Source structure configuration is not valid for this recipe pool.
+tst.bottledchaos.result.output_overflow=Output quantity exceeds the limit.
 tst.bottledchaos.result.parameter_limit=%s insufficient: %s / %s
 tst.bottledchaos.result.recipe_cache_unavailable=Bottled Chaos processing recipes are unavailable. Check the startup log.
 tst.bottledchaos.result.recipe_voltage_limit=Recipe voltage exceeds the structure upgrade limit.

@@ -1019,8 +1019,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         CheckRecipeResult failure = CheckRecipeResultRegistry.NO_RECIPE;
         try {
             startRecipeProcessing();
-            // A full-power probe discovers work without changing any real or shared input.
-            for (int slot = 0; slot < THREAD_COUNT; slot++) {
+            // Multiple groups need a full-power eligibility probe before sharing power. A lone group already
+            // receives that same budget in the real pass, so do not plan its complete chain twice.
+            boolean probeCandidates = Integer.bitCount(candidates) > 1;
+            for (int slot = 0; probeCandidates && slot < THREAD_COUNT; slot++) {
                 if ((candidates & (1 << slot)) == 0) continue;
                 CheckRecipeResult result = threads[slot].isBusy()
                     ? threads[slot].eut <= inputPower ? CheckRecipeResultRegistry.SUCCESSFUL

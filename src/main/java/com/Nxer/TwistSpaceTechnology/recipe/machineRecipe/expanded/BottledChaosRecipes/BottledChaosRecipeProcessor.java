@@ -37,10 +37,8 @@ import com.Nxer.TwistSpaceTechnology.util.recipes.RecipeMaterialUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
 
-import gregtech.api.objects.ItemData;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.GTUtility.FluidId;
@@ -180,29 +178,166 @@ public final class BottledChaosRecipeProcessor {
 
     public static ExecutionPlanner executionPlanner(long routeMask, int entry, ItemStack[] items, FluidStack[] fluids,
         MachineParameters parameters, BottledChaosMaterialCache materials) {
-        return new ExecutionPlanner(cache, routeMask, entry, items, fluids, parameters, materials);
+        return executionPlanner(routeMask, entry, items, fluids, parameters, materials, new PlanningCache());
+    }
+
+    /** One current authorization graph per processing group; quantities always belong to a fresh planner. */
+    public static final class PlanningCache {
+
+        private RouteCache snapshot;
+        private long routeMask;
+        private AuthorizedGraph graph;
+        private BottledChaosItemInputs.Matching matching;
+
+        private AuthorizedGraph get(RouteCache current, long mask) {
+            if (current != snapshot || graph == null || mask != routeMask) {
+                snapshot = current;
+                routeMask = mask;
+                graph = current == null ? null : new AuthorizedGraph(current, mask);
+                matching = null;
+            }
+            return graph;
+        }
+
+        private BottledChaosItemInputs.Matching matching(ItemStack[] items) {
+            matching = new BottledChaosItemInputs.Matching(items, matching);
+            return matching;
+        }
+    }
+
+    private static final class AuthorizedGraph {
+
+        final boolean[] authorized;
+        final List<Map<Object, int[]>> suppliers = new ArrayList<>();
+        final List<Set<Object>> retainedOutputs = new ArrayList<>();
+        final List<Set<Integer>> downstream = new ArrayList<>();
+        final Set<Object> cachedInputs = new LinkedHashSet<>();
+        final List<Requirement> itemRequirements = new ArrayList<>();
+        final Set<Object> requiredInputs = new LinkedHashSet<>();
+        final int[][] orders;
+        final long[][] completeTargets;
+        final boolean[] terminals;
+
+        private AuthorizedGraph(RouteCache snapshot, long routeMask) {
+            authorized = new boolean[snapshot.routes.length];
+            List<Map<Object, List<Integer>>> incoming = new ArrayList<>();
+            for (int index = 0; index < authorized.length; index++) {
+                authorized[index] = snapshot.routes[index].isAuthorized(routeMask);
+                incoming.add(new LinkedHashMap<>());
+                retainedOutputs.add(new LinkedHashSet<>());
+                downstream.add(new LinkedHashSet<>());
+            }
+            for (ChainLink link : snapshot.links) {
+                if (!authorized[link.target]) continue;
+                cachedInputs.add(link.key);
+                // An already-paid input stays usable even if none of its suppliers is currently authorized.
+                List<Integer> sources = incoming.get(link.target)
+                    .computeIfAbsent(link.key, ignored -> new ArrayList<>());
+                if (!authorized[link.source]) continue;
+                sources.add(link.source);
+                retainedOutputs.get(link.source)
+                    .add(link.key);
+                downstream.get(link.source)
+                    .add(link.target);
+            }
+            for (Map<Object, List<Integer>> inputs : incoming) {
+                Map<Object, int[]> sources = new LinkedHashMap<>();
+                inputs.forEach(
+                    (key, entries) -> sources.put(
+                        key,
+                        entries.stream()
+                            .mapToInt(Integer::intValue)
+                            .toArray()));
+                suppliers.add(sources);
+            }
+            for (int index : snapshot.entryOrder) {
+                if (!authorized[index]) continue;
+                RecipeData data = snapshot.routes[index].data;
+                itemRequirements.addAll(data.itemRequirements);
+                requiredInputs.addAll(data.inputs.keySet());
+                requiredInputs.addAll(data.catalysts.keySet());
+            }
+            orders = new int[snapshot.routes.length][];
+            completeTargets = new long[snapshot.routes.length][];
+            terminals = new boolean[snapshot.routes.length];
+            for (int index = 0; index < terminals.length; index++) {
+                for (Object output : snapshot.routes[index].targetOutputs) {
+                    if (!retainedOutputs.get(index)
+                        .contains(output)) terminals[index] = true;
+                }
+            }
+        }
+
+    }
+
+    public static ExecutionPlanner executionPlanner(long routeMask, int entry, ItemStack[] items, FluidStack[] fluids,
+        MachineParameters parameters, BottledChaosMaterialCache materials, PlanningCache planningCache) {
+        return new ExecutionPlanner(
+            cache,
+            routeMask,
+            entry,
+            items,
+            fluids,
+            parameters,
+            materials,
+            planningCache.get(cache, routeMask),
+            planningCache.matching(items));
+    }
+
+    @FunctionalInterface
+    public interface RouteFilter {
+
+        boolean allows(long voltage, long pools);
     }
 
     /** One input/structure snapshot, sharing source checks and normalized costs across bounded batch probes. */
     public static final class ExecutionPlanner {
 
+        public long diagnosticProbeNs, diagnosticSourceNs, diagnosticMatchNs, diagnosticInputNs, diagnosticTargetPassNs;
+        public int diagnosticProbes, diagnosticSourceCalls, diagnosticTargetPasses, diagnosticTargetExtensions;
+        public int diagnosticShortProbes, diagnosticShortExtensions;
+        public double diagnosticShortBefore, diagnosticShortAfter;
+
         private final RouteCache snapshot;
         private final long routeMask;
-        private final int entry;
+        private int entry;
         private final ItemStack[] items;
         private final FluidStack[] fluids;
         private final MachineParameters parameters;
         private final BottledChaosMaterialCache materials;
         private final Map<Long, SourceChecks> sourceChecks = new LinkedHashMap<>();
         private final Set<TST_ItemID> virtualItems = new LinkedHashSet<>();
+        private final AuthorizedGraph graph;
+        private final BottledChaosItemInputs.Matching matching;
+        private final List<Map<Object, int[]>> suppliers;
+        private final List<Set<Object>> retainedOutputs;
+        private final List<Set<Integer>> downstream;
+        private final boolean[] authorized;
         private Map<Object, Long> external;
         private Map<Object, Long> remaining;
         private Map<Object, Long> released;
         private int[] goalOrder;
         private long[] targets;
+        private boolean deferCompletion;
+        private boolean targetExtensionAttempted;
+        private boolean shortCorrectionAttempted;
+        private RouteFilter routeFilter = (voltage, pools) -> true;
+        private java.util.function.LongToDoubleFunction durationLimit = voltage -> Double.MAX_VALUE;
+
+        public void setLimits(RouteFilter routeFilter, java.util.function.LongToDoubleFunction durationLimit) {
+            this.routeFilter = routeFilter;
+            this.durationLimit = durationLimit;
+        }
 
         private ExecutionPlanner(RouteCache snapshot, long routeMask, int entry, ItemStack[] items, FluidStack[] fluids,
-            MachineParameters parameters, BottledChaosMaterialCache materials) {
+            MachineParameters parameters, BottledChaosMaterialCache materials, AuthorizedGraph graph,
+            BottledChaosItemInputs.Matching matching) {
+            this.graph = graph;
+            this.matching = matching;
+            suppliers = graph == null ? null : graph.suppliers;
+            retainedOutputs = graph == null ? null : graph.retainedOutputs;
+            downstream = graph == null ? null : graph.downstream;
+            authorized = graph == null ? null : graph.authorized;
             this.snapshot = snapshot;
             this.routeMask = routeMask;
             this.entry = entry;
@@ -222,8 +357,11 @@ public final class BottledChaosRecipeProcessor {
         }
 
         private boolean checkSources(int index, long voltage) {
+            if (!routeFilter.allows(voltage, snapshot.routes[index].poolMask)) return false;
             SourceChecks checks = sourceChecks(voltage);
             if (!checks.checked[index]) {
+                long diagnosticSourceStart = System.nanoTime();
+                diagnosticSourceCalls++;
                 checks.checked[index] = true;
                 checks.allowed[index] = true;
                 for (var time : snapshot.routes[index].data.times.entrySet()) {
@@ -237,6 +375,7 @@ public final class BottledChaosRecipeProcessor {
                         calculateTimePart(time.getKey(), time.getValue(), parameters, voltage),
                         1);
                 }
+                diagnosticSourceNs += System.nanoTime() - diagnosticSourceStart;
             }
             return checks.allowed[index];
         }
@@ -244,50 +383,79 @@ public final class BottledChaosRecipeProcessor {
         @Desugar
         private record SourceChecks(double[] costs, boolean[] checked, boolean[] allowed) {}
 
+        /** Entry fallbacks share the same input, authorization and source-cost snapshot. */
+        public PreparedPlan prepareEntry(int entry) {
+            return prepareEntry(entry, true);
+        }
+
+        /** Native matching conflicts retain the original, fully checked entry/quantity fallback. */
+        public PreparedPlan retryEntry(int entry) {
+            return prepareEntry(entry, false);
+        }
+
+        private PreparedPlan prepareEntry(int entry, boolean deferCompletion) {
+            this.deferCompletion = deferCompletion;
+            this.entry = entry;
+            goalOrder = null;
+            targets = null;
+            return prepare(1);
+        }
+
         /** Prefer complete terminal products; only an unavailable full line falls back to paid intermediate carry. */
         public PreparedPlan prepare(int targetBatches) {
             if (snapshot == null || !snapshot.routes[entry].isAuthorized(routeMask)) return null;
             if (external == null) {
-                external = snapshot.collectAvailableInputs(routeMask, items, fluids, virtualItems);
+                Set<Object> cachedInputs = graph.cachedInputs;
+                long diagnosticInputStart = System.nanoTime();
+                external = snapshot.collectAvailableInputs(graph, matching, fluids, virtualItems);
+                diagnosticInputNs += System.nanoTime() - diagnosticInputStart;
                 remaining = materials.snapshot();
                 released = new LinkedHashMap<>();
                 for (var iterator = remaining.entrySet()
                     .iterator(); iterator.hasNext();) {
                     var carry = iterator.next();
-                    if (snapshot.hasAuthorizedCacheConsumer(routeMask, carry.getKey())) continue;
+                    if (cachedInputs.contains(carry.getKey())) continue;
                     released.put(carry.getKey(), carry.getValue());
                     iterator.remove();
                 }
-                boolean[] reachable = new boolean[snapshot.routes.length];
-                reachable[entry] = true;
-                boolean changed;
-                do {
-                    changed = false;
-                    for (ChainLink link : snapshot.links) {
-                        if (reachable[link.source] && !reachable[link.target]
-                            && snapshot.routes[link.target].isAuthorized(routeMask)) {
-                            reachable[link.target] = true;
-                            changed = true;
+            }
+            if (goalOrder == null) {
+                if (graph.orders[entry] == null) {
+                    boolean[] reachable = new boolean[snapshot.routes.length];
+                    reachable[entry] = true;
+                    int[] queue = new int[snapshot.routes.length];
+                    queue[0] = entry;
+                    int tail = 1;
+                    for (int head = 0; head < tail; head++) {
+                        for (int target : downstream.get(queue[head])) {
+                            if (reachable[target]) continue;
+                            reachable[target] = true;
+                            queue[tail++] = target;
                         }
                     }
-                } while (changed);
-                int[] entries = snapshot.entryOrder;
-                goalOrder = new int[entries.length];
-                int size = 0;
-                long[] complete = new long[snapshot.routes.length];
-                // Deeper branches get first claim on shared material. Returned byproducts do not hide a terminal.
-                for (int i = entries.length - 1; i >= 0; i--) {
-                    int index = entries[i];
-                    if (!reachable[index]) continue;
-                    goalOrder[size++] = index;
-                    for (Object terminal : snapshot.routes[index].targetOutputs) {
-                        if (!snapshot.hasAuthorizedConsumer(index, routeMask, terminal)) {
-                            complete[index] = 1;
-                            break;
+                    int[] entries = snapshot.entryOrder;
+                    goalOrder = new int[entries.length];
+                    int size = 0;
+                    long[] complete = new long[snapshot.routes.length];
+                    // Deeper branches get first claim on shared material. Returned byproducts do not hide a terminal.
+                    for (int i = entries.length - 1; i >= 0; i--) {
+                        int index = entries[i];
+                        if (!reachable[index]) continue;
+                        goalOrder[size++] = index;
+                        for (Object terminal : snapshot.routes[index].targetOutputs) {
+                            if (!retainedOutputs.get(index)
+                                .contains(terminal)) {
+                                complete[index] = 1;
+                                break;
+                            }
                         }
                     }
+                    goalOrder = Arrays.copyOf(goalOrder, size);
+                    graph.orders[entry] = goalOrder;
+                    graph.completeTargets[entry] = complete;
                 }
-                goalOrder = Arrays.copyOf(goalOrder, size);
+                goalOrder = graph.orders[entry];
+                long[] complete = graph.completeTargets[entry];
                 PreparedPlan first = prepareTargets(complete, true);
                 if (first == null) {
                     for (int index : goalOrder) {
@@ -307,70 +475,202 @@ public final class BottledChaosRecipeProcessor {
             return prepareTargets(requested, false);
         }
 
-        /** Increase final-product targets, then rebuild exact upstream demand within the time and source limits. */
-        public PreparedPlan fitDownstream(PreparedPlan full, Predicate<PreparedPlan> fits) {
+        /** Estimate whole-line batches once, then shrink until a complete candidate fits. */
+        public PreparedPlan fitDownstream(PreparedPlan full, double durationLimit, Predicate<PreparedPlan> fits) {
             if (!fits.test(full)) return full; // One complete integer chain is indivisible.
-            PreparedPlan chosen = full;
-            long[] requested = full.targets.clone();
-            for (int index : goalOrder) {
-                if (requested[index] == 0) continue;
-                long lower = requested[index];
-                long upper = lower;
-                while (upper < Integer.MAX_VALUE) {
-                    upper = Math.min(Integer.MAX_VALUE, upper * 2);
-                    requested[index] = upper;
-                    PreparedPlan candidate = prepareTargets(requested, false);
-                    if (candidate == null || !fits.test(candidate)) break;
-                    chosen = candidate;
-                    lower = upper;
-                }
-                if (lower < upper) {
-                    long high = upper - 1;
-                    long low = lower + 1;
-                    while (low <= high) {
-                        long middle = low + (high - low) / 2;
-                        requested[index] = middle;
-                        PreparedPlan candidate = prepareTargets(requested, false);
-                        if (candidate != null && fits.test(candidate)) {
-                            chosen = candidate;
-                            low = middle + 1;
-                        } else high = middle - 1;
+            if (!targetExtensionAttempted) {
+                targetExtensionAttempted = true;
+                full = appendAvailableTargets(full, durationLimit, fits);
+            }
+            return fitTargets(full, (long) Math.min(Integer.MAX_VALUE, durationLimit / full.duration), fits);
+        }
+
+        /** Correct an underfilled estimate at most twice; ordinary rounds never enter this path. */
+        public PreparedPlan refineShortPlan(PreparedPlan chosen, Predicate<PreparedPlan> fits) {
+            if (shortCorrectionAttempted) return chosen;
+            shortCorrectionAttempted = true;
+            double share = chosen.duration / durationLimit.applyAsDouble(chosen.baseEUt);
+            diagnosticShortBefore = share;
+            diagnosticShortAfter = share;
+            double scale = 1 / share;
+            for (long target : chosen.targets) {
+                if (target != 0) scale = Math.min(scale, (double) Integer.MAX_VALUE / target);
+            }
+            for (int attempt = 0; attempt < 2 && scale > 1; attempt++) {
+                long[] requested = chosen.targets.clone();
+                for (int index : goalOrder) requested[index] = (long) Math.floor(requested[index] * scale);
+                if (Arrays.equals(requested, chosen.targets)) break;
+                diagnosticShortProbes++;
+                PreparedPlan candidate = probeTargets(requested, false);
+                if (candidate != null && fits.test(candidate)) {
+                    candidate = finishCandidate(candidate);
+                    if (candidate != null) {
+                        diagnosticShortExtensions++;
+                        diagnosticShortAfter = candidate.duration / durationLimit.applyAsDouble(candidate.baseEUt);
+                        return candidate;
                     }
                 }
-                requested = chosen.targets.clone();
+                double rejectedShare = candidate == null ? 0
+                    : candidate.duration / durationLimit.applyAsDouble(candidate.baseEUt);
+                // A measured time rejection brackets the target. Missing input only permits a smaller estimate.
+                scale = rejectedShare > 1 ? 1 + (scale - 1) * (1 - share) / (rejectedShare - share)
+                    : 1 + (scale - 1) / 2;
             }
             return chosen;
         }
 
+        private PreparedPlan appendAvailableTargets(PreparedPlan full, double durationLimit,
+            Predicate<PreparedPlan> fits) {
+            long diagnosticStart = System.nanoTime();
+            diagnosticTargetPasses++;
+            try {
+                var expanded = chainPlanner(Integer.MAX_VALUE)
+                    .appendAvailableTargets(full.chain, goalOrder, durationLimit);
+                if (Arrays.equals(expanded.targets, full.targets)) return full;
+                PreparedPlan candidate = prepareResult(expanded);
+                if (!fits.test(candidate)) return full;
+                candidate = finishCandidate(candidate);
+                if (candidate == null) return full;
+                diagnosticTargetExtensions++;
+                return candidate;
+            } finally {
+                diagnosticTargetPassNs += System.nanoTime() - diagnosticStart;
+            }
+        }
+
+        /** Output blockage only shrinks the selected targets; it never repeats the initial growth estimate. */
+        public PreparedPlan reduceDownstream(PreparedPlan full, PreparedPlan blocked, Predicate<PreparedPlan> fits) {
+            long multiplier = Integer.MAX_VALUE;
+            for (int index : goalOrder) {
+                if (full.targets[index] != 0)
+                    multiplier = Math.min(multiplier, blocked.targets[index] / full.targets[index]);
+            }
+            return fitTargets(full, multiplier / 2, fits);
+        }
+
+        private PreparedPlan fitTargets(PreparedPlan full, long multiplier, Predicate<PreparedPlan> fits) {
+            for (long target : full.targets) {
+                if (target != 0) multiplier = Math.min(multiplier, Integer.MAX_VALUE / target);
+            }
+            for (; multiplier > 1; multiplier /= 2) {
+                PreparedPlan candidate = prepareScaledTargets(full, multiplier);
+                if (candidate == null || !fits.test(candidate)) continue;
+                candidate = finishCandidate(candidate);
+                if (candidate != null) return candidate;
+            }
+            return full;
+        }
+
+        private PreparedPlan prepareScaledTargets(PreparedPlan full, long multiplier) {
+            long[] requested = full.targets.clone();
+            for (int index : goalOrder) requested[index] *= multiplier;
+            return probeTargets(requested, false);
+        }
+
+        /** Terminal recycling consumes existing leftovers within the remaining work budget. */
+        private boolean terminalRecovery(int index) {
+            if (!snapshot.stages[index].availableInputsOnly) return false;
+            for (Object output : snapshot.routes[index].targetOutputs) {
+                if (!retainedOutputs.get(index)
+                    .contains(output)) return true;
+            }
+            return false;
+        }
+
+        public PreparedPlan recoverAvailable(PreparedPlan chosen, double durationLimit) {
+            double budget = durationLimit - chosen.duration;
+            if (budget <= 0) return chosen;
+            int[] recovery = new int[goalOrder.length];
+            int size = 0;
+            for (int index : goalOrder) {
+                if (terminalRecovery(index) && checkSources(index, chosen.baseEUt)) recovery[size++] = index;
+            }
+            if (size == 0) return chosen;
+            var recovered = chainPlanner(Integer.MAX_VALUE)
+                .recover(chosen.chain, Arrays.copyOf(recovery, size), budget, sourceChecks(chosen.baseEUt).costs);
+            if (Arrays.equals(recovered.batches, chosen.chain.batches)) return chosen;
+            PreparedPlan result = finishCandidate(prepareResult(recovered));
+            return result == null ? chosen : result;
+        }
+
         private PreparedPlan prepareTargets(long[] requested, boolean skipUnavailable) {
-            parameters.resetSourceUsage();
-            long scale = Arrays.stream(requested)
-                .max()
-                .orElse(1);
-            long batchLimit = Math.min(
-                Integer.MAX_VALUE,
-                Math.max(1, Math.min(10000, Config.BottledChaosMaxChainedRecipeBatches)) * Math.max(1, scale));
-            BottledChaosChainPlanner planner = new BottledChaosChainPlanner(
-                snapshot.stages,
-                snapshot.suppliers,
-                new BottledChaosChainPlanner.Conditions() {
+            return finishCandidate(probeTargets(requested, skipUnavailable));
+        }
 
-                    @Override
-                    public boolean canProcess(int index, long voltage) {
-                        return snapshot.routes[index].isAuthorized(routeMask) && checkSources(index, voltage);
-                    }
+        private PreparedPlan probeTargets(long[] requested, boolean skipUnavailable) {
+            long diagnosticStart = System.nanoTime();
+            diagnosticProbes++;
+            try {
 
-                    @Override
-                    public long retainedOutput(int index, Object key, long amount) {
-                        return snapshot.hasAuthorizedConsumer(index, routeMask, key) ? amount : 0;
-                    }
-                },
-                virtualItems,
-                batchLimit);
-            BottledChaosChainPlanner.Result result = planner
-                .prepare(goalOrder, requested, external, remaining, released, skipUnavailable);
-            if (result == null) return null;
-            BottledChaosItemInputs.Consumption itemConsumption;
+                long scale = Arrays.stream(requested)
+                    .max()
+                    .orElse(1);
+                long batchLimit = Math.min(
+                    Integer.MAX_VALUE,
+                    Math.max(1, Math.min(10000, Config.BottledChaosMaxChainedRecipeBatches)) * Math.max(1, scale));
+                BottledChaosChainPlanner.Result result = chainPlanner(batchLimit)
+                    .prepare(goalOrder, requested, external, remaining, released, skipUnavailable);
+                return result == null ? null : prepareResult(result);
+
+            } finally {
+                diagnosticProbeNs += System.nanoTime() - diagnosticStart;
+            }
+        }
+
+        private BottledChaosChainPlanner chainPlanner(long batchLimit) {
+            return new BottledChaosChainPlanner(snapshot.stages, suppliers, new BottledChaosChainPlanner.Conditions() {
+
+                @Override
+                public boolean canProcess(int index, long voltage) {
+                    return authorized[index] && checkSources(index, voltage);
+                }
+
+                @Override
+                public double cost(int index, long voltage) {
+                    return checkSources(index, voltage) ? sourceChecks(voltage).costs[index] : Double.POSITIVE_INFINITY;
+                }
+
+                @Override
+                public long pools(int index) {
+                    return snapshot.routes[index].poolMask;
+                }
+
+                @Override
+                public long retainedOutput(int index, Object key, long amount) {
+                    return retainedOutputs.get(index)
+                        .contains(key) ? amount : 0;
+                }
+
+                @Override
+                public boolean terminalRecovery(int index) {
+                    return ExecutionPlanner.this.terminalRecovery(index);
+                }
+            }, virtualItems, batchLimit);
+        }
+
+        private PreparedPlan prepareResult(BottledChaosChainPlanner.Result result) {
+            return new PreparedPlan(
+                snapshot.familyNames[snapshot.familyOfEntry[entry]],
+                entry,
+                result.voltage,
+                result.duration,
+                result.pools,
+                result.consumed,
+                result.outputs,
+                result.remaining,
+                result.produced,
+                materials.amountLimit(),
+                (int) Math.max(1, result.batches[entry]),
+                result);
+        }
+
+        private PreparedPlan finishCandidate(PreparedPlan plan) {
+            return deferCompletion ? plan : completePlan(plan);
+        }
+
+        public PreparedPlan completePlan(PreparedPlan plan) {
+            if (plan == null || plan.itemConsumption != null) return plan;
+            BottledChaosChainPlanner.Result result = plan.chain;
             try {
                 List<Requirement> requirements = new ArrayList<>();
                 Map<Object, Long> internalPresence = new LinkedHashMap<>(remaining);
@@ -381,22 +681,18 @@ public final class BottledChaosRecipeProcessor {
                             .scale(snapshot.routes[index].data.itemRequirements, result.batches[index], 1, null));
                     snapshot.routes[index].data.outputs.forEach((key, amount) -> internalPresence.put(key, 1L));
                 }
-                itemConsumption = BottledChaosItemInputs
-                    .allocate(requirements, result.consumed, internalPresence, items);
+                long diagnosticMatchStart = System.nanoTime();
+                plan.itemConsumption = BottledChaosItemInputs
+                    .allocate(requirements, result.consumed, internalPresence, matching);
+                diagnosticMatchNs += System.nanoTime() - diagnosticMatchStart;
             } catch (ArithmeticException overflow) {
                 return null;
             }
-            if (itemConsumption == null) return null;
-            double duration = 0;
-            long requiredPools = 0;
-            int family = snapshot.familyOfEntry[entry];
+            if (plan.itemConsumption == null) return null;
+            parameters.resetSourceUsage();
             for (int index : snapshot.entryOrder) {
                 if (result.batches[index] == 0) continue;
-                if (!checkSources(index, result.voltage)) return null;
                 CachedRoute route = snapshot.routes[index];
-                duration = BottledChaosRecipeSupport
-                    .addDuration(duration, sourceChecks(result.voltage).costs[index], result.batches[index]);
-                requiredPools |= route.poolMask;
                 for (var time : route.data.times.entrySet()) {
                     configureSource(time.getKey(), parameters, result.voltage);
                     parameters.recordSourceUsage(
@@ -404,21 +700,8 @@ public final class BottledChaosRecipeProcessor {
                             .map());
                 }
             }
-            return new PreparedPlan(
-                snapshot.familyNames[family],
-                entry,
-                result.voltage,
-                duration,
-                parameters.upkeepDemands(),
-                requiredPools,
-                result.consumed,
-                result.outputs,
-                result.remaining,
-                result.produced,
-                materials.amountLimit(),
-                (int) Math.max(1, result.batches[entry]),
-                result.targets,
-                itemConsumption);
+            plan.upkeep = Collections.unmodifiableList(new ArrayList<>(parameters.upkeepDemands()));
+            return plan;
         }
     }
 
@@ -1417,7 +1700,6 @@ public final class BottledChaosRecipeProcessor {
         final String[] familyNames;
         final int[] familyOfEntry;
         final BottledChaosChainPlanner.Stage[] stages;
-        final List<Map<Object, int[]>> suppliers = new ArrayList<>();
 
         RouteCache(CachedRoute[] routes, int[] entryOrder, int[] displayOrder, ChainLink[] links) {
             this.routes = routes;
@@ -1433,19 +1715,6 @@ public final class BottledChaosRecipeProcessor {
                     data.catalysts,
                     routes[entry].baseEUt,
                     routes[entry].availableInputsOnly);
-                Map<Object, List<Integer>> incoming = new LinkedHashMap<>();
-                for (ChainLink link : links) {
-                    if (link.target == entry) incoming.computeIfAbsent(link.key, ignored -> new ArrayList<>())
-                        .add(link.source);
-                }
-                Map<Object, int[]> sources = new LinkedHashMap<>();
-                for (var input : incoming.entrySet()) sources.put(
-                    input.getKey(),
-                    input.getValue()
-                        .stream()
-                        .mapToInt(Integer::intValue)
-                        .toArray());
-                suppliers.add(sources);
             }
             Map<String, Integer> families = new LinkedHashMap<>();
             familyOfEntry = new int[routes.length];
@@ -1468,52 +1737,30 @@ public final class BottledChaosRecipeProcessor {
             }
         }
 
-        private Map<Object, Long> collectAvailableInputs(long routeMask, ItemStack[] items, FluidStack[] fluids,
-            Set<TST_ItemID> virtualItems) {
+        private Map<Object, Long> collectAvailableInputs(AuthorizedGraph graph,
+            BottledChaosItemInputs.Matching matching, FluidStack[] fluids, Set<TST_ItemID> virtualItems) {
             Map<Object, Long> available = new LinkedHashMap<>();
-            if (items != null) for (ItemStack stack : items) {
-                if (stack == null || stack.stackSize < 0) continue;
-                ItemData association = GTOreDictUnificator.getAssociation(stack);
-                Set<TST_ItemID> matching = new LinkedHashSet<>();
-                for (int entry : entryOrder) {
-                    if (!routes[entry].isAuthorized(routeMask)) continue;
-                    for (Requirement input : routes[entry].data.itemRequirements)
-                        if (input.matches(association, stack)) matching.add(input.key);
-                }
-                // Candidate amounts may overlap; the final native allocation reserves each actual slot only once.
-                for (TST_ItemID key : matching) {
-                    available.merge(key, (long) stack.stackSize, Math::addExact);
-                    if (stack.stackSize == 0) virtualItems.add(key);
-                }
-            }
+            matching.slotsByKey(graph.itemRequirements)
+                .forEach((key, slots) -> {
+                    for (int slot = 0; slot < slots.length; slot++) {
+                        if (!slots[slot]) continue;
+                        int amount = matching.items[slot].stackSize;
+                        available.merge(key, (long) amount, Math::addExact);
+                        if (amount == 0) virtualItems.add(key);
+                    }
+                });
             if (fluids != null) for (FluidStack stack : fluids) {
                 if (stack == null || stack.amount <= 0) continue;
                 FluidId key = FluidId.create(stack);
-                if (isRequiredInput(routeMask, key)) available.merge(key, (long) stack.amount, Math::addExact);
+                if (graph.requiredInputs.contains(key)) available.merge(key, (long) stack.amount, Math::addExact);
             }
             return available;
-        }
-
-        private boolean isRequiredInput(long routeMask, Object key) {
-            for (int entry : entryOrder) {
-                if (!routes[entry].isAuthorized(routeMask)) continue;
-                RecipeData data = routes[entry].data;
-                if (data.inputs.containsKey(key) || data.catalysts.containsKey(key)) return true;
-            }
-            return false;
         }
 
         private boolean hasAuthorizedConsumer(int source, long mask, Object key) {
             for (ChainLink link : links) {
                 if (link.source == source && link.key.equals(key) && routes[link.target].isAuthorized(mask))
                     return true;
-            }
-            return false;
-        }
-
-        private boolean hasAuthorizedCacheConsumer(long mask, Object key) {
-            for (ChainLink link : links) {
-                if (link.key.equals(key) && routes[link.target].isAuthorized(mask)) return true;
             }
             return false;
         }
@@ -1528,7 +1775,8 @@ public final class BottledChaosRecipeProcessor {
         return taken;
     }
 
-    private static double calculateTimePart(TimeKey key, long rawTicks, MachineParameters parameters, long recipeVoltage) {
+    private static double calculateTimePart(TimeKey key, long rawTicks, MachineParameters parameters,
+        long recipeVoltage) {
         double sourceSpeed = parameters.speedMultiplier(key.map());
         double sourceDuration = Math.max(parameters.minimumSourceDuration(key.map()), key.recipeTicks() / sourceSpeed);
         return BottledChaosOverclock.calculateNormalizedDuration(
@@ -1604,8 +1852,8 @@ public final class BottledChaosRecipeProcessor {
             return Collections.emptyList();
         }
 
-        default void configureSource(RecipeMap<?> map, long recipeVoltage, int requiredHeat,
-            int requiredGlassTier, ItemStack requiredSpecialInput, boolean heavyCentrifuge, long requiredSourceVoltage,
+        default void configureSource(RecipeMap<?> map, long recipeVoltage, int requiredHeat, int requiredGlassTier,
+            ItemStack requiredSpecialInput, boolean heavyCentrifuge, long requiredSourceVoltage,
             long fusionThreshold) {}
 
         default long maximumSourcePower(RecipeMap<?> map) {
@@ -1677,14 +1925,14 @@ public final class BottledChaosRecipeProcessor {
         return OverclockType.NormalOverclock;
     }
 
-    /** One immutable candidate: exact external consumption, final outputs and available/pending carry deltas. */
+    /** One candidate: exact input consumption and carry, with outputs finalized only when checking capacity. */
     public static final class PreparedPlan {
 
         private final String family;
         private final int entry;
         private final long baseEUt;
         private final double duration;
-        private final List<BottledChaosUpkeep.Demand> upkeep;
+        private List<BottledChaosUpkeep.Demand> upkeep;
         private final long requiredPools;
         private final Map<Object, Long> consumed;
         private final Map<Object, Long> outputs;
@@ -1694,17 +1942,16 @@ public final class BottledChaosRecipeProcessor {
         private Plan outputPlan;
         private final int executions;
         private final long[] targets;
-        private final BottledChaosItemInputs.Consumption itemConsumption;
+        private final BottledChaosChainPlanner.Result chain;
+        private BottledChaosItemInputs.Consumption itemConsumption;
 
-        private PreparedPlan(String family, int entry, long baseEUt, double duration,
-            List<BottledChaosUpkeep.Demand> upkeep, long requiredPools, Map<Object, Long> consumed,
-            Map<Object, Long> outputs, Map<Object, Long> remainingCache, Map<Object, Long> pendingCache, long cacheLimit,
-            int executions, long[] targets, BottledChaosItemInputs.Consumption itemConsumption) {
+        private PreparedPlan(String family, int entry, long baseEUt, double duration, long requiredPools,
+            Map<Object, Long> consumed, Map<Object, Long> outputs, Map<Object, Long> remainingCache,
+            Map<Object, Long> pendingCache, long cacheLimit, int executions, BottledChaosChainPlanner.Result chain) {
             this.family = family;
             this.entry = entry;
             this.baseEUt = baseEUt;
             this.duration = duration;
-            this.upkeep = Collections.unmodifiableList(new ArrayList<>(upkeep));
             this.requiredPools = requiredPools;
             this.consumed = consumed;
             this.outputs = outputs;
@@ -1712,8 +1959,8 @@ public final class BottledChaosRecipeProcessor {
             this.pendingCache = pendingCache;
             this.cacheLimit = cacheLimit;
             this.executions = executions;
-            this.targets = targets;
-            this.itemConsumption = itemConsumption;
+            this.targets = chain.targets;
+            this.chain = chain;
         }
 
         public String family() {

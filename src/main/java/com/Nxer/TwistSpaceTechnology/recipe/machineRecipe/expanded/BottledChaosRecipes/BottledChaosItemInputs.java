@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaos
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,13 @@ final class BottledChaosItemInputs {
         }
 
         Requirement amount(long value) {
-            return new Requirement(key, value, alternatives);
+            return new Requirement(this, value);
+        }
+
+        private Requirement(Requirement source, long amount) {
+            key = source.key;
+            this.amount = amount;
+            alternatives = source.alternatives;
         }
 
         Requirement withAlternative(Requirement other) {
@@ -66,6 +73,90 @@ final class BottledChaosItemInputs {
                 if (!found) return false;
             }
             return true;
+        }
+    }
+
+    /** Reuse native rule matches while slot identities stay equal; every round keeps its own quantities. */
+    static final class Matching {
+
+        final ItemStack[] items;
+        private final ItemData[] associations;
+        private final TST_ItemID[] identities;
+        private final boolean[] valid;
+        private final Map<List<RecipeItemInput>, boolean[]> slots;
+        private final Map<List<RecipeItemInput>, Boolean> canonical;
+        private List<Requirement> combinedRequirements;
+        private Map<TST_ItemID, boolean[]> combinedSlots;
+
+        Matching(ItemStack[] provided) {
+            this(provided, null);
+        }
+
+        Matching(ItemStack[] provided, Matching previous) {
+            items = provided == null ? new ItemStack[0] : provided;
+            if (previous != null && previous.sameSlots(items)) {
+                associations = previous.associations;
+                identities = previous.identities;
+                valid = previous.valid;
+                slots = previous.slots;
+                canonical = previous.canonical;
+                combinedRequirements = previous.combinedRequirements;
+                combinedSlots = previous.combinedSlots;
+            } else {
+                associations = new ItemData[items.length];
+                identities = new TST_ItemID[items.length];
+                valid = new boolean[items.length];
+                slots = new IdentityHashMap<>();
+                canonical = new IdentityHashMap<>();
+                for (int i = 0; i < items.length; i++) {
+                    if (items[i] == null) continue;
+                    identities[i] = TST_ItemID.create(items[i].copy());
+                    associations[i] = GTOreDictUnificator.getAssociation(items[i]);
+                    valid[i] = items[i].stackSize >= 0;
+                }
+            }
+        }
+
+        private boolean sameSlots(ItemStack[] provided) {
+            if (provided.length != identities.length) return false;
+            for (int i = 0; i < provided.length; i++) {
+                if (provided[i] == null) {
+                    if (identities[i] != null) return false;
+                } else if (identities[i] == null || valid[i] != (provided[i].stackSize >= 0)
+                    || !identities[i].equals(TST_ItemID.create(provided[i]))) return false;
+            }
+            return true;
+        }
+
+        boolean[] slots(Requirement input) {
+            return slots.computeIfAbsent(input.alternatives, ignored -> {
+                boolean[] matches = new boolean[items.length];
+                for (int i = 0; i < items.length; i++) {
+                    matches[i] = items[i] != null && items[i].stackSize >= 0
+                        && input.matches(associations[i], items[i]);
+                }
+                return matches;
+            });
+        }
+
+        boolean canonical(Requirement input) {
+            return canonical.computeIfAbsent(input.alternatives, ignored -> {
+                ItemStack template = input.key.getItemStack();
+                return input.matches(GTOreDictUnificator.getAssociation(template), template);
+            });
+        }
+
+        Map<TST_ItemID, boolean[]> slotsByKey(List<Requirement> requirements) {
+            if (combinedRequirements != requirements) {
+                combinedRequirements = requirements;
+                combinedSlots = new LinkedHashMap<>();
+                for (Requirement input : requirements) {
+                    boolean[] accepted = slots(input);
+                    boolean[] combined = combinedSlots.computeIfAbsent(input.key, ignored -> new boolean[items.length]);
+                    for (int slot = 0; slot < accepted.length; slot++) combined[slot] |= accepted[slot];
+                }
+            }
+            return combinedSlots;
         }
     }
 
@@ -192,29 +283,34 @@ final class BottledChaosItemInputs {
      */
     static Consumption allocate(List<Requirement> requirements, Map<Object, Long> consumed,
         Map<Object, Long> internalPresence, ItemStack[] provided) {
-        ItemStack[] items = provided == null ? new ItemStack[0] : provided;
-        ItemData[] associations = new ItemData[items.length];
-        for (int i = 0; i < items.length; i++) associations[i] = GTOreDictUnificator.getAssociation(items[i]);
+        return allocate(requirements, consumed, internalPresence, new Matching(provided));
+    }
+
+    static Consumption allocate(List<Requirement> requirements, Map<Object, Long> consumed,
+        Map<Object, Long> internalPresence, Matching matching) {
+        ItemStack[] items = matching.items;
         List<Requirement> demands = new ArrayList<>();
         Map<TST_ItemID, Long> internal = new LinkedHashMap<>();
         for (Requirement input : requirements) {
             if (input.amount == 0) {
                 boolean found = false;
                 for (int i = 0; i < items.length; i++) {
-                    if (items[i] != null && items[i].stackSize >= 0 && input.matches(associations[i], items[i])) {
+                    if (matching.slots(input)[i]) {
                         found = true;
                         break;
                     }
                 }
-                ItemStack template = input.key.getItemStack();
-                if (!found && !(internalPresence.getOrDefault(input.key, 0L) > 0
-                    && input.matches(GTOreDictUnificator.getAssociation(template), template))) return null;
+                if (!found && !(internalPresence.getOrDefault(input.key, 0L) > 0 && matching.canonical(input)))
+                    return null;
             } else {
                 demands.add(input);
                 internal.merge(input.key, input.amount, Math::addExact);
             }
         }
         internal.replaceAll((key, amount) -> amount - consumed.getOrDefault(key, 0L));
+        for (long amount : internal.values()) if (amount < 0) return null;
+        int[] direct = allocateDirect(demands, internal, matching);
+        if (direct != null) return new Consumption(items, direct);
         List<TST_ItemID> keys = new ArrayList<>(internal.keySet());
         int source = 0;
         int firstSupply = 1;
@@ -225,13 +321,10 @@ final class BottledChaosItemInputs {
         for (int i = 0; i < keys.size(); i++) {
             TST_ItemID key = keys.get(i);
             long amount = internal.get(key);
-            if (amount < 0) return null;
             internalEdges.add(flow.add(source, firstSupply + i, amount));
-            ItemStack template = key.getItemStack();
-            ItemData association = GTOreDictUnificator.getAssociation(template);
             for (int j = 0; j < demands.size(); j++) {
                 Requirement demand = demands.get(j);
-                if (key.equals(demand.key) && demand.matches(association, template))
+                if (key.equals(demand.key) && matching.canonical(demand))
                     flow.add(firstSupply + i, firstDemand + j, demand.amount);
             }
         }
@@ -241,8 +334,7 @@ final class BottledChaosItemInputs {
             slots.add(flow.add(source, node, 0));
             if (items[i] == null || items[i].stackSize <= 0) continue;
             for (int j = 0; j < demands.size(); j++) {
-                if (demands.get(j)
-                    .matches(associations[i], items[i])) flow.add(node, firstDemand + j, items[i].stackSize);
+                if (matching.slots(demands.get(j))[i]) flow.add(node, firstDemand + j, items[i].stackSize);
             }
         }
         List<Edge> remaining = new ArrayList<>();
@@ -261,6 +353,36 @@ final class BottledChaosItemInputs {
                 : (int) (items[i].stackSize - slots.get(i).capacity);
         }
         return new Consumption(items, amounts);
+    }
+
+    /** Try the ordinary disjoint-input case first; overlapping native rules still fall back to residual paths. */
+    private static int[] allocateDirect(List<Requirement> demands, Map<TST_ItemID, Long> internal, Matching matching) {
+        ItemStack[] items = matching.items;
+        Map<TST_ItemID, Long> remainingInternal = new LinkedHashMap<>(internal);
+        long[] needed = new long[demands.size()];
+        for (int i = 0; i < demands.size(); i++) {
+            Requirement demand = demands.get(i);
+            needed[i] = demand.amount;
+            long available = remainingInternal.getOrDefault(demand.key, 0L);
+            if (available <= 0) continue;
+            if (!matching.canonical(demand)) continue;
+            long taken = Math.min(available, needed[i]);
+            remainingInternal.put(demand.key, available - taken);
+            needed[i] -= taken;
+        }
+        for (long amount : remainingInternal.values()) if (amount != 0) return null;
+        int[] amounts = new int[items.length];
+        for (int i = 0; i < demands.size(); i++) {
+            for (int slot = 0; needed[i] > 0 && slot < items.length; slot++) {
+                if (items[slot] == null || items[slot].stackSize <= amounts[slot]
+                    || !matching.slots(demands.get(i))[slot]) continue;
+                int taken = (int) Math.min(needed[i], items[slot].stackSize - amounts[slot]);
+                amounts[slot] += taken;
+                needed[i] -= taken;
+            }
+            if (needed[i] != 0) return null;
+        }
+        return amounts;
     }
 
     private static final class Edge {

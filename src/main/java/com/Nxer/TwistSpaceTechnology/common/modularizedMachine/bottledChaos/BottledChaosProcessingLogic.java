@@ -1,7 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -23,11 +25,14 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
 
     private static final int MAX_BATCH_TICKS = 200;
 
+    private final BottledChaosRecipeProcessor.PlanningCache planningCache = new BottledChaosRecipeProcessor.PlanningCache();
     private long routeMask;
     private long pools;
     private long maximumRecipeVoltage = Long.MAX_VALUE;
     private BottledChaosMaterialCache materials;
     private PreparedPlan preparedPlan;
+    private CheckRecipeResult rejectedRoute = CheckRecipeResultRegistry.NO_RECIPE;
+    private final Map<Long, Double> durationLimits = new HashMap<>();
     private Function<BottledChaosRecipeProcessor.Plan, CheckRecipeResult> outputCheck;
     private BottledChaosRecipeProcessor.MachineParameters machineParameters = new BottledChaosRecipeProcessor.MachineParameters() {};
 
@@ -66,7 +71,10 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
 
     @Override
     public @NotNull CheckRecipeResult process() {
+        long diagnosticStart = System.nanoTime();
         preparedPlan = null;
+        rejectedRoute = CheckRecipeResultRegistry.NO_RECIPE;
+        durationLimits.clear();
         if (routeMask == 0) {
             return SimpleResultWithText.ofFailure("tst.bottledchaos.result.unbound");
         }
@@ -77,83 +85,159 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
             return SimpleResultWithText.ofFailure("tst.bottledchaos.result.recipe_cache_unavailable");
         }
         CheckRecipeResult failure = CheckRecipeResultRegistry.NO_RECIPE;
+        var planner = BottledChaosRecipeProcessor
+            .executionPlanner(routeMask, 0, inputItems, inputFluids, machineParameters, materials, planningCache);
+        planner.setLimits((voltage, requiredPools) -> {
+            CheckRecipeResult result = validateLimits(voltage, requiredPools);
+            if (!result.wasSuccessful()) rejectedRoute = result;
+            return result.wasSuccessful();
+        }, this::batchDurationLimit);
+        long diagnosticSetup = System.nanoTime();
         // 1. Try the last successful family first. Failures may select another entry/family without any consumption.
         for (int entry : BottledChaosRecipeProcessor.candidateEntries(routeMask, materials)) {
-            var planner = BottledChaosRecipeProcessor
-                .executionPlanner(routeMask, entry, inputItems, inputFluids, machineParameters, materials);
-            PreparedPlan baseline = planner.prepare(1);
-            if (baseline == null) continue;
-            CheckRecipeResult result = validatePlan(baseline);
-            if (!result.wasSuccessful()) {
-                failure = result;
-                continue;
+            for (int attempt = 0; attempt < 2; attempt++) {
+                long diagnosticPrepareStart = System.nanoTime();
+                PreparedPlan baseline = attempt == 0 ? planner.prepareEntry(entry) : planner.retryEntry(entry);
+                long diagnosticPrepared = System.nanoTime();
+                if (baseline == null) break;
+                CheckRecipeResult result = validatePlan(baseline);
+                if (!result.wasSuccessful()) {
+                    failure = result;
+                    break;
+                }
+                // 2. Extend selected goals from present stock once, then estimate/halve complete-line targets.
+                PreparedPlan fallback = baseline;
+                Predicate<PreparedPlan> fitsWork = candidate -> validatePlan(candidate).wasSuccessful()
+                    && candidate.durationTicks() <= batchDurationLimit(candidate);
+                PreparedPlan chosen = planner.fitDownstream(baseline, batchDurationLimit(baseline), fitsWork);
+                if (chosen.durationTicks()
+                    <= batchDurationLimit(chosen) * BottledChaosOverclock.MIN_OVERCLOCK_TICKS / MAX_BATCH_TICKS) {
+                    chosen = planner.refineShortPlan(chosen, fitsWork);
+                }
+                long diagnosticFitted = System.nanoTime();
+                result = validatePlan(chosen);
+                if (!result.wasSuccessful()) {
+                    failure = result;
+                    break;
+                }
+                // 3. Reserve outputs before changing even the caller's input copies; a smaller plan may still fit.
+                PreparedPlan mainPlan = chosen;
+                PreparedPlan recovered = planner.recoverAvailable(chosen, batchDurationLimit(chosen));
+                if (fitsWork.test(recovered)) chosen = recovered;
+                long diagnosticRecovered = System.nanoTime();
+                result = checkOutputs(planner, chosen);
+                if (!result.wasSuccessful() && chosen != mainPlan) {
+                    chosen = mainPlan;
+                    result = checkOutputs(planner, chosen);
+                }
+                if (!result.wasSuccessful() && chosen != fallback) {
+                    // Output blockage only shrinks the selected targets; do not repeat the growth estimate.
+                    chosen = planner.reduceDownstream(
+                        fallback,
+                        chosen,
+                        candidate -> fitsWork.test(candidate) && checkOutputs(planner, candidate).wasSuccessful());
+                    result = checkOutputs(planner, chosen);
+                }
+                if (!result.wasSuccessful() && chosen != fallback) {
+                    chosen = fallback;
+                    result = checkOutputs(planner, chosen);
+                }
+                if (!result.wasSuccessful()) {
+                    if (attempt == 0 && result == CheckRecipeResultRegistry.NO_RECIPE) continue;
+                    failure = result;
+                    break;
+                }
+                long diagnosticChecked = System.nanoTime();
+                BottledChaosOverclock.Result clock = overclock(chosen);
+                result = validateClock(clock);
+                if (!result.wasSuccessful()) {
+                    failure = result;
+                    break;
+                }
+                chosen.consumeInputCopies(inputItems, inputFluids);
+                preparedPlan = chosen;
+                calculatedEut = clock.eut();
+                duration = Math.max(1, clock.duration());
+                BottledChaosRecipeProcessor.Plan outputs = chosen.outputPlan();
+                calculatedParallels = outputs.executions();
+                setLongOutputs(outputs.itemOutputs(), outputs.fluidOutputs());
+                long diagnosticEnd = System.nanoTime();
+                com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG.info(
+                    "BC_ROUND entry=" + entry
+                        + " total="
+                        + (diagnosticEnd - diagnosticStart)
+                        + " setup="
+                        + (diagnosticSetup - diagnosticStart)
+                        + " prepare="
+                        + (diagnosticPrepared - diagnosticPrepareStart)
+                        + " fit="
+                        + (diagnosticFitted - diagnosticPrepared)
+                        + " recover="
+                        + (diagnosticRecovered - diagnosticFitted)
+                        + " output="
+                        + (diagnosticChecked - diagnosticRecovered)
+                        + " finish="
+                        + (diagnosticEnd - diagnosticChecked)
+                        + " probes="
+                        + planner.diagnosticProbes
+                        + " probeNs="
+                        + planner.diagnosticProbeNs
+                        + " targetPasses="
+                        + planner.diagnosticTargetPasses
+                        + " targetExtensions="
+                        + planner.diagnosticTargetExtensions
+                        + " targetPassNs="
+                        + planner.diagnosticTargetPassNs
+                        + " shortProbes="
+                        + planner.diagnosticShortProbes
+                        + " shortExtensions="
+                        + planner.diagnosticShortExtensions
+                        + " shortBefore="
+                        + planner.diagnosticShortBefore
+                        + " shortAfter="
+                        + planner.diagnosticShortAfter
+                        + " sources="
+                        + planner.diagnosticSourceCalls
+                        + " sourceNs="
+                        + planner.diagnosticSourceNs
+                        + " inputNs="
+                        + planner.diagnosticInputNs
+                        + " matchNs="
+                        + planner.diagnosticMatchNs
+                        + " ticks="
+                        + duration
+                        + " eut="
+                        + calculatedEut);
+                return CheckRecipeResultRegistry.SUCCESSFUL;
             }
-            // 2. Grow final-product targets; every probe derives its own upstream feed and serial voltage.
-            PreparedPlan fallback = baseline;
-            Predicate<PreparedPlan> fitsWork = candidate -> validatePlan(candidate).wasSuccessful()
-                && candidate.durationTicks() <= Math.min(
-                    Double.MAX_VALUE,
-                    MAX_BATCH_TICKS * BottledChaosOverclock.maximumSpeed(
-                        candidate.baseEUt() * euModifier,
-                        availableVoltage,
-                        overClockTimeReduction,
-                        overClockPowerIncrease) / speedBoost);
-            PreparedPlan chosen = planner.fitDownstream(baseline, fitsWork);
-            result = validatePlan(chosen);
-            if (!result.wasSuccessful()) {
-                failure = result;
-                continue;
-            }
-            // 3. Reserve outputs before changing even the caller's input copies; a smaller plan may still fit.
-            result = outputCheck.apply(chosen.outputPlan());
-            if (!result.wasSuccessful() && chosen != fallback) {
-                // Probe smaller targets only after output blockage, avoiding extra ME simulations on normal starts.
-                chosen = planner.fitDownstream(
-                    fallback,
-                    candidate -> fitsWork.test(candidate)
-                        && (candidate == fallback || outputCheck.apply(candidate.outputPlan())
-                            .wasSuccessful()));
-                result = outputCheck.apply(chosen.outputPlan());
-            }
-            if (!result.wasSuccessful() && chosen != fallback) {
-                chosen = fallback;
-                result = outputCheck.apply(chosen.outputPlan());
-            }
-            if (!result.wasSuccessful()) {
-                failure = result;
-                continue;
-            }
-            BottledChaosOverclock.Result clock = overclock(chosen);
-            result = validateClock(clock);
-            if (!result.wasSuccessful()) {
-                failure = result;
-                continue;
-            }
-            chosen.consumeInputCopies(inputItems, inputFluids);
-            preparedPlan = chosen;
-            calculatedEut = clock.eut();
-            duration = Math.max(1, clock.duration());
-            BottledChaosRecipeProcessor.Plan outputs = chosen.outputPlan();
-            calculatedParallels = outputs.executions();
-            setLongOutputs(outputs.itemOutputs(), outputs.fluidOutputs());
-            return CheckRecipeResultRegistry.SUCCESSFUL;
         }
+        if (failure == CheckRecipeResultRegistry.NO_RECIPE && rejectedRoute != CheckRecipeResultRegistry.NO_RECIPE)
+            return rejectedRoute;
         if (failure == CheckRecipeResultRegistry.NO_RECIPE
             && machineParameters instanceof BottledChaosMachineConfiguration.RuntimeParameters runtime)
             return runtime.sourceFailure();
         return failure;
     }
 
+    private CheckRecipeResult checkOutputs(BottledChaosRecipeProcessor.ExecutionPlanner planner, PreparedPlan plan) {
+        if (planner.completePlan(plan) == null) return CheckRecipeResultRegistry.NO_RECIPE;
+        BottledChaosRecipeProcessor.Plan outputs;
+        try {
+            outputs = plan.outputPlan();
+        } catch (ArithmeticException overflow) {
+            // #tr tst.bottledchaos.result.output_overflow
+            // # Output quantity exceeds the limit.
+            // #zh_CN 输出数量超过上限.
+            return SimpleResultWithText.ofFailure("tst.bottledchaos.result.output_overflow");
+        }
+        return outputCheck.apply(outputs);
+    }
+
     private CheckRecipeResult validatePlan(PreparedPlan plan) {
         long baseRecipeVoltage = plan.baseEUt();
         long requiredPools = plan.requiredPools();
-        if (baseRecipeVoltage > maximumRecipeVoltage) {
-            // #tr tst.bottledchaos.result.recipe_voltage_limit
-            // # Recipe voltage exceeds the structure upgrade limit.
-            // #zh_CN 配方电压超过结构升级上限.
-            return SimpleResultWithText.ofFailure("tst.bottledchaos.result.recipe_voltage_limit");
-        }
-        if ((pools & requiredPools) != requiredPools) return missingPools(requiredPools, pools);
+        CheckRecipeResult limits = validateLimits(baseRecipeVoltage, requiredPools);
+        if (!limits.wasSuccessful()) return limits;
         double power = baseRecipeVoltage * euModifier;
         if (!Double.isFinite(power) || power <= 0 || power >= Long.MAX_VALUE)
             return CheckRecipeResultRegistry.POWER_OVERFLOW;
@@ -162,6 +246,31 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
         if (Math.ceil(power) > availableVoltage)
             return CheckRecipeResultRegistry.insufficientPower((long) Math.ceil(power));
         return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    private CheckRecipeResult validateLimits(long baseRecipeVoltage, long requiredPools) {
+        if (baseRecipeVoltage > maximumRecipeVoltage) {
+            // #tr tst.bottledchaos.result.recipe_voltage_limit
+            // # Recipe voltage exceeds the structure upgrade limit.
+            // #zh_CN 配方电压超过结构升级上限.
+            return SimpleResultWithText.ofFailure("tst.bottledchaos.result.recipe_voltage_limit");
+        }
+        if ((pools & requiredPools) != requiredPools) return missingPools(requiredPools, pools);
+        return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    private double batchDurationLimit(PreparedPlan plan) {
+        return batchDurationLimit(plan.baseEUt());
+    }
+
+    private double batchDurationLimit(long voltage) {
+        return durationLimits.computeIfAbsent(
+            voltage,
+            key -> Math.min(
+                Double.MAX_VALUE,
+                MAX_BATCH_TICKS * BottledChaosOverclock
+                    .maximumSpeed(key * euModifier, availableVoltage, overClockTimeReduction, overClockPowerIncrease)
+                    / speedBoost));
     }
 
     private BottledChaosOverclock.Result overclock(PreparedPlan plan) {

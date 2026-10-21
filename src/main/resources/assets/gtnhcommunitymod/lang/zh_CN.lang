@@ -885,6 +885,7 @@ tst.bottledchaos.result.capacity_exceeded=已安装凭证超过主机容量.
 tst.bottledchaos.result.credential_changed=此加工组的凭证已变更.
 tst.bottledchaos.result.insufficient_power_share=此加工组分配到的电力不足.
 tst.bottledchaos.result.invalid_source_configuration=来源结构配置不适用于此配方池.
+tst.bottledchaos.result.output_overflow=输出数量超过上限.
 tst.bottledchaos.result.parameter_limit=%s不足: %s / %s
 tst.bottledchaos.result.recipe_cache_unavailable=瓶中混沌处理配方不可用. 请检查启动日志.
 tst.bottledchaos.result.recipe_voltage_limit=配方电压超过结构升级上限.

@@ -3,7 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos;
 /** Shared source normalization and final execution overclocks. Only final execution has a two-second stop. */
 public final class BottledChaosOverclock {
 
-    private static final int MIN_OVERCLOCK_TICKS = 40;
+    public static final int MIN_OVERCLOCK_TICKS = 40;
 
     public static final class Result {
 
@@ -79,14 +79,16 @@ public final class BottledChaosOverclock {
             normalized = 0;
             for (int limit : overclockLimitAlternatives) {
                 if (limit < -1) throw new IllegalArgumentException("Invalid source overclock limit");
-                normalized += work / overclockSpeed(
-                    basePower,
-                    targetEUt,
-                    timeDivisor,
-                    powerMultiplier,
-                    limit < 0 ? -1 : (long) limit + parallelOverclocks,
-                    finitePerfect,
-                    false) / overclockLimitAlternatives.length;
+                normalized += work
+                    / overclockSpeed(
+                        basePower,
+                        targetEUt,
+                        timeDivisor,
+                        powerMultiplier,
+                        limit < 0 ? -1 : (long) limit + parallelOverclocks,
+                        finitePerfect,
+                        false)
+                    / overclockLimitAlternatives.length;
             }
         }
         if (!Double.isFinite(normalized) || normalized <= 0)
@@ -142,9 +144,8 @@ public final class BottledChaosOverclock {
             double nextPower = count < perfectOverclocks ? 4 : powerMultiplier;
             double nextSpeed = count < perfectOverclocks ? 4 : timeDivisor;
             if (power > availablePower / nextPower) {
-                if (fractionalLastStep) speed *= Math.pow(
-                    Math.max(1, availablePower / power),
-                    Math.log(nextSpeed) / Math.log(nextPower));
+                if (fractionalLastStep)
+                    speed *= Math.pow(Math.max(1, availablePower / power), Math.log(nextSpeed) / Math.log(nextPower));
                 break;
             }
             power *= nextPower;

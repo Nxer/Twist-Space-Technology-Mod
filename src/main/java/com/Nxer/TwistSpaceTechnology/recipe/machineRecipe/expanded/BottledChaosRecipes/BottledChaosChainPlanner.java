@@ -34,6 +34,18 @@ final class BottledChaosChainPlanner {
         boolean canProcess(int stage, long voltage);
 
         long retainedOutput(int stage, Object key, long amount);
+
+        default boolean terminalRecovery(int stage) {
+            return false;
+        }
+
+        default double cost(int stage, long voltage) {
+            return 0;
+        }
+
+        default long pools(int stage) {
+            return 0;
+        }
     }
 
     static final class Result {
@@ -47,6 +59,8 @@ final class BottledChaosChainPlanner {
         final long[] targets;
         final boolean[] active;
         long voltage;
+        long pools;
+        double duration;
 
         Result(int stages, Map<Object, Long> external, Map<Object, Long> remaining, Map<Object, Long> outputs) {
             this.external = new LinkedHashMap<>(external);
@@ -69,6 +83,8 @@ final class BottledChaosChainPlanner {
             targets = other.targets.clone();
             active = other.active.clone();
             voltage = other.voltage;
+            pools = other.pools;
+            duration = other.duration;
         }
     }
 
@@ -116,7 +132,7 @@ final class BottledChaosChainPlanner {
         state = new Result(stages.length, external, remaining, released);
         for (int goal : goalOrder) {
             if (targets[goal] == 0) continue;
-            Result before = new Result(state);
+            Result before = skipUnavailable ? new Result(state) : null;
             attempts = 0;
             try {
                 if (execute(goal, Math.max(0, targets[goal] - state.batches[goal]))) {
@@ -126,11 +142,31 @@ final class BottledChaosChainPlanner {
             } catch (ArithmeticException overflow) {
                 // An unrepresentable probe is discarded without committing any of its material deltas.
             }
-            state = before;
             if (!skipUnavailable) return null;
+            state = before;
         }
-        for (long target : state.targets) if (target != 0) return state;
+        for (long target : state.targets) if (target != 0) {
+            recoverProduced(goalOrder);
+            return state;
+        }
         return null;
+    }
+
+    /** Include recycling of this round's byproducts in the complete-line time estimate. */
+    private void recoverProduced(int[] order) {
+        for (int index : order) {
+            Stage stage = stages[index];
+            if (!stage.availableInputsOnly || !conditions.terminalRecovery(index)) continue;
+            long count = 0;
+            for (var input : stage.inputs.entrySet()) {
+                count = Math.max(count, state.produced.getOrDefault(input.getKey(), 0L) / input.getValue());
+            }
+            count = suppliedInputLimit(index, Math.min(count, batchLimit - state.batches[index]));
+            if (count <= 0) continue;
+            Result before = new Result(state);
+            attempts = 0;
+            if (!trySupplier(index, count)) state = before;
+        }
     }
 
     private boolean execute(int index, long count) {
@@ -144,6 +180,13 @@ final class BottledChaosChainPlanner {
             for (int previous = 0; previous < stages.length; previous++) {
                 if ((state.batches[previous] != 0 || state.active[previous])
                     && !conditions.canProcess(previous, voltage)) return false;
+            }
+        }
+        if (voltage != state.voltage) {
+            state.duration = 0;
+            for (int previous = 0; previous < stages.length; previous++) {
+                if (state.batches[previous] != 0)
+                    state.duration += conditions.cost(previous, voltage) * state.batches[previous];
             }
         }
         state.voltage = voltage;
@@ -182,6 +225,9 @@ final class BottledChaosChainPlanner {
             if (amount > retained) state.outputs.merge(key, amount - retained, Math::addExact);
         }
         state.batches[index] += count;
+        state.pools |= conditions.pools(index);
+        state.duration += conditions.cost(index, state.voltage) * count;
+        if (!Double.isFinite(state.duration)) throw new ArithmeticException("duration overflow");
         state.active[index] = false;
         return true;
     }
@@ -191,36 +237,103 @@ final class BottledChaosChainPlanner {
         int[] sources = suppliers.get(consumer)
             .get(key);
         if (sources == null) return false;
-        for (int source : sources) {
+        for (int sourceIndex = 0; sourceIndex < sources.length; sourceIndex++) {
+            int source = sources[sourceIndex];
             // A return cannot pay for its own unfinished consumer. Existing carry or external seed may break cycles.
             if (state.active[source]) continue;
             long missing = needed - available(consumer, key);
             long output = stages[source].outputs.get(key);
             long count = Math
                 .min(batchLimit - state.batches[source], missing / output + (missing % output == 0 ? 0 : 1));
+            count = suppliedInputLimit(source, count);
             if (count <= 0) continue;
-            Result before = new Result(state);
+            // Only an alternative supplier needs a local rollback. A failed last supplier rejects its caller.
+            Result before = sourceIndex + 1 < sources.length ? new Result(state) : null;
             if (trySupplier(source, count)) {
                 if (available(consumer, key) >= needed) return true;
                 continue;
             }
+            if (before == null) return false;
             state = before;
-            // Different authorized suppliers may jointly cover the shortage. Probe integer counts, not units.
-            long lower = 1;
-            long upper = count - 1;
-            Result best = before;
-            while (lower <= upper && attempts <= MAX_SUPPLY_ATTEMPTS) {
-                long middle = lower + (upper - lower) / 2;
-                state = new Result(before);
-                if (trySupplier(source, middle)) {
-                    best = state;
-                    lower = middle + 1;
-                } else upper = middle - 1;
-            }
-            state = best;
-            if (available(consumer, key) >= needed) return true;
+            // Try each source once. The outer whole-line estimate shrinks if combined supply is insufficient.
         }
         return false;
+    }
+
+    /** Bound leaf inputs directly; recursive suppliers are checked once by execute, never binary-searched. */
+    private long suppliedInputLimit(int index, long count) {
+        Stage stage = stages[index];
+        for (var input : stage.inputs.entrySet()) {
+            int[] sources = suppliers.get(index)
+                .get(input.getKey());
+            boolean canSupply = false;
+            if (!stage.availableInputsOnly && sources != null) {
+                for (int source : sources) if (!state.active[source] && source != index) {
+                    canSupply = true;
+                    break;
+                }
+            }
+            if (!canSupply) count = Math.min(count, available(index, input.getKey()) / input.getValue());
+        }
+        return count;
+    }
+
+    /** Add whole batches to selected goals using present stock, without creating new intermediate goals. */
+    Result appendAvailableTargets(Result planned, int[] order, double durationLimit) {
+        state = planned;
+        for (int index : order) {
+            Stage stage = stages[index];
+            if (planned.targets[index] == 0 || stage.availableInputsOnly) continue;
+            long count = batchLimit - state.batches[index];
+            boolean chainedInput = false;
+            for (var input : stage.inputs.entrySet()) {
+                count = Math.min(count, available(index, input.getKey()) / input.getValue());
+                chainedInput |= suppliers.get(index)
+                    .containsKey(input.getKey());
+            }
+            if (!chainedInput || count <= 0) continue;
+            // Selected goals already ran in this plan, so their voltage and source cost remain unchanged.
+            double cost = conditions.cost(index, state.voltage);
+            if (cost > 0) count = Math.min(count, (long) Math.max(0, (durationLimit - state.duration) / cost));
+            if (count <= 0) continue;
+            boolean catalystsAvailable = true;
+            for (var catalyst : stage.catalysts.entrySet()) {
+                Object key = catalyst.getKey();
+                long consumed = Math.multiplyExact(stage.inputs.getOrDefault(key, 0L), count);
+                long needed = Math.max(0, catalyst.getValue() - consumed);
+                if (available(index, key) - consumed < needed && !(needed == 1 && virtualItems.contains(key))) {
+                    catalystsAvailable = false;
+                    break;
+                }
+            }
+            if (!catalystsAvailable) continue;
+            Result before = state;
+            state = new Result(state);
+            attempts = 0;
+            if (trySupplier(index, count)) state.targets[index] = state.batches[index];
+            else state = before;
+        }
+        return state;
+    }
+
+    /** Use spare work budget for terminal recycling, without replaying the main chain or producing new feed. */
+    Result recover(Result planned, int[] order, double budget, double[] costs) {
+        state = new Result(planned);
+        for (int index : order) {
+            Stage stage = stages[index];
+            if (!stage.availableInputsOnly || stage.voltage > state.voltage || costs[index] <= 0) continue;
+            long count = suppliedInputLimit(
+                index,
+                Math.min(batchLimit - state.batches[index], (long) Math.floor(budget / costs[index])));
+            if (count <= 0) continue;
+            Result before = new Result(state);
+            attempts = 0;
+            if (trySupplier(index, count)) {
+                state.targets[index] = state.batches[index];
+                budget = Math.max(0, budget - costs[index] * count);
+            } else state = before;
+        }
+        return state;
     }
 
     private boolean trySupplier(int source, long count) {
