@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaos
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.CosmicNeutroniumDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.IronDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.recipeItemId;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeSupport.prepareSourceRecipe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,26 +46,23 @@ public final class BottledChaosExoticMatterRecipes {
         for (FluidStack stack : Godforge.exoticModulePlasmaFluidMap.keySet()) inputs.add(requireFluid(stack.copy()));
         Map<Object, PlasmaSource> sources = collectPlasmaSources(inputs);
         Map<PlasmaSource, RecipeMark> preparations = new HashMap<>();
+        // Preserve the selected native plasma sources; only the challenge's expected outputs need dynamic data.
+        // spotless:off
         for (PlasmaSource source : sources.values()) {
             catalog.registerExternalInputs(source.input());
-            preparations.put(
-                source,
-                catalog.markTemporaryRecipe(
-                    TecTechRecipeMaps.godforgePlasmaRecipes,
-                    source.input(),
-                    source.plasma(),
-                    -1,
-                    source.recipe()));
+            preparations.put(source, catalog.markPreparedRecipe(TecTechRecipeMaps.godforgePlasmaRecipes,
+                source.input(), source.plasma(), prepareSourceRecipe(TecTechRecipeMaps.godforgePlasmaRecipes, source.recipe())));
         }
 
-        registerQuarkGluonPlasma(
-            catalog,
+        // Main trunks: the two independent native challenge expectations.
+        registerQuarkGluonPlasma(catalog,
             solidCandidates(Godforge.exoticModulePlasmaItemMap, sources),
             fluidCandidates(Godforge.exoticModulePlasmaFluidMap, sources),
             preparations);
         registerMagmatter(catalog, solidCandidates(Godforge.exoticModuleMagmatterItemMap, sources), preparations);
         catalog.setQueryMarkers("magmatter", new Object[0], null);
         catalog.setQueryMarkers("quark_gluon_plasma", new Object[0], null);
+        // spotless:on
     }
 
     private static void registerQuarkGluonPlasma(RecipeCatalog catalog, List<SolidCandidate> solids,
@@ -111,27 +109,17 @@ public final class BottledChaosExoticMatterRecipes {
             Math.multiplyExact(200, QGP_CYCLES),
             (int) TierEU.RECIPE_MAX,
             0);
-        catalog.registerChain(
-            "quark_gluon_plasma",
-            1,
-            TierEU.RECIPE_MAX,
-            candidateRoot(solids, IronDust),
-            new Object[] { product },
-            new Object[] {},
-            catalog.markTemporaryRecipe(
-                TecTechRecipeMaps.godforgeExoticMatterRecipes,
-                plasmaInputs[0].getFluid(),
-                product,
-                -1,
-                exotic));
+        // spotless:off
+        catalog.registerChain("quark_gluon_plasma", 1, TierEU.RECIPE_MAX, candidateRoot(solids, IronDust),
+            new Object[] { product }, new Object[] {},
+            catalog.markPreparedRecipe(TecTechRecipeMaps.godforgeExoticMatterRecipes, plasmaInputs[0].getFluid(), product,
+                prepareSourceRecipe(TecTechRecipeMaps.godforgeExoticMatterRecipes, exotic)));
+        // Input branches: every selected plasma keeps the native preparation's own processing requirements.
         for (SolidCandidate candidate : solids) catalog.registerChainInputSynthesis(
-            "quark_gluon_plasma",
-            candidate.plasma(),
-            preparations.get(candidate.source()));
+            "quark_gluon_plasma", candidate.plasma(), preparations.get(candidate.source()));
         for (FluidCandidate candidate : fluids) catalog.registerChainInputSynthesis(
-            "quark_gluon_plasma",
-            candidate.plasma(),
-            preparations.get(candidate.source()));
+            "quark_gluon_plasma", candidate.plasma(), preparations.get(candidate.source()));
+        // spotless:on
         // Whole gifts give exact macro totals: 112000 dust + 95904000 mB -> 1000000 mB QGP, 10400000 ticks.
         // Individual mean errors are <0.008 dust or <0.999 mB per 1000 mB QGP; there is no sampling at runtime.
     }
@@ -165,21 +153,15 @@ public final class BottledChaosExoticMatterRecipes {
             Math.multiplyExact(200, solids.size()),
             (int) TierEU.RECIPE_MAX,
             0);
-        catalog.registerChain(
-            "magmatter",
-            1,
-            TierEU.RECIPE_MAX,
-            candidateRoot(solids, CosmicNeutroniumDust),
-            new Object[] { product },
-            new Object[] {},
-            catalog.markTemporaryRecipe(
-                TecTechRecipeMaps.godforgeExoticMatterRecipes,
-                plasmaInputs[0].getFluid(),
-                product,
-                -1,
-                exotic));
+        // spotless:off
+        catalog.registerChain("magmatter", 1, TierEU.RECIPE_MAX, candidateRoot(solids, CosmicNeutroniumDust),
+            new Object[] { product }, new Object[] {},
+            catalog.markPreparedRecipe(TecTechRecipeMaps.godforgeExoticMatterRecipes, plasmaInputs[0].getFluid(), product,
+                prepareSourceRecipe(TecTechRecipeMaps.godforgeExoticMatterRecipes, exotic)));
+        // Input branches: feed the expected challenge through the selected native plasma recipes.
         for (SolidCandidate candidate : solids)
             catalog.registerChainInputSynthesis("magmatter", candidate.plasma(), preparations.get(candidate.source()));
+        // spotless:on
         // The current 14-type pool nets 49 dust each -> 8064 mB, with 454000 preparation + 2800 exotic ticks.
     }
 

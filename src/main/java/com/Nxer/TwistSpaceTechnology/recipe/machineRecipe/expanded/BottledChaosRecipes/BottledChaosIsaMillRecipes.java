@@ -41,6 +41,7 @@ public final class BottledChaosIsaMillRecipes {
 
     public static void registerRecipeChains(RecipeCatalog catalog) {
         // spotless:off
+        // Main trunks: crushed minerals -> milling -> flotation -> native drying products.
         registerMineral(catalog, Materials.Sphalerite, GTPPFluids.SphaleriteFlotationFroth, IndiumDust, TierEU.RECIPE_LuV, 0);
         registerMineral(catalog, Materials.Chalcopyrite, GTPPFluids.ChalcopyriteFlotationFroth, IndiumDust, TierEU.RECIPE_IV, 0);
         registerMineral(catalog, Materials.Nickel, GTPPFluids.NickelFlotationFroth, recipeItemId(Materials.Nickel.getDust(1)), TierEU.RECIPE_IV, 0);
@@ -52,10 +53,12 @@ public final class BottledChaosIsaMillRecipes {
         registerMineral(catalog, Materials.Almandine, GTPPFluids.AlmandineFlotationFroth, recipeItemId(Materials.Aluminium.getDust(1)), TierEU.RECIPE_LuV, 0);
         registerMineral(catalog, Materials.Pyrope, GTPPFluids.PyropeFlotationFroth, recipeItemId(Materials.Magnesium.getDust(1)), TierEU.RECIPE_EV, 0);
         registerMineral(catalog, Materials.Monazite, GTPPFluids.MonaziteFlotationFroth, recipeItemId(Materials.Erbium.getDust(1)), TierEU.RECIPE_UV, 0);
+        // Honeycomb variants keep their additional authorization and native drying inputs.
         if (Mods.Forestry.isModLoaded() && GTBees.combs != null) {
             registerMineral(catalog, Materials.Sphalerite, GTPPFluids.SphaleriteFlotationFroth, IndiumDust, TierEU.RECIPE_LuV, 256);
             registerMineral(catalog, Materials.Chalcopyrite, GTPPFluids.ChalcopyriteFlotationFroth, IndiumDust, TierEU.RECIPE_IV, 40);
         }
+        // Independent coproduct recovery and flotation-reagent production.
         registerRedMudRecipe(catalog);
         registerPineOilRecipe(catalog);
         // spotless:on
@@ -80,14 +83,14 @@ public final class BottledChaosIsaMillRecipes {
             .stream()
             .filter(key -> !key.equals(GTUtility.FluidId.create(Water)))
             .toArray();
-        RecipeMark[] steps = { catalog.markRecipe(Milling, new Object[] { crushed, AluminaMillingBall }, milled, 10),
+        // spotless:off
+        RecipeMark[] steps = {
+            catalog.markRecipe(Milling, new Object[] { crushed, AluminaMillingBall }, milled, 10),
             catalog.markRecipe(FlotationCell, milled, froth, -1),
-            catalog.markPreparedRecipe(
-                VacuumFurnace,
-                combCount > 0 ? new Object[] { froth, recipeItemId(GTBees.combs.getStackForType(CombType.INDIUM, 1)) }
-                    : froth,
-                target,
-                drying) };
+            catalog.markPreparedRecipe(VacuumFurnace,
+                combCount > 0 ? new Object[] { froth, recipeItemId(GTBees.combs.getStackForType(CombType.INDIUM, 1)) } : froth,
+                target, drying)
+        };
         if (combCount > 0) {
             catalog.registerAugmentedChain("isamill", "honeycomb", baseEUt, crushed, products, new Object[] {}, steps);
         } else if (mineral == Materials.Sphalerite) {
@@ -98,6 +101,7 @@ public final class BottledChaosIsaMillRecipes {
         catalog.setExecutionTargets("isamill", target);
         if (combCount == 0 && circuit == 1 && Mods.Forestry.isModLoaded() && GTBees.combs != null)
             catalog.requireCircuit("isamill", 1);
+        // spotless:on
     }
 
     private static void registerRedMudRecipe(RecipeCatalog catalog) {
@@ -109,14 +113,11 @@ public final class BottledChaosIsaMillRecipes {
                     .fluids(new FluidStack(RedMud, 1_000))
                     .find())
             .withFullDustOutputs();
-        catalog.registerAlternativeChain(
-            "isamill",
-            TierEU.RECIPE_LV,
-            RedMud,
-            recovery.outputs.keySet()
-                .toArray(),
-            new Object[] {},
+        // spotless:off
+        catalog.registerAlternativeChain("isamill", TierEU.RECIPE_LV, RedMud,
+            recovery.outputs.keySet().toArray(), new Object[] {},
             catalog.markPreparedRecipe(CentrifugeNonCell, RedMud, Water, recovery));
+        // spotless:on
     }
 
     private static void registerPineOilRecipe(RecipeCatalog catalog) {

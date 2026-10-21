@@ -46,114 +46,108 @@ public final class BottledChaosPurifiedWaterRecipes {
             RecipeMaps.purificationPlasmaHeatingRecipes, RecipeMaps.purificationUVTreatmentRecipes,
             RecipeMaps.purificationDegasifierRecipes, RecipeMaps.purificationParticleExtractionRecipes };
 
-        for (int grade = 1; grade <= waters.length; grade++) {
-            Materials inputWater = grade == 1 ? Materials.Water : waters[grade - 2];
-            GTRecipe source = findSource(pools[grade - 1], inputWater, waters[grade - 1], grade);
-            int successPercent = grade <= 2 ? boostedSuccessPercent(source) : 100;
-            Stage stage = new Stage(pools[grade - 1], source, successPercent);
+        for (int grade = 1; grade <= waters.length; grade++) registerStage(catalog, pools[grade - 1], waters, grade);
 
-            switch (grade) {
-                case 1 -> {
-                    // Synthesize the expected loss: the native roll destroys filters on 19 of 100 outcomes.
-                    stage.itemInput(source.mInputs[0], source.mInputs[0].stackSize * 19L, 100);
-                    stage.waterBoost();
-                    stage.failedWater(grade, waters, successPercent);
-                }
-                case 2 -> {
-                    stage.waterBoost();
-                    stage.failedWater(grade, waters, successPercent);
-                }
-                case 3 -> {
-                    // Base 10% plus nine exact PAC levels reaches 100%; waste returns even on failure.
-                    stage.fluidInput(Materials.PolyAluminiumChloride.getFluid(1), 900_000, 1);
-                    stage.fluidOutput(Materials.FlocculationWasteLiquid.getFluid(1), 900_000, 1);
-                }
-                case 4 -> {
-                    // Enumerated native float pH values: the least one-sided dose in the passing range.
-                    stage.itemInput(Materials.SodiumHydroxide.getDust(1), 121_045, 2_000);
-                    stage.fluidInput(Materials.HydrochloricAcid.getFluid(1), 1_210_090, 2_000);
-                }
-                case 5 -> {
-                    // Three complete thermal cycles give 99%; 10% water feedback supplies the rest.
-                    stage.fluidInput(Materials.Helium.getPlasma(1), 300, 1);
-                    stage.fluidInput(Materials.SuperCoolant.getFluid(1), 6_000, 1);
-                    stage.waterBoost();
-                }
-                case 6 -> {
-                    // All nine native lenses are reusable, and the completed sequence gives 90%.
-                    if (MTEPurificationUnitUVTreatment.LENS_ITEMS.size() != 9)
-                        throw new IllegalStateException("unexpected purified-water lens sequence");
-                    for (ItemStack lens : MTEPurificationUnitUVTreatment.LENS_ITEMS) stage.requireItem(lens, 1);
-                    stage.waterBoost();
-                }
-                case 7 -> {
-                    // Eight non-bypass signals occur at 10% each; the no-input bypass occurs at 20%.
-                    stage.fluidInput(Materials.SuperCoolant.getFluid(1), 10_000, 10);
-                    stage.fluidInput(Materials.Helium.getGas(1), 10_000, 10);
-                    stage.fluidInput(WerkstoffLoader.Neon.getFluidOrGas(1), 7_500, 10);
-                    stage.fluidInput(WerkstoffLoader.Krypton.getFluidOrGas(1), 5_000, 10);
-                    stage.fluidInput(WerkstoffLoader.Xenon.getFluidOrGas(1), 2_500, 10);
-                    stage.fluidInput(Materials.SuperconductorUMVBase.getMolten(1), 10L * INGOTS * 2, 5);
-                    stage.fluidInput(Materials.Neutronium.getMolten(1), 32L * INGOTS * 2, 5);
-                    // UMV superconductor doubles only the four signals that request it.
-                    stage.fluidOutput(source.mFluidOutputs[0], source.mFluidOutputs[0].amount * 2L, 5);
-                }
-                case 8 -> {
-                    // Eighteen entries cover every unordered pair, with three occurrences per flavor:
-                    // Strange, Up, Down, Up, Bottom, Down, Top, Up, Charm, Down, Strange, Bottom,
-                    // Top, Bottom, Charm, Top, Strange, Charm. Sixteen wrong entries return unchanged.
-                    ItemList[] catalysts = { ItemList.Quark_Creation_Catalyst_Up, ItemList.Quark_Creation_Catalyst_Down,
-                        ItemList.Quark_Creation_Catalyst_Bottom, ItemList.Quark_Creation_Catalyst_Top,
-                        ItemList.Quark_Creation_Catalyst_Strange, ItemList.Quark_Creation_Catalyst_Charm };
-                    for (ItemList catalyst : catalysts) {
-                        ItemStack stack = catalyst.get(1);
-                        stage.itemInput(stack, 3, 1);
-                        stage.itemOutput(stack, 8, 3);
-                        stage.requireItem(stack, 3);
-                    }
-                    stage.fluidInput(Materials.Infinity.getMolten(1), 6L * INGOTS * (1 + 2 + 4), 1);
-                    // The real source already contains the additional end-of-cycle 500 L.
-                    stage.fluidOutput(
-                        Materials.StableBaryonicMatter.getFluid(1),
-                        MTEPurificationUnitBaryonicPerfection.BARYONIC_MATTER_OUTPUT,
-                        1);
-                }
-                default -> throw new IllegalStateException("unknown purified-water grade " + grade);
+        // spotless:off
+        // Shared output branch: recover waste before supplementing the net aluminium and acid demand.
+        catalog.registerOutputDecompositions(FlocculationWasteLiquid);
+
+        // Shared input branches: native consumables for the eight independently chainable water stages.
+        catalog.registerInputSyntheses(ActivatedCarbonFilterMesh, OzoneGas, PolyAluminiumChloride,
+            SuperCoolant, SodiumHydroxideDust);
+        // spotless:on
+    }
+
+    private static void registerStage(RecipeCatalog catalog, RecipeMap<?> pool, Materials[] waters, int grade) {
+        Materials inputWater = grade == 1 ? Materials.Water : waters[grade - 2];
+        GTRecipe source = findSource(pool, inputWater, waters[grade - 1], grade);
+        int successPercent = grade <= 2 ? boostedSuccessPercent(source) : 100;
+        Stage stage = new Stage(pool, source, successPercent);
+
+        switch (grade) {
+            case 1 -> {
+                // Synthesize the expected loss: the native roll destroys filters on 19 of 100 outcomes.
+                stage.itemInput(source.mInputs[0], source.mInputs[0].stackSize * 19L, 100);
+                stage.waterBoost();
+                stage.failedWater(grade, waters, successPercent);
             }
-
-            RecipeData data = stage.prepare();
-            Object root = source.mFluidInputs[0].getFluid();
-            Object product = source.mFluidOutputs[0].getFluid();
-            // Recover flocculation waste; other coproducts remain terminal, with water feeding the next grade.
-            catalog.registerChain(
-                "purified_water_" + grade,
-                1,
-                source.mEUt,
-                root,
-                data.outputs.keySet()
-                    .stream()
-                    .filter(key -> !key.equals(FluidId.create(FlocculationWasteLiquid)))
-                    .toArray(),
-                new Object[] { product },
-                catalog.markPreparedRecipe(stage.pool, root, product, data));
-            catalog.setExecutionTargets("purified_water_" + grade, product);
-            if (grade < 8) catalog.setQueryMarkers("purified_water_" + grade, null, new Object[] { product });
-            catalog.registerExternalInputs(
-                data.inputs.keySet()
-                    .toArray());
-            catalog.registerExternalInputs(
-                data.catalysts.keySet()
-                    .toArray());
+            case 2 -> {
+                stage.waterBoost();
+                stage.failedWater(grade, waters, successPercent);
+            }
+            case 3 -> {
+                // Base 10% plus nine exact PAC levels reaches 100%; waste returns even on failure.
+                stage.fluidInput(Materials.PolyAluminiumChloride.getFluid(1), 900_000, 1);
+                stage.fluidOutput(Materials.FlocculationWasteLiquid.getFluid(1), 900_000, 1);
+            }
+            case 4 -> {
+                // Enumerated native float pH values: the least one-sided dose in the passing range.
+                stage.itemInput(Materials.SodiumHydroxide.getDust(1), 121_045, 2_000);
+                stage.fluidInput(Materials.HydrochloricAcid.getFluid(1), 1_210_090, 2_000);
+            }
+            case 5 -> {
+                // Three complete thermal cycles give 99%; 10% water feedback supplies the rest.
+                stage.fluidInput(Materials.Helium.getPlasma(1), 300, 1);
+                stage.fluidInput(Materials.SuperCoolant.getFluid(1), 6_000, 1);
+                stage.waterBoost();
+            }
+            case 6 -> {
+                // All nine native lenses are reusable, and the completed sequence gives 90%.
+                if (MTEPurificationUnitUVTreatment.LENS_ITEMS.size() != 9)
+                    throw new IllegalStateException("unexpected purified-water lens sequence");
+                for (ItemStack lens : MTEPurificationUnitUVTreatment.LENS_ITEMS) stage.requireItem(lens, 1);
+                stage.waterBoost();
+            }
+            case 7 -> {
+                // Eight non-bypass signals occur at 10% each; the no-input bypass occurs at 20%.
+                stage.fluidInput(Materials.SuperCoolant.getFluid(1), 10_000, 10);
+                stage.fluidInput(Materials.Helium.getGas(1), 10_000, 10);
+                stage.fluidInput(WerkstoffLoader.Neon.getFluidOrGas(1), 7_500, 10);
+                stage.fluidInput(WerkstoffLoader.Krypton.getFluidOrGas(1), 5_000, 10);
+                stage.fluidInput(WerkstoffLoader.Xenon.getFluidOrGas(1), 2_500, 10);
+                stage.fluidInput(Materials.SuperconductorUMVBase.getMolten(1), 10L * INGOTS * 2, 5);
+                stage.fluidInput(Materials.Neutronium.getMolten(1), 32L * INGOTS * 2, 5);
+                // UMV superconductor doubles only the four signals that request it.
+                stage.fluidOutput(source.mFluidOutputs[0], source.mFluidOutputs[0].amount * 2L, 5);
+            }
+            case 8 -> {
+                // Eighteen entries cover every unordered pair, with three occurrences per flavor:
+                // Strange, Up, Down, Up, Bottom, Down, Top, Up, Charm, Down, Strange, Bottom,
+                // Top, Bottom, Charm, Top, Strange, Charm. Sixteen wrong entries return unchanged.
+                ItemList[] catalysts = { ItemList.Quark_Creation_Catalyst_Up, ItemList.Quark_Creation_Catalyst_Down,
+                    ItemList.Quark_Creation_Catalyst_Bottom, ItemList.Quark_Creation_Catalyst_Top,
+                    ItemList.Quark_Creation_Catalyst_Strange, ItemList.Quark_Creation_Catalyst_Charm };
+                for (ItemList catalyst : catalysts) {
+                    ItemStack stack = catalyst.get(1);
+                    stage.itemInput(stack, 3, 1);
+                    stage.itemOutput(stack, 8, 3);
+                    stage.requireItem(stack, 3);
+                }
+                stage.fluidInput(Materials.Infinity.getMolten(1), 6L * INGOTS * (1 + 2 + 4), 1);
+                // The real source already contains the additional end-of-cycle 500 L.
+                stage.fluidOutput(
+                    Materials.StableBaryonicMatter.getFluid(1),
+                    MTEPurificationUnitBaryonicPerfection.BARYONIC_MATTER_OUTPUT,
+                    1);
+            }
+            default -> throw new IllegalStateException("unknown purified-water grade " + grade);
         }
 
-        // Recover waste before supplying consumables so returned aluminium and hydrochloric acid are reused.
-        catalog.registerOutputDecompositions(FlocculationWasteLiquid);
-        catalog.registerInputSyntheses(
-            ActivatedCarbonFilterMesh,
-            OzoneGas,
-            PolyAluminiumChloride,
-            SuperCoolant,
-            SodiumHydroxideDust);
+        RecipeData data = stage.prepare();
+        Object root = source.mFluidInputs[0].getFluid();
+        Object product = source.mFluidOutputs[0].getFluid();
+        // spotless:off
+        // Main trunk: preserve the native stage's expected yield, special inputs and returned catalysts.
+        Object[] products = data.outputs.keySet().stream()
+            .filter(key -> !key.equals(FluidId.create(FlocculationWasteLiquid))).toArray();
+        catalog.registerChain("purified_water_" + grade, 1, source.mEUt, root,
+            products, new Object[] { product },
+            catalog.markPreparedRecipe(stage.pool, root, product, data));
+        catalog.setExecutionTargets("purified_water_" + grade, product);
+        if (grade < 8) catalog.setQueryMarkers("purified_water_" + grade, null, new Object[] { product });
+        catalog.registerExternalInputs(data.inputs.keySet().toArray());
+        catalog.registerExternalInputs(data.catalysts.keySet().toArray());
+        // spotless:on
     }
 
     private static GTRecipe findSource(RecipeMap<?> pool, Materials input, Materials output, int grade) {

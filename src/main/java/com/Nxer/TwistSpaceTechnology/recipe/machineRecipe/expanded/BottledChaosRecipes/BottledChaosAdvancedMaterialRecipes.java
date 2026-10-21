@@ -25,39 +25,26 @@ import gregtech.api.enums.TierEU;
 public final class BottledChaosAdvancedMaterialRecipes {
 
     public static void registerRecipeChains(RecipeCatalog catalog) {
-        // 1. Grow seeds and return their solution before balancing the transfer-medium production step.
-        var crystalSolution = catalog.markRecipeSequence(
-            Autoclave,
-            MagMatterRound,
-            PhononCrystalSolution,
+        // spotless:off
+        // Main trunk: grow seeds and close the solution return before producing the transfer medium.
+        var crystalSolution = catalog.markRecipeSequence(Autoclave, MagMatterRound, PhononCrystalSolution,
             catalog.markRecipe(Autoclave, MagMatterRound, PhononicSeedCrystal, -1),
-            catalog.markRecipe(
-                BlastFurnace,
-                new Object[] { PhononicSeedCrystal, EternityDust },
-                PhononCrystalSolution,
-                2));
-        catalog.registerChain(
-            "phonon_medium",
-            1,
-            TierEU.RECIPE_UXV,
-            MagMatterRound,
+            catalog.markRecipe(BlastFurnace, new Object[] { PhononicSeedCrystal, EternityDust }, PhononCrystalSolution, 2));
+        catalog.registerChain("phonon_medium", 1, TierEU.RECIPE_UXV, MagMatterRound,
             new Object[] { PhononMedium },
             crystalSolution,
             catalog.markRecipe(AlloyBlastSmelter, PhononCrystalSolution, PhononMedium, 5));
         catalog.setQueryMarkers("phonon_medium", new Object[] {}, new Object[] { PhononMedium });
 
-        // 2. Prepare the chronic singularity in the arc furnace, then retain every expected QFT coproduct.
+        // Main trunk: arc-furnace preparation followed by the expected QFT coproducts.
         if (!Mods.EternalSingularity.isModLoaded()) return;
         Objects.requireNonNull(EternalSingularity, "eternal singularity");
         Objects.requireNonNull(ChronicSingularity, "chronic singularity");
-        catalog.registerChain(
-            "eternity",
-            1,
-            TierEU.RECIPE_UMV,
-            EternalSingularity,
+        catalog.registerChain("eternity", 1, TierEU.RECIPE_UMV, EternalSingularity,
             new Object[] { EternityMolten },
             catalog.markRecipe(ArcFurnace, EternalSingularity, ChronicSingularity, -1),
             catalog.markRecipe(QuantumForceTransformer, ChronicSingularity, EternityMolten, -1));
         catalog.setQueryMarkers("eternity", new Object[] {}, new Object[] { EternityMolten });
+        // spotless:on
     }
 }
