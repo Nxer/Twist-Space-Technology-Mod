@@ -27,6 +27,7 @@ import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofCoil;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -319,12 +320,28 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         recipeHeatLimitation = 0;
         glassTier = -1;
 
-        // Check all tier to render properly in nei
-        if (!checkPiece(STRUCTURE_PIECE_MAIN_T2, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet, errors)) {
-            clearHatches();
-            errors.clear();
-            if (!checkPiece(STRUCTURE_PIECE_MAIN_T1, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet, errors)
-                || controllerTier > 1) return;
+        // An upgraded controller requires the tier 2 structure; keep its errors for the structure scanner.
+        if (controllerTier > 1) {
+            if (!checkPiece(STRUCTURE_PIECE_MAIN_T2, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet, errors)) {
+                clearHatches();
+                return;
+            }
+        } else {
+            List<StructureError> upgradeErrors = new ArrayList<>();
+            if (!checkPiece(
+                STRUCTURE_PIECE_MAIN_T2,
+                baseHorizontalOffSet,
+                baseVerticalOffSet,
+                baseDepthOffSet,
+                upgradeErrors)) {
+                clearHatches();
+                if (!checkPiece(
+                    STRUCTURE_PIECE_MAIN_T1,
+                    baseHorizontalOffSet,
+                    baseVerticalOffSet,
+                    baseDepthOffSet,
+                    errors)) return;
+            }
         }
 
         if (this.mHeatingCapacity < getCoilHeat()) this.mHeatingCapacity = getCoilHeat();

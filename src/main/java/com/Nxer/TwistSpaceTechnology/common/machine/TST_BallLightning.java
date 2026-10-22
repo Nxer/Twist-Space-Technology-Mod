@@ -31,6 +31,7 @@ import static tectech.thing.casing.TTCasingsContainer.StabilisationFieldGenerato
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -350,7 +351,9 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                 return;
             }
 
-            if (checkPiece(STRUCTURE_PIECE_MK2, 38, 51, 7, errors)) {
+            // The second structure is optional. Its missing blocks must not invalidate the base structure.
+            List<StructureError> upgradeErrors = new ArrayList<>();
+            if (checkPiece(STRUCTURE_PIECE_MK2, 38, 51, 7, upgradeErrors)) {
                 mStructureTier = 2;
             } else {
                 mStructureTier = 1;
