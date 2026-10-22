@@ -39,6 +39,7 @@ import org.jetbrains.annotations.Nullable;
 import com.Nxer.TwistSpaceTechnology.client.effect.MegaNqReactorParticleBatch;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
+import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_MegaNqReactor;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_GeneratorBase;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
@@ -62,6 +63,7 @@ import goodgenerator.items.GGMaterial;
 import goodgenerator.loader.Loaders;
 import goodgenerator.util.CrackRecipeAdder;
 import gregtech.api.GregTechAPI;
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -80,6 +82,7 @@ import gregtech.api.util.GTUtility.FluidId;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.shutdown.ShutDownReason;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
+import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
 import gregtech.common.render.IMTERenderer;
 import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -211,6 +214,16 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     protected static final int MAX_DISCOUNT_PERCENT = 50;
     protected static final int DEFAULT_COOLANT_EFFICIENCY = 100;
 
+    /** GUI 电压单位对应的 GT 电压等级索引：8 = UV，14 = MAX（不含 15 的 MAX+）。 */
+    private static final int OUTPUT_UNIT_FIRST_TIER = 8;
+    private static final int OUTPUT_UNIT_LAST_TIER_EXCLUSIVE = 15;
+    public static final long[] OUTPUT_UNIT_VALUES = Arrays
+        .copyOfRange(GTValues.V, OUTPUT_UNIT_FIRST_TIER, OUTPUT_UNIT_LAST_TIER_EXCLUSIVE);
+    public static final String[] OUTPUT_UNIT_NAMES = Arrays
+        .stream(GTValues.VN, OUTPUT_UNIT_FIRST_TIER, OUTPUT_UNIT_LAST_TIER_EXCLUSIVE)
+        .map(name -> name + "/t")
+        .toArray(String[]::new);
+
     protected static final List<Pair<FluidStack, Integer>> EXCITED_TIERS = Arrays.asList(
         Pair.of(Materials.Space.getMolten(20L), EXCITED_LIQUID_COEFF[0]),
         Pair.of(GGMaterial.atomicSeparationCatalyst.getMolten(20), EXCITED_LIQUID_COEFF[1]),
@@ -231,6 +244,9 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     protected long runTimeTicks = 0;
     protected int cachedCoolantEfficiency = DEFAULT_COOLANT_EFFICIENCY;
     protected int cachedTimeMultiplier = 1;
+    protected int outputUnitIndex = 0;
+    protected String cachedFuelName = "";
+    protected long cachedFuelAmount = 0;
     protected double coreFxX;
     protected double coreFxY;
     protected double coreFxZ;
@@ -367,6 +383,8 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
         times = coefficient;
         parallel = maxParallel;
         lockedFluid = lockedForRun;
+        cachedFuelName = fuelInput.getLocalizedName();
+        cachedFuelAmount = consumedFuelAmount;
         mMaxProgresstime = recipeTicks;
         mEfficiencyIncrease = 10000;
         mOutputFluids = copyFluidOutputs(tRecipe.mFluidOutputs, maxParallel);
@@ -544,6 +562,42 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
         return Math.max(1, originalAmount * (100 - discount) / 100);
     }
 
+    public int getOutputUnitIndex() {
+        return outputUnitIndex;
+    }
+
+    public void setOutputUnitIndex(int index) {
+        this.outputUnitIndex = Math.max(0, Math.min(index, OUTPUT_UNIT_NAMES.length - 1));
+    }
+
+    public int getBasicOutput() {
+        return basicOutput;
+    }
+
+    public int getCachedCoolantEfficiency() {
+        return cachedCoolantEfficiency;
+    }
+
+    public int getCachedTimeMultiplier() {
+        return cachedTimeMultiplier;
+    }
+
+    public int getParallel() {
+        return parallel;
+    }
+
+    public String getCachedFuelName() {
+        return cachedFuelName;
+    }
+
+    public long getCachedFuelAmount() {
+        return cachedFuelAmount;
+    }
+
+    public long getCurrentOutput() {
+        return lEUt;
+    }
+
     @Override
     protected boolean filtersFluid() {
         return false;
@@ -679,6 +733,11 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     }
 
     @Override
+    protected @NotNull MTEMultiBlockBaseGui<?> getGui() {
+        return new TST_Gui_MegaNqReactor(this);
+    }
+
+    @Override
     protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
         super.drawTexts(screenElements, inventorySlot);
         // spotless:off
@@ -809,7 +868,7 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
             .addInfo(tr("tst.common.machine.MegaNqReactor.tooltip.info.02"))
             // #tr tst.common.machine.MegaNqReactor.tooltip.info.03
             // # §aContinuous operation reduces coolant/excited liquid consumption
-            // #zh_CN §a持续运行可降低冷却剂/激发液体消耗!
+            // #zh_CN §a持续运行可降低冷却液/激发态流体消耗!
             .addInfo(tr("tst.common.machine.MegaNqReactor.tooltip.info.03"))
             // #tr tst.common.machine.MegaNqReactor.tooltip.info.04
             // # Up to §550%§7. Max in 24h, decays when idle.
