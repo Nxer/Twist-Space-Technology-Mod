@@ -13,6 +13,7 @@ import com.cleanroommc.modularui.drawable.GuiTextures;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.utils.Alignment;
 import com.cleanroommc.modularui.utils.Color;
+import com.cleanroommc.modularui.value.sync.DoubleSyncValue;
 import com.cleanroommc.modularui.value.sync.IntSyncValue;
 import com.cleanroommc.modularui.value.sync.LongSyncValue;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
@@ -40,7 +41,7 @@ public class TST_Gui_MegaNqReactor extends TST_Gui<TST_MegaNqReactor> {
         syncManager.syncValue("megaNqOutput", new LongSyncValue(null, multiblock::getCurrentOutput));
         syncManager.syncValue("megaNqFuelName", new StringSyncValue(multiblock::getCachedFuelName));
         syncManager.syncValue("megaNqFuelAmount", new LongSyncValue(null, multiblock::getCachedFuelAmount));
-        syncManager.syncValue("megaNqDiscount", new IntSyncValue(multiblock::getConsumptionDiscount));
+        syncManager.syncValue("megaNqRuntimeBonus", new DoubleSyncValue(multiblock::getRuntimeBonus));
     }
 
     @Override
@@ -82,7 +83,7 @@ public class TST_Gui_MegaNqReactor extends TST_Gui<TST_MegaNqReactor> {
         LongSyncValue outputSyncer = syncManager.findSyncHandler("megaNqOutput", LongSyncValue.class);
         StringSyncValue fuelNameSyncer = syncManager.findSyncHandler("megaNqFuelName", StringSyncValue.class);
         LongSyncValue fuelAmountSyncer = syncManager.findSyncHandler("megaNqFuelAmount", LongSyncValue.class);
-        IntSyncValue discountSyncer = syncManager.findSyncHandler("megaNqDiscount", IntSyncValue.class);
+        DoubleSyncValue bonusSyncer = syncManager.findSyncHandler("megaNqRuntimeBonus", DoubleSyncValue.class);
 
         ListWidget<IWidget, ?> terminal = super.createTerminalTextWidget(syncManager, parent);
         // 插到终端文本最上方，避免结构错误/停机原因过长时被挤出可视区域
@@ -100,6 +101,7 @@ public class TST_Gui_MegaNqReactor extends TST_Gui<TST_MegaNqReactor> {
                         efficiencySyncer.getIntValue(),
                         multiplierSyncer.getIntValue(),
                         parallelSyncer.getIntValue(),
+                        bonusSyncer.getDoubleValue(),
                         unitSyncer.getIntValue())
                     + EnumChatFormatting.RESET));
         IWidget fuelLine = createInfoLine(
@@ -111,17 +113,17 @@ public class TST_Gui_MegaNqReactor extends TST_Gui<TST_MegaNqReactor> {
                     + formatNumber(fuelAmountSyncer.getLongValue())
                     + " mB"
                     + EnumChatFormatting.RESET));
-        IWidget discountLine = createInfoLine(
+        IWidget bonusLine = createInfoLine(
             IKey.dynamic(
-                () -> TSTUtils.tr("tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.consumption_discount") + " "
+                () -> TSTUtils.tr("tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.runtime_bonus") + " "
                     + EnumChatFormatting.GOLD
-                    + discountSyncer.getIntValue()
-                    + "%"
+                    + String.format("%.2f", bonusSyncer.getDoubleValue())
+                    + "x"
                     + EnumChatFormatting.RESET));
         terminal.addChild(outputLine, 0);
         terminal.addChild(breakdownLine, 1);
         terminal.addChild(fuelLine, 2);
-        terminal.addChild(discountLine, 3);
+        terminal.addChild(bonusLine, 3);
         return terminal;
     }
 
@@ -140,7 +142,7 @@ public class TST_Gui_MegaNqReactor extends TST_Gui<TST_MegaNqReactor> {
         return amount + " A " + TST_MegaNqReactor.OUTPUT_UNIT_NAMES[unitIndex];
     }
 
-    private static String formatBreakdown(int basicOutput, int efficiency, int multiplier, int parallel,
+    private static String formatBreakdown(int basicOutput, int efficiency, int multiplier, int parallel, double bonus,
         int unitIndex) {
         return "= " + formatNumber(basicOutput)
             + " EU/t ("
@@ -157,6 +159,10 @@ public class TST_Gui_MegaNqReactor extends TST_Gui<TST_MegaNqReactor> {
             + parallel
             + " ("
             + TSTUtils.tr("tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.output_parallel")
+            + ") * "
+            + String.format("%.2f", bonus)
+            + "x ("
+            + TSTUtils.tr("tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.runtime_bonus")
             + ") / "
             + formatNumber(TST_MegaNqReactor.OUTPUT_UNIT_VALUES[unitIndex])
             + " EU/t";
