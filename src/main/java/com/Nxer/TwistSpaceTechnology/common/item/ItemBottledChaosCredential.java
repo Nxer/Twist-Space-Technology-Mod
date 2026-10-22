@@ -263,6 +263,30 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
         // # Naquadria
         // #zh_CN 超能硅岩
 
+        // #tr tst.bottledchaos.route.naquadah_fuel_preparation
+        // # Naquadah Fuel Precursors
+        // #zh_CN 硅岩燃料前置
+
+        // #tr tst.bottledchaos.route.naquadah_fuel_3
+        // # Naquadah Fuel III
+        // #zh_CN 硅岩燃料 III
+
+        // #tr tst.bottledchaos.route.naquadah_fuel_4
+        // # Naquadah Fuel IV
+        // #zh_CN 硅岩燃料 IV
+
+        // #tr tst.bottledchaos.route.naquadah_fuel_5
+        // # Naquadah Fuel V
+        // #zh_CN 硅岩燃料 V
+
+        // #tr tst.bottledchaos.route.naquadah_fuel_6
+        // # Naquadah Fuel VI
+        // #zh_CN 硅岩燃料 VI
+
+        // #tr tst.bottledchaos.route.fusion
+        // # Fusion
+        // #zh_CN 聚变
+
         // #tr tst.bottledchaos.route.growth_medium_sterilized
         // # Sterile Growth Medium
         // #zh_CN 无菌培养基

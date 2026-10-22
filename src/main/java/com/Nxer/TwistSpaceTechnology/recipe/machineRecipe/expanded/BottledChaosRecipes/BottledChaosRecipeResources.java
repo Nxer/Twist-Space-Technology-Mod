@@ -45,6 +45,7 @@ import gtnhlanth.api.recipe.LanthanidesRecipeMaps;
 import gtnhlanth.common.register.BotWerkstoffMaterialPool;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
 import kubatech.loaders.DEFCRecipes;
+import tectech.recipe.TecTechRecipeMaps;
 
 /**
  * Shared recipe resources. Access after material and fluid registration (recipe loading at load-complete).
@@ -82,7 +83,7 @@ public final class BottledChaosRecipeResources {
             "kevlar",
             "purified_water_1", "purified_water_2", "purified_water_3", "purified_water_4", "purified_water_5", "purified_water_6", "purified_water_7", "purified_water_8",
             "magmatter", "quark_gluon_plasma",
-            "titanium", "tungsten", "indium", "phonon_medium", "eternity", "honeycomb", "isamill"
+            "titanium", "tungsten", "indium", "phonon_medium", "eternity", "honeycomb", "isamill", "naquadah_fuel_4", "naquadah_fuel_preparation", "naquadah_fuel_5", "naquadah_fuel_6", "naquadah_fuel_3", "fusion"
         };
         // spotless:on
         public static final int ROUTE_COUNT = TAGS.length - (HAS_NETHERITE ? 0 : 1)
@@ -98,7 +99,7 @@ public final class BottledChaosRecipeResources {
             "titanium", "tungsten", "indium",
             "platinum_metallic_powder", "palladium_metallic_powder", "platinum_residue", "leach_residue", "rarest_metal_residue", "iridium_metal_residue", "crude_rhodium_metal",
             "monazite", "bastnasite", "cerium", "rare_earth_cerium", "samarium",
-            "naquadah", "enriched_naquadah", "naquadria", "ancient_debris", "isamill", "crystalline_alloy_molten", "purified_water_1", "purified_water_2",
+            "naquadah", "enriched_naquadah", "naquadria", "naquadah_fuel_preparation", "naquadah_fuel_3", "naquadah_fuel_4", "naquadah_fuel_5", "naquadah_fuel_6", "fusion", "ancient_debris", "isamill", "crystalline_alloy_molten", "purified_water_1", "purified_water_2",
             "prismatic_acid", "purified_water_3", "purified_water_4",
             "kevlar", "super_heavy_radox", "heavy_radox", "light_radox", "super_light_radox", "purified_water_5", "purified_water_6",
             "growth_medium_sterilized", "stem_cells", "seaweed_broth", "tau_ceti_e_seaweed_extract", "bio_medium_sterilized", "bio_cells", "xenoxene",
@@ -134,8 +135,8 @@ public final class BottledChaosRecipeResources {
             if (index < 0 || index >= ROUTE_COUNT) return null;
             if (!HAS_NETHERITE && index >= 7) index++;
             if (!HAS_CRYSTALLINE_ALLOY && index >= 8) index++;
-            if (!HAS_ETERNITY && index >= TAGS.length - 3) index++;
-            if (!HAS_HONEYCOMBS && index >= TAGS.length - 2) index++;
+            if (!HAS_ETERNITY && index >= 44) index++;
+            if (!HAS_HONEYCOMBS && index >= 45) index++;
             return TAGS[index];
         }
 
@@ -269,6 +270,12 @@ public final class BottledChaosRecipeResources {
             if (CredentialModel.HAS_ETERNITY) register("eternity", EternalSingularity, EternityMolten);
             if (CredentialModel.HAS_HONEYCOMBS) register("honeycomb", recipeItemId(GTBees.combs.getStackForType(CombType.INDIUM, 1)), recipeItemId(GTBees.combs.getStackForType(CombType.INDIUM, 1)));
             register("isamill", MilledSphalerite, MilledSphalerite);
+            register("naquadah_fuel_4", GGMaterial.naquadahBasedFuelMkIII.getFluidOrGas(1).getFluid(), GGMaterial.naquadahBasedFuelMkIV.getFluidOrGas(1).getFluid());
+            register("naquadah_fuel_preparation", NaquadriaDust, GGMaterial.heavyNaquadahFuel.getFluidOrGas(1).getFluid());
+            register("naquadah_fuel_5", GGMaterial.naquadahBasedFuelMkIV.getFluidOrGas(1).getFluid(), GGMaterial.naquadahBasedFuelMkV.getFluidOrGas(1).getFluid());
+            register("naquadah_fuel_6", GGMaterial.naquadahBasedFuelMkV.getFluidOrGas(1).getFluid(), GGMaterial.naquadahBasedFuelMkVI.getFluidOrGas(1).getFluid());
+            register("naquadah_fuel_3", recipeItemId(GGMaterial.extremelyUnstableNaquadah.get(OrePrefixes.dust, 1)), GGMaterial.naquadahBasedFuelMkIII.getFluidOrGas(1).getFluid());
+            register("fusion", recipeItemId(Materials.Cobalt.getDust(1)), MaterialsElements.STANDALONE.ASTRAL_TITANIUM.getPlasma());
             // spotless:on
         }
 
@@ -314,6 +321,8 @@ public final class BottledChaosRecipeResources {
         public static final RecipeMap<?> FluidSolidifier = RecipeMaps.fluidSolidifierRecipes;
         public static final RecipeMap<?> FluidExtractor = RecipeMaps.fluidExtractionRecipes;
         public static final RecipeMap<?> Bender = RecipeMaps.benderRecipes;
+        public static final RecipeMap<?> Compressor = RecipeMaps.compressorRecipes;
+        public static final RecipeMap<?> Cutter = RecipeMaps.cutterRecipes;
         public static final RecipeMap<?> Furnace = RecipeMaps.furnaceRecipes;
         public static final RecipeMap<?> Macerator = RecipeMaps.maceratorRecipes;
         public static final RecipeMap<?> ForgeHammer = RecipeMaps.hammerRecipes;
@@ -335,10 +344,13 @@ public final class BottledChaosRecipeResources {
         public static final RecipeMap<?> NeutronActivator = GTCMRecipe.NeutronActivatorWithEURecipeMap;
         public static final RecipeMap<?> BacterialVat = BartWorksRecipeMaps.bacterialVatRecipes;
         public static final RecipeMap<?> Extractor = RecipeMaps.extractorRecipes;
+        public static final RecipeMap<?> ElectricImplosionCompressor = BartWorksRecipeMaps.electricImplosionCompressorRecipes;
         public static final RecipeMap<?> Assembler = RecipeMaps.assemblerRecipes;
         public static final RecipeMap<?> IndustrialCokeOven = RecipeMaps.industrialCokeOvenRecipes;
         public static final RecipeMap<?> QuantumForceTransformer = RecipeMaps.quantumForceTransformerRecipes;
         public static final RecipeMap<?> FusionCrafting = DEFCRecipes.fusionCraftingRecipes;
+        public static final RecipeMap<?> Fusion = RecipeMaps.fusionRecipes;
+        public static final RecipeMap<?> GodforgePlasma = TecTechRecipeMaps.godforgePlasmaRecipes;
         // spotless:on
     }
 

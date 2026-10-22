@@ -54,10 +54,12 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosR
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosBiologicalRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosExoticMatterRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosFakeRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosFusionRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosIndiumRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosIsaMillRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosKevlarRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosLanthanideRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosNaquadahFuelRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosNaquadahRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosNetheriteRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosPlatinumRecipes;
@@ -214,6 +216,8 @@ public class RecipeLoader {
             BottledChaosPrismaticRecipes.registerRecipeChains(catalog);
             BottledChaosLanthanideRecipes.registerRecipeChains(catalog);
             BottledChaosNaquadahRecipes.registerRecipeChains(catalog);
+            BottledChaosNaquadahFuelRecipes.registerRecipeChains(catalog);
+            BottledChaosFusionRecipes.registerRecipeChains(catalog);
             BottledChaosBiologicalRecipes.registerRecipeChains(catalog);
             BottledChaosRadoxRecipes.registerRecipeChains(catalog);
             BottledChaosKevlarRecipes.registerRecipeChains(catalog);

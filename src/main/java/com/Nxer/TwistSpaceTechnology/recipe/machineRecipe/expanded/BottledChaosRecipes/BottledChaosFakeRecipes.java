@@ -214,6 +214,8 @@ public final class BottledChaosFakeRecipes {
 
     /** Dedicated family tabs use the stable registered tags, including families with a single recipe. */
     private static RecipeCategory categoryForRoute(BottledChaosRecipeProcessor.DisplayRecipe display) {
+        int routeIndex = display.routeIndex();
+        if ("fusion".equals(CredentialModel.tag(routeIndex))) return GTCMRecipe.BottledChaosFusionCategory;
         if (usesExpandedLayout(
             display.itemInputs()
                 .size(),
@@ -226,7 +228,6 @@ public final class BottledChaosFakeRecipes {
                 .fluidOutputs()
                 .size()))
             return GTCMRecipe.BottledChaosRecipes.getDefaultRecipeCategory();
-        int routeIndex = display.routeIndex();
         if ("honeycomb".equals(CredentialModel.tag(routeIndex)))
             routeIndex = Long.numberOfTrailingZeros(display.requiredTagMask() & ~(1L << routeIndex));
         return switch (CredentialModel.tag(routeIndex)) {
@@ -239,6 +240,7 @@ public final class BottledChaosFakeRecipes {
             case "crystalline_alloy_molten", "prismatic_acid" -> GTCMRecipe.BottledChaosPrismaticCategory;
             case "bastnasite", "monazite", "rare_earth_cerium", "cerium", "samarium" -> GTCMRecipe.BottledChaosLanthanideCategory;
             case "naquadah", "enriched_naquadah", "naquadria" -> GTCMRecipe.BottledChaosNaquadahCategory;
+            case "naquadah_fuel_preparation", "naquadah_fuel_3", "naquadah_fuel_4", "naquadah_fuel_5", "naquadah_fuel_6" -> GTCMRecipe.BottledChaosNaquadahFuelCategory;
             case "growth_medium_sterilized", "stem_cells", "seaweed_broth", "tau_ceti_e_seaweed_extract", "bio_medium_sterilized", "bio_cells" -> GTCMRecipe.BottledChaosBiologicalCategory;
             case "xenoxene", "super_heavy_radox", "heavy_radox", "light_radox", "super_light_radox" -> GTCMRecipe.BottledChaosRadoxCategory;
             case "kevlar" -> GTCMRecipe.BottledChaosKevlarCategory;

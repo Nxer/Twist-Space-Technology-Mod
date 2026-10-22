@@ -412,6 +412,24 @@ public class GTCMRecipe {
         RecipeCategorySetting::getDefault,
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
+    // #tr tst.bottledchaos.recipe.category.naquadah_fuel.name
+    // # Bottled Chaos - Naquadah Fuel
+    // #zh_CN 瓶中混沌 - 硅岩燃料
+    public static final RecipeCategory BottledChaosNaquadahFuelCategory = new RecipeCategory(
+        "tst.bottledchaos.recipe.category.naquadah_fuel.name",
+        BottledChaosRecipes,
+        RecipeCategorySetting::getDefault,
+        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+
+    // #tr tst.bottledchaos.recipe.category.fusion.name
+    // # Bottled Chaos - Fusion
+    // #zh_CN 瓶中混沌 - 聚变
+    public static final RecipeCategory BottledChaosFusionCategory = new RecipeCategory(
+        "tst.bottledchaos.recipe.category.fusion.name",
+        BottledChaosRecipes,
+        RecipeCategorySetting::getDefault,
+        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+
     // #tr tst.bottledchaos.recipe.category.netherite.name
     // # Bottled Chaos - Netherite
     // #zh_CN 瓶中混沌 - 下界合金
