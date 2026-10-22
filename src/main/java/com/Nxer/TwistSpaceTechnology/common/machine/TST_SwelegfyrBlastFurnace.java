@@ -322,7 +322,12 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
         // An upgraded controller requires the tier 2 structure; keep its errors for the structure scanner.
         if (controllerTier > 1) {
-            if (!checkPiece(STRUCTURE_PIECE_MAIN_T2, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet, errors)) {
+            if (!checkPiece(
+                STRUCTURE_PIECE_MAIN_T2,
+                baseHorizontalOffSet,
+                baseVerticalOffSet,
+                baseDepthOffSet,
+                errors)) {
                 clearHatches();
                 return;
             }
