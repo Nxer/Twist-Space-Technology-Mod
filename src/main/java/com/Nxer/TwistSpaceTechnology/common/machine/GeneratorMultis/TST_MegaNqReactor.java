@@ -270,10 +270,12 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
         Pair<FluidStack, Integer> excitedInfo = getExcited(fluidView);
         int coefficient = excitedInfo == null ? 1 : excitedInfo.getValue();
         FluidStack fuelInput = tRecipe.mFluidInputs[0];
-        int perParallelFuel = fuelInput.amount;
-        if (perParallelFuel <= 0) {
+
+        long perParallelFuelLong = (long) fuelInput.amount * coefficient;
+        if (perParallelFuelLong <= 0 || perParallelFuelLong > Integer.MAX_VALUE) {
             return CheckRecipeResultRegistry.NO_FUEL_FOUND;
         }
+        int perParallelFuel = (int) perParallelFuelLong;
         int fuelAmount = fluidView.getAmount(fuelInput);
         int intLimitCap = Integer.MAX_VALUE / perParallelFuel;
         int maxParallel = Math.min(Math.min(Config.Parallel_MegaNqReactor, fuelAmount / perParallelFuel), intLimitCap);
