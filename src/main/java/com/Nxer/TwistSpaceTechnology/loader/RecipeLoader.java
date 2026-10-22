@@ -46,6 +46,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.RapidHeatExch
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StarKernelForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarMaterialSiphonRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.BeamCrafterRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.ChemicalReactorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.CircuitAssemblerRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.CompressorRecipePool;
@@ -97,6 +98,7 @@ public class RecipeLoader {
         SwelegfyrTransitionRecipes.loadRecipes();
 
         // Original GTNH RecipeMap
+        BeamCrafterRecipePool.loadRecipes();
         ChemicalReactorRecipePool.loadRecipes();
         CircuitAssemblerRecipePool.loadRecipes();
         DistillationRecipePool.loadRecipes();
