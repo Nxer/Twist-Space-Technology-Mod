@@ -16,15 +16,13 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 
 import java.util.Objects;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeCatalog;
-
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.TierEU;
 
 /** Native advanced-material chains; all balancing and QFT expectation calculations happen during cache loading. */
 public final class BottledChaosAdvancedMaterialRecipes {
 
-    public static void registerRecipeChains(RecipeCatalog catalog) {
+    public static void registerRecipeChains(BottledChaosRecipeCatalog catalog) {
         // spotless:off
         // Main trunk: grow seeds and close the solution return before producing the transfer medium.
         var crystalSolution = catalog.markRecipeSequence(Autoclave, MagMatterRound, PhononCrystalSolution,

@@ -18,8 +18,7 @@ import java.util.Map;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeCatalog;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeMark;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.RecipeMark;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeSupport.RecipeData;
 
 import bartworks.system.material.WerkstoffLoader;
@@ -38,15 +37,15 @@ public final class BottledChaosFusionRecipes {
     private static final String TAG = "fusion";
     private static final String PREPARATION_TAG = "naquadah_fuel_preparation";
 
-    private final RecipeCatalog catalog;
+    private final BottledChaosRecipeCatalog catalog;
     private final Map<Fluid, RecipeMark> moltenSources = new HashMap<>();
     private boolean firstFusion = true;
 
-    private BottledChaosFusionRecipes(RecipeCatalog catalog) {
+    private BottledChaosFusionRecipes(BottledChaosRecipeCatalog catalog) {
         this.catalog = catalog;
     }
 
-    public static void registerRecipeChains(RecipeCatalog catalog) {
+    public static void registerRecipeChains(BottledChaosRecipeCatalog catalog) {
         var recipes = new BottledChaosFusionRecipes(catalog);
         recipes.registerLaserRoutes();
         recipes.registerPlasmaCoolingRoutes();

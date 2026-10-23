@@ -15,6 +15,7 @@ import java.util.Objects;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosSourceRequirements;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosItemInputs.Requirement;
 import com.Nxer.TwistSpaceTechnology.util.recipes.RecipeMaterialUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
@@ -55,7 +56,7 @@ final class BottledChaosRecipeSupport {
             throw new IllegalArgumentException("invalid source recipe duration or power");
         }
         // Read source requirements before GTRecipe.copy() drops metadata.
-        SourceRequirements requirements = sourceRequirements(map, recipe);
+        BottledChaosSourceRequirements requirements = sourceRequirements(map, recipe);
         Map<Object, Long> catalysts = new LinkedHashMap<>();
 
         // Use 1000x fluid efficiency for half-full bacterial vats.
@@ -132,7 +133,7 @@ final class BottledChaosRecipeSupport {
         return new RecipeData(inputs, outputs, catalysts, times, itemRequirements);
     }
 
-    private static SourceRequirements sourceRequirements(RecipeMap<?> map, GTRecipe recipe) {
+    private static BottledChaosSourceRequirements sourceRequirements(RecipeMap<?> map, GTRecipe recipe) {
         int heat = recipe.getMetadataOrDefault(GTRecipeConstants.COIL_HEAT, 0);
         if (map == RecipeMaps.blastFurnaceRecipes || map == RecipeMaps.vacuumFurnaceRecipes
             || map == RecipeMaps.alloyBlastSmelterRecipes
@@ -151,7 +152,7 @@ final class BottledChaosRecipeSupport {
             ? recipe.getMetadata(GTRecipeConstants.QFT_CATALYST)
             : map == BottledChaosRecipeResources.RecipePools.BacterialVat
                 && recipe.mSpecialItems instanceof ItemStack culture ? culture : null;
-        return new SourceRequirements(
+        return new BottledChaosSourceRequirements(
             Math.max(0, heat),
             recipe.getMetadataOrDefault(GTRecipeConstants.GLASS, 0),
             Math.max(0, casing),
@@ -554,28 +555,19 @@ final class BottledChaosRecipeSupport {
         return map.isEmpty() ? Collections.emptyMap() : Collections.unmodifiableMap(map);
     }
 
-    /** Only immutable source requirements survive startup; radiation is satisfied by the packaged radio hatch. */
-    @Desugar
-    record SourceRequirements(int heat, int glassTier, int casingTier, int compressionTier, boolean heavyCentrifuge,
-        TST_ItemID specialInput, int plasmaTier, boolean multiStepPlasma, long requiredSourceVoltage,
-        long fusionThreshold) {
-
-        private static final SourceRequirements NONE = new SourceRequirements(0, 0, 0, 0, false, null, 0, false, 0, 0);
-    }
-
     /**
      * Keep source duration and requirements separate, including the native neutron activator's per-recipe tick floor.
      */
     @Desugar
-    record TimeKey(RecipeMap<?> map, long eut, int recipeTicks, SourceRequirements requirements,
+    record TimeKey(RecipeMap<?> map, long eut, int recipeTicks, BottledChaosSourceRequirements requirements,
         BottledChaosProcessAlternatives.Source source, BottledChaosProcessAlternatives.Group alternatives) {
 
-        TimeKey(RecipeMap<?> map, long eut, int recipeTicks, SourceRequirements requirements) {
+        TimeKey(RecipeMap<?> map, long eut, int recipeTicks, BottledChaosSourceRequirements requirements) {
             this(map, eut, recipeTicks, requirements, null, null);
         }
 
         TimeKey(RecipeMap<?> map, long eut) {
-            this(map, eut, 1, SourceRequirements.NONE);
+            this(map, eut, 1, BottledChaosSourceRequirements.NONE);
         }
     }
 }

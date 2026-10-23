@@ -59,14 +59,12 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.TriniumDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.TriniumSulfateDust;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeCatalog;
-
 import gregtech.api.enums.TierEU;
 
 /** Three naquadah processing tags, using the existing EU-powered neutron activator recipe pool. */
 public final class BottledChaosNaquadahRecipes {
 
-    public static void registerRecipeChains(RecipeCatalog catalog) {
+    public static void registerRecipeChains(BottledChaosRecipeCatalog catalog) {
         // spotless:off
         // 1. Prepare refining paths. Cross-line byproducts require their own processing tags.
         var enrichedSludgeRefining = catalog.markRecipeSequence(NeutronActivator,

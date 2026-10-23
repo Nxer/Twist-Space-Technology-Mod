@@ -22,9 +22,7 @@ import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosMachineModule;
 import com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
-import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.MachineParameters;
 import com.cleanroommc.modularui.utils.item.ItemStackHandler;
 import com.github.bsideup.jabel.Desugar;
 
@@ -43,7 +41,7 @@ import gregtech.common.tileentities.machines.multi.purification.MTEPurificationP
 import kubatech.loaders.DEFCRecipes;
 
 /** Startup machine directory and per-controller pool inventory; no runtime registry scans. */
-public final class BottledChaosMachineConfiguration implements MachineParameters {
+public final class BottledChaosMachineConfiguration implements BottledChaosSourceParameters {
 
     public static final int MAX_POOLS = Long.SIZE;
     public static final int MACHINE_LIMIT = 4096;
@@ -290,20 +288,11 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
             : stack == null ? 0 : stack.stackSize;
     }
 
-    public static int quantitySpeed(int count) {
-        return ItemBottledChaosMachineModule.quantitySpeed(count);
-    }
-
     @Override
     public double speedMultiplier(RecipeMap<?> map) {
         Integer slot = poolIndexes.get(map);
         loadPendingMachines();
         return slot == null ? 1 : machineSpeeds[slot];
-    }
-
-    @Override
-    public OverclockType overclock(RecipeMap<?> map) {
-        return MachineParameters.super.overclock(map);
     }
 
     /** One candidate's immutable inventory snapshot; source requirements never leak into another credential. */
@@ -320,7 +309,7 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
             masterParallel);
     }
 
-    public final class RuntimeParameters implements MachineParameters {
+    public final class RuntimeParameters implements BottledChaosSourceParameters {
 
         private final long inputVoltage;
         private final long inputPower;
@@ -368,20 +357,23 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
         }
 
         @Override
-        public void configureSource(RecipeMap<?> map, long recipeVoltage, int requiredHeat, int requiredGlassTier,
-            ItemStack requiredSpecialInput, boolean heavyCentrifuge, long requiredSourceVoltage, long fusionThreshold) {
+        public void configureSource(RecipeMap<?> map, long recipeVoltage, BottledChaosSourceRequirements requirements) {
             Integer slot = poolIndexes.get(map);
             if (slot == null || debug[slot] || controllers[slot] == null) return;
             configured[slot] = true;
+            ItemStack requiredSpecialInput = requirements.specialInput() == null ? null
+                : requirements.specialInput()
+                    .getItemStack(1)
+                    .copy();
             SourceKey key = new SourceKey(
                 slot,
                 recipeVoltage,
-                requiredHeat,
-                requiredGlassTier,
+                requirements.heat(),
+                requirements.glassTier(),
                 requiredSpecialInput == null ? null : GTUtility.ItemId.createNoCopy(requiredSpecialInput),
-                heavyCentrifuge,
-                requiredSourceVoltage,
-                fusionThreshold);
+                requirements.heavyCentrifuge(),
+                requirements.requiredSourceVoltage(),
+                requirements.fusionThreshold());
             currentFailures[slot] = null;
             currentProfiles[slot] = profiles.computeIfAbsent(
                 key,
@@ -397,13 +389,13 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
                     masterTime,
                     masterEU,
                     masterParallel,
-                    requiredHeat,
-                    requiredGlassTier,
+                    requirements.heat(),
+                    requirements.glassTier(),
                     requiredSpecialInput,
-                    heavyCentrifuge,
+                    requirements.heavyCentrifuge(),
                     failure -> currentFailures[slot] = failure,
-                    requiredSourceVoltage,
-                    fusionThreshold));
+                    requirements.requiredSourceVoltage(),
+                    requirements.fusionThreshold()));
         }
 
         private BottledChaosMachineParameters.Profile profile(RecipeMap<?> map) {
@@ -430,9 +422,7 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
         }
 
         @Override
-        public boolean canProcess(RecipeMap<?> map, long recipeVoltage, int requiredHeat, int requiredGlassTier,
-            int requiredCasingTier, int requiredCompressionTier, boolean heavyCentrifuge, int requiredPlasmaTier,
-            boolean multiStepPlasma, long requiredSourceVoltage) {
+        public boolean canProcess(RecipeMap<?> map, long recipeVoltage, BottledChaosSourceRequirements requirements) {
             Integer slot = poolIndexes.get(map);
             if (slot != null && (purificationPools & (1L << slot)) != 0
                 && (quantities[slot] <= 0 || quantities[slot] > purificationPlantQuantity)) {
@@ -451,7 +441,8 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
                         SimpleResultWithText.ofFailure("tst.bottledchaos.result.invalid_source_configuration"));
                 return allowed;
             }
-            long requiredVoltage = requiredSourceVoltage > 0 ? requiredSourceVoltage : recipeVoltage;
+            long requiredVoltage = requirements.requiredSourceVoltage() > 0 ? requirements.requiredSourceVoltage()
+                : recipeVoltage;
             if (profile.maximumRecipeTier() >= 0
                 && requiredVoltage > gregtech.api.enums.GTValues.V[profile.maximumRecipeTier()])
                 return reject(
@@ -459,17 +450,19 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
                     "voltage",
                     gregtech.api.enums.GTValues.V[profile.maximumRecipeTier()],
                     requiredVoltage);
-            if (requiredHeat > profile.heat()) return reject(slot, "heat", profile.heat(), requiredHeat);
-            if (requiredGlassTier > profile.glassTier())
-                return reject(slot, "glass", profile.glassTier(), requiredGlassTier);
-            if (requiredCasingTier > 0 && requiredCasingTier > profile.casingTier())
-                return reject(slot, "casing", profile.casingTier(), requiredCasingTier);
-            if (requiredCompressionTier > 0 && requiredCompressionTier > profile.compressionTier())
-                return reject(slot, "compression", profile.compressionTier(), requiredCompressionTier);
-            if (heavyCentrifuge && !profile.heavyCentrifuge()) return reject(slot, "heavy_centrifuge", 0, 1);
-            if (requiredPlasmaTier > profile.plasmaTier())
-                return reject(slot, "plasma", profile.plasmaTier(), requiredPlasmaTier);
-            if (multiStepPlasma && !profile.multiStepPlasma()) return reject(slot, "multi_step_plasma", 0, 1);
+            if (requirements.heat() > profile.heat()) return reject(slot, "heat", profile.heat(), requirements.heat());
+            if (requirements.glassTier() > profile.glassTier())
+                return reject(slot, "glass", profile.glassTier(), requirements.glassTier());
+            if (requirements.casingTier() > 0 && requirements.casingTier() > profile.casingTier())
+                return reject(slot, "casing", profile.casingTier(), requirements.casingTier());
+            if (requirements.compressionTier() > 0 && requirements.compressionTier() > profile.compressionTier())
+                return reject(slot, "compression", profile.compressionTier(), requirements.compressionTier());
+            if (requirements.heavyCentrifuge() && !profile.heavyCentrifuge())
+                return reject(slot, "heavy_centrifuge", 0, 1);
+            if (requirements.plasmaTier() > profile.plasmaTier())
+                return reject(slot, "plasma", profile.plasmaTier(), requirements.plasmaTier());
+            if (requirements.multiStepPlasma() && !profile.multiStepPlasma())
+                return reject(slot, "multi_step_plasma", 0, 1);
             return true;
         }
 
@@ -478,6 +471,7 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
             return false;
         }
 
+        @Override
         public CheckRecipeResult sourceFailure() {
             return sourceFailure;
         }
@@ -509,13 +503,14 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
         @Override
         public double timeDivisor(RecipeMap<?> map, int requiredHeat) {
             var profile = profile(map);
-            return profile == null ? MachineParameters.super.timeDivisor(map, requiredHeat) : profile.timeDivisor();
+            return profile == null ? BottledChaosSourceParameters.super.timeDivisor(map, requiredHeat)
+                : profile.timeDivisor();
         }
 
         @Override
         public double powerMultiplier(RecipeMap<?> map, int requiredHeat) {
             var profile = profile(map);
-            return profile == null ? MachineParameters.super.powerMultiplier(map, requiredHeat)
+            return profile == null ? BottledChaosSourceParameters.super.powerMultiplier(map, requiredHeat)
                 : profile.powerMultiplier();
         }
 

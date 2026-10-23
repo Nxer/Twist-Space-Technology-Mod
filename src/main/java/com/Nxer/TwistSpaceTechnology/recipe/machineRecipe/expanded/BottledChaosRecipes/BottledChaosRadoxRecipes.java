@@ -19,14 +19,12 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.SuperLightRadox;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.Xenoxene;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeCatalog;
-
 import gregtech.api.enums.TierEU;
 
 /** Xenoxene fractionation and four independent fraction routes through molten Radox polymer. */
 public final class BottledChaosRadoxRecipes {
 
-    public static void registerRecipeChains(RecipeCatalog catalog) {
+    public static void registerRecipeChains(BottledChaosRecipeCatalog catalog) {
         // spotless:off
         // Close the native return once: superlight -> cracked -> gas + light -> returned superlight.
         var recoveredGas = catalog.markRecipeSequence(OilCracker, SuperLightRadox, RadoxGas,

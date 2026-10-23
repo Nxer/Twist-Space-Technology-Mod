@@ -13,8 +13,7 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RoquesiteDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.SphaleriteDust;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeCatalog;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeMark;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.RecipeMark;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import gregtech.api.enums.Mods;
@@ -25,7 +24,7 @@ import gregtech.loaders.misc.GTBees;
 /** Native indium extraction from mineral dusts, including separately authorized honeycomb boosts. */
 public final class BottledChaosIndiumRecipes {
 
-    public static void registerRecipeChains(RecipeCatalog catalog) {
+    public static void registerRecipeChains(BottledChaosRecipeCatalog catalog) {
         // spotless:off
         // 1. Leach the native purified ores; replace both ore forms with full mineral dusts in the startup cache.
         RecipeMark leaching = catalog.markRecipeWithSubstitutedInputs(LargeChemicalReactor,
@@ -54,7 +53,7 @@ public final class BottledChaosIndiumRecipes {
         // spotless:on
     }
 
-    public static void registerCombRecipeChains(RecipeCatalog catalog) {
+    public static void registerCombRecipeChains(BottledChaosRecipeCatalog catalog) {
         if (!Mods.Forestry.isModLoaded() || GTBees.combs == null) return;
         // spotless:off
         TST_ItemID indiumComb = TST_ItemID.create(GTBees.combs.getStackForType(CombType.INDIUM, 1));

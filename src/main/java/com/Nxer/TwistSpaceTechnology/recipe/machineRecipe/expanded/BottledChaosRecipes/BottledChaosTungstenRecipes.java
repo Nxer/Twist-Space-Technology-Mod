@@ -14,14 +14,12 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.TungstenTrioxideDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.TungsticAcidDust;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeCatalog;
-
 import gregtech.api.enums.TierEU;
 
 /** LuV mineral processing; alternative sources and consecutive stages share one credential tag. */
 public final class BottledChaosTungstenRecipes {
 
-    public static void registerRecipeChains(RecipeCatalog catalog) {
+    public static void registerRecipeChains(BottledChaosRecipeCatalog catalog) {
         // spotless:off
         // 1. Final stage: acidify scheelite, then dehydrate tungstic acid to tungsten trioxide.
         catalog.registerChain("tungsten", 1, TierEU.RECIPE_LuV, CalciumTungstateDust,

@@ -26,7 +26,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeCatalog;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeSupport.RecipeData;
 
 import bartworks.system.material.WerkstoffLoader;
@@ -47,7 +46,7 @@ public final class BottledChaosNaquadahFuelRecipes {
     private static final String PREPARATION_TAG = "naquadah_fuel_preparation";
     private static final String FUEL_TAG = "naquadah_fuel_4";
 
-    public static void registerRecipeChains(RecipeCatalog catalog) {
+    public static void registerRecipeChains(BottledChaosRecipeCatalog catalog) {
         registerPreparationChains(catalog);
         registerFuelChains(catalog);
 
@@ -62,7 +61,7 @@ public final class BottledChaosNaquadahFuelRecipes {
         // spotless:on
     }
 
-    private static void registerPreparationChains(RecipeCatalog catalog) {
+    private static void registerPreparationChains(BottledChaosRecipeCatalog catalog) {
         var enriched = source(
             BlastFurnace,
             new ItemStack[] { EnrichedNaquadahDust.getItemStack(16), GTUtility.getIntegratedCircuit(16) },
@@ -222,7 +221,7 @@ public final class BottledChaosNaquadahFuelRecipes {
         // spotless:on
     }
 
-    private static void registerFuelChains(RecipeCatalog catalog) {
+    private static void registerFuelChains(BottledChaosRecipeCatalog catalog) {
         RecipeMap<?> refinery = GoodGeneratorRecipeMaps.naquadahFuelRefineFactoryRecipes;
         Fluid fuelIII = GGMaterial.naquadahBasedFuelMkIII.getFluidOrGas(1)
             .getFluid();
@@ -428,7 +427,7 @@ public final class BottledChaosNaquadahFuelRecipes {
                         .appendBalancedRecipe(data, recipeItemId(Materials.TungstenSteel.getDust(1)));
     }
 
-    private static void registerCatalysts(RecipeCatalog catalog, Fluid moltenCatalyst) {
+    private static void registerCatalysts(BottledChaosRecipeCatalog catalog, Fluid moltenCatalyst) {
         var raw = recipeItemId(ItemRefer.Raw_Atomic_Separation_Catalyst.get(1));
         var orundum = recipeItemId(GGMaterial.orundum.get(OrePrefixes.dust, 1));
         var ingot = GGMaterial.atomicSeparationCatalyst.get(OrePrefixes.ingot, 1);

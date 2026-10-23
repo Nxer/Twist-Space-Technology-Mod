@@ -18,7 +18,6 @@ import java.util.Objects;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeCatalog;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeSupport.RecipeData;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeSupport.TimeKey;
 
@@ -37,7 +36,7 @@ import gregtech.common.tileentities.machines.multi.purification.MTEPurificationU
 /** Exact expected resource ledgers for the eight native purification stages. */
 public final class BottledChaosPurifiedWaterRecipes {
 
-    public static void registerRecipeChains(RecipeCatalog catalog) {
+    public static void registerRecipeChains(BottledChaosRecipeCatalog catalog) {
         Materials[] waters = { Materials.Grade1PurifiedWater, Materials.Grade2PurifiedWater,
             Materials.Grade3PurifiedWater, Materials.Grade4PurifiedWater, Materials.Grade5PurifiedWater,
             Materials.Grade6PurifiedWater, Materials.Grade7PurifiedWater, Materials.Grade8PurifiedWater };
@@ -58,7 +57,8 @@ public final class BottledChaosPurifiedWaterRecipes {
         // spotless:on
     }
 
-    private static void registerStage(RecipeCatalog catalog, RecipeMap<?> pool, Materials[] waters, int grade) {
+    private static void registerStage(BottledChaosRecipeCatalog catalog, RecipeMap<?> pool, Materials[] waters,
+        int grade) {
         Materials inputWater = grade == 1 ? Materials.Water : waters[grade - 2];
         GTRecipe source = findSource(pool, inputWater, waters[grade - 1], grade);
         int successPercent = grade <= 2 ? boostedSuccessPercent(source) : 100;

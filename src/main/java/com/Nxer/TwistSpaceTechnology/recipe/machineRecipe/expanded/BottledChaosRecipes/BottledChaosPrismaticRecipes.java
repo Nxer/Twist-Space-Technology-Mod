@@ -43,8 +43,7 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 
 import net.minecraftforge.fluids.Fluid;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeCatalog;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeMark;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.RecipeMark;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import gregtech.api.enums.Materials;
@@ -56,7 +55,7 @@ import gregtech.loaders.misc.GTBees;
 /** Prismarine shard processing through prismatic acid. */
 public final class BottledChaosPrismaticRecipes {
 
-    public static void registerRecipeChains(RecipeCatalog catalog) {
+    public static void registerRecipeChains(BottledChaosRecipeCatalog catalog) {
         // spotless:off
         // Shard stage: precipitation -> recovered solvent -> crystal -> gas -> acid.
         // Starting at precipitation exposes the solvent return before the missing fresh solvent is supplied.

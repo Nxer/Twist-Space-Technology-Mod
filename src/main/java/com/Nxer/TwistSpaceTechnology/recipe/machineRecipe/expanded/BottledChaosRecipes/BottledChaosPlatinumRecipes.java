@@ -78,7 +78,6 @@ import static gregtech.api.enums.Mods.Forestry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeCatalog;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import gregtech.api.enums.GTValues;
@@ -91,7 +90,7 @@ import gregtech.loaders.misc.GTBees;
 /** Platinum-group recipe chains and shared reagent branches; all processing belongs to the recipe processor. */
 public final class BottledChaosPlatinumRecipes {
 
-    public static void registerRecipeChains(RecipeCatalog catalog) {
+    public static void registerRecipeChains(BottledChaosRecipeCatalog catalog) {
         // spotless:off
         // Route 0 main trunk: platinum metallic powder to finished platinum dust and recycled metallic powder.
         catalog.registerChain("platinum_metallic_powder", 1, TierEU.RECIPE_ZPM, PlatinumMetallicPowder,
@@ -194,7 +193,7 @@ public final class BottledChaosPlatinumRecipes {
         catalog.setKeyOutputs("rarest_metal_residue", new Object[] { OsmiumDust, IridiumMetalResidueDust });
     }
 
-    private static void registerCropHammerChains(RecipeCatalog catalog) {
+    private static void registerCropHammerChains(BottledChaosRecipeCatalog catalog) {
         TST_ItemID osmianthRoot = resolveCropsLeafAlias(11);
         if (osmianthRoot != null) catalog.registerAlternativeChain(
             "rarest_metal_residue",
@@ -216,7 +215,7 @@ public final class BottledChaosPlatinumRecipes {
             catalog.markRecipe(LargeChemicalReactor, IridiumChlorideDust, IridiumDust, -1));
     }
 
-    public static void registerCombRecipeChains(RecipeCatalog catalog) {
+    public static void registerCombRecipeChains(BottledChaosRecipeCatalog catalog) {
         if (!Forestry.isModLoaded() || GTBees.combs == null) return;
         ItemStack platinumComb = GTBees.combs.getStackForType(CombType.PLATINUM, 1);
         ItemStack palladiumComb = GTBees.combs.getStackForType(CombType.PALLADIUM, 1);

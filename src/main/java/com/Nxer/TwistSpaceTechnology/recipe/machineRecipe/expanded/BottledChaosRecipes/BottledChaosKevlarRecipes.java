@@ -108,14 +108,12 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.Water;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.WovenKevlar;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeCatalog;
-
 import gregtech.api.enums.TierEU;
 
 /** Independent precursor preparations followed by polymer synthesis through the final Kevlar plate. */
 public final class BottledChaosKevlarRecipes {
 
-    public static void registerRecipeChains(RecipeCatalog catalog) {
+    public static void registerRecipeChains(BottledChaosRecipeCatalog catalog) {
         // spotless:off
         // Finishing: retain all precursors as inputs; combine both polymer syntheses through the final plate.
         catalog.registerChain("kevlar", 1, TierEU.RECIPE_UV, ParaphenylenediamineDust,

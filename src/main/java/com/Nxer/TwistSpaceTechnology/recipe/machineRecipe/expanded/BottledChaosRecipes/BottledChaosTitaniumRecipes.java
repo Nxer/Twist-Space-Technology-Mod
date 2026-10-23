@@ -35,14 +35,12 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.TitaniumIngot;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.TitaniumTetrachloride;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeCatalog;
-
 import gregtech.api.enums.TierEU;
 
 /** LuV mineral processing; alternative sources and consecutive stages share one credential tag. */
 public final class BottledChaosTitaniumRecipes {
 
-    public static void registerRecipeChains(RecipeCatalog catalog) {
+    public static void registerRecipeChains(BottledChaosRecipeCatalog catalog) {
         // spotless:off
         // 1. Final stage: chlorinate rutile, reduce its chloride, then cool to titanium ingots.
         catalog.registerChain("titanium", 1, TierEU.RECIPE_LuV, RutileDust,

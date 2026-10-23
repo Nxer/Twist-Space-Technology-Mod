@@ -21,8 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeCatalog;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeMark;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.RecipeMark;
 import com.Nxer.TwistSpaceTechnology.util.recipes.RecipeMaterialUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
@@ -39,7 +38,7 @@ public final class BottledChaosExoticMatterRecipes {
 
     private static final int QGP_CYCLES = 1_000;
 
-    public static void registerRecipeChains(RecipeCatalog catalog) {
+    public static void registerRecipeChains(BottledChaosRecipeCatalog catalog) {
         Set<Object> inputs = new LinkedHashSet<>();
         for (ItemStack stack : Godforge.exoticModulePlasmaItemMap.keySet()) inputs.add(unifiedDustId(stack));
         for (ItemStack stack : Godforge.exoticModuleMagmatterItemMap.keySet()) inputs.add(unifiedDustId(stack));
@@ -63,7 +62,7 @@ public final class BottledChaosExoticMatterRecipes {
         // spotless:on
     }
 
-    private static void registerQuarkGluonPlasma(RecipeCatalog catalog, List<SolidCandidate> solids,
+    private static void registerQuarkGluonPlasma(BottledChaosRecipeCatalog catalog, List<SolidCandidate> solids,
         List<FluidCandidate> fluids, Map<PlasmaSource, RecipeMark> preparations) {
         int[] solidWeights = new int[solids.size()];
         for (int index = 0; index < solids.size(); index++) solidWeights[index] = solids.get(index)
@@ -122,7 +121,7 @@ public final class BottledChaosExoticMatterRecipes {
         // Individual mean errors are <0.008 dust or <0.999 mB per 1000 mB QGP; there is no sampling at runtime.
     }
 
-    private static void registerMagmatter(RecipeCatalog catalog, List<SolidCandidate> solids,
+    private static void registerMagmatter(BottledChaosRecipeCatalog catalog, List<SolidCandidate> solids,
         Map<PlasmaSource, RecipeMark> preparations) {
         int weight = solids.get(0)
             .weight();

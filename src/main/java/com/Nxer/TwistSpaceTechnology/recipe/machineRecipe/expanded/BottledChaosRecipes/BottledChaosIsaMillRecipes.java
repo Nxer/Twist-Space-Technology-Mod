@@ -21,8 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeCatalog;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeMark;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.RecipeMark;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import gregtech.api.enums.Materials;
@@ -39,7 +38,7 @@ import gtPlusPlus.xmod.bop.blocks.BOPBlockRegistrator;
 /** Complete mineral flotation lines, with separate pine-oil production and red-mud recovery. */
 public final class BottledChaosIsaMillRecipes {
 
-    public static void registerRecipeChains(RecipeCatalog catalog) {
+    public static void registerRecipeChains(BottledChaosRecipeCatalog catalog) {
         // spotless:off
         // Main trunks: crushed minerals -> milling -> flotation -> native drying products.
         registerMineral(catalog, Materials.Sphalerite, GTPPFluids.SphaleriteFlotationFroth, IndiumDust, TierEU.RECIPE_LuV, 0);
@@ -64,8 +63,8 @@ public final class BottledChaosIsaMillRecipes {
         // spotless:on
     }
 
-    private static void registerMineral(RecipeCatalog catalog, Materials mineral, Fluid froth, Object target,
-        long baseEUt, int combCount) {
+    private static void registerMineral(BottledChaosRecipeCatalog catalog, Materials mineral, Fluid froth,
+        Object target, long baseEUt, int combCount) {
         TST_ItemID crushed = recipeItemId(GTOreDictUnificator.get(OrePrefixes.crushed, mineral, 1));
         TST_ItemID milled = recipeItemId(GTOreDictUnificator.get(OrePrefixes.milled, mineral, 1));
         int circuit = combCount > 0 ? 2 : mineral == Materials.Sphalerite || mineral == Materials.Chalcopyrite ? 1 : -1;
@@ -104,7 +103,7 @@ public final class BottledChaosIsaMillRecipes {
         // spotless:on
     }
 
-    private static void registerRedMudRecipe(RecipeCatalog catalog) {
+    private static void registerRedMudRecipe(BottledChaosRecipeCatalog catalog) {
         var recovery = BottledChaosRecipeSupport
             .prepareSourceRecipe(
                 CentrifugeNonCell,
@@ -120,7 +119,7 @@ public final class BottledChaosIsaMillRecipes {
         // spotless:on
     }
 
-    private static void registerPineOilRecipe(RecipeCatalog catalog) {
+    private static void registerPineOilRecipe(BottledChaosRecipeCatalog catalog) {
         // spotless:off
         TST_ItemID pineLog = TST_ItemID.create(new ItemStack(BOPBlockRegistrator.log_Pine));
         catalog.registerAlternativeChain("isamill", TierEU.RECIPE_LuV, pineLog,

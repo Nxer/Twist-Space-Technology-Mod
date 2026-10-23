@@ -35,7 +35,6 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RhodiumBlock;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RhodiumDust;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeCatalog;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import gregtech.api.enums.Mods;
@@ -46,7 +45,7 @@ import gregtech.loaders.misc.GTBees;
 /** Netherite trunks and nether-air reagent branches, resolved from live source recipes. */
 public final class BottledChaosNetheriteRecipes {
 
-    public static void registerRecipeChains(RecipeCatalog catalog) {
+    public static void registerRecipeChains(BottledChaosRecipeCatalog catalog) {
         if (!Mods.EtFuturumRequiem.isModLoaded()) return;
         if (AncientDebris == null || NetheriteScrap == null)
             throw new IllegalStateException("missing Et Futurum netherite process items");

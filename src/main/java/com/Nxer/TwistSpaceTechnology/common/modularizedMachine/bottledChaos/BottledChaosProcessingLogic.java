@@ -34,7 +34,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
     private CheckRecipeResult rejectedRoute = CheckRecipeResultRegistry.NO_RECIPE;
     private final Map<Long, Double> durationLimits = new HashMap<>();
     private Function<BottledChaosRecipeProcessor.Plan, CheckRecipeResult> outputCheck;
-    private BottledChaosRecipeProcessor.MachineParameters machineParameters = new BottledChaosRecipeProcessor.MachineParameters() {};
+    private BottledChaosSourceParameters machineParameters = BottledChaosSourceParameters.DEFAULT;
 
     public void setMaterialCache(BottledChaosMaterialCache materials,
         Function<BottledChaosRecipeProcessor.Plan, CheckRecipeResult> outputCheck) {
@@ -64,7 +64,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
         return preparedPlan == null ? Collections.emptyList() : preparedPlan.upkeep();
     }
 
-    public void setMachineConfiguration(long maximumVoltage, BottledChaosRecipeProcessor.MachineParameters parameters) {
+    public void setMachineConfiguration(long maximumVoltage, BottledChaosSourceParameters parameters) {
         maximumRecipeVoltage = maximumVoltage;
         machineParameters = parameters;
     }
@@ -213,9 +213,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
         }
         if (failure == CheckRecipeResultRegistry.NO_RECIPE && rejectedRoute != CheckRecipeResultRegistry.NO_RECIPE)
             return rejectedRoute;
-        if (failure == CheckRecipeResultRegistry.NO_RECIPE
-            && machineParameters instanceof BottledChaosMachineConfiguration.RuntimeParameters runtime)
-            return runtime.sourceFailure();
+        if (failure == CheckRecipeResultRegistry.NO_RECIPE) return machineParameters.sourceFailure();
         return failure;
     }
 

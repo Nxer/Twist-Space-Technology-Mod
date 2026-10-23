@@ -119,8 +119,7 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeCatalog;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeMark;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.RecipeMark;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.TierEU;
@@ -128,7 +127,7 @@ import gregtech.api.enums.TierEU;
 /** Bastnasite and monazite trunks, followed by their rare-earth and radioactive-metal branches. */
 public final class BottledChaosLanthanideRecipes {
 
-    public static void registerRecipeChains(RecipeCatalog catalog) {
+    public static void registerRecipeChains(BottledChaosRecipeCatalog catalog) {
         // spotless:off
         catalog.registerExternalInputs(CeriumRichMixtureDust, SamariumOreConcentrateDust);
         // 1. Bastnasite: keep the existing stage recipes under one mineral tag.

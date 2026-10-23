@@ -52,7 +52,6 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 
 import net.minecraftforge.oredict.OreDictionary;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.RecipeCatalog;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import gregtech.api.enums.TierEU;
@@ -60,7 +59,7 @@ import gregtech.api.enums.TierEU;
 /** Six biological production stages; stem-cell coproducts include their sludge-recovery steps. */
 public final class BottledChaosBiologicalRecipes {
 
-    public static void registerRecipeChains(RecipeCatalog catalog) {
+    public static void registerRecipeChains(BottledChaosRecipeCatalog catalog) {
         // spotless:off
         // Stem-cell finishing entry; preparation entries execute before this primary entry.
         catalog.registerChain("stem_cells", 1, TierEU.RECIPE_UHV, GrowthMediumSterilized,
