@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.fluids.FluidStack;
@@ -38,6 +39,36 @@ public final class BottledChaosUpkeep {
             fluid = GTUtility.copyAmount(1, fluid);
             startupReserveSeconds = Math.max(1, startupReserveSeconds);
         }
+    }
+
+    /** Charged once when a new job starts, independently of its duration or batch count. */
+    @Desugar
+    public record ItemDemand(String pool, ItemStack item, long amount) {
+
+        public ItemDemand {
+            item = GTUtility.copyAmount(1, item);
+        }
+    }
+
+    /** Only mutate the caller's working copies after every pool's startup items are available. */
+    public static CheckRecipeResult consumeRoundItems(List<ItemDemand> demands, ItemStack[] inputs) {
+        IdentityHashMap<ItemStack, Integer> remaining = new IdentityHashMap<>();
+        for (ItemStack input : inputs) {
+            if (input != null && input.stackSize > 0) remaining.putIfAbsent(input, input.stackSize);
+        }
+        for (ItemDemand demand : demands) {
+            long needed = demand.amount();
+            for (ItemStack input : inputs) {
+                if (needed == 0) break;
+                if (input == null || !GTUtility.areStacksEqual(input, demand.item())) continue;
+                int taken = (int) Math.min(needed, remaining.getOrDefault(input, 0));
+                remaining.put(input, remaining.getOrDefault(input, 0) - taken);
+                needed -= taken;
+            }
+            if (needed > 0) return BottledChaosPoolFailure.missingItem(demand.pool(), demand.item(), needed);
+        }
+        remaining.forEach((item, amount) -> item.stackSize = amount);
+        return CheckRecipeResultRegistry.SUCCESSFUL;
     }
 
     @Desugar

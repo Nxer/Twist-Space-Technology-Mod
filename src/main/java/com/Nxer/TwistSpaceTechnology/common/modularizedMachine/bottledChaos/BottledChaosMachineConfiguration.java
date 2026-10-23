@@ -19,6 +19,8 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosMachineModule;
+import com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -36,6 +38,7 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.util.GTUtility;
+import gregtech.common.blocks.ItemMachines;
 import gregtech.common.tileentities.machines.multi.purification.MTEPurificationPlant;
 import kubatech.loaders.DEFCRecipes;
 
@@ -154,6 +157,7 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
                 // Both activators consume the same converted source recipes; the ordinary machine keeps its own speed.
                 if (machine instanceof MTENeutronActivator)
                     machinePools[id] |= mask(GTCMRecipe.NeutronActivatorWithEURecipeMap);
+                if (machine instanceof TST_MiracleDoor) machinePools[id] |= mask(RecipeMaps.alloyBlastSmelterRecipes);
             } catch (RuntimeException exception) {
                 TwistSpaceTechnology.LOG.warn("Cannot inspect Bottled Chaos machine catalyst {}.", id, exception);
             }
@@ -368,9 +372,11 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
         private final long[] quantities = new long[MAX_POOLS];
         private final double[] quantitySpeeds = machineSpeeds.clone();
         private final boolean[] debug = new boolean[MAX_POOLS];
+        private final boolean[] miracleDoor = new boolean[MAX_POOLS];
         private final boolean[] configured = new boolean[MAX_POOLS];
         private final Map<SourceKey, BottledChaosMachineParameters.Profile> profiles = new HashMap<>();
         private final List<BottledChaosUpkeep.Demand> sourceUsage = new ArrayList<>();
+        private long roundItemPools;
         private final BottledChaosMachineParameters.Profile[] currentProfiles = new BottledChaosMachineParameters.Profile[MAX_POOLS];
         private final CheckRecipeResult[] currentFailures = new CheckRecipeResult[MAX_POOLS];
         private CheckRecipeResult sourceFailure = CheckRecipeResultRegistry.NO_RECIPE;
@@ -392,6 +398,8 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
                 structures[slot] = machineStructures[slot];
                 controllers[slot] = structures[slot] != null ? structures[slot].controller()
                     : ItemBottledChaosMachineModule.isModule(stack) ? null : stack;
+                miracleDoor[slot] = !debug[slot] && controllers[slot] != null
+                    && ItemMachines.getMetaTileEntity(controllers[slot]) instanceof TST_MiracleDoor;
                 quantities[slot] = machineQuantities[slot];
             }
         }
@@ -438,6 +446,18 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
         private BottledChaosMachineParameters.Profile profile(RecipeMap<?> map) {
             Integer slot = poolIndexes.get(map);
             return slot == null ? null : currentProfiles[slot];
+        }
+
+        @Override
+        public boolean isSourceAvailable(RecipeMap<?> map) {
+            Integer slot = poolIndexes.get(map);
+            return slot != null && quantities[slot] > 0 && (debug[slot] || controllers[slot] != null);
+        }
+
+        @Override
+        public boolean energyOnly(RecipeMap<?> pool) {
+            Integer slot = poolIndexes.get(pool);
+            return slot != null && miracleDoor[slot];
         }
 
         @Override
@@ -577,6 +597,7 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
         @Override
         public void resetSourceUsage() {
             sourceUsage.clear();
+            roundItemPools = 0;
         }
 
         /** Record only executed steps; rejected binary-search candidates cannot overwrite the chosen plan's fees. */
@@ -585,6 +606,7 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
             Integer slot = poolIndexes.get(map);
             var profile = profile(map);
             if (slot == null || profile == null) return;
+            if (miracleDoor[slot]) roundItemPools |= 1L << slot;
             for (FluidStack fluid : profile.upkeep()) {
                 if (fluid == null || fluid.amount <= 0) continue;
                 sourceUsage.add(
@@ -600,6 +622,17 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
         @Override
         public List<BottledChaosUpkeep.Demand> upkeepDemands() {
             return Collections.unmodifiableList(new ArrayList<>(sourceUsage));
+        }
+
+        @Override
+        public List<BottledChaosUpkeep.ItemDemand> roundItemDemands() {
+            if (roundItemPools == 0) return Collections.emptyList();
+            List<BottledChaosUpkeep.ItemDemand> demands = new ArrayList<>();
+            for (int slot = 0; slot < pools.length; slot++) {
+                if ((roundItemPools & (1L << slot)) != 0) demands.add(
+                    new BottledChaosUpkeep.ItemDemand(poolKey(slot), MiscHelper.CRITICAL_PHOTON, quantities[slot]));
+            }
+            return demands;
         }
     }
 

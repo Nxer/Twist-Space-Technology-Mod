@@ -124,8 +124,10 @@ final class BottledChaosRecipeSupport {
 
         // Keep raw source work grouped by machine and EU/t for runtime overclock normalization.
         Map<TimeKey, Long> times = new LinkedHashMap<>();
+        var source = BottledChaosProcessAlternatives
+            .capture(map, inputs, outputs, catalysts, Math.multiplyExact((long) recipe.mDuration, probabilityBatch));
         times.put(
-            new TimeKey(map, recipe.mEUt, recipe.mDuration, requirements),
+            new TimeKey(map, recipe.mEUt, recipe.mDuration, requirements, source, null),
             Math.multiplyExact((long) recipe.mDuration, probabilityBatch));
         return new RecipeData(inputs, outputs, catalysts, times, itemRequirements);
     }
@@ -133,7 +135,8 @@ final class BottledChaosRecipeSupport {
     private static SourceRequirements sourceRequirements(RecipeMap<?> map, GTRecipe recipe) {
         int heat = recipe.getMetadataOrDefault(GTRecipeConstants.COIL_HEAT, 0);
         if (map == RecipeMaps.blastFurnaceRecipes || map == RecipeMaps.vacuumFurnaceRecipes
-            || map == RecipeMaps.alloyBlastSmelterRecipes) heat = Math.max(heat, recipe.mSpecialValue);
+            || map == RecipeMaps.alloyBlastSmelterRecipes
+            || map == TecTechRecipeMaps.godforgeMoltenRecipes) heat = Math.max(heat, recipe.mSpecialValue);
         int casing = 0;
         if (map == RecipeMaps.chemicalPlantRecipes)
             casing = recipe.getMetadataOrDefault(GTRecipeConstants.CHEMPLANT_CASING_TIER, recipe.mSpecialValue);
@@ -257,6 +260,10 @@ final class BottledChaosRecipeSupport {
         final Map<Object, Long> catalysts;
         final Map<TimeKey, Long> times;
         final List<Requirement> itemRequirements;
+
+        RecipeData withTimes(Map<TimeKey, Long> work) {
+            return new RecipeData(inputs, outputs, catalysts, work, itemRequirements);
+        }
 
         /** Consolidate native small/tiny coproducts into exact full-dust batches without changing source work. */
         RecipeData withFullDustOutputs() {
@@ -560,7 +567,12 @@ final class BottledChaosRecipeSupport {
      * Keep source duration and requirements separate, including the native neutron activator's per-recipe tick floor.
      */
     @Desugar
-    record TimeKey(RecipeMap<?> map, long eut, int recipeTicks, SourceRequirements requirements) {
+    record TimeKey(RecipeMap<?> map, long eut, int recipeTicks, SourceRequirements requirements,
+        BottledChaosProcessAlternatives.Source source, BottledChaosProcessAlternatives.Group alternatives) {
+
+        TimeKey(RecipeMap<?> map, long eut, int recipeTicks, SourceRequirements requirements) {
+            this(map, eut, recipeTicks, requirements, null, null);
+        }
 
         TimeKey(RecipeMap<?> map, long eut) {
             this(map, eut, 1, SourceRequirements.NONE);

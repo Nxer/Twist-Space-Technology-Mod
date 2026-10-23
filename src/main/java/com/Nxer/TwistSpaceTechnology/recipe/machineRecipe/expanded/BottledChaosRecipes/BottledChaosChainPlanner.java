@@ -43,8 +43,12 @@ final class BottledChaosChainPlanner {
             return 0;
         }
 
-        default long pools(int stage) {
+        default long pools(int stage, long voltage) {
             return 0;
+        }
+
+        default Map<Object, Long> inputs(int stage, long voltage) {
+            return null;
         }
     }
 
@@ -158,7 +162,7 @@ final class BottledChaosChainPlanner {
             Stage stage = stages[index];
             if (!stage.availableInputsOnly || !conditions.terminalRecovery(index)) continue;
             long count = 0;
-            for (var input : stage.inputs.entrySet()) {
+            for (var input : inputs(index, Math.max(state.voltage, stage.voltage)).entrySet()) {
                 count = Math.max(count, state.produced.getOrDefault(input.getKey(), 0L) / input.getValue());
             }
             count = suppliedInputLimit(index, Math.min(count, batchLimit - state.batches[index]));
@@ -184,16 +188,20 @@ final class BottledChaosChainPlanner {
         }
         if (voltage != state.voltage) {
             state.duration = 0;
+            state.pools = 0;
             for (int previous = 0; previous < stages.length; previous++) {
-                if (state.batches[previous] != 0)
+                if (state.batches[previous] != 0) {
                     state.duration += conditions.cost(previous, voltage) * state.batches[previous];
+                    state.pools |= conditions.pools(previous, voltage);
+                }
             }
         }
         state.voltage = voltage;
         state.active[index] = true;
+        Map<Object, Long> inputs = inputs(index, voltage);
         Map<Object, Long> missing = new LinkedHashMap<>();
         // Reserve every available input before making any supplier run. Shared inputs belong to this goal first.
-        for (var input : stage.inputs.entrySet()) {
+        for (var input : inputs.entrySet()) {
             long needed = Math.multiplyExact(input.getValue(), count);
             long taken = takeInput(index, input.getKey(), needed);
             if (taken < needed) missing.put(input.getKey(), needed - taken);
@@ -206,8 +214,7 @@ final class BottledChaosChainPlanner {
         }
         for (var catalyst : stage.catalysts.entrySet()) {
             Object key = catalyst.getKey();
-            long needed = Math
-                .max(0, catalyst.getValue() - Math.multiplyExact(stage.inputs.getOrDefault(key, 0L), count));
+            long needed = Math.max(0, catalyst.getValue() - Math.multiplyExact(inputs.getOrDefault(key, 0L), count));
             if (stage.availableInputsOnly && available(index, key) < needed
                 && !(needed == 1 && virtualItems.contains(key))) return false;
             if (!(needed == 1 && virtualItems.contains(key)) && !supply(index, key, needed)) return false;
@@ -225,7 +232,7 @@ final class BottledChaosChainPlanner {
             if (amount > retained) state.outputs.merge(key, amount - retained, Math::addExact);
         }
         state.batches[index] += count;
-        state.pools |= conditions.pools(index);
+        state.pools |= conditions.pools(index, state.voltage);
         state.duration += conditions.cost(index, state.voltage) * count;
         if (!Double.isFinite(state.duration)) throw new ArithmeticException("duration overflow");
         state.active[index] = false;
@@ -263,7 +270,7 @@ final class BottledChaosChainPlanner {
     /** Bound leaf inputs directly; recursive suppliers are checked once by execute, never binary-searched. */
     private long suppliedInputLimit(int index, long count) {
         Stage stage = stages[index];
-        for (var input : stage.inputs.entrySet()) {
+        for (var input : inputs(index, Math.max(state.voltage, stage.voltage)).entrySet()) {
             int[] sources = suppliers.get(index)
                 .get(input.getKey());
             boolean canSupply = false;
@@ -286,7 +293,8 @@ final class BottledChaosChainPlanner {
             if (planned.targets[index] == 0 || stage.availableInputsOnly) continue;
             long count = batchLimit - state.batches[index];
             boolean chainedInput = false;
-            for (var input : stage.inputs.entrySet()) {
+            Map<Object, Long> inputs = inputs(index, state.voltage);
+            for (var input : inputs.entrySet()) {
                 count = Math.min(count, available(index, input.getKey()) / input.getValue());
                 chainedInput |= suppliers.get(index)
                     .containsKey(input.getKey());
@@ -299,7 +307,7 @@ final class BottledChaosChainPlanner {
             boolean catalystsAvailable = true;
             for (var catalyst : stage.catalysts.entrySet()) {
                 Object key = catalyst.getKey();
-                long consumed = Math.multiplyExact(stage.inputs.getOrDefault(key, 0L), count);
+                long consumed = Math.multiplyExact(inputs.getOrDefault(key, 0L), count);
                 long needed = Math.max(0, catalyst.getValue() - consumed);
                 if (available(index, key) - consumed < needed && !(needed == 1 && virtualItems.contains(key))) {
                     catalystsAvailable = false;
@@ -342,6 +350,11 @@ final class BottledChaosChainPlanner {
         } catch (ArithmeticException overflow) {
             return false;
         }
+    }
+
+    private Map<Object, Long> inputs(int index, long voltage) {
+        Map<Object, Long> inputs = conditions.inputs(index, voltage);
+        return inputs == null ? stages[index].inputs : inputs;
     }
 
     private long available(int consumer, Object key) {

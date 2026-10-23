@@ -15,9 +15,11 @@ import net.minecraft.util.StatCollector;
 
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_BottledChaos;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineConfiguration;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosProcessAlternatives;
 import com.cleanroommc.modularui.api.IPanelHandler;
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.api.widget.IWidget;
+import com.cleanroommc.modularui.drawable.Rectangle;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.network.NetworkUtils;
 import com.cleanroommc.modularui.screen.ModularPanel;
@@ -43,6 +45,7 @@ import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 
 import gregtech.api.modularui2.GTGuiTextures;
+import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.common.gui.modularui.adapter.CheckRecipeResultAdapter;
@@ -295,7 +298,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             syncManager.syncedPanel(
                 RECIPE_CATEGORY_PANEL,
                 true,
-                (panelSyncManager, handler) -> createRecipeCategoryPanel(panelSyncManager, parent, handler)));
+                (panelSyncManager, handler) -> createRecipeCategoryPanel(panelSyncManager, handler)));
     }
 
     @Override
@@ -540,8 +543,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             .tooltipShowUpTimer(TOOLTIP_DELAY);
     }
 
-    private ModularPanel createRecipeCategoryPanel(PanelSyncManager syncManager, ModularPanel parent,
-        IPanelHandler panelHandler) {
+    private ModularPanel createRecipeCategoryPanel(PanelSyncManager syncManager, IPanelHandler panelHandler) {
         BooleanSupplier panelOpen = () -> panelHandler.isPanelOpen() && syncManager.getModularSyncManager()
             .isOpen();
         LongSyncValue required = new LongSyncValue(
@@ -551,61 +553,64 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
         syncManager.syncValue("bottledChaosRequiredPools", required);
         var rows = new ListWidget<>().fullWidth()
             .height(104);
+        BooleanSupplier alternativesVisible = () -> poolVisible(
+            required,
+            Long.numberOfTrailingZeros(
+                BottledChaosMachineConfiguration.mask(BottledChaosProcessAlternatives.STELLAR_FORGE)))
+            || poolVisible(
+                required,
+                Long.numberOfTrailingZeros(
+                    BottledChaosMachineConfiguration.mask(BottledChaosProcessAlternatives.GODFORGE_MOLTEN)))
+            || poolVisible(required, Long.numberOfTrailingZeros(BottledChaosProcessAlternatives.coolingMask()));
+        Flow originalPools = Flow.column()
+            .width(99)
+            .coverChildrenHeight(1)
+            .collapseDisabledChild();
+        Flow alternativePools = Flow.column()
+            .width(91)
+            .coverChildrenHeight(1)
+            .collapseDisabledChild();
+        Rectangle frame = new Rectangle().hollow()
+            .color(0xFF747474);
+        Flow alternativeGroup = Flow.row()
+            .fullWidth()
+            .coverChildrenHeight(0)
+            .padding(3)
+            .collapseDisabledChild()
+            .background(
+                (context, x, y, width, height, theme) -> {
+                    if (alternativesVisible.getAsBoolean()) frame.draw(context, x, y, width, height, theme);
+                })
+            .child(originalPools)
+            .child(alternativePools);
+        boolean grouped = false;
+        IWidget[] originals = new IWidget[3];
         for (int slot = 0; slot < BottledChaosMachineConfiguration.poolCount(); slot++) {
-            final int poolSlot = slot;
-            IntSyncValue users = new IntSyncValue(() -> multiblock.getRecipePoolUsers(poolSlot));
-            syncManager.syncValue("bottledChaosPoolUsers" + poolSlot, users);
-            BooleanSupplier visible = () -> (required.getLongValue() & (1L << poolSlot)) != 0
-                || multiblock.getMachineConfiguration()
-                    .machines()
-                    .getStackInSlot(poolSlot) != null;
-            rows.child(
-                Flow.row()
-                    .fullWidth()
-                    .height(20)
-                    .setEnabledIf(widget -> visible.getAsBoolean())
-                    .child(
-                        new ItemSlot()
-                            .syncHandler(
-                                new MachineSlotSyncHandler(
-                                    createConfigurationSlot(
-                                        multiblock.getMachineConfiguration()
-                                            .machines(),
-                                        poolSlot,
-                                        () -> panelOpen.getAsBoolean() && visible.getAsBoolean())
-                                            .ignoreMaxStackSize(true)
-                                            .singletonSlotGroup()))
-                            .tooltip(
-                                tooltip -> tooltip
-                                    .addLine(IKey.str(BottledChaosMachineConfiguration.poolName(poolSlot)))))
-                    .child(
-                        new TextWidget<>(IKey.str(BottledChaosMachineConfiguration.poolName(poolSlot))).width(168)
-                            .height(18)
-                            .textAlign(Alignment.CenterLeft)
-                            .tooltipBuilder(tooltip -> {
-                                // #tr tst.bottledchaos.gui.pool_users
-                                // # Processing groups: %s
-                                // #zh_CN 加工组: %s
-                                String groups = MM_BottledChaos.formatProcessingGroups(users.getValue());
-                                tooltip.addLine(
-                                    IKey.str(
-                                        StatCollector.translateToLocalFormatted(
-                                            "tst.bottledchaos.gui.pool_users",
-                                            groups.isEmpty() ? StatCollector.translateToLocal("GT5U.gui.text.nil")
-                                                : groups)));
-                            })
-                            .tooltipAutoUpdate(true)));
+            var pool = BottledChaosMachineConfiguration.pool(slot);
+            boolean replacement = pool == BottledChaosProcessAlternatives.STELLAR_FORGE
+                || pool == BottledChaosProcessAlternatives.GODFORGE_MOLTEN
+                || pool == BottledChaosProcessAlternatives.COOLING;
+            boolean original = pool == RecipeMaps.blastFurnaceRecipes || pool == RecipeMaps.vacuumFreezerRecipes
+                || pool == RecipeMaps.fluidExtractionRecipes;
+            if (replacement || original) {
+                if (!grouped) {
+                    rows.child(alternativeGroup);
+                    grouped = true;
+                }
+                IWidget row = createRecipePoolRow(syncManager, panelOpen, required, slot, replacement ? 69 : 77, 32);
+                if (replacement) alternativePools.child(row);
+                else originals[pool == RecipeMaps.blastFurnaceRecipes ? 0
+                    : pool == RecipeMaps.vacuumFreezerRecipes ? 1 : 2] = row;
+            } else rows.child(createRecipePoolRow(syncManager, panelOpen, required, slot, 168, 20));
         }
+        for (IWidget row : originals) if (row != null) originalPools.child(row);
         return new ModularPanel(RECIPE_CATEGORY_PANEL) {
 
             @Override
             public boolean shouldAnimate() {
                 return false;
             }
-        }.relative(parent)
-            .leftRel(1)
-            .topRel(0)
-            .size(208, 268)
+        }.size(208, 224)
             .child(
                 Flow.column()
                     .full()
@@ -616,7 +621,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                             .fullWidth()
                             .height(18))
                     .child(
-                        IKey.lang("tst.bottledchaos.gui.recipe_category_slot_hint")
+                        IKey.str(StatCollector.translateToLocal("tst.bottledchaos.gui.recipe_category_slot_hint"))
                             .asWidget()
                             .fullWidth()
                             .height(38))
@@ -627,7 +632,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                             .height(18))
                     .child(
                         new ListWidget<>().fullWidth()
-                            .height(72)
+                            .height(32)
                             .child(
                                 new Grid().coverChildren()
                                     .gridOfWidthHeight(
@@ -642,6 +647,51 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                                                     panelOpen).ignoreMaxStackSize(true)
                                                         .singletonSlotGroup()
                                                         .filter(stack -> false)))))));
+    }
+
+    private boolean poolVisible(LongSyncValue required, int slot) {
+        return slot < BottledChaosMachineConfiguration.poolCount()
+            && ((required.getLongValue() & (1L << slot)) != 0 || multiblock.getMachineConfiguration()
+                .machines()
+                .getStackInSlot(slot) != null);
+    }
+
+    private IWidget createRecipePoolRow(PanelSyncManager syncManager, BooleanSupplier panelOpen, LongSyncValue required,
+        int slot, int textWidth, int height) {
+        IntSyncValue users = new IntSyncValue(() -> multiblock.getRecipePoolUsers(slot));
+        syncManager.syncValue("bottledChaosPoolUsers" + slot, users);
+        BooleanSupplier visible = () -> poolVisible(required, slot);
+        return Flow.row()
+            .fullWidth()
+            .height(height)
+            .setEnabledIf(widget -> visible.getAsBoolean())
+            .child(
+                new ItemSlot()
+                    .syncHandler(
+                        new MachineSlotSyncHandler(
+                            createConfigurationSlot(
+                                multiblock.getMachineConfiguration()
+                                    .machines(),
+                                slot,
+                                () -> panelOpen.getAsBoolean() && visible.getAsBoolean()).ignoreMaxStackSize(true)
+                                    .singletonSlotGroup()))
+                    .tooltip(tooltip -> tooltip.addLine(IKey.str(BottledChaosMachineConfiguration.poolName(slot)))))
+            .child(
+                new TextWidget<>(IKey.str(BottledChaosMachineConfiguration.poolName(slot))).width(textWidth)
+                    .height(height)
+                    .textAlign(Alignment.CenterLeft)
+                    .tooltipBuilder(tooltip -> {
+                        // #tr tst.bottledchaos.gui.pool_users
+                        // # Processing groups: %s
+                        // #zh_CN 加工组: %s
+                        String groups = MM_BottledChaos.formatProcessingGroups(users.getValue());
+                        tooltip.addLine(
+                            IKey.str(
+                                StatCollector.translateToLocalFormatted(
+                                    "tst.bottledchaos.gui.pool_users",
+                                    groups.isEmpty() ? StatCollector.translateToLocal("GT5U.gui.text.nil") : groups)));
+                    })
+                    .tooltipAutoUpdate(true));
     }
 
     /** Sends an integer quantity after native slot packets, only when a machine slot changes. */

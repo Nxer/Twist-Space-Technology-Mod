@@ -20,6 +20,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_BallLightning;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaMacerator;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosStructureCatalog.Structure;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.github.bsideup.jabel.Desugar;
 
 import bartworks.API.recipe.BartWorksRecipeMaps;
@@ -103,7 +104,8 @@ public final class BottledChaosMachineParameters {
         THERMAL_DEVOURER("TST_ThermalEnergyDevourer"), SOLIDIFIER("MTEMassSolidifier"), ISA_MILL("MTEIsaMill"),
         CRYOGENIC_FREEZER("MTECryogenicFreezer"), ARC_FURNACE("MTEIndustrialArcFurnace"), DE_FUSION("MTEDEFusionCrafter"),
         INDISTINCT_PROTOTYPE("MM_IndistinctTentaclePrototypeMK2"), ADVANCED_BLAST("MTEAdvEBF"),
-        GODFORGE_SMELTING("MTESmeltingModule"), HEARTH("MTEExothermicHearth"), SWELEGFYR("TST_SwelegfyrBlastFurnace"),
+        GODFORGE_SMELTING("MTESmeltingModule"), GODFORGE_MOLTEN("MTEMoltenModule"), STELLAR_FORGE("TST_MiracleDoor"),
+        HEAT_CONVECTOR("TST_HyperThermalConvector"), HEARTH("MTEExothermicHearth"), SWELEGFYR("TST_SwelegfyrBlastFurnace"),
         CHEMICAL_PLANT("MTEChemicalPlant"), GODFORGE_EXOTIC("MTEExoticModule"), GODFORGE_PLASMA("MTEPlasmaModule"), FOUNDRY("MTEExoFoundry"),
         MULTI_FURNACE("MTEMultiFurnace"), HEPHAESTUS("TST_HephaestusAtelier"), CENTRIFUGE("MTEIndustrialCentrifuge"),
         SPINMATRON("MTESpinmatron"), PURIFICATION_CLARIFIER("MTEPurificationUnitClarifier"),
@@ -220,8 +222,8 @@ public final class BottledChaosMachineParameters {
         if (!(original instanceof RecipeMapWorkable workable)) return null;
         Machine machine = Machine.find(original);
         if (!workable.getAvailableRecipeMaps()
-            .contains(pool) && !(machine == Machine.NEUTRON && pool == GTCMRecipe.NeutronActivatorWithEURecipeMap))
-            return null;
+            .contains(pool) && !(machine == Machine.NEUTRON && pool == GTCMRecipe.NeutronActivatorWithEURecipeMap)
+            && !(machine == Machine.STELLAR_FORGE && pool == RecipeMaps.alloyBlastSmelterRecipes)) return null;
         Values value = new Values();
         if (machine == null) {
             if (!(original instanceof MTEBasicMachine basic) || basic.mTier <= 0) return null;
@@ -489,7 +491,24 @@ public final class BottledChaosMachineParameters {
                 value.heatDiscount = 0.95;
                 value.upkeep = pyrotheum(10);
             }
-            case GODFORGE_SMELTING, GODFORGE_EXOTIC, GODFORGE_PLASMA -> {
+            case STELLAR_FORGE -> {
+                if (pool != GTCMRecipe.StellarForgeRecipeMap && pool != RecipeMaps.alloyBlastSmelterRecipes
+                    && pool != GTCMRecipe.StellarForgeAlloySmelterRecipeMap) return null;
+                value.euMultiplier = Math.max(
+                    1,
+                    pool == GTCMRecipe.StellarForgeRecipeMap ? Config.multiplierOfMiracleDoorEUCostEBFMode
+                        : Config.multiplierOfMiracleDoorEUCostABSMode);
+                // Native Miracle Door recipes have no coil-temperature admission limit.
+                value.heat = Integer.MAX_VALUE;
+                value.maximumOverclocks = 0;
+                value.timeDivisor = value.powerMultiplier = 1;
+            }
+            case HEAT_CONVECTOR -> {
+                if (pool != GTCMRecipe.RapidCoolingDownRecipeMap) return null;
+                value.maximumOverclocks = 0;
+                value.timeDivisor = value.powerMultiplier = 1;
+            }
+            case GODFORGE_SMELTING, GODFORGE_MOLTEN, GODFORGE_EXOTIC, GODFORGE_PLASMA -> {
                 var preset = BottledChaosComplexStructures.godforge(structure);
                 if (preset == null) return null;
                 value.set(preset.parallel(), preset.eu(), preset.time());
@@ -503,7 +522,8 @@ public final class BottledChaosMachineParameters {
                     "godforge_configuration",
                     preset.rings(),
                     BottledChaosComplexStructures.godforgeUpgradeName(preset));
-                if (machine == Machine.GODFORGE_SMELTING) value.heatDiscount = preset.heatDiscount();
+                if (machine == Machine.GODFORGE_SMELTING || machine == Machine.GODFORGE_MOLTEN)
+                    value.heatDiscount = preset.heatDiscount();
             }
             case FOUNDRY -> {
                 FoundryData foundry = BottledChaosComplexStructures.foundry(structure);
@@ -889,6 +909,25 @@ public final class BottledChaosMachineParameters {
             1,
             1,
             0);
+        if (machine == Machine.STELLAR_FORGE || machine == Machine.HEAT_CONVECTOR) {
+            if (machine == Machine.STELLAR_FORGE) {
+                // #tr tst.bottledchaos.machine_module.energy_duration
+                // # Duration is normalized from total recipe energy.
+                // #zh_CN 按配方总能耗折算耗时.
+                lines.add(text("eu", base == null ? "-" : number(base.euMultiplier())));
+                lines.add(text("energy_duration"));
+                // #tr tst.bottledchaos.machine_module.critical_photon
+                // # Critical Photon: 1 per module stack per round.
+                // #zh_CN 临界光子: 每堆每轮1个.
+                lines.add(text("critical_photon"));
+            } else {
+                // #tr tst.bottledchaos.machine_module.free_cooling
+                // # Plasma cooling: 0 EU, 0 ticks of processing work.
+                // #zh_CN 等离子冷却: 0 EU, 0 tick处理耗时.
+                lines.add(text("free_cooling"));
+            }
+            return lines;
+        }
         double quantitySpeed = 1d + Math.max(0, quantitySpeedExponent);
         String parallel = base == null ? "-" : number(base.parallel());
         String eu = base == null ? "-" : number(base.euMultiplier());
@@ -981,7 +1020,7 @@ public final class BottledChaosMachineParameters {
             case ADVANCED_BLAST -> {
                 if (recipeHeat) eu = "0.9 x " + text("thermal_eu", "0.95");
             }
-            case GODFORGE_SMELTING -> {
+            case GODFORGE_SMELTING, GODFORGE_MOLTEN -> {
                 var preset = BottledChaosComplexStructures.godforge(structure);
                 if (preset != null && recipeHeat) eu = (preset.eu() == 1 ? "" : number(preset.eu()) + " x ")
                     + text("thermal_eu", number(preset.heatDiscount()));
@@ -1099,6 +1138,7 @@ public final class BottledChaosMachineParameters {
             && pool != RecipeMaps.fermentingRecipes) special = append(special, text("radiation"));
         if (recipeHeat && (machine == Machine.DEHYDRATOR || machine == Machine.ADVANCED_BLAST
             || machine == Machine.GODFORGE_SMELTING
+            || machine == Machine.GODFORGE_MOLTEN
             || machine == Machine.HEARTH
             || machine == Machine.SWELEGFYR)) special = append(special, text("thermal_oc"));
         if (base != null && base.upkeep().length > 0 && machine != Machine.SPINMATRON)

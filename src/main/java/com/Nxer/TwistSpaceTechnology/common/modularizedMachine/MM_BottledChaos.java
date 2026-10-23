@@ -1366,15 +1366,31 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         }
         result = structureUpkeep.checkStart(active, starting, supply);
         if (!result.wasSuccessful()) return result;
+        IdentityHashMap<ItemStack, ItemStack> roundItemCopies = new IdentityHashMap<>();
+        List<BottledChaosUpkeep.ItemDemand> roundItems = logic.getPreparedPlan()
+            .roundItems();
+        if (!roundItems.isEmpty()) {
+            for (int i = 0; i < originals.length; i++) roundItemCopies.put(originals[i], itemCopies[i]);
+            ItemStack[] itemSupply = getCentralSupplyItems();
+            for (int i = 0; i < itemSupply.length; i++) {
+                ItemStack original = itemSupply[i];
+                itemSupply[i] = roundItemCopies
+                    .computeIfAbsent(original, stack -> inputs == null ? stack.copy() : inputs.copyItem(stack));
+            }
+            result = BottledChaosUpkeep.consumeRoundItems(roundItems, itemSupply);
+            if (!result.wasSuccessful()) return result;
+        }
         if (inputs != null && inputs.probeOnly) return CheckRecipeResultRegistry.SUCCESSFUL;
 
         if (inputs != null) {
             for (int i = 0; i < originals.length; i++) inputs.items.put(originals[i], itemCopies[i]);
+            inputs.items.putAll(roundItemCopies);
             for (int i = 0; i < originalFluids.length; i++) inputs.fluids.put(originalFluids[i], fluidCopies[i]);
             return CheckRecipeResultRegistry.SUCCESSFUL;
         }
         // Only now commit the prechecked input deltas. No real input was touched by ProcessingLogic.
         for (int i = 0; i < originals.length; i++) originals[i].stackSize = itemCopies[i].stackSize;
+        roundItemCopies.forEach((original, copy) -> original.stackSize = copy.stackSize);
         for (int i = 0; i < originalFluids.length; i++) originalFluids[i].amount = fluidCopies[i].amount;
         updateSlots();
         return CheckRecipeResultRegistry.SUCCESSFUL;
@@ -1662,6 +1678,14 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     private FluidStack[] getCentralSupplyFluids() {
         return withCentralInputs(() -> uniqueFluidReferences(getStoredFluidsWithDualInput()));
+    }
+
+    private ItemStack[] getCentralSupplyItems() {
+        return withCentralInputs(() -> {
+            ArrayList<ItemStack> items = getStoredInputsNoSeparation();
+            items.removeIf(stack -> stack == mInventory[1]);
+            return uniqueItemReferences(items);
+        });
     }
 
     /** Source-machine upkeep belongs to the controller, not the credential's private input positions. */

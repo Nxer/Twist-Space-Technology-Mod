@@ -7,6 +7,7 @@ import java.io.UncheckedIOException;
 import java.math.BigInteger;
 import java.util.StringJoiner;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.StatCollector;
@@ -29,6 +30,14 @@ public final class BottledChaosPoolFailure implements CheckRecipeResult {
         failure.data.setString("pool", pool);
         failure.data.setTag("fluid", fluid.writeToNBT(new NBTTagCompound()));
         failure.data.setString("amount", required.toString());
+        return failure;
+    }
+
+    public static BottledChaosPoolFailure missingItem(String pool, ItemStack item, long required) {
+        BottledChaosPoolFailure failure = new BottledChaosPoolFailure();
+        failure.data.setString("pool", pool);
+        failure.data.setTag("item", item.writeToNBT(new NBTTagCompound()));
+        failure.data.setString("amount", Long.toString(required));
         return failure;
     }
 
@@ -68,6 +77,12 @@ public final class BottledChaosPoolFailure implements CheckRecipeResult {
                 FluidStack.loadFluidStackFromNBT(data.getCompoundTag("fluid"))
                     .getLocalizedName(),
                 formatNumber(new BigInteger(data.getString("amount"))));
+        } else if (data.hasKey("item", 10)) {
+            reason = StatCollector.translateToLocalFormatted(
+                "GT5U.gui.text.recipe_result.out_of_item",
+                ItemStack.loadItemStackFromNBT(data.getCompoundTag("item"))
+                    .getDisplayName(),
+                formatNumber(Long.parseLong(data.getString("amount"))));
         } else if (data.hasKey("resultId", 8)) {
             CheckRecipeResult result = CheckRecipeResultRegistry.getSampleFromRegistry(data.getString("resultId"))
                 .newInstance();

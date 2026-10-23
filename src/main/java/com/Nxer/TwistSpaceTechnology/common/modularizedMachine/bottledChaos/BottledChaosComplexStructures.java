@@ -56,6 +56,7 @@ public final class BottledChaosComplexStructures {
         List<Rule> rules) {
         // Individual Godforge module structures are paid only as part of their complete host.
         if (supported == BottledChaosSupportedMachine.MTESMELTING_MODULE
+            || supported == BottledChaosSupportedMachine.MTEMOLTEN_MODULE
             || supported == BottledChaosSupportedMachine.MTEPLASMA_MODULE
             || supported == BottledChaosSupportedMachine.MTEEXOTIC_MODULE) return true;
         if (supported != BottledChaosSupportedMachine.MTEEXO_FOUNDRY) return false;
@@ -157,9 +158,10 @@ public final class BottledChaosComplexStructures {
             BottledChaosSupportedMachine supported = module == null ? null : BottledChaosSupportedMachine.find(module);
             ForgeOfGodsUpgrade target = supported == BottledChaosSupportedMachine.MTESMELTING_MODULE
                 ? ForgeOfGodsUpgrade.START
-                : supported == BottledChaosSupportedMachine.MTEPLASMA_MODULE ? ForgeOfGodsUpgrade.GPCI
-                    // This pool includes magnetic matter, so its minimum complete host must also unlock that mode.
-                    : supported == BottledChaosSupportedMachine.MTEEXOTIC_MODULE ? ForgeOfGodsUpgrade.EE : null;
+                : supported == BottledChaosSupportedMachine.MTEMOLTEN_MODULE ? ForgeOfGodsUpgrade.FDIM
+                    : supported == BottledChaosSupportedMachine.MTEPLASMA_MODULE ? ForgeOfGodsUpgrade.GPCI
+                        // This pool includes magnetic matter, so its minimum complete host must also unlock that mode.
+                        : supported == BottledChaosSupportedMachine.MTEEXOTIC_MODULE ? ForgeOfGodsUpgrade.EE : null;
             if (target == null) continue;
             try {
                 Rule section = BottledChaosStructureCatalog.readRule(module, supported, 1, machinePools[id]);
