@@ -1771,23 +1771,21 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         clearCredentialHatchBindings();
         IGregTechTileEntity base = getBaseMetaTileEntity();
         if (base != null && base.isServerSide()) {
-            for (ItemStackHandler inventory : new ItemStackHandler[] { machineConfiguration.machines(),
-                machineConfiguration.retired() }) {
-                for (int slot = 0; slot < inventory.getSlots(); slot++) {
-                    ItemStack stack = inventory.getStackInSlot(slot);
-                    if (stack == null) continue;
-                    inventory.setStackInSlot(slot, null);
-                    while (stack.stackSize > 0) {
-                        ItemStack drop = stack.copy();
-                        drop.stackSize = Math.min(stack.stackSize, stack.getMaxStackSize());
-                        stack.stackSize -= drop.stackSize;
-                        GTUtility.dropItemToBlockPos(
-                            base.getWorld(),
-                            base.getXCoord(),
-                            base.getYCoord(),
-                            base.getZCoord(),
-                            drop);
-                    }
+            ItemStackHandler inventory = machineConfiguration.machines();
+            for (int slot = 0; slot < inventory.getSlots(); slot++) {
+                ItemStack stack = inventory.getStackInSlot(slot);
+                if (stack == null) continue;
+                inventory.setStackInSlot(slot, null);
+                while (stack.stackSize > 0) {
+                    ItemStack drop = stack.copy();
+                    drop.stackSize = Math.min(stack.stackSize, stack.getMaxStackSize());
+                    stack.stackSize -= drop.stackSize;
+                    GTUtility.dropItemToBlockPos(
+                        base.getWorld(),
+                        base.getXCoord(),
+                        base.getYCoord(),
+                        base.getZCoord(),
+                        drop);
                 }
             }
             for (int slot = 0; slot < CREDENTIAL_INJECTION_ITEM_SLOT_COUNT; slot++) {

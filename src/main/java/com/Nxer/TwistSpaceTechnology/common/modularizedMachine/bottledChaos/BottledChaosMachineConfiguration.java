@@ -64,7 +64,6 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
     private NBTTagCompound pendingMachines;
     private long requiredPools;
     private final ItemStackHandler machines;
-    private final ItemStackHandler retired;
 
     public BottledChaosMachineConfiguration(Runnable changed) {
         Arrays.fill(machineSpeeds, 1);
@@ -106,28 +105,6 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
                     && (debug || machineStructures[slot] != null && machineQuantities[slot] > 0
                         && (machineStructures[slot].poolMask() & bit) != 0);
                 supportedPools = supported ? supportedPools | bit : supportedPools & ~bit;
-                changed.run();
-            }
-        };
-        retired = new ItemStackHandler(MAX_POOLS) {
-
-            @Override
-            public int getSlotLimit(int slot) {
-                return MACHINE_LIMIT;
-            }
-
-            @Override
-            protected int getStackLimit(int slot, ItemStack stack) {
-                return stack == null ? 0 : MACHINE_LIMIT;
-            }
-
-            @Override
-            public boolean isItemValid(int slot, ItemStack stack) {
-                return false;
-            }
-
-            @Override
-            protected void onContentsChanged(int slot) {
                 changed.run();
             }
         };
@@ -274,10 +251,6 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
         return machines;
     }
 
-    public ItemStackHandler retired() {
-        return retired;
-    }
-
     public long requiredPoolMask() {
         return requiredPools;
     }
@@ -290,20 +263,10 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
         return (requiredPools & (1L << slot)) != 0;
     }
 
-    /** A full retired inventory leaves the remainder in its original, extraction-only slot. */
+    /** Unused modules stay in their named pool slots until the player takes them out. */
     public void updateRequiredPools(long mask) {
         loadPendingMachines();
         requiredPools = withDependencies(mask);
-        for (int slot = 0; slot < MAX_POOLS; slot++) {
-            if (isPoolRequired(slot)) continue;
-            ItemStack original = machines.getStackInSlot(slot);
-            if (original == null) continue;
-            ItemStack remainder = original.copy();
-            for (int target = 0; target < retired.getSlots() && remainder != null; target++)
-                remainder = retired.insertItem(target, remainder, false);
-            if (remainder == null || remainder.stackSize != original.stackSize)
-                machines.setStackInSlot(slot, remainder);
-        }
     }
 
     public long installedPoolMask() {
@@ -652,14 +615,12 @@ public final class BottledChaosMachineConfiguration implements MachineParameters
             active.setTag(poolKey(slot), item);
         }
         nbt.setTag("bottledChaosPoolMachines", active);
-        nbt.setTag("bottledChaosRetiredMachines", retired.serializeNBT());
     }
 
     public void load(NBTTagCompound nbt) {
         pendingMachines = (NBTTagCompound) nbt.getCompoundTag("bottledChaosPoolMachines")
             .copy();
         loadPendingMachines();
-        retired.deserializeNBT(nbt.getCompoundTag("bottledChaosRetiredMachines"));
     }
 
     private void loadPendingMachines() {

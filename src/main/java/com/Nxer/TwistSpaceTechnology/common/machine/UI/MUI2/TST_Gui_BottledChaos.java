@@ -70,10 +70,6 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
     // #zh_CN 放入已封装的机器结构模组. 封装数量每增加至8倍, 配方池额外加速100%.
     // spotless:on
 
-    // #tr tst.bottledchaos.gui.retired_machines
-    // # Retired Machines
-    // #zh_CN 弃用主机
-
     // #tr tst.bottledchaos.gui.credential_injection
     // # Credential Injection / Structure Packaging
     // #zh_CN 凭证注入 / 结构封装
@@ -552,7 +548,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             multiblock.getMachineConfiguration()::setRequiredPoolMask);
         syncManager.syncValue("bottledChaosRequiredPools", required);
         var rows = new ListWidget<>().fullWidth()
-            .height(104);
+            .height(154);
         BooleanSupplier alternativesVisible = () -> poolVisible(
             required,
             Long.numberOfTrailingZeros(
@@ -577,6 +573,8 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             .coverChildrenHeight(0)
             .padding(3)
             .collapseDisabledChild()
+            .setEnabledIf(widget -> originalPools.getChildren().stream().anyMatch(IWidget::isEnabled)
+                || alternativePools.getChildren().stream().anyMatch(IWidget::isEnabled))
             .background(
                 (context, x, y, width, height, theme) -> {
                     if (alternativesVisible.getAsBoolean()) frame.draw(context, x, y, width, height, theme);
@@ -625,28 +623,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                             .asWidget()
                             .fullWidth()
                             .height(38))
-                    .child(rows)
-                    .child(
-                        new TextWidget<>(IKey.lang("tst.bottledchaos.gui.retired_machines")).textAlign(Alignment.Center)
-                            .fullWidth()
-                            .height(18))
-                    .child(
-                        new ListWidget<>().fullWidth()
-                            .height(32)
-                            .child(
-                                new Grid().coverChildren()
-                                    .gridOfWidthHeight(
-                                        8,
-                                        8,
-                                        (x, y, index) -> new ItemSlot().syncHandler(
-                                            new MachineSlotSyncHandler(
-                                                createConfigurationSlot(
-                                                    multiblock.getMachineConfiguration()
-                                                        .retired(),
-                                                    index,
-                                                    panelOpen).ignoreMaxStackSize(true)
-                                                        .singletonSlotGroup()
-                                                        .filter(stack -> false)))))));
+                    .child(rows));
     }
 
     private boolean poolVisible(LongSyncValue required, int slot) {
@@ -677,19 +654,26 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                                     .singletonSlotGroup()))
                     .tooltip(tooltip -> tooltip.addLine(IKey.str(BottledChaosMachineConfiguration.poolName(slot)))))
             .child(
-                new TextWidget<>(IKey.str(BottledChaosMachineConfiguration.poolName(slot))).width(textWidth)
+                new TextWidget<>(
+                    IKey.dynamic(
+                        () -> (users.getValue() == 0 ? EnumChatFormatting.RED.toString() : "")
+                            + BottledChaosMachineConfiguration.poolName(slot))).width(textWidth)
                     .height(height)
                     .textAlign(Alignment.CenterLeft)
                     .tooltipBuilder(tooltip -> {
                         // #tr tst.bottledchaos.gui.pool_users
                         // # Processing groups: %s
                         // #zh_CN 加工组: %s
-                        String groups = MM_BottledChaos.formatProcessingGroups(users.getValue());
-                        tooltip.addLine(
+                        if (users.getValue() == 0) {
+                            // #tr tst.bottledchaos.gui.pool_unused
+                            // # No processing group uses this recipe pool.
+                            // #zh_CN 没有加工组使用此配方池.
+                            tooltip.addLine(IKey.lang("tst.bottledchaos.gui.pool_unused"));
+                        } else tooltip.addLine(
                             IKey.str(
                                 StatCollector.translateToLocalFormatted(
                                     "tst.bottledchaos.gui.pool_users",
-                                    groups.isEmpty() ? StatCollector.translateToLocal("GT5U.gui.text.nil") : groups)));
+                                    MM_BottledChaos.formatProcessingGroups(users.getValue()))));
                     })
                     .tooltipAutoUpdate(true));
     }
