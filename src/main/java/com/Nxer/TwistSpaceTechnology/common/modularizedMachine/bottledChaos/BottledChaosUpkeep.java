@@ -25,7 +25,6 @@ public final class BottledChaosUpkeep {
 
     private final Map<RateKey, Bill> bills = new LinkedHashMap<>();
     private final List<Bill> activeBills = new ArrayList<>();
-    private CheckRecipeResult failure = CheckRecipeResultRegistry.SUCCESSFUL;
 
     /** A type template and an unbounded integer per-second amount; no int-sized stack expansion. */
     @Desugar
@@ -164,13 +163,8 @@ public final class BottledChaosUpkeep {
         return BottledChaosPoolFailure.missingFluid(pools.toString(), fluid.getFluidStack(), amount);
     }
 
-    public CheckRecipeResult getFailure() {
-        return failure;
-    }
-
     /** Precheck every due pool before consuming any fluid. No fractional or deferred charges. */
     public Transaction prepare(FluidStack[] inputs) {
-        failure = CheckRecipeResultRegistry.SUCCESSFUL;
         Map<RateKey, BigInteger> perPool = new LinkedHashMap<>();
         Map<GTUtility.FluidId, BigInteger> amounts = new LinkedHashMap<>();
         List<Bill> due = new ArrayList<>();
@@ -197,21 +191,27 @@ public final class BottledChaosUpkeep {
                 needed = needed.subtract(BigInteger.valueOf(taken));
             }
             if (needed.signum() > 0) {
-                failure = missingFluid(perPool, entry.getKey(), needed);
-                return null;
+                return new Transaction(missingFluid(perPool, entry.getKey(), needed), null, null);
             }
         }
-        return new Transaction(remaining, due);
+        return new Transaction(CheckRecipeResultRegistry.SUCCESSFUL, remaining, due);
     }
 
-    public final class Transaction {
+    /** One preparation result. Only a successful result has input and accounting changes to commit. */
+    public static final class Transaction {
 
+        private final CheckRecipeResult result;
         private final IdentityHashMap<FluidStack, Integer> remaining;
         private final List<Bill> due;
 
-        private Transaction(IdentityHashMap<FluidStack, Integer> remaining, List<Bill> due) {
+        private Transaction(CheckRecipeResult result, IdentityHashMap<FluidStack, Integer> remaining, List<Bill> due) {
+            this.result = result;
             this.remaining = remaining;
             this.due = due;
+        }
+
+        public CheckRecipeResult result() {
+            return result;
         }
 
         public void commitInputs() {

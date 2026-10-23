@@ -1712,10 +1712,11 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         startRecipeProcessing();
         BottledChaosUpkeep.Transaction payment = structureUpkeep
             .prepare(uniqueFluidReferences(getStoredFluidsWithDualInput()));
-        if (payment == null) {
+        if (!payment.result()
+            .wasSuccessful()) {
             endRecipeProcessing();
             lEUt = 0;
-            recordRunningFailure(structureUpkeep.getFailure());
+            recordRunningFailure(payment.result());
             return false;
         }
         if (!drainEnergyInput(usage)) {
