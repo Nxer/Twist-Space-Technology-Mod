@@ -123,12 +123,23 @@ public final class BottledChaosOutputBuffer {
         private final boolean protectItems;
         private final boolean protectFluids;
 
-        public Transaction(IVoidable machine, boolean recipeCheck) {
-            this(machine, recipeCheck, false);
+        /** GT recipe capacity rules, used both for planning and for delivery after completion. */
+        public static Transaction forRecipeOutputs(IVoidable machine) {
+            return new Transaction(machine, true, false);
         }
 
-        /** Cache exports always protect paid materials, independently of the controller's voiding mode. */
-        public Transaction(IVoidable machine, boolean recipeCheck, boolean forceProtect) {
+        /** Check cache exports alongside reserved job outputs, always protecting the materials from voiding. */
+        public static Transaction forCacheExportCheck(IVoidable machine) {
+            return new Transaction(machine, true, true);
+        }
+
+        /** Reserve the actual cache transfer after its capacity check, still forcing output protection. */
+        public static Transaction forCacheExport(IVoidable machine) {
+            return new Transaction(machine, false, true);
+        }
+
+        /** recipeCheck selects GT capacity rules, not simulation; only commit() delivers reserved outputs. */
+        private Transaction(IVoidable machine, boolean recipeCheck, boolean forceProtect) {
             protectItems = forceProtect || machine.protectsExcessItem();
             protectFluids = forceProtect || machine.protectsExcessFluid();
             List<IOutputBus> buses = new ArrayList<>();

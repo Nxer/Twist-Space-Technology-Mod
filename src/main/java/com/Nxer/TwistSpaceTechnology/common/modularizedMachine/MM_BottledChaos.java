@@ -1399,7 +1399,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     /** Shared output reservation used by every candidate, including family fallback and concentrated probes. */
     private CheckRecipeResult reserveThreadOutputs(BottledChaosRecipeProcessor.Plan plan, InputTransaction inputs) {
-        BottledChaosOutputBuffer.Transaction reservation = new BottledChaosOutputBuffer.Transaction(this, true);
+        BottledChaosOutputBuffer.Transaction reservation = BottledChaosOutputBuffer.Transaction.forRecipeOutputs(this);
         CheckRecipeResult result = reserveRunningOutputs(reservation);
         if (!result.wasSuccessful()) return result;
         BottledChaosOutputBuffer candidate = new BottledChaosOutputBuffer();
@@ -1442,7 +1442,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             cacheExportResult = SimpleResultWithText.ofSuccess("tst.bottledchaos.gui.cache_empty");
             return;
         }
-        BottledChaosOutputBuffer.Transaction check = new BottledChaosOutputBuffer.Transaction(this, true, true);
+        BottledChaosOutputBuffer.Transaction check = BottledChaosOutputBuffer.Transaction.forCacheExportCheck(this);
         cacheExportResult = reserveRunningOutputs(check);
         if (!cacheExportResult.wasSuccessful()) return;
         for (TST_BottledChaosRecipeTokenHatch hatch : credentialHatches) {
@@ -1451,7 +1451,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 .reserveExport(check);
             if (!cacheExportResult.wasSuccessful()) return;
         }
-        BottledChaosOutputBuffer.Transaction output = new BottledChaosOutputBuffer.Transaction(this, false, true);
+        BottledChaosOutputBuffer.Transaction output = BottledChaosOutputBuffer.Transaction.forCacheExport(this);
         for (TST_BottledChaosRecipeTokenHatch hatch : credentialHatches) {
             if (hatch == null || !hatch.isValid()) continue;
             cacheExportResult = hatch.getMaterialCache()
@@ -1597,7 +1597,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             if (thread.progress >= thread.duration && runnable[i] && (advancing[i] || tick >= thread.nextCheckTick)) {
                 processingGroupMask = 1 << i;
                 // Recheck current capacity: another producer may have occupied the reserved space.
-                BottledChaosOutputBuffer.Transaction output = new BottledChaosOutputBuffer.Transaction(this, true);
+                BottledChaosOutputBuffer.Transaction output = BottledChaosOutputBuffer.Transaction
+                    .forRecipeOutputs(this);
                 CheckRecipeResult result = output.reserve(thread.outputs);
                 threadResults[i] = result;
                 if (result.wasSuccessful()) {
