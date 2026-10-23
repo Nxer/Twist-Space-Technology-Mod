@@ -66,7 +66,7 @@ public final class BottledChaosRadoxRecipes {
         catalog.registerChain("light_radox", 1, TierEU.RECIPE_UHV, LightRadox,
             new Object[] { RadoxPolymerMolten }, new Object[] {}, lightCracking, recoveredGas, polymerization);
 
-        catalog.setKeyOutputs("xenoxene",
+        catalog.setExistingEntriesKeyOutputs("xenoxene",
             new Object[] { SuperHeavyRadox, HeavyRadox, LightRadox, SuperLightRadox, Mutagen });
         catalog.orderDisplayRecipes("radox", Xenoxene, SuperHeavyRadox, HeavyRadox, LightRadox, SuperLightRadox);
         // spotless:on

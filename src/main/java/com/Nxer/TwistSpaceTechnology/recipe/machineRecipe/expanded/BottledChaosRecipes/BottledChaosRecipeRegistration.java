@@ -30,11 +30,33 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.SulfurTrioxideGas;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.SulfuricAcid;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineConfiguration;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.CredentialModel;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeSupport.TimeKey;
+
+import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.RecipeMaps;
+
 /** Registers Bottled Chaos processing chains and their display recipes in the required startup order. */
 public final class BottledChaosRecipeRegistration {
 
     public static void registerRecipes() {
-        BottledChaosRecipeProcessor.initializeRecipeCache(catalog -> {
+        registerBaseRecipes();
+        BottledChaosFakeRecipes.registerRecipes();
+        BottledChaosFakeRecipes.registerCredentialRecipes();
+        BottledChaosStructureRecipes.registerRecipes();
+    }
+
+    /** Base sources are available at load-complete; stellar-forge versions are resolved at serverStarted. */
+    private static void registerBaseRecipes() {
+        BottledChaosRecipeProcessor.clearCache();
+        BottledChaosProcessAlternatives.clearPending();
+        try {
+            BottledChaosRecipeCatalog catalog = new BottledChaosRecipeCatalog();
             BottledChaosTitaniumRecipes.registerRecipeChains(catalog);
             BottledChaosTungstenRecipes.registerRecipeChains(catalog);
             BottledChaosIndiumRecipes.registerRecipeChains(catalog);
@@ -55,7 +77,7 @@ public final class BottledChaosRecipeRegistration {
             BottledChaosIsaMillRecipes.registerRecipeChains(catalog);
             BottledChaosPlatinumRecipes.registerCombRecipeChains(catalog);
             catalog.registerDeferredReagents(AmmoniaGas);
-            catalog.registerInputSyntheses(
+            catalog.includeSynthesisPath(
                 Nitrobenzene,
                 LiquidNitrogen,
                 SodiumNitrateDust,
@@ -68,7 +90,7 @@ public final class BottledChaosRecipeRegistration {
                 BoricAcid,
                 FormicAcid,
                 FermentationBase);
-            catalog.registerOutputDecompositions(
+            catalog.includeDecompositionPath(
                 MagnesiumChlorideDust,
                 AmmoniaGas,
                 NitrogenMonoxideGas,
@@ -76,7 +98,7 @@ public final class BottledChaosRecipeRegistration {
                 SulfurDioxideGas,
                 SulfurTrioxideGas,
                 CalciumFluorideFluid);
-            // Apply reagent boundaries last so every family retains these inputs and recovered acids can cancel.
+            // Compilation applies external reagent boundaries after collecting every synthesis path.
             catalog.registerExternalReagents(
                 NitricAcid,
                 HydrofluoricAcid,
@@ -89,9 +111,26 @@ public final class BottledChaosRecipeRegistration {
                 DilutedHydrochloricAcid,
                 SodiumChlorideDust,
                 PotassiumNitrateDust);
-        });
-        BottledChaosFakeRecipes.registerRecipes();
-        BottledChaosFakeRecipes.registerCredentialRecipes();
-        BottledChaosStructureRecipes.registerRecipes();
+            var compiled = catalog.compile();
+            Set<RecipeMap<?>> selectedPools = new LinkedHashSet<>();
+            selectedPools.add(RecipeMaps.fusionRecipes);
+            selectedPools.add(BottledChaosProcessAlternatives.STELLAR_FORGE);
+            selectedPools.add(BottledChaosProcessAlternatives.GODFORGE_MOLTEN);
+            selectedPools.add(BottledChaosProcessAlternatives.COOLING);
+            for (var route : compiled.routes())
+                for (TimeKey time : route.data().times.keySet()) selectedPools.add(time.map());
+            BottledChaosMachineConfiguration.initialize(selectedPools.toArray(new RecipeMap<?>[0]));
+            CredentialModel.publishCapacityCosts(compiled.capacityCosts());
+            BottledChaosRecipeProcessor.installCache(compiled);
+            TwistSpaceTechnology.LOG.info("Bottled Chaos resolved {} processing steps.", compiled.resolvedStepCount());
+        } catch (RuntimeException exception) {
+            TwistSpaceTechnology.LOG
+                .error("Bottled Chaos recipe resolution failed; processing routes are disabled.", exception);
+        }
+    }
+
+    /** Called after StellarForgeRecipePool has built its native recipes; base-cache readiness is independent. */
+    public static void resolveLateSources() {
+        BottledChaosProcessAlternatives.resolve();
     }
 }

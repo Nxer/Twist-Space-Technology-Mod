@@ -18,7 +18,7 @@ import java.util.Map;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.RecipeMark;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.StepRef;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeSupport.RecipeData;
 
 import bartworks.system.material.WerkstoffLoader;
@@ -38,7 +38,7 @@ public final class BottledChaosFusionRecipes {
     private static final String PREPARATION_TAG = "naquadah_fuel_preparation";
 
     private final BottledChaosRecipeCatalog catalog;
-    private final Map<Fluid, RecipeMark> moltenSources = new HashMap<>();
+    private final Map<Fluid, StepRef> moltenSources = new HashMap<>();
     private boolean firstFusion = true;
 
     private BottledChaosFusionRecipes(BottledChaosRecipeCatalog catalog) {
@@ -87,7 +87,7 @@ public final class BottledChaosFusionRecipes {
             MaterialsElements.STANDALONE.ADVANCED_NITINOL, MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN };
         for (int stage = 0; stage < materials.length; stage++) {
             Material material = materials[stage];
-            RecipeMark fusion = stage == 0 ? astralFusion()
+            StepRef fusion = stage == 0 ? astralFusion()
                 : stage == 1 ? advancedNitinolFusion()
                     : catalog.markRecipe(
                         Fusion,
@@ -97,24 +97,24 @@ public final class BottledChaosFusionRecipes {
                         material.getPlasma(),
                         -1);
             if (stage == 2) {
-                registerFusion(
+                var entry = registerFusion(
                     TierEU.RECIPE_UV,
                     MaterialsElements.STANDALONE.ADVANCED_NITINOL.getPlasma(),
                     material.getPlasma(),
                     fusion);
-                molten(TAG, Materials.Tartarite);
+                molten(entry, Materials.Tartarite);
                 continue;
             }
             for (boolean plasmaMaker : new boolean[] { false, true }) {
                 Object root = stage == 0 ? recipeItemId((plasmaMaker ? Materials.Force : Materials.Cobalt).getDust(1))
                     : plasmaMaker ? recipeItemId(MaterialsElements.STANDALONE.RUNITE.getDust(1))
                         : MaterialsElements.STANDALONE.ASTRAL_TITANIUM.getPlasma();
-                registerFusion(
+                var entry = registerFusion(
                     plasmaMaker ? TierEU.RECIPE_UXV : stage == 0 ? TierEU.RECIPE_ZPM : TierEU.RECIPE_UV,
                     root,
                     material.getPlasma(),
                     fusion);
-                registerFusionInputs(stage, plasmaMaker);
+                registerFusionInputs(entry, stage, plasmaMaker);
             }
         }
     }
@@ -124,31 +124,31 @@ public final class BottledChaosFusionRecipes {
         // spotless:off
         // Keep the higher-tier native reactions, with fusion and plasma-maker feed variants.
         for (boolean plasmaMaker : new boolean[] { false, true }) {
-            registerFusion(plasmaMaker ? TierEU.RECIPE_UXV : TierEU.RECIPE_UEV,
+            var fermium = registerFusion(plasmaMaker ? TierEU.RECIPE_UXV : TierEU.RECIPE_UEV,
                 recipeItemId(plasmaMaker ? Materials.Force.getDust(1) : elements.THORIUM232.getDust(1)), elements.FERMIUM.getPlasma(),
                 catalog.markRecipe(Fusion, new Object[] { MaterialsElements.STANDALONE.FORCE.getPlasma(), Materials.Rubidium.getMolten(1).getFluid() }, elements.FERMIUM.getPlasma(), -1));
-            if (plasmaMaker) synthesize(GodforgePlasma, recipeItemId(Materials.Force.getDust(1)), MaterialsElements.STANDALONE.FORCE.getPlasma());
-            else synthesizeForce();
-            molten(TAG, Materials.Rubidium);
+            if (plasmaMaker) synthesize(fermium, GodforgePlasma, recipeItemId(Materials.Force.getDust(1)), MaterialsElements.STANDALONE.FORCE.getPlasma());
+            else synthesizeForce(fermium);
+            molten(fermium, Materials.Rubidium);
 
-            registerFusion(plasmaMaker ? TierEU.RECIPE_UXV : TierEU.RECIPE_UEV,
+            var neptunium = registerFusion(plasmaMaker ? TierEU.RECIPE_UXV : TierEU.RECIPE_UEV,
                 plasmaMaker ? elements.XENON.getFluid() : recipeItemId(Materials.Plutonium241.getDust(1)), elements.NEPTUNIUM.getPlasma(),
                 catalog.markRecipe(Fusion, new Object[] { elements.XENON.getPlasma(), Materials.Yttrium.getMolten(1).getFluid() }, elements.NEPTUNIUM.getPlasma(), -1));
-            if (plasmaMaker) synthesize(GodforgePlasma, elements.XENON.getFluid(), elements.XENON.getPlasma());
-            else synthesizeXenon();
-            molten(TAG, Materials.Yttrium);
+            if (plasmaMaker) synthesize(neptunium, GodforgePlasma, elements.XENON.getFluid(), elements.XENON.getPlasma());
+            else synthesizeXenon(neptunium);
+            molten(neptunium, Materials.Yttrium);
         }
         // spotless:on
     }
 
-    private void registerFusion(long voltage, Object root, Object output, RecipeMark... steps) {
+    private BottledChaosRecipeCatalog.Entry registerFusion(long voltage, Object root, Object output, StepRef... steps) {
         if (firstFusion) {
-            catalog.registerChain(TAG, 1, voltage, root, new Object[] { output }, steps);
             firstFusion = false;
-        } else catalog.registerAlternativeChain(TAG, voltage, root, new Object[] { output }, steps);
+            return catalog.registerChain(TAG, 1, voltage, root, new Object[] { output }, steps);
+        } else return catalog.registerAlternativeChain(TAG, voltage, root, new Object[] { output }, steps);
     }
 
-    private RecipeMark astralFusion() {
+    private StepRef astralFusion() {
         return catalog.markRecipe(
             Fusion,
             new Object[] { MaterialsElements.getInstance().KRYPTON.getPlasma(),
@@ -157,7 +157,7 @@ public final class BottledChaosFusionRecipes {
             -1);
     }
 
-    private RecipeMark advancedNitinolFusion() {
+    private StepRef advancedNitinolFusion() {
         return catalog.markRecipe(
             Fusion,
             new Object[] { MaterialsElements.getInstance().XENON.getPlasma(),
@@ -166,7 +166,7 @@ public final class BottledChaosFusionRecipes {
             -1);
     }
 
-    private RecipeMark curiumFusion() {
+    private StepRef curiumFusion() {
         return catalog.markRecipe(
             Fusion,
             new Object[] { Materials.Plutonium241.getMolten(1)
@@ -177,135 +177,128 @@ public final class BottledChaosFusionRecipes {
             -1);
     }
 
-    private void registerFusionInputs(int stage, boolean plasmaMaker) {
+    private void registerFusionInputs(BottledChaosRecipeCatalog.Entry entry, int stage, boolean plasmaMaker) {
         var elements = MaterialsElements.getInstance();
         // spotless:off
         if (plasmaMaker) {
             // Runite has a native Everglades ore vein; Force has a native bee source.
             if (stage == 0) {
-                synthesize(GodforgePlasma, recipeItemId(Materials.Force.getDust(1)), MaterialsElements.STANDALONE.FORCE.getPlasma());
-                synthesize(GodforgePlasma, elements.KRYPTON.getFluid(), elements.KRYPTON.getPlasma());
+                synthesize(entry, GodforgePlasma, recipeItemId(Materials.Force.getDust(1)), MaterialsElements.STANDALONE.FORCE.getPlasma());
+                synthesize(entry, GodforgePlasma, elements.KRYPTON.getFluid(), elements.KRYPTON.getPlasma());
             } else {
-                synthesize(GodforgePlasma, recipeItemId(MaterialsElements.STANDALONE.RUNITE.getDust(1)), MaterialsElements.STANDALONE.RUNITE.getPlasma());
-                synthesize(GodforgePlasma, elements.XENON.getFluid(), elements.XENON.getPlasma());
+                synthesize(entry, GodforgePlasma, recipeItemId(MaterialsElements.STANDALONE.RUNITE.getDust(1)), MaterialsElements.STANDALONE.RUNITE.getPlasma());
+                synthesize(entry, GodforgePlasma, elements.XENON.getFluid(), elements.XENON.getPlasma());
             }
             return;
         }
         if (stage == 0) {
-            synthesizeForce();
-            synthesize(Fusion, new Object[] { Materials.Niobium.getPlasma(1).getFluid(), Materials.Zinc.getPlasma(1).getFluid() }, elements.KRYPTON.getPlasma());
-            synthesize(Fusion, new Object[] { Materials.Cobalt.getMolten(1).getFluid(), Materials.Silicon.getMolten(1).getFluid() }, Materials.Niobium.getPlasma(1).getFluid());
-            synthesize(Fusion, new Object[] { Materials.Copper.getMolten(1).getFluid(), Materials.Tritium.getGas(1).getFluid() }, Materials.Zinc.getPlasma(1).getFluid());
-            molten(TAG, Materials.Cobalt, Materials.Silicon, Materials.Copper);
+            synthesizeForce(entry);
+            synthesize(entry, Fusion, new Object[] { Materials.Niobium.getPlasma(1).getFluid(), Materials.Zinc.getPlasma(1).getFluid() }, elements.KRYPTON.getPlasma());
+            synthesize(entry, Fusion, new Object[] { Materials.Cobalt.getMolten(1).getFluid(), Materials.Silicon.getMolten(1).getFluid() }, Materials.Niobium.getPlasma(1).getFluid());
+            synthesize(entry, Fusion, new Object[] { Materials.Copper.getMolten(1).getFluid(), Materials.Tritium.getGas(1).getFluid() }, Materials.Zinc.getPlasma(1).getFluid());
+            molten(entry, Materials.Cobalt, Materials.Silicon, Materials.Copper);
         } else {
-            synthesize(Fusion, new Object[] { MaterialsElements.STANDALONE.ASTRAL_TITANIUM.getPlasma(), MaterialsAlloy.TITANSTEEL.getFluid() }, MaterialsElements.STANDALONE.RUNITE.getPlasma());
-            synthesizeXenon();
-            molten(TAG, MaterialsAlloy.TITANSTEEL);
-            synthesize(MixerNonCell, recipeItemId(MaterialsAlloy.TUNGSTEN_TITANIUM_CARBIDE.getDust(1)), recipeItemId(MaterialsAlloy.TITANSTEEL.getDust(1)));
-            synthesize(MixerNonCell, recipeItemId(Materials.TungstenCarbide.getDust(1)), recipeItemId(MaterialsAlloy.TUNGSTEN_TITANIUM_CARBIDE.getDust(1)));
-            catalog.registerChainInputSynthesis(TAG, MixerNonCell, recipeItemId(Materials.TungstenCarbide.getDust(1)),
+            synthesize(entry, Fusion, new Object[] { MaterialsElements.STANDALONE.ASTRAL_TITANIUM.getPlasma(), MaterialsAlloy.TITANSTEEL.getFluid() }, MaterialsElements.STANDALONE.RUNITE.getPlasma());
+            synthesizeXenon(entry);
+            molten(entry, MaterialsAlloy.TITANSTEEL);
+            synthesize(entry, MixerNonCell, recipeItemId(MaterialsAlloy.TUNGSTEN_TITANIUM_CARBIDE.getDust(1)), recipeItemId(MaterialsAlloy.TITANSTEEL.getDust(1)));
+            synthesize(entry, MixerNonCell, recipeItemId(Materials.TungstenCarbide.getDust(1)), recipeItemId(MaterialsAlloy.TUNGSTEN_TITANIUM_CARBIDE.getDust(1)));
+            entry.includeSynthesisStep(MixerNonCell, recipeItemId(Materials.TungstenCarbide.getDust(1)),
                 new Object[] { recipeItemId(Materials.Tungsten.getDust(1)), recipeItemId(Materials.Carbon.getDust(1)) }, 1);
         }
         // spotless:on
     }
 
-    private void synthesizeBoron() {
+    private void synthesizeBoron(BottledChaosRecipeCatalog.Entry entry) {
         // spotless:off
-        synthesize(Fusion, new Object[] { Materials.Helium.getPlasma(1).getFluid(), Materials.Lithium.getMolten(1).getFluid() }, Materials.Boron.getPlasma(1).getFluid());
-        synthesize(Fusion, new Object[] { Materials.Deuterium.getGas(1).getFluid(), Materials.Tritium.getGas(1).getFluid() }, Materials.Helium.getPlasma(1).getFluid());
-        molten(TAG, Materials.Lithium);
+        synthesize(entry, Fusion, new Object[] { Materials.Helium.getPlasma(1).getFluid(), Materials.Lithium.getMolten(1).getFluid() }, Materials.Boron.getPlasma(1).getFluid());
+        synthesize(entry, Fusion, new Object[] { Materials.Deuterium.getGas(1).getFluid(), Materials.Tritium.getGas(1).getFluid() }, Materials.Helium.getPlasma(1).getFluid());
+        molten(entry, Materials.Lithium);
         // spotless:on
     }
 
-    private void synthesizeForce() {
+    private void synthesizeForce(BottledChaosRecipeCatalog.Entry entry) {
         var elements = MaterialsElements.getInstance();
         // spotless:off
-        synthesize(Fusion, new Object[] { elements.NEON.getPlasma(), MaterialsAlloy.ARCANITE.getFluid() }, MaterialsElements.STANDALONE.FORCE.getPlasma());
-        synthesize(Fusion, new Object[] { Materials.Boron.getPlasma(1).getFluid(), Materials.Calcium.getPlasma(1).getFluid() }, elements.NEON.getPlasma());
-        synthesizeBoron();
-        synthesize(Fusion, new Object[] { Materials.Magnesium.getMolten(1).getFluid(), Materials.Oxygen.getGas(1).getFluid() }, Materials.Calcium.getPlasma(1).getFluid());
-        molten(TAG, Materials.Magnesium);
-        molten(TAG, MaterialsAlloy.ARCANITE);
-        synthesize(MixerNonCell, recipeItemId(elements.THORIUM232.getDust(1)), recipeItemId(MaterialsAlloy.ARCANITE.getDust(1)));
-        synthesize(MixerNonCell, recipeItemId(Materials.InfusedAir.getDust(1)), recipeItemId(MaterialsAlloy.ENERGYCRYSTAL.getDust(1)));
+        synthesize(entry, Fusion, new Object[] { elements.NEON.getPlasma(), MaterialsAlloy.ARCANITE.getFluid() }, MaterialsElements.STANDALONE.FORCE.getPlasma());
+        synthesize(entry, Fusion, new Object[] { Materials.Boron.getPlasma(1).getFluid(), Materials.Calcium.getPlasma(1).getFluid() }, elements.NEON.getPlasma());
+        synthesizeBoron(entry);
+        synthesize(entry, Fusion, new Object[] { Materials.Magnesium.getMolten(1).getFluid(), Materials.Oxygen.getGas(1).getFluid() }, Materials.Calcium.getPlasma(1).getFluid());
+        molten(entry, Materials.Magnesium);
+        molten(entry, MaterialsAlloy.ARCANITE);
+        synthesize(entry, MixerNonCell, recipeItemId(elements.THORIUM232.getDust(1)), recipeItemId(MaterialsAlloy.ARCANITE.getDust(1)));
+        synthesize(entry, MixerNonCell, recipeItemId(Materials.InfusedAir.getDust(1)), recipeItemId(MaterialsAlloy.ENERGYCRYSTAL.getDust(1)));
         // spotless:on
     }
 
-    private void synthesizeAmericium() {
+    private void synthesizeAmericium(BottledChaosRecipeCatalog.Entry entry) {
         // spotless:off
-        synthesize(Fusion, new Object[] { Materials.Plutonium241.getMolten(1).getFluid(), Materials.Hydrogen.getGas(1).getFluid() }, Materials.Americium.getPlasma(1).getFluid());
-        molten(TAG, Materials.Plutonium241);
+        synthesize(entry, Fusion, new Object[] { Materials.Plutonium241.getMolten(1).getFluid(), Materials.Hydrogen.getGas(1).getFluid() }, Materials.Americium.getPlasma(1).getFluid());
+        molten(entry, Materials.Plutonium241);
         // spotless:on
     }
 
-    private void synthesizeXenon() {
+    private void synthesizeXenon(BottledChaosRecipeCatalog.Entry entry) {
         // spotless:off
-        synthesize(Fusion, new Object[] { MaterialsElements.getInstance().CURIUM.getFluid(), Materials.Americium.getPlasma(1).getFluid() }, MaterialsElements.getInstance().XENON.getPlasma());
-        catalog.registerChainInputSynthesis(TAG, MaterialsElements.getInstance().CURIUM.getFluid(), curiumFusion());
-        synthesizeAmericium();
+        synthesize(entry, Fusion, new Object[] { MaterialsElements.getInstance().CURIUM.getFluid(), Materials.Americium.getPlasma(1).getFluid() }, MaterialsElements.getInstance().XENON.getPlasma());
+        entry.includeSynthesisStep(MaterialsElements.getInstance().CURIUM.getFluid(), curiumFusion());
+        synthesizeAmericium(entry);
         // spotless:on
     }
 
-    private void synthesize(RecipeMap<?> pool, Object inputs, Object output) {
-        catalog.registerChainInputSynthesis(TAG, pool, output, inputs, -1);
+    private void synthesize(BottledChaosRecipeCatalog.Entry entry, RecipeMap<?> pool, Object inputs, Object output) {
+        entry.includeSynthesisStep(pool, output, inputs, -1);
     }
 
-    private void molten(String tag, Materials... materials) {
+    private void molten(BottledChaosRecipeCatalog.Entry entry, Materials... materials) {
         for (Materials material : materials) molten(
-            tag,
+            entry,
             material.getDust(1),
             material.getIngots(1),
             material.getMolten(1)
                 .getFluid());
     }
 
-    private void molten(String tag, Material material) {
-        molten(tag, material.getDust(1), material.getIngot(1), material.getFluid());
+    private void molten(BottledChaosRecipeCatalog.Entry entry, Material material) {
+        molten(entry, material.getDust(1), material.getIngot(1), material.getFluid());
     }
 
-    private void molten(String tag, ItemStack dust, ItemStack ingot, Fluid fluid) {
-        RecipeMark mark = moltenSources.get(fluid);
+    private void molten(BottledChaosRecipeCatalog.Entry entry, ItemStack dust, ItemStack ingot, Fluid fluid) {
+        StepRef mark = moltenSources.get(fluid);
         if (mark == null) {
             ItemStack suppliedDust = GTUtility.copyAmount(64, dust);
-            GTRecipe extraction = FluidExtractor.findRecipeQuery()
-                .items(suppliedDust)
-                .find();
+            GTRecipe extraction = BottledChaosSourceResolver.query(FluidExtractor, new ItemStack[] { suppliedDust });
             RecipeData data;
             if (extraction != null && extraction.mFluidOutputs.length == 1
                 && extraction.mFluidOutputs[0].getFluid() == fluid) {
                 data = prepareSourceRecipe(FluidExtractor, extraction);
             } else {
                 // Prefer Og for recipes that use a protective gas; gas-free smelting keeps its native recipe.
-                GTRecipe smelting = BlastFurnace.findRecipeQuery()
-                    .items(suppliedDust, GTUtility.getIntegratedCircuit(11))
-                    .fluids(WerkstoffLoader.Oganesson.getFluidOrGas(Integer.MAX_VALUE))
-                    .find();
-                if (smelting == null) smelting = BlastFurnace.findRecipeQuery()
-                    .items(suppliedDust, GTUtility.getIntegratedCircuit(1))
-                    .find();
+                GTRecipe smelting = BottledChaosSourceResolver.query(
+                    BlastFurnace,
+                    new ItemStack[] { suppliedDust, GTUtility.getIntegratedCircuit(11) },
+                    WerkstoffLoader.Oganesson.getFluidOrGas(Integer.MAX_VALUE));
+                if (smelting == null) smelting = BottledChaosSourceResolver
+                    .query(BlastFurnace, new ItemStack[] { suppliedDust, GTUtility.getIntegratedCircuit(1) });
                 if (smelting == null) throw new IllegalStateException("Missing fusion feedstock smelting: " + dust);
                 data = prepareSourceRecipe(BlastFurnace, smelting);
                 if (!recipeItemId(smelting.mOutputs[0]).equals(recipeItemId(ingot))) {
                     data = data.appendBalancedRecipe(
-                        prepareSourceRecipe(VacuumFreezer, source(VacuumFreezer, smelting.mOutputs)),
+                        prepareSourceRecipe(
+                            VacuumFreezer,
+                            BottledChaosSourceResolver.require(VacuumFreezer, smelting.mOutputs)),
                         recipeItemId(smelting.mOutputs[0]));
                 }
                 data = data.appendBalancedRecipe(
-                    prepareSourceRecipe(FluidExtractor, source(FluidExtractor, new ItemStack[] { ingot })),
+                    prepareSourceRecipe(
+                        FluidExtractor,
+                        BottledChaosSourceResolver.require(FluidExtractor, new ItemStack[] { ingot })),
                     recipeItemId(ingot));
             }
             mark = catalog.markPreparedRecipe(FluidExtractor, recipeItemId(dust), fluid, data);
             moltenSources.put(fluid, mark);
         }
-        catalog.registerChainInputSynthesis(tag, fluid, mark);
+        entry.includeSynthesisStep(fluid, mark);
     }
 
-    private static GTRecipe source(RecipeMap<?> map, ItemStack[] items) {
-        GTRecipe recipe = map.findRecipeQuery()
-            .items(items)
-            .find();
-        if (recipe == null)
-            throw new IllegalStateException("Missing fusion feedstock source recipe: " + map.unlocalizedName);
-        return recipe;
-    }
 }

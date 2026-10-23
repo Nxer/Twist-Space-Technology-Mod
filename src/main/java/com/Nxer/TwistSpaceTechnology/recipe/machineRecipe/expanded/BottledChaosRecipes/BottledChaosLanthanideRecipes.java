@@ -119,7 +119,7 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.RecipeMark;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.StepRef;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.TierEU;
@@ -131,8 +131,8 @@ public final class BottledChaosLanthanideRecipes {
         // spotless:off
         catalog.registerExternalInputs(CeriumRichMixtureDust, SamariumOreConcentrateDust);
         // 1. Bastnasite: keep the existing stage recipes under one mineral tag.
-        RecipeMark[] bastnasitePreparationSteps = {
-            catalog.markTemporaryRecipe(Digester, BastnasiteDust, MuddyBastnasiteSolution, -1,
+        StepRef[] bastnasitePreparationSteps = {
+            catalog.markFixedRecipe(Digester, BastnasiteDust, MuddyBastnasiteSolution,
                 GTValues.RA.stdBuilder()
                     .itemInputs(BastnasiteDust.getItemStack(2))
                     .itemOutputs(SiliconDioxideDust.getItemStack(1))
@@ -149,7 +149,7 @@ public final class BottledChaosLanthanideRecipes {
             catalog.markRecipe(ChemicalBath, BastnasiteRareEarthOxideDust, LeachedBastnasiteRareEarthOxidesDust, -1),
             catalog.markRecipe(BlastFurnace, LeachedBastnasiteRareEarthOxidesDust, RoastedRareEarthOxidesDust, 1)
         };
-        RecipeMark[] bastnasiteFinishingSteps = {
+        StepRef[] bastnasiteFinishingSteps = {
             catalog.markRecipe(MixerNonCell, RoastedRareEarthOxidesDust, WetRareEarthOxidesDust, 7),
             catalog.markRecipe(LargeChemicalReactor, WetRareEarthOxidesDust, CeriumOxidizedRareEarthOxidesDust, -1),
             catalog.markRecipe(CentrifugeNonCell, CeriumOxidizedRareEarthOxidesDust, BastnasiteRarerEarthOxidesDust, -1),
@@ -157,19 +157,19 @@ public final class BottledChaosLanthanideRecipes {
             catalog.markRecipe(LargeChemicalReactor, NitratedBastnasiteRarerEarthOxides, SaturatedBastnasiteRarerEarthOxides, -1),
             catalog.markRecipe(CentrifugeNonCell, SaturatedBastnasiteRarerEarthOxides, NeodymicRareEarthConcentrateDust, -1)
         };
-        RecipeMark[] bastnasiteSamariumSteps = {
+        StepRef[] bastnasiteSamariumSteps = {
             catalog.markRecipe(LargeChemicalReactor, new Object[] { SamaricRareEarthConcentrateDust, SamariumOreConcentrateDust }, FluorinatedSamaricConcentrateDust, -1),
             catalog.markRecipe(BlastFurnace, FluorinatedSamaricConcentrateDust, SamariumTerbiumMixtureDust, -1),
             catalog.markRecipe(LargeChemicalReactor, SamariumTerbiumMixtureDust, NitratedSamariumTerbiumMixtureDust, -1),
             catalog.markRecipe(LargeChemicalReactor, NitratedSamariumTerbiumMixtureDust, TerbiumNitrateDust, -1)
         };
         Object[] bastnasiteSamariumTerminals = { HolmiumDust, SamariumDust, GadoliniumDust, TerbiumDust };
-        RecipeMark[] unboostedBastnasiteSamarium = bastnasiteSamariumSteps.clone();
+        StepRef[] unboostedBastnasiteSamarium = bastnasiteSamariumSteps.clone();
         unboostedBastnasiteSamarium[0] = catalog.markRecipe(LargeChemicalReactor, SamaricRareEarthConcentrateDust, FluorinatedSamaricConcentrateDust, 1);
         // The final entry is primary; alternatives are ordered from mineral preparation to finishing.
-        catalog.registerChain("bastnasite", 1, TierEU.RECIPE_UV, SamaricRareEarthConcentrateDust,
+        var bastnasiteSamarium = catalog.registerChain("bastnasite", 1, TierEU.RECIPE_UV, SamaricRareEarthConcentrateDust,
             bastnasiteSamariumTerminals, new Object[] {}, unboostedBastnasiteSamarium);
-        catalog.requireCircuit("bastnasite", 1);
+        bastnasiteSamarium.requireCircuit(1);
         catalog.registerAlternativeChain("bastnasite", TierEU.RECIPE_UV, BastnasiteDust,
             new Object[] { RoastedRareEarthOxidesDust }, new Object[] { RoastedRareEarthOxidesDust }, bastnasitePreparationSteps);
         catalog.registerAlternativeChain("bastnasite", TierEU.RECIPE_UV, RoastedRareEarthOxidesDust,
@@ -179,8 +179,8 @@ public final class BottledChaosLanthanideRecipes {
             bastnasiteSamariumTerminals, new Object[] {}, bastnasiteSamariumSteps);
 
         // 2. Monazite: digestion, acidification, radioactive-metal separation, then rare-earth finishing.
-        RecipeMark[] monazitePreparationSteps = {
-            catalog.markTemporaryRecipe(Digester, MonaziteDust, MuddyMonaziteSolution, -1,
+        StepRef[] monazitePreparationSteps = {
+            catalog.markFixedRecipe(Digester, MonaziteDust, MuddyMonaziteSolution,
                 GTValues.RA.stdBuilder()
                     .itemInputs(MonaziteDust.getItemStack(2))
                     .itemOutputs(SiliconDioxideDust.getItemStack(1))
@@ -191,12 +191,12 @@ public final class BottledChaosLanthanideRecipes {
                     .build().orElseThrow(() -> new IllegalStateException("invalid monazite dust digestion"))),
             catalog.markRecipe(DissolutionTank, MuddyMonaziteSolution, DilutedMonaziteMud, 9)
         };
-        RecipeMark[] monaziteAcidificationSteps = {
+        StepRef[] monaziteAcidificationSteps = {
             catalog.markRecipe(Sifter, DilutedMonaziteMud, MonaziteSulfateDust, -1),
             catalog.markRecipe(MixerNonCell, MonaziteSulfateDust, DilutedMonaziteSulfate, -1),
             catalog.markRecipe(LargeChemicalReactor, DilutedMonaziteSulfate, AcidicMonaziteDust, 14)
         };
-        RecipeMark[] monaziteFinishingSteps = {
+        StepRef[] monaziteFinishingSteps = {
             catalog.markRecipe(Sifter, AcidicMonaziteDust, MonaziteRareEarthFiltrateDust, -1),
             catalog.markRecipe(ChemicalBath, MonaziteRareEarthFiltrateDust, NeutralizedMonaziteRareEarthFiltrateDust, -1),
             catalog.markRecipe(Sifter, NeutralizedMonaziteRareEarthFiltrateDust, MonaziteRareEarthHydroxideConcentrateDust, -1),
@@ -208,7 +208,7 @@ public final class BottledChaosLanthanideRecipes {
         };
         Object[] monaziteFinishingTerminals = { ThoriumDust, UraniumDust, Uranium235Dust, CeriumDioxideDust, NitricMonaziteLeachedConcentrate };
         Object[] monaziteFinishingLinks = { CeriumDioxideDust, NitricMonaziteLeachedConcentrate };
-        RecipeMark[] monaziteSamariumSteps = {
+        StepRef[] monaziteSamariumSteps = {
             catalog.markRecipe(VacuumFreezer, NitricMonaziteLeachedConcentrate, CooledMonaziteRareEarthConcentrateDust, -1),
             catalog.markRecipe(ElectromagneticSeparator, CooledMonaziteRareEarthConcentrateDust, MonaziteRarerEarthSedimentDust, -1),
             catalog.markRecipe(BlastFurnace, MonaziteRarerEarthSedimentDust, MonaziteHalogenicRareEarthMixtureDust, -1),
@@ -217,29 +217,29 @@ public final class BottledChaosLanthanideRecipes {
             catalog.markRecipe(Sifter, SamaricResidueDust, SamariumDust, -1)
         };
         Object[] monaziteSamariumTerminals = { SamariumDust, GadoliniumDust, EuropiumDust };
-        RecipeMark[] ceriumBoostedMonazite = monaziteFinishingSteps.clone();
+        StepRef[] ceriumBoostedMonazite = monaziteFinishingSteps.clone();
         ceriumBoostedMonazite[5] = catalog.markRecipe(MixerNonCell,
             new Object[] { NitratedMonaziteConcentrate, CeriumRichMixtureDust }, NitricLeachedMonaziteMixture, -1);
-        RecipeMark[] samariumBoostedMonazite = monaziteSamariumSteps.clone();
+        StepRef[] samariumBoostedMonazite = monaziteSamariumSteps.clone();
         samariumBoostedMonazite[3] = catalog.markRecipe(MixerNonCell,
             new Object[] { MonaziteHalogenicRareEarthMixtureDust, SamariumOreConcentrateDust }, SaturatedMonaziteRareEarthMixtureDust, -1);
-        catalog.registerChain("monazite", 1, TierEU.RECIPE_UV, NitricMonaziteLeachedConcentrate,
+        var monaziteSamarium = catalog.registerChain("monazite", 1, TierEU.RECIPE_UV, NitricMonaziteLeachedConcentrate,
             monaziteSamariumTerminals, new Object[] {}, monaziteSamariumSteps);
-        catalog.requireCircuit("monazite", 1);
+        monaziteSamarium.requireCircuit(1);
         catalog.registerAlternativeChain("monazite", TierEU.RECIPE_UV, MonaziteDust,
             new Object[] { DilutedMonaziteMud, HafniumDust, ZirconiumDust, ThoriumDust }, new Object[] { DilutedMonaziteMud }, monazitePreparationSteps);
         catalog.registerAlternativeChain("monazite", TierEU.RECIPE_UV, DilutedMonaziteMud,
             new Object[] { AcidicMonaziteDust }, new Object[] { AcidicMonaziteDust }, monaziteAcidificationSteps);
-        catalog.registerAlternativeChain("monazite", TierEU.RECIPE_UV, AcidicMonaziteDust,
+        var monaziteFinishing = catalog.registerAlternativeChain("monazite", TierEU.RECIPE_UV, AcidicMonaziteDust,
             monaziteFinishingTerminals, monaziteFinishingLinks, monaziteFinishingSteps);
-        catalog.requireCircuit("monazite", 1);
+        monaziteFinishing.requireCircuit(1);
         catalog.registerAlternativeChain("monazite", TierEU.RECIPE_UV, AcidicMonaziteDust,
             monaziteFinishingTerminals, monaziteFinishingLinks, ceriumBoostedMonazite);
         catalog.registerAlternativeChain("monazite", TierEU.RECIPE_UV, NitricMonaziteLeachedConcentrate,
             monaziteSamariumTerminals, new Object[] {}, samariumBoostedMonazite);
 
         // 3. Shared cerium-dioxide finishing and the separately authorized cerium-rich feed.
-        RecipeMark[] ceriumSteps = {
+        StepRef[] ceriumSteps = {
             catalog.markRecipe(LargeChemicalReactor, CeriumDioxideDust, CeriumChlorideDust, -1),
             catalog.markRecipe(LargeChemicalReactor, CeriumChlorideDust, CeriumOxalateDust, 1),
             catalog.markRecipe(BlastFurnace, CeriumOxalateDust, CeriumIIIOxideDust, -1),
@@ -247,14 +247,14 @@ public final class BottledChaosLanthanideRecipes {
         };
         catalog.registerChain("rare_earth_cerium", 1, TierEU.RECIPE_UV, CeriumDioxideDust,
             new Object[] { CeriumDust }, new Object[] {}, ceriumSteps);
-        RecipeMark[] ceriumRichMixtureSteps = ceriumSteps.clone();
+        StepRef[] ceriumRichMixtureSteps = ceriumSteps.clone();
         ceriumRichMixtureSteps[0] = catalog.markRecipe(LargeChemicalReactor, CeriumRichMixtureDust, CeriumChlorideDust, -1);
         catalog.registerChain("cerium", 1, TierEU.RECIPE_UV, CeriumRichMixtureDust,
             new Object[] { CeriumDust, MonaziteDust }, new Object[] {}, ceriumRichMixtureSteps);
 
         // Samarium concentrate: digestion -> dissolution -> oxalate -> chloride -> full-dust electrolysis.
         // The dissolution/precipitation sequence returns muddy solution; cancel that loop before adding digestion.
-        RecipeMark samariumSolutionProcessing = catalog.markRecipeSequence(DissolutionTank, MuddySamariumRareEarthSolution, SamariumDust,
+        StepRef samariumSolutionProcessing = catalog.markRecipeSequence(DissolutionTank, MuddySamariumRareEarthSolution, SamariumDust,
             catalog.markRecipe(DissolutionTank, new Object[] { MuddySamariumRareEarthSolution, NitricAcid }, SamariumRareEarthMud, 9),
             catalog.markRecipe(DissolutionTank, new Object[] { SamariumRareEarthMud, Water }, DilutedSamariumRareEarthSolution, 9),
             catalog.markRecipe(LargeChemicalReactor, new Object[] { DilutedSamariumRareEarthSolution, OxalicAcid }, SamariumOxalateDust, 13),
@@ -266,64 +266,64 @@ public final class BottledChaosLanthanideRecipes {
             new Object[] { CeriumDioxideDust, CeriumRichMixtureDust },
             catalog.markRecipe(Digester, SamariumOreConcentrateDust, MuddySamariumRareEarthSolution, -1),
             samariumSolutionProcessing);
-        catalog.registerOutputDecomposition(CentrifugeNonCell, DephosphatedSamariumConcentrateDust, SamariumDust, -1);
-        catalog.setKeyOutputs("samarium", new Object[] { SamariumDust, CeriumDioxideDust, CeriumRichMixtureDust });
+        catalog.includeDecompositionStep(CentrifugeNonCell, DephosphatedSamariumConcentrateDust, SamariumDust, -1);
+        catalog.setExistingEntriesKeyOutputs("samarium", new Object[] { SamariumDust, CeriumDioxideDust, CeriumRichMixtureDust });
 
-        catalog.setKeyOutputs("bastnasite",
+        catalog.setExistingEntriesKeyOutputs("bastnasite",
             new Object[] { RoastedRareEarthOxidesDust, LanthanumDust, NeodymiumDust, CeriumDioxideDust, SamaricRareEarthConcentrateDust, HolmiumDust, SamariumDust, GadoliniumDust, TerbiumDust });
-        catalog.setKeyOutputs("monazite",
+        catalog.setExistingEntriesKeyOutputs("monazite",
             new Object[] { DilutedMonaziteMud, HafniumDust, ZirconiumDust, ThoriumDust, AcidicMonaziteDust, UraniumDust, Uranium235Dust, CeriumDioxideDust, NitricMonaziteLeachedConcentrate, SamariumDust, GadoliniumDust, EuropiumDust });
         catalog.orderDisplayRecipes("lanthanide", MonaziteDust, DilutedMonaziteMud, AcidicMonaziteDust,
             NitricMonaziteLeachedConcentrate, BastnasiteDust, RoastedRareEarthOxidesDust, SamaricRareEarthConcentrateDust,
             SamariumOreConcentrateDust, CeriumRichMixtureDust, CeriumDioxideDust);
 
         // 4. Mineral coproducts and the remaining elemental output branches.
-        catalog.registerOutputDecomposition(LargeChemicalReactor, NeodymicRareEarthConcentrateDust, LanthanumChlorideDust, -1);
-        catalog.registerOutputDecomposition(ElectrolyzerNonCell, LanthanumChlorideDust, LanthanumDust, -1);
-        catalog.registerOutputDecomposition(ElectrolyzerNonCell, NeodymiumOxideDust, NeodymiumDust, -1);
-        catalog.registerOutputDecomposition(ElectrolyzerNonCell, TerbiumNitrateDust, TerbiumDust, -1);
-        catalog.registerOutputDecomposition(Sifter, SamaricResidueDust, SamariumDust, -1);
-        catalog.registerOutputDecomposition(LargeChemicalReactor, EuropiumIIIOxideDust, EuropiumOxideDust, -1);
-        catalog.registerOutputDecomposition(ElectrolyzerNonCell, EuropiumOxideDust, EuropiumDust, -1);
-        catalog.registerOutputDecomposition(BlastFurnace, ThoriumPhosphateCakeDust, ThoriumPhosphateConcentrateDust, -1);
-        catalog.registerOutputDecomposition(ThermalCentrifuge, ThoriumPhosphateConcentrateDust, ThoriumDust, -1);
-        catalog.registerOutputDecomposition(ChemicalBath, UraniumFiltrateDust, NeutralizedUraniumFiltrateDust, -1);
-        catalog.registerOutputDecomposition(Sifter, NeutralizedUraniumFiltrateDust, UraniumDust, -1);
-        catalog.registerOutputDecomposition(ElectrolyzerNonCell, ThoriumDioxideDust, ThoriumDust, -1);
+        catalog.includeDecompositionStep(LargeChemicalReactor, NeodymicRareEarthConcentrateDust, LanthanumChlorideDust, -1);
+        catalog.includeDecompositionStep(ElectrolyzerNonCell, LanthanumChlorideDust, LanthanumDust, -1);
+        catalog.includeDecompositionStep(ElectrolyzerNonCell, NeodymiumOxideDust, NeodymiumDust, -1);
+        catalog.includeDecompositionStep(ElectrolyzerNonCell, TerbiumNitrateDust, TerbiumDust, -1);
+        catalog.includeDecompositionStep(Sifter, SamaricResidueDust, SamariumDust, -1);
+        catalog.includeDecompositionStep(LargeChemicalReactor, EuropiumIIIOxideDust, EuropiumOxideDust, -1);
+        catalog.includeDecompositionStep(ElectrolyzerNonCell, EuropiumOxideDust, EuropiumDust, -1);
+        catalog.includeDecompositionStep(BlastFurnace, ThoriumPhosphateCakeDust, ThoriumPhosphateConcentrateDust, -1);
+        catalog.includeDecompositionStep(ThermalCentrifuge, ThoriumPhosphateConcentrateDust, ThoriumDust, -1);
+        catalog.includeDecompositionStep(ChemicalBath, UraniumFiltrateDust, NeutralizedUraniumFiltrateDust, -1);
+        catalog.includeDecompositionStep(Sifter, NeutralizedUraniumFiltrateDust, UraniumDust, -1);
+        catalog.includeDecompositionStep(ElectrolyzerNonCell, ThoriumDioxideDust, ThoriumDust, -1);
 
         // Hafnia/zirconia separation and refining belong to this mineral family.
-        catalog.registerOutputDecomposition(CentrifugeNonCell, HafniumZirconiumOxideBlendDust,
+        catalog.includeDecompositionStep(CentrifugeNonCell, HafniumZirconiumOxideBlendDust,
             new Object[] { HafniumDioxideDust, ZirconiumDioxideDust }, -1);
-        catalog.registerOutputDecomposition(LargeChemicalReactor, HafniumDioxideDust, HafniumTetrachlorideDust, 1);
-        catalog.registerOutputDecomposition(LargeChemicalReactor, HafniumTetrachlorideDust, HafniumTetrachlorideSolution, 1);
-        catalog.registerOutputDecomposition(BlastFurnace, HafniumTetrachlorideSolution, LowPurityHafniumDust, 2);
-        catalog.registerOutputDecomposition(LargeChemicalReactor, LowPurityHafniumDust, HafniumIodideDust, 1);
-        catalog.registerOutputDecomposition(BlastFurnace, HafniumIodideDust, HotHafniumIngot, 13);
-        catalog.registerOutputDecomposition(VacuumFreezer, HotHafniumIngot, HafniumIngot, -1);
-        catalog.registerOutputDecomposition(Macerator, HafniumIngot, HafniumDust, -1);
-        catalog.registerOutputDecomposition(LargeChemicalReactor, ZirconiumDioxideDust, ZirconiumTetrachlorideDust, 1);
-        catalog.registerOutputDecomposition(LargeChemicalReactor, ZirconiumTetrachlorideDust, ZirconiumTetrachlorideSolution, 1);
-        catalog.registerOutputDecomposition(BlastFurnace, ZirconiumTetrachlorideSolution, HotZirconiumIngot, 2);
-        catalog.registerOutputDecomposition(VacuumFreezer, HotZirconiumIngot, ZirconiumIngot, -1);
-        catalog.registerOutputDecomposition(Macerator, ZirconiumIngot, ZirconiumDust, -1);
+        catalog.includeDecompositionStep(LargeChemicalReactor, HafniumDioxideDust, HafniumTetrachlorideDust, 1);
+        catalog.includeDecompositionStep(LargeChemicalReactor, HafniumTetrachlorideDust, HafniumTetrachlorideSolution, 1);
+        catalog.includeDecompositionStep(BlastFurnace, HafniumTetrachlorideSolution, LowPurityHafniumDust, 2);
+        catalog.includeDecompositionStep(LargeChemicalReactor, LowPurityHafniumDust, HafniumIodideDust, 1);
+        catalog.includeDecompositionStep(BlastFurnace, HafniumIodideDust, HotHafniumIngot, 13);
+        catalog.includeDecompositionStep(VacuumFreezer, HotHafniumIngot, HafniumIngot, -1);
+        catalog.includeDecompositionStep(Macerator, HafniumIngot, HafniumDust, -1);
+        catalog.includeDecompositionStep(LargeChemicalReactor, ZirconiumDioxideDust, ZirconiumTetrachlorideDust, 1);
+        catalog.includeDecompositionStep(LargeChemicalReactor, ZirconiumTetrachlorideDust, ZirconiumTetrachlorideSolution, 1);
+        catalog.includeDecompositionStep(BlastFurnace, ZirconiumTetrachlorideSolution, HotZirconiumIngot, 2);
+        catalog.includeDecompositionStep(VacuumFreezer, HotZirconiumIngot, ZirconiumIngot, -1);
+        catalog.includeDecompositionStep(Macerator, ZirconiumIngot, ZirconiumDust, -1);
 
         // 5. Recover diluted acetone before supplementing its net consumption through acetic acid.
-        catalog.registerOutputDecompositions(DilutedAcetone);
-        catalog.registerInputSyntheses(Acetone);
+        catalog.includeDecompositionPath(DilutedAcetone);
+        catalog.includeSynthesisPath(Acetone);
 
         // 6. Common reagent inputs, resolved from non-cell source pools before the deferred acid remainder.
-        catalog.registerInputSyntheses(AmmoniumNitrateSolution, AmmoniumNitrateDust);
-        catalog.registerInputSyntheses(OxalicAcid);
+        catalog.includeSynthesisPath(AmmoniumNitrateSolution, AmmoniumNitrateDust);
+        catalog.includeSynthesisPath(OxalicAcid);
         // Preserve the existing salt input boundary; acids are finalized by the common loader.
-        catalog.registerInputSynthesis(SodiumFluorosilicate);
-        catalog.registerInputSynthesis(HexafluorosilicicAcid);
+        catalog.includeSynthesisStep(SodiumFluorosilicate);
+        catalog.includeSynthesisStep(HexafluorosilicicAcid);
 
         // 7. Mineral/organic coproducts, then CO2 -> CO recycling before direct handling of either remainder.
-        catalog.registerOutputDecomposition(ElectrolyzerNonCell, RedZirconDust, ZirconiumDust, -1);
-        catalog.registerOutputDecompositions(ChloromethaneGas);
+        catalog.includeDecompositionStep(ElectrolyzerNonCell, RedZirconDust, ZirconiumDust, -1);
+        catalog.includeDecompositionPath(ChloromethaneGas);
         catalog.registerReagentRecycling(LargeChemicalReactor, CarbonDioxideGas, CarbonMonoxideGas, -1);
-        catalog.registerInputSyntheses(CarbonDioxideGas);
-        catalog.registerOutputDecompositions(CarbonMonoxideGas, CarbonDioxideGas);
+        catalog.includeSynthesisPath(CarbonDioxideGas);
+        catalog.includeDecompositionPath(CarbonMonoxideGas, CarbonDioxideGas);
         // spotless:on
     }
 }

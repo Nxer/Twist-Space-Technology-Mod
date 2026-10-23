@@ -28,34 +28,34 @@ public final class BottledChaosTungstenRecipes {
             catalog.markRecipe(BlastFurnace, TungsticAcidDust, TungstenTrioxideDust, -1));
 
         // 2. Alternative mineral entries: preprocess each complete line through scheelite to tungsten trioxide.
-        catalog.registerAlternativeChain("tungsten", TierEU.RECIPE_LuV, LithiumTungstateDust,
+        var lithiumTungstate = catalog.registerAlternativeChain("tungsten", TierEU.RECIPE_LuV, LithiumTungstateDust,
             new Object[] { TungstenTrioxideDust }, new Object[] {},
             catalog.markRecipe(Autoclave, LithiumTungstateDust, SodiumTungstate, -1),
             catalog.markRecipe(LargeChemicalReactor, SodiumTungstate, CalciumTungstateDust, -1),
             catalog.markRecipe(LargeChemicalReactor, CalciumTungstateDust, TungsticAcidDust, -1),
             catalog.markRecipe(BlastFurnace, TungsticAcidDust, TungstenTrioxideDust, -1));
-        catalog.registerChainInputSynthesis("tungsten", LargeChemicalReactor, CalciumChlorideDust,
+        lithiumTungstate.includeSynthesisStep(LargeChemicalReactor, CalciumChlorideDust,
             new Object[] { CalciteDust, HydrochloricAcid }, -1);
-        catalog.registerAlternativeChain("tungsten", TierEU.RECIPE_LuV, ManganeseTungstateDust,
+        var manganeseTungstate = catalog.registerAlternativeChain("tungsten", TierEU.RECIPE_LuV, ManganeseTungstateDust,
             new Object[] { TungstenTrioxideDust }, new Object[] {},
             catalog.markRecipe(Autoclave, ManganeseTungstateDust, SodiumTungstate, -1),
             catalog.markRecipe(LargeChemicalReactor, SodiumTungstate, CalciumTungstateDust, -1),
             catalog.markRecipe(LargeChemicalReactor, CalciumTungstateDust, TungsticAcidDust, -1),
             catalog.markRecipe(BlastFurnace, TungsticAcidDust, TungstenTrioxideDust, -1));
-        catalog.registerChainInputSynthesis("tungsten", LargeChemicalReactor, CalciumChlorideDust,
+        manganeseTungstate.includeSynthesisStep(LargeChemicalReactor, CalciumChlorideDust,
             new Object[] { CalciteDust, HydrochloricAcid }, -1);
-        catalog.registerAlternativeChain("tungsten", TierEU.RECIPE_LuV, IronTungstateDust,
+        var ironTungstate = catalog.registerAlternativeChain("tungsten", TierEU.RECIPE_LuV, IronTungstateDust,
             new Object[] { TungstenTrioxideDust }, new Object[] {},
             catalog.markRecipe(Autoclave, IronTungstateDust, SodiumTungstate, -1),
             catalog.markRecipe(LargeChemicalReactor, SodiumTungstate, CalciumTungstateDust, -1),
             catalog.markRecipe(LargeChemicalReactor, CalciumTungstateDust, TungsticAcidDust, -1),
             catalog.markRecipe(BlastFurnace, TungsticAcidDust, TungstenTrioxideDust, -1));
-        catalog.registerChainInputSynthesis("tungsten", LargeChemicalReactor, CalciumChlorideDust,
+        ironTungstate.includeSynthesisStep(LargeChemicalReactor, CalciumChlorideDust,
             new Object[] { CalciteDust, HydrochloricAcid }, -1);
 
         // 3. Cancel returned calcium chloride first; any remaining calcite input uses calcium, carbon and oxygen.
-        catalog.registerInputSyntheses(CalciteDust);
-        catalog.registerOutputDecompositions(CalciumChlorideDust);
+        catalog.includeSynthesisPath(CalciteDust);
+        catalog.includeDecompositionPath(CalciumChlorideDust);
 
         // NEI uses each stage's declared root and terminal products as its only material query markers.
         // spotless:on

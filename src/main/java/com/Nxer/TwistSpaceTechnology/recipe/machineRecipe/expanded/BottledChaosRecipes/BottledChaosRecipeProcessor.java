@@ -9,13 +9,11 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.FluidStackLong;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineConfiguration;
@@ -26,6 +24,8 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.Bott
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosItemInputs.Requirement;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.ChainLink;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.CompiledCatalog;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.CompiledRoute;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.CredentialModel;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeSupport.RecipeData;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeSupport.TimeKey;
@@ -33,7 +33,6 @@ import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
 
 import gregtech.api.recipe.RecipeMap;
-import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.GTUtility.FluidId;
 
@@ -46,82 +45,36 @@ public final class BottledChaosRecipeProcessor {
     private static final BottledChaosSourceParameters DEFAULT_PARAMETERS = BottledChaosSourceParameters.DEFAULT;
     private static volatile RouteCache cache;
 
-    // Core entry points: startup publication, execution preparation and NEI display.
-    public static synchronized void initializeRecipeCache(Consumer<BottledChaosRecipeCatalog> registerChains) {
+    // Registration owns declaration/compilation and lifecycle ordering; execution owns the published snapshot.
+    static void clearCache() {
         cache = null;
-        try {
-            BottledChaosRecipeCatalog catalog = new BottledChaosRecipeCatalog();
-            BottledChaosProcessAlternatives.clearPending();
-            registerChains.accept(catalog);
-            var compiled = catalog.compile();
-            Set<RecipeMap<?>> selectedPools = new LinkedHashSet<>();
-            selectedPools.add(RecipeMaps.fusionRecipes);
-            selectedPools.add(BottledChaosProcessAlternatives.STELLAR_FORGE);
-            selectedPools.add(BottledChaosProcessAlternatives.GODFORGE_MOLTEN);
-            selectedPools.add(BottledChaosProcessAlternatives.COOLING);
-            for (var route : compiled.routes())
-                for (TimeKey time : route.data().times.keySet()) selectedPools.add(time.map());
-            BottledChaosMachineConfiguration.initialize(selectedPools.toArray(new RecipeMap<?>[0]));
-            CachedRoute[] routes = new CachedRoute[compiled.routes().length];
-            for (int entry = 0; entry < routes.length; entry++) {
-                var route = compiled.routes()[entry];
-                routes[entry] = new CachedRoute(
-                    route.data(),
-                    new SourceWork(route.data()),
-                    route.root(),
-                    route.targetOutputs(),
-                    route.baseEUt(),
-                    route.tagIndex(),
-                    route.inputMultiplier(),
-                    route.requiredTagMask(),
-                    route.availableInputsOnly(),
-                    route.inputAlternatives(),
-                    route.hiddenDisplay(),
-                    BottledChaosMachineConfiguration.withDependencies(
-                        route.data().times.keySet()
-                            .stream()
-                            .mapToLong(time -> BottledChaosMachineConfiguration.mask(time.map()))
-                            .reduce(0L, (left, right) -> left | right)));
-            }
-            // Publish only complete, executable routes; startup registration state is no longer retained.
-            cache = new RouteCache(
-                routes,
-                compiled.entryOrder(),
-                compiled.displayOrder(),
-                compiled.links(),
-                compiled.keyOutputs());
-            TwistSpaceTechnology.LOG.info("Bottled Chaos resolved {} processing steps.", compiled.resolvedStepCount());
-        } catch (RuntimeException exception) {
-            TwistSpaceTechnology.LOG
-                .error("Bottled Chaos recipe resolution failed; processing routes are disabled.", exception);
-        }
     }
 
-    public static PreparedPlan prepareExecution(long routeMask, ItemStack[] itemInputs, FluidStack[] fluidInputs) {
-        return prepareExecution(routeMask, itemInputs, fluidInputs, DEFAULT_PARAMETERS);
-    }
-
-    public static PreparedPlan prepareExecution(long routeMask, ItemStack[] itemInputs, FluidStack[] fluidInputs,
-        BottledChaosSourceParameters parameters) {
-        BottledChaosMaterialCache materials = new BottledChaosMaterialCache();
-        for (int entry : candidateEntries(routeMask, materials)) {
-            PreparedPlan prepared = prepareExecution(
-                routeMask,
-                entry,
-                1,
-                itemInputs,
-                fluidInputs,
-                parameters,
-                materials);
-            if (prepared != null) return prepared;
+    static void installCache(CompiledCatalog compiled) {
+        CachedRoute[] routes = new CachedRoute[compiled.routes().length];
+        for (int entry = 0; entry < routes.length; entry++) {
+            CompiledRoute definition = compiled.routes()[entry];
+            routes[entry] = new CachedRoute(
+                definition,
+                new SourceWork(definition.data()),
+                BottledChaosMachineConfiguration.withDependencies(
+                    definition.data().times.keySet()
+                        .stream()
+                        .mapToLong(time -> BottledChaosMachineConfiguration.mask(time.map()))
+                        .reduce(0L, (left, right) -> left | right)));
         }
-        return null;
+        cache = new RouteCache(
+            routes,
+            compiled.entryOrder(),
+            compiled.displayOrder(),
+            compiled.links(),
+            compiled.keyOutputs());
     }
 
     /** Last successful family/entry first, then the fixed family directory, as in GT's buffered recipe lookup. */
-    public static int[] candidateEntries(long routeMask, BottledChaosMaterialCache materials) {
+    public static int[] candidateEntries(long tagMask, BottledChaosMaterialCache materials) {
         RouteCache snapshot = cache;
-        if (snapshot == null || routeMask == 0) return new int[0];
+        if (snapshot == null || tagMask == 0) return new int[0];
         int[] result = new int[snapshot.routes.length];
         int size = 0;
         for (int pass = 0; pass < 2; pass++) {
@@ -130,9 +83,9 @@ public final class BottledChaosRecipeProcessor {
                 int preferred = materials.lastEntry();
                 if (preferred >= 0 && preferred < snapshot.routes.length
                     && snapshot.familyOfEntry[preferred] == family
-                    && snapshot.routes[preferred].isAuthorized(routeMask)) result[size++] = preferred;
+                    && snapshot.routes[preferred].isAuthorized(tagMask)) result[size++] = preferred;
                 for (int entry : snapshot.familyEntries[family]) {
-                    if (entry != preferred && snapshot.routes[entry].isAuthorized(routeMask)) result[size++] = entry;
+                    if (entry != preferred && snapshot.routes[entry].isAuthorized(tagMask)) result[size++] = entry;
                 }
             }
         }
@@ -140,45 +93,34 @@ public final class BottledChaosRecipeProcessor {
     }
 
     /** Waila groups final targets before other key outputs, then unmarked coproducts. */
-    public static Map<Object, Integer> outputPriorities(long routeMask) {
+    public static Map<Object, Integer> outputPriorities(long tagMask) {
         RouteCache snapshot = cache;
-        if (snapshot == null || routeMask == 0) return Collections.emptyMap();
+        if (snapshot == null || tagMask == 0) return Collections.emptyMap();
         Map<Object, Integer> priorities = new LinkedHashMap<>();
         for (int entry : snapshot.entryOrder) {
             CachedRoute route = snapshot.routes[entry];
-            if (!route.isAuthorized(routeMask)) continue;
-            for (Object key : route.data.outputs.keySet())
+            if (!route.isAuthorized(tagMask)) continue;
+            for (Object key : route.definition.data().outputs.keySet())
                 if (snapshot.keyOutputs.contains(key)) priorities.putIfAbsent(key, 1);
-            for (Object key : route.targetOutputs) {
-                if (!snapshot.hasAuthorizedConsumer(entry, routeMask, key)) priorities.put(key, 0);
+            for (Object key : route.definition.planningTargets()) {
+                if (!snapshot.hasAuthorizedConsumer(entry, tagMask, key)) priorities.put(key, 0);
             }
         }
         return priorities;
-    }
-
-    /** Integer final-product targets determine upstream supply; graph cycles require already available seed. */
-    public static PreparedPlan prepareExecution(long routeMask, int entry, int externalBatches, ItemStack[] items,
-        FluidStack[] fluids, BottledChaosSourceParameters parameters, BottledChaosMaterialCache materials) {
-        return executionPlanner(routeMask, entry, items, fluids, parameters, materials).prepare(externalBatches);
-    }
-
-    public static ExecutionPlanner executionPlanner(long routeMask, int entry, ItemStack[] items, FluidStack[] fluids,
-        BottledChaosSourceParameters parameters, BottledChaosMaterialCache materials) {
-        return executionPlanner(routeMask, entry, items, fluids, parameters, materials, new PlanningCache());
     }
 
     /** One current authorization graph per processing group; quantities always belong to a fresh planner. */
     public static final class PlanningCache {
 
         private RouteCache snapshot;
-        private long routeMask;
+        private long tagMask;
         private AuthorizedGraph graph;
         private BottledChaosItemInputs.Matching matching;
 
         private AuthorizedGraph get(RouteCache current, long mask) {
-            if (current != snapshot || graph == null || mask != routeMask) {
+            if (current != snapshot || graph == null || mask != tagMask) {
                 snapshot = current;
-                routeMask = mask;
+                tagMask = mask;
                 graph = current == null ? null : new AuthorizedGraph(current, mask);
                 matching = null;
             }
@@ -204,11 +146,11 @@ public final class BottledChaosRecipeProcessor {
         final long[][] completeTargets;
         final boolean[] terminals;
 
-        private AuthorizedGraph(RouteCache snapshot, long routeMask) {
+        private AuthorizedGraph(RouteCache snapshot, long tagMask) {
             authorized = new boolean[snapshot.routes.length];
             List<Map<Object, List<Integer>>> incoming = new ArrayList<>();
             for (int index = 0; index < authorized.length; index++) {
-                authorized[index] = snapshot.routes[index].isAuthorized(routeMask);
+                authorized[index] = snapshot.routes[index].isAuthorized(tagMask);
                 incoming.add(new LinkedHashMap<>());
                 retainedOutputs.add(new LinkedHashSet<>());
                 downstream.add(new LinkedHashSet<>());
@@ -238,7 +180,7 @@ public final class BottledChaosRecipeProcessor {
             }
             for (int index : snapshot.entryOrder) {
                 if (!authorized[index]) continue;
-                RecipeData data = snapshot.routes[index].data;
+                RecipeData data = snapshot.routes[index].definition.data();
                 itemRequirements.addAll(data.itemRequirements);
                 requiredInputs.addAll(data.inputs.keySet());
                 requiredInputs.addAll(data.catalysts.keySet());
@@ -247,7 +189,7 @@ public final class BottledChaosRecipeProcessor {
             completeTargets = new long[snapshot.routes.length][];
             terminals = new boolean[snapshot.routes.length];
             for (int index = 0; index < terminals.length; index++) {
-                for (Object output : snapshot.routes[index].targetOutputs) {
+                for (Object output : snapshot.routes[index].definition.planningTargets()) {
                     if (!retainedOutputs.get(index)
                         .contains(output)) terminals[index] = true;
                 }
@@ -256,17 +198,16 @@ public final class BottledChaosRecipeProcessor {
 
     }
 
-    public static ExecutionPlanner executionPlanner(long routeMask, int entry, ItemStack[] items, FluidStack[] fluids,
+    public static ExecutionPlanner executionPlanner(long tagMask, ItemStack[] items, FluidStack[] fluids,
         BottledChaosSourceParameters parameters, BottledChaosMaterialCache materials, PlanningCache planningCache) {
         return new ExecutionPlanner(
             cache,
-            routeMask,
-            entry,
+            tagMask,
             items,
             fluids,
             parameters,
             materials,
-            planningCache.get(cache, routeMask),
+            planningCache.get(cache, tagMask),
             planningCache.matching(items));
     }
 
@@ -285,8 +226,8 @@ public final class BottledChaosRecipeProcessor {
         public double diagnosticShortBefore, diagnosticShortAfter;
 
         private final RouteCache snapshot;
-        private final long routeMask;
-        private int entry;
+        private final long tagMask;
+        private int entry = -1;
         private final ItemStack[] items;
         private final FluidStack[] fluids;
         private final BottledChaosSourceParameters parameters;
@@ -315,7 +256,7 @@ public final class BottledChaosRecipeProcessor {
             this.durationLimit = durationLimit;
         }
 
-        private ExecutionPlanner(RouteCache snapshot, long routeMask, int entry, ItemStack[] items, FluidStack[] fluids,
+        private ExecutionPlanner(RouteCache snapshot, long tagMask, ItemStack[] items, FluidStack[] fluids,
             BottledChaosSourceParameters parameters, BottledChaosMaterialCache materials, AuthorizedGraph graph,
             BottledChaosItemInputs.Matching matching) {
             this.graph = graph;
@@ -325,8 +266,7 @@ public final class BottledChaosRecipeProcessor {
             downstream = graph == null ? null : graph.downstream;
             authorized = graph == null ? null : graph.authorized;
             this.snapshot = snapshot;
-            this.routeMask = routeMask;
-            this.entry = entry;
+            this.tagMask = tagMask;
             this.items = items;
             this.fluids = fluids;
             this.parameters = parameters;
@@ -381,8 +321,8 @@ public final class BottledChaosRecipeProcessor {
         }
 
         /** Prefer complete terminal products; only an unavailable full line falls back to paid intermediate carry. */
-        public PreparedPlan prepare(int targetBatches) {
-            if (snapshot == null || !snapshot.routes[entry].isAuthorized(routeMask)) return null;
+        private PreparedPlan prepare(int targetBatches) {
+            if (snapshot == null || !snapshot.routes[entry].isAuthorized(tagMask)) return null;
             if (external == null) {
                 Set<Object> cachedInputs = graph.cachedInputs;
                 long diagnosticInputStart = System.nanoTime();
@@ -421,7 +361,7 @@ public final class BottledChaosRecipeProcessor {
                         int index = entries[i];
                         if (!reachable[index]) continue;
                         goalOrder[size++] = index;
-                        for (Object terminal : snapshot.routes[index].targetOutputs) {
+                        for (Object terminal : snapshot.routes[index].definition.planningTargets()) {
                             if (!retainedOutputs.get(index)
                                 .contains(terminal)) {
                                 complete[index] = 1;
@@ -549,7 +489,7 @@ public final class BottledChaosRecipeProcessor {
         /** Terminal recycling consumes existing leftovers within the remaining work budget. */
         private boolean terminalRecovery(int index) {
             if (!snapshot.stages[index].availableInputsOnly) return false;
-            for (Object output : snapshot.routes[index].targetOutputs) {
+            for (Object output : snapshot.routes[index].definition.planningTargets()) {
                 if (!retainedOutputs.get(index)
                     .contains(output)) return true;
             }
@@ -662,9 +602,13 @@ public final class BottledChaosRecipeProcessor {
                 for (int index = 0; index < result.batches.length; index++) {
                     if (result.batches[index] == 0) continue;
                     requirements.addAll(
-                        BottledChaosItemInputs
-                            .scale(snapshot.routes[index].data.itemRequirements, result.batches[index], 1, null));
-                    snapshot.routes[index].data.outputs.forEach((key, amount) -> internalPresence.put(key, 1L));
+                        BottledChaosItemInputs.scale(
+                            snapshot.routes[index].definition.data().itemRequirements,
+                            result.batches[index],
+                            1,
+                            null));
+                    snapshot.routes[index].definition.data().outputs
+                        .forEach((key, amount) -> internalPresence.put(key, 1L));
                 }
                 long diagnosticMatchStart = System.nanoTime();
                 plan.itemConsumption = BottledChaosItemInputs
@@ -690,25 +634,36 @@ public final class BottledChaosRecipeProcessor {
     }
 
     /** NEI reads the same net materials and timing groups directly, without replaying the runtime planner. */
-    public static List<DisplayRecipe> createDisplayRecipes() {
+    public static List<DisplayRecipe> displayRecipes() {
         RouteCache snapshot = cache;
-        if (snapshot == null) return Collections.emptyList();
+        return snapshot == null ? Collections.emptyList() : snapshot.displays;
+    }
+
+    public static int maxDisplaySourcePools() {
+        RouteCache snapshot = cache;
+        return snapshot == null ? 12 : snapshot.maxDisplaySourcePools;
+    }
+
+    private static List<DisplayRecipe> buildDisplayRecipes(RouteCache snapshot) {
         List<DisplayRecipe> result = new ArrayList<>(snapshot.routes.length);
         // 1. Read net materials in production order; folded input variants share their primary display entry.
         for (int displayOrder = 0; displayOrder < snapshot.displayOrder.length; displayOrder++) {
-            int routeIndex = snapshot.displayOrder[displayOrder];
-            CachedRoute cachedRoute = snapshot.routes[routeIndex];
-            if (cachedRoute.inputMultiplier > 0 || cachedRoute.hiddenDisplay) continue;
-            ItemStack[][] inputAlternatives = cachedRoute.displayInputAlternatives;
-            if (routeIndex == cachedRoute.tagIndex) for (CachedRoute alternative : snapshot.routes) {
-                if (alternative.tagIndex != cachedRoute.tagIndex || alternative.inputMultiplier == 0) continue;
-                inputAlternatives = new ItemStack[][] { { ((TST_ItemID) cachedRoute.root).getItemStack(1)
-                    .copy(),
-                    ((TST_ItemID) alternative.root).getItemStack(alternative.inputMultiplier)
+            int entryIndex = snapshot.displayOrder[displayOrder];
+            CachedRoute cachedRoute = snapshot.routes[entryIndex];
+            if (cachedRoute.definition.inputMultiplier() > 0 || cachedRoute.definition.hiddenDisplay()) continue;
+            ItemStack[][] inputAlternatives = cachedRoute.definition.inputAlternatives();
+            if (entryIndex == cachedRoute.definition.tagIndex()) for (CachedRoute alternative : snapshot.routes) {
+                if (alternative.definition.tagIndex() != cachedRoute.definition.tagIndex()
+                    || alternative.definition.inputMultiplier() == 0) continue;
+                inputAlternatives = new ItemStack[][] { {
+                    ((TST_ItemID) cachedRoute.definition.balanceRoot()).getItemStack(1)
+                        .copy(),
+                    ((TST_ItemID) alternative.definition.balanceRoot())
+                        .getItemStack(alternative.definition.inputMultiplier())
                         .copy() } };
                 break;
             }
-            RecipeData route = cachedRoute.data;
+            RecipeData route = cachedRoute.definition.data();
             List<ItemStackLong> items = new ArrayList<>();
             List<FluidStackLong> fluids = new ArrayList<>();
             route.inputs.forEach((key, amount) -> appendResourceStack(key, amount, items, fluids));
@@ -726,7 +681,7 @@ public final class BottledChaosRecipeProcessor {
                     time.getKey(),
                     time.getValue(),
                     DEFAULT_PARAMETERS,
-                    cachedRoute.baseEUt);
+                    cachedRoute.definition.baseEUt());
                 totalDuration = BottledChaosRecipeSupport.addDuration(totalDuration, part, 1);
                 RecipeMap<?> map = time.getKey()
                     .map();
@@ -737,12 +692,12 @@ public final class BottledChaosRecipeProcessor {
             // 3. Build copied display templates with the exact long quantities and grouped source times.
             result.add(
                 new DisplayRecipe(
-                    cachedRoute.tagIndex,
+                    cachedRoute.definition.tagIndex(),
                     displayOrder,
-                    cachedRoute.requiredTagMask,
+                    cachedRoute.definition.requiredTagMask(),
                     inputAlternatives,
                     snapshot.keyOutputs,
-                    cachedRoute.baseEUt,
+                    cachedRoute.definition.baseEUt(),
                     Collections.unmodifiableList(items),
                     Collections.unmodifiableList(fluids),
                     Collections.unmodifiableList(processingTimes),
@@ -757,7 +712,7 @@ public final class BottledChaosRecipeProcessor {
         long pools = 0;
         if (snapshot != null) for (CachedRoute route : snapshot.routes) if (route.isAuthorized(tagMask)) {
             pools |= route.poolMask;
-            for (TimeKey key : route.data.times.keySet()) {
+            for (TimeKey key : route.definition.data().times.keySet()) {
                 var group = key.alternatives();
                 if (group != null) for (RecipeMap<?> pool : group.versions.keySet())
                     pools |= BottledChaosMachineConfiguration.mask(pool);
@@ -771,17 +726,12 @@ public final class BottledChaosRecipeProcessor {
         return cache != null;
     }
 
-    /**
-     * Complete net recipe with its runtime root, NEI endpoint identities, voltage, owning tag and authorization mask;
-     * positive inputMultiplier folds its NEI row into the primary entry.
-     */
+    /** One immutable compiled definition, plus execution-only derived work and pool requirements. */
     @Desugar
-    private record CachedRoute(RecipeData data, SourceWork work, Object root, Object[] targetOutputs, long baseEUt,
-        int tagIndex, int inputMultiplier, long requiredTagMask, boolean availableInputsOnly,
-        ItemStack[][] displayInputAlternatives, boolean hiddenDisplay, long poolMask) {
+    private record CachedRoute(CompiledRoute definition, SourceWork work, long poolMask) {
 
-        boolean isAuthorized(long routeMask) {
-            return (routeMask & requiredTagMask) == requiredTagMask;
+        boolean isAuthorized(long tagMask) {
+            return (tagMask & definition.requiredTagMask()) == definition.requiredTagMask();
         }
     }
 
@@ -797,6 +747,8 @@ public final class BottledChaosRecipeProcessor {
         final String[] familyNames;
         final int[] familyOfEntry;
         final BottledChaosChainPlanner.Stage[] stages;
+        final List<DisplayRecipe> displays;
+        final int maxDisplaySourcePools;
 
         RouteCache(CachedRoute[] routes, int[] entryOrder, int[] displayOrder, ChainLink[] links,
             Set<Object> keyOutputs) {
@@ -807,19 +759,19 @@ public final class BottledChaosRecipeProcessor {
             this.keyOutputs = keyOutputs;
             stages = new BottledChaosChainPlanner.Stage[routes.length];
             for (int entry = 0; entry < routes.length; entry++) {
-                RecipeData data = routes[entry].data;
+                RecipeData data = routes[entry].definition.data();
                 stages[entry] = new BottledChaosChainPlanner.Stage(
                     data.inputs,
                     data.outputs,
                     data.catalysts,
-                    routes[entry].baseEUt,
-                    routes[entry].availableInputsOnly);
+                    routes[entry].definition.baseEUt(),
+                    routes[entry].definition.availableInputsOnly());
             }
             Map<String, Integer> families = new LinkedHashMap<>();
             familyOfEntry = new int[routes.length];
             int[] counts = new int[routes.length];
             for (int entry : entryOrder) {
-                String name = CredentialModel.processingFamily(routes[entry].requiredTagMask);
+                String name = CredentialModel.processingFamily(routes[entry].definition.requiredTagMask());
                 int family = families.computeIfAbsent(name, ignored -> families.size());
                 familyOfEntry[entry] = family;
                 counts[family]++;
@@ -834,6 +786,13 @@ public final class BottledChaosRecipeProcessor {
                 int family = familyOfEntry[entry];
                 familyEntries[family][counts[family]++] = entry;
             }
+            displays = buildDisplayRecipes(this);
+            maxDisplaySourcePools = displays.stream()
+                .mapToInt(
+                    display -> display.processingTimes()
+                        .size())
+                .max()
+                .orElse(12);
         }
 
         private Map<Object, Long> collectAvailableInputs(AuthorizedGraph graph,
@@ -1091,11 +1050,14 @@ public final class BottledChaosRecipeProcessor {
             return roundItems;
         }
 
-        public Plan outputPlan() {
+        public void prepareOutputs() {
             if (outputPlan == null) {
                 BottledChaosChainPlanner.releaseExcess(cacheLimit, remainingCache, pendingCache, outputs);
                 outputPlan = createOutputPlan(outputs, duration, executions);
             }
+        }
+
+        public Plan outputPlan() {
             return outputPlan;
         }
 
@@ -1179,7 +1141,7 @@ public final class BottledChaosRecipeProcessor {
      * and grouped processing times. Key outputs restrict lookup without removing any displayed material.
      */
     @Desugar
-    public record DisplayRecipe(int routeIndex, int displayOrder, long requiredTagMask, ItemStack[][] inputAlternatives,
+    public record DisplayRecipe(int tagIndex, int displayOrder, long requiredTagMask, ItemStack[][] inputAlternatives,
         Set<Object> keyOutputs, long baseEUt, List<ItemStackLong> itemInputs, List<FluidStackLong> fluidInputs,
         List<RecipeMapDuration> processingTimes, Plan plan) {}
 

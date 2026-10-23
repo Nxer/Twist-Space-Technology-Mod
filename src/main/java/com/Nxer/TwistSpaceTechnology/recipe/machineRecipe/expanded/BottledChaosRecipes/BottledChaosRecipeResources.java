@@ -1,10 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.IntStream;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -70,43 +72,78 @@ public final class BottledChaosRecipeResources {
         public static final String ROUTE_MASK_NBT_KEY = "bottledChaosRouteMask";
         public static final String OCCUPIED_WEIGHT_NBT_KEY = "bottledChaosOccupiedWeight";
 
-        // Independent stages follow their declared forward order; alternative sources keep the same tag.
+        /** Stable declaration order defines credential bits; unlock order affects presentation only. */
+        @Desugar
+        private record TagDefinition(String tag, boolean enabled, int displayOrder, String family, String page) {}
+
+        // Material bindings stay in CredentialRoutes and are not initialized with this metadata.
         // spotless:off
-        private static final String[] TAGS = {
-            "platinum_metallic_powder", "platinum_residue", "crude_rhodium_metal", "leach_residue", "palladium_metallic_powder", "rarest_metal_residue", "iridium_metal_residue",
-            "ancient_debris",
-            "crystalline_alloy_molten", "prismatic_acid",
-            "bastnasite", "monazite", "rare_earth_cerium", "cerium", "samarium",
-            "naquadah", "enriched_naquadah", "naquadria",
-            "growth_medium_sterilized", "stem_cells", "seaweed_broth", "tau_ceti_e_seaweed_extract", "bio_medium_sterilized", "bio_cells",
-            "xenoxene", "super_heavy_radox", "heavy_radox", "light_radox", "super_light_radox",
-            "kevlar",
-            "purified_water_1", "purified_water_2", "purified_water_3", "purified_water_4", "purified_water_5", "purified_water_6", "purified_water_7", "purified_water_8",
-            "magmatter", "quark_gluon_plasma",
-            "titanium", "tungsten", "indium", "phonon_medium", "eternity", "honeycomb", "isamill", "naquadah_fuel_4", "naquadah_fuel_preparation", "naquadah_fuel_5", "naquadah_fuel_6", "naquadah_fuel_3", "fusion"
+        private static final TagDefinition[] DEFINITIONS = {
+            new TagDefinition("platinum_metallic_powder", true, 3, "platinum", "Platinum"),
+            new TagDefinition("platinum_residue", true, 5, "platinum", "Platinum"),
+            new TagDefinition("crude_rhodium_metal", true, 9, "platinum", "Platinum"),
+            new TagDefinition("leach_residue", true, 6, "platinum", "Platinum"),
+            new TagDefinition("palladium_metallic_powder", true, 4, "platinum", "Platinum"),
+            new TagDefinition("rarest_metal_residue", true, 7, "platinum", "Platinum"),
+            new TagDefinition("iridium_metal_residue", true, 8, "platinum", "Platinum"),
+            new TagDefinition("ancient_debris", HAS_NETHERITE, 24, "ancient_debris", "Netherite"),
+            new TagDefinition("crystalline_alloy_molten", HAS_CRYSTALLINE_ALLOY, 26, "prismatic", "Prismatic"),
+            new TagDefinition("prismatic_acid", true, 29, "prismatic", "Prismatic"),
+            new TagDefinition("bastnasite", true, 11, "lanthanide", "Lanthanide"),
+            new TagDefinition("monazite", true, 10, "lanthanide", "Lanthanide"),
+            new TagDefinition("rare_earth_cerium", true, 13, "lanthanide", "Lanthanide"),
+            new TagDefinition("cerium", true, 12, "lanthanide", "Lanthanide"),
+            new TagDefinition("samarium", true, 14, "lanthanide", "Lanthanide"),
+            new TagDefinition("naquadah", true, 15, "naquadah", "Naquadah"),
+            new TagDefinition("enriched_naquadah", true, 16, "naquadah", "Naquadah"),
+            new TagDefinition("naquadria", true, 17, "naquadah", "Naquadah"),
+            new TagDefinition("growth_medium_sterilized", true, 39, "biological", "Biological"),
+            new TagDefinition("stem_cells", true, 40, "biological", "Biological"),
+            new TagDefinition("seaweed_broth", true, 41, "biological", "Biological"),
+            new TagDefinition("tau_ceti_e_seaweed_extract", true, 42, "biological", "Biological"),
+            new TagDefinition("bio_medium_sterilized", true, 43, "biological", "Biological"),
+            new TagDefinition("bio_cells", true, 44, "biological", "Biological"),
+            new TagDefinition("xenoxene", true, 45, "radox", "Radox"),
+            new TagDefinition("super_heavy_radox", true, 33, "radox", "Radox"),
+            new TagDefinition("heavy_radox", true, 34, "radox", "Radox"),
+            new TagDefinition("light_radox", true, 35, "radox", "Radox"),
+            new TagDefinition("super_light_radox", true, 36, "radox", "Radox"),
+            new TagDefinition("kevlar", true, 32, "kevlar", "Kevlar"),
+            new TagDefinition("purified_water_1", true, 27, "purified_water", "PurifiedWater"),
+            new TagDefinition("purified_water_2", true, 28, "purified_water", "PurifiedWater"),
+            new TagDefinition("purified_water_3", true, 30, "purified_water", "PurifiedWater"),
+            new TagDefinition("purified_water_4", true, 31, "purified_water", "PurifiedWater"),
+            new TagDefinition("purified_water_5", true, 37, "purified_water", "PurifiedWater"),
+            new TagDefinition("purified_water_6", true, 38, "purified_water", "PurifiedWater"),
+            new TagDefinition("purified_water_7", true, 46, "purified_water", "PurifiedWater"),
+            new TagDefinition("purified_water_8", true, 47, "purified_water", "PurifiedWater"),
+            new TagDefinition("magmatter", true, 50, "magmatter", "Default"),
+            new TagDefinition("quark_gluon_plasma", true, 48, "quark_gluon_plasma", "Default"),
+            new TagDefinition("titanium", true, 0, "titanium", "Titanium"),
+            new TagDefinition("tungsten", true, 1, "tungsten", "Tungsten"),
+            new TagDefinition("indium", true, 2, "indium", "Indium"),
+            new TagDefinition("phonon_medium", true, 51, "phonon_medium", "Default"),
+            new TagDefinition("eternity", HAS_ETERNITY, 49, "eternity", "Default"),
+            new TagDefinition("honeycomb", HAS_HONEYCOMBS, 52, "honeycomb", "Default"),
+            new TagDefinition("isamill", true, 25, "isamill", "IsaMill"),
+            new TagDefinition("naquadah_fuel_4", true, 20, "naquadah_fuel_4", "NaquadahFuel"),
+            new TagDefinition("naquadah_fuel_preparation", true, 18, "naquadah_fuel_preparation", "NaquadahFuel"),
+            new TagDefinition("naquadah_fuel_5", true, 21, "naquadah_fuel_5", "NaquadahFuel"),
+            new TagDefinition("naquadah_fuel_6", true, 22, "naquadah_fuel_6", "NaquadahFuel"),
+            new TagDefinition("naquadah_fuel_3", true, 19, "naquadah_fuel_3", "NaquadahFuel"),
+            new TagDefinition("fusion", true, 23, "fusion", "Fusion")
         };
         // spotless:on
-        public static final int ROUTE_COUNT = TAGS.length - (HAS_NETHERITE ? 0 : 1)
-            - (HAS_CRYSTALLINE_ALLOY ? 0 : 1)
-            - (HAS_ETERNITY ? 0 : 1)
-            - (HAS_HONEYCOMBS ? 0 : 1);
+        private static final TagDefinition[] ACTIVE = Arrays.stream(DEFINITIONS)
+            .filter(TagDefinition::enabled)
+            .toArray(TagDefinition[]::new);
+        public static final int ROUTE_COUNT = ACTIVE.length;
         public static final long ALL_ROUTE_MASK = (1L << ROUTE_COUNT) - 1;
-
-        // Unlock progression is presentation only; TAGS keeps the saved credential bit identities.
-        // Individual stages follow their unlock tier; shared NEI pages use their earliest stage separately.
-        // spotless:off
-        private static final int[] DISPLAY_ORDER = Arrays.stream(new String[] {
-            "titanium", "tungsten", "indium",
-            "platinum_metallic_powder", "palladium_metallic_powder", "platinum_residue", "leach_residue", "rarest_metal_residue", "iridium_metal_residue", "crude_rhodium_metal",
-            "monazite", "bastnasite", "cerium", "rare_earth_cerium", "samarium",
-            "naquadah", "enriched_naquadah", "naquadria", "naquadah_fuel_preparation", "naquadah_fuel_3", "naquadah_fuel_4", "naquadah_fuel_5", "naquadah_fuel_6", "fusion", "ancient_debris", "isamill", "crystalline_alloy_molten", "purified_water_1", "purified_water_2",
-            "prismatic_acid", "purified_water_3", "purified_water_4",
-            "kevlar", "super_heavy_radox", "heavy_radox", "light_radox", "super_light_radox", "purified_water_5", "purified_water_6",
-            "growth_medium_sterilized", "stem_cells", "seaweed_broth", "tau_ceti_e_seaweed_extract", "bio_medium_sterilized", "bio_cells", "xenoxene",
-            "purified_water_7", "purified_water_8",
-            "quark_gluon_plasma", "eternity", "magmatter", "phonon_medium", "honeycomb"
-        }).mapToInt(CredentialModel::indexForTag).filter(index -> index >= 0).toArray();
-        // spotless:on
+        private static final int[] DISPLAY_ORDER = IntStream.range(0, ROUTE_COUNT)
+            .boxed()
+            .sorted(Comparator.comparingInt(index -> ACTIVE[index].displayOrder()))
+            .mapToInt(Integer::intValue)
+            .toArray();
 
         private static volatile int[] registeredCapacityCosts;
 
@@ -123,8 +160,7 @@ public final class BottledChaosRecipeResources {
 
         /** Honeycomb variants share their production tag's position, regardless of the authorization bit. */
         public static int displayIndex(long requiredTagMask) {
-            if (HAS_HONEYCOMBS) requiredTagMask &= ~(1L << indexForTag("honeycomb"));
-            int tagIndex = Long.numberOfTrailingZeros(requiredTagMask);
+            int tagIndex = ownerTagIndex(requiredTagMask);
             for (int order = 0; order < DISPLAY_ORDER.length; order++) {
                 if (DISPLAY_ORDER[order] == tagIndex) return order;
             }
@@ -132,12 +168,7 @@ public final class BottledChaosRecipeResources {
         }
 
         public static String tag(int index) {
-            if (index < 0 || index >= ROUTE_COUNT) return null;
-            if (!HAS_NETHERITE && index >= 7) index++;
-            if (!HAS_CRYSTALLINE_ALLOY && index >= 8) index++;
-            if (!HAS_ETERNITY && index >= 44) index++;
-            if (!HAS_HONEYCOMBS && index >= 45) index++;
-            return TAGS[index];
+            return index >= 0 && index < ROUTE_COUNT ? ACTIVE[index].tag() : null;
         }
 
         public static int indexForTag(String tag) {
@@ -149,19 +180,18 @@ public final class BottledChaosRecipeResources {
 
         /** Processing families are independent of NEI pages; additional honeycomb authorization keeps its owner. */
         public static String processingFamily(long requiredTagMask) {
+            int index = ownerTagIndex(requiredTagMask);
+            return index >= 0 && index < ROUTE_COUNT ? ACTIVE[index].family() : null;
+        }
+
+        /** Shared production owner for honeycomb authorization, runtime families and presentation. */
+        public static int ownerTagIndex(long requiredTagMask) {
             if (HAS_HONEYCOMBS) requiredTagMask &= ~(1L << indexForTag("honeycomb"));
-            String name = tag(Long.numberOfTrailingZeros(requiredTagMask));
-            if (name == null) return null;
-            return switch (name) {
-                case "platinum_metallic_powder", "platinum_residue", "crude_rhodium_metal", "leach_residue", "palladium_metallic_powder", "rarest_metal_residue", "iridium_metal_residue" -> "platinum";
-                case "crystalline_alloy_molten", "prismatic_acid" -> "prismatic";
-                case "bastnasite", "monazite", "rare_earth_cerium", "cerium", "samarium" -> "lanthanide";
-                case "naquadah", "enriched_naquadah", "naquadria" -> "naquadah";
-                case "growth_medium_sterilized", "stem_cells", "seaweed_broth", "tau_ceti_e_seaweed_extract", "bio_medium_sterilized", "bio_cells" -> "biological";
-                case "xenoxene", "super_heavy_radox", "heavy_radox", "light_radox", "super_light_radox" -> "radox";
-                case "purified_water_1", "purified_water_2", "purified_water_3", "purified_water_4", "purified_water_5", "purified_water_6", "purified_water_7", "purified_water_8" -> "purified_water";
-                default -> name;
-            };
+            return Long.numberOfTrailingZeros(requiredTagMask);
+        }
+
+        public static String displayPage(int index) {
+            return index >= 0 && index < ROUTE_COUNT ? ACTIVE[index].page() : "Default";
         }
 
         public static String translationKey(int index) {

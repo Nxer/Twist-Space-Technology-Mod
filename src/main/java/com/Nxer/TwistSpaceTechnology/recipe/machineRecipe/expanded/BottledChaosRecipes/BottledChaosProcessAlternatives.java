@@ -187,7 +187,7 @@ public final class BottledChaosProcessAlternatives {
     }
 
     /** Native Stellar Forge recipes are generated at server-start, after the ordinary recipe cache. */
-    public static void resolve() {
+    static void resolve() {
         int stellarForge = 0, godforge = 0, cooling = 0;
         for (Group group : pending) {
             Map<RecipeMap<?>, List<Version>> versions = new LinkedHashMap<>();

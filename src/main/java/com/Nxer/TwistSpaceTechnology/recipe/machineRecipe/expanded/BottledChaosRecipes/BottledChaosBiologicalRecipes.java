@@ -113,21 +113,21 @@ public final class BottledChaosBiologicalRecipes {
             catalog.markRecipe(FluidHeater, BioMediumRaw, BioMediumSterilized, -1));
 
         // Shared input branches: fresh raw growth medium uses externally supplied agar.
-        catalog.registerInputSynthesis(BacterialVat, GrowthMediumRaw, new Object[] { Agar, Mutagen }, -1);
-        catalog.registerInputSynthesis(Autoclave, UnknownCrystal,
+        catalog.includeSynthesisStep(BacterialVat, GrowthMediumRaw, new Object[] { Agar, Mutagen }, -1);
+        catalog.includeSynthesisStep(Autoclave, UnknownCrystal,
             new Object[] { MysteriousCrystalDust, DistilledWater }, -1);
-        catalog.registerInputSynthesis(MixerNonCell, OsmiridiumDust, new Object[] { OsmiumDust, IridiumDust }, 1);
+        catalog.includeSynthesisStep(MixerNonCell, OsmiridiumDust, new Object[] { OsmiumDust, IridiumDust }, 1);
 
         // Seaweed preparation inputs; intermediate stage outputs have no automatic input synthesis.
-        catalog.registerInputSynthesis(FluidExtractor, MeatExtract, RawMeatDust, -1);
-        catalog.registerInputSynthesis(MixerNonCell, EnergiumDust, new Object[] { RedstoneDust, RubyDust }, -1);
-        catalog.registerInputSyntheses(SodiumChlorideDust, PhosphoricAcid, DistilledWater);
+        catalog.includeSynthesisStep(FluidExtractor, MeatExtract, RawMeatDust, -1);
+        catalog.includeSynthesisStep(MixerNonCell, EnergiumDust, new Object[] { RedstoneDust, RubyDust }, -1);
+        catalog.includeSynthesisPath(SodiumChlorideDust, PhosphoricAcid, DistilledWater);
         // Avoid an input/output acid cycle; supply this dilute input through its native hydrogen-sulfide source.
-        catalog.registerInputSynthesis(LargeChemicalReactor, DilutedSulfuricAcid, new Object[] { HydrogenSulfideGas, Water }, -1);
-        catalog.registerInputSynthesis(LargeChemicalReactor, HydrogenSulfideGas, new Object[] { SulfurDust, HydrogenGas }, 1);
+        catalog.includeSynthesisStep(LargeChemicalReactor, DilutedSulfuricAcid, new Object[] { HydrogenSulfideGas, Water }, -1);
+        catalog.includeSynthesisStep(LargeChemicalReactor, HydrogenSulfideGas, new Object[] { SulfurDust, HydrogenGas }, 1);
 
-        catalog.setKeyOutputs("stem_cells", new Object[] { StemCells, Mutagen });
-        catalog.setKeyOutputs("bio_cells", new Object[] { BioCells, Mutagen });
+        catalog.setExistingEntriesKeyOutputs("stem_cells", new Object[] { StemCells, Mutagen });
+        catalog.setExistingEntriesKeyOutputs("bio_cells", new Object[] { BioCells, Mutagen });
 
         catalog.registerExternalInputs(Agar, StemCells, RawMeatDust, Mutagen);
         // spotless:on

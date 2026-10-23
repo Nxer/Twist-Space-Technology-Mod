@@ -24,7 +24,7 @@ public final class BottledChaosFakeRecipes {
     public static void registerRecipes() {
         GTCMRecipe.BottledChaosRecipes.getBackend()
             .clearRecipes();
-        var displays = BottledChaosRecipeProcessor.createDisplayRecipes();
+        var displays = BottledChaosRecipeProcessor.displayRecipes();
         int registered = 0;
         for (var display : displays) {
             try {
@@ -103,8 +103,8 @@ public final class BottledChaosFakeRecipes {
                 if (!Double.isFinite(plan.durationTicks()) || plan.durationTicks() <= 0) {
                     throw new IllegalArgumentException("invalid display batch duration");
                 }
-                var route = CredentialRoutes.get(display.routeIndex());
-                if (route == null) throw new IllegalStateException("missing credential route " + display.routeIndex());
+                var route = CredentialRoutes.get(display.tagIndex());
+                if (route == null) throw new IllegalStateException("missing credential route " + display.tagIndex());
                 long routeMask = display.requiredTagMask();
                 int requiredWeight = ItemBottledChaosCredential.getRequiredWeight(routeMask);
                 ItemStack credential = null;
@@ -113,7 +113,7 @@ public final class BottledChaosFakeRecipes {
                     if (credential != null) break;
                 }
                 if (credential == null)
-                    throw new IllegalStateException("no credential frame can hold route " + display.routeIndex());
+                    throw new IllegalStateException("no credential frame can hold route " + display.tagIndex());
                 var recipeBuilder = GTValues.RA.stdBuilder();
                 recipeBuilder.recipeCategory(categoryForRoute(display));
                 if (alternativeInputs == null) recipeBuilder.itemInputsUnsafe(itemInputs);
@@ -131,7 +131,7 @@ public final class BottledChaosFakeRecipes {
                     .size();
             } catch (RuntimeException exception) {
                 TwistSpaceTechnology.LOG.error(
-                    "Could not register Bottled Chaos NEI sample for route " + display.routeIndex() + '.',
+                    "Could not register Bottled Chaos NEI sample for route " + display.tagIndex() + '.',
                     exception);
             }
         }
@@ -214,8 +214,8 @@ public final class BottledChaosFakeRecipes {
 
     /** Dedicated family tabs use the stable registered tags, including families with a single recipe. */
     private static RecipeCategory categoryForRoute(BottledChaosRecipeProcessor.DisplayRecipe display) {
-        int routeIndex = display.routeIndex();
-        if ("fusion".equals(CredentialModel.tag(routeIndex))) return GTCMRecipe.BottledChaosFusionCategory;
+        int tagIndex = display.tagIndex();
+        if ("fusion".equals(CredentialModel.tag(tagIndex))) return GTCMRecipe.BottledChaosFusionCategory;
         if (usesExpandedLayout(
             display.itemInputs()
                 .size(),
@@ -228,23 +228,23 @@ public final class BottledChaosFakeRecipes {
                 .fluidOutputs()
                 .size()))
             return GTCMRecipe.BottledChaosRecipes.getDefaultRecipeCategory();
-        if ("honeycomb".equals(CredentialModel.tag(routeIndex)))
-            routeIndex = Long.numberOfTrailingZeros(display.requiredTagMask() & ~(1L << routeIndex));
-        return switch (CredentialModel.tag(routeIndex)) {
-            case "titanium" -> GTCMRecipe.BottledChaosTitaniumCategory;
-            case "tungsten" -> GTCMRecipe.BottledChaosTungstenCategory;
-            case "indium" -> GTCMRecipe.BottledChaosIndiumCategory;
-            case "isamill" -> GTCMRecipe.BottledChaosIsaMillCategory;
-            case "ancient_debris" -> GTCMRecipe.BottledChaosNetheriteCategory;
-            case "platinum_metallic_powder", "platinum_residue", "crude_rhodium_metal", "leach_residue", "palladium_metallic_powder", "rarest_metal_residue", "iridium_metal_residue" -> GTCMRecipe.BottledChaosPlatinumCategory;
-            case "crystalline_alloy_molten", "prismatic_acid" -> GTCMRecipe.BottledChaosPrismaticCategory;
-            case "bastnasite", "monazite", "rare_earth_cerium", "cerium", "samarium" -> GTCMRecipe.BottledChaosLanthanideCategory;
-            case "naquadah", "enriched_naquadah", "naquadria" -> GTCMRecipe.BottledChaosNaquadahCategory;
-            case "naquadah_fuel_preparation", "naquadah_fuel_3", "naquadah_fuel_4", "naquadah_fuel_5", "naquadah_fuel_6" -> GTCMRecipe.BottledChaosNaquadahFuelCategory;
-            case "growth_medium_sterilized", "stem_cells", "seaweed_broth", "tau_ceti_e_seaweed_extract", "bio_medium_sterilized", "bio_cells" -> GTCMRecipe.BottledChaosBiologicalCategory;
-            case "xenoxene", "super_heavy_radox", "heavy_radox", "light_radox", "super_light_radox" -> GTCMRecipe.BottledChaosRadoxCategory;
-            case "kevlar" -> GTCMRecipe.BottledChaosKevlarCategory;
-            case "purified_water_1", "purified_water_2", "purified_water_3", "purified_water_4", "purified_water_5", "purified_water_6", "purified_water_7", "purified_water_8" -> GTCMRecipe.BottledChaosPurifiedWaterCategory;
+        if ("honeycomb".equals(CredentialModel.tag(tagIndex)))
+            tagIndex = CredentialModel.ownerTagIndex(display.requiredTagMask());
+        return switch (CredentialModel.displayPage(tagIndex)) {
+            case "Titanium" -> GTCMRecipe.BottledChaosTitaniumCategory;
+            case "Tungsten" -> GTCMRecipe.BottledChaosTungstenCategory;
+            case "Indium" -> GTCMRecipe.BottledChaosIndiumCategory;
+            case "IsaMill" -> GTCMRecipe.BottledChaosIsaMillCategory;
+            case "Netherite" -> GTCMRecipe.BottledChaosNetheriteCategory;
+            case "Platinum" -> GTCMRecipe.BottledChaosPlatinumCategory;
+            case "Prismatic" -> GTCMRecipe.BottledChaosPrismaticCategory;
+            case "Lanthanide" -> GTCMRecipe.BottledChaosLanthanideCategory;
+            case "Naquadah" -> GTCMRecipe.BottledChaosNaquadahCategory;
+            case "NaquadahFuel" -> GTCMRecipe.BottledChaosNaquadahFuelCategory;
+            case "Biological" -> GTCMRecipe.BottledChaosBiologicalCategory;
+            case "Radox" -> GTCMRecipe.BottledChaosRadoxCategory;
+            case "Kevlar" -> GTCMRecipe.BottledChaosKevlarCategory;
+            case "PurifiedWater" -> GTCMRecipe.BottledChaosPurifiedWaterCategory;
             default -> GTCMRecipe.BottledChaosRecipes.getDefaultRecipeCategory();
         };
     }

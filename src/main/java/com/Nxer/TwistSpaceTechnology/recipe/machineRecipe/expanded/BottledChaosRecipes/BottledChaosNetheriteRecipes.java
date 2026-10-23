@@ -81,22 +81,22 @@ public final class BottledChaosNetheriteRecipes {
         }
 
         // 1. Reheat returned scraps and cancel them against the UHV bath's hot-scrap input.
-        catalog.registerOutputDecomposition(ChemicalBath, NetheriteScrap, HotNetheriteScrap, -1);
+        catalog.includeDecompositionStep(ChemicalBath, NetheriteScrap, HotNetheriteScrap, -1);
 
         // 2. Waste branch: poor waste -> flotation froth -> milled netherrack -> netherrack.
         // Select the alumina-ball milling recipe explicitly.
-        catalog.registerInputSynthesis(VacuumFurnace, PoorNetherWaste, NetherrackFlotationFroth, -1);
-        catalog.registerInputSynthesis(FlotationCell, NetherrackFlotationFroth, new Object[] { MilledNetherrack, NefariousOil }, -1);
-        catalog.registerInputSynthesis(Milling, MilledNetherrack, new Object[] { Netherrack, AluminaMillingBall }, 10);
+        catalog.includeSynthesisStep(VacuumFurnace, PoorNetherWaste, NetherrackFlotationFroth, -1);
+        catalog.includeSynthesisStep(FlotationCell, NetherrackFlotationFroth, new Object[] { MilledNetherrack, NefariousOil }, -1);
+        catalog.includeSynthesisStep(Milling, MilledNetherrack, new Object[] { Netherrack, AluminaMillingBall }, 10);
 
         // 3. Oil branch: grade-2 purified water + nefarious gas -> oil for flotation.
-        catalog.registerInputSynthesis(OilCracker, NefariousOil, new Object[] { Grade2PurifiedWater, NefariousGas }, 1);
+        catalog.includeSynthesisStep(OilCracker, NefariousOil, new Object[] { Grade2PurifiedWater, NefariousGas }, 1);
 
         // 4. Air branch: vacuum freezing -> distillation. Reuse the tower's joint gas/mud outputs first.
         // Resolve gas before mud so its coproduct can satisfy the waste branch and the UHV trunk.
-        catalog.registerInputSynthesis(DistillationTower, NefariousGas, NetherSemiFluid, -1);
-        catalog.registerInputSynthesis(DistillationTower, HeavyHellishMud, NetherSemiFluid, -1);
-        catalog.registerInputSynthesis(VacuumFreezer, NetherSemiFluid, NetherAir, -1);
+        catalog.includeSynthesisStep(DistillationTower, NefariousGas, NetherSemiFluid, -1);
+        catalog.includeSynthesisStep(DistillationTower, HeavyHellishMud, NetherSemiFluid, -1);
+        catalog.includeSynthesisStep(VacuumFreezer, NetherSemiFluid, NetherAir, -1);
         // spotless:on
     }
 }

@@ -21,7 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.RecipeMark;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.StepRef;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import gregtech.api.enums.Materials;
@@ -74,32 +74,30 @@ public final class BottledChaosIsaMillRecipes {
             : circuit > 0 ? new ItemStack[] { GTUtility.getIntegratedCircuit(circuit) } : new ItemStack[0];
         var drying = BottledChaosRecipeSupport.prepareSourceRecipe(
             VacuumFurnace,
-            VacuumFurnace.findRecipeQuery()
-                .items(furnaceItems)
-                .fluids(new FluidStack(froth, 4_000))
-                .find());
+            BottledChaosSourceResolver.require(VacuumFurnace, furnaceItems, new FluidStack(froth, 4_000)));
         Object[] products = drying.outputs.keySet()
             .stream()
             .filter(key -> !key.equals(GTUtility.FluidId.create(Water)))
             .toArray();
         // spotless:off
-        RecipeMark[] steps = {
+        StepRef[] steps = {
             catalog.markRecipe(Milling, new Object[] { crushed, AluminaMillingBall }, milled, 10),
             catalog.markRecipe(FlotationCell, milled, froth, -1),
             catalog.markPreparedRecipe(VacuumFurnace,
                 combCount > 0 ? new Object[] { froth, recipeItemId(GTBees.combs.getStackForType(CombType.INDIUM, 1)) } : froth,
                 target, drying)
         };
+        BottledChaosRecipeCatalog.Entry mineralEntry;
         if (combCount > 0) {
-            catalog.registerAugmentedChain("isamill", "honeycomb", baseEUt, crushed, products, new Object[] {}, steps);
+            mineralEntry = catalog.registerAugmentedChain("isamill", "honeycomb", baseEUt, crushed, products, new Object[] {}, steps);
         } else if (mineral == Materials.Sphalerite) {
-            catalog.registerChain("isamill", 1, baseEUt, crushed, products, new Object[] {}, steps);
+            mineralEntry = catalog.registerChain("isamill", 1, baseEUt, crushed, products, new Object[] {}, steps);
         } else {
-            catalog.registerAlternativeChain("isamill", baseEUt, crushed, products, new Object[] {}, steps);
+            mineralEntry = catalog.registerAlternativeChain("isamill", baseEUt, crushed, products, new Object[] {}, steps);
         }
-        catalog.setExecutionTargets("isamill", target);
+        mineralEntry.setPlanningTargets(target);
         if (combCount == 0 && circuit == 1 && Mods.Forestry.isModLoaded() && GTBees.combs != null)
-            catalog.requireCircuit("isamill", 1);
+            mineralEntry.requireCircuit(1);
         // spotless:on
     }
 
@@ -107,10 +105,10 @@ public final class BottledChaosIsaMillRecipes {
         var recovery = BottledChaosRecipeSupport
             .prepareSourceRecipe(
                 CentrifugeNonCell,
-                CentrifugeNonCell.findRecipeQuery()
-                    .items(GTUtility.getIntegratedCircuit(10))
-                    .fluids(new FluidStack(RedMud, 1_000))
-                    .find())
+                BottledChaosSourceResolver.require(
+                    CentrifugeNonCell,
+                    new ItemStack[] { GTUtility.getIntegratedCircuit(10) },
+                    new FluidStack(RedMud, 1_000)))
             .withFullDustOutputs();
         // spotless:off
         catalog.registerAlternativeChain("isamill", TierEU.RECIPE_LV, RedMud,
@@ -122,16 +120,16 @@ public final class BottledChaosIsaMillRecipes {
     private static void registerPineOilRecipe(BottledChaosRecipeCatalog catalog) {
         // spotless:off
         TST_ItemID pineLog = TST_ItemID.create(new ItemStack(BOPBlockRegistrator.log_Pine));
-        catalog.registerAlternativeChain("isamill", TierEU.RECIPE_LuV, pineLog,
+        var pineOil = catalog.registerAlternativeChain("isamill", TierEU.RECIPE_LuV, pineLog,
             new Object[] { PineOil }, new Object[] {},
             catalog.markPreparedRecipe(ChemicalPlant, CrushedPineMaterials, PineOil,
                 BottledChaosRecipeSupport.prepareSourceRecipe(ChemicalPlant,
-                    ChemicalPlant.findRecipeQuery()
-                        .items(CrushedPineMaterials.getItemStack(64), GTUtility.getIntegratedCircuit(18))
-                        .fluids(new FluidStack(SuperheatedSteam, 5_000)).find()).withFullDustOutputs()));
-        catalog.registerChainInputSynthesis("isamill", ChemicalPlant, CrushedPineMaterials, pineLog, 14);
-        catalog.registerChainInputSynthesis("isamill", FluidHeater, SuperheatedSteam, Steam, -1);
-        catalog.registerChainInputSynthesis("isamill", FluidHeater, Steam, Water, 1);
+                    BottledChaosSourceResolver.require(ChemicalPlant,
+                        new ItemStack[] { CrushedPineMaterials.getItemStack(64), GTUtility.getIntegratedCircuit(18) },
+                        new FluidStack(SuperheatedSteam, 5_000))).withFullDustOutputs()));
+        pineOil.includeSynthesisStep(ChemicalPlant, CrushedPineMaterials, pineLog, 14);
+        pineOil.includeSynthesisStep(FluidHeater, SuperheatedSteam, Steam, -1);
+        pineOil.includeSynthesisStep(FluidHeater, Steam, Water, 1);
         // spotless:on
     }
 }

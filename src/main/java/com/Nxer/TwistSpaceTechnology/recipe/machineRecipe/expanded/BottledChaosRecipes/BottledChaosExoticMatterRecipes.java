@@ -21,7 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.RecipeMark;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.StepRef;
 import com.Nxer.TwistSpaceTechnology.util.recipes.RecipeMaterialUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
@@ -44,7 +44,7 @@ public final class BottledChaosExoticMatterRecipes {
         for (ItemStack stack : Godforge.exoticModuleMagmatterItemMap.keySet()) inputs.add(unifiedDustId(stack));
         for (FluidStack stack : Godforge.exoticModulePlasmaFluidMap.keySet()) inputs.add(requireFluid(stack.copy()));
         Map<Object, PlasmaSource> sources = collectPlasmaSources(inputs);
-        Map<PlasmaSource, RecipeMark> preparations = new HashMap<>();
+        Map<PlasmaSource, StepRef> preparations = new HashMap<>();
         // Preserve the selected native plasma sources; only the challenge's expected outputs need dynamic data.
         // spotless:off
         for (PlasmaSource source : sources.values()) {
@@ -63,7 +63,7 @@ public final class BottledChaosExoticMatterRecipes {
     }
 
     private static void registerQuarkGluonPlasma(BottledChaosRecipeCatalog catalog, List<SolidCandidate> solids,
-        List<FluidCandidate> fluids, Map<PlasmaSource, RecipeMark> preparations) {
+        List<FluidCandidate> fluids, Map<PlasmaSource, StepRef> preparations) {
         int[] solidWeights = new int[solids.size()];
         for (int index = 0; index < solids.size(); index++) solidWeights[index] = solids.get(index)
             .weight();
@@ -107,22 +107,20 @@ public final class BottledChaosExoticMatterRecipes {
             (int) TierEU.RECIPE_MAX,
             0);
         // spotless:off
-        catalog.registerChain("quark_gluon_plasma", 1, TierEU.RECIPE_MAX, candidateRoot(solids, IronDust),
+        var quarkGluonPlasma = catalog.registerChain("quark_gluon_plasma", 1, TierEU.RECIPE_MAX, candidateRoot(solids, IronDust),
             new Object[] { product }, new Object[] {},
             catalog.markPreparedRecipe(TecTechRecipeMaps.godforgeExoticMatterRecipes, plasmaInputs[0].getFluid(), product,
                 prepareSourceRecipe(TecTechRecipeMaps.godforgeExoticMatterRecipes, exotic)));
         // Input branches: every selected plasma keeps the native preparation's own processing requirements.
-        for (SolidCandidate candidate : solids) catalog.registerChainInputSynthesis(
-            "quark_gluon_plasma", candidate.plasma(), preparations.get(candidate.source()));
-        for (FluidCandidate candidate : fluids) catalog.registerChainInputSynthesis(
-            "quark_gluon_plasma", candidate.plasma(), preparations.get(candidate.source()));
+        for (SolidCandidate candidate : solids) quarkGluonPlasma.includeSynthesisStep(candidate.plasma(), preparations.get(candidate.source()));
+        for (FluidCandidate candidate : fluids) quarkGluonPlasma.includeSynthesisStep(candidate.plasma(), preparations.get(candidate.source()));
         // spotless:on
         // Whole gifts give exact macro totals: 112000 dust + 95904000 mB -> 1000000 mB QGP, 10400000 ticks.
         // Individual mean errors are <0.008 dust or <0.999 mB per 1000 mB QGP; there is no sampling at runtime.
     }
 
     private static void registerMagmatter(BottledChaosRecipeCatalog catalog, List<SolidCandidate> solids,
-        Map<PlasmaSource, RecipeMark> preparations) {
+        Map<PlasmaSource, StepRef> preparations) {
         int weight = solids.get(0)
             .weight();
         ItemStack[] returnedDusts = new ItemStack[solids.size()];
@@ -151,13 +149,13 @@ public final class BottledChaosExoticMatterRecipes {
             (int) TierEU.RECIPE_MAX,
             0);
         // spotless:off
-        catalog.registerChain("magmatter", 1, TierEU.RECIPE_MAX, candidateRoot(solids, CosmicNeutroniumDust),
+        var magmatter = catalog.registerChain("magmatter", 1, TierEU.RECIPE_MAX, candidateRoot(solids, CosmicNeutroniumDust),
             new Object[] { product }, new Object[] {},
             catalog.markPreparedRecipe(TecTechRecipeMaps.godforgeExoticMatterRecipes, plasmaInputs[0].getFluid(), product,
                 prepareSourceRecipe(TecTechRecipeMaps.godforgeExoticMatterRecipes, exotic)));
         // Input branches: feed the expected challenge through the selected native plasma recipes.
         for (SolidCandidate candidate : solids)
-            catalog.registerChainInputSynthesis("magmatter", candidate.plasma(), preparations.get(candidate.source()));
+            magmatter.includeSynthesisStep(candidate.plasma(), preparations.get(candidate.source()));
         // spotless:on
         // The current 14-type pool nets 49 dust each -> 8064 mB, with 454000 preparation + 2800 exotic ticks.
     }

@@ -159,23 +159,23 @@ public final class BottledChaosPlatinumRecipes {
             catalog.markRecipe(LargeChemicalReactor, IridiumChlorideDust, IridiumDust, -1));
 
         // Shared input branches: synthesize route reagents before the marked main trunks.
-        catalog.registerInputSyntheses(AquaRegia, AmmoniumChlorideFluid, SodiumNitrateDust,
+        catalog.includeSynthesisPath(AquaRegia, AmmoniumChlorideFluid, SodiumNitrateDust,
             FormicAcid, PotassiumDisulfateMolten);
-        catalog.registerInputSynthesis(SaltWater);
+        catalog.includeSynthesisStep(SaltWater);
 
         // Shared output branches: recover route byproducts after the marked main trunks.
-        catalog.registerOutputDecompositions(SodiumSulfateDust);
+        catalog.includeDecompositionPath(SodiumSulfateDust);
 
         // Potassium return branch.
-        catalog.registerOutputDecompositions(PotassiumMolten);
+        catalog.includeDecompositionPath(PotassiumMolten);
 
         // Direct compound and gas decomposition branches.
-        catalog.registerOutputDecompositions(CalciumChlorideDust, CalciumChlorideFluid, ZincSulfateDust,
+        catalog.includeDecompositionPath(CalciumChlorideDust, CalciumChlorideFluid, ZincSulfateDust,
             EthyleneGas, SodiumChlorideDust, NitrogenDioxideGas, NitrogenMonoxideGas, AmmoniaGas);
 
         // Sludge residue terminal branches.
-        catalog.registerOutputDecomposition(CentrifugeNonCell, SludgeResidueDust, SiliconDioxideDust, -1);
-        catalog.registerOutputDecomposition(CentrifugeNonCell, MetallicSludgeResidueDust, NickelDust, -1);
+        catalog.includeDecompositionStep(CentrifugeNonCell, SludgeResidueDust, SiliconDioxideDust, -1);
+        catalog.includeDecompositionStep(CentrifugeNonCell, MetallicSludgeResidueDust, NickelDust, -1);
         // spotless:on
 
         registerCropHammerChains(catalog);
@@ -186,11 +186,12 @@ public final class BottledChaosPlatinumRecipes {
             TST_ItemID.create(platinumCandidates[1]),
             platinumCandidates[1].stackSize / platinumCandidates[0].stackSize);
 
-        catalog.setKeyOutputs(
+        catalog.setExistingEntriesKeyOutputs(
             "platinum_metallic_powder",
             new Object[] { PlatinumDust, PlatinumResidueDust, PalladiumMetallicPowder });
-        catalog.setKeyOutputs("leach_residue", new Object[] { RutheniumDust, RarestMetalResidueDust });
-        catalog.setKeyOutputs("rarest_metal_residue", new Object[] { OsmiumDust, IridiumMetalResidueDust });
+        catalog.setExistingEntriesKeyOutputs("leach_residue", new Object[] { RutheniumDust, RarestMetalResidueDust });
+        catalog
+            .setExistingEntriesKeyOutputs("rarest_metal_residue", new Object[] { OsmiumDust, IridiumMetalResidueDust });
     }
 
     private static void registerCropHammerChains(BottledChaosRecipeCatalog catalog) {
@@ -237,11 +238,10 @@ public final class BottledChaosPlatinumRecipes {
             platinumRoot,
             new Object[] { PlatinumDust },
             new Object[] { PlatinumMetallicPowder, PalladiumMetallicPowder },
-            catalog.markTemporaryRecipe(
+            catalog.markFixedRecipe(
                 LargeChemicalReactor,
                 platinumRoot,
                 PlatinumConcentrateFluid,
-                -1,
                 GTValues.RA.stdBuilder()
                     .itemInputs(platinumRoot.getItemStack(36))
                     .itemOutputs(Materials.Platinum.getDust(1))
@@ -265,11 +265,10 @@ public final class BottledChaosPlatinumRecipes {
             palladiumRoot,
             PalladiumMetallicPowder,
             new Object[] { PalladiumDust },
-            catalog.markTemporaryRecipe(
+            catalog.markFixedRecipe(
                 LargeChemicalReactor,
                 palladiumRoot,
                 PalladiumMetallicPowder,
-                -1,
                 GTValues.RA.stdBuilder()
                     .itemInputs(palladiumRoot.getItemStack(40))
                     .itemOutputs(PalladiumMetallicPowder.getItemStack(44))
@@ -286,11 +285,10 @@ public final class BottledChaosPlatinumRecipes {
             osmiumRoot,
             new Object[] { OsmiumDust },
             new Object[] {},
-            catalog.markTemporaryRecipe(
+            catalog.markFixedRecipe(
                 LargeChemicalReactor,
                 osmiumRoot,
                 AcidicOsmiumSolution,
-                -1,
                 GTValues.RA.stdBuilder()
                     .itemInputs(osmiumRoot.getItemStack(36))
                     .itemOutputs(Materials.Osmium.getDust(1))
@@ -310,11 +308,10 @@ public final class BottledChaosPlatinumRecipes {
             iridiumRoot,
             new Object[] { IridiumDust },
             new Object[] {},
-            catalog.markTemporaryRecipe(
+            catalog.markFixedRecipe(
                 LargeChemicalReactor,
                 iridiumRoot,
                 AcidicIridiumSolution,
-                -1,
                 GTValues.RA.stdBuilder()
                     .itemInputs(iridiumRoot.getItemStack(36))
                     .itemOutputs(Materials.Iridium.getDust(1))
@@ -328,7 +325,7 @@ public final class BottledChaosPlatinumRecipes {
             catalog.markRecipe(LargeChemicalReactor, IridiumChlorideDust, IridiumDust, -1));
 
         // Keep every entry's products under the shared comb tag; NEI matches only its actual output slots.
-        catalog.setKeyOutputs(
+        catalog.setExistingEntriesKeyOutputs(
             "honeycomb",
             new Object[] { IndiumDust, PlatinumDust, PlatinumMetallicPowder, PalladiumMetallicPowder, PalladiumDust,
                 OsmiumDust, IridiumDust });

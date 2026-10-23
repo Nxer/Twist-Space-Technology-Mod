@@ -121,27 +121,27 @@ public final class BottledChaosNaquadahRecipes {
             new Object[] { EnrichedNaquadahOxideMixtureDust }, lowQualitySulfateRecovery);
 
         // 6. Input branches. Returned rich solution is canceled before supplementing the phosphate demand.
-        catalog.registerInputSynthesis(LargeChemicalReactor, NaquadriaRichSolution, LowQualityNaquadriaPhosphateDust, -1);
-        catalog.registerInputSynthesis(CentrifugeNonCell, LowQualityNaquadriaPhosphateDust, NaquadriaOxideMixtureDust, -1);
+        catalog.includeSynthesisStep(LargeChemicalReactor, NaquadriaRichSolution, LowQualityNaquadriaPhosphateDust, -1);
+        catalog.includeSynthesisStep(CentrifugeNonCell, LowQualityNaquadriaPhosphateDust, NaquadriaOxideMixtureDust, -1);
         // Gallium reduction returns NaOH; cancel it against all demand before processing the remainder.
         catalog.registerDeferredReagents(SodiumHydroxideDust);
-        catalog.registerInputSyntheses(QuicklimeDust, SodiumHydroxideDust);
+        catalog.includeSynthesisPath(QuicklimeDust, SodiumHydroxideDust);
         // P507 is fully returned by precipitation/distillation and cancels without an input-synthesis branch.
 
         // 7. Metallic byproducts, followed by fluoride waste treatment.
-        catalog.registerOutputDecomposition(BlastFurnace, TitaniumTrifluorideDust, HotTitaniumIngot, 1);
-        catalog.registerOutputDecomposition(VacuumFreezer, HotTitaniumIngot, TitaniumIngot, -1);
-        catalog.registerOutputDecomposition(Macerator, TitaniumIngot, TitaniumDust, -1);
-        catalog.registerOutputDecomposition(LargeChemicalReactor, GalliumHydroxideDust, GalliumDust, -1);
-        catalog.registerOutputDecomposition(LargeChemicalReactor, IndiumPhosphateDust, IndiumDust, 1);
-        catalog.registerOutputDecomposition(LargeChemicalReactor, TriniumSulfateDust, TriniumDust, -1);
-        catalog.registerOutputDecomposition(ElectrolyzerNonCell, MagnesiumSulfateDust, MagnesiumDust, -1);
-        catalog.registerOutputDecomposition(ElectrolyzerNonCell, SodiumOxideDust, SodiumDust, -1);
-        catalog.registerOutputDecomposition(LargeChemicalReactor, FluorineRichWasteLiquid, NaquadahWasteLiquid, -1);
-        catalog.registerOutputDecomposition(DistillationTower, NaquadahWasteLiquid, new Object[] { SaltWater, HydrochloricAcid }, -1);
+        catalog.includeDecompositionStep(BlastFurnace, TitaniumTrifluorideDust, HotTitaniumIngot, 1);
+        catalog.includeDecompositionStep(VacuumFreezer, HotTitaniumIngot, TitaniumIngot, -1);
+        catalog.includeDecompositionStep(Macerator, TitaniumIngot, TitaniumDust, -1);
+        catalog.includeDecompositionStep(LargeChemicalReactor, GalliumHydroxideDust, GalliumDust, -1);
+        catalog.includeDecompositionStep(LargeChemicalReactor, IndiumPhosphateDust, IndiumDust, 1);
+        catalog.includeDecompositionStep(LargeChemicalReactor, TriniumSulfateDust, TriniumDust, -1);
+        catalog.includeDecompositionStep(ElectrolyzerNonCell, MagnesiumSulfateDust, MagnesiumDust, -1);
+        catalog.includeDecompositionStep(ElectrolyzerNonCell, SodiumOxideDust, SodiumDust, -1);
+        catalog.includeDecompositionStep(LargeChemicalReactor, FluorineRichWasteLiquid, NaquadahWasteLiquid, -1);
+        catalog.includeDecompositionStep(DistillationTower, NaquadahWasteLiquid, new Object[] { SaltWater, HydrochloricAcid }, -1);
 
         // 8. Recover sulfuric acid and reduce mineral/organic byproducts to their elemental forms.
-        catalog.registerOutputDecompositions(DilutedSulfuricAcid, BariumSulfateDust,
+        catalog.includeDecompositionPath(DilutedSulfuricAcid, BariumSulfateDust,
             TricalciumPhosphateDust, QuicklimeDust, Phenol, SodiumHydroxideDust, AdamantiumOxideDust, FluorsparDust);
         // spotless:on
     }

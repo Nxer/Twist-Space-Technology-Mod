@@ -22,9 +22,11 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeSupport.prepareSourceRecipe;
 import static com.Nxer.TwistSpaceTechnology.util.MathUtils.getGCD;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeSupport.RecipeData;
 
@@ -62,56 +64,58 @@ public final class BottledChaosNaquadahFuelRecipes {
     }
 
     private static void registerPreparationChains(BottledChaosRecipeCatalog catalog) {
-        var enriched = source(
+        var enriched = BottledChaosSourceResolver.require(
             BlastFurnace,
             new ItemStack[] { EnrichedNaquadahDust.getItemStack(16), GTUtility.getIntegratedCircuit(16) },
             Materials.HydrofluoricAcid.getFluid(3_000));
-        var naquadria = source(
+        var naquadria = BottledChaosSourceResolver.require(
             BlastFurnace,
             new ItemStack[] { NaquadriaDust.getItemStack(32), GTUtility.getIntegratedCircuit(16) },
             GGMaterial.fluoroantimonicAcid.getFluidOrGas(4_000));
-        var neutralization = source(
+        var neutralization = BottledChaosSourceResolver.require(
             LargeChemicalReactor,
             new ItemStack[] { Materials.Quicklime.getDust(8), GTUtility.getIntegratedCircuit(3) },
             GGMaterial.acidNaquadahEmulsion.getFluidOrGas(1_000));
-        var centrifugation = source(
+        var centrifugation = BottledChaosSourceResolver.require(
             CentrifugeNonCell,
             new ItemStack[] { GTUtility.getIntegratedCircuit(1) },
             GGMaterial.naquadahEmulsion.getFluidOrGas(1_000));
-        var distillation = source(DistillationTower, new ItemStack[0], GGMaterial.naquadahSolution.getFluidOrGas(20));
-        var antimonyDecomposition = source(
-            ElectrolyzerNonCell,
-            new ItemStack[] { Materials.AntimonyTrioxide.getDust(5) });
-        var sludgeCentrifugation = source(
-            CentrifugeNonCell,
-            new ItemStack[] { GGMaterial.radioactiveSludge.get(OrePrefixes.dust, 4) });
-        var gasCracking = source(
+        var distillation = BottledChaosSourceResolver
+            .require(DistillationTower, new ItemStack[0], GGMaterial.naquadahSolution.getFluidOrGas(20));
+        var antimonyDecomposition = BottledChaosSourceResolver
+            .require(ElectrolyzerNonCell, new ItemStack[] { Materials.AntimonyTrioxide.getDust(5) });
+        var sludgeCentrifugation = BottledChaosSourceResolver
+            .require(CentrifugeNonCell, new ItemStack[] { GGMaterial.radioactiveSludge.get(OrePrefixes.dust, 4) });
+        var gasCracking = BottledChaosSourceResolver.require(
             OilCracker,
             new ItemStack[] { GTUtility.getIntegratedCircuit(1) },
             GGMaterial.naquadahGas.getFluidOrGas(1_000),
             GGMaterial.atomicSeparationCatalyst.getMolten(4));
-        var lightCracking = source(
+        var lightCracking = BottledChaosSourceResolver.require(
             OilCracker,
             new ItemStack[] { GTUtility.getIntegratedCircuit(1) },
             GGMaterial.lightNaquadahFuel.getFluidOrGas(1_000),
             GGMaterial.atomicSeparationCatalyst.getMolten(4));
-        var asphaltCracking = source(
+        var asphaltCracking = BottledChaosSourceResolver.require(
             OilCracker,
             new ItemStack[] { GTUtility.getIntegratedCircuit(1) },
             GGMaterial.naquadahAsphalt.getFluidOrGas(1_000),
             GGMaterial.atomicSeparationCatalyst.getMolten(12));
-        var lightDistillation = source(DistillationTower, new ItemStack[0], lightCracking.mFluidOutputs);
-        var asphaltDistillation = source(DistillationTower, new ItemStack[0], asphaltCracking.mFluidOutputs);
-        var gasDistillation = source(DistillationTower, new ItemStack[0], gasCracking.mFluidOutputs);
-        RecipeData[] fuelPrecursors = {
+        var lightDistillation = BottledChaosSourceResolver
+            .require(DistillationTower, new ItemStack[0], lightCracking.mFluidOutputs);
+        var asphaltDistillation = BottledChaosSourceResolver
+            .require(DistillationTower, new ItemStack[0], asphaltCracking.mFluidOutputs);
+        var gasDistillation = BottledChaosSourceResolver
+            .require(DistillationTower, new ItemStack[0], gasCracking.mFluidOutputs);
+        RecipeData[] fuelPrecursors = { denseFuelPrecursor(
+            BottledChaosSourceResolver
+                .require(MixerNonCell, new ItemStack[] { Materials.Graphite.getDust(3), Materials.Uranium.getDust(1) }),
+            Materials.TungstenCarbide,
+            GGMaterial.graphiteUraniumMixture.get(OrePrefixes.dust, 4),
+            ItemRefer.Wrapped_Uranium_Ingot.get(4),
+            ItemRefer.High_Density_Uranium_Nugget.get(5)),
             denseFuelPrecursor(
-                source(MixerNonCell, new ItemStack[] { Materials.Graphite.getDust(3), Materials.Uranium.getDust(1) }),
-                Materials.TungstenCarbide,
-                GGMaterial.graphiteUraniumMixture.get(OrePrefixes.dust, 4),
-                ItemRefer.Wrapped_Uranium_Ingot.get(4),
-                ItemRefer.High_Density_Uranium_Nugget.get(5)),
-            denseFuelPrecursor(
-                source(
+                BottledChaosSourceResolver.require(
                     MixerNonCell,
                     new ItemStack[] { Materials.Plutonium.getDust(10), Materials.Uranium.getDust(2),
                         Materials.Carbon.getDust(8) },
@@ -172,16 +176,16 @@ public final class BottledChaosNaquadahFuelRecipes {
         // Main trunks: preserve the exact native balance, including asphalt, gas and antimony recovery.
         catalog.registerChain(PREPARATION_TAG, 1, Math.max(naquadria.mEUt, processingVoltage), NaquadriaDust,
             new Object[] { heavy, light, unstable },
-            catalog.markPreparedRecipe(BlastFurnace, NaquadriaDust, heavy, 0,
+            catalog.markPreparedRecipe(BlastFurnace, NaquadriaDust, heavy,
                 prepareSourceRecipe(BlastFurnace, naquadria)
                     .appendBalancedRecipe(processing, GTUtility.FluidId.create(acid))
                     .withFullDustOutputs()));
 
         // Recover scarce heavy fuel from existing light fuel; asphalt and gas are processed in the same step.
-        catalog.registerAlternativeChain(PREPARATION_TAG,
+        var heavyFuelRecovery = catalog.registerAlternativeChain(PREPARATION_TAG,
             Math.max(Math.max(asphaltVoltage, gasVoltage), Math.max(lightCracking.mEUt, lightDistillation.mEUt)),
             light, new Object[] { heavy },
-            catalog.markPreparedRecipe(OilCracker, light, heavy, 0,
+            catalog.markPreparedRecipe(OilCracker, light, heavy,
                 prepareSourceRecipe(OilCracker, lightCracking)
                     .appendBalancedRecipe(
                         prepareSourceRecipe(DistillationTower, lightDistillation),
@@ -189,19 +193,19 @@ public final class BottledChaosNaquadahFuelRecipes {
                     .appendBalancedRecipe(asphaltRecovery, GTUtility.FluidId.create(asphalt))
                     .appendBalancedRecipe(gasRecovery, GTUtility.FluidId.create(gas))
                     .withFullDustOutputs()));
-        catalog.useAvailableInputsOnly(PREPARATION_TAG);
+        heavyFuelRecovery.useAvailableInputsOnly();
         catalog.registerAlternativeChain(PREPARATION_TAG, Math.max(enriched.mEUt, processingVoltage), EnrichedNaquadahDust,
             new Object[] { heavy, light },
-            catalog.markPreparedRecipe(BlastFurnace, EnrichedNaquadahDust, heavy, 0,
+            catalog.markPreparedRecipe(BlastFurnace, EnrichedNaquadahDust, heavy,
                 prepareSourceRecipe(BlastFurnace, enriched)
                     .appendBalancedRecipe(processing, GTUtility.FluidId.create(acid))
                     .withFullDustOutputs()));
         // Independent sludge recovery; it never pulls additional upstream fuel production.
-        catalog.registerAlternativeChain(PREPARATION_TAG, sludgeCentrifugation.mEUt, sludge,
+        var sludgeRecovery = catalog.registerAlternativeChain(PREPARATION_TAG, sludgeCentrifugation.mEUt, sludge,
             new Object[] { naquadah },
-            catalog.markPreparedRecipe(CentrifugeNonCell, sludge, naquadah, 0,
+            catalog.markPreparedRecipe(CentrifugeNonCell, sludge, naquadah,
                 prepareSourceRecipe(CentrifugeNonCell, sludgeCentrifugation)));
-        catalog.useAvailableInputsOnly(PREPARATION_TAG);
+        sludgeRecovery.useAvailableInputsOnly();
         // spotless:on
 
         registerCatalysts(catalog, moltenCatalyst);
@@ -217,7 +221,7 @@ public final class BottledChaosNaquadahFuelRecipes {
         catalog.registerAlternativeChain(PREPARATION_TAG,
             precursor.times.keySet().stream().mapToLong(time -> time.eut()).max().getAsLong(), precursorInputs[0],
             new Object[] { denseUranium, densePlutonium },
-            catalog.markPreparedRecipe(ElectricImplosionCompressor, precursorInputs[0], denseUranium, 0, precursor));
+            catalog.markPreparedRecipe(ElectricImplosionCompressor, precursorInputs[0], denseUranium, precursor));
         // spotless:on
     }
 
@@ -237,35 +241,35 @@ public final class BottledChaosNaquadahFuelRecipes {
         var denseUranium = recipeItemId(ItemRefer.High_Density_Uranium.get(1));
         var densePlutonium = recipeItemId(ItemRefer.High_Density_Plutonium.get(1));
         // Read source voltages instead of replacing the refinery's nonstandard power values with tier constants.
-        var regularIII = source(
+        var regularIII = BottledChaosSourceResolver.require(
             refinery,
             new ItemStack[] { GGMaterial.extremelyUnstableNaquadah.get(OrePrefixes.dust, 4),
                 WerkstoffLoader.Tiberium.get(OrePrefixes.dust, 27), ItemRefer.High_Density_Uranium.get(2),
                 ItemRefer.High_Density_Plutonium.get(1) },
             GGMaterial.heavyNaquadahFuel.getFluidOrGas(800),
             GGMaterial.lightNaquadahFuel.getFluidOrGas(1_000));
-        var advancedIII = source(
+        var advancedIII = BottledChaosSourceResolver.require(
             refinery,
             new ItemStack[] { GGMaterial.extremelyUnstableNaquadah.get(OrePrefixes.dust, 8),
                 MaterialsElements.STANDALONE.CHRONOMATIC_GLASS.getDust(9), ItemRefer.High_Density_Uranium.get(2),
                 ItemRefer.High_Density_Plutonium.get(1) },
             GGMaterial.heavyNaquadahFuel.getFluidOrGas(800),
             GGMaterial.lightNaquadahFuel.getFluidOrGas(1_000));
-        var regularIV = source(
+        var regularIV = BottledChaosSourceResolver.require(
             refinery,
             new ItemStack[] { GGMaterial.extremelyUnstableNaquadah.get(OrePrefixes.dust, 27),
                 Materials.NetherStar.getDust(64), Materials.DraconiumAwakened.getDust(64),
                 GGMaterial.orundum.get(OrePrefixes.dust, 32) },
             GGMaterial.naquadahBasedFuelMkIII.getFluidOrGas(2_000),
             Materials.Praseodymium.getMolten(9_216));
-        var advancedIV = source(
+        var advancedIV = BottledChaosSourceResolver.require(
             refinery,
             new ItemStack[] { GGMaterial.extremelyUnstableNaquadah.get(OrePrefixes.dust, 27),
                 Materials.Bedrockium.getDust(64), Materials.DraconiumAwakened.getDust(64),
                 GGMaterial.orundum.get(OrePrefixes.dust, 64) },
             GGMaterial.naquadahBasedFuelMkIII.getFluidOrGas(2_000),
             MaterialsElements.STANDALONE.HYPOGEN.getFluidStack(240));
-        var directIV = source(
+        var directIV = BottledChaosSourceResolver.require(
             refinery,
             new ItemStack[] { GGMaterial.extremelyUnstableNaquadah.get(OrePrefixes.dust, 54),
                 GGMaterial.orundum.get(OrePrefixes.dust, 32), ItemRefer.High_Density_Uranium.get(10),
@@ -296,13 +300,13 @@ public final class BottledChaosNaquadahFuelRecipes {
 
         Fluid fuelV = GGMaterial.naquadahBasedFuelMkV.getFluidOrGas(1)
             .getFluid();
-        GTRecipe regularV = source(
+        GTRecipe regularV = BottledChaosSourceResolver.require(
             refinery,
             new ItemStack[] { Materials.Infinity.getDust(8),
                 GGMaterial.atomicSeparationCatalyst.get(OrePrefixes.dust, 32) },
             GGMaterial.naquadahBasedFuelMkIV.getFluidOrGas(2_000),
             Materials.RadoxHeavy.getFluid(250));
-        GTRecipe advancedV = source(
+        GTRecipe advancedV = BottledChaosSourceResolver.require(
             refinery,
             new ItemStack[] { Materials.TranscendentMetal.getDust(16),
                 GGMaterial.atomicSeparationCatalyst.get(OrePrefixes.dust, 48) },
@@ -310,13 +314,13 @@ public final class BottledChaosNaquadahFuelRecipes {
             Materials.RadoxHeavy.getFluid(250),
             Materials.Mellion.getMolten(288),
             Materials.Creon.getMolten(288));
-        GTRecipe regularVI = source(
+        GTRecipe regularVI = BottledChaosSourceResolver.require(
             refinery,
             new ItemStack[] { MaterialsElements.STANDALONE.ASTRAL_TITANIUM.getDust(64),
                 Materials.Tritanium.getDust(32) },
             GGMaterial.naquadahBasedFuelMkV.getFluidOrGas(2_000),
             GGMaterial.shirabon.getMolten(360));
-        GTRecipe advancedVI = source(
+        GTRecipe advancedVI = BottledChaosSourceResolver.require(
             refinery,
             new ItemStack[] { MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN.getDust(64),
                 Materials.Tritanium.getDust(48) },
@@ -339,15 +343,15 @@ public final class BottledChaosNaquadahFuelRecipes {
             catalog.markRecipe(FluidSolidifier, moltenCatalyst, catalystIngot, -1),
             catalog.markRecipe(Macerator, catalystIngot, catalystDust, -1));
 
-        catalog.registerChain("naquadah_fuel_5", 1, regularV.mEUt, fuel,
+        var regularFuelV = catalog.registerChain("naquadah_fuel_5", 1, regularV.mEUt, fuel,
             new Object[] { fuelV },
             catalog.markRecipe(refinery, new Object[] { fuel, infinityDust }, fuelV, -1));
-        catalog.registerChainInputSynthesis("naquadah_fuel_5", infinityDust, infinitySolidification);
-        catalog.registerChainInputSynthesis("naquadah_fuel_5", catalystDust, catalystSolidification);
-        catalog.registerAlternativeChain("naquadah_fuel_5", advancedV.mEUt, fuel,
+        regularFuelV.includeSynthesisStep(infinityDust, infinitySolidification);
+        regularFuelV.includeSynthesisStep(catalystDust, catalystSolidification);
+        var advancedFuelV = catalog.registerAlternativeChain("naquadah_fuel_5", advancedV.mEUt, fuel,
             new Object[] { fuelV },
             catalog.markRecipe(refinery, new Object[] { fuel, recipeItemId(Materials.TranscendentMetal.getDust(1)) }, fuelV, -1));
-        catalog.registerChainInputSynthesis("naquadah_fuel_5", catalystDust, catalystSolidification);
+        advancedFuelV.includeSynthesisStep(catalystDust, catalystSolidification);
 
         catalog.registerChain("naquadah_fuel_6", 1, regularVI.mEUt, fuelV,
             new Object[] { fuelVI },
@@ -360,21 +364,22 @@ public final class BottledChaosNaquadahFuelRecipes {
 
     private static RecipeData denseFuelPrecursor(GTRecipe mixture, Materials foil, ItemStack mixedDust,
         ItemStack wrapped, ItemStack nuggets) {
-        var smelting = source(BlastFurnace, new ItemStack[] { foil.getDust(1), GTUtility.getIntegratedCircuit(1) });
-        RecipeData foilProduction = prepareSourceRecipe(BlastFurnace, smelting)
-            .appendBalancedRecipe(
-                prepareSourceRecipe(VacuumFreezer, source(VacuumFreezer, smelting.mOutputs)),
-                recipeItemId(smelting.mOutputs[0]))
+        var smelting = BottledChaosSourceResolver
+            .require(BlastFurnace, new ItemStack[] { foil.getDust(1), GTUtility.getIntegratedCircuit(1) });
+        RecipeData foilProduction = prepareSourceRecipe(BlastFurnace, smelting).appendBalancedRecipe(
+            prepareSourceRecipe(VacuumFreezer, BottledChaosSourceResolver.require(VacuumFreezer, smelting.mOutputs)),
+            recipeItemId(smelting.mOutputs[0]))
             .appendBalancedRecipe(
                 prepareSourceRecipe(
                     Bender,
-                    source(Bender, new ItemStack[] { foil.getIngots(1), GTUtility.getIntegratedCircuit(10) })),
+                    BottledChaosSourceResolver
+                        .require(Bender, new ItemStack[] { foil.getIngots(1), GTUtility.getIntegratedCircuit(10) })),
                 recipeItemId(foil.getIngots(1)));
         RecipeData data = prepareSourceRecipe(MixerNonCell, mixture)
             .appendBalancedRecipe(
                 prepareSourceRecipe(
                     Assembler,
-                    source(
+                    BottledChaosSourceResolver.require(
                         Assembler,
                         new ItemStack[] { mixedDust, GTOreDictUnificator.get(OrePrefixes.foil, foil, 4),
                             GTUtility.getIntegratedCircuit(1) })),
@@ -382,12 +387,12 @@ public final class BottledChaosNaquadahFuelRecipes {
             .appendBalancedRecipe(
                 prepareSourceRecipe(
                     ElectricImplosionCompressor,
-                    source(ElectricImplosionCompressor, new ItemStack[] { wrapped })),
+                    BottledChaosSourceResolver.require(ElectricImplosionCompressor, new ItemStack[] { wrapped })),
                 recipeItemId(wrapped))
             .appendBalancedRecipe(
                 prepareSourceRecipe(
                     ElectricImplosionCompressor,
-                    source(
+                    BottledChaosSourceResolver.require(
                         ElectricImplosionCompressor,
                         new ItemStack[] { nuggets },
                         Materials.Neutronium.getMolten(72))),
@@ -399,20 +404,24 @@ public final class BottledChaosNaquadahFuelRecipes {
         if (foil == Materials.TungstenCarbide) {
             return prepareSourceRecipe(
                 MixerNonCell,
-                source(
-                    MixerNonCell,
-                    new ItemStack[] { Materials.Tungsten.getDust(1), Materials.Carbon.getDust(1),
-                        GTUtility.getIntegratedCircuit(1) })).appendBalancedRecipe(data, recipeItemId(foil.getDust(1)));
+                BottledChaosSourceResolver
+                    .require(
+                        MixerNonCell,
+                        new ItemStack[] { Materials.Tungsten.getDust(1), Materials.Carbon.getDust(1),
+                            GTUtility.getIntegratedCircuit(1) }))
+                                .appendBalancedRecipe(data, recipeItemId(foil.getDust(1)));
         }
         data = prepareSourceRecipe(
             MixerNonCell,
-            source(
-                MixerNonCell,
-                new ItemStack[] { Materials.HSSG.getDust(6), Materials.Iridium.getDust(2), Materials.Osmium.getDust(1),
-                    GTUtility.getIntegratedCircuit(2) })).appendBalancedRecipe(data, recipeItemId(foil.getDust(1)));
+            BottledChaosSourceResolver
+                .require(
+                    MixerNonCell,
+                    new ItemStack[] { Materials.HSSG.getDust(6), Materials.Iridium.getDust(2),
+                        Materials.Osmium.getDust(1), GTUtility.getIntegratedCircuit(2) }))
+                            .appendBalancedRecipe(data, recipeItemId(foil.getDust(1)));
         data = prepareSourceRecipe(
             MixerNonCell,
-            source(
+            BottledChaosSourceResolver.require(
                 MixerNonCell,
                 new ItemStack[] { Materials.TungstenSteel.getDust(5), Materials.Chrome.getDust(1),
                     Materials.Molybdenum.getDust(2), Materials.Vanadium.getDust(1),
@@ -420,7 +429,7 @@ public final class BottledChaosNaquadahFuelRecipes {
                         .appendBalancedRecipe(data, recipeItemId(Materials.HSSG.getDust(1)));
         return prepareSourceRecipe(
             MixerNonCell,
-            source(
+            BottledChaosSourceResolver.require(
                 MixerNonCell,
                 new ItemStack[] { Materials.Tungsten.getDust(1), Materials.Steel.getDust(1),
                     GTUtility.getIntegratedCircuit(1) }))
@@ -433,18 +442,19 @@ public final class BottledChaosNaquadahFuelRecipes {
         var ingot = GGMaterial.atomicSeparationCatalyst.get(OrePrefixes.ingot, 1);
         RecipeData catalyst = prepareSourceRecipe(
             ElectricImplosionCompressor,
-            source(
+            BottledChaosSourceResolver.require(
                 ElectricImplosionCompressor,
                 new ItemStack[] { GGMaterial.orundum.get(OrePrefixes.dust, 4), GTUtility.getIntegratedCircuit(1) }))
                     .appendBalancedRecipe(
                         prepareSourceRecipe(
                             Compressor,
-                            source(Compressor, new ItemStack[] { GGMaterial.orundum.get(OrePrefixes.gem, 9) })),
+                            BottledChaosSourceResolver
+                                .require(Compressor, new ItemStack[] { GGMaterial.orundum.get(OrePrefixes.gem, 9) })),
                         recipeItemId(GGMaterial.orundum.get(OrePrefixes.gem, 1)))
                     .appendBalancedRecipe(
                         prepareSourceRecipe(
                             Cutter,
-                            source(
+                            BottledChaosSourceResolver.require(
                                 Cutter,
                                 new ItemStack[] { GGMaterial.orundum.get(OrePrefixes.block, 1) },
                                 Materials.Water.getFluid(1_000))),
@@ -452,7 +462,7 @@ public final class BottledChaosNaquadahFuelRecipes {
                     .appendBalancedRecipe(
                         prepareSourceRecipe(
                             BlastFurnace,
-                            source(
+                            BottledChaosSourceResolver.require(
                                 BlastFurnace,
                                 new ItemStack[] { GGMaterial.orundum.get(OrePrefixes.plate, 2),
                                     ItemRefer.Raw_Atomic_Separation_Catalyst.get(4) },
@@ -461,35 +471,40 @@ public final class BottledChaosNaquadahFuelRecipes {
                     .appendBalancedRecipe(
                         prepareSourceRecipe(
                             VacuumFreezer,
-                            source(
+                            BottledChaosSourceResolver.require(
                                 VacuumFreezer,
                                 new ItemStack[] { GGMaterial.atomicSeparationCatalyst.get(OrePrefixes.ingotHot, 1) })),
                         recipeItemId(GGMaterial.atomicSeparationCatalyst.get(OrePrefixes.ingotHot, 1)))
                     .withFullDustOutputs();
         catalyst = prepareSourceRecipe(
             FluidExtractor,
-            source(FluidExtractor, new ItemStack[] { Materials.Plutonium.getDust(1) }))
+            BottledChaosSourceResolver.require(FluidExtractor, new ItemStack[] { Materials.Plutonium.getDust(1) }))
                 .appendBalancedRecipe(catalyst, GTUtility.FluidId.create(Materials.Plutonium.getMolten(1)));
         catalyst = catalyst.appendBalancedRecipe(
-            prepareSourceRecipe(FluidExtractor, source(FluidExtractor, new ItemStack[] { ingot })),
+            prepareSourceRecipe(
+                FluidExtractor,
+                BottledChaosSourceResolver.require(FluidExtractor, new ItemStack[] { ingot })),
             recipeItemId(ingot));
-        var naquadahSmelting = source(
+        var naquadahSmelting = BottledChaosSourceResolver.require(
             BlastFurnace,
             new ItemStack[] { Materials.Naquadah.getDust(1), GTUtility.getIntegratedCircuit(11) },
             WerkstoffLoader.Xenon.getFluidOrGas(1_000));
         RecipeData moltenNaquadah = prepareSourceRecipe(BlastFurnace, naquadahSmelting)
             .appendBalancedRecipe(
-                prepareSourceRecipe(VacuumFreezer, source(VacuumFreezer, naquadahSmelting.mOutputs)),
+                prepareSourceRecipe(
+                    VacuumFreezer,
+                    BottledChaosSourceResolver.require(VacuumFreezer, naquadahSmelting.mOutputs)),
                 recipeItemId(naquadahSmelting.mOutputs[0]))
             .appendBalancedRecipe(
                 prepareSourceRecipe(
                     FluidExtractor,
-                    source(FluidExtractor, new ItemStack[] { Materials.Naquadah.getIngots(1) })),
+                    BottledChaosSourceResolver
+                        .require(FluidExtractor, new ItemStack[] { Materials.Naquadah.getIngots(1) })),
                 recipeItemId(Materials.Naquadah.getIngots(1)));
         ItemStack[][] rawInputs = { { Materials.Blaze.getDust(32), Materials.Firestone.getDust(4) },
             { Materials.Draconium.getDust(4), Materials.Quantium.getDust(4) },
             { Materials.Ardite.getDust(4), Materials.Manyullyn.getDust(4) } };
-        int variant = 0;
+        List<BottledChaosRecipeCatalog.Entry> variants = new ArrayList<>();
         for (ItemStack first : rawInputs[0]) {
             for (ItemStack second : rawInputs[1]) {
                 for (ItemStack third : rawInputs[2]) {
@@ -497,31 +512,22 @@ public final class BottledChaosNaquadahFuelRecipes {
                         .appendBalancedRecipe(
                             prepareSourceRecipe(
                                 MixerNonCell,
-                                source(
+                                BottledChaosSourceResolver.require(
                                     MixerNonCell,
                                     new ItemStack[] { first, second, third, GTUtility.getIntegratedCircuit(4) },
                                     Materials.Naquadah.getMolten(288))),
                             GTUtility.FluidId.create(Materials.Naquadah.getMolten(1)))
                         .appendBalancedRecipe(catalyst, raw);
                     // spotless:off
-                    catalog.registerAlternativeChain(PREPARATION_TAG,
+                    variants.add(catalog.registerAlternativeChain(PREPARATION_TAG,
                         data.times.keySet().stream().mapToLong(time -> time.eut()).max().getAsLong(), orundum,
                         new Object[] { moltenCatalyst },
-                        catalog.markPreparedRecipe(FluidExtractor, orundum, moltenCatalyst, variant++, data));
+                        catalog.markPreparedRecipe(FluidExtractor, orundum, moltenCatalyst, data)));
                     // spotless:on
                 }
             }
         }
-        catalog.groupLatestDisplayRecipes(PREPARATION_TAG, variant, rawInputs);
+        catalog.groupDisplayRecipes(variants, rawInputs);
     }
 
-    private static GTRecipe source(RecipeMap<?> map, ItemStack[] items, FluidStack... fluids) {
-        GTRecipe recipe = map.findRecipeQuery()
-            .items(items)
-            .fluids(fluids)
-            .find();
-        if (recipe == null)
-            throw new IllegalStateException("Missing naquadah fuel source recipe: " + map.unlocalizedName);
-        return recipe;
-    }
 }

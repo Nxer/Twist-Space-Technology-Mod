@@ -51,14 +51,14 @@ public final class BottledChaosTitaniumRecipes {
 
         // 2. Ilmenite preparation: use the native crushed-ore bath, retaining its 60% slag yield.
         // Replace only the ore input with full mineral dust before balancing the cached chain.
-        catalog.registerAlternativeChain("titanium", TierEU.RECIPE_LuV, IlmeniteDust,
+        var ilmenite = catalog.registerAlternativeChain("titanium", TierEU.RECIPE_LuV, IlmeniteDust,
             new Object[] { RutileDust }, new Object[] { RutileDust },
             catalog.markRecipeWithSubstitutedInput(ChemicalBath, CrushedIlmenite, IlmeniteDust, RutileDust, -1));
-        catalog.registerChainOutputDecomposition("titanium", CentrifugeNonCell, IlmeniteSlagDust, IronDust, -1);
-        catalog.registerChainOutputDecomposition("titanium", ElectrolyzerNonCell, IronIISulfateSolution, IronDust, -1);
+        ilmenite.includeDecompositionStep(CentrifugeNonCell, IlmeniteSlagDust, IronDust, -1);
+        ilmenite.includeDecompositionStep(ElectrolyzerNonCell, IronIISulfateSolution, IronDust, -1);
 
         // 3. Bauxite preparation: slurry mixing, heating, precipitation and slag separation.
-        catalog.registerAlternativeChain("titanium", TierEU.RECIPE_LuV, BauxiteDust,
+        var bauxite = catalog.registerAlternativeChain("titanium", TierEU.RECIPE_LuV, BauxiteDust,
             new Object[] { RutileDust }, new Object[] { RutileDust },
             catalog.markRecipeWithSubstitutedInput(MixerNonCell, CrushedBauxite, BauxiteDust, BauxiteSlurry, 8),
             catalog.markRecipe(FluidHeater, BauxiteSlurry, HeatedBauxiteSlurry, -1),
@@ -67,13 +67,13 @@ public final class BottledChaosTitaniumRecipes {
         catalog.orderDisplayRecipes("titanium", IlmeniteDust, BauxiteDust, RutileDust);
 
         // 4. Bauxite coproducts: recover sluice metals and decompose the remaining mineral compounds.
-        catalog.registerChainOutputDecomposition("titanium", CentrifugeNonCell, SluiceJuice, IronDust, -1);
-        catalog.registerChainOutputDecomposition("titanium", ElectrolyzerNonCell, AluminiumOxideDust, AluminiumDust, -1);
-        catalog.registerChainOutputDecomposition("titanium", ElectrolyzerNonCell, SodiumCarbonateDust, SodiumDust, -1);
-        catalog.registerChainOutputDecomposition("titanium", ElectrolyzerNonCell, CalciteDust, CarbonDust, -1);
-        catalog.registerChainOutputDecomposition("titanium", ElectrolyzerNonCell, SiliconDioxideDust, SiliconDust, -1);
-        catalog.registerOutputDecompositions(QuicklimeDust);
-        catalog.registerInputSyntheses(AluminiumHydroxideDust, SodiumHydroxideDust, QuicklimeDust);
+        bauxite.includeDecompositionStep(CentrifugeNonCell, SluiceJuice, IronDust, -1);
+        bauxite.includeDecompositionStep(ElectrolyzerNonCell, AluminiumOxideDust, AluminiumDust, -1);
+        bauxite.includeDecompositionStep(ElectrolyzerNonCell, SodiumCarbonateDust, SodiumDust, -1);
+        bauxite.includeDecompositionStep(ElectrolyzerNonCell, CalciteDust, CarbonDust, -1);
+        bauxite.includeDecompositionStep(ElectrolyzerNonCell, SiliconDioxideDust, SiliconDust, -1);
+        catalog.includeDecompositionPath(QuicklimeDust);
+        catalog.includeSynthesisPath(AluminiumHydroxideDust, SodiumHydroxideDust, QuicklimeDust);
 
         // NEI uses each stage's declared root and terminal products as its only material query markers.
         // spotless:on

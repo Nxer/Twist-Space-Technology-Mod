@@ -49,10 +49,10 @@ public final class BottledChaosPurifiedWaterRecipes {
 
         // spotless:off
         // Shared output branch: recover waste before supplementing the net aluminium and acid demand.
-        catalog.registerOutputDecompositions(FlocculationWasteLiquid);
+        catalog.includeDecompositionPath(FlocculationWasteLiquid);
 
         // Shared input branches: native consumables for the eight independently chainable water stages.
-        catalog.registerInputSyntheses(ActivatedCarbonFilterMesh, OzoneGas, PolyAluminiumChloride,
+        catalog.includeSynthesisPath(ActivatedCarbonFilterMesh, OzoneGas, PolyAluminiumChloride,
             SuperCoolant, SodiumHydroxideDust);
         // spotless:on
     }
@@ -140,11 +140,11 @@ public final class BottledChaosPurifiedWaterRecipes {
         // Main trunk: preserve the native stage's expected yield, special inputs and returned catalysts.
         Object[] products = data.outputs.keySet().stream()
             .filter(key -> !key.equals(FluidId.create(FlocculationWasteLiquid))).toArray();
-        catalog.registerChain("purified_water_" + grade, 1, source.mEUt, root,
+        var waterStage = catalog.registerChain("purified_water_" + grade, 1, source.mEUt, root,
             products, new Object[] { product },
             catalog.markPreparedRecipe(stage.pool, root, product, data));
-        catalog.setExecutionTargets("purified_water_" + grade, product);
-        if (grade < 8) catalog.setKeyOutputs("purified_water_" + grade, product);
+        waterStage.setPlanningTargets(product);
+        if (grade < 8) catalog.setExistingEntriesKeyOutputs("purified_water_" + grade, product);
         catalog.registerExternalInputs(data.inputs.keySet().toArray());
         catalog.registerExternalInputs(data.catalysts.keySet().toArray());
         // spotless:on

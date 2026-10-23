@@ -20,7 +20,6 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.AssemblyLineW
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BOTRecipe.BOTRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BOTRecipe.RuneEngraverRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BloodyHellRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosProcessAlternatives;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeRegistration;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CircuitAssemblyLineWithoutImprintRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CokingFactoryRecipePool;
@@ -178,7 +177,7 @@ public class RecipeLoader {
 
         CircuitAssemblyLineWithoutImprintRecipePool.loadRecipes();
         StellarForgeRecipePool.loadOnServerStarted();
-        BottledChaosProcessAlternatives.resolve();
+        BottledChaosRecipeRegistration.resolveLateSources();
         TreeGrowthSimulatorWithoutToolFakeRecipe.loadRecipes();
         MiracleTopRecipePool.loadRecipes();
         if (Config.Enable_IndustrialMagicMatrix) {

@@ -86,7 +86,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
         }
         CheckRecipeResult failure = CheckRecipeResultRegistry.NO_RECIPE;
         var planner = BottledChaosRecipeProcessor
-            .executionPlanner(routeMask, 0, inputItems, inputFluids, machineParameters, materials, planningCache);
+            .executionPlanner(routeMask, inputItems, inputFluids, machineParameters, materials, planningCache);
         planner.setLimits((voltage, requiredPools) -> {
             CheckRecipeResult result = validateLimits(voltage, requiredPools);
             if (!result.wasSuccessful()) rejectedRoute = result;
@@ -221,6 +221,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
         if (planner.completePlan(plan) == null) return CheckRecipeResultRegistry.NO_RECIPE;
         BottledChaosRecipeProcessor.Plan outputs;
         try {
+            plan.prepareOutputs();
             outputs = plan.outputPlan();
         } catch (ArithmeticException overflow) {
             // #tr tst.bottledchaos.result.output_overflow

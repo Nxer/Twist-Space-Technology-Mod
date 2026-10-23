@@ -327,13 +327,7 @@ public class GTCMRecipe {
         .useSpecialSlot()
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> {
-            int maxMaps = BottledChaosRecipeProcessor.createDisplayRecipes()
-                .stream()
-                .mapToInt(
-                    display -> display.processingTimes()
-                        .size())
-                .max()
-                .orElse(12);
+            int maxMaps = BottledChaosRecipeProcessor.maxDisplaySourcePools();
             return builder.setDisplayStack(GTCMItemList.BottledChaos.get(1))
                 .setHeight(350 + 10 * maxMaps)
                 .setMultipleWidgetsAllowed(true);

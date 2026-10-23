@@ -43,7 +43,7 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 
 import net.minecraftforge.fluids.Fluid;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.RecipeMark;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.StepRef;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import gregtech.api.enums.Materials;
@@ -81,17 +81,17 @@ public final class BottledChaosPrismaticRecipes {
         catalog.orderDisplayRecipes("prismatic", DiamondGem, RedAlgaeBiomass, PrismarineShard);
 
         // Input branches: supplement extraction, then reuse the contaminated peroxide in looped leaching.
-        catalog.registerInputSynthesis(ChemicalBath, PrismarineRichNitrobenzeneSolution,
+        catalog.includeSynthesisStep(ChemicalBath, PrismarineRichNitrobenzeneSolution,
             new Object[] { PrismarineSolution, Nitrobenzene }, 1);
         // Preserve the source loop's net contaminated peroxide output after reuse.
-        catalog.registerInputSynthesis(DissolutionTank, PrismarineSolution,
+        catalog.includeSynthesisStep(DissolutionTank, PrismarineSolution,
             new Object[] { PrismarineShard, PrismarineContaminatedHydrogenPeroxide }, -1);
 
         // Alloy preparation: autoclave crystals -> powder -> alloy -> protected blast -> cooling -> melt.
         // Both protective gases share the alloy tag, which may pass its melt to the independently authorized acid stage.
         if (BottledChaosRecipeResources.CredentialModel.indexForTag("crystalline_alloy_molten") >= 0) {
             for (Fluid gas : new Fluid[] { OganessonGas, XenonGas }) {
-                var steps = new RecipeMark[] {
+                var steps = new StepRef[] {
                     catalog.markRecipe(Autoclave, new Object[] { DiamondGem, PulsatingIronMolten }, PulsatingCrystal, -1),
                     catalog.markRecipe(Macerator, PulsatingCrystal, PulsatingCrystalDust, -1),
                     catalog.markRecipe(MixerNonCell, PulsatingCrystalDust, CrystallineAlloyDust, 2),
@@ -104,13 +104,13 @@ public final class BottledChaosPrismaticRecipes {
                 else catalog.registerAlternativeChain("crystalline_alloy_molten", TierEU.RECIPE_UHV, DiamondGem,
                     new Object[] { CrystallineAlloyMolten }, new Object[] { CrystallineAlloyMolten }, steps);
             }
-            catalog.registerInputSyntheses(PulsatingIronMolten);
+            catalog.includeSynthesisPath(PulsatingIronMolten);
         }
 
         // Strontium return: crystallization melt -> ingot -> dust -> hydroxide.
-        catalog.registerOutputDecomposition(FluidSolidifier, StrontiumMolten, StrontiumIngot, -1);
-        catalog.registerOutputDecomposition(Macerator, StrontiumIngot, StrontiumDust, -1);
-        catalog.registerInputSynthesis(LargeChemicalReactor, StrontiumHydroxideDust,
+        catalog.includeDecompositionStep(FluidSolidifier, StrontiumMolten, StrontiumIngot, -1);
+        catalog.includeDecompositionStep(Macerator, StrontiumIngot, StrontiumDust, -1);
+        catalog.includeSynthesisStep(LargeChemicalReactor, StrontiumHydroxideDust,
             new Object[] { StrontiumDust, HydrogenGas, OxygenGas }, -1);
         // spotless:on
     }
