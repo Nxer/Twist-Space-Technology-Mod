@@ -7,8 +7,6 @@ import java.util.Map;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor;
-
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 
@@ -50,21 +48,13 @@ public final class BottledChaosMaterialCache {
         return amounts;
     }
 
-    /** Merge all families for a bounded Waila summary without changing their stored inventories. */
-    public NBTTagCompound getWailaSummary(long routeMask) {
-        BottledChaosRecipeProcessor.Plan materials = BottledChaosRecipeProcessor.materialPlan(snapshot());
-        BottledChaosOutputBuffer summary = new BottledChaosOutputBuffer();
-        summary.set(materials.itemOutputs(), materials.fluidOutputs());
-        return summary.getWailaSummary(routeMask);
-    }
-
     /** Called once after real inputs and output reservations have committed. */
-    public void replace(String family, BottledChaosRecipeProcessor.Plan remaining) {
+    public void replace(String family, BottledChaosMaterialStacks remaining) {
         int index = indexOf(family);
         if (index < 0) {
-            if (remaining.itemOutputs()
+            if (remaining.items()
                 .isEmpty()
-                && remaining.fluidOutputs()
+                && remaining.fluids()
                     .isEmpty()) {
                 clearMaterials();
                 return;
@@ -76,7 +66,7 @@ public final class BottledChaosMaterialCache {
             inventories[index] = new BottledChaosOutputBuffer();
         }
         clearMaterials();
-        inventories[index].set(remaining.itemOutputs(), remaining.fluidOutputs());
+        inventories[index].set(remaining.items(), remaining.fluids());
     }
 
     /** Newly produced intermediates become available only after the paid job finishes. */
@@ -84,7 +74,7 @@ public final class BottledChaosMaterialCache {
         if (produced.isEmpty()) return;
         Map<Object, Long> amounts = snapshot();
         produced.collectAmounts(amounts);
-        replace(family, BottledChaosRecipeProcessor.materialPlan(amounts));
+        replace(family, BottledChaosMaterialStacks.fromAmounts(amounts));
     }
 
     /** Reserve every family before exporting anything; a blocked output leaves the cache untouched. */

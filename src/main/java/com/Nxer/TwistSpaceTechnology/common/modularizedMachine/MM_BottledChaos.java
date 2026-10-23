@@ -61,6 +61,8 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachin
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedMachineSupportAllModuleBase;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineConfiguration;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMaterialStacks;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMaterialSummary;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosOutputBuffer;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosPowerAllocator;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosProcessingLogic;
@@ -1183,8 +1185,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         BottledChaosRecipeProcessor.PreparedPlan prepared = logic.getPreparedPlan();
         prepared.commitCache(credentialHatches[slot].getMaterialCache());
         thread.processingFamily = prepared.family();
-        BottledChaosRecipeProcessor.Plan pending = prepared.pendingCache();
-        thread.pendingCache.set(pending.itemOutputs(), pending.fluidOutputs());
+        BottledChaosMaterialStacks pending = prepared.pendingCache();
+        thread.pendingCache.set(pending.items(), pending.fluids());
         credentialHatches[slot].markDirty();
         markDirty();
     }
@@ -2003,8 +2005,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         job.setLong("energyTier", getInputVoltageTier());
         job.setTag(
             "outputs",
-            thread.outputs
-                .getWailaSummary(ItemBottledChaosCredential.getRouteMask(thread.credential), thread.pendingCache));
+            BottledChaosMaterialSummary.forJob(
+                thread.outputs,
+                thread.pendingCache,
+                ItemBottledChaosCredential.getRouteMask(thread.credential)));
         return job;
     }
 

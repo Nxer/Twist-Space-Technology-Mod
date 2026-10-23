@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes;
 
+import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMaterialStacks.appendResourceStack;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,6 +20,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineConfiguration;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMaterialCache;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMaterialStacks;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosOverclock;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosSourceParameters;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosUpkeep;
@@ -1061,12 +1064,12 @@ public final class BottledChaosRecipeProcessor {
             return outputPlan;
         }
 
-        public Plan pendingCache() {
-            return materialPlan(pendingCache);
+        public BottledChaosMaterialStacks pendingCache() {
+            return BottledChaosMaterialStacks.fromAmounts(pendingCache);
         }
 
         public void commitCache(BottledChaosMaterialCache materials) {
-            materials.replace(family, materialPlan(remainingCache));
+            materials.replace(family, BottledChaosMaterialStacks.fromAmounts(remainingCache));
             materials.remember(family, entry);
         }
 
@@ -1090,11 +1093,6 @@ public final class BottledChaosRecipeProcessor {
         }
     }
 
-    /** Reuse the long output representation and NBT codec for material cache snapshots. */
-    public static Plan materialPlan(Map<Object, Long> amounts) {
-        return createOutputPlan(amounts, 0, 0);
-    }
-
     private static Plan createOutputPlan(Map<Object, Long> outputs, double duration, int executions) {
         List<ItemStackLong> items = new ArrayList<>();
         List<FluidStackLong> fluids = new ArrayList<>();
@@ -1104,21 +1102,6 @@ public final class BottledChaosRecipeProcessor {
             Collections.unmodifiableList(items),
             Collections.unmodifiableList(fluids),
             executions);
-    }
-
-    private static void appendResourceStack(Object key, long amount, List<ItemStackLong> items,
-        List<FluidStackLong> fluids) {
-        // Copy templates so neither runtime outputs nor NEI can mutate cached identities through NBT.
-        if (key instanceof TST_ItemID item) items.add(
-            new ItemStackLong(
-                item.getItemStack()
-                    .copy(),
-                amount));
-        else fluids.add(
-            new FluidStackLong(
-                ((FluidId) key).getFluidStack(1)
-                    .copy(),
-                amount));
     }
 
     /**

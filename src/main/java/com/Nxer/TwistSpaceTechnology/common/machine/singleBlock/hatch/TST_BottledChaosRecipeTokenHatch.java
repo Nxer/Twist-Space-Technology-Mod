@@ -22,7 +22,7 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosCredential;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_BottledChaos;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMaterialCache;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosOutputBuffer;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMaterialSummary;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.cleanroommc.modularui.api.IPanelHandler;
 import com.cleanroommc.modularui.api.drawable.IKey;
@@ -205,7 +205,8 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
         tag.removeTag(WAILA_THREAD_NBT);
         tag.setTag(
             WAILA_CACHE_NBT,
-            materialCache.getWailaSummary(ItemBottledChaosCredential.getRouteMask(mInventory[0])));
+            BottledChaosMaterialSummary
+                .forCache(materialCache, ItemBottledChaosCredential.getRouteMask(mInventory[0])));
         if (controller == null) return;
         NBTTagCompound job = controller.getCredentialHatchWailaData(this, processingGroup);
         if (job == null) {
@@ -288,7 +289,7 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
                 formatNumber(total)));
         NBTTagList entries = outputs.getTagList("entries", 10);
         int shown = 0;
-        for (int i = 0; i < Math.min(BottledChaosOutputBuffer.WAILA_OUTPUT_LIMIT, entries.tagCount()); i++) {
+        for (int i = 0; i < Math.min(BottledChaosMaterialSummary.WAILA_OUTPUT_LIMIT, entries.tagCount()); i++) {
             NBTTagCompound entry = entries.getCompoundTagAt(i);
             ItemStack output = entry.hasKey("item", 10) ? ItemStack.loadItemStackFromNBT(entry.getCompoundTag("item"))
                 : null;
