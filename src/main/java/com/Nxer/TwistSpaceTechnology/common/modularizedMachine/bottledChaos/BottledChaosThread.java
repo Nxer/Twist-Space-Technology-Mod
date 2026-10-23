@@ -6,6 +6,8 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.util.GTUtility;
 
 /** A logical server-tick job, not a Java worker thread. */
@@ -24,6 +26,76 @@ public final class BottledChaosThread {
     public int parallels;
     public long nextCheckTick;
     public String status = "GT5U.waila.machine.idle";
+    private CheckRecipeResult result = CheckRecipeResultRegistry.SUCCESSFUL;
+
+    public CheckRecipeResult result() {
+        return result;
+    }
+
+    /** Invalidate a search failure without changing a paid job or its displayed status. */
+    public void resetResult() {
+        result = CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    /** Called only after the host's input transaction has succeeded. */
+    public void begin(ItemStack authorization, BottledChaosProcessingLogic logic) {
+        credential = authorization.copy();
+        requiredPools = logic.getRequiredPools();
+        upkeep = logic.getUpkeep();
+        recipeVoltage = logic.getBaseRecipeVoltage();
+        eut = logic.getCalculatedEut();
+        duration = Math.max(1, logic.getDuration());
+        progress = 0;
+        parallels = logic.getCurrentParallels();
+        outputs.set(logic.getLongItemOutputs(), logic.getLongFluidOutputs());
+    }
+
+    public void setPendingCache(String family, BottledChaosMaterialStacks pending) {
+        processingFamily = family;
+        pendingCache.set(pending.items(), pending.fluids());
+    }
+
+    public void searched(CheckRecipeResult searchResult, long retryTick) {
+        result = searchResult;
+        status = result.wasSuccessful() ? "GT5U.gui.text.status.active"
+            : result == CheckRecipeResultRegistry.NO_RECIPE ? "GT5U.waila.machine.idle" : result.getDisplayString();
+        nextCheckTick = retryTick;
+    }
+
+    public void activate() {
+        status = "GT5U.gui.text.status.active";
+        resetResult();
+    }
+
+    public void advance() {
+        progress++;
+        activate();
+    }
+
+    /** Reuse the rendered failure until it changes; do not format a message every tick. */
+    public void fail(CheckRecipeResult failure) {
+        if (!failure.equals(result) || "tst.bottledchaos.paused".equals(status)) status = failure.getDisplayString();
+        result = failure;
+    }
+
+    public void waitForOutput(CheckRecipeResult failure, long retryTick) {
+        result = failure;
+        status = failure.getDisplayString();
+        nextCheckTick = retryTick;
+    }
+
+    /** Pausing preserves the paid job, pending cache and previous failure. */
+    public boolean pause() {
+        if ("tst.bottledchaos.paused".equals(status)) return false;
+        status = "tst.bottledchaos.paused";
+        return true;
+    }
+
+    public boolean resumeIdle() {
+        if (isBusy() || !"tst.bottledchaos.paused".equals(status)) return false;
+        status = "GT5U.waila.machine.idle";
+        return true;
+    }
 
     public boolean isBusy() {
         return duration > 0;
@@ -38,6 +110,7 @@ public final class BottledChaosThread {
         duration = progress = parallels = 0;
         eut = recipeVoltage = requiredPools = nextCheckTick = 0;
         status = "GT5U.waila.machine.idle";
+        resetResult();
     }
 
     public NBTTagCompound save() {
@@ -69,5 +142,6 @@ public final class BottledChaosThread {
         pendingCache.load(tag.getCompoundTag("pendingCache"));
         upkeep = BottledChaosUpkeep.loadDemands(tag.getTagList("upkeep", 10));
         nextCheckTick = 0;
+        resetResult();
     }
 }

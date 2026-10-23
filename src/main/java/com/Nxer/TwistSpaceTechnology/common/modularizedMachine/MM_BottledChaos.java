@@ -61,7 +61,6 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachin
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedMachineSupportAllModuleBase;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineConfiguration;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMaterialStacks;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMaterialSummary;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosOutputBuffer;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosPowerAllocator;
@@ -337,7 +336,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private final boolean[] matchingCredentials = new boolean[THREAD_COUNT];
     private final int[] inputPeerMasks = new int[THREAD_COUNT];
     private final long[] credentialCosts = new long[THREAD_COUNT];
-    private final CheckRecipeResult[] threadResults = new CheckRecipeResult[THREAD_COUNT];
     private CheckRecipeResult cacheExportResult = CheckRecipeResultRegistry.NONE;
     private long cacheExportResultExpiresAt;
     private int processingGroupMask;
@@ -390,7 +388,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         for (int i = 0; i < THREAD_COUNT; i++) {
             threads[i] = new BottledChaosThread();
             threadLogics[i] = new BottledChaosProcessingLogic();
-            threadResults[i] = CheckRecipeResultRegistry.SUCCESSFUL;
         }
     }
 
@@ -443,7 +440,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         inputGroupingDirty = true;
         Arrays.fill(inputPeerMasks, 0);
         Arrays.fill(credentialCosts, 0);
-        Arrays.fill(threadResults, CheckRecipeResultRegistry.SUCCESSFUL);
         allocatedCapacity = -1;
         inputPower = -1;
     }
@@ -780,23 +776,18 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                     .clearMaterials();
                 hatch.markDirty();
                 if (thread.isBusy()) {
-                    thread.complete();
                     upkeepDirty = poolUsersDirty = true;
                     threadLogics[slot] = new BottledChaosProcessingLogic();
                 }
-                thread.status = hatch.isExecutionEnabled() ? "GT5U.waila.machine.idle" : "tst.bottledchaos.paused";
-                threadResults[slot] = CheckRecipeResultRegistry.SUCCESSFUL;
+                thread.complete();
+                if (!hatch.isExecutionEnabled()) thread.pause();
                 thread.nextCheckTick = schedulerTick + 20;
                 changed = true;
             }
             if (!hatch.isExecutionEnabled()) {
-                if (!"tst.bottledchaos.paused".equals(thread.status)) {
-                    thread.status = "tst.bottledchaos.paused";
-                    changed = true;
-                }
-            } else if (!thread.isBusy() && "tst.bottledchaos.paused".equals(thread.status)) {
-                thread.status = "GT5U.waila.machine.idle";
-                changed = true;
+                changed |= thread.pause();
+            } else {
+                changed |= thread.resumeIdle();
             }
         }
         if (changed) markDirty();
@@ -819,7 +810,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                     installedCredentials[slot] = credential == null ? null : credential.copy();
                     // Credential changes also discard recipe-search caches, never already-paid jobs.
                     threadLogics[slot] = new BottledChaosProcessingLogic();
-                    if (!threads[slot].isBusy()) threadResults[slot] = CheckRecipeResultRegistry.SUCCESSFUL;
+                    if (!threads[slot].isBusy()) threads[slot].resetResult();
                     inputGroupsChanged = true;
                 }
                 matchingCredentials[slot] = ItemStack
@@ -925,7 +916,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 || ((validInputGroupMask ^ newValidInputGroupMask) & (1 << slot)) != 0) {
                 // Input membership invalidates searches, never a thread's already-consumed job.
                 threadLogics[slot] = new BottledChaosProcessingLogic();
-                if (!threads[slot].isBusy()) threadResults[slot] = CheckRecipeResultRegistry.SUCCESSFUL;
+                if (!threads[slot].isBusy()) threads[slot].resetResult();
                 threads[slot].nextCheckTick = 0;
             }
             inputPeerMasks[slot] = peers[slot];
@@ -967,7 +958,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if (overCapacity) return SimpleResultWithText.ofFailure("tst.bottledchaos.result.capacity_exceeded");
         // Finished jobs retry delivery only in runMachine; recipe searches reuse their last result.
         for (int slot = 0; slot < THREAD_COUNT; slot++) {
-            CheckRecipeResult result = threadResults[slot];
+            CheckRecipeResult result = threads[slot].result();
             if (threads[slot].isBusy() && threads[slot].progress >= threads[slot].duration
                 && (result == CheckRecipeResultRegistry.ITEM_OUTPUT_FULL
                     || result == CheckRecipeResultRegistry.FLUID_OUTPUT_FULL))
@@ -980,7 +971,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         for (int slot = 0; slot < THREAD_COUNT; slot++) {
             BottledChaosThread thread = threads[slot];
             if (isThreadExecutionDisabled(slot)) {
-                thread.status = "tst.bottledchaos.paused";
+                thread.pause();
                 continue;
             }
             hasWork |= thread.isBusy();
@@ -1001,7 +992,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         for (int slot = 0; slot < THREAD_COUNT; slot++) {
             BottledChaosThread thread = threads[slot];
             if (isThreadExecutionDisabled(slot)) {
-                thread.status = "tst.bottledchaos.paused";
+                thread.pause();
                 continue;
             }
             if (schedulerTick < thread.nextCheckTick || thread.isBusy() && !hasAuthorizedWork(slot)) continue;
@@ -1103,18 +1094,14 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 : BottledChaosPowerAllocator.powerForShare(capacity, credentialCosts[slot], weightSum);
             if ((candidates & (1 << slot)) == 0) continue;
             if (inputs.prepared[slot]) commitPreparedThread(slot);
-            threads[slot].status = "GT5U.gui.text.status.active";
-            threadResults[slot] = CheckRecipeResultRegistry.SUCCESSFUL;
+            threads[slot].activate();
         }
         markDirty();
         return CheckRecipeResultRegistry.SUCCESSFUL;
     }
 
     private void setThreadSearchResult(int slot, CheckRecipeResult result) {
-        threadResults[slot] = result;
-        threads[slot].status = result.wasSuccessful() ? "GT5U.gui.text.status.active"
-            : result == CheckRecipeResultRegistry.NO_RECIPE ? "GT5U.waila.machine.idle" : result.getDisplayString();
-        threads[slot].nextCheckTick = schedulerTick + 20;
+        threads[slot].searched(result, schedulerTick + 20);
     }
 
     private CheckRecipeResult prepareScopedThread(int slot, long budget, InputTransaction inputs) {
@@ -1158,22 +1145,12 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private void commitPreparedThread(int slot) {
         BottledChaosProcessingLogic logic = threadLogics[slot];
         BottledChaosThread thread = threads[slot];
-        thread.credential = installedCredentials[slot].copy();
+        thread.begin(installedCredentials[slot], logic);
         matchingCredentials[slot] = true;
-        thread.requiredPools = logic.getRequiredPools();
-        thread.upkeep = logic.getUpkeep();
         upkeepDirty = poolUsersDirty = true;
-        thread.recipeVoltage = logic.getBaseRecipeVoltage();
-        thread.eut = logic.getCalculatedEut();
-        thread.duration = Math.max(1, logic.getDuration());
-        thread.progress = 0;
-        thread.parallels = logic.getCurrentParallels();
-        thread.outputs.set(logic.getLongItemOutputs(), logic.getLongFluidOutputs());
         BottledChaosRecipeProcessor.PreparedPlan prepared = logic.getPreparedPlan();
         prepared.commitCache(credentialHatches[slot].getMaterialCache());
-        thread.processingFamily = prepared.family();
-        BottledChaosMaterialStacks pending = prepared.pendingCache();
-        thread.pendingCache.set(pending.items(), pending.fluids());
+        thread.setPendingCache(prepared.family(), prepared.pendingCache());
         credentialHatches[slot].markDirty();
         markDirty();
     }
@@ -1557,14 +1534,12 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             BottledChaosThread thread = threads[i];
             if (!thread.isBusy()) continue;
             if (isThreadExecutionDisabled(i)) {
-                thread.status = "tst.bottledchaos.paused";
+                thread.pause();
                 continue;
             }
             CheckRecipeResult result = canRunThread(i);
             if (!result.wasSuccessful()) {
-                if (!result.equals(threadResults[i]) || "tst.bottledchaos.paused".equals(thread.status))
-                    thread.status = result.getDisplayString();
-                threadResults[i] = result;
+                thread.fail(result);
                 failure = result;
                 continue;
             }
@@ -1589,9 +1564,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             if (!thread.isBusy()) continue;
             if (isThreadExecutionDisabled(i)) continue;
             if (advancing[i]) {
-                thread.progress++;
-                thread.status = "GT5U.gui.text.status.active";
-                threadResults[i] = CheckRecipeResultRegistry.SUCCESSFUL;
+                thread.advance();
                 progressed = true;
             }
             if (thread.progress >= thread.duration && runnable[i] && (advancing[i] || tick >= thread.nextCheckTick)) {
@@ -1600,7 +1573,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 BottledChaosOutputBuffer.Transaction output = BottledChaosOutputBuffer.Transaction
                     .forRecipeOutputs(this);
                 CheckRecipeResult result = output.reserve(thread.outputs);
-                threadResults[i] = result;
                 if (result.wasSuccessful()) {
                     output.commit();
                     recipesDone += thread.parallels;
@@ -1611,14 +1583,15 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                     upkeepDirty = poolUsersDirty = true;
                     completed = true;
                 } else {
-                    thread.status = result.getDisplayString();
-                    thread.nextCheckTick = tick + OUTPUT_RETRY_TICKS;
+                    thread.waitForOutput(result, tick + OUTPUT_RETRY_TICKS);
                     failure = result;
                 }
             }
-            if (thread.isBusy() && thread.progress >= thread.duration && !threadResults[i].wasSuccessful()) {
+            if (thread.isBusy() && thread.progress >= thread.duration
+                && !threads[i].result()
+                    .wasSuccessful()) {
                 // Keep the output failure visible between the bounded delivery retries.
-                failure = threadResults[i];
+                failure = threads[i].result();
             }
             if (thread.isBusy() && (advancing[i] || thread.progress >= thread.duration)
                 && thread.duration > mMaxProgresstime) {
@@ -1746,9 +1719,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private void recordRunningFailure(CheckRecipeResult result) {
         for (int slot = 0; slot < THREAD_COUNT; slot++) {
             if (!advancing[slot]) continue;
-            if (!result.equals(threadResults[slot]) || "tst.bottledchaos.paused".equals(threads[slot].status))
-                threads[slot].status = result.getDisplayString();
-            threadResults[slot] = result;
+            threads[slot].fail(result);
         }
         setCheckRecipeResult(result);
     }
@@ -1758,7 +1729,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         // Keep already-consumed jobs and pending outputs for a safe resume.
         super.stopMachine(reason);
         for (BottledChaosThread thread : threads) {
-            if (thread.isBusy()) thread.status = "tst.bottledchaos.paused";
+            if (thread.isBusy()) thread.pause();
         }
         markDirty();
     }
@@ -2062,7 +2033,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     private CheckRecipeResult getThreadDisplayResult(int slot) {
         CheckRecipeResult global = getGlobalFailure();
-        return isFailure(global) && (processingGroupMask & (1 << slot)) != 0 ? global : threadResults[slot];
+        return isFailure(global) && (processingGroupMask & (1 << slot)) != 0 ? global : threads[slot].result();
     }
 
     public static String formatProcessingGroups(int mask) {
