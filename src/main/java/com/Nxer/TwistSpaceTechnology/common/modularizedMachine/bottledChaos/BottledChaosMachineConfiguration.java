@@ -22,6 +22,7 @@ import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosMachineModule;
 import com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosSourceParameters.Evaluation;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.cleanroommc.modularui.utils.item.ItemStackHandler;
 import com.github.bsideup.jabel.Desugar;
@@ -56,6 +57,7 @@ public final class BottledChaosMachineConfiguration {
     private final BottledChaosStructureCatalog.Structure[] machineStructures = new BottledChaosStructureCatalog.Structure[MAX_POOLS];
     private final BottledChaosMachineParameters.InstalledSource[] machineSources = new BottledChaosMachineParameters.InstalledSource[MAX_POOLS];
     private final long[] machineQuantities = new long[MAX_POOLS];
+    private ConfigurationSnapshot configurationSnapshot;
     private long supportedPools;
     private long debugPools;
     private NBTTagCompound pendingMachines;
@@ -107,6 +109,7 @@ public final class BottledChaosMachineConfiguration {
                 machineSources[slot] = !debug && controller != null
                     ? new BottledChaosMachineParameters.InstalledSource(controller, machineStructures[slot])
                     : null;
+                configurationSnapshot = null;
                 changed.run();
             }
         };
@@ -296,7 +299,9 @@ public final class BottledChaosMachineConfiguration {
     public RuntimeParameters runtime(long inputVoltage, long inputPower, ItemStack[] items, FluidStack[] supplyFluids,
         double masterTime, double masterEU, long masterParallel) {
         loadPendingMachines();
+        if (configurationSnapshot == null) configurationSnapshot = new ConfigurationSnapshot();
         return new RuntimeParameters(
+            configurationSnapshot,
             inputVoltage,
             inputPower,
             items,
@@ -306,22 +311,36 @@ public final class BottledChaosMachineConfiguration {
             masterParallel);
     }
 
-    public final class RuntimeParameters implements BottledChaosSourceParameters {
+    /** Stable until a module changes; each planning attempt shares these read-only arrays. */
+    private final class ConfigurationSnapshot {
 
-        private final BottledChaosMachineParameters.Context context;
         private final long purificationPlantQuantity = purificationPlantQuantity();
         private final long[] quantities = machineQuantities.clone();
         private final boolean[] miracleDoor = new boolean[MAX_POOLS];
         private final long debugMask = debugPools;
         private final BottledChaosMachineParameters.InstalledSource[] sources = machineSources.clone();
         private final Evaluation[] defaults = new Evaluation[MAX_POOLS];
+
+        private ConfigurationSnapshot() {
+            for (int slot = 0; slot < pools.length; slot++) {
+                defaults[slot] = Evaluation.defaults(pools[slot], machineSpeeds[slot]);
+                miracleDoor[slot] = sources[slot] != null && sources[slot].original instanceof TST_MiracleDoor;
+            }
+        }
+    }
+
+    public final class RuntimeParameters implements BottledChaosSourceParameters {
+
+        private final ConfigurationSnapshot installed;
+        private final BottledChaosMachineParameters.Context context;
         private final Map<SourceKey, Evaluation> evaluations = new HashMap<>();
         private final List<BottledChaosUpkeep.Demand> sourceUsage = new ArrayList<>();
         private long roundItemPools;
         private CheckRecipeResult sourceFailure = CheckRecipeResultRegistry.NO_RECIPE;
 
-        private RuntimeParameters(long inputVoltage, long inputPower, ItemStack[] items, FluidStack[] fluids,
-            double masterTime, double masterEU, long masterParallel) {
+        private RuntimeParameters(ConfigurationSnapshot installed, long inputVoltage, long inputPower,
+            ItemStack[] items, FluidStack[] fluids, double masterTime, double masterEU, long masterParallel) {
+            this.installed = installed;
             context = new BottledChaosMachineParameters.Context(
                 inputVoltage,
                 inputPower,
@@ -330,10 +349,6 @@ public final class BottledChaosMachineConfiguration {
                 masterTime,
                 masterEU,
                 masterParallel);
-            for (int slot = 0; slot < pools.length; slot++) {
-                defaults[slot] = Evaluation.defaults(pools[slot], machineSpeeds[slot]);
-                miracleDoor[slot] = sources[slot] != null && sources[slot].original instanceof TST_MiracleDoor;
-            }
         }
 
         @Override
@@ -342,16 +357,16 @@ public final class BottledChaosMachineConfiguration {
             Integer slot = poolIndexes.get(map);
             if (slot == null) return Evaluation.defaults(map, 1);
             Evaluation result;
-            if ((purificationPools & (1L << slot)) != 0
-                && (quantities[slot] <= 0 || quantities[slot] > purificationPlantQuantity)) {
+            if ((purificationPools & (1L << slot)) != 0 && (installed.quantities[slot] <= 0
+                || installed.quantities[slot] > installed.purificationPlantQuantity)) {
                 result = reject(
                     slot,
                     "purification_capacity",
-                    purificationPlantQuantity,
-                    Math.max(1, quantities[slot]));
-            } else if (sources[slot] == null) {
+                    installed.purificationPlantQuantity,
+                    Math.max(1, installed.quantities[slot]));
+            } else if (installed.sources[slot] == null) {
                 // Missing pools are reported by ProcessingLogic; TestItem supplies unrestricted defaults.
-                return defaults[slot];
+                return installed.defaults[slot];
             } else {
                 SourceKey key = new SourceKey(slot, recipeVoltage, requirements);
                 result = evaluations.get(key);
@@ -367,7 +382,7 @@ public final class BottledChaosMachineConfiguration {
         private Evaluation evaluate(int slot, RecipeMap<?> map, long recipeVoltage,
             BottledChaosSourceRequirements requirements) {
             var result = BottledChaosMachineParameters
-                .evaluate(sources[slot], map, recipeVoltage, context, requirements);
+                .evaluate(installed.sources[slot], map, recipeVoltage, context, requirements);
             var profile = result.profile();
             if (profile == null) {
                 // #tr tst.bottledchaos.result.invalid_source_configuration
@@ -410,11 +425,11 @@ public final class BottledChaosMachineConfiguration {
             int base = profile.maximumOverclocks();
             return new Evaluation(
                 profile,
-                defaults[slot].quantitySpeedMultiplier(),
-                miracleDoor[slot],
+                installed.defaults[slot].quantitySpeedMultiplier(),
+                installed.miracleDoor[slot],
                 maximum,
                 perfect,
-                sources[slot].fourHeliocasts ? new int[] { base, base + 1, base + 2, base + 3 } : null,
+                installed.sources[slot].fourHeliocasts ? new int[] { base, base + 1, base + 2, base + 3 } : null,
                 null);
         }
 
@@ -426,7 +441,8 @@ public final class BottledChaosMachineConfiguration {
         @Override
         public boolean isSourceAvailable(RecipeMap<?> map) {
             Integer slot = poolIndexes.get(map);
-            return slot != null && quantities[slot] > 0 && ((debugMask & (1L << slot)) != 0 || sources[slot] != null);
+            return slot != null && installed.quantities[slot] > 0
+                && ((installed.debugMask & (1L << slot)) != 0 || installed.sources[slot] != null);
         }
 
         @Override
@@ -453,7 +469,7 @@ public final class BottledChaosMachineConfiguration {
                     new BottledChaosUpkeep.Demand(
                         poolKey(slot),
                         fluid,
-                        BigInteger.valueOf(quantities[slot])
+                        BigInteger.valueOf(installed.quantities[slot])
                             .multiply(BigInteger.valueOf(fluid.amount)),
                         profile.startupReserveSeconds()));
             }
@@ -470,7 +486,10 @@ public final class BottledChaosMachineConfiguration {
             List<BottledChaosUpkeep.ItemDemand> demands = new ArrayList<>();
             for (int slot = 0; slot < pools.length; slot++) {
                 if ((roundItemPools & (1L << slot)) != 0) demands.add(
-                    new BottledChaosUpkeep.ItemDemand(poolKey(slot), MiscHelper.CRITICAL_PHOTON, quantities[slot]));
+                    new BottledChaosUpkeep.ItemDemand(
+                        poolKey(slot),
+                        MiscHelper.CRITICAL_PHOTON,
+                        installed.quantities[slot]));
             }
             return demands;
         }
