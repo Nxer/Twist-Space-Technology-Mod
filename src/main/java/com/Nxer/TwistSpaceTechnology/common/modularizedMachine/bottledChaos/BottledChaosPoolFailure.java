@@ -44,8 +44,7 @@ public final class BottledChaosPoolFailure implements CheckRecipeResult {
     public static BottledChaosPoolFailure of(String pool, CheckRecipeResult reason) {
         BottledChaosPoolFailure failure = new BottledChaosPoolFailure();
         failure.data.setString("pool", pool);
-        failure.data.setString("resultId", reason.getID());
-        failure.data.setTag("result", reason.writeToNBT(new NBTTagCompound()));
+        BottledChaosResultData.write(failure.data, reason);
         return failure;
     }
 
@@ -83,11 +82,9 @@ public final class BottledChaosPoolFailure implements CheckRecipeResult {
                 ItemStack.loadItemStackFromNBT(data.getCompoundTag("item"))
                     .getDisplayName(),
                 formatNumber(Long.parseLong(data.getString("amount"))));
-        } else if (data.hasKey("resultId", 8)) {
-            CheckRecipeResult result = CheckRecipeResultRegistry.getSampleFromRegistry(data.getString("resultId"))
-                .newInstance();
-            result.readFromNBT(data.getCompoundTag("result"));
-            reason = result.getDisplayString();
+        } else if (BottledChaosResultData.hasResult(data)) {
+            reason = BottledChaosResultData.read(data)
+                .getDisplayString();
         } else if ("heat".equals(data.getString("parameter"))) {
             reason = CheckRecipeResultRegistry.insufficientHeat((int) data.getLong("required"))
                 .getDisplayString();

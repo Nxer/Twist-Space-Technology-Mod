@@ -66,6 +66,7 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.Bott
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosOutputBuffer;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosPowerAllocator;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosResultData;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosThread;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosUpkeep;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
@@ -2029,18 +2030,12 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         String status = getThreadWailaStatus(slot);
         job.setString("status", status);
         if (status.isEmpty()) {
-            CheckRecipeResult result = getThreadDisplayResult(slot);
-            job.setString("resultId", result.getID());
-            job.setTag("result", result.writeToNBT(new NBTTagCompound()));
+            BottledChaosResultData.write(job, getThreadDisplayResult(slot));
         }
     }
 
     public static String getWailaStatusText(NBTTagCompound job) {
-        if (!job.hasKey("resultId", 8)) return StatCollector.translateToLocal(job.getString("status"));
-        CheckRecipeResult result = CheckRecipeResultRegistry.getSampleFromRegistry(job.getString("resultId"))
-            .newInstance();
-        result.readFromNBT(job.getCompoundTag("result"));
-        return result.getDisplayString();
+        return BottledChaosResultData.displayText(job, "status");
     }
 
     private static boolean isFailure(CheckRecipeResult result) {
@@ -2104,17 +2099,17 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         NBTTagCompound summary = new NBTTagCompound();
         NBTTagList entries = new NBTTagList();
         IGregTechTileEntity base = getBaseMetaTileEntity();
-        if (!mMachine)
-            addSummaryResult(entries, SimpleResultWithText.ofFailure("GT5U.gui.multimachine.incomplete_structure"), 0);
-        if (overCapacity)
-            addSummaryResult(entries, SimpleResultWithText.ofFailure("tst.bottledchaos.result.capacity_exceeded"), 0);
+        if (!mMachine) BottledChaosResultData
+            .addGrouped(entries, SimpleResultWithText.ofFailure("GT5U.gui.multimachine.incomplete_structure"), 0);
+        if (overCapacity) BottledChaosResultData
+            .addGrouped(entries, SimpleResultWithText.ofFailure("tst.bottledchaos.result.capacity_exceeded"), 0);
         if (shouldCheckMaintenance() && getRepairStatus() < getIdealStatus()) {
             NBTTagCompound entry = new NBTTagCompound();
             entry.setString("key", "GT5U.turbine.maintenance.true");
             entries.appendTag(entry);
         }
         CheckRecipeResult global = getGlobalFailure();
-        if (mMachine && isFailure(global)) addSummaryResult(entries, global, processingGroupMask);
+        if (mMachine && isFailure(global)) BottledChaosResultData.addGrouped(entries, global, processingGroupMask);
         long usage = 0;
         int usageGroups = 0;
         if (mMachine) {
@@ -2138,13 +2133,13 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 } else {
                     result = getThreadDisplayResult(slot);
                 }
-                if (isFailure(result)) addSummaryResult(entries, result, 1 << slot);
+                if (isFailure(result)) BottledChaosResultData.addGrouped(entries, result, 1 << slot);
             }
         }
         if (base != null && base.isAllowedToWork()
             && (activeConcentratedPower || concentratedPower != activeConcentratedPower)
             && usage > inputPower)
-            addSummaryResult(entries, CheckRecipeResultRegistry.insufficientPower(usage), usageGroups);
+            BottledChaosResultData.addGrouped(entries, CheckRecipeResultRegistry.insufficientPower(usage), usageGroups);
         summary.setBoolean("errors", entries.tagCount() > 0);
         if (entries.tagCount() == 0) {
             NBTTagCompound entry = new NBTTagCompound();
@@ -2155,23 +2150,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         }
         summary.setTag("entries", entries);
         return summary;
-    }
-
-    private static void addSummaryResult(NBTTagList entries, CheckRecipeResult result, int slots) {
-        NBTTagCompound data = result.writeToNBT(new NBTTagCompound());
-        for (int i = 0; i < entries.tagCount(); i++) {
-            NBTTagCompound entry = entries.getCompoundTagAt(i);
-            if (result.getID()
-                .equals(entry.getString("resultId")) && data.equals(entry.getCompoundTag("result"))) {
-                entry.setInteger("slots", entry.getInteger("slots") | slots);
-                return;
-            }
-        }
-        NBTTagCompound entry = new NBTTagCompound();
-        entry.setString("resultId", result.getID());
-        entry.setTag("result", data);
-        entry.setInteger("slots", slots);
-        entries.appendTag(entry);
     }
 
     @Override

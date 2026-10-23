@@ -19,6 +19,7 @@ import net.minecraft.util.StatCollector;
 
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_BottledChaos;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineConfiguration;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosResultData;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosProcessAlternatives;
 import com.cleanroommc.modularui.api.IPanelHandler;
 import com.cleanroommc.modularui.api.drawable.IKey;
@@ -262,19 +263,10 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
         for (int i = 0; i < entries.tagCount(); i++) {
             NBTTagCompound entry = entries.getCompoundTagAt(i);
             String slots = MM_BottledChaos.formatProcessingGroups(entry.getInteger("slots"));
-            String text;
-            if (entry.hasKey("resultId", 8)) {
-                CheckRecipeResult result = CheckRecipeResultRegistry.getSampleFromRegistry(entry.getString("resultId"))
-                    .newInstance();
-                result.readFromNBT(entry.getCompoundTag("result"));
-                text = result.getDisplayString();
-            } else {
-                text = StatCollector.translateToLocal(entry.getString("key"));
-            }
             lines.add(
                 (summary.getBoolean("errors") ? EnumChatFormatting.RED : EnumChatFormatting.AQUA)
                     + (slots.length() == 0 ? "" : slots + " ")
-                    + text
+                    + BottledChaosResultData.displayText(entry, "key")
                     + EnumChatFormatting.RESET);
         }
         return lines.toString();
