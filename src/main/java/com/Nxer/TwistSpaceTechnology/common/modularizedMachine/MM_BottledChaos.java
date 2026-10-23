@@ -1029,7 +1029,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 CheckRecipeResult result = threads[slot].isBusy()
                     ? threads[slot].eut <= inputPower ? CheckRecipeResultRegistry.SUCCESSFUL
                         : CheckRecipeResultRegistry.insufficientPower(threads[slot].eut)
-                    : prepareScopedThread(slot, inputPower, new InputTransaction(true));
+                    : prepareScopedThread(slot, inputPower, InputTransaction.PROBE);
                 if (!result.wasSuccessful()) {
                     candidates &= ~(1 << slot);
                     failure = result;
@@ -1118,19 +1118,16 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     }
 
     private CheckRecipeResult prepareScopedThread(int slot, long budget, InputTransaction inputs) {
-        ArrayList<MTEHatchInputBus> allBuses = mInputBusses;
-        ArrayList<MTEHatchInput> allHatches = mInputHatches;
-        ArrayList<IDualInputHatch> allDualHatches = mDualInputHatches;
-        mDualInputHatches = getScopedDualInputHatches(slot, allDualHatches);
-        mInputBusses = getScopedInputBuses(slot, allBuses);
-        mInputHatches = getScopedInputHatches(slot, allHatches);
-        try {
-            return prepareThread(slot, budget, inputs);
-        } finally {
-            mInputBusses = allBuses;
-            mInputHatches = allHatches;
-            mDualInputHatches = allDualHatches;
-        }
+        return withGroupInputs(slot, () -> prepareThread(slot, budget, inputs));
+    }
+
+    private <T> T withGroupInputs(int slot, Supplier<T> action) {
+        ArrayList<IDualInputHatch> duals = getScopedDualInputHatches(slot, mDualInputHatches);
+        return withInputs(
+            getScopedInputBuses(slot, mInputBusses, duals),
+            getScopedInputHatches(slot, mInputHatches),
+            duals,
+            action);
     }
 
     private CheckRecipeResult startThread(int slot) {
@@ -1141,27 +1138,16 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if (powerBudgets[slot] <= 0)
             return SimpleResultWithText.ofFailure("tst.bottledchaos.result.insufficient_power_share");
 
-        // Scope GT's normal/ME/segmented inputs to this credential's peers and the central inputs.
-        ArrayList<MTEHatchInputBus> allBuses = mInputBusses;
-        ArrayList<MTEHatchInput> allHatches = mInputHatches;
-        ArrayList<IDualInputHatch> allDualHatches = mDualInputHatches;
-        mDualInputHatches = getScopedDualInputHatches(slot, allDualHatches);
-        mInputBusses = getScopedInputBuses(slot, allBuses);
-        mInputHatches = getScopedInputHatches(slot, allHatches);
-        CheckRecipeResult result;
-        try {
-            startRecipeProcessing();
-            result = prepareThread(slot);
-            setCheckRecipeResult(result);
-        } finally {
+        CheckRecipeResult result = withGroupInputs(slot, () -> {
             try {
-                endRecipeProcessing();
+                startRecipeProcessing();
+                CheckRecipeResult prepared = prepareThread(slot, powerBudgets[slot], InputTransaction.IMMEDIATE);
+                setCheckRecipeResult(prepared);
+                return prepared;
             } finally {
-                mInputBusses = allBuses;
-                mInputHatches = allHatches;
-                mDualInputHatches = allDualHatches;
+                endRecipeProcessing();
             }
-        }
+        });
         // ME extraction failures follow GT's failure-consumption semantics: never award outputs.
         if (!checkRecipeResult.wasSuccessful()) return checkRecipeResult;
         if (!result.wasSuccessful()) return result;
@@ -1192,7 +1178,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         markDirty();
     }
 
-    private ArrayList<MTEHatchInputBus> getScopedInputBuses(int slot, List<MTEHatchInputBus> allBuses) {
+    private ArrayList<MTEHatchInputBus> getScopedInputBuses(int slot, List<MTEHatchInputBus> allBuses,
+        List<IDualInputHatch> duals) {
         ArrayList<MTEHatchInputBus> scoped = new ArrayList<>();
         int groupMask = (1 << slot) | getInputPeerMask(slot);
         for (int input = 0; input < threadInputs.length; input++) {
@@ -1203,8 +1190,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         for (MTEHatchInputBus bus : allBuses) {
             if (!isDedicatedInput(bus)) addInputReference(scoped, bus);
         }
-        // GT registers crafting buffers only in mDualInputHatches. Include their bus lifecycle as well.
-        for (IDualInputHatch dual : mDualInputHatches) {
+        // Include the scoped crafting buffers in the bus lifecycle as well.
+        for (IDualInputHatch dual : duals) {
             if (dual instanceof MTEHatchInputBus bus) addInputReference(scoped, bus);
         }
         return scoped;
@@ -1258,10 +1245,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         return false;
     }
 
-    private CheckRecipeResult prepareThread(int slot) {
-        return prepareThread(slot, powerBudgets[slot], null);
-    }
-
     private CheckRecipeResult prepareThread(int slot, long budget, InputTransaction inputs) {
         ArrayList<ItemStack> commonItems = getStoredNonDualInputs();
         ArrayList<FluidStack> commonFluids = getStoredFluids();
@@ -1312,10 +1295,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         ItemStack[] originals = uniqueItemReferences(storedItems);
         FluidStack[] originalFluids = uniqueFluidReferences(storedFluids);
         ItemStack[] itemCopies = Arrays.stream(originals)
-            .map(stack -> inputs == null ? stack.copy() : inputs.copyItem(stack))
+            .map(inputs::copyItem)
             .toArray(ItemStack[]::new);
         FluidStack[] fluidCopies = Arrays.stream(originalFluids)
-            .map(stack -> inputs == null ? stack.copy() : inputs.copyFluid(stack))
+            .map(inputs::copyFluid)
             .toArray(FluidStack[]::new);
         // Shared recipe fluids and upkeep use the same pending copies, including earlier concentrated candidates.
         IdentityHashMap<FluidStack, FluidStack> workingFluids = new IdentityHashMap<>();
@@ -1323,7 +1306,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         FluidStack[] supply = getCentralSupplyFluids();
         for (int i = 0; i < supply.length; i++) {
             FluidStack working = workingFluids.get(supply[i]);
-            supply[i] = working != null ? working : inputs == null ? supply[i].copy() : inputs.copyFluid(supply[i]);
+            supply[i] = working != null ? working : inputs.copyFluid(supply[i]);
         }
 
         BottledChaosProcessingLogic logic = threadLogics[slot];
@@ -1364,7 +1347,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         List<BottledChaosUpkeep.Demand> starting = new ArrayList<>(logic.getUpkeep());
         for (int other = 0; other < THREAD_COUNT; other++) {
             if (hasAuthorizedWork(other)) active.addAll(threads[other].upkeep);
-            if (inputs != null && inputs.prepared[other]) starting.addAll(threadLogics[other].getUpkeep());
+            if (inputs.isPrepared(other)) starting.addAll(threadLogics[other].getUpkeep());
         }
         result = structureUpkeep.checkStart(active, starting, supply);
         if (!result.wasSuccessful()) return result;
@@ -1376,25 +1359,13 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             ItemStack[] itemSupply = getCentralSupplyItems();
             for (int i = 0; i < itemSupply.length; i++) {
                 ItemStack original = itemSupply[i];
-                itemSupply[i] = roundItemCopies
-                    .computeIfAbsent(original, stack -> inputs == null ? stack.copy() : inputs.copyItem(stack));
+                itemSupply[i] = roundItemCopies.computeIfAbsent(original, inputs::copyItem);
             }
             result = BottledChaosUpkeep.consumeRoundItems(roundItems, itemSupply);
             if (!result.wasSuccessful()) return result;
         }
-        if (inputs != null && inputs.probeOnly) return CheckRecipeResultRegistry.SUCCESSFUL;
-
-        if (inputs != null) {
-            for (int i = 0; i < originals.length; i++) inputs.items.put(originals[i], itemCopies[i]);
-            inputs.items.putAll(roundItemCopies);
-            for (int i = 0; i < originalFluids.length; i++) inputs.fluids.put(originalFluids[i], fluidCopies[i]);
-            return CheckRecipeResultRegistry.SUCCESSFUL;
-        }
-        // Only now commit the prechecked input deltas. No real input was touched by ProcessingLogic.
-        for (int i = 0; i < originals.length; i++) originals[i].stackSize = itemCopies[i].stackSize;
-        roundItemCopies.forEach((original, copy) -> original.stackSize = copy.stackSize);
-        for (int i = 0; i < originalFluids.length; i++) originalFluids[i].amount = fluidCopies[i].amount;
-        updateSlots();
+        // Both modes accept the same checked deltas; only the transaction decides when to apply them.
+        if (inputs.accept(originals, itemCopies, originalFluids, fluidCopies, roundItemCopies)) updateSlots();
         return CheckRecipeResultRegistry.SUCCESSFUL;
     }
 
@@ -1404,9 +1375,9 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         CheckRecipeResult result = reserveRunningOutputs(reservation);
         if (!result.wasSuccessful()) return result;
         BottledChaosOutputBuffer candidate = new BottledChaosOutputBuffer();
-        if (inputs != null) {
+        if (inputs.deferred()) {
             for (int i = 0; i < THREAD_COUNT; i++) {
-                if (!inputs.prepared[i]) continue;
+                if (!inputs.isPrepared(i)) continue;
                 candidate.set(threadLogics[i].getLongItemOutputs(), threadLogics[i].getLongFluidOutputs());
                 result = reservation.reserve(candidate);
                 if (!result.wasSuccessful()) return result;
@@ -1478,29 +1449,57 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             .getTotalWorldTime() < cacheExportResultExpiresAt ? cacheExportResult : CheckRecipeResultRegistry.NONE;
     }
 
+    /** Checked input deltas; stateless immediate/probe modes need no per-attempt reservation maps. */
     private static final class InputTransaction {
 
-        private final IdentityHashMap<ItemStack, ItemStack> items = new IdentityHashMap<>();
-        private final IdentityHashMap<FluidStack, FluidStack> fluids = new IdentityHashMap<>();
-        private final boolean[] prepared = new boolean[THREAD_COUNT];
+        private static final InputTransaction IMMEDIATE = new InputTransaction(false, false);
+        private static final InputTransaction PROBE = new InputTransaction(false, true);
+        private final IdentityHashMap<ItemStack, ItemStack> items;
+        private final IdentityHashMap<FluidStack, FluidStack> fluids;
+        private final boolean[] prepared;
         private final boolean probeOnly;
 
         private InputTransaction() {
-            this(false);
+            this(true, false);
         }
 
-        private InputTransaction(boolean probeOnly) {
+        private InputTransaction(boolean deferred, boolean probeOnly) {
+            items = deferred ? new IdentityHashMap<>() : null;
+            fluids = deferred ? new IdentityHashMap<>() : null;
+            prepared = deferred ? new boolean[THREAD_COUNT] : null;
             this.probeOnly = probeOnly;
         }
 
+        private boolean deferred() {
+            return prepared != null;
+        }
+
+        private boolean isPrepared(int slot) {
+            return deferred() && prepared[slot];
+        }
+
         private ItemStack copyItem(ItemStack original) {
-            return items.getOrDefault(original, original)
-                .copy();
+            return (deferred() ? items.getOrDefault(original, original) : original).copy();
         }
 
         private FluidStack copyFluid(FluidStack original) {
-            return fluids.getOrDefault(original, original)
-                .copy();
+            return (deferred() ? fluids.getOrDefault(original, original) : original).copy();
+        }
+
+        /** Returns true only when real inputs were changed and the host must update its slots. */
+        private boolean accept(ItemStack[] originals, ItemStack[] itemCopies, FluidStack[] originalFluids,
+            FluidStack[] fluidCopies, IdentityHashMap<ItemStack, ItemStack> roundItems) {
+            if (probeOnly) return false;
+            if (deferred()) {
+                for (int i = 0; i < originals.length; i++) items.put(originals[i], itemCopies[i]);
+                items.putAll(roundItems);
+                for (int i = 0; i < originalFluids.length; i++) fluids.put(originalFluids[i], fluidCopies[i]);
+                return false;
+            }
+            for (int i = 0; i < originals.length; i++) originals[i].stackSize = itemCopies[i].stackSize;
+            roundItems.forEach((original, copy) -> original.stackSize = copy.stackSize);
+            for (int i = 0; i < originalFluids.length; i++) originalFluids[i].amount = fluidCopies[i].amount;
+            return true;
         }
 
         private void commit() {
@@ -1693,12 +1692,18 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     /** Source-machine upkeep belongs to the controller, not the credential's private input positions. */
     private <T> T withCentralInputs(Supplier<T> action) {
+        return withInputs(centralInputBuses, centralInputHatches, centralDualInputs, action);
+    }
+
+    /** Scope only the exposed inputs; the caller owns GT's start/end processing lifecycle. */
+    private <T> T withInputs(ArrayList<MTEHatchInputBus> buses, ArrayList<MTEHatchInput> hatches,
+        ArrayList<IDualInputHatch> duals, Supplier<T> action) {
         ArrayList<MTEHatchInputBus> allBuses = mInputBusses;
         ArrayList<MTEHatchInput> allHatches = mInputHatches;
         ArrayList<IDualInputHatch> allDualHatches = mDualInputHatches;
-        mInputBusses = centralInputBuses;
-        mInputHatches = centralInputHatches;
-        mDualInputHatches = centralDualInputs;
+        mInputBusses = buses;
+        mInputHatches = hatches;
+        mDualInputHatches = duals;
         try {
             return action.get();
         } finally {
