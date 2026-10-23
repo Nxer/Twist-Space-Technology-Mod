@@ -56,6 +56,7 @@ public final class BottledChaosMachineConfiguration implements BottledChaosSourc
 
     private final double[] machineSpeeds = new double[MAX_POOLS];
     private final BottledChaosStructureCatalog.Structure[] machineStructures = new BottledChaosStructureCatalog.Structure[MAX_POOLS];
+    private final BottledChaosMachineParameters.InstalledSource[] machineSources = new BottledChaosMachineParameters.InstalledSource[MAX_POOLS];
     private final long[] machineQuantities = new long[MAX_POOLS];
     private long supportedPools;
     private long debugPools;
@@ -103,6 +104,10 @@ public final class BottledChaosMachineConfiguration implements BottledChaosSourc
                     && (debug || machineStructures[slot] != null && machineQuantities[slot] > 0
                         && (machineStructures[slot].poolMask() & bit) != 0);
                 supportedPools = supported ? supportedPools | bit : supportedPools & ~bit;
+                ItemStack controller = machineStructures[slot] != null ? machineStructures[slot].controller()
+                    : ItemBottledChaosMachineModule.isModule(stack) ? null : stack;
+                machineSources[slot] = !debug && controller != null
+                    ? new BottledChaosMachineParameters.InstalledSource(controller, machineStructures[slot]) : null;
                 changed.run();
             }
         };
@@ -325,6 +330,7 @@ public final class BottledChaosMachineConfiguration implements BottledChaosSourc
         private final double[] quantitySpeeds = machineSpeeds.clone();
         private final boolean[] debug = new boolean[MAX_POOLS];
         private final boolean[] miracleDoor = new boolean[MAX_POOLS];
+        private final BottledChaosMachineParameters.InstalledSource[] sources = machineSources.clone();
         private final boolean[] configured = new boolean[MAX_POOLS];
         private final Map<SourceKey, BottledChaosMachineParameters.Profile> profiles = new HashMap<>();
         private final List<BottledChaosUpkeep.Demand> sourceUsage = new ArrayList<>();
@@ -378,8 +384,7 @@ public final class BottledChaosMachineConfiguration implements BottledChaosSourc
             currentProfiles[slot] = profiles.computeIfAbsent(
                 key,
                 ignored -> BottledChaosMachineParameters.evaluate(
-                    controllers[slot],
-                    structures[slot],
+                    sources[slot],
                     map,
                     recipeVoltage,
                     inputVoltage,
@@ -532,7 +537,7 @@ public final class BottledChaosMachineConfiguration implements BottledChaosSourc
         public int[] overclockLimitAlternatives(RecipeMap<?> map) {
             Integer slot = poolIndexes.get(map);
             var profile = profile(map);
-            if (slot == null || profile == null || !BottledChaosComplexStructures.fourHeliocasts(structures[slot]))
+            if (slot == null || profile == null || (sources[slot] == null || !sources[slot].fourHeliocasts))
                 return null;
             int base = profile.maximumOverclocks();
             return new int[] { base, base + 1, base + 2, base + 3 };

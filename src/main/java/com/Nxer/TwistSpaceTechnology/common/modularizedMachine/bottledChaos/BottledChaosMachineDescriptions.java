@@ -1,8 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos;
 
-import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineParameters.append;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineParameters.evaluate;
-import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineParameters.text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +18,8 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.Bott
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.VoltageIndex;
-import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.common.blocks.ItemMachines;
 import gregtech.common.tileentities.machines.multi.foundry.FoundryData;
 
 /** Player-facing parameter descriptions, derived from the same machine profiles used for execution. */
@@ -33,14 +29,10 @@ public final class BottledChaosMachineDescriptions {
         int quantitySpeedExponent, boolean compact) {
         List<String> lines = new ArrayList<>();
         if (controller == null || pool == null) return lines;
-        controller = BottledChaosComplexStructures.parameterController(controller, structure);
-        IMetaTileEntity original = controller.getItem() instanceof ItemMachines
-            ? ItemMachines.getMetaTileEntity(controller)
-            : null;
-        Machine machine = original == null ? null : Machine.find(original);
+        var source = new BottledChaosMachineParameters.InstalledSource(controller, structure);
+        Machine machine = source.machine;
         Profile base = evaluate(
-            controller,
-            structure,
+            source,
             pool,
             1,
             32,
@@ -50,6 +42,12 @@ public final class BottledChaosMachineDescriptions {
             1,
             1,
             1,
+            0,
+            0,
+            null,
+            false,
+            ignored -> {},
+            0,
             0);
         if (machine == Machine.STELLAR_FORGE || machine == Machine.HEAT_CONVECTOR) {
             if (machine == Machine.STELLAR_FORGE) {
@@ -77,10 +75,15 @@ public final class BottledChaosMachineDescriptions {
         String oc = base == null ? "-" : clock(base.powerMultiplier(), base.timeDivisor());
         String restrictions = base == null
             ? StatCollector.translateToLocal("GT5U.gui.multimachine.incomplete_structure")
-            : base.restrictions();
-        String special = base == null ? "" : base.special();
-        Upgrades u = new Upgrades(structure == null ? new ItemStack[0] : structure.materials());
+            : machine == Machine.BIO_VAT ? text("culture") : "";
+        String special = "";
+        Upgrades u = source.upgrades;
         int shape = structure == null ? 1 : structure.profile();
+        if (base != null && source.godforge != null) special = text(
+            "godforge_configuration",
+            source.godforge.rings(),
+            BottledChaosComplexStructures.godforgeUpgradeName(source.godforge));
+        if (base != null && BottledChaosMachineConfiguration.isPurificationPool(pool)) special = text("purification");
         boolean recipeHeat = BottledChaosStructureCatalog.requiresRecipeHeat(pool);
         boolean variableTime = false;
         if (machine != null) switch (machine) {
@@ -163,12 +166,12 @@ public final class BottledChaosMachineDescriptions {
                 if (recipeHeat) eu = "0.9 x " + text("thermal_eu", "0.95");
             }
             case GODFORGE_SMELTING, GODFORGE_MOLTEN -> {
-                var preset = BottledChaosComplexStructures.godforge(structure);
+                var preset = source.godforge;
                 if (preset != null && recipeHeat) eu = (preset.eu() == 1 ? "" : number(preset.eu()) + " x ")
                     + text("thermal_eu", number(preset.heatDiscount()));
             }
             case FOUNDRY -> {
-                FoundryData foundry = BottledChaosComplexStructures.foundry(structure);
+                FoundryData foundry = source.foundry;
                 if (foundry != null) {
                     parallel = number(Math.floor(foundry.parallelScaleAdj)) + "T";
                     eu = number(foundry.euEffAdj);
@@ -190,6 +193,10 @@ public final class BottledChaosMachineDescriptions {
             }
             case SWELEGFYR -> {
                 if (recipeHeat) eu = text("thermal_eu", "0.9");
+                if (base != null) special = StatCollector.translateToLocalFormatted(
+                    "GT5U.tooltip.fluid.temperature",
+                    shape > 1 ? (long) (Math.floor(Math.pow(structure.heat(), 1.08) / 100) * 100 + 1)
+                        : structure.heat());
             }
             case CENTRIFUGE -> parallel = "8T";
             case SPINMATRON -> {
@@ -312,6 +319,15 @@ public final class BottledChaosMachineDescriptions {
         return lines;
     }
 
+    static String append(String value, String addition) {
+        return value.isEmpty() ? addition : value + "; " + addition;
+    }
+
+    static String text(String suffix, Object... args) {
+        String key = "tst.bottledchaos.machine_module." + suffix;
+        return args.length == 0 ? StatCollector.translateToLocal(key)
+            : StatCollector.translateToLocalFormatted(key, args);
+    }
     private static String number(double value) {
         if (value == Integer.MAX_VALUE) return "int";
         if (value >= Long.MAX_VALUE) return "long";

@@ -4,7 +4,6 @@ import java.util.function.Consumer;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -66,7 +65,7 @@ public final class BottledChaosMachineParameters {
     @Desugar
     public record Profile(long parallel, double euMultiplier, double timeMultiplier, double timeDivisor,
         double powerMultiplier, int maximumRecipeTier, long heat, int glassTier, FluidStack[] upkeep,
-        String restrictions, String special, int maximumOverclocks, int perfectOverclocks, int casingTier,
+        int maximumOverclocks, int perfectOverclocks, int casingTier,
         int compressionTier, double minimumSourceDuration, boolean heavyCentrifuge, int plasmaTier,
         boolean multiStepPlasma, int startupReserveSeconds, long maximumSourcePower) {}
 
@@ -185,36 +184,40 @@ public final class BottledChaosMachineParameters {
         }
     }
 
-    public static Profile evaluate(ItemStack controller, Structure structure, RecipeMap<?> pool, long recipeVoltage,
-        long inputVoltage, long inputPower, ItemStack[] items, FluidStack[] fluids, double masterTime, double masterEU,
-        long masterParallel, int requiredHeat) {
-        return evaluate(
-            controller,
-            structure,
-            pool,
-            recipeVoltage,
-            inputVoltage,
-            inputPower,
-            items,
-            fluids,
-            masterTime,
-            masterEU,
-            masterParallel,
-            requiredHeat,
-            0,
-            null,
-            false,
-            ignored -> {},
-            0,
-            0);
+    /** Parsed once per installed module change; never contains a planning inventory or dynamic profile. */
+    static final class InstalledSource {
+
+        final Structure structure;
+        final boolean debug;
+        final IMetaTileEntity original;
+        final RecipeMapWorkable workable;
+        final Machine machine;
+        final Upgrades upgrades;
+        final BottledChaosComplexStructures.GodforgeProfile godforge;
+        final FoundryData foundry;
+        final boolean fourHeliocasts;
+
+        InstalledSource(ItemStack controller, Structure structure) {
+            this.structure = structure;
+            debug = GTCMItemList.TestItem0.equal(controller);
+            controller = BottledChaosComplexStructures.parameterController(controller, structure);
+            original = controller != null && controller.getItem() instanceof ItemMachines
+                ? ItemMachines.getMetaTileEntity(controller) : null;
+            workable = original instanceof RecipeMapWorkable source ? source : null;
+            machine = original == null ? null : Machine.find(original);
+            upgrades = new Upgrades(structure == null ? new ItemStack[0] : structure.materials());
+            godforge = BottledChaosComplexStructures.godforge(structure);
+            foundry = machine == Machine.FOUNDRY ? BottledChaosComplexStructures.foundry(structure) : null;
+            fourHeliocasts = foundry != null && BottledChaosComplexStructures.fourHeliocasts(structure);
+        }
     }
 
-    public static Profile evaluate(ItemStack controller, Structure structure, RecipeMap<?> pool, long recipeVoltage,
+    static Profile evaluate(InstalledSource source, RecipeMap<?> pool, long recipeVoltage,
         long inputVoltage, long inputPower, ItemStack[] items, FluidStack[] fluids, double masterTime, double masterEU,
         long masterParallel, int requiredHeat, int requiredGlassTier, ItemStack requiredSpecialInput,
         boolean heavyCentrifuge, Consumer<CheckRecipeResult> failure, long requiredSourceVoltage,
         long fusionThreshold) {
-        if (controller == null || pool == null
+        if (source == null || pool == null
             || recipeVoltage <= 0
             || inputVoltage <= 0
             || inputPower <= 0
@@ -226,12 +229,12 @@ public final class BottledChaosMachineParameters {
             || masterEU <= 0
             || masterParallel <= 0
             || requiredHeat < 0) return null;
-        if (GTCMItemList.TestItem0.equal(controller)) return new Values().profile();
-        controller = BottledChaosComplexStructures.parameterController(controller, structure);
-        if (!(controller.getItem() instanceof ItemMachines)) return null;
-        IMetaTileEntity original = ItemMachines.getMetaTileEntity(controller);
-        if (!(original instanceof RecipeMapWorkable workable)) return null;
-        Machine machine = Machine.find(original);
+        if (source.debug) return new Values().profile();
+        IMetaTileEntity original = source.original;
+        RecipeMapWorkable workable = source.workable;
+        Machine machine = source.machine;
+        Structure structure = source.structure;
+        if (workable == null) return null;
         if (!workable.getAvailableRecipeMaps()
             .contains(pool) && !(machine == Machine.NEUTRON && pool == GTCMRecipe.NeutronActivatorWithEURecipeMap)
             && !(machine == Machine.STELLAR_FORGE && pool == RecipeMaps.alloyBlastSmelterRecipes)) return null;
@@ -242,7 +245,7 @@ public final class BottledChaosMachineParameters {
             return value.profile();
         }
         if (structure == null) return null;
-        Upgrades u = new Upgrades(structure == null ? new ItemStack[0] : structure.materials());
+        Upgrades u = source.upgrades;
         int shape = structure == null ? 1 : structure.profile();
         int t = GTUtility.getTier(inputVoltage);
         int p = GTUtility.getTier(inputPower);
@@ -311,7 +314,7 @@ public final class BottledChaosMachineParameters {
                 value.timeDivisor = 4;
                 value.requiresHeat = true;
             }
-            case BIO_VAT -> value.restrictions = text("culture");
+            case BIO_VAT -> {}
             case MEGA_ALLOY -> {
                 if (c < 0 && !u.basicAlloyCoil) return null;
                 value.set(256, Math.pow(0.95, Math.max(c + 1 - recipeTier, 0)), 1 - 0.05 * Math.max(c - 3, 0));
@@ -372,7 +375,6 @@ public final class BottledChaosMachineParameters {
                     if (requiredSpecialInput == null || dishes <= 0) return reject(pool, "culture", dishes, 1, failure);
                     if (u.glass < requiredGlassTier) return reject(pool, "glass", u.glass, requiredGlassTier, failure);
                     value.set(dishes, 1, 1 / (1.6 + 0.6 * (u.glass - requiredGlassTier)));
-                    value.restrictions = text("culture");
                 }
             }
             case OIL_CRACKER -> {
@@ -487,7 +489,6 @@ public final class BottledChaosMachineParameters {
                     1d / electrode.speedModifier);
                 value.timeDivisor = electrode.OCSpeedFactor;
                 value.powerMultiplier = electrode.OCPowerFactor;
-                value.special = text("electrode");
             }
             case INDISTINCT_PROTOTYPE, MODULAR_NEUTRON -> {
                 value.set(masterParallel, masterEU, masterTime);
@@ -495,7 +496,6 @@ public final class BottledChaosMachineParameters {
                     value.timeDivisor = 1;
                     value.powerMultiplier = 1;
                 }
-                value.special = text("master");
             }
             case ADVANCED_BLAST -> {
                 value.set(8, 0.9, 1d / 2.2);
@@ -520,7 +520,7 @@ public final class BottledChaosMachineParameters {
                 value.timeDivisor = value.powerMultiplier = 1;
             }
             case GODFORGE_SMELTING, GODFORGE_MOLTEN, GODFORGE_EXOTIC, GODFORGE_PLASMA -> {
-                var preset = BottledChaosComplexStructures.godforge(structure);
+                var preset = source.godforge;
                 if (preset == null) return null;
                 value.set(preset.parallel(), preset.eu(), preset.time());
                 // This package aggregates multiple native modules, each retaining its own int parallel limit.
@@ -529,15 +529,11 @@ public final class BottledChaosMachineParameters {
                 value.heat = preset.heat();
                 value.plasmaTier = preset.plasmaTier();
                 value.multiStepPlasma = preset.multiStepPlasma();
-                value.special = text(
-                    "godforge_configuration",
-                    preset.rings(),
-                    BottledChaosComplexStructures.godforgeUpgradeName(preset));
                 if (machine == Machine.GODFORGE_SMELTING || machine == Machine.GODFORGE_MOLTEN)
                     value.heatDiscount = preset.heatDiscount();
             }
             case FOUNDRY -> {
-                FoundryData foundry = BottledChaosComplexStructures.foundry(structure);
+                FoundryData foundry = source.foundry;
                 if (foundry == null) return null;
                 value.set(
                     (long) Math.floor(foundry.parallelScaleAdj) * Math.max(1, t),
@@ -558,11 +554,6 @@ public final class BottledChaosMachineParameters {
                         : coolant.getMolten(coolant == Materials.SpaceTime ? 50 : 25) };
                 }
                 value.maximumOverclocks = Math.max(0, t - recipeTier + additional);
-                value.special = text(
-                    "foundry_configuration",
-                    shape + 1,
-                    BottledChaosComplexStructures.foundryUpgradeName(structure));
-                if (foundry.isHRPairPresent) value.special = append(value.special, text("foundry_random"));
             }
             case HEARTH -> {
                 value.parallel = 512;
@@ -574,7 +565,6 @@ public final class BottledChaosMachineParameters {
                 value.heat = shape > 1 ? (long) (Math.floor(Math.pow(value.heat, 1.08) / 100) * 100 + 1) : value.heat;
                 value.heatDiscount = 0.9;
                 value.upkeep = pyrotheum(shape > 1 ? (int) Math.min(Integer.MAX_VALUE, value.heat / 5) : 1000);
-                value.special = StatCollector.translateToLocalFormatted("GT5U.tooltip.fluid.temperature", value.heat);
             }
             case CHEMICAL_PLANT -> {
                 if (u.fluidPipe < 1 || u.machineCasing < 0 || u.solidCasing < 0 || c < 0) return null;
@@ -606,12 +596,10 @@ public final class BottledChaosMachineParameters {
                 value.upkeep = new FluidStack[] { boost ? Materials.BiocatalyzedPropulsionFluid.getFluid(amount)
                     : new FluidStack(GTPPFluids.Kerosene, amount) };
                 value.startupReserveSeconds = 5;
-                value.restrictions = text("rotor");
             }
             case PURIFICATION_CLARIFIER, PURIFICATION_DEGASSER, PURIFICATION_FLOCCULATION, PURIFICATION_OZONATION, PURIFICATION_PH, PURIFICATION_PLASMA, PURIFICATION_BARYONIC, PURIFICATION_UV -> {
                 value.timeDivisor = 4;
                 value.powerMultiplier = 4;
-                value.special = text("purification");
             }
             case QUANTUM -> {
                 long catalyst = count(items, requiredSpecialInput);
@@ -620,7 +608,6 @@ public final class BottledChaosMachineParameters {
                 if (u.quantumTier < 1) return reject(pool, "casing", u.quantumTier, 1, failure);
                 value.parallel = Math.min(Integer.MAX_VALUE, catalyst);
                 value.casingTier = u.quantumTier;
-                value.restrictions = text("catalyst");
             }
             case DE_FUSION -> {
                 value.casingTier = u.draconicTier;
@@ -647,7 +634,6 @@ public final class BottledChaosMachineParameters {
                 value.timeDivisor = 1;
                 value.powerMultiplier = 1;
                 value.maximumOverclocks = 0;
-                value.special = text("neutron");
             }
         }
         // Only source machines whose glass limits voltage inherit a recipe voltage cap.
@@ -659,7 +645,7 @@ public final class BottledChaosMachineParameters {
         }
         if (value.heatDiscount > 0) {
             value.requiresHeat = true;
-            var godforge = BottledChaosComplexStructures.godforge(structure);
+            var godforge = source.godforge;
             long excess = Math.max((godforge == null ? value.heat : godforge.overclockHeat()) - requiredHeat, 0);
             value.euMultiplier *= Math.pow(value.heatDiscount, excess / 900);
             value.perfectOverclocks = (int) Math.min(Integer.MAX_VALUE, excess / 1800);
@@ -726,8 +712,6 @@ public final class BottledChaosMachineParameters {
         long heat;
         int glassTier;
         FluidStack[] upkeep = new FluidStack[0];
-        String restrictions = "";
-        String special = "";
         int maximumOverclocks = -1;
         int perfectOverclocks;
         int casingTier = -1;
@@ -762,8 +746,6 @@ public final class BottledChaosMachineParameters {
                 heat,
                 glassTier,
                 upkeep,
-                restrictions,
-                special,
                 maximumOverclocks,
                 perfectOverclocks,
                 casingTier,
@@ -882,13 +864,4 @@ public final class BottledChaosMachineParameters {
         }
     }
 
-    static String append(String value, String addition) {
-        return value.isEmpty() ? addition : value + "; " + addition;
-    }
-
-    static String text(String suffix, Object... args) {
-        String key = "tst.bottledchaos.machine_module." + suffix;
-        return args.length == 0 ? StatCollector.translateToLocal(key)
-            : StatCollector.translateToLocalFormatted(key, args);
-    }
 }
