@@ -52,9 +52,33 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
             && stack.stackSize == 1;
     }
 
-    public static NBTTagCompound assembly(ItemStack stack) {
+    private static NBTTagCompound assembly(ItemStack stack) {
         return isModule(stack) && stack.hasTagCompound() ? stack.getTagCompound()
             .getCompoundTag(ASSEMBLY) : new NBTTagCompound();
+    }
+
+    public static String machineKey(ItemStack stack) {
+        return assembly(stack).getString("machine");
+    }
+
+    public static int profile(ItemStack stack) {
+        return assembly(stack).getInteger("profile");
+    }
+
+    /** Decode the stored controller for tooltips and recipe-query identity checks. */
+    public static ItemStack controller(ItemStack stack) {
+        return ItemStack.loadItemStackFromNBT(assembly(stack).getCompoundTag("controller"));
+    }
+
+    public static boolean isDisplay(ItemStack stack) {
+        return assembly(stack).getBoolean("display");
+    }
+
+    /** AE patterns describe the real output. Only the copy loses its NEI marker; no physical asset is created. */
+    public static ItemStack copyForPattern(ItemStack stack) {
+        ItemStack copy = stack.copy();
+        if (isModule(copy)) assembly(copy).removeTag("display");
+        return copy;
     }
 
     public static long quantity(ItemStack stack) {
@@ -155,7 +179,7 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
 
     @Override
     public IIcon getIconIndex(ItemStack stack) {
-        return quantity(stack) > 0 || assembly(stack).getBoolean("display") ? packedIcon : itemIcon;
+        return quantity(stack) > 0 || isDisplay(stack) ? packedIcon : itemIcon;
     }
 
     @Override
@@ -167,7 +191,7 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> lines, boolean advanced) {
         long quantity = quantity(stack);
         NBTTagCompound data = assembly(stack);
-        ItemStack controller = ItemStack.loadItemStackFromNBT(data.getCompoundTag("controller"));
+        ItemStack controller = controller(stack);
         if (controller != null) lines.add(EnumChatFormatting.GOLD + controller.getDisplayName());
         boolean display = data.getBoolean("display");
         Structure structure = structure(stack);

@@ -262,10 +262,11 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
             if (input.item.stackSize > 0) inputs.add(new PositionedStack(input.item.copy(), input.relx, input.rely));
         List<PositionedStack> outputs = new ArrayList<>();
         for (PositionedStack output : cached.mOutputs) {
-            ItemStack item = output.item.copy();
-            if (ItemBottledChaosMachineModule.isModule(item)) ItemBottledChaosMachineModule.assembly(item)
-                .removeTag("display");
-            outputs.add(new PositionedStack(item, output.relx, output.rely));
+            outputs.add(
+                new PositionedStack(
+                    ItemBottledChaosMachineModule.copyForPattern(output.item),
+                    output.relx,
+                    output.rely));
         }
         return new GTNEIDefaultHandler(RecipeMaps.assemblerRecipes.getDefaultRecipeCategory()) {
 
@@ -302,9 +303,7 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
                 continue;
             }
             for (ItemStack output : recipe.mRecipe.mOutputs) {
-                ItemStack controller = ItemStack.loadItemStackFromNBT(
-                    ItemBottledChaosMachineModule.assembly(output)
-                        .getCompoundTag("controller"));
+                ItemStack controller = ItemBottledChaosMachineModule.controller(output);
                 if (controller != null && controller.isItemEqual(input)) {
                     arecipes.add(recipe);
                     break;
@@ -314,8 +313,7 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
     }
 
     private void loadModule(ItemStack module) {
-        String key = ItemBottledChaosMachineModule.assembly(module)
-            .getString("machine");
+        String key = ItemBottledChaosMachineModule.machineKey(module);
         for (CachedDefaultRecipe recipe : getCache()) {
             if (key.isEmpty() || recipe instanceof StructureRecipe structure && structure.display.hasMachine(key)
                 || hasMachine(recipe.mRecipe.mInputs, key)
@@ -326,9 +324,7 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
     private static boolean hasMachine(ItemStack[] stacks, String key) {
         for (ItemStack stack : stacks) {
             if (stack == null) continue;
-            if (key.equals(stack.getUnlocalizedName()) || key.equals(
-                ItemBottledChaosMachineModule.assembly(stack)
-                    .getString("machine")))
+            if (key.equals(stack.getUnlocalizedName()) || key.equals(ItemBottledChaosMachineModule.machineKey(stack)))
                 return true;
         }
         return false;

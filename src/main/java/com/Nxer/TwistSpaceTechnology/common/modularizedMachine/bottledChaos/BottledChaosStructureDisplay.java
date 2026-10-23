@@ -104,10 +104,10 @@ public final class BottledChaosStructureDisplay {
             if (material == null) materials.put(TST_ItemID.create(item), item.copy());
             else material.stackSize += item.stackSize;
         }
-        var data = ItemBottledChaosMachineModule.assembly(frame.outputs()[0]);
+        ItemStack module = frame.outputs()[0];
         return BottledChaosStructureCatalog.resolve(
-            data.getString("machine"),
-            data.getInteger("profile"),
+            ItemBottledChaosMachineModule.machineKey(module),
+            ItemBottledChaosMachineModule.profile(module),
             materials.values()
                 .toArray(new ItemStack[0]));
     }
