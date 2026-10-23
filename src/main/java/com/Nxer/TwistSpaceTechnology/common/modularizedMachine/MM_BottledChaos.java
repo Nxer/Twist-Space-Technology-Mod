@@ -2015,24 +2015,22 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         return job;
     }
 
-    private String getThreadWailaStatus(int slot) {
-        if (isThreadExecutionDisabled(slot)) return "tst.bottledchaos.paused";
-        if (overCapacity) return "tst.bottledchaos.capacity_exceeded";
-        if (validGroup(slot) && !ItemBottledChaosCredential.isBound(installedCredentials[slot]))
-            return "tst.bottledchaos.unbound";
-        if (!mMachine) return "tst.bottledchaos.paused";
-        CheckRecipeResult result = getThreadDisplayResult(slot);
-        if (isFailure(result)) return "";
-        if (!getBaseMetaTileEntity().isAllowedToWork()) return "tst.bottledchaos.paused";
-        return threads[slot].status;
-    }
-
     private void writeThreadWailaStatus(NBTTagCompound job, int slot) {
-        String status = getThreadWailaStatus(slot);
-        job.setString("status", status);
-        if (status.isEmpty()) {
-            BottledChaosResultData.write(job, getThreadDisplayResult(slot));
+        String status;
+        if (isThreadExecutionDisabled(slot)) status = "tst.bottledchaos.paused";
+        else if (overCapacity) status = "tst.bottledchaos.capacity_exceeded";
+        else if (validGroup(slot) && !ItemBottledChaosCredential.isBound(installedCredentials[slot]))
+            status = "tst.bottledchaos.unbound";
+        else if (!mMachine) status = "tst.bottledchaos.paused";
+        else {
+            CheckRecipeResult result = getThreadDisplayResult(slot);
+            status = isFailure(result) ? ""
+                : !getBaseMetaTileEntity().isAllowedToWork() ? "tst.bottledchaos.paused" : threads[slot].status;
+            job.setString("status", status);
+            if (status.isEmpty()) BottledChaosResultData.write(job, result);
+            return;
         }
+        job.setString("status", status);
     }
 
     public static String getWailaStatusText(NBTTagCompound job) {
