@@ -50,7 +50,6 @@ import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 
 import gregtech.api.modularui2.GTGuiTextures;
-import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.common.gui.modularui.adapter.CheckRecipeResultAdapter;
@@ -541,15 +540,17 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
         syncManager.syncValue("bottledChaosRequiredPools", required);
         var rows = new ListWidget<>().fullWidth()
             .height(154);
-        BooleanSupplier alternativesVisible = () -> poolVisible(
-            required,
-            Long.numberOfTrailingZeros(
-                BottledChaosMachineConfiguration.mask(BottledChaosProcessAlternatives.STELLAR_FORGE)))
-            || poolVisible(
-                required,
-                Long.numberOfTrailingZeros(
-                    BottledChaosMachineConfiguration.mask(BottledChaosProcessAlternatives.GODFORGE_MOLTEN)))
-            || poolVisible(required, Long.numberOfTrailingZeros(BottledChaosProcessAlternatives.coolingMask()));
+        var displayGroup = BottledChaosProcessAlternatives.displayGroup();
+        var alternativeMaps = displayGroup.alternatives();
+        BooleanSupplier alternativesVisible = () -> {
+            for (int i = 0; i < alternativeMaps.size(); i++) {
+                if (poolVisible(
+                    required,
+                    Long.numberOfTrailingZeros(BottledChaosMachineConfiguration.mask(alternativeMaps.get(i)))))
+                    return true;
+            }
+            return false;
+        };
         Flow originalPools = Flow.column()
             .width(99)
             .coverChildrenHeight(1)
@@ -579,23 +580,21 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             .child(originalPools)
             .child(alternativePools);
         boolean grouped = false;
-        IWidget[] originals = new IWidget[3];
+        IWidget[] originals = new IWidget[displayGroup.originals()
+            .size()];
         for (int slot = 0; slot < BottledChaosMachineConfiguration.poolCount(); slot++) {
             var pool = BottledChaosMachineConfiguration.pool(slot);
-            boolean replacement = pool == BottledChaosProcessAlternatives.STELLAR_FORGE
-                || pool == BottledChaosProcessAlternatives.GODFORGE_MOLTEN
-                || pool == BottledChaosProcessAlternatives.COOLING;
-            boolean original = pool == RecipeMaps.blastFurnaceRecipes || pool == RecipeMaps.vacuumFreezerRecipes
-                || pool == RecipeMaps.fluidExtractionRecipes;
-            if (replacement || original) {
+            boolean replacement = alternativeMaps.contains(pool);
+            int originalIndex = displayGroup.originals()
+                .indexOf(pool);
+            if (replacement || originalIndex >= 0) {
                 if (!grouped) {
                     rows.child(alternativeGroup);
                     grouped = true;
                 }
                 IWidget row = createRecipePoolRow(syncManager, panelOpen, required, slot, replacement ? 69 : 77, 32);
                 if (replacement) alternativePools.child(row);
-                else originals[pool == RecipeMaps.blastFurnaceRecipes ? 0
-                    : pool == RecipeMaps.vacuumFreezerRecipes ? 1 : 2] = row;
+                else originals[originalIndex] = row;
             } else rows.child(createRecipePoolRow(syncManager, panelOpen, required, slot, 168, 20));
         }
         for (IWidget row : originals) if (row != null) originalPools.child(row);

@@ -19,6 +19,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosR
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeSupport.TimeKey;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
+import com.google.common.collect.ImmutableList;
 
 import bartworks.system.material.WerkstoffLoader;
 import gregtech.api.enums.Materials;
@@ -34,7 +35,19 @@ public final class BottledChaosProcessAlternatives {
     public static final RecipeMap<?> STELLAR_FORGE = GTCMRecipe.StellarForgeRecipeMap;
     public static final RecipeMap<?> GODFORGE_MOLTEN = TecTechRecipeMaps.godforgeMoltenRecipes;
     public static final RecipeMap<?> COOLING = GTCMRecipe.RapidCoolingDownRecipeMap;
+    private static final DisplayGroup DISPLAY_GROUP = new DisplayGroup(
+        ImmutableList
+            .of(RecipeMaps.blastFurnaceRecipes, RecipeMaps.vacuumFreezerRecipes, RecipeMaps.fluidExtractionRecipes),
+        ImmutableList.of(STELLAR_FORGE, GODFORGE_MOLTEN, COOLING));
     private static final List<Group> pending = new ArrayList<>();
+
+    /** Pool-list membership and original-column order only; valid substitutions still come from cached versions. */
+    @Desugar
+    public record DisplayGroup(List<RecipeMap<?>> originals, List<RecipeMap<?>> alternatives) {}
+
+    public static DisplayGroup displayGroup() {
+        return DISPLAY_GROUP;
+    }
 
     static final class Source {
 
