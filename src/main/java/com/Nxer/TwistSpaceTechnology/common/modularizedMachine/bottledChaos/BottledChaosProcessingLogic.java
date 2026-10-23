@@ -125,22 +125,23 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
                 PreparedPlan recovered = planner.recoverAvailable(chosen, batchDurationLimit(chosen));
                 if (fitsWork.test(recovered)) chosen = recovered;
                 long diagnosticRecovered = System.nanoTime();
-                result = checkOutputs(planner, chosen);
+                result = prepareAndCheckOutputs(planner, chosen);
                 if (!result.wasSuccessful() && chosen != mainPlan) {
                     chosen = mainPlan;
-                    result = checkOutputs(planner, chosen);
+                    result = prepareAndCheckOutputs(planner, chosen);
                 }
                 if (!result.wasSuccessful() && chosen != fallback) {
                     // Output blockage only shrinks the selected targets; do not repeat the growth estimate.
                     chosen = planner.reduceDownstream(
                         fallback,
                         chosen,
-                        candidate -> fitsWork.test(candidate) && checkOutputs(planner, candidate).wasSuccessful());
-                    result = checkOutputs(planner, chosen);
+                        candidate -> fitsWork.test(candidate)
+                            && prepareAndCheckOutputs(planner, candidate).wasSuccessful());
+                    result = prepareAndCheckOutputs(planner, chosen);
                 }
                 if (!result.wasSuccessful() && chosen != fallback) {
                     chosen = fallback;
-                    result = checkOutputs(planner, chosen);
+                    result = prepareAndCheckOutputs(planner, chosen);
                 }
                 if (!result.wasSuccessful()) {
                     if (attempt == 0 && result == CheckRecipeResultRegistry.NO_RECIPE) continue;
@@ -162,52 +163,17 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
                 calculatedParallels = outputs.executions();
                 setLongOutputs(outputs.itemOutputs(), outputs.fluidOutputs());
                 long diagnosticEnd = System.nanoTime();
-                com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG.info(
-                    "BC_ROUND entry=" + entry
-                        + " total="
-                        + (diagnosticEnd - diagnosticStart)
-                        + " setup="
-                        + (diagnosticSetup - diagnosticStart)
-                        + " prepare="
-                        + (diagnosticPrepared - diagnosticPrepareStart)
-                        + " fit="
-                        + (diagnosticFitted - diagnosticPrepared)
-                        + " recover="
-                        + (diagnosticRecovered - diagnosticFitted)
-                        + " output="
-                        + (diagnosticChecked - diagnosticRecovered)
-                        + " finish="
-                        + (diagnosticEnd - diagnosticChecked)
-                        + " probes="
-                        + planner.diagnosticProbes
-                        + " probeNs="
-                        + planner.diagnosticProbeNs
-                        + " targetPasses="
-                        + planner.diagnosticTargetPasses
-                        + " targetExtensions="
-                        + planner.diagnosticTargetExtensions
-                        + " targetPassNs="
-                        + planner.diagnosticTargetPassNs
-                        + " shortProbes="
-                        + planner.diagnosticShortProbes
-                        + " shortExtensions="
-                        + planner.diagnosticShortExtensions
-                        + " shortBefore="
-                        + planner.diagnosticShortBefore
-                        + " shortAfter="
-                        + planner.diagnosticShortAfter
-                        + " sources="
-                        + planner.diagnosticSourceCalls
-                        + " sourceNs="
-                        + planner.diagnosticSourceNs
-                        + " inputNs="
-                        + planner.diagnosticInputNs
-                        + " matchNs="
-                        + planner.diagnosticMatchNs
-                        + " ticks="
-                        + duration
-                        + " eut="
-                        + calculatedEut);
+                logRound(
+                    entry,
+                    planner,
+                    diagnosticStart,
+                    diagnosticSetup,
+                    diagnosticPrepareStart,
+                    diagnosticPrepared,
+                    diagnosticFitted,
+                    diagnosticRecovered,
+                    diagnosticChecked,
+                    diagnosticEnd);
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
         }
@@ -217,7 +183,60 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
         return failure;
     }
 
-    private CheckRecipeResult checkOutputs(BottledChaosRecipeProcessor.ExecutionPlanner planner, PreparedPlan plan) {
+    /** Formatting stays outside planning; all timestamps are sampled at the original stage boundaries. */
+    private void logRound(int entry, BottledChaosRecipeProcessor.ExecutionPlanner planner, long diagnosticStart,
+        long diagnosticSetup, long diagnosticPrepareStart, long diagnosticPrepared, long diagnosticFitted,
+        long diagnosticRecovered, long diagnosticChecked, long diagnosticEnd) {
+        com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG.info(
+            "BC_ROUND entry=" + entry
+                + " total="
+                + (diagnosticEnd - diagnosticStart)
+                + " setup="
+                + (diagnosticSetup - diagnosticStart)
+                + " prepare="
+                + (diagnosticPrepared - diagnosticPrepareStart)
+                + " fit="
+                + (diagnosticFitted - diagnosticPrepared)
+                + " recover="
+                + (diagnosticRecovered - diagnosticFitted)
+                + " output="
+                + (diagnosticChecked - diagnosticRecovered)
+                + " finish="
+                + (diagnosticEnd - diagnosticChecked)
+                + " probes="
+                + planner.diagnosticProbes
+                + " probeNs="
+                + planner.diagnosticProbeNs
+                + " targetPasses="
+                + planner.diagnosticTargetPasses
+                + " targetExtensions="
+                + planner.diagnosticTargetExtensions
+                + " targetPassNs="
+                + planner.diagnosticTargetPassNs
+                + " shortProbes="
+                + planner.diagnosticShortProbes
+                + " shortExtensions="
+                + planner.diagnosticShortExtensions
+                + " shortBefore="
+                + planner.diagnosticShortBefore
+                + " shortAfter="
+                + planner.diagnosticShortAfter
+                + " sources="
+                + planner.diagnosticSourceCalls
+                + " sourceNs="
+                + planner.diagnosticSourceNs
+                + " inputNs="
+                + planner.diagnosticInputNs
+                + " matchNs="
+                + planner.diagnosticMatchNs
+                + " ticks="
+                + duration
+                + " eut="
+                + calculatedEut);
+    }
+
+    private CheckRecipeResult prepareAndCheckOutputs(BottledChaosRecipeProcessor.ExecutionPlanner planner,
+        PreparedPlan plan) {
         if (planner.completePlan(plan) == null) return CheckRecipeResultRegistry.NO_RECIPE;
         BottledChaosRecipeProcessor.Plan outputs;
         try {
