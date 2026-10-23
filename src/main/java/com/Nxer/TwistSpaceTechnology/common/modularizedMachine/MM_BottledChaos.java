@@ -4,6 +4,10 @@ import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.Modularize
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.ParallelController;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.PowerConsumptionController;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.SpeedController;
+import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting.CARRIER_SLOT;
+import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting.MATERIAL_SLOT_START;
+import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting.OUTPUT_SLOT;
+import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting.SLOT_COUNT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.defer;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
@@ -125,10 +129,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private static final int CAPACITY_REGION_BLOCK_COUNT = 64;
     private static final int CAPACITY_LEVEL_COUNT = 5;
     private static final int OUTPUT_RETRY_TICKS = 20;
-    private static final int CREDENTIAL_INJECTION_TARGET_SLOT = 0;
-    private static final int CREDENTIAL_INJECTION_SOURCE_SLOT_START = 1;
-    private static final int CREDENTIAL_INJECTION_OUTPUT_SLOT = 9;
-    private static final int CREDENTIAL_INJECTION_ITEM_SLOT_COUNT = 11;
     private static final String CREDENTIAL_INJECTION_ITEM_NBT = "bottledChaosCredentialInjectionItem";
     private static final String WAILA_CAPACITY = "bottledChaosCapacity";
     private static final String WAILA_USED_CAPACITY = "bottledChaosUsedCapacity";
@@ -300,21 +300,20 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         authorizationDirty = true;
         markDirty();
     });
-    private final ItemStackHandler credentialInjectionInventory = new ItemStackHandler(
-        CREDENTIAL_INJECTION_ITEM_SLOT_COUNT) {
+    private final ItemStackHandler credentialInjectionInventory = new ItemStackHandler(SLOT_COUNT) {
 
         @Override
         public int getSlotLimit(int slot) {
-            return slot >= CREDENTIAL_INJECTION_SOURCE_SLOT_START && slot < CREDENTIAL_INJECTION_OUTPUT_SLOT ? 64 : 1;
+            return slot >= MATERIAL_SLOT_START && slot < OUTPUT_SLOT ? 64 : 1;
         }
 
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
-            if (slot == CREDENTIAL_INJECTION_TARGET_SLOT) {
+            if (slot == CARRIER_SLOT) {
                 return ItemBottledChaosCredential.getCapacity(stack) > 0
                     || ItemBottledChaosMachineModule.isModule(stack);
             }
-            return slot < CREDENTIAL_INJECTION_OUTPUT_SLOT;
+            return slot < OUTPUT_SLOT;
         }
 
         @Override
@@ -397,7 +396,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         super.saveNBTData(nbt);
         machineConfiguration.save(nbt);
         nbt.setTag("bottledChaosUpkeep", structureUpkeep.save());
-        for (int slot = 0; slot < CREDENTIAL_INJECTION_ITEM_SLOT_COUNT; slot++) {
+        for (int slot = 0; slot < SLOT_COUNT; slot++) {
             GTUtility
                 .saveItem(nbt, CREDENTIAL_INJECTION_ITEM_NBT + slot, credentialInjectionInventory.getStackInSlot(slot));
         }
@@ -423,7 +422,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         structureUpkeep.load(nbt.getTagList("bottledChaosUpkeep", 10));
         upkeepDirty = poolUsersDirty = true;
         upkeepRetryTick = 0;
-        for (int slot = 0; slot < CREDENTIAL_INJECTION_ITEM_SLOT_COUNT; slot++) {
+        for (int slot = 0; slot < SLOT_COUNT; slot++) {
             credentialInjectionInventory
                 .setStackInSlot(slot, GTUtility.loadItem(nbt, CREDENTIAL_INJECTION_ITEM_NBT + slot));
         }
@@ -1788,7 +1787,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                         drop);
                 }
             }
-            for (int slot = 0; slot < CREDENTIAL_INJECTION_ITEM_SLOT_COUNT; slot++) {
+            for (int slot = 0; slot < SLOT_COUNT; slot++) {
                 ItemStack stack = credentialInjectionInventory.getStackInSlot(slot);
                 if (stack == null) continue;
                 credentialInjectionInventory.setStackInSlot(slot, null);

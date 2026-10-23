@@ -1,5 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2;
 
+import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting.CARRIER_SLOT;
+import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting.MATERIAL_SLOT_START;
+import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting.OUTPUT_SLOT;
+import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting.SECOND_OUTPUT_SLOT;
 import static gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY;
 
 import java.util.StringJoiner;
@@ -55,10 +59,6 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
     private static final String RECIPE_CATEGORY_PANEL = "bottledChaosRecipeCategoryPanel";
     private static final String CREDENTIAL_INJECTION_PANEL = "bottledChaosCredentialInjectionPanel";
     private static final String CREDENTIAL_SLOT_GROUP = "bottledChaosCredentialCrafting";
-    private static final int CREDENTIAL_TARGET_SLOT = 0;
-    private static final int CREDENTIAL_SOURCE_SLOT_START = 1;
-    private static final int CREDENTIAL_OUTPUT_SLOT = 9;
-    private static final int CREDENTIAL_SECOND_OUTPUT_SLOT = 10;
 
     // #tr tst.bottledchaos.gui.recipe_category_configuration
     // # Machine Type Configuration
@@ -449,7 +449,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             .child(
                 createCredentialSingleSlotArea(
                     "tst.bottledchaos.gui.credential_injection.frame",
-                    CREDENTIAL_TARGET_SLOT,
+                    CARRIER_SLOT,
                     "tst.bottledchaos.gui.credential_injection.target",
                     true,
                     panelOpen))
@@ -482,8 +482,8 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             .child(
                 Flow.row()
                     .size(36, 18)
-                    .child(createCredentialOutputSlot(CREDENTIAL_OUTPUT_SLOT, outputs))
-                    .child(createCredentialOutputSlot(CREDENTIAL_SECOND_OUTPUT_SLOT, outputs)));
+                    .child(createCredentialOutputSlot(OUTPUT_SLOT, outputs))
+                    .child(createCredentialOutputSlot(SECOND_OUTPUT_SLOT, outputs)));
     }
 
     private IWidget createCredentialOutputSlot(int slot, BottledChaosCraftingOutput outputs) {
@@ -522,7 +522,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                     .slot(
                         createConfigurationSlot(
                             multiblock.getCredentialInjectionInventory(),
-                            CREDENTIAL_SOURCE_SLOT_START + index,
+                            MATERIAL_SLOT_START + index,
                             panelOpen).slotGroup(CREDENTIAL_SLOT_GROUP))
                     .tooltip(
                         tooltip -> tooltip.addLine(IKey.lang("tst.bottledchaos.gui.credential_injection.source"))));

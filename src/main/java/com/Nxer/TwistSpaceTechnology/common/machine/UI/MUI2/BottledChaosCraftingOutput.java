@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2;
 
+import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting.OUTPUT_SLOT;
+
 import java.io.IOException;
 import java.util.function.BooleanSupplier;
 
@@ -52,7 +54,7 @@ public final class BottledChaosCraftingOutput {
 
     private ItemStack output(int slot) {
         if (isClient()) {
-            return BottledChaosCrafting.displayStack(display.getStackInSlot(slot - 9));
+            return BottledChaosCrafting.displayStack(display.getStackInSlot(slot - OUTPUT_SLOT));
         }
         ItemStack result = crafting().result(slot);
         if (result != null) return result;
@@ -73,7 +75,7 @@ public final class BottledChaosCraftingOutput {
         Preview preview = crafting().preview();
         if (preview == null || preview.revision() != revision || !crafting().canTake(preview)) return;
         for (int variant = 0; variant < preview.variants(); variant++) {
-            if (!ItemStack.areItemStacksEqual(primary, preview.output(9, variant))) continue;
+            if (!ItemStack.areItemStacksEqual(primary, preview.output(OUTPUT_SLOT, variant))) continue;
             selected = preview;
             selectedVariant = variant;
             selectionExpires = tick() + 10;
@@ -111,7 +113,7 @@ public final class BottledChaosCraftingOutput {
 
             @Override
             protected void onSlotUpdate(ItemStack stack, boolean onlyAmountChanged, boolean client, boolean init) {
-                if (client) display.setStackInSlot(index - 9, stack == null ? null : stack.copy());
+                if (client) display.setStackInSlot(index - OUTPUT_SLOT, stack == null ? null : stack.copy());
                 super.onSlotUpdate(stack, onlyAmountChanged, client, init);
             }
 
@@ -135,7 +137,7 @@ public final class BottledChaosCraftingOutput {
         private boolean extracted;
 
         private ResultSlot(int index) {
-            super(display, index - 9);
+            super(display, index - OUTPUT_SLOT);
             this.index = index;
         }
 
@@ -197,7 +199,7 @@ public final class BottledChaosCraftingOutput {
 
         @Override
         public void putStack(ItemStack stack) {
-            if (isClient()) display.setStackInSlot(index - 9, stack);
+            if (isClient()) display.setStackInSlot(index - OUTPUT_SLOT, stack);
             else if (stack == null || stack.stackSize <= 0) takeChecked();
         }
 
@@ -205,7 +207,7 @@ public final class BottledChaosCraftingOutput {
         public ItemStack decrStackSize(int amount) {
             ItemStack stack = getStack();
             if (amount <= 0 || stack == null) return null;
-            if (isClient()) display.setStackInSlot(index - 9, null);
+            if (isClient()) display.setStackInSlot(index - OUTPUT_SLOT, null);
             else takeChecked();
             return stack;
         }

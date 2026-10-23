@@ -14,11 +14,13 @@ import com.cleanroommc.modularui.utils.item.ItemStackHandler;
 /** Shared workbench transaction: cached previews are detached from the persistent inventory. */
 public final class BottledChaosCrafting {
 
-    private static final int CREDENTIAL_INJECTION_TARGET_SLOT = 0;
-    private static final int CREDENTIAL_INJECTION_SOURCE_SLOT_START = 1;
-    private static final int CREDENTIAL_INJECTION_SOURCE_SLOT_COUNT = 8;
-    private static final int CREDENTIAL_INJECTION_OUTPUT_SLOT = 9;
-    private static final int CREDENTIAL_INJECTION_SECOND_OUTPUT_SLOT = 10;
+    public static final int CARRIER_SLOT = 0;
+    public static final int MATERIAL_SLOT_START = 1;
+    public static final int MATERIAL_SLOT_COUNT = 8;
+    public static final int OUTPUT_SLOT = 9;
+    public static final int SECOND_OUTPUT_SLOT = 10;
+    public static final int SLOT_COUNT = SECOND_OUTPUT_SLOT + 1;
+
     private final ItemStackHandler inventory;
     private final Runnable changed;
     private Preview preview;
@@ -60,18 +62,18 @@ public final class BottledChaosCrafting {
         dirty = false;
         preview = null;
         ItemStack[] before = snapshot();
-        if (before[9] != null || before[10] != null) {
+        if (before[OUTPUT_SLOT] != null || before[SECOND_OUTPUT_SLOT] != null) {
             status = "tst.bottledchaos.gui.credential_injection.output_occupied";
             return null;
         }
         ItemStackHandler after = new ItemStackHandler(inventory.getSlots());
         for (int slot = 0; slot < before.length; slot++) after.setStackInSlot(slot, copy(before[slot]));
         List<ItemStack> outputs = new ArrayList<>();
-        if (ItemBottledChaosMachineModule.isModule(before[0])) {
+        if (ItemBottledChaosMachineModule.isModule(before[CARRIER_SLOT])) {
             status = BottledChaosStructurePackaging.execute(after, unloading, outputs);
         } else status = inject(after);
         if (!status.endsWith(".success")) return null;
-        if (outputs.isEmpty()) outputs.add(after.getStackInSlot(9));
+        if (outputs.isEmpty()) outputs.add(after.getStackInSlot(OUTPUT_SLOT));
         preview = new Preview(revision, before, after, outputs);
         status = "tst.bottledchaos.gui.credential_injection.preview";
         return preview;
@@ -97,13 +99,14 @@ public final class BottledChaosCrafting {
     public boolean take(Preview candidate, int variant, int outputSlot) {
         if (!canTake(candidate) || variant < 0
             || variant >= candidate.outputs.size()
-            || outputSlot < 9
-            || outputSlot > 10
+            || outputSlot < OUTPUT_SLOT
+            || outputSlot > SECOND_OUTPUT_SLOT
             || candidate.output(outputSlot, variant) == null) return false;
         committing = true;
         try {
             for (int slot = 0; slot < inventory.getSlots(); slot++) {
-                ItemStack stack = slot == 9 ? candidate.outputs.get(variant) : candidate.after.getStackInSlot(slot);
+                ItemStack stack = slot == OUTPUT_SLOT ? candidate.outputs.get(variant)
+                    : candidate.after.getStackInSlot(slot);
                 inventory.setStackInSlot(slot, slot == outputSlot ? null : copy(stack));
             }
         } finally {
@@ -164,18 +167,17 @@ public final class BottledChaosCrafting {
         }
 
         public ItemStack output(int slot, int variant) {
-            return displayStack(slot == 9 ? outputs.get(variant) : after.getStackInSlot(slot));
+            return displayStack(slot == OUTPUT_SLOT ? outputs.get(variant) : after.getStackInSlot(slot));
         }
     }
 
     private static String inject(ItemStackHandler inventory) {
-        ItemStack target = inventory.getStackInSlot(CREDENTIAL_INJECTION_TARGET_SLOT);
+        ItemStack target = inventory.getStackInSlot(CARRIER_SLOT);
         long targetCapacity = ItemBottledChaosCredential.getCapacity(target);
         if (targetCapacity <= 0) {
             return "tst.bottledchaos.gui.credential_injection.missing_target";
         }
-        if (inventory.getStackInSlot(CREDENTIAL_INJECTION_OUTPUT_SLOT) != null
-            || inventory.getStackInSlot(CREDENTIAL_INJECTION_SECOND_OUTPUT_SLOT) != null) {
+        if (inventory.getStackInSlot(OUTPUT_SLOT) != null || inventory.getStackInSlot(SECOND_OUTPUT_SLOT) != null) {
             return "tst.bottledchaos.gui.credential_injection.output_occupied";
         }
 
@@ -192,8 +194,7 @@ public final class BottledChaosCrafting {
         boolean hasMarker = false;
         boolean hasCredential = false;
         boolean hasSource = false;
-        for (int slot = CREDENTIAL_INJECTION_SOURCE_SLOT_START; slot
-            < CREDENTIAL_INJECTION_SOURCE_SLOT_START + CREDENTIAL_INJECTION_SOURCE_SLOT_COUNT; slot++) {
+        for (int slot = MATERIAL_SLOT_START; slot < MATERIAL_SLOT_START + MATERIAL_SLOT_COUNT; slot++) {
             ItemStack source = inventory.getStackInSlot(slot);
             if (source == null) continue;
             hasSource = true;
@@ -236,10 +237,9 @@ public final class BottledChaosCrafting {
         if (!ItemBottledChaosCredential.setBinding(result, routeMask, occupiedWeight)) {
             return "tst.bottledchaos.gui.credential_injection.invalid_source";
         }
-        inventory.setStackInSlot(CREDENTIAL_INJECTION_OUTPUT_SLOT, result);
-        inventory.setStackInSlot(CREDENTIAL_INJECTION_TARGET_SLOT, null);
-        for (int slot = CREDENTIAL_INJECTION_SOURCE_SLOT_START; slot
-            < CREDENTIAL_INJECTION_SOURCE_SLOT_START + CREDENTIAL_INJECTION_SOURCE_SLOT_COUNT; slot++) {
+        inventory.setStackInSlot(OUTPUT_SLOT, result);
+        inventory.setStackInSlot(CARRIER_SLOT, null);
+        for (int slot = MATERIAL_SLOT_START; slot < MATERIAL_SLOT_START + MATERIAL_SLOT_COUNT; slot++) {
             if (inventory.getStackInSlot(slot) != null) {
                 inventory.extractItem(slot, 1, false);
             }
@@ -252,8 +252,7 @@ public final class BottledChaosCrafting {
 
         int sourceSlot = -1;
         ItemStack source = null;
-        for (int slot = CREDENTIAL_INJECTION_SOURCE_SLOT_START; slot
-            < CREDENTIAL_INJECTION_SOURCE_SLOT_START + CREDENTIAL_INJECTION_SOURCE_SLOT_COUNT; slot++) {
+        for (int slot = MATERIAL_SLOT_START; slot < MATERIAL_SLOT_START + MATERIAL_SLOT_COUNT; slot++) {
             ItemStack stack = inventory.getStackInSlot(slot);
             if (stack == null) continue;
             if (source != null) return null;
@@ -299,9 +298,9 @@ public final class BottledChaosCrafting {
             return "tst.bottledchaos.gui.credential_injection.invalid_source";
         }
 
-        inventory.setStackInSlot(CREDENTIAL_INJECTION_OUTPUT_SLOT, remaining);
-        inventory.setStackInSlot(CREDENTIAL_INJECTION_SECOND_OUTPUT_SLOT, transferred);
-        inventory.setStackInSlot(CREDENTIAL_INJECTION_TARGET_SLOT, null);
+        inventory.setStackInSlot(OUTPUT_SLOT, remaining);
+        inventory.setStackInSlot(SECOND_OUTPUT_SLOT, transferred);
+        inventory.setStackInSlot(CARRIER_SLOT, null);
         inventory.setStackInSlot(sourceSlot, null);
         return "tst.bottledchaos.gui.credential_injection.success";
     }

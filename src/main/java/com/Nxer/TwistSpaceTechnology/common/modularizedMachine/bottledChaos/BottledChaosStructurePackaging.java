@@ -1,5 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos;
 
+import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting.CARRIER_SLOT;
+import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting.MATERIAL_SLOT_START;
+import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting.OUTPUT_SLOT;
+import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting.SECOND_OUTPUT_SLOT;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -60,13 +65,13 @@ public final class BottledChaosStructurePackaging {
 
     /** Run on a detached inventory to prepare all outputs, sharing a single AE deduction plan. */
     public static String execute(ItemStackHandler inventory, boolean unload, List<ItemStack> outputs) {
-        ItemStack target = inventory.getStackInSlot(0);
+        ItemStack target = inventory.getStackInSlot(CARRIER_SLOT);
         if (!ItemBottledChaosMachineModule.isModule(target)) return PREFIX + "invalid_structure";
-        if (inventory.getStackInSlot(9) != null || inventory.getStackInSlot(10) != null)
+        if (inventory.getStackInSlot(OUTPUT_SLOT) != null || inventory.getStackInSlot(SECOND_OUTPUT_SLOT) != null)
             return "tst.bottledchaos.gui.credential_injection.output_occupied";
 
         int diskSlot = -1;
-        for (int slot = 1; slot <= 8; slot++) {
+        for (int slot = MATERIAL_SLOT_START; slot < OUTPUT_SLOT; slot++) {
             ItemStack stack = inventory.getStackInSlot(slot);
             if (stack != null && AEApi.instance()
                 .registries()
@@ -101,9 +106,9 @@ public final class BottledChaosStructurePackaging {
         if (total > 0 && structure == null) return PREFIX + "invalid_structure";
         Map<TST_ItemID, Long> raw = new LinkedHashMap<>();
         List<Structure> candidates = new ArrayList<>();
-        boolean[] merge = new boolean[9];
+        boolean[] merge = new boolean[OUTPUT_SLOT];
         try {
-            for (int slot = 1; slot <= 8; slot++) {
+            for (int slot = MATERIAL_SLOT_START; slot < OUTPUT_SLOT; slot++) {
                 if (slot == diskSlot) continue;
                 ItemStack source = inventory.getStackInSlot(slot);
                 if (source == null) continue;
@@ -173,11 +178,11 @@ public final class BottledChaosStructurePackaging {
             if (candidates.isEmpty()) candidates.add(structure);
             ItemStack[] materials = structure.materials();
             BaseActionSource action = new BaseActionSource();
-            int[] consumed = new int[9];
+            int[] consumed = new int[OUTPUT_SLOT];
             for (int i = 0; i < materials.length; i++) {
                 ItemStack material = materials[i];
                 long needed = Math.multiplyExact(batches, material.stackSize);
-                for (int slot = 1; slot <= 8 && needed > 0; slot++) {
+                for (int slot = MATERIAL_SLOT_START; slot < OUTPUT_SLOT && needed > 0; slot++) {
                     ItemStack stack = inventory.getStackInSlot(slot);
                     if (slot == diskSlot || merge[slot] || !sameItem(stack, material)) continue;
                     int taken = (int) Math.min(needed, stack.stackSize - consumed[slot]);
@@ -192,13 +197,13 @@ public final class BottledChaosStructurePackaging {
             }
             for (Structure candidate : candidates) outputs.add(ItemBottledChaosMachineModule.create(candidate, total));
             // Only this block mutates real inventory. Failures above discard the copied disk and deduction plan.
-            inventory.setStackInSlot(0, null);
-            for (int slot = 1; slot <= 8; slot++) {
+            inventory.setStackInSlot(CARRIER_SLOT, null);
+            for (int slot = MATERIAL_SLOT_START; slot < OUTPUT_SLOT; slot++) {
                 if (merge[slot] || slot == diskSlot) inventory.setStackInSlot(slot, null);
                 else if (consumed[slot] > 0) inventory.extractItem(slot, consumed[slot], false);
             }
-            inventory.setStackInSlot(9, outputs.get(0));
-            inventory.setStackInSlot(10, disk);
+            inventory.setStackInSlot(OUTPUT_SLOT, outputs.get(0));
+            inventory.setStackInSlot(SECOND_OUTPUT_SLOT, disk);
             return PREFIX + "success";
         } catch (ArithmeticException exception) {
             return PREFIX + "invalid_materials";
@@ -224,10 +229,10 @@ public final class BottledChaosStructurePackaging {
             IAEItemStack remainder = cell.injectItems(toAE(material, amount), Actionable.MODULATE, action);
             if (remainder != null && remainder.getStackSize() > 0) return PREFIX + "disk_full";
         }
-        inventory.setStackInSlot(0, null);
+        inventory.setStackInSlot(CARRIER_SLOT, null);
         inventory.setStackInSlot(diskSlot, null);
-        inventory.setStackInSlot(9, new ItemStack(module.getItem(), 1, 0));
-        inventory.setStackInSlot(10, disk);
+        inventory.setStackInSlot(OUTPUT_SLOT, new ItemStack(module.getItem(), 1, 0));
+        inventory.setStackInSlot(SECOND_OUTPUT_SLOT, disk);
         return PREFIX + "success";
     }
 
