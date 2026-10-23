@@ -17,7 +17,7 @@ import net.minecraft.util.StatCollector;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.init.TstItems;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineConfiguration;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineParameters;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineDescriptions;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosStructureCatalog;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosStructureCatalog.Rule;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosStructureCatalog.Structure;
@@ -215,7 +215,7 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
             if ((poolMask & (1L << slot)) == 0) continue;
             parameterGroups
                 .computeIfAbsent(
-                    BottledChaosMachineParameters.describe(
+                    BottledChaosMachineDescriptions.describe(
                         controller,
                         structure,
                         BottledChaosMachineConfiguration.pool(slot),
