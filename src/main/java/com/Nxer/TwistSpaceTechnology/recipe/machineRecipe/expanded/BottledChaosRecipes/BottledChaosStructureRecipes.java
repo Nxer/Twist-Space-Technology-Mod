@@ -73,7 +73,7 @@ public final class BottledChaosStructureRecipes {
                 example.setStackInSlot(0, module.copy());
                 example.setStackInSlot(1, emptyDisk.copy());
                 if (BottledChaosStructurePackaging.execute(example, true)
-                    .endsWith(".success")) {
+                    .wasSuccessful()) {
                     ItemStack disk = example.getStackInSlot(10);
                     if (disk != null && add(
                         new BottledChaosStructureDisplay(
