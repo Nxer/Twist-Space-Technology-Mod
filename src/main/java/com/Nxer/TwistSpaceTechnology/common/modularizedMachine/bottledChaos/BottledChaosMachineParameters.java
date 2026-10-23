@@ -1,7 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos;
 
-import java.util.function.Consumer;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -65,9 +63,9 @@ public final class BottledChaosMachineParameters {
     @Desugar
     public record Profile(long parallel, double euMultiplier, double timeMultiplier, double timeDivisor,
         double powerMultiplier, int maximumRecipeTier, long heat, int glassTier, FluidStack[] upkeep,
-        int maximumOverclocks, int perfectOverclocks, int casingTier,
-        int compressionTier, double minimumSourceDuration, boolean heavyCentrifuge, int plasmaTier,
-        boolean multiStepPlasma, int startupReserveSeconds, long maximumSourcePower) {}
+        int maximumOverclocks, int perfectOverclocks, int casingTier, int compressionTier, double minimumSourceDuration,
+        boolean heavyCentrifuge, int plasmaTier, boolean multiStepPlasma, int startupReserveSeconds,
+        long maximumSourcePower) {}
 
     /** One case per machine, with mode-specific pools handled explicitly below. */
     enum Machine {
@@ -202,7 +200,8 @@ public final class BottledChaosMachineParameters {
             debug = GTCMItemList.TestItem0.equal(controller);
             controller = BottledChaosComplexStructures.parameterController(controller, structure);
             original = controller != null && controller.getItem() instanceof ItemMachines
-                ? ItemMachines.getMetaTileEntity(controller) : null;
+                ? ItemMachines.getMetaTileEntity(controller)
+                : null;
             workable = original instanceof RecipeMapWorkable source ? source : null;
             machine = original == null ? null : Machine.find(original);
             upgrades = new Upgrades(structure == null ? new ItemStack[0] : structure.materials());
@@ -212,11 +211,40 @@ public final class BottledChaosMachineParameters {
         }
     }
 
-    static Profile evaluate(InstalledSource source, RecipeMap<?> pool, long recipeVoltage,
-        long inputVoltage, long inputPower, ItemStack[] items, FluidStack[] fluids, double masterTime, double masterEU,
-        long masterParallel, int requiredHeat, int requiredGlassTier, ItemStack requiredSpecialInput,
-        boolean heavyCentrifuge, Consumer<CheckRecipeResult> failure, long requiredSourceVoltage,
-        long fusionThreshold) {
+    /** References are the caller-owned, unmodified input snapshot for one planning attempt. */
+    @Desugar
+    public record Context(long inputVoltage, long inputPower, ItemStack[] items, FluidStack[] fluids, double masterTime,
+        double masterEU, long masterParallel) {}
+
+    @Desugar
+    record Evaluation(Profile profile, CheckRecipeResult failure) {
+
+        static final Evaluation INVALID = new Evaluation(null, null);
+    }
+
+    static Profile defaultProfile(boolean perfect) {
+        Values values = new Values();
+        if (perfect) values.timeDivisor = 4;
+        return values.profile();
+    }
+
+    static Evaluation evaluate(InstalledSource source, RecipeMap<?> pool, long recipeVoltage, Context context,
+        BottledChaosSourceRequirements requirements) {
+        long inputVoltage = context.inputVoltage();
+        long inputPower = context.inputPower();
+        ItemStack[] items = context.items();
+        FluidStack[] fluids = context.fluids();
+        double masterTime = context.masterTime();
+        double masterEU = context.masterEU();
+        long masterParallel = context.masterParallel();
+        int requiredHeat = requirements.heat();
+        int requiredGlassTier = requirements.glassTier();
+        ItemStack requiredSpecialInput = requirements.specialInput() == null ? null
+            : requirements.specialInput()
+                .getItemStack(1);
+        boolean heavyCentrifuge = requirements.heavyCentrifuge();
+        long requiredSourceVoltage = requirements.requiredSourceVoltage();
+        long fusionThreshold = requirements.fusionThreshold();
         if (source == null || pool == null
             || recipeVoltage <= 0
             || inputVoltage <= 0
@@ -228,23 +256,24 @@ public final class BottledChaosMachineParameters {
             || !Double.isFinite(masterEU)
             || masterEU <= 0
             || masterParallel <= 0
-            || requiredHeat < 0) return null;
-        if (source.debug) return new Values().profile();
+            || requiredHeat < 0) return Evaluation.INVALID;
+        if (source.debug) return new Evaluation(new Values().profile(), null);
         IMetaTileEntity original = source.original;
         RecipeMapWorkable workable = source.workable;
         Machine machine = source.machine;
         Structure structure = source.structure;
-        if (workable == null) return null;
+        if (workable == null) return Evaluation.INVALID;
         if (!workable.getAvailableRecipeMaps()
             .contains(pool) && !(machine == Machine.NEUTRON && pool == GTCMRecipe.NeutronActivatorWithEURecipeMap)
-            && !(machine == Machine.STELLAR_FORGE && pool == RecipeMaps.alloyBlastSmelterRecipes)) return null;
+            && !(machine == Machine.STELLAR_FORGE && pool == RecipeMaps.alloyBlastSmelterRecipes))
+            return Evaluation.INVALID;
         Values value = new Values();
         if (machine == null) {
-            if (!(original instanceof MTEBasicMachine basic) || basic.mTier <= 0) return null;
+            if (!(original instanceof MTEBasicMachine basic) || basic.mTier <= 0) return Evaluation.INVALID;
             value.maximumRecipeTier = basic.mTier;
-            return value.profile();
+            return new Evaluation(value.profile(), null);
         }
-        if (structure == null) return null;
+        if (structure == null) return Evaluation.INVALID;
         Upgrades u = source.upgrades;
         int shape = structure == null ? 1 : structure.profile();
         int t = GTUtility.getTier(inputVoltage);
@@ -255,7 +284,7 @@ public final class BottledChaosMachineParameters {
         value.heat = structure == null ? 0 : structure.heat();
         switch (machine) {
             case FUSION -> {
-                if (pool != RecipeMaps.fusionRecipes) return null;
+                if (pool != RecipeMaps.fusionRecipes) return Evaluation.INVALID;
                 int tier;
                 boolean advanced;
                 if (original instanceof MTELargeFusionComputer fusion) {
@@ -280,13 +309,14 @@ public final class BottledChaosMachineParameters {
             case DISTILLATION_TOWER, DISSOLUTION, VACUUM_FREEZER -> {}
             case ALLOY_BLAST -> value.maximumRecipeTier = t;
             case VACUUM_FILTER -> {
-                if (pool != RecipeMaps.distillationTowerRecipes && pool != RecipeMaps.distilleryRecipes) return null;
+                if (pool != RecipeMaps.distillationTowerRecipes && pool != RecipeMaps.distilleryRecipes)
+                    return Evaluation.INVALID;
                 value.set(Integer.MAX_VALUE, 0.5, 1d / (1 + p));
                 if (pool == RecipeMaps.distilleryRecipes) value.timeDivisor = 4;
             }
             case MAGNETAR_SEPARATOR -> value.set(4L * t, 0.8, 0.25);
             case MAGNET_SEPARATOR -> {
-                if (u.magnet < 0 || pool != RecipeMaps.electroMagneticSeparatorRecipes) return null;
+                if (u.magnet < 0 || pool != RecipeMaps.electroMagneticSeparatorRecipes) return Evaluation.INVALID;
                 value.set(
                     new int[] { 8, 24, 48, 96, 256 }[u.magnet],
                     new double[] { 0.8, 0.75, 0.7, 0.6, 0.5 }[u.magnet],
@@ -301,7 +331,7 @@ public final class BottledChaosMachineParameters {
                 value.timeDivisor = 4;
             }
             case CHEMICAL_DISTORTER -> {
-                if (pool != RecipeMaps.multiblockChemicalReactorRecipes) return null;
+                if (pool != RecipeMaps.multiblockChemicalReactorRecipes) return Evaluation.INVALID;
                 value.set(1024, 1, 0.1);
                 value.timeDivisor = 4;
             }
@@ -316,7 +346,7 @@ public final class BottledChaosMachineParameters {
             }
             case BIO_VAT -> {}
             case MEGA_ALLOY -> {
-                if (c < 0 && !u.basicAlloyCoil) return null;
+                if (c < 0 && !u.basicAlloyCoil) return Evaluation.INVALID;
                 value.set(256, Math.pow(0.95, Math.max(c + 1 - recipeTier, 0)), 1 - 0.05 * Math.max(c - 3, 0));
                 value.maximumRecipeTier = u.glass;
             }
@@ -326,13 +356,13 @@ public final class BottledChaosMachineParameters {
                     || u.gravityLens
                     || u.fusion < 1
                     || c < HeatingCoilLevel.UMV.getTier()
-                    || u.ballField < 1) return null;
+                    || u.ballField < 1) return Evaluation.INVALID;
                 value.set(powerOfTwo((long) u.fusion * c), 1, 1);
                 value.timeDivisor = u.ballField >= 3 ? 4 : 2;
                 value.maximumRecipeTier = u.glass < 12 ? u.glass : -1;
             }
             case INDISTINCT -> {
-                if (pool != RecipeMaps.assemblerRecipes || u.component < 0) return null;
+                if (pool != RecipeMaps.assemblerRecipes || u.component < 0) return Evaluation.INVALID;
                 value.set(Integer.MAX_VALUE, 1, 0.25);
                 value.timeDivisor = u.component >= recipeTier ? 4 : 2;
                 value.maximumRecipeTier = u.component + 2;
@@ -340,17 +370,18 @@ public final class BottledChaosMachineParameters {
             case PRECISE_ASSEMBLER -> {
                 if (pool != RecipeMaps.assemblerRecipes || u.precision < -1
                     || u.machineCasing < 0
-                    || u.glass < VoltageIndex.EV) return null;
+                    || u.glass < VoltageIndex.EV) return Evaluation.INVALID;
                 value.set(powerOfTwo(u.precision + 5L), 1, 0.5);
                 value.maximumRecipeTier = u.machineCasing < VoltageIndex.UHV ? u.machineCasing : -1;
             }
             case AUTOCLAVE -> {
-                if (u.itemPipe < 1 || u.fluidPipe < 1 || c < 0) return null;
+                if (u.itemPipe < 1 || u.fluidPipe < 1 || c < 0) return Evaluation.INVALID;
                 value.set(12L * u.itemPipe, (12 - u.fluidPipe) / 12d, 1 / (1 + 0.25 * (c + 1)));
             }
             case CRYSTALLINE -> {
-                if (pool != RecipeMaps.autoclaveRecipes && pool != RecipeMaps.chemicalBathRecipes) return null;
-                if (u.field < 1 || u.glass < 1) return null;
+                if (pool != RecipeMaps.autoclaveRecipes && pool != RecipeMaps.chemicalBathRecipes)
+                    return Evaluation.INVALID;
+                if (u.field < 1 || u.glass < 1) return Evaluation.INVALID;
                 value.set(
                     Math.min(Integer.MAX_VALUE, (long) u.glass * u.field * p),
                     1d / u.field,
@@ -358,7 +389,7 @@ public final class BottledChaosMachineParameters {
                 value.timeDivisor = u.field >= 3 ? 4 : 2;
             }
             case MANUFACTURING -> {
-                if (!manufacturingPool(pool) || u.core < 5) return null;
+                if (!manufacturingPool(pool) || u.core < 5) return Evaluation.INVALID;
                 value.set(2L * t, 1 - 0.15 * Math.max(u.core - 5, 0), 1 / (1.2 + 0.5 * (u.core - 5)));
                 value.maximumRecipeTier = u.core;
                 value.compressionTier = 0;
@@ -372,94 +403,95 @@ public final class BottledChaosMachineParameters {
                     value.set(powerOfTwo(Math.max(2L * u.glass - 6, 0)), 1, 0.25);
                 else {
                     long dishes = count(items, requiredSpecialInput);
-                    if (requiredSpecialInput == null || dishes <= 0) return reject(pool, "culture", dishes, 1, failure);
-                    if (u.glass < requiredGlassTier) return reject(pool, "glass", u.glass, requiredGlassTier, failure);
+                    if (requiredSpecialInput == null || dishes <= 0) return reject(pool, "culture", dishes, 1);
+                    if (u.glass < requiredGlassTier) return reject(pool, "glass", u.glass, requiredGlassTier);
                     value.set(dishes, 1, 1 / (1.6 + 0.6 * (u.glass - requiredGlassTier)));
                 }
             }
             case OIL_CRACKER -> {
-                if (c < 0) return null;
+                if (c < 0) return Evaluation.INVALID;
                 value.euMultiplier = Math.max(0.5, 1 - 0.1 * (c + 1));
             }
             case MEGA_OIL_CRACKER -> {
-                if (c < 0) return null;
+                if (c < 0) return Evaluation.INVALID;
                 value.set(256, Math.pow(0.9, c + 1), 1);
             }
             case ADVANCED_OIL_CRACKER -> {
-                if (c < 0) return null;
+                if (c < 0) return Evaluation.INVALID;
                 value.set(256, 1d / (c + 1), 0.5);
                 value.timeDivisor = u.coil == HeatingCoilLevel.UXV || u.coil == HeatingCoilLevel.MAX ? 4 : 2;
             }
             case ADVANCED_DISTILLATION -> {
                 if (pool == RecipeMaps.distillationTowerRecipes) value.set(12, 1, 1d / 3);
                 else if (pool == RecipeMaps.distilleryRecipes) value.set(2L * (shape / 3) * t, 0.15, 0.5);
-                else return null;
+                else return Evaluation.INVALID;
             }
             case MEGA_DISTILLATION -> {
                 if (pool == RecipeMaps.distillationTowerRecipes) value.set(256, 0.9, 2d / 3);
                 // The source increments height after checking the final middle section.
                 else if (pool == RecipeMaps.distilleryRecipes) value.set(256L * (1 + (shape + 1) / 2), 0.5, 0.5);
-                else return null;
+                else return Evaluation.INVALID;
             }
             case MAGNETIC_DOMAIN -> value.set(64L * shape, 1, Math.pow(0.75, p));
             case EXTRACTOR -> {
-                if (u.itemPipe < 1) return null;
+                if (u.itemPipe < 1) return Evaluation.INVALID;
                 value.set(8L * u.itemPipe, 0.85, 1d / 3);
             }
             case SPACE_SCALER -> {
                 if (pool == BartWorksRecipeMaps.electricImplosionCompressorRecipes) {
-                    if (u.field < 11) return null;
-                } else if (pool != RecipeMaps.extractorRecipes || u.field < 1) return null;
+                    if (u.field < 11) return Evaluation.INVALID;
+                } else if (pool != RecipeMaps.extractorRecipes || u.field < 1) return Evaluation.INVALID;
                 value.set(Integer.MAX_VALUE, 1, u.field >= 2 ? 0.1 : 1);
                 value.timeDivisor = u.field >= 2 ? 4 : 2;
             }
             case LARGE_FLUID_EXTRACTOR -> {
-                if (c < 0 || u.solenoid < 0) return null;
+                if (c < 0 || u.solenoid < 0) return Evaluation.INVALID;
                 value.set(Math.max(1, 8L * u.solenoid), 0.8 * Math.pow(0.9, c), 1 / (1.5 + 0.1 * c));
             }
             case HUMAN_POWER -> {
-                if (c < 0) return null;
+                if (c < 0) return Evaluation.INVALID;
                 value.set(Integer.MAX_VALUE, 1, 1d / (c + 1));
                 value.timeDivisor = 4;
             }
             case FORGE_HAMMER -> value.set(6L * Math.max(1, u.solenoid) * t, 1, 0.5);
             case PRESSURE_FORMER -> {
-                if (pool != RecipeMaps.hammerRecipes && pool != RecipeMaps.benderRecipes || c < 0) return null;
+                if (pool != RecipeMaps.hammerRecipes && pool != RecipeMaps.benderRecipes || c < 0)
+                    return Evaluation.INVALID;
                 value.set(1024, 0.75, 1d / (16 * (c + 1)));
                 value.timeDivisor = 4;
             }
             case COKE_OVEN -> {
-                if (c < 0) return null;
+                if (c < 0) return Evaluation.INVALID;
                 int width = Math.max(0, shape - 1);
-                if (u.cokeTier < 0) return null;
+                if (u.cokeTier < 0) return Evaluation.INVALID;
                 boolean adiabatic = u.cokeTier > 0;
                 value.set(adiabatic ? 32L + 16L * width : 16L + 8L * width, Math.pow(0.98, c + 1), 1);
             }
             case LASER_ENGRAVER -> {
-                if (u.laserTier < 0 || u.glass < u.laserTier || u.laserParallel <= 0) return null;
+                if (u.laserTier < 0 || u.glass < u.laserTier || u.laserParallel <= 0) return Evaluation.INVALID;
                 value.set(u.laserParallel, 0.8, 1d / 3.5);
                 value.maximumRecipeTier = u.laserTier < VoltageIndex.UXV ? u.laserTier + 1 : -1;
                 value.maximumOverclocks = Math.max(0, u.laserTier - recipeTier + 1);
             }
             case PHOTON_MASTER -> {
-                if (pool != RecipeMaps.laserEngraverRecipes) return null;
+                if (pool != RecipeMaps.laserEngraverRecipes) return Evaluation.INVALID;
                 value.set(256, 1, 1d / (2 * (1 + u.photonSpeed / 10000d)));
                 value.timeDivisor = u.photonPerfect ? 4 : 2;
             }
             case MACERATOR -> value.set((shape > 1 ? 8L : 2L) * t, 1, shape > 1 ? 0.15625 : 0.625);
             case MEGA_MACERATOR -> {
-                if (u.maceratorTier < 1) return null;
+                if (u.maceratorTier < 1) return Evaluation.INVALID;
                 long parallel = u.maceratorTier >= 3 ? Integer.MAX_VALUE : u.maceratorTier == 2 ? 32768 : 128;
                 value.set(parallel, 1, u.glass >= 12 || u.glass > recipeTier ? 0.125 : 1);
             }
             case MOLECULE -> {
                 if (pool != RecipeMaps.centrifugeNonCellRecipes && pool != RecipeMaps.electrolyzerNonCellRecipes)
-                    return null;
+                    return Evaluation.INVALID;
                 value.set(24L * shape, 1, Math.pow(0.9, p));
                 value.timeDivisor = shape >= 16 ? 4 : 2;
             }
             case GIANT_DRYER -> {
-                if (c < 0) return null;
+                if (c < 0) return Evaluation.INVALID;
                 value.set(Math.min(Integer.MAX_VALUE, (long) shape * (c + 1) * 32), 1, 2 * Math.pow(0.8, p) / (c + 1));
             }
             case DEHYDRATOR -> {
@@ -467,11 +499,11 @@ public final class BottledChaosMachineParameters {
                 value.heatDiscount = 0.95;
             }
             case MIXER -> {
-                if (u.itemPipe < 1) return null;
+                if (u.itemPipe < 1) return Evaluation.INVALID;
                 value.set(8L * t, 1, 1d / (u.itemPipe + 2));
             }
             case THERMAL_CENTRIFUGE -> {
-                if (c < 0 || u.solenoid < 0) return null;
+                if (c < 0 || u.solenoid < 0) return Evaluation.INVALID;
                 value.set(8L * t + 2L * u.solenoid, 0.8 * Math.pow(0.95, c), 1d / (2.5 + 0.05 * c));
             }
             case THERMAL_DEVOURER -> value.set(1024, 1, 1d / (2 * (1 + p)));
@@ -481,7 +513,7 @@ public final class BottledChaosMachineParameters {
                 value.upkeep = cryotheum(10);
             }
             case ARC_FURNACE -> {
-                if (pool != RecipeMaps.arcFurnaceRecipes || u.electrode == null) return null;
+                if (pool != RecipeMaps.arcFurnaceRecipes || u.electrode == null) return Evaluation.INVALID;
                 ArcFurnaceElectrode electrode = u.electrode;
                 value.set(
                     electrode == ArcFurnaceElectrode.InfinityElectrode ? Integer.MAX_VALUE : electrode.parallelLimit,
@@ -504,7 +536,7 @@ public final class BottledChaosMachineParameters {
             }
             case STELLAR_FORGE -> {
                 if (pool != GTCMRecipe.StellarForgeRecipeMap && pool != RecipeMaps.alloyBlastSmelterRecipes
-                    && pool != GTCMRecipe.StellarForgeAlloySmelterRecipeMap) return null;
+                    && pool != GTCMRecipe.StellarForgeAlloySmelterRecipeMap) return Evaluation.INVALID;
                 value.euMultiplier = Math.max(
                     1,
                     pool == GTCMRecipe.StellarForgeRecipeMap ? Config.multiplierOfMiracleDoorEUCostEBFMode
@@ -515,13 +547,13 @@ public final class BottledChaosMachineParameters {
                 value.timeDivisor = value.powerMultiplier = 1;
             }
             case HEAT_CONVECTOR -> {
-                if (pool != GTCMRecipe.RapidCoolingDownRecipeMap) return null;
+                if (pool != GTCMRecipe.RapidCoolingDownRecipeMap) return Evaluation.INVALID;
                 value.maximumOverclocks = 0;
                 value.timeDivisor = value.powerMultiplier = 1;
             }
             case GODFORGE_SMELTING, GODFORGE_MOLTEN, GODFORGE_EXOTIC, GODFORGE_PLASMA -> {
                 var preset = source.godforge;
-                if (preset == null) return null;
+                if (preset == null) return Evaluation.INVALID;
                 value.set(preset.parallel(), preset.eu(), preset.time());
                 // This package aggregates multiple native modules, each retaining its own int parallel limit.
                 value.parallelLimit = Long.MAX_VALUE;
@@ -534,7 +566,7 @@ public final class BottledChaosMachineParameters {
             }
             case FOUNDRY -> {
                 FoundryData foundry = source.foundry;
-                if (foundry == null) return null;
+                if (foundry == null) return Evaluation.INVALID;
                 value.set(
                     (long) Math.floor(foundry.parallelScaleAdj) * Math.max(1, t),
                     foundry.euEffAdj,
@@ -548,7 +580,7 @@ public final class BottledChaosMachineParameters {
                             : foundry.allowEternity && contains(fluids, Materials.Eternity.getMolten(1))
                                 ? Materials.Eternity
                                 : null;
-                    if (coolant == null) return reject(pool, "coolant", 0, 1, failure);
+                    if (coolant == null) return reject(pool, "coolant", 0, 1);
                     additional = coolant == Materials.SuperCoolant ? 1 : coolant == Materials.SpaceTime ? 2 : 3;
                     value.upkeep = new FluidStack[] { coolant == Materials.SuperCoolant ? coolant.getFluid(100)
                         : coolant.getMolten(coolant == Materials.SpaceTime ? 50 : 25) };
@@ -567,26 +599,26 @@ public final class BottledChaosMachineParameters {
                 value.upkeep = pyrotheum(shape > 1 ? (int) Math.min(Integer.MAX_VALUE, value.heat / 5) : 1000);
             }
             case CHEMICAL_PLANT -> {
-                if (u.fluidPipe < 1 || u.machineCasing < 0 || u.solidCasing < 0 || c < 0) return null;
+                if (u.fluidPipe < 1 || u.machineCasing < 0 || u.solidCasing < 0 || c < 0) return Evaluation.INVALID;
                 value.set(2L * u.fluidPipe, 1, 2d / (1 + c));
                 value.casingTier = u.solidCasing;
                 value.maximumRecipeTier = u.machineCasing < 9 ? u.machineCasing : -1;
             }
             case MULTI_FURNACE -> {
-                if (c < 0) return null;
+                if (c < 0) return Evaluation.INVALID;
                 value.parallel = Math.min(Integer.MAX_VALUE, 4L * powerOfTwo(u.coil.ordinal() - 1));
             }
             case HEPHAESTUS -> {
-                if (pool != RecipeMaps.furnaceRecipes) return null;
+                if (pool != RecipeMaps.furnaceRecipes) return Evaluation.INVALID;
                 value.parallel = Integer.MAX_VALUE;
                 value.timeDivisor = 4;
             }
             case CENTRIFUGE -> value.set(8L * t, 0.9, 1d / 3);
             case SPINMATRON -> {
-                if (u.rotorScore <= 0) return null;
+                if (u.rotorScore <= 0) return Evaluation.INVALID;
                 boolean boost = contains(fluids, Materials.BiocatalyzedPropulsionFluid.getFluid(1));
                 value.heavyCentrifuge = shape >= 3 && boost;
-                if (heavyCentrifuge && !value.heavyCentrifuge) return reject(pool, "heavy_centrifuge", 0, 1, failure);
+                if (heavyCentrifuge && !value.heavyCentrifuge) return reject(pool, "heavy_centrifuge", 0, 1);
                 value.set(
                     Math.max(1, (long) Math.floor(4 * u.rotorScore * (boost ? 1.25 : 1) / (heavyCentrifuge ? 32 : 1))),
                     heavyCentrifuge ? 11.2 : 0.7,
@@ -603,9 +635,8 @@ public final class BottledChaosMachineParameters {
             }
             case QUANTUM -> {
                 long catalyst = count(items, requiredSpecialInput);
-                if (requiredSpecialInput == null || catalyst <= 0)
-                    return reject(pool, "catalyst", catalyst, 1, failure);
-                if (u.quantumTier < 1) return reject(pool, "casing", u.quantumTier, 1, failure);
+                if (requiredSpecialInput == null || catalyst <= 0) return reject(pool, "catalyst", catalyst, 1);
+                if (u.quantumTier < 1) return reject(pool, "casing", u.quantumTier, 1);
                 value.parallel = Math.min(Integer.MAX_VALUE, catalyst);
                 value.casingTier = u.quantumTier;
             }
@@ -614,7 +645,7 @@ public final class BottledChaosMachineParameters {
                 value.perfectOverclocks = Math.max(0, u.draconicTier - 1);
             }
             case NAQUADAH_REFINERY -> {
-                if (u.refineryCoil < 1) return reject(pool, "casing", u.refineryCoil, 1, failure);
+                if (u.refineryCoil < 1) return reject(pool, "casing", u.refineryCoil, 1);
                 value.parallel = 4L * u.refineryCoil;
                 value.casingTier = u.refineryCoil;
                 value.timeDivisor = 4;
@@ -628,7 +659,7 @@ public final class BottledChaosMachineParameters {
                 }
             }
             case NEUTRON -> {
-                if (shape < 4 || shape > 249) return null;
+                if (shape < 4 || shape > 249) return Evaluation.INVALID;
                 value.timeMultiplier = Math.pow(0.9, shape - 4);
                 value.minimumSourceDuration = 1;
                 value.timeDivisor = 1;
@@ -653,16 +684,15 @@ public final class BottledChaosMachineParameters {
         // Swelegfyr's operating heat affects discounts and OC, but does not raise its recipe admission limit.
         if (machine == Machine.SWELEGFYR) value.heat = structure.heat() + 100L * Math.max(t - 2, 0);
         if (value.requiresHeat && (value.heat <= 0 || requiredHeat > value.heat))
-            return reject(pool, "heat", value.heat, Math.max(1, requiredHeat), failure);
-        if (requiredGlassTier > value.glassTier)
-            return reject(pool, "glass", value.glassTier, requiredGlassTier, failure);
-        return value.profile();
+            return reject(pool, "heat", value.heat, Math.max(1, requiredHeat));
+        if (requiredGlassTier > value.glassTier) return reject(pool, "glass", value.glassTier, requiredGlassTier);
+        return new Evaluation(value.profile(), null);
     }
 
-    private static Profile reject(RecipeMap<?> pool, String parameter, long available, long required,
-        Consumer<CheckRecipeResult> failure) {
-        failure.accept(BottledChaosPoolFailure.parameter(pool.unlocalizedName, parameter, available, required));
-        return null;
+    private static Evaluation reject(RecipeMap<?> pool, String parameter, long available, long required) {
+        return new Evaluation(
+            null,
+            BottledChaosPoolFailure.parameter(pool.unlocalizedName, parameter, available, required));
     }
 
     private static boolean manufacturingPool(RecipeMap<?> pool) {

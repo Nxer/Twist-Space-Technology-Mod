@@ -35,13 +35,11 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.util.GTUtility;
-import gregtech.common.blocks.ItemMachines;
 import gregtech.common.tileentities.machines.multi.purification.MTEPurificationPlant;
 import kubatech.loaders.DEFCRecipes;
 
 /** Startup machine directory and per-controller pool inventory; no runtime registry scans. */
-public final class BottledChaosMachineConfiguration implements BottledChaosSourceParameters {
+public final class BottledChaosMachineConfiguration {
 
     public static final int MAX_POOLS = Long.SIZE;
     public static final int MACHINE_LIMIT = 4096;
@@ -107,7 +105,8 @@ public final class BottledChaosMachineConfiguration implements BottledChaosSourc
                 ItemStack controller = machineStructures[slot] != null ? machineStructures[slot].controller()
                     : ItemBottledChaosMachineModule.isModule(stack) ? null : stack;
                 machineSources[slot] = !debug && controller != null
-                    ? new BottledChaosMachineParameters.InstalledSource(controller, machineStructures[slot]) : null;
+                    ? new BottledChaosMachineParameters.InstalledSource(controller, machineStructures[slot])
+                    : null;
                 changed.run();
             }
         };
@@ -293,13 +292,6 @@ public final class BottledChaosMachineConfiguration implements BottledChaosSourc
             : stack == null ? 0 : stack.stackSize;
     }
 
-    @Override
-    public double speedMultiplier(RecipeMap<?> map) {
-        Integer slot = poolIndexes.get(map);
-        loadPendingMachines();
-        return slot == null ? 1 : machineSpeeds[slot];
-    }
-
     /** One candidate's immutable inventory snapshot; source requirements never leak into another credential. */
     public RuntimeParameters runtime(long inputVoltage, long inputPower, ItemStack[] items, FluidStack[] supplyFluids,
         double masterTime, double masterEU, long masterParallel) {
@@ -316,135 +308,76 @@ public final class BottledChaosMachineConfiguration implements BottledChaosSourc
 
     public final class RuntimeParameters implements BottledChaosSourceParameters {
 
-        private final long inputVoltage;
-        private final long inputPower;
-        private final ItemStack[] items;
-        private final FluidStack[] fluids;
-        private final double masterTime;
-        private final double masterEU;
-        private final long masterParallel;
-        private final long purificationPlantQuantity;
-        private final ItemStack[] controllers = new ItemStack[MAX_POOLS];
-        private final BottledChaosStructureCatalog.Structure[] structures = new BottledChaosStructureCatalog.Structure[MAX_POOLS];
-        private final long[] quantities = new long[MAX_POOLS];
-        private final double[] quantitySpeeds = machineSpeeds.clone();
-        private final boolean[] debug = new boolean[MAX_POOLS];
+        private final BottledChaosMachineParameters.Context context;
+        private final long purificationPlantQuantity = purificationPlantQuantity();
+        private final long[] quantities = machineQuantities.clone();
         private final boolean[] miracleDoor = new boolean[MAX_POOLS];
+        private final long debugMask = debugPools;
         private final BottledChaosMachineParameters.InstalledSource[] sources = machineSources.clone();
-        private final boolean[] configured = new boolean[MAX_POOLS];
-        private final Map<SourceKey, BottledChaosMachineParameters.Profile> profiles = new HashMap<>();
+        private final Evaluation[] defaults = new Evaluation[MAX_POOLS];
+        private final Map<SourceKey, Evaluation> evaluations = new HashMap<>();
         private final List<BottledChaosUpkeep.Demand> sourceUsage = new ArrayList<>();
         private long roundItemPools;
-        private final BottledChaosMachineParameters.Profile[] currentProfiles = new BottledChaosMachineParameters.Profile[MAX_POOLS];
-        private final CheckRecipeResult[] currentFailures = new CheckRecipeResult[MAX_POOLS];
         private CheckRecipeResult sourceFailure = CheckRecipeResultRegistry.NO_RECIPE;
 
         private RuntimeParameters(long inputVoltage, long inputPower, ItemStack[] items, FluidStack[] fluids,
             double masterTime, double masterEU, long masterParallel) {
-            this.inputVoltage = inputVoltage;
-            this.inputPower = inputPower;
-            this.items = items;
-            this.fluids = fluids;
-            this.masterTime = masterTime;
-            this.masterEU = masterEU;
-            this.masterParallel = masterParallel;
-            purificationPlantQuantity = purificationPlantQuantity();
+            context = new BottledChaosMachineParameters.Context(
+                inputVoltage,
+                inputPower,
+                items,
+                fluids,
+                masterTime,
+                masterEU,
+                masterParallel);
             for (int slot = 0; slot < pools.length; slot++) {
-                ItemStack stack = machines.getStackInSlot(slot);
-                if (stack == null) continue;
-                debug[slot] = (debugPools & (1L << slot)) != 0;
-                structures[slot] = machineStructures[slot];
-                controllers[slot] = structures[slot] != null ? structures[slot].controller()
-                    : ItemBottledChaosMachineModule.isModule(stack) ? null : stack;
-                miracleDoor[slot] = !debug[slot] && controllers[slot] != null
-                    && ItemMachines.getMetaTileEntity(controllers[slot]) instanceof TST_MiracleDoor;
-                quantities[slot] = machineQuantities[slot];
+                defaults[slot] = Evaluation.defaults(pools[slot], machineSpeeds[slot]);
+                miracleDoor[slot] = sources[slot] != null && sources[slot].original instanceof TST_MiracleDoor;
             }
         }
 
         @Override
-        public void configureSource(RecipeMap<?> map, long recipeVoltage, BottledChaosSourceRequirements requirements) {
+        public Evaluation evaluateSource(RecipeMap<?> map, long recipeVoltage,
+            BottledChaosSourceRequirements requirements) {
             Integer slot = poolIndexes.get(map);
-            if (slot == null || debug[slot] || controllers[slot] == null) return;
-            configured[slot] = true;
-            ItemStack requiredSpecialInput = requirements.specialInput() == null ? null
-                : requirements.specialInput()
-                    .getItemStack(1)
-                    .copy();
-            SourceKey key = new SourceKey(
-                slot,
-                recipeVoltage,
-                requirements.heat(),
-                requirements.glassTier(),
-                requiredSpecialInput == null ? null : GTUtility.ItemId.createNoCopy(requiredSpecialInput),
-                requirements.heavyCentrifuge(),
-                requirements.requiredSourceVoltage(),
-                requirements.fusionThreshold());
-            currentFailures[slot] = null;
-            currentProfiles[slot] = profiles.computeIfAbsent(
-                key,
-                ignored -> BottledChaosMachineParameters.evaluate(
-                    sources[slot],
-                    map,
-                    recipeVoltage,
-                    inputVoltage,
-                    inputPower,
-                    items,
-                    fluids,
-                    masterTime,
-                    masterEU,
-                    masterParallel,
-                    requirements.heat(),
-                    requirements.glassTier(),
-                    requiredSpecialInput,
-                    requirements.heavyCentrifuge(),
-                    failure -> currentFailures[slot] = failure,
-                    requirements.requiredSourceVoltage(),
-                    requirements.fusionThreshold()));
-        }
-
-        private BottledChaosMachineParameters.Profile profile(RecipeMap<?> map) {
-            Integer slot = poolIndexes.get(map);
-            return slot == null ? null : currentProfiles[slot];
-        }
-
-        @Override
-        public boolean isSourceAvailable(RecipeMap<?> map) {
-            Integer slot = poolIndexes.get(map);
-            return slot != null && quantities[slot] > 0 && (debug[slot] || controllers[slot] != null);
-        }
-
-        @Override
-        public boolean energyOnly(RecipeMap<?> pool) {
-            Integer slot = poolIndexes.get(pool);
-            return slot != null && miracleDoor[slot];
-        }
-
-        @Override
-        public long maximumSourcePower(RecipeMap<?> map) {
-            var profile = profile(map);
-            return profile == null ? Long.MAX_VALUE : profile.maximumSourcePower();
-        }
-
-        @Override
-        public boolean canProcess(RecipeMap<?> map, long recipeVoltage, BottledChaosSourceRequirements requirements) {
-            Integer slot = poolIndexes.get(map);
-            if (slot != null && (purificationPools & (1L << slot)) != 0
+            if (slot == null) return Evaluation.defaults(map, 1);
+            Evaluation result;
+            if ((purificationPools & (1L << slot)) != 0
                 && (quantities[slot] <= 0 || quantities[slot] > purificationPlantQuantity)) {
-                return reject(slot, "purification_capacity", purificationPlantQuantity, Math.max(1, quantities[slot]));
+                result = reject(
+                    slot,
+                    "purification_capacity",
+                    purificationPlantQuantity,
+                    Math.max(1, quantities[slot]));
+            } else if (sources[slot] == null) {
+                // Missing pools are reported by ProcessingLogic; TestItem supplies unrestricted defaults.
+                return defaults[slot];
+            } else {
+                SourceKey key = new SourceKey(slot, recipeVoltage, requirements);
+                result = evaluations.get(key);
+                if (result == null) {
+                    result = evaluate(slot, map, recipeVoltage, requirements);
+                    evaluations.put(key, result);
+                }
             }
-            var profile = profile(map);
-            // Missing pools are reported by ProcessingLogic; TestItem deliberately supplies unrestricted defaults.
+            if (!result.successful()) sourceFailure = result.failure();
+            return result;
+        }
+
+        private Evaluation evaluate(int slot, RecipeMap<?> map, long recipeVoltage,
+            BottledChaosSourceRequirements requirements) {
+            var result = BottledChaosMachineParameters
+                .evaluate(sources[slot], map, recipeVoltage, context, requirements);
+            var profile = result.profile();
             if (profile == null) {
-                boolean allowed = slot == null || !configured[slot];
                 // #tr tst.bottledchaos.result.invalid_source_configuration
                 // # Source structure configuration is not valid for this recipe pool.
                 // #zh_CN 来源结构配置不适用于此配方池.
-                if (!allowed) sourceFailure = currentFailures[slot] != null ? currentFailures[slot]
-                    : BottledChaosPoolFailure.of(
-                        poolKey(slot),
-                        SimpleResultWithText.ofFailure("tst.bottledchaos.result.invalid_source_configuration"));
-                return allowed;
+                return Evaluation.rejected(
+                    result.failure() != null ? result.failure()
+                        : BottledChaosPoolFailure.of(
+                            poolKey(slot),
+                            SimpleResultWithText.ofFailure("tst.bottledchaos.result.invalid_source_configuration")));
             }
             long requiredVoltage = requirements.requiredSourceVoltage() > 0 ? requirements.requiredSourceVoltage()
                 : recipeVoltage;
@@ -468,93 +401,37 @@ public final class BottledChaosMachineConfiguration implements BottledChaosSourc
                 return reject(slot, "plasma", profile.plasmaTier(), requirements.plasmaTier());
             if (requirements.multiStepPlasma() && !profile.multiStepPlasma())
                 return reject(slot, "multi_step_plasma", 0, 1);
-            return true;
+            int maximum = map == GoodGeneratorRecipeMaps.naquadahFuelRefineFactoryRecipes
+                ? Math.max(0, profile.casingTier() - requirements.casingTier())
+                : profile.maximumOverclocks();
+            int perfect = map == DEFCRecipes.fusionCraftingRecipes
+                ? Math.max(0, profile.casingTier() - requirements.casingTier())
+                : profile.perfectOverclocks();
+            int base = profile.maximumOverclocks();
+            return new Evaluation(
+                profile,
+                defaults[slot].quantitySpeedMultiplier(),
+                miracleDoor[slot],
+                maximum,
+                perfect,
+                sources[slot].fourHeliocasts ? new int[] { base, base + 1, base + 2, base + 3 } : null,
+                null);
         }
 
-        private boolean reject(int slot, String parameter, long available, long required) {
-            sourceFailure = BottledChaosPoolFailure.parameter(poolKey(slot), parameter, available, required);
-            return false;
+        private Evaluation reject(int slot, String parameter, long available, long required) {
+            return Evaluation
+                .rejected(BottledChaosPoolFailure.parameter(poolKey(slot), parameter, available, required));
+        }
+
+        @Override
+        public boolean isSourceAvailable(RecipeMap<?> map) {
+            Integer slot = poolIndexes.get(map);
+            return slot != null && quantities[slot] > 0 && ((debugMask & (1L << slot)) != 0 || sources[slot] != null);
         }
 
         @Override
         public CheckRecipeResult sourceFailure() {
             return sourceFailure;
-        }
-
-        @Override
-        public long parallel(RecipeMap<?> map) {
-            var profile = profile(map);
-            return profile == null ? 1 : profile.parallel();
-        }
-
-        @Override
-        public double speedMultiplier(RecipeMap<?> map) {
-            var profile = profile(map);
-            return profile == null ? 1 : 1 / profile.timeMultiplier();
-        }
-
-        @Override
-        public double quantitySpeedMultiplier(RecipeMap<?> map) {
-            Integer slot = poolIndexes.get(map);
-            return slot == null ? 1 : quantitySpeeds[slot];
-        }
-
-        @Override
-        public double euMultiplier(RecipeMap<?> map, int requiredHeat) {
-            var profile = profile(map);
-            return profile == null ? 1 : profile.euMultiplier();
-        }
-
-        @Override
-        public double timeDivisor(RecipeMap<?> map, int requiredHeat) {
-            var profile = profile(map);
-            return profile == null ? BottledChaosSourceParameters.super.timeDivisor(map, requiredHeat)
-                : profile.timeDivisor();
-        }
-
-        @Override
-        public double powerMultiplier(RecipeMap<?> map, int requiredHeat) {
-            var profile = profile(map);
-            return profile == null ? BottledChaosSourceParameters.super.powerMultiplier(map, requiredHeat)
-                : profile.powerMultiplier();
-        }
-
-        @Override
-        public int maximumOverclocks(RecipeMap<?> map) {
-            var profile = profile(map);
-            return profile == null ? -1 : profile.maximumOverclocks();
-        }
-
-        @Override
-        public int maximumOverclocks(RecipeMap<?> map, int requiredCasingTier) {
-            var profile = profile(map);
-            if (profile != null && map == GoodGeneratorRecipeMaps.naquadahFuelRefineFactoryRecipes)
-                return Math.max(0, profile.casingTier() - requiredCasingTier);
-            return maximumOverclocks(map);
-        }
-
-        @Override
-        public int[] overclockLimitAlternatives(RecipeMap<?> map) {
-            Integer slot = poolIndexes.get(map);
-            var profile = profile(map);
-            if (slot == null || profile == null || (sources[slot] == null || !sources[slot].fourHeliocasts))
-                return null;
-            int base = profile.maximumOverclocks();
-            return new int[] { base, base + 1, base + 2, base + 3 };
-        }
-
-        @Override
-        public int perfectOverclocks(RecipeMap<?> map, int requiredHeat, int requiredCasingTier) {
-            var profile = profile(map);
-            if (profile != null && map == DEFCRecipes.fusionCraftingRecipes)
-                return Math.max(0, profile.casingTier() - requiredCasingTier);
-            return profile == null ? 0 : profile.perfectOverclocks();
-        }
-
-        @Override
-        public double minimumSourceDuration(RecipeMap<?> map) {
-            var profile = profile(map);
-            return profile == null ? 0 : profile.minimumSourceDuration();
         }
 
         @Override
@@ -565,11 +442,11 @@ public final class BottledChaosMachineConfiguration implements BottledChaosSourc
 
         /** Record only executed steps; rejected binary-search candidates cannot overwrite the chosen plan's fees. */
         @Override
-        public void recordSourceUsage(RecipeMap<?> map) {
+        public void recordSourceUsage(RecipeMap<?> map, Evaluation source) {
             Integer slot = poolIndexes.get(map);
-            var profile = profile(map);
+            var profile = source.profile();
             if (slot == null || profile == null) return;
-            if (miracleDoor[slot]) roundItemPools |= 1L << slot;
+            if (source.energyOnly()) roundItemPools |= 1L << slot;
             for (FluidStack fluid : profile.upkeep()) {
                 if (fluid == null || fluid.amount <= 0) continue;
                 sourceUsage.add(
@@ -600,8 +477,7 @@ public final class BottledChaosMachineConfiguration implements BottledChaosSourc
     }
 
     @Desugar
-    private record SourceKey(int pool, long voltage, int heat, int glass, GTUtility.ItemId special,
-        boolean heavyCentrifuge, long sourceVoltage, long fusionThreshold) {}
+    private record SourceKey(int pool, long voltage, BottledChaosSourceRequirements requirements) {}
 
     public void save(NBTTagCompound nbt) {
         loadPendingMachines();

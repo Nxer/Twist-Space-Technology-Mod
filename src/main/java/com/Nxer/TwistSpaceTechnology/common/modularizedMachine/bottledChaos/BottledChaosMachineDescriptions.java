@@ -35,20 +35,8 @@ public final class BottledChaosMachineDescriptions {
             source,
             pool,
             1,
-            32,
-            32,
-            new ItemStack[0],
-            new FluidStack[0],
-            1,
-            1,
-            1,
-            0,
-            0,
-            null,
-            false,
-            ignored -> {},
-            0,
-            0);
+            new BottledChaosMachineParameters.Context(32, 32, new ItemStack[0], new FluidStack[0], 1, 1, 1),
+            BottledChaosSourceRequirements.NONE).profile();
         if (machine == Machine.STELLAR_FORGE || machine == Machine.HEAT_CONVECTOR) {
             if (machine == Machine.STELLAR_FORGE) {
                 // #tr tst.bottledchaos.machine_module.energy_duration
@@ -328,6 +316,7 @@ public final class BottledChaosMachineDescriptions {
         return args.length == 0 ? StatCollector.translateToLocal(key)
             : StatCollector.translateToLocalFormatted(key, args);
     }
+
     private static String number(double value) {
         if (value == Integer.MAX_VALUE) return "int";
         if (value >= Long.MAX_VALUE) return "long";

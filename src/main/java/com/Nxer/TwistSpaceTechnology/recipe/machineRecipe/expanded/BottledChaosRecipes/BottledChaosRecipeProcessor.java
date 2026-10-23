@@ -625,10 +625,9 @@ public final class BottledChaosRecipeProcessor {
             for (int index : snapshot.entryOrder) {
                 if (result.batches[index] == 0) continue;
                 SourceSelection selected = sourceChecks(result.voltage).selections[index];
-                for (TimeKey time : selected.sources) {
-                    parameters.configureSource(time.map(), result.voltage, time.requirements());
-                    parameters.recordSourceUsage(time.map());
-                }
+                for (SelectedSource source : selected.sources)
+                    parameters.recordSourceUsage(source.time.map(), source.parameters);
+
             }
             plan.upkeep = Collections.unmodifiableList(new ArrayList<>(parameters.upkeepDemands()));
             plan.roundItems = Collections.unmodifiableList(new ArrayList<>(parameters.roundItemDemands()));
@@ -683,7 +682,12 @@ public final class BottledChaosRecipeProcessor {
                 double part = calculateTimePart(
                     time.getKey(),
                     time.getValue(),
-                    DEFAULT_PARAMETERS,
+                    DEFAULT_PARAMETERS.evaluateSource(
+                        time.getKey()
+                            .map(),
+                        cachedRoute.definition.baseEUt(),
+                        time.getKey()
+                            .requirements()),
                     cachedRoute.definition.baseEUt());
                 totalDuration = BottledChaosRecipeSupport.addDuration(totalDuration, part, 1);
                 RecipeMap<?> map = time.getKey()
@@ -836,52 +840,36 @@ public final class BottledChaosRecipeProcessor {
         return taken;
     }
 
-    private static double calculateTimePart(TimeKey key, long rawTicks, BottledChaosSourceParameters parameters,
+    private static double calculateTimePart(TimeKey key, long rawTicks, BottledChaosSourceParameters.Evaluation source,
         long recipeVoltage) {
         if (key.eut() == 0) return 0;
-        if (parameters.energyOnly(key.map())) return rawTicks * (double) key.eut()
-            * parameters.euMultiplier(
-                key.map(),
-                key.requirements()
-                    .heat())
-            / parameters.quantitySpeedMultiplier(key.map())
+        var profile = source.profile();
+        if (source.energyOnly()) return rawTicks * (double) key.eut()
+            * profile.euMultiplier()
+            / source.quantitySpeedMultiplier()
             / recipeVoltage;
-        double sourceSpeed = parameters.speedMultiplier(key.map());
-        double sourceDuration = Math.max(parameters.minimumSourceDuration(key.map()), key.recipeTicks() / sourceSpeed);
+        double sourceSpeed = 1 / profile.timeMultiplier();
+        double sourceDuration = Math.max(profile.minimumSourceDuration(), key.recipeTicks() / sourceSpeed);
         return BottledChaosOverclock.calculateNormalizedDuration(
             rawTicks,
             key.eut(),
-            Math.min(recipeVoltage, parameters.maximumSourcePower(key.map())),
-            parameters.parallel(key.map()),
-            key.recipeTicks() / sourceDuration * parameters.quantitySpeedMultiplier(key.map()),
-            parameters.euMultiplier(
-                key.map(),
-                key.requirements()
-                    .heat()),
-            parameters.timeDivisor(
-                key.map(),
-                key.requirements()
-                    .heat()),
-            parameters.powerMultiplier(
-                key.map(),
-                key.requirements()
-                    .heat()),
-            parameters.maximumOverclocks(
-                key.map(),
-                key.requirements()
-                    .casingTier()),
-            parameters.perfectOverclocks(
-                key.map(),
-                key.requirements()
-                    .heat(),
-                key.requirements()
-                    .casingTier()),
-            parameters.overclockLimitAlternatives(key.map()));
+            Math.min(recipeVoltage, profile.maximumSourcePower()),
+            profile.parallel(),
+            key.recipeTicks() / sourceDuration * source.quantitySpeedMultiplier(),
+            profile.euMultiplier(),
+            profile.timeDivisor(),
+            profile.powerMultiplier(),
+            source.maximumOverclocks(),
+            source.perfectOverclocks(),
+            source.overclockLimitAlternatives());
     }
 
     @Desugar
-    private record SourceSelection(double duration, long pools, List<TimeKey> sources, Map<Object, Long> omittedInputs,
-        Map<Object, Long> inputs) {}
+    private record SelectedSource(TimeKey time, BottledChaosSourceParameters.Evaluation parameters) {}
+
+    @Desugar
+    private record SourceSelection(double duration, long pools, List<SelectedSource> sources,
+        Map<Object, Long> omittedInputs, Map<Object, Long> inputs) {}
 
     /** Partition source work once at startup, keeping ordinary routes on the direct calculation path. */
     private static final class SourceWork {
@@ -948,8 +936,8 @@ public final class BottledChaosRecipeProcessor {
         // A fully substituted gas demand disappears, including any source tick rounding difference.
         for (var omitted : result.omittedInputs.entrySet()) {
             boolean stillConsumed = false;
-            for (TimeKey source : result.sources)
-                if (source.source() != null && source.source().inputs.containsKey(omitted.getKey())) {
+            for (SelectedSource source : result.sources)
+                if (source.time.source() != null && source.time.source().inputs.containsKey(omitted.getKey())) {
                     stillConsumed = true;
                     break;
                 }
@@ -968,15 +956,15 @@ public final class BottledChaosRecipeProcessor {
         long voltage, double scale) {
         double duration = 0;
         long pools = 0;
-        List<TimeKey> sources = new ArrayList<>(work.size());
+        List<SelectedSource> sources = new ArrayList<>(work.size());
         for (var entry : work.entrySet()) {
             TimeKey key = entry.getKey();
-            parameters.configureSource(key.map(), voltage, key.requirements());
-            if (!parameters.canProcess(key.map(), voltage, key.requirements())) return null;
+            var source = parameters.evaluateSource(key.map(), voltage, key.requirements());
+            if (!source.successful()) return null;
             duration = BottledChaosRecipeSupport
-                .addDuration(duration, calculateTimePart(key, entry.getValue(), parameters, voltage) * scale, 1);
+                .addDuration(duration, calculateTimePart(key, entry.getValue(), source, voltage) * scale, 1);
             pools |= BottledChaosMachineConfiguration.mask(key.map());
-            sources.add(key);
+            sources.add(new SelectedSource(key, source));
         }
         return new SourceSelection(
             duration,
