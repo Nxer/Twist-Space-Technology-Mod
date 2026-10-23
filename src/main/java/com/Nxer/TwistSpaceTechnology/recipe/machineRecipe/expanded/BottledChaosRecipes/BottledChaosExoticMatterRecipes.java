@@ -60,8 +60,6 @@ public final class BottledChaosExoticMatterRecipes {
             fluidCandidates(Godforge.exoticModulePlasmaFluidMap, sources),
             preparations);
         registerMagmatter(catalog, solidCandidates(Godforge.exoticModuleMagmatterItemMap, sources), preparations);
-        catalog.setQueryMarkers("magmatter", new Object[0], null);
-        catalog.setQueryMarkers("quark_gluon_plasma", new Object[0], null);
         // spotless:on
     }
 

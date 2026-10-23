@@ -127,57 +127,46 @@ public final class BottledChaosKevlarRecipes {
         catalog.registerChainInputSynthesis("kevlar", LargeChemicalReactor, PolyurethaneResin,
             new Object[] { KevlarCatalystDust, PentaerythritolDust, DiphenylmethaneDiisocyanateDust, EthyleneGlycol, SiliconeOil }, 1);
 
-        catalog.setQueryMarkers("kevlar", new Object[] { ParaphenylenediamineDust, TerephthaloylChlorideDust, NMethylpyrrolidone, CalciumChlorideDust, KevlarCatalystDust, PentaerythritolDust, DiphenylmethaneDiisocyanateDust, EthyleneGlycol, SiliconeOil }, null);
-
         // Liquid-crystal precursors: diamine, acid chloride, solvent, then algae-derived calcium chloride.
         catalog.registerAlternativeChain("kevlar", TierEU.RECIPE_UV, Benzene,
             new Object[] { ParaphenylenediamineDust }, new Object[] { ParaphenylenediamineDust },
             catalog.markRecipe(LargeChemicalReactor, new Object[] { Nitroaniline, PalladiumDust, NitrogenDioxideGas }, ParaphenylenediamineDust, 1));
-        catalog.setLatestQueryInputs("kevlar");
         catalog.registerChainInputSynthesis("kevlar", LargeChemicalReactor,
             Nitrobenzene, new Object[] { Benzene, SulfuricAcid, NitricAcid, DistilledWater }, 1);
 
         catalog.registerAlternativeChain("kevlar", TierEU.RECIPE_UV, Benzene,
             new Object[] { TerephthaloylChlorideDust }, new Object[] { TerephthaloylChlorideDust },
             catalog.markRecipe(LargeChemicalReactor, new Object[] { ThionylChloride, DimethylTerephthalate, CarbonDioxideGas }, TerephthaloylChlorideDust, 1));
-        catalog.setLatestQueryInputs("kevlar");
         catalog.registerAlternativeChain("kevlar", TierEU.RECIPE_UV, CarbonDust,
             new Object[] { NMethylpyrrolidone }, new Object[] { NMethylpyrrolidone },
             catalog.markRecipe(LargeChemicalReactor, new Object[] { MethylamineGas, GammaButyrolactone }, NMethylpyrrolidone, -1));
-        catalog.setLatestQueryInputs("kevlar");
         catalog.registerAlternativeChain("kevlar", TierEU.RECIPE_UV, RedAlgaeBiomass,
             new Object[] { CalciumChlorideDust }, new Object[] { CalciumChlorideDust },
             catalog.markRecipe(LargeChemicalReactor, new Object[] { CalciumCarbonateDust, HydrochloricAcid }, CalciumChlorideDust, 8));
-        catalog.setLatestQueryInputs("kevlar");
         catalog.registerChainInputSynthesis("kevlar", Extractor, CalciumCarbonateDust, RedCelluloseFiber, -1);
 
         // Resin precursors: use algae-derived butanol for the catalyst, then prepare the four other feeds.
         catalog.registerAlternativeChain("kevlar", TierEU.RECIPE_UV, TinDust,
             new Object[] { KevlarCatalystDust }, new Object[] { KevlarCatalystDust },
             catalog.markRecipe(LargeChemicalReactor, new Object[] { TinDust, Butanol, PropionicAcid, IronIIIChloride }, KevlarCatalystDust, 1));
-        catalog.setLatestQueryInputs("kevlar");
         catalog.registerChainInputSynthesis("kevlar", ChemicalPlant, Butanol,
             new Object[] { GoldenBrownCelluloseFiber, RedCelluloseFiber, FermentationBase }, 5);
 
         catalog.registerAlternativeChain("kevlar", TierEU.RECIPE_UV, SodiumDust,
             new Object[] { PentaerythritolDust }, new Object[] { PentaerythritolDust },
             catalog.markRecipe(LargeChemicalReactor, new Object[] { SodiumHydroxideDust, Formaldehyde, AcetaldehydeGas }, PentaerythritolDust, -1));
-        catalog.setLatestQueryInputs("kevlar");
         catalog.registerAlternativeChain("kevlar", TierEU.RECIPE_UV, Benzene,
             new Object[] { DiphenylmethaneDiisocyanateDust }, new Object[] { DiphenylmethaneDiisocyanateDust },
             catalog.markRecipe(DistillationTower, DiphenylmethaneDiisocyanateMixture, DiphenylmethaneDiisocyanateDust, -1));
-        catalog.setLatestQueryInputs("kevlar");
         catalog.registerChainInputSynthesis("kevlar", LargeChemicalReactor,
             Nitrobenzene, new Object[] { Benzene, SulfuricAcid, NitricAcid, DistilledWater }, 1);
         catalog.registerAlternativeChain("kevlar", TierEU.RECIPE_UV, EthyleneGas,
             new Object[] { EthyleneGlycol }, new Object[] { EthyleneGlycol },
             catalog.markRecipe(LargeChemicalReactor, new Object[] { EthyleneOxideGas, Water }, EthyleneGlycol, 1));
-        catalog.setLatestQueryInputs("kevlar");
         catalog.requireCircuit("kevlar", 1);
         catalog.registerAlternativeChain("kevlar", TierEU.RECIPE_UV, SiliconDust,
             new Object[] { SiliconeOil }, new Object[] { SiliconeOil },
             catalog.markRecipe(LargeChemicalReactor, new Object[] { EthyleneOxideGas, Dimethyldichlorosilane, Water }, SiliconeOil, 2));
-        catalog.setLatestQueryInputs("kevlar");
         catalog.requireCircuit("kevlar", 2);
         catalog.orderDisplayRecipes("kevlar", Benzene, CarbonDust, RedAlgaeBiomass, TinDust, SodiumDust,
             EthyleneGas, SiliconDust, ParaphenylenediamineDust);

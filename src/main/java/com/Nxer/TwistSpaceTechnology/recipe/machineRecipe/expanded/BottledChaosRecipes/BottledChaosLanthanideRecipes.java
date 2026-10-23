@@ -268,13 +268,11 @@ public final class BottledChaosLanthanideRecipes {
             catalog.markRecipe(Digester, SamariumOreConcentrateDust, MuddySamariumRareEarthSolution, -1),
             samariumSolutionProcessing);
         catalog.registerOutputDecomposition(CentrifugeNonCell, DephosphatedSamariumConcentrateDust, SamariumDust, -1);
-        catalog.setQueryMarkers("samarium", new Object[] { SamariumOreConcentrateDust }, new Object[] { SamariumDust, CeriumDioxideDust, CeriumRichMixtureDust });
+        catalog.setKeyOutputs("samarium", new Object[] { SamariumDust, CeriumDioxideDust, CeriumRichMixtureDust });
 
-        catalog.setQueryMarkers("bastnasite",
-            new Object[] { BastnasiteDust, RoastedRareEarthOxidesDust, SamaricRareEarthConcentrateDust, SamariumOreConcentrateDust },
+        catalog.setKeyOutputs("bastnasite",
             new Object[] { RoastedRareEarthOxidesDust, LanthanumDust, NeodymiumDust, CeriumDioxideDust, SamaricRareEarthConcentrateDust, HolmiumDust, SamariumDust, GadoliniumDust, TerbiumDust });
-        catalog.setQueryMarkers("monazite",
-            new Object[] { MonaziteDust, DilutedMonaziteMud, AcidicMonaziteDust, NitricMonaziteLeachedConcentrate },
+        catalog.setKeyOutputs("monazite",
             new Object[] { DilutedMonaziteMud, HafniumDust, ZirconiumDust, ThoriumDust, AcidicMonaziteDust, UraniumDust, Uranium235Dust, CeriumDioxideDust, NitricMonaziteLeachedConcentrate, SamariumDust, GadoliniumDust, EuropiumDust });
         catalog.orderDisplayRecipes("lanthanide", MonaziteDust, DilutedMonaziteMud, AcidicMonaziteDust,
             NitricMonaziteLeachedConcentrate, BastnasiteDust, RoastedRareEarthOxidesDust, SamaricRareEarthConcentrateDust,

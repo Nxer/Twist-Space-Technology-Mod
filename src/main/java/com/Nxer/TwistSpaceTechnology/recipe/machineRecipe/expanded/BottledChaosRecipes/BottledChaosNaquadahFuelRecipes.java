@@ -177,7 +177,6 @@ public final class BottledChaosNaquadahFuelRecipes {
                 prepareSourceRecipe(BlastFurnace, naquadria)
                     .appendBalancedRecipe(processing, GTUtility.FluidId.create(acid))
                     .withFullDustOutputs()));
-        catalog.setLatestQueryInputs(PREPARATION_TAG, NaquadriaDust, moltenCatalyst);
 
         // Recover scarce heavy fuel from existing light fuel; asphalt and gas are processed in the same step.
         catalog.registerAlternativeChain(PREPARATION_TAG,
@@ -191,7 +190,6 @@ public final class BottledChaosNaquadahFuelRecipes {
                     .appendBalancedRecipe(asphaltRecovery, GTUtility.FluidId.create(asphalt))
                     .appendBalancedRecipe(gasRecovery, GTUtility.FluidId.create(gas))
                     .withFullDustOutputs()));
-        catalog.setLatestQueryInputs(PREPARATION_TAG, light, moltenCatalyst);
         catalog.useAvailableInputsOnly(PREPARATION_TAG);
         catalog.registerAlternativeChain(PREPARATION_TAG, Math.max(enriched.mEUt, processingVoltage), EnrichedNaquadahDust,
             new Object[] { heavy, light },
@@ -199,7 +197,6 @@ public final class BottledChaosNaquadahFuelRecipes {
                 prepareSourceRecipe(BlastFurnace, enriched)
                     .appendBalancedRecipe(processing, GTUtility.FluidId.create(acid))
                     .withFullDustOutputs()));
-        catalog.setLatestQueryInputs(PREPARATION_TAG, EnrichedNaquadahDust, moltenCatalyst);
         // Independent sludge recovery; it never pulls additional upstream fuel production.
         catalog.registerAlternativeChain(PREPARATION_TAG, sludgeCentrifugation.mEUt, sludge,
             new Object[] { naquadah },
@@ -222,7 +219,6 @@ public final class BottledChaosNaquadahFuelRecipes {
             precursor.times.keySet().stream().mapToLong(time -> time.eut()).max().getAsLong(), precursorInputs[0],
             new Object[] { denseUranium, densePlutonium },
             catalog.markPreparedRecipe(ElectricImplosionCompressor, precursorInputs[0], denseUranium, 0, precursor));
-        catalog.setLatestQueryInputs(PREPARATION_TAG, precursorInputs);
         // spotless:on
     }
 
@@ -284,24 +280,19 @@ public final class BottledChaosNaquadahFuelRecipes {
         catalog.registerChain("naquadah_fuel_3", 1, regularIII.mEUt, unstable,
             new Object[] { fuelIII },
             catalog.markRecipe(refinery, new Object[] { unstable, recipeItemId(WerkstoffLoader.Tiberium.get(OrePrefixes.dust, 1)) }, fuelIII, -1));
-        catalog.setLatestQueryInputs("naquadah_fuel_3", unstable, heavy, light, denseUranium, densePlutonium);
         catalog.registerAlternativeChain("naquadah_fuel_3", advancedIII.mEUt, unstable,
             new Object[] { fuelIII },
             catalog.markRecipe(refinery, new Object[] { unstable, recipeItemId(MaterialsElements.STANDALONE.CHRONOMATIC_GLASS.getDust(1)) }, fuelIII, -1));
-        catalog.setLatestQueryInputs("naquadah_fuel_3", unstable, heavy, light, denseUranium, densePlutonium);
 
         catalog.registerChain(FUEL_TAG, 1, regularIV.mEUt, fuelIII,
             new Object[] { fuel },
             catalog.markRecipe(refinery, new Object[] { fuelIII, recipeItemId(Materials.NetherStar.getDust(1)) }, fuel, -1));
-        catalog.setLatestQueryInputs(FUEL_TAG, fuelIII, unstable);
         catalog.registerAlternativeChain(FUEL_TAG, advancedIV.mEUt, fuelIII,
             new Object[] { fuel },
             catalog.markRecipe(refinery, new Object[] { fuelIII, recipeItemId(Materials.Bedrockium.getDust(1)) }, fuel, -1));
-        catalog.setLatestQueryInputs(FUEL_TAG, fuelIII, unstable);
         catalog.registerAlternativeChain(FUEL_TAG, directIV.mEUt, unstable,
             new Object[] { fuel },
             catalog.markRecipe(refinery, new Object[] { unstable, heavy, light, denseUranium, densePlutonium }, fuel, -1));
-        catalog.setLatestQueryInputs(FUEL_TAG, unstable, heavy, light, denseUranium, densePlutonium);
         // spotless:on
 
         Fluid fuelV = GGMaterial.naquadahBasedFuelMkV.getFluidOrGas(1)
@@ -352,13 +343,11 @@ public final class BottledChaosNaquadahFuelRecipes {
         catalog.registerChain("naquadah_fuel_5", 1, regularV.mEUt, fuel,
             new Object[] { fuelV },
             catalog.markRecipe(refinery, new Object[] { fuel, infinityDust }, fuelV, -1));
-        catalog.setLatestQueryInputs("naquadah_fuel_5", fuel, moltenCatalyst);
         catalog.registerChainInputSynthesis("naquadah_fuel_5", infinityDust, infinitySolidification);
         catalog.registerChainInputSynthesis("naquadah_fuel_5", catalystDust, catalystSolidification);
         catalog.registerAlternativeChain("naquadah_fuel_5", advancedV.mEUt, fuel,
             new Object[] { fuelV },
             catalog.markRecipe(refinery, new Object[] { fuel, recipeItemId(Materials.TranscendentMetal.getDust(1)) }, fuelV, -1));
-        catalog.setLatestQueryInputs("naquadah_fuel_5", fuel, moltenCatalyst);
         catalog.registerChainInputSynthesis("naquadah_fuel_5", catalystDust, catalystSolidification);
 
         catalog.registerChain("naquadah_fuel_6", 1, regularVI.mEUt, fuelV,
@@ -520,7 +509,6 @@ public final class BottledChaosNaquadahFuelRecipes {
                         data.times.keySet().stream().mapToLong(time -> time.eut()).max().getAsLong(), orundum,
                         new Object[] { moltenCatalyst },
                         catalog.markPreparedRecipe(FluidExtractor, orundum, moltenCatalyst, variant++, data));
-                    catalog.setLatestQueryInputs(PREPARATION_TAG, orundum, recipeItemId(first));
                     // spotless:on
                 }
             }

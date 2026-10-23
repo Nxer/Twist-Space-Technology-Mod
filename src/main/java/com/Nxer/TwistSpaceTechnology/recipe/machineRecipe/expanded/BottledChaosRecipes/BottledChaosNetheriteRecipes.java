@@ -73,14 +73,12 @@ public final class BottledChaosNetheriteRecipes {
         catalog.registerAlternativeChain("ancient_debris", TierEU.RECIPE_ZPM, NetheriteNanoparticles,
             new Object[] { IntenselyBondedNetheriteNanoparticles }, new Object[] {},
             catalog.markRecipe(BlastFurnace, NetheriteNanoparticles, IntenselyBondedNetheriteNanoparticles, 1));
-        catalog.setLatestQueryInputs("ancient_debris", NetheriteNanoparticles, HellishMetalMolten);
         if (Mods.Forestry.isModLoaded() && GTBees.combs != null) {
             catalog.registerAugmentedChain("ancient_debris", "honeycomb", TierEU.RECIPE_ZPM, NetheriteNanoparticles,
                 new Object[] { IntenselyBondedNetheriteNanoparticles }, new Object[] {},
                 catalog.markRecipe(BlastFurnace,
                     new Object[] { NetheriteNanoparticles, TST_ItemID.create(GTBees.combs.getStackForType(CombType.NETHERITE, 1)) },
                     IntenselyBondedNetheriteNanoparticles, 2));
-            catalog.setLatestQueryInputs("ancient_debris", NetheriteNanoparticles, HellishMetalMolten);
         }
 
         // 1. Reheat returned scraps and cancel them against the UHV bath's hot-scrap input.

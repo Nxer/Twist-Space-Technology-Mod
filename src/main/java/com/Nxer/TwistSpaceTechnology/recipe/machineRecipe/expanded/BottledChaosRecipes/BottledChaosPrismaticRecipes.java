@@ -68,8 +68,6 @@ public final class BottledChaosPrismaticRecipes {
             catalog.markRecipe(VacuumFurnace, PrismaticCrystal, PrismaticGas, -1),
             catalog.markRecipe(VacuumFreezer, PrismaticGas, PrismaticAcid, -1));
 
-        catalog.setQueryMarkers("prismatic_acid", new Object[] { PrismarineShard, CrystallineAlloyMolten }, null);
-
         // Independent shard supply; the honeycomb source replaces quartz and doubles the native yield.
         catalog.registerAlternativeChain("prismatic_acid", TierEU.RECIPE_LuV, RedAlgaeBiomass,
             new Object[] { PrismarineShard }, new Object[] { PrismarineShard },

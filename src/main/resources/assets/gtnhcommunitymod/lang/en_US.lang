@@ -868,7 +868,6 @@ tst.bottledchaos.recipe.category.radox.name=Bottled Chaos - Radox
 tst.bottledchaos.recipe.category.titanium.name=Bottled Chaos - Titanium
 tst.bottledchaos.recipe.category.tungsten.name=Bottled Chaos - Tungsten
 tst.bottledchaos.recipe.credential.name=Bottled Chaos - Credential Injection
-tst.bottledchaos.recipe.key_input=Key Input
 tst.bottledchaos.recipe.key_output=Key Output
 tst.bottledchaos.recipe.name=Bottled Chaos
 tst.bottledchaos.recipe.recipe_map_time=%s: %s s

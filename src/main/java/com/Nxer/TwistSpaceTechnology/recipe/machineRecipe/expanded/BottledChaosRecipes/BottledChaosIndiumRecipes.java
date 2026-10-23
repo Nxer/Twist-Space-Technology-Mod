@@ -41,7 +41,7 @@ public final class BottledChaosIndiumRecipes {
             recovery);
 
         if (Mods.Forestry.isModLoaded() && GTBees.combs != null) catalog.requireCircuit("indium", 1);
-        catalog.setQueryMarkers("indium", new Object[] { SphaleriteDust, GalenaDust }, new Object[] { IndiumDust });
+        catalog.setKeyOutputs("indium", new Object[] { IndiumDust });
 
         catalog.registerAlternativeChain("indium", TierEU.RECIPE_LV, IndiumPhosphateDust,
             new Object[] { IndiumDust }, new Object[] {},
@@ -65,7 +65,7 @@ public final class BottledChaosIndiumRecipes {
                 new TST_ItemID[] { GalenaDust, SphaleriteDust }, IndiumConcentrate, 8),
             catalog.markRecipe(LargeChemicalReactor, new Object[] { IndiumConcentrate, indiumComb }, IndiumDust, 3),
             catalog.markRecipe(ElectrolyzerNonCell, LeadZincSolution, LeadDust, -1));
-        catalog.setQueryMarkers("honeycomb", new Object[] { SphaleriteDust, GalenaDust }, new Object[] { IndiumDust });
+        catalog.setKeyOutputs("honeycomb", new Object[] { IndiumDust });
         catalog.registerAugmentedChain("honeycomb", "indium", TierEU.RECIPE_LV, IndiumPhosphateDust,
             new Object[] { IndiumDust }, new Object[] {},
             catalog.markRecipe(LargeChemicalReactor, new Object[] { IndiumPhosphateDust, indiumComb }, IndiumDust, 2));

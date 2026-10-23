@@ -573,8 +573,13 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             .coverChildrenHeight(0)
             .padding(3)
             .collapseDisabledChild()
-            .setEnabledIf(widget -> originalPools.getChildren().stream().anyMatch(IWidget::isEnabled)
-                || alternativePools.getChildren().stream().anyMatch(IWidget::isEnabled))
+            .setEnabledIf(
+                widget -> originalPools.getChildren()
+                    .stream()
+                    .anyMatch(IWidget::isEnabled)
+                    || alternativePools.getChildren()
+                        .stream()
+                        .anyMatch(IWidget::isEnabled))
             .background(
                 (context, x, y, width, height, theme) -> {
                     if (alternativesVisible.getAsBoolean()) frame.draw(context, x, y, width, height, theme);
@@ -658,24 +663,24 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                     IKey.dynamic(
                         () -> (users.getValue() == 0 ? EnumChatFormatting.RED.toString() : "")
                             + BottledChaosMachineConfiguration.poolName(slot))).width(textWidth)
-                    .height(height)
-                    .textAlign(Alignment.CenterLeft)
-                    .tooltipBuilder(tooltip -> {
-                        // #tr tst.bottledchaos.gui.pool_users
-                        // # Processing groups: %s
-                        // #zh_CN 加工组: %s
-                        if (users.getValue() == 0) {
-                            // #tr tst.bottledchaos.gui.pool_unused
-                            // # No processing group uses this recipe pool.
-                            // #zh_CN 没有加工组使用此配方池.
-                            tooltip.addLine(IKey.lang("tst.bottledchaos.gui.pool_unused"));
-                        } else tooltip.addLine(
-                            IKey.str(
-                                StatCollector.translateToLocalFormatted(
-                                    "tst.bottledchaos.gui.pool_users",
-                                    MM_BottledChaos.formatProcessingGroups(users.getValue()))));
-                    })
-                    .tooltipAutoUpdate(true));
+                                .height(height)
+                                .textAlign(Alignment.CenterLeft)
+                                .tooltipBuilder(tooltip -> {
+                                    // #tr tst.bottledchaos.gui.pool_users
+                                    // # Processing groups: %s
+                                    // #zh_CN 加工组: %s
+                                    if (users.getValue() == 0) {
+                                        // #tr tst.bottledchaos.gui.pool_unused
+                                        // # No processing group uses this recipe pool.
+                                        // #zh_CN 没有加工组使用此配方池.
+                                        tooltip.addLine(IKey.lang("tst.bottledchaos.gui.pool_unused"));
+                                    } else tooltip.addLine(
+                                        IKey.str(
+                                            StatCollector.translateToLocalFormatted(
+                                                "tst.bottledchaos.gui.pool_users",
+                                                MM_BottledChaos.formatProcessingGroups(users.getValue()))));
+                                })
+                                .tooltipAutoUpdate(true));
     }
 
     /** Sends an integer quantity after native slot packets, only when a machine slot changes. */

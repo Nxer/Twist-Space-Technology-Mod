@@ -90,8 +90,6 @@ public final class BottledChaosRecipeProcessor {
                     preparedRoutes[i],
                     new SourceWork(preparedRoutes[i]),
                     chain.root(),
-                    catalog.keyInputs(i),
-                    catalog.keyOutputs(i),
                     targets,
                     chain.baseEUt(),
                     chain.tagIndex(),
@@ -111,7 +109,8 @@ public final class BottledChaosRecipeProcessor {
                 routes,
                 catalog.entryOrder(),
                 catalog.displayOrder(),
-                catalog.links.toArray(new ChainLink[0]));
+                catalog.links.toArray(new ChainLink[0]),
+                Collections.unmodifiableSet(catalog.keyOutputs));
             TwistSpaceTechnology.LOG.info("Bottled Chaos resolved {} processing steps.", catalog.resolved.size());
         } catch (RuntimeException exception) {
             TwistSpaceTechnology.LOG
@@ -169,7 +168,8 @@ public final class BottledChaosRecipeProcessor {
         for (int entry : snapshot.entryOrder) {
             CachedRoute route = snapshot.routes[entry];
             if (!route.isAuthorized(routeMask)) continue;
-            for (Object key : route.lookupOutputs) priorities.putIfAbsent(key, 1);
+            for (Object key : route.data.outputs.keySet())
+                if (snapshot.keyOutputs.contains(key)) priorities.putIfAbsent(key, 1);
             for (Object key : route.targetOutputs) {
                 if (!snapshot.hasAuthorizedConsumer(entry, routeMask, key)) priorities.put(key, 0);
             }
@@ -762,8 +762,7 @@ public final class BottledChaosRecipeProcessor {
                     displayOrder,
                     cachedRoute.requiredTagMask,
                     inputAlternatives,
-                    cachedRoute.lookupInputs.clone(),
-                    cachedRoute.lookupOutputs.clone(),
+                    snapshot.keyOutputs,
                     cachedRoute.baseEUt,
                     Collections.unmodifiableList(items),
                     Collections.unmodifiableList(fluids),
@@ -812,8 +811,8 @@ public final class BottledChaosRecipeProcessor {
         private final Map<Integer, Integer> substitutedChains = new LinkedHashMap<>();
         private final Map<Integer, TST_ItemID> selectorCircuits = new LinkedHashMap<>();
         private final Set<Integer> availableInputChains = new LinkedHashSet<>();
-        private final Map<Integer, Object[]> queryInputs = new LinkedHashMap<>();
-        private final Map<Integer, Object[]> queryOutputs = new LinkedHashMap<>();
+        private final Map<Integer, Object[]> outputMarkers = new LinkedHashMap<>();
+        private final Set<Object> keyOutputs = new LinkedHashSet<>();
         private final Map<Integer, Object[]> executionTargets = new LinkedHashMap<>();
         private final Map<String, List<Object>> displayRoots = new LinkedHashMap<>();
         private final Map<Integer, ItemStack[][]> displayInputAlternatives = new LinkedHashMap<>();
@@ -922,47 +921,22 @@ public final class BottledChaosRecipeProcessor {
                     (1L << tagIndex) | additionalTags));
         }
 
-        /**
-         * Override NEI lookup keys for currently registered entries of this tag; input keys also accept chained
-         * supply. Null keeps defaults, an empty array disables a side.
-         */
-        public void setQueryMarkers(String tag, Object[] inputs, Object[] outputs) {
+        /** Override key outputs for this tag's existing entries; their identities allow chaining across all tags. */
+        public void setKeyOutputs(String tag, Object... outputs) {
             int tagIndex = CredentialModel.indexForTag(tag);
-            if (tagIndex < 0) throw new IllegalArgumentException("unknown query tag: " + tag);
-            Object[] inputKeys = inputs == null ? null
-                : Arrays.stream(inputs)
-                    .map(BottledChaosRecipeProcessor::resourceKey)
-                    .toArray();
-            Object[] outputKeys = outputs == null ? null
-                : Arrays.stream(outputs)
-                    .map(BottledChaosRecipeProcessor::resourceKey)
-                    .toArray();
+            if (tagIndex < 0) throw new IllegalArgumentException("unknown key output tag: " + tag);
+            Object[] outputKeys = Arrays.stream(outputs)
+                .map(BottledChaosRecipeProcessor::resourceKey)
+                .toArray();
             for (int entry = 0; entry < chains.size(); entry++) {
                 RecipeChain chain = chains.get(entry);
                 if (chain == null || chain.tagIndex() != tagIndex) continue;
-                if (inputKeys != null) queryInputs.put(entry, inputKeys);
-                if (outputKeys != null) queryOutputs.put(entry, outputKeys);
+                outputMarkers.put(entry, outputKeys);
             }
         }
 
-        /** Override only the latest entry's key inputs; no inputs disables lookup and incoming recipe links. */
-        public void setLatestQueryInputs(String tag, Object... inputs) {
-            queryInputs.put(
-                latestChainIndex(tag),
-                Arrays.stream(inputs)
-                    .map(BottledChaosRecipeProcessor::resourceKey)
-                    .toArray());
-        }
-
-        private Object[] keyInputs(int entry) {
-            return queryInputs.getOrDefault(
-                entry,
-                new Object[] { chains.get(entry)
-                    .root() });
-        }
-
         private Object[] keyOutputs(int entry) {
-            return queryOutputs.getOrDefault(
+            return outputMarkers.getOrDefault(
                 entry,
                 chains.get(entry)
                     .terminals());
@@ -1445,15 +1419,16 @@ public final class BottledChaosRecipeProcessor {
                 TST_ItemID selector = selectorCircuits.get(i);
                 if (selector != null) routes[i] = routes[i].requireCatalyst(selector);
             }
-            // 4. Any actual output may supply a marked key input; output markers only control NEI lookup.
+            // 4. Key output identities may supply any actual input or catalyst, independently of its tag.
+            for (int entry = 0; entry < chains.size(); entry++) Collections.addAll(keyOutputs, keyOutputs(entry));
             int[] executionOrder = entryOrder();
             for (int sourcePosition = 0; sourcePosition < executionOrder.length; sourcePosition++) {
                 int source = executionOrder[sourcePosition];
                 for (Object key : routes[source].outputs.keySet()) {
+                    if (!keyOutputs.contains(key)) continue;
                     for (int targetPosition = 0; targetPosition < executionOrder.length; targetPosition++) {
                         int target = executionOrder[targetPosition];
-                        if (source == target || !Arrays.asList(keyInputs(target))
-                            .contains(key)) continue;
+                        if (source == target) continue;
                         if (routes[target].inputs.containsKey(key) || routes[target].catalysts.containsKey(key))
                             links.add(new ChainLink(source, target, key));
                     }
@@ -1612,7 +1587,6 @@ public final class BottledChaosRecipeProcessor {
                 RecipeChain chain = chains.get(entry);
                 boundaries.add(chain.root());
                 Collections.addAll(boundaries, chain.terminals());
-                Collections.addAll(boundaries, keyInputs(entry));
                 Collections.addAll(boundaries, keyOutputs(entry));
                 if (chain.chainableOutputs() != null) Collections.addAll(boundaries, chain.chainableOutputs());
             }
@@ -1691,10 +1665,9 @@ public final class BottledChaosRecipeProcessor {
      * positive inputMultiplier folds its NEI row into the primary entry.
      */
     @Desugar
-    private record CachedRoute(RecipeData data, SourceWork work, Object root, Object[] lookupInputs,
-        Object[] lookupOutputs, Object[] targetOutputs, long baseEUt, int tagIndex, int inputMultiplier,
-        long requiredTagMask, boolean availableInputsOnly, ItemStack[][] displayInputAlternatives,
-        boolean hiddenDisplay, long poolMask) {
+    private record CachedRoute(RecipeData data, SourceWork work, Object root, Object[] targetOutputs, long baseEUt,
+        int tagIndex, int inputMultiplier, long requiredTagMask, boolean availableInputsOnly,
+        ItemStack[][] displayInputAlternatives, boolean hiddenDisplay, long poolMask) {
 
         boolean isAuthorized(long routeMask) {
             return (routeMask & requiredTagMask) == requiredTagMask;
@@ -1708,16 +1681,19 @@ public final class BottledChaosRecipeProcessor {
         final int[] entryOrder;
         final int[] displayOrder;
         final ChainLink[] links;
+        final Set<Object> keyOutputs;
         final int[][] familyEntries;
         final String[] familyNames;
         final int[] familyOfEntry;
         final BottledChaosChainPlanner.Stage[] stages;
 
-        RouteCache(CachedRoute[] routes, int[] entryOrder, int[] displayOrder, ChainLink[] links) {
+        RouteCache(CachedRoute[] routes, int[] entryOrder, int[] displayOrder, ChainLink[] links,
+            Set<Object> keyOutputs) {
             this.routes = routes;
             this.entryOrder = entryOrder;
             this.displayOrder = displayOrder;
             this.links = links;
+            this.keyOutputs = keyOutputs;
             stages = new BottledChaosChainPlanner.Stage[routes.length];
             for (int entry = 0; entry < routes.length; entry++) {
                 RecipeData data = routes[entry].data;
@@ -2214,12 +2190,12 @@ public final class BottledChaosRecipeProcessor {
     public record RecipeMapDuration(RecipeMap<?> map, double durationTicks) {}
 
     /**
-     * NEI row data: authorization, independent item alternatives, searchable entry/endpoints, complete long quantities
-     * and grouped processing times. Lookup identities do not remove any displayed material.
+     * NEI row data: authorization, independent item alternatives, global key outputs, complete long quantities
+     * and grouped processing times. Key outputs restrict lookup without removing any displayed material.
      */
     @Desugar
     public record DisplayRecipe(int routeIndex, int displayOrder, long requiredTagMask, ItemStack[][] inputAlternatives,
-        Object[] lookupInputs, Object[] lookupOutputs, long baseEUt, List<ItemStackLong> itemInputs,
-        List<FluidStackLong> fluidInputs, List<RecipeMapDuration> processingTimes, Plan plan) {}
+        Set<Object> keyOutputs, long baseEUt, List<ItemStackLong> itemInputs, List<FluidStackLong> fluidInputs,
+        List<RecipeMapDuration> processingTimes, Plan plan) {}
 
 }

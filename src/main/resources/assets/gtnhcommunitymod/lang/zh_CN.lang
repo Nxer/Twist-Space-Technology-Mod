@@ -868,7 +868,6 @@ tst.bottledchaos.recipe.category.radox.name=瓶中混沌 - 拉多X
 tst.bottledchaos.recipe.category.titanium.name=瓶中混沌 - 钛
 tst.bottledchaos.recipe.category.tungsten.name=瓶中混沌 - 钨
 tst.bottledchaos.recipe.credential.name=瓶中混沌 - 凭证注入
-tst.bottledchaos.recipe.key_input=关键输入
 tst.bottledchaos.recipe.key_output=关键输出
 tst.bottledchaos.recipe.name=瓶中混沌
 tst.bottledchaos.recipe.recipe_map_time=%s: %s秒

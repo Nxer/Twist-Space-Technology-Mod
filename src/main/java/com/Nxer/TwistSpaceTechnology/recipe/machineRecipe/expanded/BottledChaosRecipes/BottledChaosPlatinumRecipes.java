@@ -187,12 +187,11 @@ public final class BottledChaosPlatinumRecipes {
             TST_ItemID.create(platinumCandidates[1]),
             platinumCandidates[1].stackSize / platinumCandidates[0].stackSize);
 
-        catalog.setQueryMarkers(
+        catalog.setKeyOutputs(
             "platinum_metallic_powder",
-            null,
             new Object[] { PlatinumDust, PlatinumResidueDust, PalladiumMetallicPowder });
-        catalog.setQueryMarkers("leach_residue", null, new Object[] { RutheniumDust, RarestMetalResidueDust });
-        catalog.setQueryMarkers("rarest_metal_residue", null, new Object[] { OsmiumDust, IridiumMetalResidueDust });
+        catalog.setKeyOutputs("leach_residue", new Object[] { RutheniumDust, RarestMetalResidueDust });
+        catalog.setKeyOutputs("rarest_metal_residue", new Object[] { OsmiumDust, IridiumMetalResidueDust });
     }
 
     private static void registerCropHammerChains(RecipeCatalog catalog) {
@@ -330,9 +329,8 @@ public final class BottledChaosPlatinumRecipes {
             catalog.markRecipe(LargeChemicalReactor, IridiumChlorideDust, IridiumDust, -1));
 
         // Keep every entry's products under the shared comb tag; NEI matches only its actual output slots.
-        catalog.setQueryMarkers(
+        catalog.setKeyOutputs(
             "honeycomb",
-            null,
             new Object[] { IndiumDust, PlatinumDust, PlatinumMetallicPowder, PalladiumMetallicPowder, PalladiumDust,
                 OsmiumDust, IridiumDust });
     }
