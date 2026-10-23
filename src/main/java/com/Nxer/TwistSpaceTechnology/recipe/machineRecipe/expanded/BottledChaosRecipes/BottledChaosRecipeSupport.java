@@ -168,6 +168,14 @@ final class BottledChaosRecipeSupport {
             map == RecipeMaps.fusionRecipes ? recipe.getMetadataOrDefault(GTRecipeConstants.FUSION_THRESHOLD, 0L) : 0);
     }
 
+    static long takeAmount(Map<Object, Long> amounts, Object key, long needed) {
+        long stored = amounts.getOrDefault(key, 0L);
+        long taken = Math.min(stored, needed);
+        if (stored == taken) amounts.remove(key);
+        else amounts.put(key, stored - taken);
+        return taken;
+    }
+
     public static double addDuration(double current, double perBatch, long batches) {
         double result = current + perBatch * batches;
         if (!Double.isFinite(result)) throw new ArithmeticException("duration overflow");

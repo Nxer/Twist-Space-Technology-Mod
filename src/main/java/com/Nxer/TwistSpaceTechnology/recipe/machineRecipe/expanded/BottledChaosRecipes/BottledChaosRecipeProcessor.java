@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes;
 
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMaterialStacks.appendResourceStack;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeSupport.takeAmount;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +22,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineConfiguration;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMaterialCache;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMaterialStacks;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosOverclock;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosSourceParameters;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosUpkeep;
 import com.Nxer.TwistSpaceTechnology.config.Config;
@@ -32,6 +32,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosR
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.CredentialModel;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeSupport.RecipeData;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeSupport.TimeKey;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosSourceWork.Selection;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
 
@@ -59,7 +60,7 @@ public final class BottledChaosRecipeProcessor {
             CompiledRoute definition = compiled.routes()[entry];
             routes[entry] = new CachedRoute(
                 definition,
-                new SourceWork(definition.data()),
+                new BottledChaosSourceWork(definition.data()),
                 BottledChaosMachineConfiguration.withDependencies(
                     definition.data().times.keySet()
                         .stream()
@@ -283,7 +284,7 @@ public final class BottledChaosRecipeProcessor {
                     new double[snapshot.routes.length],
                     new boolean[snapshot.routes.length],
                     new boolean[snapshot.routes.length],
-                    new SourceSelection[snapshot.routes.length]));
+                    new Selection[snapshot.routes.length]));
         }
 
         private boolean checkSources(int index, long voltage) {
@@ -292,18 +293,17 @@ public final class BottledChaosRecipeProcessor {
                 long diagnosticSourceStart = System.nanoTime();
                 diagnosticSourceCalls++;
                 checks.checked[index] = true;
-                SourceSelection selected = selectSources(snapshot.routes[index].work, parameters, voltage);
+                Selection selected = snapshot.routes[index].work.select(parameters, voltage);
                 checks.selections[index] = selected;
-                checks.allowed[index] = selected != null && routeFilter.allows(voltage, selected.pools);
-                if (selected != null) checks.costs[index] = selected.duration;
+                checks.allowed[index] = selected != null && routeFilter.allows(voltage, selected.pools());
+                if (selected != null) checks.costs[index] = selected.duration();
                 diagnosticSourceNs += System.nanoTime() - diagnosticSourceStart;
             }
             return checks.allowed[index];
         }
 
         @Desugar
-        private record SourceChecks(double[] costs, boolean[] checked, boolean[] allowed,
-            SourceSelection[] selections) {}
+        private record SourceChecks(double[] costs, boolean[] checked, boolean[] allowed, Selection[] selections) {}
 
         /** Entry fallbacks share the same input, authorization and source-cost snapshot. */
         public PreparedPlan prepareEntry(int entry) {
@@ -554,13 +554,13 @@ public final class BottledChaosRecipeProcessor {
 
                 @Override
                 public long pools(int index, long voltage) {
-                    return sourceChecks(voltage).selections[index].pools;
+                    return sourceChecks(voltage).selections[index].pools();
                 }
 
                 @Override
                 public Map<Object, Long> inputs(int index, long voltage) {
-                    return snapshot.routes[index].work.groups.isEmpty() || !checkSources(index, voltage) ? null
-                        : sourceChecks(voltage).selections[index].inputs;
+                    return !snapshot.routes[index].work.hasAlternatives() || !checkSources(index, voltage) ? null
+                        : sourceChecks(voltage).selections[index].inputs();
                 }
 
                 @Override
@@ -624,10 +624,7 @@ public final class BottledChaosRecipeProcessor {
             parameters.resetSourceUsage();
             for (int index : snapshot.entryOrder) {
                 if (result.batches[index] == 0) continue;
-                SourceSelection selected = sourceChecks(result.voltage).selections[index];
-                for (SelectedSource source : selected.sources)
-                    parameters.recordSourceUsage(source.time.map(), source.parameters);
-
+                sourceChecks(result.voltage).selections[index].recordUsage(parameters);
             }
             plan.upkeep = Collections.unmodifiableList(new ArrayList<>(parameters.upkeepDemands()));
             plan.roundItems = Collections.unmodifiableList(new ArrayList<>(parameters.roundItemDemands()));
@@ -679,7 +676,7 @@ public final class BottledChaosRecipeProcessor {
             Map<RecipeMap<?>, Double> timeByMap = new LinkedHashMap<>();
             double totalDuration = 0;
             for (var time : route.times.entrySet()) {
-                double part = calculateTimePart(
+                double part = BottledChaosSourceWork.normalizedDuration(
                     time.getKey(),
                     time.getValue(),
                     DEFAULT_PARAMETERS.evaluateSource(
@@ -735,7 +732,7 @@ public final class BottledChaosRecipeProcessor {
 
     /** One immutable compiled definition, plus execution-only derived work and pool requirements. */
     @Desugar
-    private record CachedRoute(CompiledRoute definition, SourceWork work, long poolMask) {
+    private record CachedRoute(CompiledRoute definition, BottledChaosSourceWork work, long poolMask) {
 
         boolean isAuthorized(long tagMask) {
             return (tagMask & definition.requiredTagMask()) == definition.requiredTagMask();
@@ -830,148 +827,6 @@ public final class BottledChaosRecipeProcessor {
             return false;
         }
 
-    }
-
-    private static long takeAmount(Map<Object, Long> amounts, Object key, long needed) {
-        long stored = amounts.getOrDefault(key, 0L);
-        long taken = Math.min(stored, needed);
-        if (stored == taken) amounts.remove(key);
-        else amounts.put(key, stored - taken);
-        return taken;
-    }
-
-    private static double calculateTimePart(TimeKey key, long rawTicks, BottledChaosSourceParameters.Evaluation source,
-        long recipeVoltage) {
-        if (key.eut() == 0) return 0;
-        var profile = source.profile();
-        if (source.energyOnly()) return rawTicks * (double) key.eut()
-            * profile.euMultiplier()
-            / source.quantitySpeedMultiplier()
-            / recipeVoltage;
-        double sourceSpeed = 1 / profile.timeMultiplier();
-        double sourceDuration = Math.max(profile.minimumSourceDuration(), key.recipeTicks() / sourceSpeed);
-        return BottledChaosOverclock.calculateNormalizedDuration(
-            rawTicks,
-            key.eut(),
-            Math.min(recipeVoltage, profile.maximumSourcePower()),
-            profile.parallel(),
-            key.recipeTicks() / sourceDuration * source.quantitySpeedMultiplier(),
-            profile.euMultiplier(),
-            profile.timeDivisor(),
-            profile.powerMultiplier(),
-            source.maximumOverclocks(),
-            source.perfectOverclocks(),
-            source.overclockLimitAlternatives());
-    }
-
-    @Desugar
-    private record SelectedSource(TimeKey time, BottledChaosSourceParameters.Evaluation parameters) {}
-
-    @Desugar
-    private record SourceSelection(double duration, long pools, List<SelectedSource> sources,
-        Map<Object, Long> omittedInputs, Map<Object, Long> inputs) {}
-
-    /** Partition source work once at startup, keeping ordinary routes on the direct calculation path. */
-    private static final class SourceWork {
-
-        final RecipeData data;
-        final Map<TimeKey, Long> ordinary = new LinkedHashMap<>();
-        final Map<BottledChaosProcessAlternatives.Group, Map<TimeKey, Long>> groups = new LinkedHashMap<>();
-
-        SourceWork(RecipeData data) {
-            this.data = data;
-            for (var entry : data.times.entrySet()) {
-                var group = entry.getKey()
-                    .alternatives();
-                if (group == null) ordinary.put(entry.getKey(), entry.getValue());
-                else groups.computeIfAbsent(group, ignored -> new LinkedHashMap<>())
-                    .put(entry.getKey(), entry.getValue());
-            }
-        }
-    }
-
-    /** Select a cached native-pool version once per plan/voltage; unrelated pool work remains mandatory. */
-    private static SourceSelection selectSources(SourceWork work, BottledChaosSourceParameters parameters,
-        long voltage) {
-        RecipeData data = work.data;
-        SourceSelection result = evaluateSources(work.ordinary, parameters, voltage, 1);
-        if (result == null) return null;
-        for (var segment : work.groups.entrySet()) {
-            var group = segment.getKey();
-            boolean installed = segment.getValue()
-                .keySet()
-                .stream()
-                .allMatch(key -> parameters.isSourceAvailable(key.map()));
-            // Installing Miracle Door selects its native material contract as well as its timing.
-            // Its gas-free inputs stay the same when the chain's common voltage rises.
-            boolean stellarForge = parameters.isSourceAvailable(BottledChaosProcessAlternatives.STELLAR_FORGE)
-                && group.versions.containsKey(BottledChaosProcessAlternatives.STELLAR_FORGE);
-            SourceSelection best = installed && !stellarForge
-                ? evaluateSources(segment.getValue(), parameters, voltage, 1)
-                : null;
-            for (var pool : group.versions.entrySet()) {
-                if (stellarForge && pool.getKey() != BottledChaosProcessAlternatives.STELLAR_FORGE) continue;
-                if (!parameters.isSourceAvailable(pool.getKey())) continue;
-                for (var version : pool.getValue()) {
-                    SourceSelection candidate = evaluateSources(version.times(), parameters, voltage, version.scale());
-                    if (candidate == null || best != null && candidate.duration >= best.duration) continue;
-                    candidate.omittedInputs.putAll(version.omittedInputs());
-                    best = candidate;
-                }
-            }
-            // Preserve the ordinary pool failures when no installed native version can run.
-            if (best == null && !installed && !stellarForge)
-                best = evaluateSources(segment.getValue(), parameters, voltage, 1);
-            if (best == null) return null;
-            result.sources.addAll(best.sources);
-            for (var omitted : best.omittedInputs.entrySet())
-                result.omittedInputs.merge(omitted.getKey(), omitted.getValue(), Math::addExact);
-            result = new SourceSelection(
-                BottledChaosRecipeSupport.addDuration(result.duration, best.duration, 1),
-                result.pools | best.pools,
-                result.sources,
-                result.omittedInputs,
-                null);
-        }
-        // A fully substituted gas demand disappears, including any source tick rounding difference.
-        for (var omitted : result.omittedInputs.entrySet()) {
-            boolean stillConsumed = false;
-            for (SelectedSource source : result.sources)
-                if (source.time.source() != null && source.time.source().inputs.containsKey(omitted.getKey())) {
-                    stillConsumed = true;
-                    break;
-                }
-            if (!stillConsumed) omitted.setValue(data.inputs.getOrDefault(omitted.getKey(), 0L));
-        }
-        Map<Object, Long> inputs = data.inputs;
-        if (!result.omittedInputs.isEmpty()) {
-            inputs = new LinkedHashMap<>(inputs);
-            for (var omitted : result.omittedInputs.entrySet())
-                takeAmount(inputs, omitted.getKey(), omitted.getValue());
-        }
-        return new SourceSelection(result.duration, result.pools, result.sources, result.omittedInputs, inputs);
-    }
-
-    private static SourceSelection evaluateSources(Map<TimeKey, Long> work, BottledChaosSourceParameters parameters,
-        long voltage, double scale) {
-        double duration = 0;
-        long pools = 0;
-        List<SelectedSource> sources = new ArrayList<>(work.size());
-        for (var entry : work.entrySet()) {
-            TimeKey key = entry.getKey();
-            var source = parameters.evaluateSource(key.map(), voltage, key.requirements());
-            if (!source.successful()) return null;
-            duration = BottledChaosRecipeSupport
-                .addDuration(duration, calculateTimePart(key, entry.getValue(), source, voltage) * scale, 1);
-            pools |= BottledChaosMachineConfiguration.mask(key.map());
-            sources.add(new SelectedSource(key, source));
-        }
-        return new SourceSelection(
-            duration,
-            BottledChaosMachineConfiguration.withDependencies(pools),
-            sources,
-            new LinkedHashMap<>(),
-            null);
     }
 
     /** One candidate: exact input consumption and carry, with outputs finalized only when checking capacity. */
