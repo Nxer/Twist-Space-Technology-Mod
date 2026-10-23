@@ -23,6 +23,8 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.ModItem;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineParameters.Machine;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineParameters.Upgrades;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
 import com.gtnewhorizon.structurelib.structure.IStructureElement;
@@ -432,8 +434,24 @@ public final class BottledChaosStructureCatalog {
                     item -> item.hasTagCompound() ? item.getTagCompound()
                         .toString() : ""));
         ItemStack[] actualMaterials = canonical.toArray(new ItemStack[0]);
-        if (!BottledChaosMachineParameters.isValidStructure(rule.controller, actualMaterials)) return null;
+        if (!isValidStructure(rule.controller, actualMaterials)) return null;
         return new Structure(rule.machineKey, rule.profile, rule.poolMask, rule.controller, actualMaterials, heat);
+    }
+
+    /** Cross-upgrade requirements shared by packaging, saved modules and NEI examples. */
+    private static boolean isValidStructure(ItemStack controller, ItemStack[] materials) {
+        Machine machine = Machine.find(ItemMachines.getMetaTileEntity(controller));
+        if (machine != Machine.BALL_LIGHTNING && machine != Machine.PRECISE_ASSEMBLER
+            && machine != Machine.LASER_ENGRAVER
+            && machine != Machine.DE_FUSION) return true;
+        Upgrades u = new Upgrades(materials);
+        return switch (machine) {
+            case BALL_LIGHTNING -> u.coil.getTier() >= HeatingCoilLevel.UMV.getTier();
+            case PRECISE_ASSEMBLER -> u.precision >= -1 && u.machineCasing >= 0 && u.glass >= VoltageIndex.EV;
+            case LASER_ENGRAVER -> u.laserTier >= 0 && u.glass >= u.laserTier;
+            case DE_FUSION -> u.draconicTier >= 1 && (u.draconicTier <= 3 || u.draconicFusionTier >= 2);
+            default -> true;
+        };
     }
 
     private static void matchLaserGlass(Rule rule, Map<TST_ItemID, ItemStack> materials) {
