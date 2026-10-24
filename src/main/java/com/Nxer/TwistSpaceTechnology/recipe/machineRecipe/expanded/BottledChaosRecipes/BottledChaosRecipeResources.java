@@ -761,18 +761,18 @@ public final class BottledChaosRecipeResources {
     public static final TST_ItemID MilledNetherrack = TST_ItemID.create(GTOreDictUnificator.get(OrePrefixes.milled, Materials.Netherrack, 1));
     public static final TST_ItemID AluminaMillingBall = TST_ItemID.create(GregtechItemList.Milling_Ball_Alumina.get(1));
 
-    static TST_ItemID resolvePlatinumLeafAlias() {
+    public static TST_ItemID resolvePlatinumLeafAlias() {
         return resolveCropsLeafAlias(12);
     }
 
-    static TST_ItemID resolveCropsLeafAlias(int metadata) {
+    public static TST_ItemID resolveCropsLeafAlias(int metadata) {
         if (!Mods.CropsNH.isModLoaded()) return null;
         ItemStack fallback = new ItemStack(Items.stick);
         ItemStack leaf = ModItem.getModItem("cropsnh", "materialLeaf", 1, metadata, fallback);
         return leaf == fallback ? null : TST_ItemID.create(leaf);
     }
 
-    static ItemStack[] platinumInputAlternatives(TST_ItemID platinumLeafAlias) {
+    public static ItemStack[] platinumInputAlternatives(TST_ItemID platinumLeafAlias) {
         return platinumLeafAlias == null ? null
             : new ItemStack[] { PlatinumMetallicPowder.getItemStack(1),
                 platinumLeafAlias.getItemStack(PLATINUM_LEAVES_PER_POWDER) };

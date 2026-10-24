@@ -23,7 +23,7 @@ import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 
 /** Startup source lookup. Native queries select one result; selectors retain all matches for ambiguity checks. */
-final class BottledChaosSourceResolver {
+public final class BottledChaosSourceResolver {
 
     private final Map<NativeSelector, List<GTRecipe>> matches;
     private final Map<Preparation, List<RecipeData>> prepared = new LinkedHashMap<>();
@@ -95,7 +95,7 @@ final class BottledChaosSourceResolver {
         return matches;
     }
 
-    static GTRecipe query(RecipeMap<?> pool, ItemStack[] items, FluidStack... fluids) {
+    public static GTRecipe query(RecipeMap<?> pool, ItemStack[] items, FluidStack... fluids) {
         return pool.findRecipeQuery()
             .items(items)
             .fluids(fluids)
@@ -103,7 +103,7 @@ final class BottledChaosSourceResolver {
     }
 
     /** Required GT query, including native fallback recipes that are absent from getAllRecipes(). */
-    static GTRecipe require(RecipeMap<?> pool, ItemStack[] items, FluidStack... fluids) {
+    public static GTRecipe require(RecipeMap<?> pool, ItemStack[] items, FluidStack... fluids) {
         GTRecipe recipe = query(pool, items, fluids);
         if (recipe == null) throw new IllegalStateException(
             "Missing native source: " + pool.unlocalizedName

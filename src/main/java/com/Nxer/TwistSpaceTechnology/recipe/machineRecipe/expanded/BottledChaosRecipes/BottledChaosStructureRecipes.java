@@ -10,29 +10,24 @@ import net.minecraft.item.ItemStack;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosMachineModule;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosStructureCatalog;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosStructureCatalog.Rule;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosStructureDisplay;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosStructureDisplay.Frame;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosStructurePackaging;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructureCatalog;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructureCatalog.Rule;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructureDisplay;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructureDisplay.Frame;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructurePackaging;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_BottledChaosStructureFrontend;
 import com.cleanroommc.modularui.utils.item.ItemStackHandler;
 
 import appeng.api.AEApi;
 import gregtech.api.enums.GTValues;
-import gregtech.api.enums.ItemList;
 import gregtech.api.metatileentity.implementations.MTEBasicMachine;
-import gregtech.api.util.GTModHandler;
 import gregtech.common.blocks.ItemMachines;
 
 /** NEI examples use the same cached assets and disk transaction as the GUI. They do not execute as GT recipes. */
 public final class BottledChaosStructureRecipes {
 
     public static void registerRecipes() {
-        GTModHandler.addShapelessCraftingRecipe(
-            GTCMItemList.BottledChaosMachineModule.get(1),
-            new Object[] { ItemList.Tool_DataStick.get(1) });
         int registered = 0;
         boolean diskExample = false;
         Map<String, List<Rule>> machines = new LinkedHashMap<>();

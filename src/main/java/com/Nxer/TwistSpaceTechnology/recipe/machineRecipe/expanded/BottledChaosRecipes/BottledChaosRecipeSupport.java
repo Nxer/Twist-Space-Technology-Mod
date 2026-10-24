@@ -15,7 +15,7 @@ import java.util.Objects;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosSourceRequirements;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosSourceRequirements;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosItemInputs.Requirement;
 import com.Nxer.TwistSpaceTechnology.util.recipes.RecipeMaterialUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
@@ -38,14 +38,14 @@ import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.ch
 import tectech.recipe.TecTechRecipeMaps;
 
 /** Bottled Chaos recipe preprocessing and source-machine duration calculations. */
-final class BottledChaosRecipeSupport {
+public final class BottledChaosRecipeSupport {
 
     // Core source preprocessing and runtime duration operations.
     /**
      * Converts one live recipe into exact whole-batch data. Item and fluid chances use one shared LCM batch;
      * programming circuits are selectors, and zero-sized item inputs remain unscaled catalysts.
      */
-    static RecipeData prepareSourceRecipe(RecipeMap<?> map, GTRecipe recipe) {
+    public static RecipeData prepareSourceRecipe(RecipeMap<?> map, GTRecipe recipe) {
         return prepareSourceRecipe(map, recipe, 0);
     }
 
@@ -262,12 +262,12 @@ final class BottledChaosRecipeSupport {
 
     // Route composition and its shared amount helpers.
     /** Immutable prepared recipe data; composition always returns a new independent value. */
-    static final class RecipeData {
+    public static final class RecipeData {
 
-        final Map<Object, Long> inputs;
-        final Map<Object, Long> outputs;
-        final Map<Object, Long> catalysts;
-        final Map<TimeKey, Long> times;
+        public final Map<Object, Long> inputs;
+        public final Map<Object, Long> outputs;
+        public final Map<Object, Long> catalysts;
+        public final Map<TimeKey, Long> times;
         final List<Requirement> itemRequirements;
 
         RecipeData withTimes(Map<TimeKey, Long> work) {
@@ -275,7 +275,7 @@ final class BottledChaosRecipeSupport {
         }
 
         /** Consolidate native small/tiny coproducts into exact full-dust batches without changing source work. */
-        RecipeData withFullDustOutputs() {
+        public RecipeData withFullDustOutputs() {
             Map<Object, Integer> divisors = new LinkedHashMap<>();
             Map<Object, Object> fullDusts = new LinkedHashMap<>();
             long scale = 1;
@@ -313,7 +313,7 @@ final class BottledChaosRecipeSupport {
         }
 
         /** Combine independent routes at fixed batch counts, preserving their native input rules and work. */
-        RecipeData combineRecipe(RecipeData other, long ownBatches, long otherBatches) {
+        public RecipeData combineRecipe(RecipeData other, long ownBatches, long otherBatches) {
             Map<Object, Long> combinedInputs = multiplyAmounts(inputs, ownBatches);
             mergeAmounts(combinedInputs, other.inputs, otherBatches);
             Map<Object, Long> combinedOutputs = multiplyAmounts(outputs, ownBatches);
@@ -327,7 +327,7 @@ final class BottledChaosRecipeSupport {
             return new RecipeData(combinedInputs, combinedOutputs, combinedCatalysts, combinedTimes, items);
         }
 
-        RecipeData appendBalancedRecipe(RecipeData downstream, Object intermediate) {
+        public RecipeData appendBalancedRecipe(RecipeData downstream, Object intermediate) {
             Objects.requireNonNull(downstream, "downstream route");
             Objects.requireNonNull(intermediate, "route intermediate");
 
@@ -364,7 +364,7 @@ final class BottledChaosRecipeSupport {
             return new RecipeData(netInputs, netOutputs, this);
         }
 
-        RecipeData netInputsAndOutputs(Object root) {
+        public RecipeData netInputsAndOutputs(Object root) {
             RecipeData result = netInputsAndOutputs();
             if (!result.inputs.containsKey(root)) {
                 throw new IllegalStateException("processing root must have positive net consumption: " + root);
@@ -391,7 +391,7 @@ final class BottledChaosRecipeSupport {
         }
 
         /** Reuse an already available coproduct before expanding its remaining demand or surplus. */
-        RecipeData cancelReturnedResource(Object key) {
+        public RecipeData cancelReturnedResource(Object key) {
             Long input = inputs.get(key);
             Long output = outputs.get(key);
             if (input == null || output == null) return this;
@@ -453,7 +453,7 @@ final class BottledChaosRecipeSupport {
             return new RecipeData(alternativeInputs, outputs, catalysts, times, items);
         }
 
-        RecipeData(Map<Object, Long> inputs, Map<Object, Long> outputs, Map<Object, Long> catalysts,
+        public RecipeData(Map<Object, Long> inputs, Map<Object, Long> outputs, Map<Object, Long> catalysts,
             Map<TimeKey, Long> times) {
             this(inputs, outputs, catalysts, times, BottledChaosItemInputs.defaults(inputs, catalysts));
         }
@@ -567,14 +567,14 @@ final class BottledChaosRecipeSupport {
      * Keep source duration and requirements separate, including the native neutron activator's per-recipe tick floor.
      */
     @Desugar
-    record TimeKey(RecipeMap<?> map, long eut, int recipeTicks, BottledChaosSourceRequirements requirements,
+    public record TimeKey(RecipeMap<?> map, long eut, int recipeTicks, BottledChaosSourceRequirements requirements,
         BottledChaosProcessAlternatives.Source source, BottledChaosProcessAlternatives.Group alternatives) {
 
         TimeKey(RecipeMap<?> map, long eut, int recipeTicks, BottledChaosSourceRequirements requirements) {
             this(map, eut, recipeTicks, requirements, null, null);
         }
 
-        TimeKey(RecipeMap<?> map, long eut) {
+        public TimeKey(RecipeMap<?> map, long eut) {
             this(map, eut, 1, BottledChaosSourceRequirements.NONE);
         }
     }
