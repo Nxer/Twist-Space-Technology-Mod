@@ -95,19 +95,39 @@ public final class NACRecipeGenerator {
     }
 
     // Index every real NAC output so recipes with several outputs are expanded only once.
+    // For duplicate module outputs, keep the highest processing fluid tier with its own amounts and duration.
     // Optical matrix recipes have a 50% chance to return a circuit that still needs packaging. MT always uses the
     // packaged result like other circuit tiers, then lets the normal unwrapping path handle it.
     private static Map<TST_ItemID, NACProducer> buildNACProducerIndex(
         Map<TST_ItemID, CircuitComponent> realComponents) {
         Map<TST_ItemID, NACProducer> producers = new LinkedHashMap<>();
+        Map<TST_ItemID, Integer> producerFluidRanks = new LinkedHashMap<>();
+        FluidStack[] processingFluids = { Materials.Grade1PurifiedWater.getFluid(1),
+            Materials.Grade2PurifiedWater.getFluid(1), Materials.Grade3PurifiedWater.getFluid(1),
+            Materials.Grade4PurifiedWater.getFluid(1), Materials.Grade5PurifiedWater.getFluid(1),
+            Materials.Grade6PurifiedWater.getFluid(1), Materials.Grade7PurifiedWater.getFluid(1),
+            Materials.Grade8PurifiedWater.getFluid(1), Materials.DimensionallyShiftedSuperfluid.getFluid(1) };
 
         for (RecipeMap<?> recipeMap : NAC_UNWRAP_RECIPE_MAPS) {
             for (GTRecipe recipe : recipeMap.getAllRecipes()) {
                 if (recipe.mFakeRecipe || recipe.mOutputs == null) continue;
+                int fluidRank = 0;
+                if (recipe.mFluidInputs != null) {
+                    for (FluidStack fluid : recipe.mFluidInputs) {
+                        if (fluid == null) continue;
+                        for (int i = 0; i < processingFluids.length; i++) {
+                            if (fluid.isFluidEqual(processingFluids[i])) fluidRank = Math.max(fluidRank, i + 1);
+                        }
+                    }
+                }
                 for (ItemStack output : recipe.mOutputs) {
                     CircuitComponent component = getNACComponent(output);
                     if (component != null && component.xorResult != null) continue;
-                    producers.putIfAbsent(TST_ItemID.create(output), new NACProducer(recipe, false));
+                    TST_ItemID outputId = TST_ItemID.create(output);
+                    if (fluidRank > producerFluidRanks.getOrDefault(outputId, -1)) {
+                        producers.put(outputId, new NACProducer(recipe, false));
+                        producerFluidRanks.put(outputId, fluidRank);
+                    }
                 }
             }
         }
