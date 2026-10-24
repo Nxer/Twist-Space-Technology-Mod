@@ -866,25 +866,30 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         String dSpeed = String.format("%.3f", this.getSpeedBonus() * 100) + "%";
         String dEUMod = String.format("%.3f", this.getEuModifier() * 100) + "%";
         String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 4];
+        String[] ret = new String[origin.length + (showParallelInInfo() ? 4 : 3)];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.Parallels
+        int index = origin.length;
+        if (showParallelInInfo()) ret[index++] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.Parallels
             + ": "
             + EnumChatFormatting.GOLD
             + this.getTrueParallel();
-        ret[origin.length + 1] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.SpeedMultiplier
+        ret[index++] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.SpeedMultiplier
             + ": "
             + EnumChatFormatting.GOLD
             + dSpeed;
-        ret[origin.length + 2] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.EuModifier
+        ret[index++] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.EuModifier
             + ": "
             + EnumChatFormatting.GOLD
             + dEUMod;
-        ret[origin.length + 3] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.HighCapacityOutput
+        ret[index] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.HighCapacityOutput
             + ": "
             + EnumChatFormatting.GOLD
             + (isMEOutputEnabled() ? "On" : "Off");
         return ret;
+    }
+
+    protected boolean showParallelInInfo() {
+        return true;
     }
 
     @Override

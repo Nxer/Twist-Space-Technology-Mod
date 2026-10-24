@@ -6,7 +6,9 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.Tags;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 
+import codechicken.nei.NEIClientConfig;
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 
@@ -28,6 +30,36 @@ public class NEI_Config implements IConfigureNEI {
 
         hide(TstBlocks.BlockLargeSolarBoilerRender);
         NEICollapsibleItems.load();
+        BottledChaosNEIHandler.register();
+        BottledChaosStructureNEIHandler.register();
+
+        // NEI loads its ordering file before loading plugins; these entries only change the in-memory order.
+        // spotless:off
+        String[] pages = {
+            "blockrenderer6343.integration.gregtech.GTNEIMultiblockHandler",
+            GTCMRecipe.BottledChaosCredentialRecipes.unlocalizedName,
+            GTCMRecipe.BottledChaosStructureRecipes.unlocalizedName,
+            GTCMRecipe.BottledChaosTitaniumCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosTungstenCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosIndiumCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosPlatinumCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosLanthanideCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosNaquadahCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosNaquadahFuelCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosFusionCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosNetheriteCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosIsaMillCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosPrismaticCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosPurifiedWaterCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosKevlarCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosRadoxCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosBiologicalCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosRecipes.unlocalizedName
+        };
+        // spotless:on
+        for (int index = 0; index < pages.length; index++) {
+            NEIClientConfig.handlerOrdering.put(pages[index], -1000 + index);
+        }
     }
 
     @Override

@@ -68,6 +68,10 @@ public class BlockRegister {
             TstBlocks.EnergySustainmentMatrix,
             TstMetaBlockItem.class,
             TstBlocks.EnergySustainmentMatrix.unlocalizedName);
+        GameRegistry.registerBlock(
+            TstBlocks.BottledChaosCapacity,
+            TstMetaBlockItem.class,
+            TstBlocks.BottledChaosCapacity.unlocalizedName);
 
         if (Config.activateMegaSpaceStation) {
             GameRegistry.registerBlock(
@@ -340,6 +344,16 @@ public class BlockRegister {
         // #zh_CN 低温冷却机械方块
         GTCMItemList.CryogenicCoolingCasing.set(MetaBlockCasing02.registerVariant(7));
 
+        // #tr tile.tst.common.MetaBlockCasing02.8.name
+        // # Neutronium Load-Bearing Casing
+        // #zh_CN 中子承载机械方块
+        GTCMItemList.NeutroniumSupportCasing.set(MetaBlockCasing02.registerVariant(8));
+
+        // #tr tile.tst.common.MetaBlockCasing02.9.name
+        // # Energy Conduction Glass
+        // #zh_CN 能量传导玻璃
+        GTCMItemList.EnergyFluxContainmentGlass.set(MetaBlockCasing02.registerGlassVariant(9));
+
         // region SpaceTimeOscillator
 
         // #tr tile.tst.common.space_time_oscillator.0.name
@@ -530,6 +544,31 @@ public class BlockRegister {
         GTCMItemList.EnergySustainmentMatrixMAX.set(
             TstBlocks.EnergySustainmentMatrix
                 .registerVariantWithTooltips(5, new String[] { TSTUtils.tr("tile.tst.common.energy_sustainment_matrix.5.tooltip") }));
+
+        // #tr tst.bottledchaos.capacity_block.0.name
+        // # Bottled Chaos Capacity Block I
+        // #zh_CN 瓶中混沌容量方块 I
+        GTCMItemList.BottledChaosCapacityTier1.set(TstBlocks.BottledChaosCapacity.registerVariant(0));
+
+        // #tr tst.bottledchaos.capacity_block.1.name
+        // # Bottled Chaos Capacity Block II
+        // #zh_CN 瓶中混沌容量方块 II
+        GTCMItemList.BottledChaosCapacityTier2.set(TstBlocks.BottledChaosCapacity.registerVariant(1));
+
+        // #tr tst.bottledchaos.capacity_block.2.name
+        // # Bottled Chaos Capacity Block III
+        // #zh_CN 瓶中混沌容量方块 III
+        GTCMItemList.BottledChaosCapacityTier3.set(TstBlocks.BottledChaosCapacity.registerVariant(2));
+
+        // #tr tst.bottledchaos.capacity_block.3.name
+        // # Bottled Chaos Capacity Block IV
+        // #zh_CN 瓶中混沌容量方块 IV
+        GTCMItemList.BottledChaosCapacityTier4.set(TstBlocks.BottledChaosCapacity.registerVariant(3));
+
+        // #tr tst.bottledchaos.capacity_block.4.name
+        // # Bottled Chaos Capacity Block V
+        // #zh_CN 瓶中混沌容量方块 V
+        GTCMItemList.BottledChaosCapacityTier5.set(TstBlocks.BottledChaosCapacity.registerVariant(4));
 
         // end region
 
