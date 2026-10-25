@@ -18,10 +18,13 @@ import static gregtech.api.enums.Textures.BlockIcons.NAQUADAH_REACTOR_SOLID_FRON
 import static gregtech.api.enums.Textures.BlockIcons.NAQUADAH_REACTOR_SOLID_FRONT_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.getCasingTextureForId;
 import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
+import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
@@ -39,6 +42,7 @@ import org.jetbrains.annotations.Nullable;
 import com.Nxer.TwistSpaceTechnology.client.effect.MegaNqReactorParticleBatch;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
+import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_MegaNqReactor;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_GeneratorBase;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
@@ -62,6 +66,7 @@ import goodgenerator.items.GGMaterial;
 import goodgenerator.loader.Loaders;
 import goodgenerator.util.CrackRecipeAdder;
 import gregtech.api.GregTechAPI;
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -80,6 +85,7 @@ import gregtech.api.util.GTUtility.FluidId;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.shutdown.ShutDownReason;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
+import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
 import gregtech.common.render.IMTERenderer;
 import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -88,7 +94,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 /**
  * 可使用的激发流体/冷却液与大型硅岩反应堆一致
  * 最大并行可在配置文件中调整。
- * 消耗减免按配方开始时刻的累计运行时间计算。
+ * 连续运行可提升发电量，24 小时达到 2.25 倍上限，停机时衰减。
  */
 @SkipGenerateDescription
 public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
@@ -196,6 +202,8 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         boolean formed = checkPiece(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset, errors);
         if (formed) {
+            checkHasInputHatch(errors);
+            checkHasOutputHatch(errors);
             updateCoreFxCenter();
         }
     }
@@ -206,23 +214,65 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     protected static final int TICKS_PER_SECOND = 20;
     protected static final int[] COOLANT_EFFICIENCY = { 500, 275, 150, 105 };
     protected static final int[] EXCITED_LIQUID_COEFF = { 64, 16, 4, 3, 2 };
-    protected static final long TICKS_TO_MAX_DISCOUNT = 24L * 60 * 60 * TICKS_PER_SECOND;
+    protected static final long TICKS_TO_MAX_BONUS = 24L * 60 * 60 * TICKS_PER_SECOND;
     protected static final long DECAY_PER_IDLE_TICK = 20L;
-    protected static final int MAX_DISCOUNT_PERCENT = 50;
     protected static final int DEFAULT_COOLANT_EFFICIENCY = 100;
 
-    protected static final List<Pair<FluidStack, Integer>> EXCITED_TIERS = Arrays.asList(
-        Pair.of(Materials.Space.getMolten(20L), EXCITED_LIQUID_COEFF[0]),
-        Pair.of(GGMaterial.atomicSeparationCatalyst.getMolten(20), EXCITED_LIQUID_COEFF[1]),
-        Pair.of(Materials.Naquadah.getMolten(20L), EXCITED_LIQUID_COEFF[2]),
-        Pair.of(Materials.Uranium235.getMolten(180L), EXCITED_LIQUID_COEFF[3]),
-        Pair.of(Materials.Caesium.getMolten(180L), EXCITED_LIQUID_COEFF[4]));
+    protected static final int OUTPUT_UNIT_FIRST_TIER = 8;
+    protected static final int OUTPUT_UNIT_LAST_TIER_EXCLUSIVE = 15;
+    public static final long[] OUTPUT_UNIT_VALUES = Arrays
+        .copyOfRange(GTValues.V, OUTPUT_UNIT_FIRST_TIER, OUTPUT_UNIT_LAST_TIER_EXCLUSIVE);
+    public static final String[] OUTPUT_UNIT_NAMES = Arrays
+        .stream(GTValues.VN, OUTPUT_UNIT_FIRST_TIER, OUTPUT_UNIT_LAST_TIER_EXCLUSIVE)
+        .map(name -> name + "/t")
+        .toArray(String[]::new);
 
-    protected static final List<Pair<FluidStack, Integer>> COOLANT_TIERS = Arrays.asList(
-        Pair.of(Materials.Time.getMolten(20L), COOLANT_EFFICIENCY[0]),
-        Pair.of(new FluidStack(TFFluids.fluidCryotheum, 1_000), COOLANT_EFFICIENCY[1]),
-        Pair.of(Materials.SuperCoolant.getFluid(1_000), COOLANT_EFFICIENCY[2]),
-        Pair.of(GTModHandler.getIC2Coolant(1_000), COOLANT_EFFICIENCY[3]));
+    protected static List<Pair<FluidStack, Integer>> excitedTiers;
+    protected static List<Pair<FluidStack, Integer>> coolantTiers;
+
+    protected static List<Pair<FluidStack, Integer>> getExcitedTiers() {
+        if (excitedTiers == null) {
+            List<Pair<FluidStack, Integer>> tiers = new ArrayList<>(5);
+            addTier(tiers, materialFluid(Materials.Space, 20), EXCITED_LIQUID_COEFF[0]);
+            addTier(tiers, GGMaterial.atomicSeparationCatalyst.getMolten(20), EXCITED_LIQUID_COEFF[1]);
+            addTier(tiers, materialFluid(Materials.Naquadah, 20), EXCITED_LIQUID_COEFF[2]);
+            addTier(tiers, materialFluid(Materials.Uranium235, 180), EXCITED_LIQUID_COEFF[3]);
+            addTier(tiers, materialFluid(Materials.Caesium, 180), EXCITED_LIQUID_COEFF[4]);
+            excitedTiers = tiers;
+        }
+        return excitedTiers;
+    }
+
+    protected static List<Pair<FluidStack, Integer>> getCoolantTiers() {
+        if (coolantTiers == null) {
+            List<Pair<FluidStack, Integer>> tiers = new ArrayList<>(4);
+            addTier(tiers, materialFluid(Materials.Time, 20), COOLANT_EFFICIENCY[0]);
+            addTier(tiers, new FluidStack(TFFluids.fluidCryotheum, 1_000), COOLANT_EFFICIENCY[1]);
+            addTier(tiers, materialFluid(Materials.SuperCoolant, 1_000), COOLANT_EFFICIENCY[2]);
+            addTier(tiers, GTModHandler.getIC2Coolant(1_000), COOLANT_EFFICIENCY[3]);
+            coolantTiers = tiers;
+        }
+        return coolantTiers;
+    }
+
+    @Nullable
+    protected static FluidStack materialFluid(@Nonnull Materials material, int amount) {
+        FluidStack stack = material.getMolten(amount);
+        if (stack != null) {
+            return stack;
+        }
+        stack = material.getFluid(amount);
+        if (stack != null) {
+            return stack;
+        }
+        return material.getGas(amount);
+    }
+
+    protected static void addTier(List<Pair<FluidStack, Integer>> tiers, @Nullable FluidStack fluid, int value) {
+        if (fluid != null) {
+            tiers.add(Pair.of(fluid, value));
+        }
+    }
 
     protected FluidStack lockedFluid = null;
     protected int times = 1;
@@ -231,6 +281,12 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     protected long runTimeTicks = 0;
     protected int cachedCoolantEfficiency = DEFAULT_COOLANT_EFFICIENCY;
     protected int cachedTimeMultiplier = 1;
+    protected int outputUnitIndex = 0;
+    protected String cachedFuelName = "";
+    protected long cachedFuelAmount = 0;
+    protected UUID wirelessOwner = null;
+    protected boolean wirelessModeActive = false;
+    protected BigInteger wirelessBufferedEU = BigInteger.ZERO;
     protected double coreFxX;
     protected double coreFxY;
     protected double coreFxZ;
@@ -270,10 +326,12 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
         Pair<FluidStack, Integer> excitedInfo = getExcited(fluidView);
         int coefficient = excitedInfo == null ? 1 : excitedInfo.getValue();
         FluidStack fuelInput = tRecipe.mFluidInputs[0];
-        int perParallelFuel = fuelInput.amount;
-        if (perParallelFuel <= 0) {
+
+        long perParallelFuelLong = (long) fuelInput.amount * coefficient;
+        if (perParallelFuelLong <= 0 || perParallelFuelLong > Integer.MAX_VALUE) {
             return CheckRecipeResultRegistry.NO_FUEL_FOUND;
         }
+        int perParallelFuel = (int) perParallelFuelLong;
         int fuelAmount = fluidView.getAmount(fuelInput);
         int intLimitCap = Integer.MAX_VALUE / perParallelFuel;
         int maxParallel = Math.min(Math.min(Config.Parallel_MegaNqReactor, fuelAmount / perParallelFuel), intLimitCap);
@@ -338,7 +396,7 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
                 .copy();
             timeMultForRun = coefficient;
             if (recipeSeconds > 0) {
-                long perSecondExcited = (long) getDiscountedAmount(lockedForRun.amount) * maxParallel;
+                long perSecondExcited = (long) lockedForRun.amount * maxParallel;
                 int totalExcitedAmt = safeMulFluidAmount(perSecondExcited, recipeSeconds);
                 if (totalExcitedAmt < 0) {
                     return CheckRecipeResultRegistry.NO_FUEL_FOUND;
@@ -354,23 +412,27 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
             }
         }
 
-        startRecipeProcessing();
-        if (!consumeFluidRequirements(getStoredFluids(), requirements)) {
-            endRecipeProcessing();
+        if (!consumeFluidRequirements(requirements)) {
             return CheckRecipeResultRegistry.NO_FUEL_FOUND;
         }
-        endRecipeProcessing();
 
         basicOutput = tRecipe.mSpecialValue;
         times = coefficient;
         parallel = maxParallel;
         lockedFluid = lockedForRun;
+        cachedFuelName = fuelInput.getLocalizedName();
+        cachedFuelAmount = consumedFuelAmount;
         mMaxProgresstime = recipeTicks;
+        mEfficiency = Math.max(0, 10000 - (getIdealStatus() - getRepairStatus()) * 1000);
         mEfficiencyIncrease = 10000;
-        mOutputFluids = copyFluidOutputs(tRecipe.mFluidOutputs, maxParallel);
+        mOutputFluids = copyFluidOutputs(tRecipe.mFluidOutputs, (long) maxParallel * coefficient);
         cachedCoolantEfficiency = efficiencyForRun;
         cachedTimeMultiplier = timeMultForRun;
-        lEUt = (long) basicOutput * cachedCoolantEfficiency * cachedTimeMultiplier / 100L * maxParallel;
+        lEUt = (long) ((double) basicOutput * cachedCoolantEfficiency
+            * cachedTimeMultiplier
+            / 100d
+            * maxParallel
+            * getRuntimeBonus());
         return CheckRecipeResultRegistry.GENERATING;
     }
 
@@ -390,7 +452,7 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
         return CrackRecipeAdder.copyFluidWithAmount(fluidStack, amount);
     }
 
-    protected static FluidStack[] copyFluidOutputs(@Nullable FluidStack[] outputs, int multiplier) {
+    protected static FluidStack[] copyFluidOutputs(@Nullable FluidStack[] outputs, long multiplier) {
         if (outputs == null || outputs.length == 0 || multiplier <= 0) {
             return null;
         }
@@ -430,34 +492,27 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     }
 
     protected boolean consumeFluidStacks(@Nullable FluidStack template, int requiredAmount) {
-        return consumeFluidStacks(getStoredFluids(), template, requiredAmount);
-    }
-
-    protected boolean consumeFluidStacks(List<FluidStack> storedFluids, @Nullable FluidStack template,
-        int requiredAmount) {
         FluidStack requiredFluid = copyFluid(template, requiredAmount);
         if (requiredFluid == null) {
             return false;
         }
         ArrayList<FluidStack> requirements = new ArrayList<>(1);
         requirements.add(requiredFluid);
-        return consumeFluidRequirements(storedFluids, requirements);
+        return consumeFluidRequirements(requirements);
     }
 
-    protected boolean consumeFluidRequirements(List<FluidStack> storedFluids, List<FluidStack> requirements) {
+    /**
+     * 统一通过 {@link #depleteInput(FluidStack)} 抽取，兼容普通输入仓与 ME 输入仓。
+     */
+    protected boolean consumeFluidRequirements(List<FluidStack> requirements) {
         List<FluidStack> mergedRequirements = mergeFluidRequirements(requirements);
         if (mergedRequirements.isEmpty()) {
             return true;
         }
-
-        FluidInventoryView fluidView = createFluidInventoryView(storedFluids);
         for (FluidStack requirement : mergedRequirements) {
-            if (!fluidView.consume(requirement, requirement.amount)) {
+            if (!depleteInput(requirement)) {
                 return false;
             }
-        }
-        for (FluidStack requirement : mergedRequirements) {
-            consumeFluidDirect(storedFluids, requirement);
         }
         updateInputHatchFluids();
         return true;
@@ -486,30 +541,10 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
         return mergedRequirements;
     }
 
-    protected boolean consumeFluidDirect(List<FluidStack> storedFluids, FluidStack requirement) {
-        int remainingAmount = requirement.amount;
-        for (FluidStack storedFluid : storedFluids) {
-            if (!isSameFluid(storedFluid, requirement)) {
-                continue;
-            }
-            int drainedAmount = Math.min(storedFluid.amount, remainingAmount);
-            storedFluid.amount -= drainedAmount;
-            remainingAmount -= drainedAmount;
-            if (remainingAmount <= 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     protected void updateInputHatchFluids() {
         for (MTEHatchInput inputHatch : GTUtility.validMTEList(mInputHatches)) {
             inputHatch.updateSlots();
         }
-    }
-
-    protected static boolean isSameFluid(@Nullable FluidStack left, @Nullable FluidStack right) {
-        return left != null && GTUtility.areFluidsEqual(left, right, true);
     }
 
     protected static int recipeSecondsFromDurationTicks(int durationTicks) {
@@ -527,19 +562,45 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
         return (int) p;
     }
 
-    public int getConsumptionDiscount() {
-        if (runTimeTicks >= TICKS_TO_MAX_DISCOUNT) {
-            return MAX_DISCOUNT_PERCENT;
-        }
-        return (int) (runTimeTicks * MAX_DISCOUNT_PERCENT / TICKS_TO_MAX_DISCOUNT);
+    public double getRuntimeBonus() {
+        double timeBonus = 1d + Math.min(0.5d, (double) runTimeTicks / (double) TICKS_TO_MAX_BONUS);
+        return timeBonus * timeBonus;
     }
 
-    public int getDiscountedAmount(int originalAmount) {
-        int discount = getConsumptionDiscount();
-        if (discount <= 0) {
-            return originalAmount;
-        }
-        return Math.max(1, originalAmount * (100 - discount) / 100);
+    public int getOutputUnitIndex() {
+        return outputUnitIndex;
+    }
+
+    public void setOutputUnitIndex(int index) {
+        this.outputUnitIndex = Math.max(0, Math.min(index, OUTPUT_UNIT_NAMES.length - 1));
+    }
+
+    public int getBasicOutput() {
+        return basicOutput;
+    }
+
+    public int getCachedCoolantEfficiency() {
+        return cachedCoolantEfficiency;
+    }
+
+    public int getCachedTimeMultiplier() {
+        return cachedTimeMultiplier;
+    }
+
+    public int getParallel() {
+        return parallel;
+    }
+
+    public String getCachedFuelName() {
+        return cachedFuelName;
+    }
+
+    public long getCachedFuelAmount() {
+        return cachedFuelAmount;
+    }
+
+    public long getCurrentOutput() {
+        return lEUt;
     }
 
     @Override
@@ -547,10 +608,14 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
         return false;
     }
 
-    protected void updateRunTimeDiscountState(boolean isRunning) {
-        if (isRunning) {
-            runTimeTicks = Math.min(runTimeTicks + 1, TICKS_TO_MAX_DISCOUNT);
-        } else {
+    protected void incrementRunTimeTicks() {
+        runTimeTicks = Math.min(runTimeTicks + 1, TICKS_TO_MAX_BONUS);
+    }
+
+    @Override
+    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPostTick(aBaseMetaTileEntity, aTick);
+        if (aBaseMetaTileEntity.isServerSide() && mMaxProgresstime <= 0 && runTimeTicks > 0) {
             runTimeTicks = Math.max(0, runTimeTicks - DECAY_PER_IDLE_TICK);
         }
     }
@@ -572,15 +637,35 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     @Override
     public boolean onRunningTick(ItemStack stack) {
         boolean isRunning = mMaxProgresstime != 0;
-        if (this.getBaseMetaTileEntity()
-            .isServerSide()) {
-            updateRunTimeDiscountState(isRunning);
+        boolean isServer = this.getBaseMetaTileEntity()
+            .isServerSide();
+        if (isServer) {
+            incrementRunTimeTicks();
         }
-        return super.onRunningTick(stack);
+        boolean lastTick = isServer && isRunning && mProgresstime >= mMaxProgresstime - 1;
+        boolean result = super.onRunningTick(stack);
+        if (lastTick) {
+            flushWirelessEU();
+        }
+        return result;
     }
 
     @Override
     public boolean addEnergyOutput(long EU) {
+        if (EU <= 0) {
+            return true;
+        }
+        if (mDynamoHatches.isEmpty() && mExoticDynamoHatches.isEmpty()) {
+            if (wirelessOwner == null) {
+                wirelessOwner = getBaseMetaTileEntity().getOwnerUuid();
+                if (wirelessOwner == null) {
+                    return false;
+                }
+            }
+            wirelessModeActive = true;
+            wirelessBufferedEU = wirelessBufferedEU.add(BigInteger.valueOf(EU));
+            return true;
+        }
         boolean result = super.addEnergyOutput(EU);
         if (!result) {
             stopMachine(ShutDownReasonRegistry.INSUFFICIENT_DYNAMO);
@@ -588,8 +673,25 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
         return result;
     }
 
+    protected void flushWirelessEU() {
+        if (!wirelessModeActive || wirelessBufferedEU.signum() <= 0) {
+            wirelessModeActive = false;
+            wirelessBufferedEU = BigInteger.ZERO;
+            return;
+        }
+        if (wirelessOwner == null) {
+            wirelessOwner = getBaseMetaTileEntity().getOwnerUuid();
+        }
+        if (wirelessOwner != null) {
+            addEUToGlobalEnergyMap(wirelessOwner, wirelessBufferedEU);
+        }
+        wirelessModeActive = false;
+        wirelessBufferedEU = BigInteger.ZERO;
+    }
+
     @Override
     public void stopMachine(@Nonnull ShutDownReason reason) {
+        flushWirelessEU();
         lEUt = 0;
         cachedCoolantEfficiency = DEFAULT_COOLANT_EFFICIENCY;
         cachedTimeMultiplier = 1;
@@ -653,7 +755,7 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     }
 
     public Pair<FluidStack, Integer> getExcited(FluidInventoryView fluidView) {
-        for (Pair<FluidStack, Integer> tier : EXCITED_TIERS) {
+        for (Pair<FluidStack, Integer> tier : getExcitedTiers()) {
             FluidStack template = tier.getKey();
             if (fluidView.hasAtLeast(template, template.amount)) {
                 return tier;
@@ -664,9 +766,9 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
 
     @Nullable
     protected Pair<FluidStack, Integer> selectCoolant(FluidInventoryView fluidView, int count) {
-        for (Pair<FluidStack, Integer> tier : COOLANT_TIERS) {
+        for (Pair<FluidStack, Integer> tier : getCoolantTiers()) {
             FluidStack template = tier.getKey();
-            int requiredAmount = getDiscountedAmount(template.amount) * count;
+            int requiredAmount = template.amount * count;
             FluidStack requiredFluid = copyFluid(template, requiredAmount);
             if (requiredFluid == null || !fluidView.hasAtLeast(requiredFluid, requiredAmount)) {
                 continue;
@@ -674,6 +776,11 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
             return Pair.of(requiredFluid, tier.getValue());
         }
         return null;
+    }
+
+    @Override
+    protected @NotNull MTEMultiBlockBaseGui<?> getGui() {
+        return new TST_Gui_MegaNqReactor(this);
     }
 
     @Override
@@ -692,11 +799,12 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
             .widget(new FakeSyncWidget.LongSyncer(() -> runTimeTicks, val -> runTimeTicks = val))
             .widget(
                 new TextWidget()
-                    // #tr tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.consumption_discount
-                    // # Consumption Discount:
-                    // #zh_CN 消耗减免:
+                    // #tr tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.runtime_bonus
+                    // # Runtime Bonus
+                    // #zh_CN 持续运行奖励
                     .setStringSupplier(
-                        () -> tr("tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.consumption_discount") + getConsumptionDiscount() + "%")
+                        () -> tr("tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.runtime_bonus") + " "
+                            + String.format("%.2f", getRuntimeBonus()) + "x")
                     .setDefaultColor(COLOR_TEXT_WHITE.get())
                     .setEnabled(widget -> getErrorDisplayID() == 0))
             .widget(
@@ -744,6 +852,13 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
         }
         aNBT.setInteger("mCachedCoolantEff", this.cachedCoolantEfficiency);
         aNBT.setInteger("mCachedTimeMult", this.cachedTimeMultiplier);
+        aNBT.setString("mWirelessBufferedEU", this.wirelessBufferedEU.toString());
+        aNBT.setBoolean("mWirelessModeActive", this.wirelessModeActive);
+        if (this.wirelessOwner != null) {
+            aNBT.setString("mWirelessOwner", this.wirelessOwner.toString());
+        } else {
+            aNBT.removeTag("mWirelessOwner");
+        }
         super.saveNBTData(aNBT);
     }
 
@@ -764,6 +879,11 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
         this.cachedCoolantEfficiency = aNBT.hasKey("mCachedCoolantEff") ? aNBT.getInteger("mCachedCoolantEff")
             : DEFAULT_COOLANT_EFFICIENCY;
         this.cachedTimeMultiplier = aNBT.hasKey("mCachedTimeMult") ? aNBT.getInteger("mCachedTimeMult") : 1;
+        String bufferedEU = aNBT.getString("mWirelessBufferedEU");
+        this.wirelessBufferedEU = bufferedEU.isEmpty() ? BigInteger.ZERO : new BigInteger(bufferedEU);
+        this.wirelessModeActive = aNBT.getBoolean("mWirelessModeActive");
+        String ownerString = aNBT.getString("mWirelessOwner");
+        this.wirelessOwner = ownerString.isEmpty() ? null : UUID.fromString(ownerString);
         super.loadNBTData(aNBT);
     }
 
@@ -806,17 +926,21 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
             // #zh_CN 就像§5大型硅岩反应堆§7一样, 但是拥有1000并行
             .addInfo(tr("tst.common.machine.MegaNqReactor.tooltip.info.02"))
             // #tr tst.common.machine.MegaNqReactor.tooltip.info.03
-            // # §aContinuous operation reduces coolant/excited liquid consumption
-            // #zh_CN §a持续运行可降低冷却剂/激发液体消耗!
+            // # §aContinuous operation increases power output
+            // #zh_CN §a连续运行可提升发电量!
             .addInfo(tr("tst.common.machine.MegaNqReactor.tooltip.info.03"))
             // #tr tst.common.machine.MegaNqReactor.tooltip.info.04
-            // # Up to §550%§7. Max in 24h, decays when idle.
-            // #zh_CN 最多减免 §550%§7, 24小时达上限, 停机时衰减.
+            // # Up to §52.25x§7. Max in 24h, decays when idle.
+            // #zh_CN 最多 §52.25x§7, 24小时达上限, 停机时衰减.
             .addInfo(tr("tst.common.machine.MegaNqReactor.tooltip.info.04"))
             // #tr tst.common.machine.MegaNqReactor.tooltip.info.05
-            // # §cEnsure sufficient dynamo size, or the machine will shut down.§7
-            // #zh_CN §c请保持动力仓足够大, 否则机器会停机§7.
+            // # §bWithout a dynamo hatch, energy is output directly to the wireless EU network.§7
+            // #zh_CN §b未安装动力仓时，能量将直接输出到无线EU网络§7.
             .addInfo(tr("tst.common.machine.MegaNqReactor.tooltip.info.05"))
+            // #tr tst.common.machine.MegaNqReactor.tooltip.info.06
+            // # §cWith dynamo hatches, ensure sufficient capacity or the machine will shut down.§7
+            // #zh_CN §c安装动力仓时请保证容量足够, 否则机器会停机§7.
+            .addInfo(tr("tst.common.machine.MegaNqReactor.tooltip.info.06"))
             .beginStructureBlock(SHAPE_MAIN)
             .toolTipFinisher();
         // spotless:on
@@ -829,9 +953,9 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
 
     public static class FluidInventoryView {
 
-        private final Object2IntOpenHashMap<FluidId> amounts = new Object2IntOpenHashMap<>();
-        private final Object2ObjectOpenHashMap<FluidId, FluidStack> mergedById = new Object2ObjectOpenHashMap<>();
-        private final List<FluidStack> mergedFluids = new ArrayList<>();
+        protected final Object2IntOpenHashMap<FluidId> amounts = new Object2IntOpenHashMap<>();
+        protected final Object2ObjectOpenHashMap<FluidId, FluidStack> mergedById = new Object2ObjectOpenHashMap<>();
+        protected final List<FluidStack> mergedFluids = new ArrayList<>();
 
         public FluidInventoryView() {
             amounts.defaultReturnValue(0);
@@ -841,7 +965,7 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
             if (stack == null || stack.amount <= 0 || stack.getFluid() == null) {
                 return;
             }
-            FluidId id = FluidId.create(stack);
+            FluidId id = FluidId.createNoCopy(stack.getFluid(), null, null);
             int previousAmount = amounts.addTo(id, stack.amount);
             FluidStack mergedFluid = mergedById.get(id);
             if (mergedFluid == null) {
@@ -865,7 +989,7 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
             if (template == null || template.getFluid() == null) {
                 return 0;
             }
-            return amounts.getInt(FluidId.create(template));
+            return amounts.getInt(FluidId.createNoCopy(template.getFluid(), null, null));
         }
 
         public boolean hasAtLeast(@Nullable FluidStack template, int requiredAmount) {
@@ -876,7 +1000,7 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
             if (template == null || template.getFluid() == null || requiredAmount <= 0) {
                 return false;
             }
-            FluidId id = FluidId.create(template);
+            FluidId id = FluidId.createNoCopy(template.getFluid(), null, null);
             int currentAmount = amounts.getInt(id);
             if (currentAmount < requiredAmount) {
                 return false;

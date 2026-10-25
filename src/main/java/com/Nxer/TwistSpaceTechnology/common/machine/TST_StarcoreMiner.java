@@ -273,6 +273,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
                         verticalOffSetMiddle - p,
                         depthOffSetMiddle,
                         errors)) continue;
+
                     // or check if stopped by a bedrock block
                     if (checkPiece(
                         STRUCTURE_PIECE_END,
@@ -280,6 +281,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
                         verticalOffSetMiddle - p,
                         depthOffSetEnd,
                         errors)) {
+                        errors.clear();
                         break;
                     } else {
                         TwistSpaceTechnology.LOG.info(

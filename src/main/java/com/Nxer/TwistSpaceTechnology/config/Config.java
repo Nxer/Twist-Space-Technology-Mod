@@ -165,7 +165,7 @@ public class Config {
     public static int SpeedUpMultiplier_Coil_MagneticDrivePressureFormer = 1;
     public static int Parallel_MagneticDrivePressureFormer = 1024;
     public static float EU_Multiplier_MagneticDrivePressureFormer = 0.75F;
-    public static int GlassTier_LimitLaserHatch_MagneticDrivePressureFormer = 11;
+    public static int GlassTier_LimitLaserHatch_MagneticDrivePressureFormer = 10;
     public static int CoilTier_EnablePerfectOverclockExtruderMode_MagneticDrivePressureFormer = 11;
     // endregion
 

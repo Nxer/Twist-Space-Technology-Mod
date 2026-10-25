@@ -133,7 +133,6 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.COMET_Cyclotro
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_AdvancedVacuum;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_Cyclotron_Coil;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_Cyclotron_External;
-import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_Industrial_Arc_Furnace;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Controller_Vacuum_Furnace;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.GTPP_Casing_UHV;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.GT_Dehydrator_ZPM;
@@ -2309,35 +2308,38 @@ public class GTCMMachineRecipes {
                 .addTo(assemblyLine);
 
             //Casing
-            GTValues.RA
-                .stdBuilder()
-                .metadata(RESEARCH_ITEM, Casing_Industrial_Arc_Furnace.get(1))
-                .metadata(SCANNING, scanningLV(2 * HOURS))
-                .itemInputs(
-                    Casing_Industrial_Arc_Furnace.get(8),
-                    eM_Power.get(8),
-                    ItemRefer.Advanced_Radiation_Protection_Plate.get(64),
-                    ItemList.UHTResistantMesh.get(64),
+            TTRecipeAdder.addResearchableAssemblylineRecipe(
+                GTCMItemList.ReinforcedIridiumAlloyCasing.get(1),
+                64_000,
+                32,
+                800_000,
+                4,
+                new Object[]{
+                    MaterialsAlloy.PIKYONIUM.getFrameBox(1),
+                    eM_Power.get(2),
+                    ItemList.neutroniumHeatCapacitor.get(1),
+                    GGMaterial.incoloy903.get(OrePrefixes.pipeHuge, 32),
 
-                    ItemList.Emitter_UV.get(16),
-                    ItemList.Sensor_UV.get(16),
-                    ItemList.Electric_Piston_UHV.get(8),
-                    HighEnergyFlowCircuit.get(8),
+                    new Object[]{OrePrefixes.circuit.get(Materials.UV), 3},
+                    ItemList.Field_Generator_ZPM.get(2),
+                    ItemList.Sensor_ZPM.get(4),
+                    ItemList.Electric_Pump_ZPM.get(8),
 
-                    new Object[]{OrePrefixes.circuit.get(Materials.UEV), 4},
-                    PicoWafer.get(8),
-                    GGMaterial.incoloy903.get(OrePrefixes.pipeHuge, 64),
-                    MaterialsElements.STANDALONE.CHRONOMATIC_GLASS.getFineWire(64)
-                )
-                .fluidInputs(
-                    new FluidStack(solderPlasma, 144 * 40),
-                    Materials.UUMatter.getFluid(1000 * 8),
-                    MaterialsAlloy.ABYSSAL.getFluidStack(144 * 28)
-                )
-                .itemOutputs(HighPowerRadiationProofCasing.get(4))
-                .eut(RECIPE_UHV)
-                .duration(20 * 120)
-                .addTo(assemblyLine);
+                    ItemList.UHTResistantMesh.get(48),
+                    ItemRefer.Advanced_Radiation_Protection_Plate.get(32),
+                    GGMaterial.marCeM200.get(OrePrefixes.plateSuperdense, 4),
+                    GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.PrismaticNaquadah, 4)
+                },
+                new FluidStack[]{
+                    Materials.Polybenzimidazole.getMolten(144 * 64),
+                    MaterialsAlloy.INDALLOY_140.getFluidStack(144 * 32),
+                    MaterialsAlloy.ARCANITE.getFluidStack(144 * 24),
+                    Materials.SuperCoolant.getFluid(1000 * 64)
+                },
+                HighPowerRadiationProofCasing.get(1),
+                20 * 30,
+                (int) RECIPE_UV
+            );
 
             //Chip
             GTValues.RA
@@ -3353,7 +3355,7 @@ public class GTCMMachineRecipes {
             },
             new FluidStack[]{
                 MaterialsAlloy.INDALLOY_140.getFluidStack(144 * 8),
-                GGMaterial.preciousMetalAlloy.getMolten(144 * 64),
+                GGMaterial.preciousMetalAlloy.getMolten(144 * 16),
                 Materials.SuperCoolant.getFluid(1000 * 8),
             },
             GTCMItemList.ReinforcedIridiumAlloyCasing.get(1),

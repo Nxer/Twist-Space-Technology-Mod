@@ -69,7 +69,6 @@ import com.dreammaster.item.NHItemList;
 
 import bartworks.system.material.WerkstoffLoader;
 import de.katzenpapst.amunra.item.ARItems;
-import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.items.GGMaterial;
 import goodgenerator.util.ItemRefer;
 import gregtech.api.enums.GTValues;
@@ -129,13 +128,6 @@ public class AssemblyLineWithoutResearchRecipePool {
 
         // basic black list
         Set<TST_ItemID> blackList = new HashSet<>();
-        for (GTRecipe recipe : GoodGeneratorRecipeMaps.componentAssemblyLineRecipes.getAllRecipes()) {
-            if (recipe == null) continue;
-            ItemStack target = recipe.getOutput(0);
-            if (target != null) {
-                blackList.add(TST_ItemID.create(target));
-            }
-        }
 
         if (Mods.GalacticraftAmunRa.isModLoaded()) {
             blackList.add(TST_ItemID.create(ARItems.shuttleSchematic.getItemStack(1)));

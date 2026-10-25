@@ -160,8 +160,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         {"                      ","   NNNNN              ","  NHHHHHN             "," NHDDDDDHN       NNN  "," NHDDDDDHN      NNNNN "," NHDDDDDHN      NNNNN "," NHDDDDDHN      NNNNN "," NHDDDDDHN       NNN  ","  NHHHHHN             ","   NNNNN              ","                      "},
         {"   GGGGG              ","  GMMMMMG             "," GMGKKKGMG      GGGGG ","GMGEEEEEGMG    GGGGGGG","GMKEEEEEKMGJJJJGGGGGGG","GMKEECEEKMG    GGGGGGG","GMKEEEEEKMGJJJJGGGGGGG","GMGEEEEEGMG    GGGGGGG"," GMGKKKGMG      GGGGG ","  GMMMMMG             ","   GGGGG              "},
         {"                      ","   HHHHH              ","  HGGGGGH        HHH  "," HGEEEEEGH      HNNNH "," HGEEEEEGHHHHHHHNFFFNH"," HGEECEEGNNNNNNNNFFFNh"," HGEEEEEGHHHHHHHNFFFNH"," HGEEEEEGH      HNNNH ","  HGGGGGH        HHH  ","   HHHHH              ","                      "},
-        {"                      ","   J   J              ","  BGAAAGB             "," JGEEEEEGJ      GAAAG ","  AEEEEEHAAAAAAAA   A ","  AEECEEN       - L a ","  AEEEEEHAAAAAAAA   A "," JGEEEEEGJ      GAAAG ","  BGAAAGB             ","   J   J              ","                      "},
-        {"                      ","   J   J              ","  BGAAAGB             "," JGEEEEEGJ      GAAAG ","  AEEEEEHAAAAAAAA   A ","  AEECEEN       - L a ","  AEEEEEHAAAAAAAA   A "," JGEEEEEGJ      GAAAG ","  BGAAAGB             ","   J   J              ","                      "},
+        {"                      ","   J   J              ","  BGAAAGB             "," JGEEEEEGJ      GAAAG ","  AEEEEEHAAAAAAAA   A ","  AEECEEN         L a ","  AEEEEEHAAAAAAAA   A "," JGEEEEEGJ      GAAAG ","  BGAAAGB             ","   J   J              ","                      "},
+        {"                      ","   J   J              ","  BGAAAGB             "," JGEEEEEGJ      GAAAG ","  AEEEEEHAAAAAAAA   A ","  AEECEEN         L a ","  AEEEEEHAAAAAAAA   A "," JGEEEEEGJ      GAAAG ","  BGAAAGB             ","   J   J              ","                      "},
         {"                      ","   HHHHH              ","  HGGGGGH        HHH  "," HGEEEEEGH      HNNNH "," HGEEEEEGHHHHHHHN   NH"," HGEECEEGNNNNNNNN L Nh"," HGEEEEEGHHHHHHHN   NH"," HGEEEEEGH      HNNNH ","  HGGGGGH        HHH  ","   HHHHH              ","                      "},
         {"   GGGGG              ","  GMMMMMG             "," GMGJJJGMG       GGG  ","GMGEEEEEGMG     GAAAG ","GMJEEEEEJMGJJJJGA   AG","GMJEECEEJMG    GN L NG","GMJEEEEEJMGJJJJGA   AG","GMGEEEEEGMG     GAAAG "," GMGJJJGMG       GGG  ","  GMMMMMG             ","   GGGGG              "},
         {"                      ","   JJ JJ              ","  JNNNNNJ        JJJ  "," JNEDDDENJ      JAAAJ ","JJNDEEEDNJJ    JA   AJ","  NDECEDN      JN L NJ","JJNDEEEDNJJ    JA   AJ"," JNEDDDENJ      JAAAJ ","  JNNNNNJ        JJJ  ","   JJ JJ              ","                      "},
@@ -219,7 +219,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 .addShape(STRUCTURE_PIECE_MAIN_T2, transpose(shapeMainT2))
                 .addShape(STRUCTURE_PIECE_Blaze_T1, transpose(shapeBlazeT1))
                 .addShape(STRUCTURE_PIECE_Blaze_T2, transpose(shapeBlazeT2))
-                .addElement('-', isAir())
                 .addElement('A', chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier))
                 .addElement('a', ofChain(chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier), isAir()))
                 .addElement('B', ofBlock(ItemList.FenceIron.getBlock(), 0))
