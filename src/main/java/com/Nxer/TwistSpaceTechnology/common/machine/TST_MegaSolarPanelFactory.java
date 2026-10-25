@@ -250,18 +250,19 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
             // # {\GREEN}Batch mode is ON
             // #zh_CN {\GREEN}批处理已开启
         }
-        float speedBonus = tag.getFloat("speedBonus");
-        if (speedBonus > -1) {
+        float recipeTimeMultiplier = tag.getFloat("recipeTimeMultiplier");
+        if (recipeTimeMultiplier > -1) {
             currentTip.add(
                 EnumChatFormatting.GREEN
                     + TSTUtils.tr("tst.common.machine.MegaSolarPanelFactory.waila.tst_mega_solar_panel_factory.2")
+                    + EnumChatFormatting.GRAY
                     + "="
                     + EnumChatFormatting.GOLD
-                    + formatNumber(tag.getFloat("speedBonus"))
+                    + formatNumber(recipeTimeMultiplier)
                     + "%");
             // #tr tst.common.machine.MegaSolarPanelFactory.waila.tst_mega_solar_panel_factory.2
-            // # {\GREEN}Current Speed Bonus
-            // #zh_CN {\GREEN}当前速度加成
+            // # {\GREEN}Current Recipe Time Multiplier
+            // #zh_CN {\GREEN}当前耗时倍率
         }
     }
 
@@ -272,7 +273,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
         final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
         if (tileEntity != null) {
             tag.setBoolean("batchMode", batchMode);
-            tag.setFloat("speedBonus", casingTier * 100);
+            tag.setFloat("recipeTimeMultiplier", casingTier < 0 ? -1F : 100F / (casingTier + 1));
         }
     }
 
@@ -303,7 +304,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
             side,
             forgeDirection,
             aActive,
-            Textures.BlockIcons.getCasingTextureForId(181),
+            Textures.BlockIcons.getCasingTextureForId(MetaBlockCasing02.getTextureIndex(2)),
             Textures.BlockIcons.OVERLAY_FRONT_HEAT_EXCHANGER,
             Textures.BlockIcons.OVERLAY_FRONT_HEAT_EXCHANGER_GLOW,
             Textures.BlockIcons.OVERLAY_FRONT_HEAT_EXCHANGER_ACTIVE,
@@ -336,7 +337,6 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
             .addInfo(tr("tst.common.machine.MegaSolarPanelFactory.tooltip.info.03"))
             .beginStructureBlock(shape)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
-            .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)

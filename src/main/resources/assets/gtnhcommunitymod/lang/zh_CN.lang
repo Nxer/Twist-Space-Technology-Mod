@@ -1372,7 +1372,7 @@ tst.common.machine.MegaSolarPanelFactory.tooltip.info.02=执行§d无损超频§
 tst.common.machine.MegaSolarPanelFactory.tooltip.info.03=耗时倍率 = 100% / 部件装配线外壳等级.
 tst.common.machine.MegaSolarPanelFactory.tooltip.machine_type=太阳能板制造厂
 tst.common.machine.MegaSolarPanelFactory.waila.tst_mega_solar_panel_factory.1=§a批处理已开启
-tst.common.machine.MegaSolarPanelFactory.waila.tst_mega_solar_panel_factory.2=§a当前速度加成
+tst.common.machine.MegaSolarPanelFactory.waila.tst_mega_solar_panel_factory.2=§a当前耗时倍率
 tst.common.machine.MegaStoneBreaker.name=硅岩制造机
 tst.common.machine.MegaStoneBreaker.tooltip.controller=硅岩制造机的控制方块
 tst.common.machine.MegaStoneBreaker.tooltip.info.01=§f嘿,听说你来自一片空岛?

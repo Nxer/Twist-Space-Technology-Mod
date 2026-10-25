@@ -538,7 +538,7 @@ public class GTCMRecipe {
     // #zh_CN 巨型太阳能板工厂
     public static final RecipeMap<TST_RecipeMapBackend> MegaSolarPanelFactoryRecipeMap = RecipeMapBuilder
         .of("tst.common.recipe.MegaSolarPanelFactoryRecipeMap.name", TST_RecipeMapBackend::new)
-        .maxIO(16, 16, 16, 0)
+        .maxIO(24, 4, 8, 0)
         .frontend(TST_GeneralFrontend::new)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaSolarPanelFactory.get(1)))
         .build();
