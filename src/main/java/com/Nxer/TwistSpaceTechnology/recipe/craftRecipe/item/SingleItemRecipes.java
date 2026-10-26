@@ -1,6 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item;
 
+import static com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.ModItem.getModItem;
+
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
@@ -10,8 +14,10 @@ import bartworks.system.material.WerkstoffLoader;
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.items.GGMaterial;
 import goodgenerator.util.ItemRefer;
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TierEU;
 import gregtech.api.recipe.RecipeMaps;
@@ -23,6 +29,51 @@ public class SingleItemRecipes {
 
     // spotless:off
     public static void loadRecipes() {
+        if (Mods.ThaumicHorizons.isModLoaded()) {
+            FluidStack lifeEssence = FluidRegistry.getFluidStack("lifeessence", 10000);
+            if (lifeEssence != null) {
+                GTValues.RA.stdBuilder()
+                    .itemInputs(getModItem(Mods.ThaumicHorizons.ID, "syringeEmpty", 1, OreDictionary.WILDCARD_VALUE))
+                    .fluidInputs(lifeEssence)
+                    .itemOutputs(getModItem(Mods.ThaumicHorizons.ID, "syringeBlood", 1, 0))
+                    .duration(20)
+                    .eut(TierEU.RECIPE_LV)
+                    .addTo(RecipeMaps.assemblerRecipes);
+            }
+        }
+
+        // Match the GTNH carpenter ingredients, including the consumed display in the box slot.
+        if (Mods.Genetics.isModLoaded()) {
+            GTValues.RA.stdBuilder()
+                .itemInputs(
+                    NHItemList.Display.get(1),
+                    GTOreDictUnificator.get(OrePrefixes.screw, Materials.EnderEye, 4),
+                    GTOreDictUnificator.get(OrePrefixes.plate, Materials.Diamond, 4),
+                    new Object[]{OrePrefixes.circuit.get(Materials.EV), 1})
+                .fluidInputs(Materials.Redstone.getMolten(2880))
+                .itemOutputs(getModItem(Mods.Genetics.ID, "database", 1, 0))
+                .duration(60)
+                .eut(TierEU.RECIPE_LV)
+                .addTo(RecipeMaps.assemblerRecipes);
+
+            if (Mods.ExtraTrees.isModLoaded() && Mods.Botany.isModLoaded() && Mods.ExtraBees.isModLoaded()) {
+                GTValues.RA.stdBuilder()
+                    .itemInputs(
+                        NHItemList.Display.get(1),
+                        getModItem(Mods.Genetics.ID, "misc", 4, 9),
+                        getModItem(Mods.Genetics.ID, "misc", 1, 10),
+                        getModItem(Mods.ExtraTrees.ID, "database", 1, 0),
+                        getModItem(Mods.Botany.ID, "database", 1, 0),
+                        getModItem(Mods.ExtraBees.ID, "dictionary", 1, 0),
+                        getModItem(Mods.ExtraTrees.ID, "databaseMoth", 1, 0))
+                    .fluidInputs(Materials.Redstone.getMolten(4320))
+                    .itemOutputs(getModItem(Mods.Genetics.ID, "registry", 1, 0))
+                    .duration(60)
+                    .eut(TierEU.RECIPE_LV)
+                    .addTo(RecipeMaps.assemblerRecipes);
+            }
+        }
+
         // Borophene Foil
         TST_RecipeBuilder.builder()
             .itemInputs(

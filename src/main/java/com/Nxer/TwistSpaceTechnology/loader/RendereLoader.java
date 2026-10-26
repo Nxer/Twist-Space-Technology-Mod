@@ -17,6 +17,8 @@ import com.Nxer.TwistSpaceTechnology.client.render.MeteorMinerRenderer;
 import com.Nxer.TwistSpaceTechnology.client.render.TileEntityRenderer;
 import com.Nxer.TwistSpaceTechnology.common.init.TstItems;
 
+import fox.spiteful.avaritia.render.FancyHaloRenderer;
+
 public class RendereLoader {
 
     public static IModelCustom PowerChairModel = null;
@@ -30,6 +32,7 @@ public class RendereLoader {
     }
 
     public static void registerItemRenderers() {
+        MinecraftForgeClient.registerItemRenderer(TstItems.MetaItem01, new FancyHaloRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockEyeOfWoodRender), new EyeOfWoodRender());
         MinecraftForgeClient.registerItemRenderer(
             com.Nxer.TwistSpaceTechnology.common.block.BlockPowerChair.ItemBlockPowerChair

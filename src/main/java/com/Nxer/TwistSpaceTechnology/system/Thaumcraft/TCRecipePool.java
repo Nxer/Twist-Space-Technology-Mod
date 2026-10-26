@@ -41,6 +41,8 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GTOreDictUnificator;
+import gregtech.common.items.DropType;
+import gregtech.loaders.misc.GTBees;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import thaumcraft.api.ThaumcraftApi;
@@ -67,6 +69,7 @@ public class TCRecipePool {
     public static InfusionRecipe infusionRecipeEcoSphereExecutionProtocol5;
     public static InfusionRecipe infusionRecipeEcoSphereExecutionProtocol6;
     public static InfusionRecipe infusionRecipeEcoSphereExecutionProtocol7;
+    public static InfusionRecipe infusionRecipeEcoSphereExecutionProtocol7Singularity;
     public static InfusionRecipe infusionRecipeEcoSphereExecutionProtocol8;
     public static InfusionRecipe infusionRecipeEcoSphereExecutionProtocol9;
     public static InfusionRecipe infusionRecipeEcoSphereUpgrade1;
@@ -90,6 +93,7 @@ public class TCRecipePool {
     public static CrucibleRecipe crucibleRecipeArcaneHole;
 
     public static void loadRecipes() {
+        AuraCoreRecipes.loadRecipes();
         // spotless:off
 
         /* Elven Workshop */
@@ -296,7 +300,7 @@ public class TCRecipePool {
                         new ItemStack(ConfigBlocks.blockCustomPlant, 1, 4),
                         getModItem(Mods.WarpTheory.ID, "item.warptheory.cleanserminor", 1, 0),
                         new ItemStack(ConfigItems.itemFocusFrost, 1, 0),
-                        getModItem("computronics", "computronics.partsForestry", 1, 1),
+                        GTBees.drop.getStackForType(DropType.ENDERGOO),
                         NHItemList.CircuitUEV.get(1)
                     });
 
@@ -353,6 +357,24 @@ public class TCRecipePool {
                         getModItem(Mods.BloodArsenal.ID, "sigil_of_divinity", 1, 0),
                         new ItemStack(WayofTime.alchemicalWizardry.ModItems.weakBloodOrb, 1),
                         newItemStackWithNBT(getModItem(Mods.BloodArsenal.ID, "compacted_mrs", 1, 0), "ritualName", "AW013Suffering"),
+                        new ItemStack(ModItems.manaResource, 1, 5),
+                        NHItemList.CircuitUHV.get(1) });
+
+                infusionRecipeEcoSphereExecutionProtocol7Singularity = addInfusionCraftingRecipeAspectNotNull(
+                    "ECO_SPHERE_EXECUTION_PROTOCOL_7",
+                    GTCMItemList.EcoSphereExecutionProtocol7.get(1),
+                    40,
+                    new AspectList().merge((Aspect) ELECTRUM.mAspect, 256)
+                        .merge(Aspect.MECHANISM, 256)
+                        .merge(Aspect.HUNGER, 128)
+                        .merge(Aspect.FLESH, 128)
+                        .merge(Aspect.ORDER, 64),
+                    ItemList.Circuit_Board_Bio.get(1),
+                    new ItemStack[] {
+                        getModItem(Mods.KubaTech.ID, ExtremeEntityCrusher.hasBeenSet() ? ExtremeEntityCrusher.get(1) : null, "Extreme Entity Crusher", 1),
+                        getModItem(Mods.BloodArsenal.ID, "sigil_of_divinity", 1, 0),
+                        new ItemStack(WayofTime.alchemicalWizardry.ModItems.weakBloodOrb, 1),
+                        GTCMItemList.LifeEssenceSingularity.get(1),
                         new ItemStack(ModItems.manaResource, 1, 5),
                         NHItemList.CircuitUHV.get(1) });
 

@@ -241,9 +241,6 @@ public class GTCMMachineRecipes {
         ItemStack ExtraUtilitiesNodeUpgrade2 = Mods.ExtraUtilities.isModLoaded()
             ? getModItem(Mods.ExtraUtilities.ID, "nodeUpgrade", 64, 2)
             : new ItemStack(Items.iron_pickaxe);
-        ItemStack CompressCobblestone8 = Mods.ExtraUtilities.isModLoaded()
-            ? getModItem(Mods.ExtraUtilities.ID, "cobblestone_compressed", 1, 7)
-            : new ItemStack(Blocks.cobblestone);
 
         // spotless:off
 
@@ -3006,10 +3003,10 @@ public class GTCMMachineRecipes {
                     ExtraUtilitiesNodeUpgrade2,
                     ExtraUtilitiesNodeUpgrade2,
 
-                    CompressCobblestone8,
-                    CompressCobblestone8,
-                    CompressCobblestone8,
-                    CompressCobblestone8
+                    getModItem(Mods.ExtraUtilities.ID, "block_bedrockium", 64, 0),
+                    getModItem(Mods.ExtraUtilities.ID, "block_bedrockium", 64, 0),
+                    getModItem(Mods.ExtraUtilities.ID, "block_bedrockium", 64, 0),
+                    getModItem(Mods.ExtraUtilities.ID, "block_bedrockium", 64, 0)
                 )
                 .fluidInputs(
                     GGMaterial.adamantiumAlloy.getMolten(9216),

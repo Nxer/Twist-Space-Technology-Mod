@@ -446,6 +446,11 @@ public class ItemRegister {
                 // #zh_CN 启用T2激光陨星采矿场所需的设计图.
                 new String[]{tr("item.tst.common.MetaItem01.46.tooltip")}));
 
+        // #tr item.tst.common.MetaItem01.47.name
+        // # Life Essence Singularity
+        // #zh_CN 生命本源奇点
+        GTCMItemList.LifeEssenceSingularity.set(MetaItem01.registerVariant(47));
+
         if (Config.activateMegaSpaceStation) {
             // #tr item.tst.common.MetaItem01.176.name
             // # High-dimensional extend
