@@ -4,6 +4,7 @@ import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.ActualPattern;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.EcoSphereExecutionProtocol;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.EcoSphereUpgrade;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.InfinityDistilledWaterStorageCell;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.LifeEssenceSingularity;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItem01;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemFlask;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemIzumik;
@@ -32,7 +33,7 @@ public class ItemRegister {
         // Keep the protocol and upgrade registry entries adjacent; saved worlds may still remap numeric IDs.
         Item[] itemsToReg = { MetaItem01, EcoSphereExecutionProtocol, EcoSphereUpgrade, ProofOfHeroes, ProofOfGods,
             MultiStructuresLinkTool, MetaItemRune, MetaItemIzumik, Yamato, ActualPattern, MetaItemNamedCircuit,
-            MetaItemFlask, InfinityDistilledWaterStorageCell, };
+            MetaItemFlask, InfinityDistilledWaterStorageCell, LifeEssenceSingularity, };
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.unlocalizedName);
@@ -445,11 +446,6 @@ public class ItemRegister {
                 // # Schematic needed to enable the Tier 2 Meteor Miner.
                 // #zh_CN 启用T2激光陨星采矿场所需的设计图.
                 new String[]{tr("item.tst.common.MetaItem01.46.tooltip")}));
-
-        // #tr item.tst.common.MetaItem01.47.name
-        // # Life Essence Singularity
-        // #zh_CN 生命本源奇点
-        GTCMItemList.LifeEssenceSingularity.set(MetaItem01.registerVariant(47));
 
         if (Config.activateMegaSpaceStation) {
             // #tr item.tst.common.MetaItem01.176.name
@@ -1119,6 +1115,7 @@ public class ItemRegister {
         GTCMItemList.HatchUpdateTool.set(new ItemStack(TstItems.HatchUpdateTool, 1));
         GTCMItemList.Yamato.set(new ItemStack(Yamato, 1));
         GTCMItemList.ActualPattern.set(new ItemStack(ActualPattern, 1));
+        GTCMItemList.LifeEssenceSingularity.set(new ItemStack(LifeEssenceSingularity, 1));
 
         // #tr item.tst.ecosphere.execution_protocol.0.name
         // # Eco-Sphere Execution Protocol: Arboreal Genesis
