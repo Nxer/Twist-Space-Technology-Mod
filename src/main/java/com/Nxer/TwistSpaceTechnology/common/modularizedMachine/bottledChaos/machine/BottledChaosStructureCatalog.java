@@ -255,11 +255,13 @@ public final class BottledChaosStructureCatalog {
         for (int id = 0; id < machinePools.length; id++) {
             IMetaTileEntity machine = GregTechAPI.METATILEENTITIES[id];
             if (machinePools[id] == 0 || machine == null) continue;
-            if (machine instanceof MTEPurificationPlant) {
+            var supported = BottledChaosSupportedMachine.find(machine);
+            if (supported == null) continue;
+            if (supported.structureKind == BottledChaosSupportedMachine.StructureKind.PURIFICATION_PLANT) {
                 rules.add(readPlant(machine, machinePools[id]));
                 continue;
             }
-            if (machine instanceof MTEBasicMachine basic && basic.isElectric()) {
+            if (supported.structureKind == BottledChaosSupportedMachine.StructureKind.SINGLE_BLOCK) {
                 // Electrical single-block machines pay only their actual registered controller; its tier remains the
                 // limit.
                 ItemStack controller = machine.getStackForm(1);
@@ -274,15 +276,15 @@ public final class BottledChaosStructureCatalog {
                         new Requirement[0]));
                 continue;
             }
-            var supported = BottledChaosSupportedMachine.find(machine);
-            if (supported == null || !(machine instanceof MTEEnhancedMultiBlockBase<?>)) continue;
+            if (!(machine instanceof MTEEnhancedMultiBlockBase<?>)) continue;
+            // Godforge combines its host and module after the ordinary structures have been collected.
+            if (supported.structureKind == BottledChaosSupportedMachine.StructureKind.GODFORGE) continue;
             try {
-                long pools = supported == BottledChaosSupportedMachine.MTEINDUSTRIAL_ARC_FURNACE
-                    ? machinePools[id]
-                        & BottledChaosMachineConfiguration.mask(gregtech.api.recipe.RecipeMaps.arcFurnaceRecipes)
-                    : machinePools[id];
-                if (pools == 0) continue;
-                if (BottledChaosComplexStructures.register(machine, supported, pools, rules)) continue;
+                long pools = machinePools[id];
+                if (supported.structureKind == BottledChaosSupportedMachine.StructureKind.FOUNDRY) {
+                    BottledChaosComplexStructures.registerFoundry(machine, supported, pools, rules);
+                    continue;
+                }
                 int[] profiles = supported.displayProfiles();
                 if (profiles.length == 0) continue;
                 if (supported.hasRepeatingPiece()) {

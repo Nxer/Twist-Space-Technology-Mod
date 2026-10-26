@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine;
 
+import java.util.Collection;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -30,7 +32,6 @@ import gregtech.api.enums.VoltageIndex;
 import gregtech.api.interfaces.IHeatingCoil;
 import gregtech.api.interfaces.IToolStats;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.tileentity.RecipeMapWorkable;
 import gregtech.api.items.MetaGeneratedTool;
 import gregtech.api.metatileentity.implementations.MTEBasicMachine;
 import gregtech.api.recipe.RecipeMap;
@@ -72,114 +73,100 @@ public final class BottledChaosMachineParameters {
     enum Machine {
 
         // spotless:off
-        AUTO_CRAFTER(BottledChaosSupportedMachine.MTEAUTO_CRAFTER),
-        BREWERY(BottledChaosSupportedMachine.MTEINDUSTRIAL_BREWERY),
-        CHEMICAL_BATH(BottledChaosSupportedMachine.MTEINDUSTRIAL_CHEMICAL_BATH),
-        DISTILLATION_TOWER(BottledChaosSupportedMachine.MTEDISTILLATION_TOWER),
-        ALLOY_BLAST(BottledChaosSupportedMachine.MTEALLOY_BLAST_SMELTER),
-        VACUUM_FILTER(BottledChaosSupportedMachine.TST_VACUUM_FILTER_EXTRACTOR),
-        MAGNETAR_SEPARATOR(BottledChaosSupportedMachine.TST_INDUSTRIAL_MAGNETAR_SEPARATOR),
-        MAGNET_SEPARATOR(BottledChaosSupportedMachine.MTEINDUSTRIAL_ELECTROMAGNETIC_SEPARATOR),
-        FLOTATION(BottledChaosSupportedMachine.MTEFROTH_FLOTATION_CELL),
-        PHYSICAL_SWITCHER(BottledChaosSupportedMachine.GT_TILE_ENTITY_PHYSICAL_FORM_SWITCHER),
-        FLUID_HEATER(BottledChaosSupportedMachine.MTEINDUSTRIAL_FLUID_HEATER),
-        LARGE_CHEMICAL(BottledChaosSupportedMachine.MTELARGE_CHEMICAL_REACTOR),
-        MEGA_CHEMICAL(BottledChaosSupportedMachine.MTEMEGA_CHEMICAL_REACTOR),
-        CHEMICAL_DISTORTER(BottledChaosSupportedMachine.GT_TILE_ENTITY_INTENSIFY_CHEMICAL_DISTORTER),
-        BENDING(BottledChaosSupportedMachine.MTEINDUSTRIAL_BENDING_MACHINE),
-        ELECTROLYZER(BottledChaosSupportedMachine.MTEINDUSTRIAL_ELECTROLYZER),
-        MAGNETIC_MIXER(BottledChaosSupportedMachine.GT_TILE_ENTITY_MAGNETIC_MIXER),
-        SIFTER(BottledChaosSupportedMachine.MTEINDUSTRIAL_SIFTER),
-        SCAVENGER(BottledChaosSupportedMachine.TST_SCAVENGER),
-        VACUUM_FREEZER(BottledChaosSupportedMachine.MTEVACUUM_FREEZER),
-        DIGESTER(BottledChaosSupportedMachine.MTEDIGESTER),
-        DISSOLUTION(BottledChaosSupportedMachine.MTEDISSOLUTION_TANK),
-        BIO_VAT(BottledChaosSupportedMachine.MTEBIO_VAT),
-        MEGA_ALLOY(BottledChaosSupportedMachine.MTEMEGA_ALLOY_BLAST_SMELTER),
-        BALL_LIGHTNING(BottledChaosSupportedMachine.TST_BALL_LIGHTNING),
-        INDISTINCT(BottledChaosSupportedMachine.TST_INDISTINCT_TENTACLE),
-        PRECISE_ASSEMBLER(BottledChaosSupportedMachine.MTEPRECISE_ASSEMBLER),
-        AUTOCLAVE(BottledChaosSupportedMachine.MTEMULTI_AUTOCLAVE),
-        CRYSTALLINE(BottledChaosSupportedMachine.GTCM_CRYSTALLINE_INFINITIER),
-        MANUFACTURING(BottledChaosSupportedMachine.TST_MANUFACTURING_CENTER),
-        BLAST_FURNACE(BottledChaosSupportedMachine.MTEELECTRIC_BLAST_FURNACE),
-        BIOSPHERE(BottledChaosSupportedMachine.TST_BIOSPHERE_III),
-        OIL_CRACKER(BottledChaosSupportedMachine.MTEOIL_CRACKER),
-        MEGA_OIL_CRACKER(BottledChaosSupportedMachine.MTEMEGA_OIL_CRACKER),
-        ADVANCED_OIL_CRACKER(BottledChaosSupportedMachine.TST_ADVANCED_MEGA_OIL_CRACKER),
-        ADVANCED_DISTILLATION(BottledChaosSupportedMachine.MTEADV_DISTILLATION_TOWER),
-        MEGA_DISTILLATION(BottledChaosSupportedMachine.MTEMEGA_DISTILLATION_TOWER),
-        MAGNETIC_DOMAIN(BottledChaosSupportedMachine.GT_TILE_ENTITY_MAGNETIC_DOMAIN_CONSTRUCTOR),
-        EXTRACTOR(BottledChaosSupportedMachine.MTEINDUSTRIAL_EXTRACTOR),
-        SPACE_SCALER(BottledChaosSupportedMachine.GT_TILE_ENTITY_SPACE_SCALER),
-        LARGE_FLUID_EXTRACTOR(BottledChaosSupportedMachine.MTELARGE_FLUID_EXTRACTOR),
-        HUMAN_POWER(BottledChaosSupportedMachine.TST_CORE_DEVICE_OF_HUMAN_POWER_GENERATION_FACILITY),
-        FORGE_HAMMER(BottledChaosSupportedMachine.MTEINDUSTRIAL_FORGE_HAMMER),
-        PRESSURE_FORMER(BottledChaosSupportedMachine.GT_TILE_ENTITY_MAGNETIC_DRIVE_PRESSURE_FORMER),
-        COKE_OVEN(BottledChaosSupportedMachine.MTEINDUSTRIAL_COKE_OVEN),
-        LASER_ENGRAVER(BottledChaosSupportedMachine.MTEINDUSTRIAL_LASER_ENGRAVER),
-        PHOTON_MASTER(BottledChaosSupportedMachine.GT_TILE_ENTITY_PRECISE_HIGH_ENERGY_PHOTONIC_QUANTUM_MASTER),
-        MACERATOR(BottledChaosSupportedMachine.MTEINDUSTRIAL_MACERATOR),
-        MEGA_MACERATOR(BottledChaosSupportedMachine.TST_MEGA_MACERATOR),
-        MOLECULE(BottledChaosSupportedMachine.GT_TILE_ENTITY_MOLECULE_DECONSTRUCTOR),
-        GIANT_DRYER(BottledChaosSupportedMachine.TST_GIANT_VACUUM_DRYING_FURNACE),
-        DEHYDRATOR(BottledChaosSupportedMachine.MTEINDUSTRIAL_DEHYDRATOR),
-        MIXER(BottledChaosSupportedMachine.MTEINDUSTRIAL_MIXER),
-        THERMAL_CENTRIFUGE(BottledChaosSupportedMachine.MTEINDUSTRIAL_THERMAL_CENTRIFUGE),
-        THERMAL_DEVOURER(BottledChaosSupportedMachine.TST_THERMAL_ENERGY_DEVOURER),
-        SOLIDIFIER(BottledChaosSupportedMachine.MTEMASS_SOLIDIFIER),
-        ISA_MILL(BottledChaosSupportedMachine.MTEISA_MILL),
-        CRYOGENIC_FREEZER(BottledChaosSupportedMachine.MTECRYOGENIC_FREEZER),
-        ARC_FURNACE(BottledChaosSupportedMachine.MTEINDUSTRIAL_ARC_FURNACE),
-        DE_FUSION(BottledChaosSupportedMachine.MTEDEFUSION_CRAFTER),
-        INDISTINCT_PROTOTYPE(BottledChaosSupportedMachine.MM_INDISTINCT_TENTACLE_PROTOTYPE_MK2),
-        ADVANCED_BLAST(BottledChaosSupportedMachine.MTEADV_EBF),
-        GODFORGE_SMELTING(BottledChaosSupportedMachine.MTESMELTING_MODULE),
-        GODFORGE_MOLTEN(BottledChaosSupportedMachine.MTEMOLTEN_MODULE),
-        STELLAR_FORGE(BottledChaosSupportedMachine.TST_MIRACLE_DOOR),
-        HEAT_CONVECTOR(BottledChaosSupportedMachine.TST_HYPER_THERMAL_CONVECTOR),
-        HEARTH(BottledChaosSupportedMachine.MTEEXOTHERMIC_HEARTH),
-        SWELEGFYR(BottledChaosSupportedMachine.TST_SWELEGFYR_BLAST_FURNACE),
-        CHEMICAL_PLANT(BottledChaosSupportedMachine.MTECHEMICAL_PLANT),
-        GODFORGE_EXOTIC(BottledChaosSupportedMachine.MTEEXOTIC_MODULE),
-        GODFORGE_PLASMA(BottledChaosSupportedMachine.MTEPLASMA_MODULE),
-        FOUNDRY(BottledChaosSupportedMachine.MTEEXO_FOUNDRY),
-        MULTI_FURNACE(BottledChaosSupportedMachine.MTEMULTI_FURNACE),
-        HEPHAESTUS(BottledChaosSupportedMachine.TST_HEPHAESTUS_ATELIER),
-        CENTRIFUGE(BottledChaosSupportedMachine.MTEINDUSTRIAL_CENTRIFUGE),
-        SPINMATRON(BottledChaosSupportedMachine.MTESPINMATRON),
-        PURIFICATION_CLARIFIER(BottledChaosSupportedMachine.MTEPURIFICATION_UNIT_CLARIFIER),
-        PURIFICATION_DEGASSER(BottledChaosSupportedMachine.MTEPURIFICATION_UNIT_DEGASSER),
-        PURIFICATION_FLOCCULATION(BottledChaosSupportedMachine.MTEPURIFICATION_UNIT_FLOCCULATION),
-        PURIFICATION_OZONATION(BottledChaosSupportedMachine.MTEPURIFICATION_UNIT_OZONATION),
-        PURIFICATION_PH(BottledChaosSupportedMachine.MTEPURIFICATION_UNIT_PH_ADJUSTMENT),
-        PURIFICATION_PLASMA(BottledChaosSupportedMachine.MTEPURIFICATION_UNIT_PLASMA_HEATER),
-        PURIFICATION_BARYONIC(BottledChaosSupportedMachine.MTEPURIFICATION_UNIT_BARYONIC_PERFECTION),
-        PURIFICATION_UV(BottledChaosSupportedMachine.MTEPURIFICATION_UNIT_UVTREATMENT),
-        QUANTUM(BottledChaosSupportedMachine.MTEQUANTUM_FORCE_TRANSFORMER),
-        FRIDGE(BottledChaosSupportedMachine.MTEENDOTHERMIC_FRIDGE),
-        NEUTRON(BottledChaosSupportedMachine.MTENEUTRON_ACTIVATOR),
-        MODULAR_NEUTRON(BottledChaosSupportedMachine.MM_LARGE_NEUTRON_OSCILLATOR),
-        NAQUADAH_REFINERY(BottledChaosSupportedMachine.MTENAQUADAH_FUEL_REFINERY),
-        FUSION(MTEFusionComputer.class.getSimpleName());
+        AUTO_CRAFTER,
+        BREWERY,
+        CHEMICAL_BATH,
+        DISTILLATION_TOWER,
+        ALLOY_BLAST,
+        VACUUM_FILTER,
+        MAGNETAR_SEPARATOR,
+        MAGNET_SEPARATOR,
+        FLOTATION,
+        PHYSICAL_SWITCHER,
+        FLUID_HEATER,
+        LARGE_CHEMICAL,
+        MEGA_CHEMICAL,
+        CHEMICAL_DISTORTER,
+        BENDING,
+        ELECTROLYZER,
+        MAGNETIC_MIXER,
+        SIFTER,
+        SCAVENGER,
+        VACUUM_FREEZER,
+        DIGESTER,
+        DISSOLUTION,
+        BIO_VAT,
+        MEGA_ALLOY,
+        BALL_LIGHTNING,
+        INDISTINCT,
+        PRECISE_ASSEMBLER,
+        AUTOCLAVE,
+        CRYSTALLINE,
+        MANUFACTURING,
+        BLAST_FURNACE,
+        BIOSPHERE,
+        OIL_CRACKER,
+        MEGA_OIL_CRACKER,
+        ADVANCED_OIL_CRACKER,
+        ADVANCED_DISTILLATION,
+        MEGA_DISTILLATION,
+        MAGNETIC_DOMAIN,
+        EXTRACTOR,
+        SPACE_SCALER,
+        LARGE_FLUID_EXTRACTOR,
+        HUMAN_POWER,
+        FORGE_HAMMER,
+        PRESSURE_FORMER,
+        COKE_OVEN,
+        LASER_ENGRAVER,
+        PHOTON_MASTER,
+        MACERATOR,
+        MEGA_MACERATOR,
+        MOLECULE,
+        GIANT_DRYER,
+        DEHYDRATOR,
+        MIXER,
+        THERMAL_CENTRIFUGE,
+        THERMAL_DEVOURER,
+        SOLIDIFIER,
+        ISA_MILL,
+        CRYOGENIC_FREEZER,
+        ARC_FURNACE,
+        DE_FUSION,
+        INDISTINCT_PROTOTYPE,
+        ADVANCED_BLAST,
+        GODFORGE_SMELTING,
+        GODFORGE_MOLTEN,
+        STELLAR_FORGE,
+        HEAT_CONVECTOR,
+        HEARTH,
+        SWELEGFYR,
+        CHEMICAL_PLANT,
+        GODFORGE_EXOTIC,
+        GODFORGE_PLASMA,
+        FOUNDRY,
+        MULTI_FURNACE,
+        HEPHAESTUS,
+        CENTRIFUGE,
+        SPINMATRON,
+        PURIFICATION_CLARIFIER,
+        PURIFICATION_DEGASSER,
+        PURIFICATION_FLOCCULATION,
+        PURIFICATION_OZONATION,
+        PURIFICATION_PH,
+        PURIFICATION_PLASMA,
+        PURIFICATION_BARYONIC,
+        PURIFICATION_UV,
+        QUANTUM,
+        FRIDGE,
+        NEUTRON,
+        MODULAR_NEUTRON,
+        NAQUADAH_REFINERY,
+        FUSION;
         // spotless:on
 
-        private final String type;
-
-        Machine(BottledChaosSupportedMachine supported) {
-            this(supported.className.substring(supported.className.lastIndexOf('.') + 1));
-        }
-
-        Machine(String type) {
-            this.type = type;
-        }
-
         static Machine find(IMetaTileEntity controller) {
-            if (controller instanceof MTEFusionComputer || controller instanceof MTELargeFusionComputer) return FUSION;
-            String type = controller.getClass()
-                .getSimpleName();
-            for (Machine machine : values()) if (machine.type.equals(type)) return machine;
-            return null;
+            return BottledChaosSupportedMachine.parameters(controller);
         }
     }
 
@@ -189,7 +176,7 @@ public final class BottledChaosMachineParameters {
         final Structure structure;
         final boolean debug;
         final IMetaTileEntity original;
-        final RecipeMapWorkable workable;
+        final Collection<RecipeMap<?>> pools;
         final Machine machine;
         final Upgrades upgrades;
         final BottledChaosComplexStructures.GodforgeProfile godforge;
@@ -203,7 +190,7 @@ public final class BottledChaosMachineParameters {
             original = controller != null && controller.getItem() instanceof ItemMachines
                 ? ItemMachines.getMetaTileEntity(controller)
                 : null;
-            workable = original instanceof RecipeMapWorkable source ? source : null;
+            pools = BottledChaosSupportedMachine.recipeMaps(original);
             machine = original == null ? null : Machine.find(original);
             upgrades = new Upgrades(structure == null ? new ItemStack[0] : structure.materials());
             godforge = BottledChaosComplexStructures.godforge(structure);
@@ -260,14 +247,9 @@ public final class BottledChaosMachineParameters {
             || requiredHeat < 0) return Evaluation.INVALID;
         if (source.debug) return new Evaluation(new Values().profile(), null);
         IMetaTileEntity original = source.original;
-        RecipeMapWorkable workable = source.workable;
         Machine machine = source.machine;
         Structure structure = source.structure;
-        if (workable == null) return Evaluation.INVALID;
-        if (!workable.getAvailableRecipeMaps()
-            .contains(pool) && !(machine == Machine.NEUTRON && pool == GTCMRecipe.NeutronActivatorWithEURecipeMap)
-            && !(machine == Machine.STELLAR_FORGE && pool == RecipeMaps.alloyBlastSmelterRecipes))
-            return Evaluation.INVALID;
+        if (!source.pools.contains(pool)) return Evaluation.INVALID;
         Values value = new Values();
         if (machine == null) {
             if (!(original instanceof MTEBasicMachine basic) || basic.mTier <= 0) return Evaluation.INVALID;

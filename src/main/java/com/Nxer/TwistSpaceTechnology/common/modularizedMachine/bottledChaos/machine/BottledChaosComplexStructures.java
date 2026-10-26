@@ -52,14 +52,8 @@ public final class BottledChaosComplexStructures {
         foundryChoices.clear();
     }
 
-    static boolean register(IMetaTileEntity machine, BottledChaosSupportedMachine supported, long pools,
+    static void registerFoundry(IMetaTileEntity machine, BottledChaosSupportedMachine supported, long pools,
         List<Rule> rules) {
-        // Individual Godforge module structures are paid only as part of their complete host.
-        if (supported == BottledChaosSupportedMachine.MTESMELTING_MODULE
-            || supported == BottledChaosSupportedMachine.MTEMOLTEN_MODULE
-            || supported == BottledChaosSupportedMachine.MTEPLASMA_MODULE
-            || supported == BottledChaosSupportedMachine.MTEEXOTIC_MODULE) return true;
-        if (supported != BottledChaosSupportedMachine.MTEEXO_FOUNDRY) return false;
         for (int tier = 1; tier <= 3; tier++) {
             Rule tower = selectFoundryChassis(
                 BottledChaosStructureCatalog.readRule(machine, supported, tier, pools),
@@ -86,7 +80,6 @@ public final class BottledChaosComplexStructures {
             foundryChoices.put(tier, choices);
             rules.add(tower);
         }
-        return true;
     }
 
     private static Rule selectFoundryChassis(Rule source, int tier) {

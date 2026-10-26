@@ -30,15 +30,12 @@ import com.cleanroommc.modularui.utils.item.ItemStackHandler;
 import com.github.bsideup.jabel.Desugar;
 
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
-import goodgenerator.blocks.tileEntity.MTENeutronActivator;
 import gregtech.api.GregTechAPI;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.tileentity.RecipeMapWorkable;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.common.tileentities.machines.multi.purification.MTEPurificationPlant;
 import kubatech.loaders.DEFCRecipes;
 
 /** Startup machine directory and per-controller pool inventory; no runtime registry scans. */
@@ -131,17 +128,10 @@ public final class BottledChaosMachineConfiguration {
         machinePools = new long[GregTechAPI.METATILEENTITIES.length];
         for (int id = 0; id < machinePools.length; id++) {
             IMetaTileEntity machine = GregTechAPI.METATILEENTITIES[id];
-            if (machine instanceof MTEPurificationPlant) {
-                machinePools[id] = purificationPlantMask();
-                continue;
-            }
-            if (!(machine instanceof RecipeMapWorkable workable)) continue;
+            var supported = BottledChaosSupportedMachine.find(machine);
+            if (supported == null) continue;
             try {
-                for (RecipeMap<?> map : workable.getAvailableRecipeMaps()) machinePools[id] |= mask(map);
-                // Both activators consume the same converted source recipes; the ordinary machine keeps its own speed.
-                if (machine instanceof MTENeutronActivator)
-                    machinePools[id] |= mask(GTCMRecipe.NeutronActivatorWithEURecipeMap);
-                if (machine instanceof TST_MiracleDoor) machinePools[id] |= mask(RecipeMaps.alloyBlastSmelterRecipes);
+                machinePools[id] = supported.poolMask(machine);
             } catch (RuntimeException exception) {
                 TwistSpaceTechnology.LOG.warn("Cannot inspect Bottled Chaos machine catalyst {}.", id, exception);
             }
