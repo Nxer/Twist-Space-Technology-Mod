@@ -624,11 +624,6 @@ public class GTCMMachineRecipes {
                 PhotonControllerUpgradeUXV.get(1),
                 SpaceWarper.get(64),
                 getCircuits(Materials.UXV, 64),
-//                getModItem(GTPlusPlus.ID, "particleBase", 64, 15),
-//                getModItem(GTPlusPlus.ID, "particleBase", 64, 16),
-//                getModItem(GTPlusPlus.ID, "particleBase", 64, 20),
-//                getModItem(GTPlusPlus.ID, "particleBase", 64, 21),
-//                getModItem(GTPlusPlus.ID, "particleBase", 64, 17),
                 Materials.Eternity.getNanite(16),
                 Materials.Universium.getNanite(16),
                 ItemList.Timepiece.get(64),
@@ -673,8 +668,6 @@ public class GTCMMachineRecipes {
                 OpticalSOC.get(64),
                 OpticalSOC.get(64),
                 OpticalSOC.get(64),
-//                getModItem(GTPlusPlus.ID, "particleBase", 64, 14),
-//                getModItem(GTPlusPlus.ID, "particleBase", 64, 14),
                 OpticalSOC.get(64),
 
                 eM_Spacetime.get(16),
@@ -706,8 +699,6 @@ public class GTCMMachineRecipes {
                 new Object[]{OrePrefixes.circuit.get(Materials.UIV), 24},
 
                 GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.CosmicNeutronium, 64),
-//                getModItem(GTPlusPlus.ID, "particleBase", 2, 14),
-//                getModItem(GTPlusPlus.ID, "particleBase", 2, 14),
                 Laser_Lens_Special.get(2),
                 Laser_Lens_Special.get(2),
                 GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.CosmicNeutronium, 64),
@@ -2855,7 +2846,6 @@ public class GTCMMachineRecipes {
                     ItemList.UHV_Coil.get(64),
 
                     new Object[]{OrePrefixes.circuit.get(Materials.UEV), 2},
-//                    new ItemStack(ModItems.itemStandarParticleBase, 16, 19),
                     ItemList.Field_Generator_UHV.get(1)
                 )
                 .fluidInputs(

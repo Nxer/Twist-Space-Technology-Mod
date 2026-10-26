@@ -81,7 +81,6 @@ import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
 import gregtech.loaders.postload.recipes.beamcrafter.BeamCrafterMetadata;
-import gtPlusPlus.core.material.Particle;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import gtnhintergalactic.recipe.IGRecipeMaps;
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
@@ -194,7 +193,7 @@ public class DSPRecipePool {
                 ItemList.EnergisedTesseract.get(16),
 
                 ItemList.Field_Generator_UMV.get(8),
-                GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(Particle.HIGGS_BOSON)))
+                ItemList.PseudoStar.get(64))
             .fluidInputs(GGMaterial.metastableOganesson.getMolten(144 * 256))
             .itemOutputs(eM_Ultimate_Containment_Advanced.get(8))
 
@@ -425,7 +424,7 @@ public class DSPRecipePool {
                 EmptySmallLaunchVehicle.get(1),
                 SpaceWarper.get(1),
                 DysonSphereFrameComponent.get(24),
-                GTUtility.copyAmountUnsafe(16, Particle.getBaseParticle(Particle.GRAVITON)),
+                ItemList.NuclearStar.get(16),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1))
             .fluidInputs(Materials.Hydrogen.getPlasma(1000 * 16))
             .itemOutputs(SmallLaunchVehicle.get(1))
@@ -713,26 +712,6 @@ public class DSPRecipePool {
             .addTo(SpaceAssembler);
 
         // Gravitational Lens
-        GTValues.RA.stdBuilder()
-            .itemInputs(
-                SpaceWarper.get(1),
-                Laser_Lens_Special.get(4),
-                GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(Particle.GRAVITON)),
-                GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(Particle.GRAVITON)),
-                GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(Particle.GRAVITON)),
-                GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(Particle.GRAVITON)))
-            .fluidInputs(Materials.MysteriousCrystal.getMolten(144 * 9 * 64 * 2))
-            .itemOutputs(
-                GravitationalLens.get(1),
-                GravitationalLens.get(1),
-                GravitationalLens.get(1),
-                GravitationalLens.get(1),
-                GravitationalLens.get(1))
-            .outputChances(10000, 9000, 8000, 7000, 6000)
-            .eut(RECIPE_UMV)
-            .duration(20 * 1200)
-            .addTo(RecipeMaps.cyclotronRecipes);
-
         GTValues.RA.stdBuilder()
             .fluidInputs(Materials.MysteriousCrystal.getMolten(144 * 9 * 64 * 2))
             .itemInputs(SpaceWarper.get(1), Laser_Lens_Special.get(4))
