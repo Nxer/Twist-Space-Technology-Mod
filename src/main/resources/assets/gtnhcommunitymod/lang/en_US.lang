@@ -1372,7 +1372,7 @@ tst.common.machine.MegaSolarPanelFactory.tooltip.info.02=§dPerfect overclocking
 tst.common.machine.MegaSolarPanelFactory.tooltip.info.03=Recipe Time Multiplier = 100% / Component Casing Tier.
 tst.common.machine.MegaSolarPanelFactory.tooltip.machine_type=Solar Factory
 tst.common.machine.MegaSolarPanelFactory.waila.tst_mega_solar_panel_factory.1=§aBatch mode is ON
-tst.common.machine.MegaSolarPanelFactory.waila.tst_mega_solar_panel_factory.2=§aCurrent Speed Bonus
+tst.common.machine.MegaSolarPanelFactory.waila.tst_mega_solar_panel_factory.2=§aCurrent Recipe Time Multiplier
 tst.common.machine.MegaStoneBreaker.name=Silicon Rock Synthesizer
 tst.common.machine.MegaStoneBreaker.tooltip.controller=Controller block for the Silicon Rock Synthesizer
 tst.common.machine.MegaStoneBreaker.tooltip.info.01=§fHey, I heard you come from a sky island?
