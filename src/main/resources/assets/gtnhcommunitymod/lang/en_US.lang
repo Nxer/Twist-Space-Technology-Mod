@@ -716,6 +716,7 @@ tst.bottledchaos.credential.1.name=Bottled Chaos Credential Frame 4
 tst.bottledchaos.credential.2.name=Bottled Chaos Credential Frame 16
 tst.bottledchaos.credential.3.name=Bottled Chaos Credential Frame 64
 tst.bottledchaos.credential.4.name=Bottled Chaos Credential Frame 256
+tst.bottledchaos.credential.5.name=Bottled Chaos Credential Frame 1024
 tst.bottledchaos.credential.bound.name=Bottled Chaos Credential %s
 tst.bottledchaos.credential.tooltip.capacity=Capacity: %s/%s
 tst.bottledchaos.credential.tooltip.empty=Inject route tags on the controller's injection page.
@@ -949,6 +950,7 @@ tst.bottledchaos.route.titanium=Titanium
 tst.bottledchaos.route.tungsten=Tungsten
 tst.bottledchaos.route.xenoxene=Xenoxene Fractionation
 tst.bottledchaos.structure.body=The main body uses the blocks shown in the structure projection.
+tst.bottledchaos.structure.capacity_channel=Bottled Chaos Capacity: 1 = Air, 2-6 = Capacity Blocks I-V
 tst.bottledchaos.structure.capacity_columns=Each capacity region provides 1 with non-capacity blocks (including air), or 4/16/64/256/1024 with 64 same-tier capacity blocks.
 tst.bottledchaos.structure.incomplete_processing_group=Dedicated input positions require a credential hatch; both inputs are optional and accept buses or hatches.
 tst.bottledchaos.structure.invalid_alignment=Bottled Chaos requires a horizontal facing without rotation or mirroring.

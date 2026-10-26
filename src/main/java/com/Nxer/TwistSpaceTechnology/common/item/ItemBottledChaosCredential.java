@@ -17,7 +17,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosR
 /** Capacity is selected by metadata; the route binding is stored on each individual stack. */
 public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
 
-    public static final int MAX_META = 4;
+    public static final int MAX_META = 5;
     private static final String DISPLAY_TAG_MASK_NBT_KEY = "bottledChaosDisplayTagMask";
 
     private final IIcon[] boundIcons = new IIcon[MAX_META + 1];
@@ -41,6 +41,10 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
     // #tr tst.bottledchaos.credential.4.name
     // # Bottled Chaos Credential Frame 256
     // #zh_CN 瓶中混沌凭证框架 256
+
+    // #tr tst.bottledchaos.credential.5.name
+    // # Bottled Chaos Credential Frame 1024
+    // #zh_CN 瓶中混沌凭证框架 1024
 
     public ItemBottledChaosCredential() {
         super("BottledChaosCredential", "bottled_chaos.credential");
@@ -135,8 +139,8 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
     public void registerIcons(IIconRegister register) {
         String path = TwistSpaceTechnology.RESOURCE_ROOT_ID + ":BottledChaosCredential/";
         for (int meta : usedMetaIds) {
-            iconMap.put(meta, register.registerIcon(path + "credential_t" + (meta + 1) + "_blank"));
-            boundIcons[meta] = register.registerIcon(path + "credential_t" + (meta + 1) + "_bound");
+            iconMap.put(meta, register.registerIcon(path + "credential_t" + meta + "_blank"));
+            boundIcons[meta] = register.registerIcon(path + "credential_t" + meta + "_bound");
         }
         itemIcon = iconMap.get(0);
     }

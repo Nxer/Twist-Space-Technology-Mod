@@ -185,6 +185,7 @@ public enum GTCMItemList {
     EcoSphereUpgrade5,
     EcoSphereUpgrade6,
     EcoSphereUpgrade7,
+    BottledChaosCredentialFrame0,
     BottledChaosCredentialFrame1,
     BottledChaosCredentialFrame2,
     BottledChaosCredentialFrame3,

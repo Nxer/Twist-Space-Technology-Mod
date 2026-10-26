@@ -569,6 +569,7 @@ public class BlockRegister {
         // # Bottled Chaos Capacity Block V
         // #zh_CN 瓶中混沌容量方块 V
         GTCMItemList.BottledChaosCapacityTier5.set(TstBlocks.BottledChaosCapacity.registerVariant(4));
+        TstBlocks.BottledChaosCapacity.registerStructureChannel();
 
         // end region
 

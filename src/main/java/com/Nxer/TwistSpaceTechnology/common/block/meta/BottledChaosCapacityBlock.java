@@ -6,11 +6,14 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.client.render.BottledChaosCapacityRenderer;
+import com.gtnewhorizon.structurelib.StructureLibAPI;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -18,6 +21,25 @@ import gregtech.api.GregTechAPI;
 
 /** Five capacity tiers; each contiguous column selects its sixteen side textures by height. */
 public class BottledChaosCapacityBlock extends AbstractTstMetaBlock {
+
+    public static final String STRUCTURE_CHANNEL = "bottledchaoscapacity";
+
+    public void registerStructureChannel() {
+        // #tr tst.bottledchaos.structure.capacity_channel
+        // # Bottled Chaos Capacity: 1 = Air, 2-6 = Capacity Blocks I-V
+        // #zh_CN 瓶中混沌容量区: 1 = 空气, 2-6 = 容量方块 I-V
+        StructureLibAPI.registerChannelDescription(
+            STRUCTURE_CHANNEL,
+            TwistSpaceTechnology.MODID,
+            "tst.bottledchaos.structure.capacity_channel");
+        for (int tier = 0; tier < 5; tier++) {
+            StructureLibAPI.registerChannelItem(
+                STRUCTURE_CHANNEL,
+                TwistSpaceTechnology.MODID,
+                tier + 2,
+                new ItemStack(this, 1, tier));
+        }
+    }
 
     @SideOnly(Side.CLIENT)
     private IIcon[][][] sideIcons;

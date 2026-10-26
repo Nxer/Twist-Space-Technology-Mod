@@ -9,6 +9,7 @@ import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledCha
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting.OUTPUT_SLOT;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting.SLOT_COUNT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.defer;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.isAir;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -51,6 +52,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.block.meta.BottledChaosCapacityBlock;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosCredential;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosMachineModule;
@@ -115,7 +117,6 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.shutdown.ShutDownReason;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
 import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
-import gregtech.common.misc.GTStructureChannels;
 import gregtech.common.tileentities.machines.IDualInputHatch;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
@@ -1818,7 +1819,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 .addElement('D', Casings.AdvancedIridiumPlatedMachineCasing.asElement())
                 .addElement('E', Casings.RadiantNaquadahAlloyCasing.asElement())
                 .addElement('F', Casings.AdvancedFilterCasing.asElement())
-                .addElement('G', GTStructureChannels.SE_MOTOR.use(capacityElement()))
+                .addElement('G', withChannel(BottledChaosCapacityBlock.STRUCTURE_CHANNEL, capacityElement()))
                 .addElement('H', Casings.HighPowerCasing.asElement())
                 .addElement('I', Casings.IronFence.asElement())
                 .addElement('J', ofFrame(Materials.Neutronium))
@@ -1917,6 +1918,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     private static IStructureElement<MM_BottledChaos> capacityElement() {
         List<IStructureElement<MM_BottledChaos>> levels = new ArrayList<>();
+        levels.add(isAir());
         for (int tier = 0; tier < CAPACITY_LEVEL_COUNT; tier++) {
             levels.add(ofBlock(TstBlocks.BottledChaosCapacity, tier));
         }
@@ -1937,9 +1939,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             machine.capacityTierCounts[region][tier]++;
             return true;
         };
+        // Runtime checks accept mixed non-capacity blocks; construction and previews select an explicit tier.
         return defer(
-            machine -> check,
-            (machine, trigger) -> levels.get(Math.min(CAPACITY_LEVEL_COUNT - 1, Math.max(0, trigger.stackSize - 1))));
+            (machine, trigger) -> trigger == null ? check
+                : levels.get(Math.min(CAPACITY_LEVEL_COUNT, Math.max(0, trigger.stackSize - 1))));
     }
 
     private boolean isCredentialHatchConnected(TST_BottledChaosRecipeTokenHatch hatch, int slot) {
@@ -2282,6 +2285,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 .beginStructureBlock(29, 41, 29, false)
                 .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.body"))
                 .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.capacity_columns"))
+                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.capacity_channel"))
                 .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.voltage_upgrades"))
                 .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.upgrade_glass"))
                 .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.processing_groups"))

@@ -716,6 +716,7 @@ tst.bottledchaos.credential.1.name=瓶中混沌凭证框架 4
 tst.bottledchaos.credential.2.name=瓶中混沌凭证框架 16
 tst.bottledchaos.credential.3.name=瓶中混沌凭证框架 64
 tst.bottledchaos.credential.4.name=瓶中混沌凭证框架 256
+tst.bottledchaos.credential.5.name=瓶中混沌凭证框架 1024
 tst.bottledchaos.credential.bound.name=瓶中混沌凭证 %s
 tst.bottledchaos.credential.tooltip.capacity=容量: %s/%s
 tst.bottledchaos.credential.tooltip.empty=在主机注入页面写入路线标签.
@@ -949,6 +950,7 @@ tst.bottledchaos.route.titanium=钛
 tst.bottledchaos.route.tungsten=钨
 tst.bottledchaos.route.xenoxene=异氙分馏
 tst.bottledchaos.structure.body=主体使用结构投影中显示的方块.
+tst.bottledchaos.structure.capacity_channel=瓶中混沌容量区: 1 = 空气, 2-6 = 容量方块 I-V
 tst.bottledchaos.structure.capacity_columns=每个容量区全为非容量方块(含空气)时提供1容量; 完整安装64个同级容量方块时提供4/16/64/256/1024容量.
 tst.bottledchaos.structure.incomplete_processing_group=专用输入位需要对应的凭证仓; 两个输入位均可留空, 或安装物品输入总线或流体输入仓.
 tst.bottledchaos.structure.invalid_alignment=瓶中混沌只能水平朝向, 不能旋转或镜像.

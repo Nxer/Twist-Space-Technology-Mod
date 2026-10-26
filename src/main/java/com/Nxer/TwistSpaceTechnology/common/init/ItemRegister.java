@@ -45,11 +45,12 @@ public class ItemRegister {
     public static void registryItemContainers() {
 
         GTCMItemList.BottledChaosMachineModule.set(BottledChaosMachineModule.registerVariant(0));
-        GTCMItemList.BottledChaosCredentialFrame1.set(BottledChaosCredential.registerVariant(0));
-        GTCMItemList.BottledChaosCredentialFrame2.set(BottledChaosCredential.registerVariant(1));
-        GTCMItemList.BottledChaosCredentialFrame3.set(BottledChaosCredential.registerVariant(2));
-        GTCMItemList.BottledChaosCredentialFrame4.set(BottledChaosCredential.registerVariant(3));
-        GTCMItemList.BottledChaosCredentialFrame5.set(BottledChaosCredential.registerVariant(4));
+        GTCMItemList.BottledChaosCredentialFrame0.set(BottledChaosCredential.registerVariant(0));
+        GTCMItemList.BottledChaosCredentialFrame1.set(BottledChaosCredential.registerVariant(1));
+        GTCMItemList.BottledChaosCredentialFrame2.set(BottledChaosCredential.registerVariant(2));
+        GTCMItemList.BottledChaosCredentialFrame3.set(BottledChaosCredential.registerVariant(3));
+        GTCMItemList.BottledChaosCredentialFrame4.set(BottledChaosCredential.registerVariant(4));
+        GTCMItemList.BottledChaosCredentialFrame5.set(BottledChaosCredential.registerVariant(5));
 
         /**
          * The order of arrangement is based on the registration order of the Minecraft Forge
