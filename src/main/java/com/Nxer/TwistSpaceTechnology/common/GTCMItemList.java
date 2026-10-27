@@ -185,6 +185,17 @@ public enum GTCMItemList {
     EcoSphereUpgrade5,
     EcoSphereUpgrade6,
     EcoSphereUpgrade7,
+    BottledChaosCredentialFrame1,
+    BottledChaosCredentialFrame2,
+    BottledChaosCredentialFrame3,
+    BottledChaosCredentialFrame4,
+    BottledChaosCredentialFrame5,
+    BottledChaosMachineModule,
+    BottledChaosCapacityTier1,
+    BottledChaosCapacityTier2,
+    BottledChaosCapacityTier3,
+    BottledChaosCapacityTier4,
+    BottledChaosCapacityTier5,
 
     LvFlask,
     MvFlask,
@@ -246,6 +257,8 @@ public enum GTCMItemList {
     MechanicallyEnhancedObsidian,
     EnvironmentalIsolationCasing,
     CryogenicCoolingCasing,
+    NeutroniumSupportCasing,
+    EnergyFluxContainmentGlass,
     Laser_Beacon,
     // endregion
 
@@ -329,6 +342,7 @@ public enum GTCMItemList {
     DimensionallyTranscendentMatterPlasmaForgePrototypeMK2,
     LargeNeutronOscillator,
     IndistinctTentaclePrototypeMK2,
+    BottledChaos,
 
     // endregion
 
@@ -518,6 +532,7 @@ public enum GTCMItemList {
     CircuitImprintHatchT2,
     EcoSphereInputInterface,
     EcoSphereUpgradeInterface,
+    BottledChaosRecipeTokenHatch,
 
     // endregion
 

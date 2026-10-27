@@ -20,7 +20,12 @@ public class TST_GeneralFrontend extends RecipeMapFrontend {
 
     public TST_GeneralFrontend(BasicUIPropertiesBuilder uiPropertiesBuilder,
         NEIRecipePropertiesBuilder neiPropertiesBuilder) {
-        super(uiPropertiesBuilder.logoPos(new Pos2d(79, 7)), neiPropertiesBuilder);
+        this(uiPropertiesBuilder, neiPropertiesBuilder, new Pos2d(79, 7));
+    }
+
+    protected TST_GeneralFrontend(BasicUIPropertiesBuilder uiPropertiesBuilder,
+        NEIRecipePropertiesBuilder neiPropertiesBuilder, Pos2d logoPos) {
+        super(uiPropertiesBuilder.logoPos(logoPos), neiPropertiesBuilder);
         this.itemRowCount = getItemRowCount();
         // neiProperties.recipeBackgroundSize = new Size(170, 10 + (itemRowCount + getFluidRowCount()) * 18);
     }

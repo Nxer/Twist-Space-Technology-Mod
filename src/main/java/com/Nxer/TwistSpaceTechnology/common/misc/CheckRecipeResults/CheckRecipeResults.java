@@ -1,5 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults;
 
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.result.BottledChaosMissingCategoriesResult;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.result.BottledChaosPoolFailure;
+
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 
@@ -7,6 +10,8 @@ public final class CheckRecipeResults {
 
     public static void initStatics() {
         CheckRecipeResultRegistry.register(new SimpleResultWithText(false, "", false));
+        CheckRecipeResultRegistry.register(new BottledChaosMissingCategoriesResult(0));
+        CheckRecipeResultRegistry.register(new BottledChaosPoolFailure());
     }
 
     // #tr tst.common.shared.result.no_idle_execution_core

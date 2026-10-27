@@ -36,11 +36,14 @@
 dependencies {
     elytraModpackVersion {
         setGtnhVersion("2.9.0-RC-2")
+        // Elytra v1.1.2 passes this flag as allowFromCaching, so true reuses the pinned manifest.
+        setManifestNoCache(true)
     }
 
     implementation(gtnh("GT5-Unofficial"))
 //    implementation("com.github.GTNewHorizons:GT5-Unofficial:5.09.52.612:dev")
     implementation(gtnh("GTNHLib"))
+    compileOnly(gtnh("Angelica"))
     implementation(gtnh("AE2FluidCraft-Rework"))
     implementation(gtnh("NewHorizonsCoreMod"))
 //    implementation("com.github.GTNewHorizons:NewHorizonsCoreMod:2.8.284:dev")

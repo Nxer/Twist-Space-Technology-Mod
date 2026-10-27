@@ -1,6 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.init;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.ActualPattern;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.BottledChaosCredential;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.BottledChaosMachineModule;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.EcoSphereExecutionProtocol;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.EcoSphereUpgrade;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.InfinityDistilledWaterStorageCell;
@@ -32,7 +34,7 @@ public class ItemRegister {
         // Keep the protocol and upgrade registry entries adjacent; saved worlds may still remap numeric IDs.
         Item[] itemsToReg = { MetaItem01, EcoSphereExecutionProtocol, EcoSphereUpgrade, ProofOfHeroes, ProofOfGods,
             MultiStructuresLinkTool, MetaItemRune, MetaItemIzumik, Yamato, ActualPattern, MetaItemNamedCircuit,
-            MetaItemFlask, InfinityDistilledWaterStorageCell, };
+            MetaItemFlask, InfinityDistilledWaterStorageCell, BottledChaosCredential, BottledChaosMachineModule, };
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.unlocalizedName);
@@ -41,6 +43,13 @@ public class ItemRegister {
     }
 
     public static void registryItemContainers() {
+
+        GTCMItemList.BottledChaosMachineModule.set(BottledChaosMachineModule.registerVariant(0));
+        GTCMItemList.BottledChaosCredentialFrame1.set(BottledChaosCredential.registerVariant(0));
+        GTCMItemList.BottledChaosCredentialFrame2.set(BottledChaosCredential.registerVariant(1));
+        GTCMItemList.BottledChaosCredentialFrame3.set(BottledChaosCredential.registerVariant(2));
+        GTCMItemList.BottledChaosCredentialFrame4.set(BottledChaosCredential.registerVariant(3));
+        GTCMItemList.BottledChaosCredentialFrame5.set(BottledChaosCredential.registerVariant(4));
 
         /**
          * The order of arrangement is based on the registration order of the Minecraft Forge
