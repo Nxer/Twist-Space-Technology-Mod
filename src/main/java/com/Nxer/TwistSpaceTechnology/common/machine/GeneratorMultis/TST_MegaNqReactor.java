@@ -200,12 +200,15 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
 
     @Override
     public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+
         boolean formed = checkPiece(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset, errors);
         if (formed) {
             checkHasInputHatch(errors);
             checkHasOutputHatch(errors);
             updateCoreFxCenter();
         }
+        wirelessModeActive = mDynamoHatches.isEmpty() && mExoticDynamoHatches.isEmpty();
+        wirelessOwner = aBaseMetaTileEntity.getOwnerUuid();
     }
     // endregion
 
@@ -286,7 +289,7 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     protected long cachedFuelAmount = 0;
     protected UUID wirelessOwner = null;
     protected boolean wirelessModeActive = false;
-    protected BigInteger wirelessBufferedEU = BigInteger.ZERO;
+    protected long currentEUt = 0;
     protected double coreFxX;
     protected double coreFxY;
     protected double coreFxZ;
@@ -423,16 +426,24 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
         cachedFuelName = fuelInput.getLocalizedName();
         cachedFuelAmount = consumedFuelAmount;
         mMaxProgresstime = recipeTicks;
-        mEfficiency = Math.max(0, 10000 - (getIdealStatus() - getRepairStatus()) * 1000);
+        mEfficiency = 10000;
         mEfficiencyIncrease = 10000;
         mOutputFluids = copyFluidOutputs(tRecipe.mFluidOutputs, (long) maxParallel * coefficient);
         cachedCoolantEfficiency = efficiencyForRun;
         cachedTimeMultiplier = timeMultForRun;
-        lEUt = (long) ((double) basicOutput * cachedCoolantEfficiency
+        double actual_eff = cachedCoolantEfficiency / 100d;
+        currentEUt = (long) ((double) basicOutput * actual_eff
             * cachedTimeMultiplier
-            / 100d
             * maxParallel
             * getRuntimeBonus());
+        if (wirelessModeActive) {
+            addEUToGlobalEnergyMap(
+                wirelessOwner,
+                BigInteger.valueOf(currentEUt)
+                    .multiply(BigInteger.valueOf(mMaxProgresstime)));
+        } else {
+            lEUt = currentEUt;
+        }
         return CheckRecipeResultRegistry.GENERATING;
     }
 
@@ -600,7 +611,7 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     }
 
     public long getCurrentOutput() {
-        return lEUt;
+        return currentEUt;
     }
 
     @Override
@@ -635,35 +646,8 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     }
 
     @Override
-    public boolean onRunningTick(ItemStack stack) {
-        boolean isRunning = mMaxProgresstime != 0;
-        boolean isServer = this.getBaseMetaTileEntity()
-            .isServerSide();
-        if (isServer) {
-            incrementRunTimeTicks();
-        }
-        boolean lastTick = isServer && isRunning && mProgresstime >= mMaxProgresstime - 1;
-        boolean result = super.onRunningTick(stack);
-        if (lastTick) {
-            flushWirelessEU();
-        }
-        return result;
-    }
-
-    @Override
     public boolean addEnergyOutput(long EU) {
         if (EU <= 0) {
-            return true;
-        }
-        if (mDynamoHatches.isEmpty() && mExoticDynamoHatches.isEmpty()) {
-            if (wirelessOwner == null) {
-                wirelessOwner = getBaseMetaTileEntity().getOwnerUuid();
-                if (wirelessOwner == null) {
-                    return false;
-                }
-            }
-            wirelessModeActive = true;
-            wirelessBufferedEU = wirelessBufferedEU.add(BigInteger.valueOf(EU));
             return true;
         }
         boolean result = super.addEnergyOutput(EU);
@@ -673,25 +657,8 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
         return result;
     }
 
-    protected void flushWirelessEU() {
-        if (!wirelessModeActive || wirelessBufferedEU.signum() <= 0) {
-            wirelessModeActive = false;
-            wirelessBufferedEU = BigInteger.ZERO;
-            return;
-        }
-        if (wirelessOwner == null) {
-            wirelessOwner = getBaseMetaTileEntity().getOwnerUuid();
-        }
-        if (wirelessOwner != null) {
-            addEUToGlobalEnergyMap(wirelessOwner, wirelessBufferedEU);
-        }
-        wirelessModeActive = false;
-        wirelessBufferedEU = BigInteger.ZERO;
-    }
-
     @Override
     public void stopMachine(@Nonnull ShutDownReason reason) {
-        flushWirelessEU();
         lEUt = 0;
         cachedCoolantEfficiency = DEFAULT_COOLANT_EFFICIENCY;
         cachedTimeMultiplier = 1;
@@ -843,6 +810,7 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
         aNBT.setInteger("mbasicOutput", this.basicOutput);
         aNBT.setInteger("mParallel", this.parallel);
         aNBT.setLong("mRunTimeTicks", this.runTimeTicks);
+        aNBT.setLong("currentEUt", this.currentEUt);
         if (lockedFluid != null) {
             aNBT.setString("mLockedFluidName", FluidRegistry.getFluidName(this.lockedFluid));
             aNBT.setInteger("mLockedFluidAmount", this.lockedFluid.amount);
@@ -852,7 +820,6 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
         }
         aNBT.setInteger("mCachedCoolantEff", this.cachedCoolantEfficiency);
         aNBT.setInteger("mCachedTimeMult", this.cachedTimeMultiplier);
-        aNBT.setString("mWirelessBufferedEU", this.wirelessBufferedEU.toString());
         aNBT.setBoolean("mWirelessModeActive", this.wirelessModeActive);
         if (this.wirelessOwner != null) {
             aNBT.setString("mWirelessOwner", this.wirelessOwner.toString());
@@ -868,6 +835,7 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
         this.basicOutput = aNBT.getInteger("mbasicOutput");
         this.parallel = aNBT.getInteger("mParallel");
         this.runTimeTicks = aNBT.getLong("mRunTimeTicks");
+        this.currentEUt = aNBT.getLong("currentEUt");
         String lockedName = aNBT.getString("mLockedFluidName");
         if (FluidRegistry.getFluid(lockedName) != null) {
             this.lockedFluid = new FluidStack(
@@ -879,8 +847,6 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
         this.cachedCoolantEfficiency = aNBT.hasKey("mCachedCoolantEff") ? aNBT.getInteger("mCachedCoolantEff")
             : DEFAULT_COOLANT_EFFICIENCY;
         this.cachedTimeMultiplier = aNBT.hasKey("mCachedTimeMult") ? aNBT.getInteger("mCachedTimeMult") : 1;
-        String bufferedEU = aNBT.getString("mWirelessBufferedEU");
-        this.wirelessBufferedEU = bufferedEU.isEmpty() ? BigInteger.ZERO : new BigInteger(bufferedEU);
         this.wirelessModeActive = aNBT.getBoolean("mWirelessModeActive");
         String ownerString = aNBT.getString("mWirelessOwner");
         this.wirelessOwner = ownerString.isEmpty() ? null : UUID.fromString(ownerString);
