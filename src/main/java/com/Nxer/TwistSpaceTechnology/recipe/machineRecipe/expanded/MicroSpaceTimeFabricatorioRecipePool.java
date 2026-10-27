@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
-import static gtPlusPlus.core.material.Particle.GRAVITON;
 import static gtPlusPlus.core.material.Particle.UNKNOWN;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 
@@ -46,7 +45,7 @@ public class MicroSpaceTimeFabricatorioRecipePool {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(24),
                 GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(UNKNOWN)),
-                GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(GRAVITON)),
+                ItemList.NuclearStar.get(64),
                 GTCMItemList.Antimatter.get(1))
             .fluidInputs(Materials.Hydrogen.getPlasma(1000))
             .itemOutputs(Laser_Lens_Special.get(64))

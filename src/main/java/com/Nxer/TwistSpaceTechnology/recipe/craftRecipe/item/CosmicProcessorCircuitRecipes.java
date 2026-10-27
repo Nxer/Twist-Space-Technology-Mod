@@ -206,7 +206,6 @@ public class CosmicProcessorCircuitRecipes {
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GTCMItemList.MatterRecombinator.get(0),
-                // new ItemStack(ModItems.itemStandarParticleBase, 1, 17),
                 GTCMItemList.CriticalPhoton.get(1),
                 GTCMItemList.ParticleTrapTimeSpaceShield.get(128),
                 ItemList.EnergisedTesseract.get(4),

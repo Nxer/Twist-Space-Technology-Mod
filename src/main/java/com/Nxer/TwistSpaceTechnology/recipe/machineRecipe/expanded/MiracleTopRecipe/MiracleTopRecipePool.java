@@ -67,11 +67,6 @@ public class MiracleTopRecipePool {
                 tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8.get(64),
                 new Object[] { OrePrefixes.circuit.get(Materials.UXV), 64 },
                 // getModItem("dreamcraft", "item.QuantumCircuit", 64),
-                // getModItem(GTPlusPlus.ID, "particleBase", 64, 15),
-                // getModItem(GTPlusPlus.ID, "particleBase", 64, 16),
-                // getModItem(GTPlusPlus.ID, "particleBase", 64, 20),
-                // getModItem(GTPlusPlus.ID, "particleBase", 64, 21),
-                // getModItem(GTPlusPlus.ID, "particleBase", 64, 17),
                 ItemList.ZPM6.get(64),
                 GTCMItemList.IndistinctTentacle.get(64))
             .fluidInputs(

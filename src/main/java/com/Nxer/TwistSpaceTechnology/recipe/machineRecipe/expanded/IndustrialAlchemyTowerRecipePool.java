@@ -41,6 +41,7 @@ public class IndustrialAlchemyTowerRecipePool {
                     .ignoreCollision()
                     .clearInvalid()
                     .special(Essence)
+                    .metadata(TCRecipeTools.CRUCIBLE_RECIPE, recipe)
                     .itemInputs(combined)
                     .itemOutputs(recipe.getOutputItem())
                     .duration(30 * SECONDS + Math.min(recipe.getAspectAmount() * SECONDS, 600))

@@ -3,10 +3,13 @@ package com.Nxer.TwistSpaceTechnology.system.Thaumcraft;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 
+import gregtech.api.recipe.RecipeMetadataKey;
+import gregtech.api.recipe.metadata.SimpleRecipeMetadataKey;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
 import thaumcraft.api.ThaumcraftApi;
@@ -18,6 +21,9 @@ import thaumcraft.common.config.ConfigItems;
 
 public class TCRecipeTools {
 
+    public static final RecipeMetadataKey<CrucibleCraftingRecipe> CRUCIBLE_RECIPE = SimpleRecipeMetadataKey
+        .create(CrucibleCraftingRecipe.class, "tst_crucible_recipe");
+
     public static ArrayList<InfusionCraftingRecipe> ICR = new ArrayList<>();// InfusionCraftingRecipeList
 
     public static HashMap<String, ArrayList<CrucibleCraftingRecipe>> CCR = new HashMap<>();// CrucibleCraftingRecipeMap
@@ -26,9 +32,7 @@ public class TCRecipeTools {
 
     @SuppressWarnings("ConstantConditions")
     public static String toStringWithoutStackSize(ItemStack itemStack) {
-        return itemStack.getItem()
-            .getUnlocalizedName() + "@"
-            + itemStack.getItemDamage();
+        return Item.itemRegistry.getNameForObject(itemStack.getItem()) + "@" + itemStack.getItemDamage();
     }
 
     public TCRecipeTools() {}
@@ -55,6 +59,7 @@ public class TCRecipeTools {
     }
 
     public static void getCrucibleCraftingRecipe() {
+        CCR.clear();
         for (var o : ThaumcraftApi.getCraftingRecipes()) {
             if (!(o instanceof CrucibleRecipe o1)) continue;
             if (GTUtility.isStackValid(o1.getRecipeOutput())) {
