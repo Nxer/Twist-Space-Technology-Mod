@@ -193,10 +193,9 @@ public class DSPRecipePool {
                 ItemList.EnergisedTesseract.get(16),
 
                 ItemList.Field_Generator_UMV.get(8),
-                ItemList.PseudoStar.get(64))
-            .fluidInputs(GGMaterial.metastableOganesson.getMolten(144 * 256))
+                GGMaterial.metastableOganesson.get(OrePrefixes.plateSuperdense, 8))
+            .fluidInputs(Materials.BoundlessCosmicSolder.getFluid(16_000L))
             .itemOutputs(eM_Ultimate_Containment_Advanced.get(8))
-
             .eut(RECIPE_UXV)
             .duration(20 * 300)
             .addTo(Assembler);
@@ -412,7 +411,6 @@ public class DSPRecipePool {
                 Materials.Infinity.getMolten(144 * 128),
                 Materials.UUMatter.getFluid(1000 * 256))
             .itemOutputs(EmptySmallLaunchVehicle.get(1))
-
             .specialValue(2)
             .eut(RECIPE_UEV)
             .duration(20 * 1200)
@@ -425,10 +423,10 @@ public class DSPRecipePool {
                 SpaceWarper.get(1),
                 DysonSphereFrameComponent.get(24),
                 ItemList.NuclearStar.get(16),
+                ItemList.StableBosonContainmentUnit.get(32),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1))
             .fluidInputs(Materials.Hydrogen.getPlasma(1000 * 16))
             .itemOutputs(SmallLaunchVehicle.get(1))
-
             .eut(RECIPE_UEV)
             .duration(20 * 600)
             .addTo(Assembler);

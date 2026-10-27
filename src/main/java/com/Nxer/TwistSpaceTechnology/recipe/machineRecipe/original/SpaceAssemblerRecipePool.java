@@ -41,7 +41,7 @@ public class SpaceAssemblerRecipePool {
                 .itemInputs(
                     GTUtility.getIntegratedCircuit(24),
                     Materials.Neutronium.getNanite(1),
-                    ItemList.NuclearStar.get(3),
+                    ItemList.StableBosonContainmentUnit.get(3),
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.ElectrumFlux, 64),
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Lanthanum, 64),
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Lanthanum, 64),

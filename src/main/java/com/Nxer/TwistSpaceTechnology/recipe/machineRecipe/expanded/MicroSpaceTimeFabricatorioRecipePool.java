@@ -45,10 +45,11 @@ public class MicroSpaceTimeFabricatorioRecipePool {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(24),
                 GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(UNKNOWN)),
-                ItemList.NuclearStar.get(64),
+                ItemList.StableBosonContainmentUnit.get(16),
                 GTCMItemList.Antimatter.get(1))
             .fluidInputs(Materials.Hydrogen.getPlasma(1000))
-            .itemOutputs(Laser_Lens_Special.get(64))
+            .itemOutputs(Laser_Lens_Special.get(64), ItemList.StableEmptyContainmentUnit.get(16))
+            .outputChances(10000, 9900)
             .fluidOutputs(Materials.DTR.getFluid(500))
             .eut(RECIPE_UIV)
             .duration(20 * 60)
