@@ -915,7 +915,7 @@ public class AssemblyLineWithoutResearchRecipePool {
                     Materials.Neutronium.getNanite(1),
                     GTUtility.copyAmountUnsafe(4096, Materials.Lanthanum.getPlates(1)),
                     GTUtility.copyAmountUnsafe(6144, Materials.NaquadahAlloy.getPlates(1)),
-                    ItemList.NuclearStar.get(1))
+                    ItemList.StableBosonContainmentUnit.get(1))
                 .fluidInputs(
                     new FluidStack(solderUEV, 144 * 1024),
                     Materials.Lead.getMolten(144 * 16 * 1024),
