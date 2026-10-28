@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineConfiguration;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.material.BottledChaosMaterialStacks;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.material.BottledChaosOutputBuffer;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.result.BottledChaosResultData;
 
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
@@ -30,6 +31,7 @@ public final class BottledChaosThread {
     public int parallels;
     public long nextCheckTick;
     public String status = "GT5U.waila.machine.idle";
+    public CheckRecipeResult blockedRoute = CheckRecipeResultRegistry.NO_RECIPE;
     private CheckRecipeResult result = CheckRecipeResultRegistry.SUCCESSFUL;
 
     public CheckRecipeResult result() {
@@ -43,6 +45,7 @@ public final class BottledChaosThread {
 
     /** Called only after the host's input transaction has succeeded. */
     public void begin(ItemStack authorization, BottledChaosProcessingLogic logic) {
+        blockedRoute = logic.getBlockedRoute();
         credential = authorization.copy();
         requiredPools = logic.getRequiredPools();
         upkeep = logic.getUpkeep();
@@ -106,6 +109,7 @@ public final class BottledChaosThread {
     }
 
     public void complete() {
+        blockedRoute = CheckRecipeResultRegistry.NO_RECIPE;
         outputs.clear();
         pendingCache.clear();
         processingFamily = "";
@@ -130,6 +134,11 @@ public final class BottledChaosThread {
         tag.setString("processingFamily", processingFamily);
         tag.setTag("pendingCache", pendingCache.save());
         tag.setTag("upkeep", BottledChaosUpkeep.saveDemands(upkeep));
+        if (blockedRoute != CheckRecipeResultRegistry.NO_RECIPE) {
+            NBTTagCompound failure = new NBTTagCompound();
+            BottledChaosResultData.write(failure, blockedRoute);
+            tag.setTag("blockedRoute", failure);
+        }
         return tag;
     }
 
@@ -145,6 +154,8 @@ public final class BottledChaosThread {
         processingFamily = tag.getString("processingFamily");
         pendingCache.load(tag.getCompoundTag("pendingCache"));
         upkeep = BottledChaosUpkeep.loadDemands(tag.getTagList("upkeep", 10));
+        blockedRoute = tag.hasKey("blockedRoute", 10) ? BottledChaosResultData.read(tag.getCompoundTag("blockedRoute"))
+            : CheckRecipeResultRegistry.NO_RECIPE;
         nextCheckTick = 0;
         resetResult();
     }

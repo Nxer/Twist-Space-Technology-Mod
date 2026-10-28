@@ -543,8 +543,7 @@ public final class BottledChaosRecipeProcessor {
                 BottledChaosChainPlanner planner = chainPlanner(batchLimit);
                 BottledChaosChainPlanner.Result result = planner
                     .prepare(goalOrder, requested, external, remaining, released, skipUnavailable);
-                if (skipUnavailable) preparationFailure = result == null ? planner.preparationFailure()
-                    : CheckRecipeResultRegistry.NO_RECIPE;
+                if (skipUnavailable) preparationFailure = planner.preparationFailure();
                 return result == null ? null : prepareResult(result);
 
             } finally {

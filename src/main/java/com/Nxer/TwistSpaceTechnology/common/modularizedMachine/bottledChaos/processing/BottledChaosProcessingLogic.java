@@ -35,6 +35,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
     private long maximumRecipeVoltage = Long.MAX_VALUE;
     private BottledChaosMaterialCache materials;
     private PreparedPlan preparedPlan;
+    private CheckRecipeResult blockedRoute = CheckRecipeResultRegistry.NO_RECIPE;
     private final Map<Long, Double> durationLimits = new HashMap<>();
     private Function<BottledChaosRecipeProcessor.Plan, CheckRecipeResult> outputCheck;
     private BottledChaosSourceParameters machineParameters = BottledChaosSourceParameters.DEFAULT;
@@ -47,6 +48,10 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
 
     public PreparedPlan getPreparedPlan() {
         return preparedPlan;
+    }
+
+    public CheckRecipeResult getBlockedRoute() {
+        return blockedRoute;
     }
 
     public void setAuthorization(ItemStack credential, long poolMask) {
@@ -76,6 +81,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
     public @NotNull CheckRecipeResult process() {
         long diagnosticStart = System.nanoTime();
         preparedPlan = null;
+        blockedRoute = CheckRecipeResultRegistry.NO_RECIPE;
         durationLimits.clear();
         if (routeMask == 0) {
             return SimpleResultWithText.ofFailure("tst.bottledchaos.result.unbound");
@@ -107,6 +113,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
                     if (failure == CheckRecipeResultRegistry.NO_RECIPE) failure = planner.preparationFailure();
                     break;
                 }
+                CheckRecipeResult preparationFailure = planner.preparationFailure();
                 CheckRecipeResult result = validatePlan(baseline);
                 if (!result.wasSuccessful()) {
                     failure = result;
@@ -157,6 +164,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
                 }
                 chosen.consumeInputCopies(inputItems, inputFluids);
                 preparedPlan = chosen;
+                blockedRoute = preparationFailure;
                 calculatedEut = clock.eut();
                 duration = Math.max(1, clock.duration());
                 BottledChaosRecipeProcessor.Plan outputs = chosen.outputPlan();

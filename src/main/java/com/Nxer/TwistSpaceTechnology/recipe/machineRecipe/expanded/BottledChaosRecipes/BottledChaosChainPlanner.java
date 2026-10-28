@@ -155,6 +155,8 @@ final class BottledChaosChainPlanner {
             CheckRecipeResult result = trySupplier(goal, Math.max(0, targets[goal] - state.batches[goal]));
             if (result.wasSuccessful()) {
                 state.targets[goal] = targets[goal];
+                // A working alternative satisfies this target, regardless of the order of attempts.
+                rejectedTargets.put(stages[goal].targets, CheckRecipeResultRegistry.NO_RECIPE);
                 continue;
             }
             if (!stages[goal].availableInputsOnly) {
