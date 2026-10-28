@@ -49,7 +49,6 @@ public final class BottledChaosExoticMatterRecipes {
         // Preserve the selected native plasma sources; only the challenge's expected outputs need dynamic data.
         // spotless:off
         for (PlasmaSource source : sources.values()) {
-            catalog.registerExternalInputs(source.input());
             preparations.put(source, catalog.markPreparedRecipe(TecTechRecipeMaps.godforgePlasmaRecipes,
                 source.input(), source.plasma(), prepareSourceRecipe(TecTechRecipeMaps.godforgePlasmaRecipes, source.recipe())));
         }

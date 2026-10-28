@@ -129,8 +129,6 @@ public final class BottledChaosBiologicalRecipes {
 
         catalog.setExistingEntriesKeyOutputs("stem_cells", new Object[] { StemCells, Mutagen });
         catalog.setExistingEntriesKeyOutputs("bio_cells", new Object[] { BioCells, Mutagen });
-
-        catalog.registerExternalInputs(Agar, StemCells, RawMeatDust, Mutagen);
         // spotless:on
     }
 }

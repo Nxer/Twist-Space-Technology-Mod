@@ -146,8 +146,6 @@ public final class BottledChaosPurifiedWaterRecipes {
             catalog.markPreparedRecipe(stage.pool, root, product, data));
         waterStage.setPlanningTargets(product);
         if (grade < 8) catalog.setExistingEntriesKeyOutputs("purified_water_" + grade, product);
-        catalog.registerExternalInputs(data.inputs.keySet().toArray());
-        catalog.registerExternalInputs(data.catalysts.keySet().toArray());
         // spotless:on
     }
 

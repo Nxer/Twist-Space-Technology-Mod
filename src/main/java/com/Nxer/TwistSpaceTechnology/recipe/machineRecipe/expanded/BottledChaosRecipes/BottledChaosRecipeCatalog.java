@@ -58,9 +58,7 @@ public final class BottledChaosRecipeCatalog {
     private final Set<Integer> hiddenDisplayEntries = new LinkedHashSet<>();
     private final Set<Object> registeredReagentSyntheses = new LinkedHashSet<>();
     private final Set<Object> registeredReagentDecompositions = new LinkedHashSet<>();
-    private final Set<Object> internalResources = new LinkedHashSet<>();
     private final Set<Object> externalReagents = new LinkedHashSet<>();
-    private final Set<Object> externalInputs = new LinkedHashSet<>();
     private final Map<StepRef, RecipeData> resolved = new LinkedHashMap<>();
 
     /** Register by stable credential tag; each route consumes its balance root and retains its protected outputs. */
@@ -325,8 +323,6 @@ public final class BottledChaosRecipeCatalog {
     }
 
     public StepRef markRecipe(RecipeMap<?> map, Object input, Object output, int circuit) {
-        internalResources.add(resourceKey(input));
-        internalResources.add(resourceKey(output));
         return registerNativeStep(map, input, output, circuit, false);
     }
 
@@ -356,7 +352,6 @@ public final class BottledChaosRecipeCatalog {
         if (originals.length == 0 || originals.length != replacements.length)
             throw new IllegalArgumentException("input substitutions require matching nonempty arrays");
         StepRef mark = markRecipe(map, originals.length == 1 ? originals[0] : originals.clone(), output, circuit);
-        Collections.addAll(internalResources, replacements);
         substitutedInputs.put(
             mark,
             Arrays.stream(replacements)
@@ -388,8 +383,6 @@ public final class BottledChaosRecipeCatalog {
     /** Prepare a fixed source recipe without registering it in any GT recipe pool. */
     public StepRef markFixedRecipe(RecipeMap<?> map, Object input, Object output, GTRecipe recipe) {
         if (recipe == null || recipe.mEUt <= 0) throw new IllegalArgumentException("invalid fixed recipe");
-        internalResources.add(resourceKey(input));
-        internalResources.add(resourceKey(output));
         StepRef mark = new StepRef(map, input, output);
         resolved.put(mark, BottledChaosRecipeSupport.prepareSourceRecipe(map, recipe));
         return mark;
@@ -399,8 +392,6 @@ public final class BottledChaosRecipeCatalog {
     public StepRef markPreparedRecipe(RecipeMap<?> map, Object input, Object output, RecipeData data) {
         if (data == null || data.inputs.isEmpty() || data.outputs.isEmpty() || data.times.isEmpty())
             throw new IllegalArgumentException("invalid prepared recipe");
-        internalResources.add(resourceKey(input));
-        internalResources.add(resourceKey(output));
         StepRef mark = new StepRef(map, input, output);
         resolved.put(mark, data);
         return mark;
@@ -487,17 +478,9 @@ public final class BottledChaosRecipeCatalog {
         for (Object resource : resources) deferredReagents.add(resourceKey(resource));
     }
 
-    /** Explicit auxiliary feedstocks may also be entry markers of another registered route. */
-    public void registerExternalInputs(Object... resources) {
-        for (Object resource : resources) externalInputs.add(resourceKey(resource));
-    }
-
     /** Declare external supply; compilation applies this boundary after collecting all reagent paths. */
     public void registerExternalReagents(Object... resources) {
-        Set<Object> supplied = new LinkedHashSet<>();
-        for (Object resource : resources) supplied.add(resourceKey(resource));
-        externalInputs.addAll(supplied);
-        externalReagents.addAll(supplied);
+        for (Object resource : resources) externalReagents.add(resourceKey(resource));
     }
 
     private StepRef registerNativeStep(RecipeMap<?> map, Object input, Object output, int circuit, boolean optional) {
@@ -565,6 +548,11 @@ public final class BottledChaosRecipeCatalog {
                 sequence.start(),
                 sequence.end(),
                 new Object[] { sequence.output() }).netInputsAndOutputs(sequence.input());
+            validateConnections(
+                prepared,
+                collectIntermediateResources(sequenceSteps, sequence.start(), sequence.end()),
+                new LinkedHashSet<>(Arrays.asList(sequence.input(), sequence.output())),
+                "sequence " + sequence.mark());
             resolved.put(sequence.mark(), prepared);
         }
     }
@@ -775,29 +763,51 @@ public final class BottledChaosRecipeCatalog {
         return result;
     }
 
-    // Material boundaries remain valid external inputs/outputs even when key markers forbid chaining them.
-    private void validateRouteConnections(RecipeData[] routes) {
-        Set<Object> boundaries = new LinkedHashSet<>(externalInputs);
-        for (int entry = 0; entry < chains.size(); entry++) {
-            RecipeChain chain = chains.get(entry);
-            boundaries.add(chain.balanceRoot());
-            Collections.addAll(boundaries, chain.protectedOutputs());
-            Collections.addAll(boundaries, keyOutputs(entry));
-            if (chain.boundaryMaterials() != null) Collections.addAll(boundaries, chain.boundaryMaterials());
+    private Set<Object> collectIntermediateResources(List<StepRef> steps, int start, int end) {
+        Set<Object> connections = collectMarkedResources(steps, start, end);
+        Set<Object> inputs = new LinkedHashSet<>();
+        Set<Object> outputs = new LinkedHashSet<>();
+        for (int step = start; step < end; step++) {
+            RecipeData source = resolved.get(steps.get(step));
+            inputs.addAll(source.inputs.keySet());
+            inputs.addAll(source.catalysts.keySet());
+            outputs.addAll(source.outputs.keySet());
         }
+        connections.retainAll(inputs);
+        connections.retainAll(outputs);
+        return connections;
+    }
+
+    // Local connections and declared branches must close without borrowing another route's boundaries.
+    private void validateRouteConnections(RecipeData[] routes) {
         for (int i = 0; i < routes.length; i++) {
             RecipeData route = routes[i];
             RecipeChain chain = chains.get(i);
             RecipeChain markedChain = chain.inputMultiplier() > 0 ? chains.get(chain.tagIndex()) : chain;
-            Set<Object> connections = collectMarkedResources(chainSteps, markedChain.start(), markedChain.end());
-            connections.retainAll(internalResources);
-            connections.removeAll(boundaries);
-            for (Object key : connections) {
-                if (route.inputs.containsKey(key) || route.catalysts.containsKey(key))
-                    throw new IllegalStateException("unresolved intermediate input in route " + i + ": " + key);
-                if (route.outputs.containsKey(key))
-                    throw new IllegalStateException("unfinished or backward output in route " + i + ": " + key);
+            Set<Object> markers = collectMarkedResources(chainSteps, markedChain.start(), markedChain.end());
+            Set<Object> connections = collectIntermediateResources(chainSteps, markedChain.start(), markedChain.end());
+            for (Expansion expansion : expansions) {
+                if ((expansion.entry() < 0 || expansion.entry() == i
+                    || chain.inputMultiplier() > 0 && expansion.entry() == chain.tagIndex())
+                    && markers.contains(expansion.key())) connections.add(expansion.key());
             }
+            Set<Object> boundaries = new LinkedHashSet<>();
+            boundaries.add(chain.balanceRoot());
+            Collections.addAll(boundaries, chain.protectedOutputs());
+            Collections.addAll(boundaries, keyOutputs(i));
+            if (chain.boundaryMaterials() != null) Collections.addAll(boundaries, chain.boundaryMaterials());
+            validateConnections(route, connections, boundaries, "route " + i);
+        }
+    }
+
+    private void validateConnections(RecipeData route, Set<Object> connections, Set<Object> boundaries, String owner) {
+        connections.removeAll(boundaries);
+        connections.removeAll(externalReagents);
+        for (Object key : connections) {
+            if (route.inputs.containsKey(key) || route.catalysts.containsKey(key))
+                throw new IllegalStateException("unresolved intermediate input in " + owner + ": " + key);
+            if (route.outputs.containsKey(key))
+                throw new IllegalStateException("unfinished or backward output in " + owner + ": " + key);
         }
     }
 
