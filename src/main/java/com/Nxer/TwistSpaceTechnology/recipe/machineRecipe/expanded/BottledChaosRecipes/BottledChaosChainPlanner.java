@@ -20,15 +20,17 @@ final class BottledChaosChainPlanner {
         final Map<Object, Long> outputs;
         final Map<Object, Long> catalysts;
         final List<?> targets;
+        final Object balanceRoot;
         final long voltage;
         final boolean availableInputsOnly;
 
         Stage(Map<Object, Long> inputs, Map<Object, Long> outputs, Map<Object, Long> catalysts, long voltage,
-            boolean availableInputsOnly, List<?> targets) {
+            boolean availableInputsOnly, List<?> targets, Object balanceRoot) {
             this.inputs = inputs;
             this.outputs = outputs;
             this.catalysts = catalysts;
             this.targets = targets;
+            this.balanceRoot = balanceRoot;
             this.voltage = voltage;
             this.availableInputsOnly = availableInputsOnly;
         }
@@ -326,41 +328,51 @@ final class BottledChaosChainPlanner {
         return count;
     }
 
-    /** Add whole batches to selected goals using present stock, without creating new intermediate goals. */
+    /** Drain paid feed downstream first, including stages bypassed by the initial plan. */
     Result appendAvailableTargets(Result planned, int[] order, double durationLimit) {
         state = planned;
-        for (int index : order) {
-            Stage stage = stages[index];
-            if (planned.targets[index] == 0 || stage.availableInputsOnly) continue;
-            long count = batchLimit - state.batches[index];
-            boolean chainedInput = false;
-            Map<Object, Long> inputs = inputs(index, state.voltage);
-            for (var input : inputs.entrySet()) {
-                count = Math.min(count, available(index, input.getKey()) / input.getValue());
-                chainedInput |= suppliers.get(index)
-                    .containsKey(input.getKey());
-            }
-            if (!chainedInput || count <= 0) continue;
-            // Selected goals already ran in this plan, so their voltage and source cost remain unchanged.
-            double cost = conditions.cost(index, state.voltage);
-            if (cost > 0) count = Math.min(count, (long) Math.max(0, (durationLimit - state.duration) / cost));
-            if (count <= 0) continue;
-            boolean catalystsAvailable = true;
-            for (var catalyst : stage.catalysts.entrySet()) {
-                Object key = catalyst.getKey();
-                long consumed = Math.multiplyExact(inputs.getOrDefault(key, 0L), count);
-                long needed = Math.max(0, catalyst.getValue() - consumed);
-                if (available(index, key) - consumed < needed && !(needed == 1 && virtualItems.contains(key))) {
-                    catalystsAvailable = false;
-                    break;
+        for (int pass = 0; pass < stages.length; pass++) {
+            boolean progressed = false;
+            for (int position = order.length - 1; position >= 0; position--) {
+                int index = order[position];
+                Stage stage = stages[index];
+                if (stage.availableInputsOnly || stage.voltage > state.voltage) continue;
+                long stored = saturatedAdd(
+                    state.remaining.getOrDefault(stage.balanceRoot, 0L),
+                    state.produced.getOrDefault(stage.balanceRoot, 0L));
+                if (stored == 0) continue;
+                Map<Object, Long> inputs = inputs(index, state.voltage);
+                long rootInput = inputs.getOrDefault(stage.balanceRoot, 0L);
+                if (rootInput <= 0) continue;
+                long count = Math.min(batchLimit - state.batches[index], stored / rootInput);
+                for (var input : inputs.entrySet()) {
+                    count = Math.min(count, available(index, input.getKey()) / input.getValue());
                 }
+                if (count <= 0) continue;
+                // A cached stage may be new to this plan; keep its ordinary machine and voltage checks.
+                double cost = conditions.cost(index, state.voltage);
+                if (cost > 0) count = Math.min(count, (long) Math.max(0, (durationLimit - state.duration) / cost));
+                if (count <= 0) continue;
+                boolean catalystsAvailable = true;
+                for (var catalyst : stage.catalysts.entrySet()) {
+                    Object key = catalyst.getKey();
+                    long consumed = Math.multiplyExact(inputs.getOrDefault(key, 0L), count);
+                    long needed = Math.max(0, catalyst.getValue() - consumed);
+                    if (available(index, key) - consumed < needed && !(needed == 1 && virtualItems.contains(key))) {
+                        catalystsAvailable = false;
+                        break;
+                    }
+                }
+                if (!catalystsAvailable) continue;
+                Result before = state;
+                state = new Result(state);
+                attempts = 0;
+                if (trySupplier(index, count).wasSuccessful()) {
+                    state.targets[index] = state.batches[index];
+                    progressed = true;
+                } else state = before;
             }
-            if (!catalystsAvailable) continue;
-            Result before = state;
-            state = new Result(state);
-            attempts = 0;
-            if (trySupplier(index, count).wasSuccessful()) state.targets[index] = state.batches[index];
-            else state = before;
+            if (!progressed) break;
         }
         return state;
     }

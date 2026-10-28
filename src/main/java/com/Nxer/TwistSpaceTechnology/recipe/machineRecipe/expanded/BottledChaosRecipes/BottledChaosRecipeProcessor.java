@@ -442,7 +442,9 @@ public final class BottledChaosRecipeProcessor {
                 if (Arrays.equals(requested, chosen.targets)) break;
                 diagnosticShortProbes++;
                 PreparedPlan candidate = probeTargets(requested, false);
-                if (candidate != null && fits.test(candidate)) {
+                if (candidate != null && fits.test(candidate))
+                    candidate = appendAvailableTargets(candidate, durationLimit.applyAsDouble(candidate.baseEUt), fits);
+                if (candidate != null && candidate.duration > chosen.duration && fits.test(candidate)) {
                     candidate = finishCandidate(candidate);
                     if (candidate != null) {
                         diagnosticShortExtensions++;
@@ -465,7 +467,7 @@ public final class BottledChaosRecipeProcessor {
             diagnosticTargetPasses++;
             try {
                 var expanded = chainPlanner(Integer.MAX_VALUE)
-                    .appendAvailableTargets(full.chain, goalOrder, durationLimit);
+                    .appendAvailableTargets(full.chain, snapshot.entryOrder, durationLimit);
                 if (Arrays.equals(expanded.targets, full.targets)) return full;
                 PreparedPlan candidate = prepareResult(expanded);
                 if (!fits.test(candidate)) return full;
@@ -493,18 +495,21 @@ public final class BottledChaosRecipeProcessor {
                 if (target != 0) multiplier = Math.min(multiplier, Integer.MAX_VALUE / target);
             }
             for (; multiplier > 1; multiplier /= 2) {
-                PreparedPlan candidate = prepareScaledTargets(full, multiplier);
-                if (candidate == null || !fits.test(candidate)) continue;
+                PreparedPlan candidate = prepareScaledTargets(full, multiplier, fits);
+                if (candidate == null || candidate.duration < full.duration || !fits.test(candidate)) continue;
                 candidate = finishCandidate(candidate);
                 if (candidate != null) return candidate;
             }
             return full;
         }
 
-        private PreparedPlan prepareScaledTargets(PreparedPlan full, long multiplier) {
+        private PreparedPlan prepareScaledTargets(PreparedPlan full, long multiplier, Predicate<PreparedPlan> fits) {
             long[] requested = full.targets.clone();
             for (int index : goalOrder) requested[index] *= multiplier;
-            return probeTargets(requested, false);
+            PreparedPlan candidate = probeTargets(requested, false);
+            // Rebuilding the main goals must retain the paid side branches before comparing work or accepting it.
+            return candidate == null || !fits.test(candidate) ? candidate
+                : appendAvailableTargets(candidate, durationLimit.applyAsDouble(candidate.baseEUt), fits);
         }
 
         /** Recycle terminal outputs or exclusive recovery feed, without stealing normal processing inputs. */
@@ -799,7 +804,8 @@ public final class BottledChaosRecipeProcessor {
                     data.catalysts,
                     routes[entry].definition.baseEUt(),
                     routes[entry].definition.availableInputsOnly(),
-                    Arrays.asList(routes[entry].definition.planningTargets()));
+                    Arrays.asList(routes[entry].definition.planningTargets()),
+                    routes[entry].definition.balanceRoot());
             }
             Map<String, Integer> families = new LinkedHashMap<>();
             familyOfEntry = new int[routes.length];
