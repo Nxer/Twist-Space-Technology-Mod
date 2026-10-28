@@ -444,6 +444,7 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
         } else {
             lEUt = currentEUt;
         }
+        incrementRunTimeTicks(recipeTicks);
         return CheckRecipeResultRegistry.GENERATING;
     }
 
@@ -619,8 +620,8 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
         return false;
     }
 
-    protected void incrementRunTimeTicks() {
-        runTimeTicks = Math.min(runTimeTicks + 1, TICKS_TO_MAX_BONUS);
+    protected void incrementRunTimeTicks(int tick) {
+        runTimeTicks = Math.min(runTimeTicks + tick, TICKS_TO_MAX_BONUS);
     }
 
     @Override
