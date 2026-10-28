@@ -88,10 +88,10 @@ public final class BottledChaosRecipeResources {
             new TagDefinition("platinum_metallic_powder", true, "platinum", BottledChaosRecipePage.PLATINUM),
             new TagDefinition("palladium_metallic_powder", true, "platinum", BottledChaosRecipePage.PLATINUM),
             new TagDefinition("platinum_residue", true, "platinum", BottledChaosRecipePage.PLATINUM),
+            new TagDefinition("crude_rhodium_metal", true, "platinum", BottledChaosRecipePage.PLATINUM),
             new TagDefinition("leach_residue", true, "platinum", BottledChaosRecipePage.PLATINUM),
             new TagDefinition("rarest_metal_residue", true, "platinum", BottledChaosRecipePage.PLATINUM),
             new TagDefinition("iridium_metal_residue", true, "platinum", BottledChaosRecipePage.PLATINUM),
-            new TagDefinition("crude_rhodium_metal", true, "platinum", BottledChaosRecipePage.PLATINUM),
             new TagDefinition("monazite", true, "lanthanide", BottledChaosRecipePage.LANTHANIDE),
             new TagDefinition("bastnasite", true, "lanthanide", BottledChaosRecipePage.LANTHANIDE),
             new TagDefinition("cerium", true, "lanthanide", BottledChaosRecipePage.LANTHANIDE),
@@ -291,10 +291,10 @@ public final class BottledChaosRecipeResources {
             register("platinum_metallic_powder", PlatinumMetallicPowder, PlatinumMetallicPowder);
             register("palladium_metallic_powder", PalladiumMetallicPowder, PalladiumMetallicPowder);
             register("platinum_residue", PlatinumResidueDust, PlatinumResidueDust);
+            register("crude_rhodium_metal", CrudeRhodiumMetalDust, CrudeRhodiumMetalDust);
             register("leach_residue", LeachResidueDust, LeachResidueDust);
             register("rarest_metal_residue", RarestMetalResidueDust, RarestMetalResidueDust);
             register("iridium_metal_residue", IridiumMetalResidueDust, IridiumMetalResidueDust);
-            register("crude_rhodium_metal", CrudeRhodiumMetalDust, CrudeRhodiumMetalDust);
             register("monazite", MonaziteDust, DilutedMonaziteMud);
             register("bastnasite", BastnasiteDust, RoastedRareEarthOxidesDust);
             register("cerium", CeriumRichMixtureDust, CeriumDust);

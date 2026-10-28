@@ -107,14 +107,23 @@ public final class BottledChaosPlatinumRecipes {
             catalog.markRecipe(LargeChemicalReactor, PalladiumEnrichedAmmoniaFluid, PalladiumSaltDust, 2),
             catalog.markRecipe(Sifter, PalladiumSaltDust, PalladiumMetallicPowder, -1));
 
-        // Route 1 main trunk: platinum residue to crude rhodium metal and leach residue.
+        // Route 1 main trunk: palladium metallic powder to finished palladium dust.
+        catalog.registerChain("palladium_metallic_powder", 1, TierEU.RECIPE_ZPM, PalladiumMetallicPowder,
+            new Object[] { PalladiumDust },
+            catalog.markRecipe(LargeChemicalReactor, PalladiumMetallicPowder, PalladiumEnrichedAmmoniaFluid, 1),
+            catalog.markRecipe(LargeChemicalReactor, PalladiumMetallicPowder, PalladiumSaltDust, 9),
+            catalog.markRecipe(LargeChemicalReactor, ReprecipitatedPalladiumDust, PalladiumDust, -1),
+            // Palladium salt return branch.
+            catalog.markRecipe(Sifter, PalladiumSaltDust, PalladiumMetallicPowder, -1));
+
+        // Route 2 main trunk: platinum residue to crude rhodium metal and leach residue.
         catalog.registerChain("platinum_residue", 1, TierEU.RECIPE_ZPM, PlatinumResidueDust,
             new Object[] { CrudeRhodiumMetalDust, LeachResidueDust },
             catalog.markRecipe(BlastFurnace, PlatinumResidueDust, LeachResidueDust, 11),
             catalog.markRecipe(LargeChemicalReactor, RhodiumSulfateGas, RhodiumSulfateSolution, 3),
             catalog.markRecipe(LargeChemicalReactor, RhodiumSulfateSolution, CrudeRhodiumMetalDust, -1));
 
-        // Route 2 main trunk: crude rhodium metal to finished rhodium dust.
+        // Route 3 main trunk: crude rhodium metal to finished rhodium dust.
         catalog.registerChain("crude_rhodium_metal", 1, TierEU.RECIPE_ZPM, CrudeRhodiumMetalDust,
             new Object[] { RhodiumDust },
             catalog.markRecipe(BlastFurnace, CrudeRhodiumMetalDust, RhodiumSaltDust, -1),
@@ -125,7 +134,7 @@ public final class BottledChaosPlatinumRecipes {
             catalog.markRecipe(LargeChemicalReactor, RhodiumFilterCakeSolution, ReprecipitatedRhodiumDust, -1),
             catalog.markRecipe(LargeChemicalReactor, ReprecipitatedRhodiumDust, RhodiumDust, -1));
 
-        // Route 3 main trunk: leach residue to finished ruthenium dust.
+        // Route 4 main trunk: leach residue to finished ruthenium dust.
         catalog.registerChain("leach_residue", 1, TierEU.RECIPE_ZPM, LeachResidueDust,
             new Object[] { RutheniumDust },
             catalog.markRecipe(BlastFurnace, LeachResidueDust, SodiumRuthenateDust, -1),
@@ -134,15 +143,6 @@ public final class BottledChaosPlatinumRecipes {
             catalog.markRecipe(DistillationTower, HotRutheniumTetroxideSolution, RutheniumTetroxideFluid, -1),
             catalog.markRecipe(FluidSolidifier, RutheniumTetroxideFluid, RutheniumTetroxideDust, 1),
             catalog.markRecipe(LargeChemicalReactor, RutheniumTetroxideDust, RutheniumDust, -1));
-
-        // Route 4 main trunk: palladium metallic powder to finished palladium dust.
-        catalog.registerChain("palladium_metallic_powder", 1, TierEU.RECIPE_ZPM, PalladiumMetallicPowder,
-            new Object[] { PalladiumDust },
-            catalog.markRecipe(LargeChemicalReactor, PalladiumMetallicPowder, PalladiumEnrichedAmmoniaFluid, 1),
-            catalog.markRecipe(LargeChemicalReactor, PalladiumMetallicPowder, PalladiumSaltDust, 9),
-            catalog.markRecipe(LargeChemicalReactor, ReprecipitatedPalladiumDust, PalladiumDust, -1),
-            // Palladium salt return branch.
-            catalog.markRecipe(Sifter, PalladiumSaltDust, PalladiumMetallicPowder, -1));
 
         // Route 5 main trunk: rarest metal residue to finished osmium dust and iridium metal residue.
         catalog.registerChain("rarest_metal_residue", 1, TierEU.RECIPE_ZPM, RarestMetalResidueDust,
