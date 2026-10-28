@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.DeployedNanoCoreRecipeMap;
 import static com.Nxer.TwistSpaceTechnology.util.RecipeMathUtils.getLCM;
 import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.copyAmount;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.mergeSameItem;
 
 import java.util.ArrayList;
 
@@ -22,7 +23,7 @@ public class DeployedNanoCoreRecipePool {
         for (GTRecipe aRecipe : RecipeMaps.nanoForgeRecipes.getAllRecipes()) {
             if (aRecipe != null) {
                 GTValues.RA.stdBuilder()
-                    .itemInputs(aRecipe.mInputs)
+                    .itemInputsUnsafe(mergeSameItem(aRecipe.mInputs))
                     .fluidInputs(aRecipe.mFluidInputs)
                     .itemOutputs(aRecipe.mOutputs)
                     .eut(aRecipe.mEUt)
@@ -63,7 +64,7 @@ public class DeployedNanoCoreRecipePool {
                         }
 
                         GTValues.RA.stdBuilder()
-                            .itemInputs(InputItems.toArray(new ItemStack[0]))
+                            .itemInputsUnsafe(mergeSameItem(InputItems.toArray(new ItemStack[0])))
                             .fluidInputs(InputFluids.toArray(new FluidStack[0]))
                             .itemOutputs(OutputItems.toArray(new ItemStack[0]))
                             .eut(aRecipe.mEUt)
