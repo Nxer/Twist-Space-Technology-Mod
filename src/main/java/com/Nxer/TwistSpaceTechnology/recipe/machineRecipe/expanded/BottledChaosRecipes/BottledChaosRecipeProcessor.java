@@ -507,23 +507,29 @@ public final class BottledChaosRecipeProcessor {
             return probeTargets(requested, false);
         }
 
-        /** Terminal recycling consumes existing leftovers within the remaining work budget. */
-        private boolean terminalRecovery(int index) {
-            if (!snapshot.stages[index].availableInputsOnly) return false;
+        /** Recycle terminal outputs or exclusive recovery feed, without stealing normal processing inputs. */
+        private boolean automaticRecovery(int index) {
+            if (!authorized[index] || !snapshot.stages[index].availableInputsOnly) return false;
             for (Object output : snapshot.routes[index].definition.planningTargets()) {
                 if (!retainedOutputs.get(index)
                     .contains(output)) return true;
             }
-            return false;
+            for (int consumer = 0; consumer < snapshot.stages.length; consumer++) {
+                if (authorized[consumer] && !snapshot.stages[consumer].availableInputsOnly
+                    && suppliers.get(consumer)
+                        .containsKey(snapshot.routes[index].definition.balanceRoot()))
+                    return false;
+            }
+            return true;
         }
 
         public PreparedPlan recoverAvailable(PreparedPlan chosen, double durationLimit) {
             double budget = durationLimit - chosen.duration;
             if (budget <= 0) return chosen;
-            int[] recovery = new int[goalOrder.length];
+            int[] recovery = new int[snapshot.entryOrder.length];
             int size = 0;
-            for (int index : goalOrder) {
-                if (terminalRecovery(index) && checkSources(index, chosen.baseEUt).wasSuccessful())
+            for (int index : snapshot.entryOrder) {
+                if (automaticRecovery(index) && checkSources(index, chosen.baseEUt).wasSuccessful())
                     recovery[size++] = index;
             }
             if (size == 0) return chosen;
@@ -587,8 +593,8 @@ public final class BottledChaosRecipeProcessor {
                 }
 
                 @Override
-                public boolean terminalRecovery(int index) {
-                    return ExecutionPlanner.this.terminalRecovery(index);
+                public boolean automaticRecovery(int index) {
+                    return ExecutionPlanner.this.automaticRecovery(index);
                 }
             }, virtualItems, batchLimit);
         }

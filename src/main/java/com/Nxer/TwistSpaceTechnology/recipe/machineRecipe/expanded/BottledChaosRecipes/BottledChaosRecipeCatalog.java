@@ -615,6 +615,10 @@ public final class BottledChaosRecipeCatalog {
         }
         // 4. Key output identities may supply any actual input or catalyst, independently of its tag.
         for (int entry = 0; entry < chains.size(); entry++) Collections.addAll(keyOutputs, keyOutputs(entry));
+        // Recovery feed is a chain boundary even when it is not a displayed key product.
+        for (int entry : availableInputChains) keyOutputs.add(
+            chains.get(entry)
+                .balanceRoot());
         int[] executionOrder = entryOrder();
         for (int sourcePosition = 0; sourcePosition < executionOrder.length; sourcePosition++) {
             int source = executionOrder[sourcePosition];

@@ -40,7 +40,7 @@ final class BottledChaosChainPlanner {
 
         long retainedOutput(int stage, Object key, long amount);
 
-        default boolean terminalRecovery(int stage) {
+        default boolean automaticRecovery(int stage) {
             return false;
         }
 
@@ -170,17 +170,17 @@ final class BottledChaosChainPlanner {
             state = before;
         }
         for (long target : state.targets) if (target != 0) {
-            recoverProduced(goalOrder);
+            recoverProduced();
             return state;
         }
         return null;
     }
 
     /** Include recycling of this round's byproducts in the complete-line time estimate. */
-    private void recoverProduced(int[] order) {
-        for (int index : order) {
+    private void recoverProduced() {
+        for (int index = 0; index < stages.length; index++) {
             Stage stage = stages[index];
-            if (!stage.availableInputsOnly || !conditions.terminalRecovery(index)) continue;
+            if (!stage.availableInputsOnly || !conditions.automaticRecovery(index)) continue;
             long count = 0;
             for (var input : inputs(index, Math.max(state.voltage, stage.voltage)).entrySet()) {
                 count = Math.max(count, state.produced.getOrDefault(input.getKey(), 0L) / input.getValue());
@@ -365,7 +365,7 @@ final class BottledChaosChainPlanner {
         return state;
     }
 
-    /** Use spare work budget for terminal recycling, without replaying the main chain or producing new feed. */
+    /** Use spare work budget for automatic recycling, without replaying the main chain or producing new feed. */
     Result recover(Result planned, int[] order, double budget, double[] costs) {
         state = new Result(planned);
         for (int index : order) {
