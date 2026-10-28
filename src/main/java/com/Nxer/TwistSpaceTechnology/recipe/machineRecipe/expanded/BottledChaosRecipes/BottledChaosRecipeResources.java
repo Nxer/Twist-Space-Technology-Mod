@@ -97,6 +97,7 @@ public final class BottledChaosRecipeResources {
             new TagDefinition("cerium", true, "lanthanide", BottledChaosRecipePage.LANTHANIDE),
             new TagDefinition("rare_earth_cerium", true, "lanthanide", BottledChaosRecipePage.LANTHANIDE),
             new TagDefinition("samarium", true, "lanthanide", BottledChaosRecipePage.LANTHANIDE),
+            new TagDefinition("nano_extraction", true, "nano_extraction", BottledChaosRecipePage.NANO_EXTRACTION),
             new TagDefinition("naquadah", true, "naquadah", BottledChaosRecipePage.NAQUADAH),
             new TagDefinition("enriched_naquadah", true, "naquadah", BottledChaosRecipePage.NAQUADAH),
             new TagDefinition("naquadria", true, "naquadah", BottledChaosRecipePage.NAQUADAH),
@@ -130,6 +131,8 @@ public final class BottledChaosRecipeResources {
             new TagDefinition("xenoxene", true, "radox", BottledChaosRecipePage.RADOX),
             new TagDefinition("purified_water_7", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
             new TagDefinition("purified_water_8", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
+            new TagDefinition("crystal_cycle", true, "crystal_cycle", BottledChaosRecipePage.DEFAULT),
+            new TagDefinition("cerium_lutetium_garnet", true, "cerium_lutetium_garnet", BottledChaosRecipePage.DEFAULT),
             new TagDefinition("eternity", HAS_ETERNITY, "eternity", BottledChaosRecipePage.DEFAULT),
             new TagDefinition("magmatter", true, "magmatter", BottledChaosRecipePage.DEFAULT),
             new TagDefinition("phonon_medium", true, "phonon_medium", BottledChaosRecipePage.DEFAULT),
@@ -300,6 +303,7 @@ public final class BottledChaosRecipeResources {
             register("cerium", CeriumRichMixtureDust, CeriumDust);
             register("rare_earth_cerium", CeriumDioxideDust, CeriumDust);
             register("samarium", SamariumOreConcentrateDust, SamariumDust);
+            register("nano_extraction", recipeItemId(GTOreDictUnificator.get(OrePrefixes.crushed, Materials.Lanthanum, 1)), Materials.Lanthanum.getMolten(1).getFluid());
             register("naquadah", NaquadahOxideMixtureDust, NaquadahDust);
             register("enriched_naquadah", EnrichedNaquadahOxideMixtureDust, EnrichedNaquadahDust);
             register("naquadria", NaquadriaOxideMixtureDust, NaquadriaDust);
@@ -333,6 +337,8 @@ public final class BottledChaosRecipeResources {
             register("xenoxene", Xenoxene, RawRadox);
             register("purified_water_7", recipeItemId(Materials.Grade7PurifiedWater.getCells(1)), recipeItemId(Materials.Grade7PurifiedWater.getCells(1)));
             register("purified_water_8", recipeItemId(Materials.Grade8PurifiedWater.getCells(1)), recipeItemId(Materials.Grade8PurifiedWater.getCells(1)));
+            register("crystal_cycle", RawCrystalChip, RawCrystalChip);
+            register("cerium_lutetium_garnet", CeriumLutetiumAluminiumOxygenBlendDust, ExquisiteCeriumLutetiumAluminiumGarnet);
             if (CredentialModel.HAS_ETERNITY) register("eternity", EternalSingularity, EternityMolten);
             register("magmatter", recipeItemId(Materials.MagMatter.getDust(1)), recipeItemId(Materials.MagMatter.getDust(1)));
             register("phonon_medium", MagMatterRound, PhononMedium);
@@ -774,6 +780,13 @@ public final class BottledChaosRecipeResources {
     // Advanced-material process items and optional singularity identities.
     public static final TST_ItemID MagMatterRound = TST_ItemID.create(GTOreDictUnificator.get(OrePrefixes.round, Materials.MagMatter, 1));
     public static final TST_ItemID PhononicSeedCrystal = TST_ItemID.create(ItemList.Phononic_Seed_Crystal.get(1));
+    public static final TST_ItemID RawCrystalChip = recipeItemId(ItemList.Circuit_Parts_RawCrystalChip.get(1));
+    public static final TST_ItemID RawCrystalParts = recipeItemId(ItemList.Circuit_Parts_RawCrystalParts.get(1));
+    public static final TST_ItemID CeriumLutetiumAluminiumOxygenBlendDust = dust(WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumOxygenBlend);
+    public static final TST_ItemID CeriumLutetiumAluminiumGarnetDust = dust(WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet);
+    public static final TST_ItemID CeriumLutetiumAluminiumGarnet = recipeItemId(WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.gem, 1));
+    public static final TST_ItemID FlawlessCeriumLutetiumAluminiumGarnet = recipeItemId(WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.gemFlawless, 1));
+    public static final TST_ItemID ExquisiteCeriumLutetiumAluminiumGarnet = recipeItemId(WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.gemExquisite, 1));
     public static final TST_ItemID EternityDust = dust(Materials.Eternity);
     public static final TST_ItemID EternalSingularity = modItem(Mods.EternalSingularity, "eternal_singularity", 0);
     public static final TST_ItemID ChronicSingularity = modItem(Mods.EternalSingularity, "combined_singularity", 15);
@@ -819,6 +832,8 @@ public final class BottledChaosRecipeResources {
     public static final Fluid StrontiumMolten = fluid(Materials.Strontium.getMolten(1));
     public static final Fluid XenonGas = fluid(WerkstoffLoader.Xenon.getFluidOrGas(1));
     public static final Fluid OganessonGas = fluid(WerkstoffLoader.Oganesson.getFluidOrGas(1));
+    public static final Fluid EuropiumMolten = fluid(Materials.Europium.getMolten(1));
+    public static final Fluid CeriumLutetiumAluminiumOxygenBlendMolten = fluid(WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumOxygenBlend.getMolten(1));
 
     // Compound fluids currently used by recipes.
     public static final Fluid TitaniumTetrachloride = fluid(Materials.Titaniumtetrachloride.getFluid(1));

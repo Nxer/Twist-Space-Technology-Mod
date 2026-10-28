@@ -16,6 +16,7 @@ public enum BottledChaosRecipePage {
     INDIUM(() -> GTCMRecipe.BottledChaosIndiumCategory),
     PLATINUM(() -> GTCMRecipe.BottledChaosPlatinumCategory, "tst.bottledchaos.route_group.platinum"),
     LANTHANIDE(() -> GTCMRecipe.BottledChaosLanthanideCategory, "tst.bottledchaos.route_group.lanthanide"),
+    NANO_EXTRACTION(() -> GTCMRecipe.BottledChaosNanoExtractionCategory, true),
     NAQUADAH(() -> GTCMRecipe.BottledChaosNaquadahCategory),
     NAQUADAH_FUEL(() -> GTCMRecipe.BottledChaosNaquadahFuelCategory),
     FUSION(() -> GTCMRecipe.BottledChaosFusionCategory, true),

@@ -379,6 +379,15 @@ public class GTCMRecipe {
         RecipeCategorySetting::getDefault,
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
+    // #tr tst.bottledchaos.recipe.category.nano_extraction.name
+    // # Bottled Chaos - Nano Resin Extraction
+    // #zh_CN 瓶中混沌 - 纳米萃取
+    public static final RecipeCategory BottledChaosNanoExtractionCategory = new RecipeCategory(
+        "tst.bottledchaos.recipe.category.nano_extraction.name",
+        BottledChaosRecipes,
+        RecipeCategorySetting::getDefault,
+        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+
     // #tr tst.bottledchaos.recipe.category.naquadah.name
     // # Bottled Chaos - Naquadah Processing
     // #zh_CN 瓶中混沌 - 硅岩处理

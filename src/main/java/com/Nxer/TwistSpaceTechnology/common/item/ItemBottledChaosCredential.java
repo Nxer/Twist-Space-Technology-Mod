@@ -271,6 +271,10 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
         // # Samarium
         // #zh_CN 钐
 
+        // #tr tst.bottledchaos.route.nano_extraction
+        // # Nano Resin Extraction
+        // #zh_CN 纳米萃取
+
         // #tr tst.bottledchaos.route.naquadah
         // # Naquadah
         // #zh_CN 硅岩
@@ -402,6 +406,14 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
         // #tr tst.bottledchaos.route.purified_water_8
         // # Grade 8 Purified Water
         // #zh_CN 8级净化水
+
+        // #tr tst.bottledchaos.route.crystal_cycle
+        // # Crystal Cycle
+        // #zh_CN 晶体循环
+
+        // #tr tst.bottledchaos.route.cerium_lutetium_garnet
+        // # Cerium-doped Lutetium Aluminium Garnet
+        // #zh_CN 掺铈镥铝石榴石
 
         // #tr tst.bottledchaos.route.eternity
         // # Eternity

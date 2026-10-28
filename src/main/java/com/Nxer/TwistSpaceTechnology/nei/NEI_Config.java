@@ -44,6 +44,7 @@ public class NEI_Config implements IConfigureNEI {
             GTCMRecipe.BottledChaosIndiumCategory.unlocalizedName,
             GTCMRecipe.BottledChaosPlatinumCategory.unlocalizedName,
             GTCMRecipe.BottledChaosLanthanideCategory.unlocalizedName,
+            GTCMRecipe.BottledChaosNanoExtractionCategory.unlocalizedName,
             GTCMRecipe.BottledChaosNaquadahCategory.unlocalizedName,
             GTCMRecipe.BottledChaosNaquadahFuelCategory.unlocalizedName,
             GTCMRecipe.BottledChaosFusionCategory.unlocalizedName,
