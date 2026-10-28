@@ -341,7 +341,7 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
         super.initDefaultModes(nbt);
         if (nbt == null) return;
         executionEnabled = nbt.getBoolean(EXECUTION_ENABLED_NBT);
-        materialCache.load(nbt.getCompoundTag(MATERIAL_CACHE_NBT));
+        if (nbt.hasKey(MATERIAL_CACHE_NBT, 10)) materialCache.load(nbt.getCompoundTag(MATERIAL_CACHE_NBT));
     }
 
     @Override

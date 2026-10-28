@@ -101,7 +101,7 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
         NBTTagCompound tag = stack.getTagCompound();
         if (routeMask == 0) {
             if (tag != null) {
-                tag.removeTag(CredentialModel.ROUTE_MASK_NBT_KEY);
+                tag.removeTag(CredentialModel.TAGS_NBT_KEY);
                 tag.removeTag(CredentialModel.OCCUPIED_WEIGHT_NBT_KEY);
             }
             return true;
@@ -194,26 +194,50 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
         }
     }
 
+    /** Grouped names for compact summaries; the item tooltip retains every tag in registration order. */
+    public static String getDisplayRouteKeys(ItemStack stack) {
+        // #tr tst.bottledchaos.route_group.platinum
+        // # Platinum Group
+        // #zh_CN 铂系
+
+        // #tr tst.bottledchaos.route_group.lanthanide
+        // # Lanthanides
+        // #zh_CN 镧系
+        return String.join(", ", CredentialModel.groupedTranslationKeys(getRouteMask(stack)));
+    }
+
     public static List<String> getRouteKeyList(ItemStack stack) {
+        // #tr tst.bottledchaos.route.honeycomb
+        // # Honeycomb Processing
+        // #zh_CN 蜂窝处理
+
+        // #tr tst.bottledchaos.route.titanium
+        // # Titanium
+        // #zh_CN 钛
+
+        // #tr tst.bottledchaos.route.tungsten
+        // # Tungsten
+        // #zh_CN 钨
+
+        // #tr tst.bottledchaos.route.indium
+        // # Indium
+        // #zh_CN 铟
+
         // #tr tst.bottledchaos.route.platinum_metallic_powder
         // # Platinum Metallic Powder
         // #zh_CN 铂金属粉
+
+        // #tr tst.bottledchaos.route.palladium_metallic_powder
+        // # Palladium Metallic Powder
+        // #zh_CN 钯金属粉
 
         // #tr tst.bottledchaos.route.platinum_residue
         // # Platinum Residue Dust
         // #zh_CN 铂渣粉
 
-        // #tr tst.bottledchaos.route.crude_rhodium_metal
-        // # Crude Rhodium Metal Dust
-        // #zh_CN 粗制铑金属粉
-
         // #tr tst.bottledchaos.route.leach_residue
         // # Leach Residue Dust
         // #zh_CN 浸出渣粉
-
-        // #tr tst.bottledchaos.route.palladium_metallic_powder
-        // # Palladium Metallic Powder
-        // #zh_CN 钯金属粉
 
         // #tr tst.bottledchaos.route.rarest_metal_residue
         // # Rare Metal Residue Dust
@@ -223,33 +247,25 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
         // # Iridium Metal Residue Dust
         // #zh_CN 铱金属渣粉
 
-        // #tr tst.bottledchaos.route.ancient_debris
-        // # Netherite
-        // #zh_CN 下界合金
-
-        // #tr tst.bottledchaos.route.crystalline_alloy_molten
-        // # Molten Crystalline Alloy
-        // #zh_CN 熔融晶化合金
-
-        // #tr tst.bottledchaos.route.prismatic_acid
-        // # Prismatic Acid
-        // #zh_CN 海晶酸
-
-        // #tr tst.bottledchaos.route.bastnasite
-        // # Bastnasite
-        // #zh_CN 氟碳镧铈
+        // #tr tst.bottledchaos.route.crude_rhodium_metal
+        // # Crude Rhodium Metal Dust
+        // #zh_CN 粗制铑金属粉
 
         // #tr tst.bottledchaos.route.monazite
         // # Monazite
         // #zh_CN 独居石
 
-        // #tr tst.bottledchaos.route.rare_earth_cerium
-        // # Monazite + Bastnasite
-        // #zh_CN 独居石 + 氟碳镧铈
+        // #tr tst.bottledchaos.route.bastnasite
+        // # Bastnasite
+        // #zh_CN 氟碳镧铈
 
         // #tr tst.bottledchaos.route.cerium
         // # Cerium
         // #zh_CN 铈
+
+        // #tr tst.bottledchaos.route.rare_earth_cerium
+        // # Monazite + Bastnasite
+        // #zh_CN 独居石 + 氟碳镧铈
 
         // #tr tst.bottledchaos.route.samarium
         // # Samarium
@@ -291,6 +307,66 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
         // # Fusion
         // #zh_CN 聚变
 
+        // #tr tst.bottledchaos.route.ancient_debris
+        // # Netherite
+        // #zh_CN 下界合金
+
+        // #tr tst.bottledchaos.route.isamill
+        // # IsaMill Processing
+        // #zh_CN 艾萨矿物处理
+
+        // #tr tst.bottledchaos.route.crystalline_alloy_molten
+        // # Molten Crystalline Alloy
+        // #zh_CN 熔融晶化合金
+
+        // #tr tst.bottledchaos.route.purified_water_1
+        // # Grade 1 Purified Water
+        // #zh_CN 1级净化水
+
+        // #tr tst.bottledchaos.route.purified_water_2
+        // # Grade 2 Purified Water
+        // #zh_CN 2级净化水
+
+        // #tr tst.bottledchaos.route.prismatic_acid
+        // # Prismatic Acid
+        // #zh_CN 海晶酸
+
+        // #tr tst.bottledchaos.route.purified_water_3
+        // # Grade 3 Purified Water
+        // #zh_CN 3级净化水
+
+        // #tr tst.bottledchaos.route.purified_water_4
+        // # Grade 4 Purified Water
+        // #zh_CN 4级净化水
+
+        // #tr tst.bottledchaos.route.kevlar
+        // # Kevlar
+        // #zh_CN 凯芙拉
+
+        // #tr tst.bottledchaos.route.super_heavy_radox
+        // # Superheavy Radox
+        // #zh_CN 超重拉多X
+
+        // #tr tst.bottledchaos.route.heavy_radox
+        // # Heavy Radox
+        // #zh_CN 重拉多X
+
+        // #tr tst.bottledchaos.route.light_radox
+        // # Light Radox
+        // #zh_CN 轻拉多X
+
+        // #tr tst.bottledchaos.route.super_light_radox
+        // # Superlight Radox
+        // #zh_CN 超轻拉多X
+
+        // #tr tst.bottledchaos.route.purified_water_5
+        // # Grade 5 Purified Water
+        // #zh_CN 5级净化水
+
+        // #tr tst.bottledchaos.route.purified_water_6
+        // # Grade 6 Purified Water
+        // #zh_CN 6级净化水
+
         // #tr tst.bottledchaos.route.growth_medium_sterilized
         // # Sterile Growth Medium
         // #zh_CN 无菌培养基
@@ -319,50 +395,6 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
         // # Xenoxene Fractionation
         // #zh_CN 异氙分馏
 
-        // #tr tst.bottledchaos.route.super_heavy_radox
-        // # Superheavy Radox
-        // #zh_CN 超重拉多X
-
-        // #tr tst.bottledchaos.route.heavy_radox
-        // # Heavy Radox
-        // #zh_CN 重拉多X
-
-        // #tr tst.bottledchaos.route.light_radox
-        // # Light Radox
-        // #zh_CN 轻拉多X
-
-        // #tr tst.bottledchaos.route.super_light_radox
-        // # Superlight Radox
-        // #zh_CN 超轻拉多X
-
-        // #tr tst.bottledchaos.route.kevlar
-        // # Kevlar
-        // #zh_CN 凯芙拉
-
-        // #tr tst.bottledchaos.route.purified_water_1
-        // # Grade 1 Purified Water
-        // #zh_CN 1级净化水
-
-        // #tr tst.bottledchaos.route.purified_water_2
-        // # Grade 2 Purified Water
-        // #zh_CN 2级净化水
-
-        // #tr tst.bottledchaos.route.purified_water_3
-        // # Grade 3 Purified Water
-        // #zh_CN 3级净化水
-
-        // #tr tst.bottledchaos.route.purified_water_4
-        // # Grade 4 Purified Water
-        // #zh_CN 4级净化水
-
-        // #tr tst.bottledchaos.route.purified_water_5
-        // # Grade 5 Purified Water
-        // #zh_CN 5级净化水
-
-        // #tr tst.bottledchaos.route.purified_water_6
-        // # Grade 6 Purified Water
-        // #zh_CN 6级净化水
-
         // #tr tst.bottledchaos.route.purified_water_7
         // # Grade 7 Purified Water
         // #zh_CN 7级净化水
@@ -371,41 +403,21 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
         // # Grade 8 Purified Water
         // #zh_CN 8级净化水
 
+        // #tr tst.bottledchaos.route.eternity
+        // # Eternity
+        // #zh_CN 永恒
+
         // #tr tst.bottledchaos.route.magmatter
         // # Magmatter
         // #zh_CN 磁物质
-
-        // #tr tst.bottledchaos.route.quark_gluon_plasma
-        // # Quark-Gluon Plasma
-        // #zh_CN 夸克胶子等离子体
-
-        // #tr tst.bottledchaos.route.titanium
-        // # Titanium
-        // #zh_CN 钛
-
-        // #tr tst.bottledchaos.route.tungsten
-        // # Tungsten
-        // #zh_CN 钨
-
-        // #tr tst.bottledchaos.route.indium
-        // # Indium
-        // #zh_CN 铟
 
         // #tr tst.bottledchaos.route.phonon_medium
         // # Lossless Phonon Transfer Medium
         // #zh_CN 无损声子传输介质
 
-        // #tr tst.bottledchaos.route.eternity
-        // # Eternity
-        // #zh_CN 永恒
-
-        // #tr tst.bottledchaos.route.honeycomb
-        // # Honeycomb Processing
-        // #zh_CN 蜂窝处理
-
-        // #tr tst.bottledchaos.route.isamill
-        // # IsaMill Processing
-        // #zh_CN 艾萨矿物处理
+        // #tr tst.bottledchaos.route.quark_gluon_plasma
+        // # Quark-Gluon Plasma
+        // #zh_CN 夸克胶子等离子体
         List<String> keys = new ArrayList<>();
         long mask = isBound(stack) ? getRouteMask(stack) : 0;
         for (int index : CredentialModel.displayOrder()) {

@@ -949,6 +949,8 @@ tst.bottledchaos.route.tau_ceti_e_seaweed_extract=鲸鱼座T星E藻类提取物
 tst.bottledchaos.route.titanium=钛
 tst.bottledchaos.route.tungsten=钨
 tst.bottledchaos.route.xenoxene=异氙分馏
+tst.bottledchaos.route_group.lanthanide=镧系
+tst.bottledchaos.route_group.platinum=铂系
 tst.bottledchaos.structure.body=主体使用结构投影中显示的方块.
 tst.bottledchaos.structure.capacity_channel=瓶中混沌容量区: 1 = 空气, 2-6 = 容量方块 I-V
 tst.bottledchaos.structure.capacity_columns=每个容量区全为非容量方块(含空气)时提供1容量; 完整安装64个同级容量方块时提供4/16/64/256/1024容量.

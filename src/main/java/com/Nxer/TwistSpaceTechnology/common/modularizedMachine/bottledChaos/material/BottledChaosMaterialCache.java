@@ -117,7 +117,7 @@ public final class BottledChaosMaterialCache {
 
     public void load(NBTTagCompound tag) {
         lastFamily = tag.getString("lastFamily");
-        setAmountLimit(tag.hasKey("amountLimit") ? tag.getLong("amountLimit") : Integer.MAX_VALUE);
+        setAmountLimit(tag.getLong("amountLimit"));
         lastEntry = -1; // Entry indexes are startup-local; material identities and family names are persistent.
         NBTTagList entries = tag.getTagList("families", 10);
         families = new String[entries.tagCount()];

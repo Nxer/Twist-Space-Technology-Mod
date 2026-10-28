@@ -215,8 +215,8 @@ public final class BottledChaosFakeRecipes {
     /** Dedicated family tabs use the stable registered tags, including families with a single recipe. */
     private static RecipeCategory categoryForRoute(BottledChaosRecipeProcessor.DisplayRecipe display) {
         int tagIndex = display.tagIndex();
-        if ("fusion".equals(CredentialModel.tag(tagIndex))) return GTCMRecipe.BottledChaosFusionCategory;
-        if (usesExpandedLayout(
+        BottledChaosRecipePage page = CredentialModel.displayPage(tagIndex);
+        if (!page.keepExpanded() && usesExpandedLayout(
             display.itemInputs()
                 .size(),
             display.plan()
@@ -227,26 +227,11 @@ public final class BottledChaosFakeRecipes {
             display.plan()
                 .fluidOutputs()
                 .size()))
-            return GTCMRecipe.BottledChaosRecipes.getDefaultRecipeCategory();
+            return BottledChaosRecipePage.DEFAULT.category();
         if ("honeycomb".equals(CredentialModel.tag(tagIndex)))
             tagIndex = CredentialModel.ownerTagIndex(display.requiredTagMask());
-        return switch (CredentialModel.displayPage(tagIndex)) {
-            case "Titanium" -> GTCMRecipe.BottledChaosTitaniumCategory;
-            case "Tungsten" -> GTCMRecipe.BottledChaosTungstenCategory;
-            case "Indium" -> GTCMRecipe.BottledChaosIndiumCategory;
-            case "IsaMill" -> GTCMRecipe.BottledChaosIsaMillCategory;
-            case "Netherite" -> GTCMRecipe.BottledChaosNetheriteCategory;
-            case "Platinum" -> GTCMRecipe.BottledChaosPlatinumCategory;
-            case "Prismatic" -> GTCMRecipe.BottledChaosPrismaticCategory;
-            case "Lanthanide" -> GTCMRecipe.BottledChaosLanthanideCategory;
-            case "Naquadah" -> GTCMRecipe.BottledChaosNaquadahCategory;
-            case "NaquadahFuel" -> GTCMRecipe.BottledChaosNaquadahFuelCategory;
-            case "Biological" -> GTCMRecipe.BottledChaosBiologicalCategory;
-            case "Radox" -> GTCMRecipe.BottledChaosRadoxCategory;
-            case "Kevlar" -> GTCMRecipe.BottledChaosKevlarCategory;
-            case "PurifiedWater" -> GTCMRecipe.BottledChaosPurifiedWaterCategory;
-            default -> GTCMRecipe.BottledChaosRecipes.getDefaultRecipeCategory();
-        };
+        return CredentialModel.displayPage(tagIndex)
+            .category();
     }
 
     private static int displayAmount(long amount) {

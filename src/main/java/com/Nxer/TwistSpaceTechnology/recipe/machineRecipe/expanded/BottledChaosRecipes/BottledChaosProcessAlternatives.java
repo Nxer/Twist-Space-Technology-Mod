@@ -35,10 +35,26 @@ public final class BottledChaosProcessAlternatives {
     public static final RecipeMap<?> STELLAR_FORGE = GTCMRecipe.StellarForgeRecipeMap;
     public static final RecipeMap<?> GODFORGE_MOLTEN = TecTechRecipeMaps.godforgeMoltenRecipes;
     public static final RecipeMap<?> COOLING = GTCMRecipe.RapidCoolingDownRecipeMap;
+
+    @Desugar
+    public record Alternative(RecipeMap<?> pool, RecipeMap<?> displayParent) {}
+
+    private static final List<Alternative> ALTERNATIVES = ImmutableList.of(
+        new Alternative(STELLAR_FORGE, RecipeMaps.blastFurnaceRecipes),
+        new Alternative(GODFORGE_MOLTEN, RecipeMaps.blastFurnaceRecipes),
+        new Alternative(COOLING, RecipeMaps.vacuumFreezerRecipes));
+    private static final List<RecipeMap<?>> DISPLAY_PARENTS = ImmutableList.copyOf(
+        ALTERNATIVES.stream()
+            .map(Alternative::displayParent)
+            .distinct()
+            .iterator());
     private static final DisplayGroup DISPLAY_GROUP = new DisplayGroup(
         ImmutableList
             .of(RecipeMaps.blastFurnaceRecipes, RecipeMaps.vacuumFreezerRecipes, RecipeMaps.fluidExtractionRecipes),
-        ImmutableList.of(STELLAR_FORGE, GODFORGE_MOLTEN, COOLING));
+        ImmutableList.copyOf(
+            ALTERNATIVES.stream()
+                .map(Alternative::pool)
+                .iterator()));
     private static final List<Group> pending = new ArrayList<>();
 
     /** Pool-list membership and original-column order only; valid substitutions still come from cached versions. */
@@ -47,6 +63,15 @@ public final class BottledChaosProcessAlternatives {
 
     public static DisplayGroup displayGroup() {
         return DISPLAY_GROUP;
+    }
+
+    public static RecipeMap<?> displayParent(RecipeMap<?> pool) {
+        for (Alternative alternative : ALTERNATIVES) if (alternative.pool() == pool) return alternative.displayParent();
+        return null;
+    }
+
+    public static List<RecipeMap<?>> displayParents() {
+        return DISPLAY_PARENTS;
     }
 
     static final class Source {

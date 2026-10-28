@@ -949,6 +949,8 @@ tst.bottledchaos.route.tau_ceti_e_seaweed_extract=Tau Ceti E Seaweed Extract
 tst.bottledchaos.route.titanium=Titanium
 tst.bottledchaos.route.tungsten=Tungsten
 tst.bottledchaos.route.xenoxene=Xenoxene Fractionation
+tst.bottledchaos.route_group.lanthanide=Lanthanides
+tst.bottledchaos.route_group.platinum=Platinum Group
 tst.bottledchaos.structure.body=The main body uses the blocks shown in the structure projection.
 tst.bottledchaos.structure.capacity_channel=Bottled Chaos Capacity: 1 = Air, 2-6 = Capacity Blocks I-V
 tst.bottledchaos.structure.capacity_columns=Each capacity region provides 1 with non-capacity blocks (including air), or 4/16/64/256/1024 with 64 same-tier capacity blocks.

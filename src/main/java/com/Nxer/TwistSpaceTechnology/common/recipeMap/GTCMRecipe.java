@@ -334,15 +334,6 @@ public class GTCMRecipe {
         })
         .build();
 
-    // #tr tst.bottledchaos.recipe.category.purified_water.name
-    // # Bottled Chaos - Water Purification
-    // #zh_CN 瓶中混沌 - 净化水
-    public static final RecipeCategory BottledChaosPurifiedWaterCategory = new RecipeCategory(
-        "tst.bottledchaos.recipe.category.purified_water.name",
-        BottledChaosRecipes,
-        RecipeCategorySetting::getDefault,
-        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
-
     // #tr tst.bottledchaos.recipe.category.titanium.name
     // # Bottled Chaos - Titanium
     // #zh_CN 瓶中混沌 - 钛
@@ -366,15 +357,6 @@ public class GTCMRecipe {
     // #zh_CN 瓶中混沌 - 铟
     public static final RecipeCategory BottledChaosIndiumCategory = new RecipeCategory(
         "tst.bottledchaos.recipe.category.indium.name",
-        BottledChaosRecipes,
-        RecipeCategorySetting::getDefault,
-        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
-
-    // #tr tst.bottledchaos.recipe.category.isamill.name
-    // # Bottled Chaos - IsaMill Processing
-    // #zh_CN 瓶中混沌 - 艾萨矿物处理
-    public static final RecipeCategory BottledChaosIsaMillCategory = new RecipeCategory(
-        "tst.bottledchaos.recipe.category.isamill.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
@@ -433,6 +415,15 @@ public class GTCMRecipe {
         RecipeCategorySetting::getDefault,
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
+    // #tr tst.bottledchaos.recipe.category.isamill.name
+    // # Bottled Chaos - IsaMill Processing
+    // #zh_CN 瓶中混沌 - 艾萨矿物处理
+    public static final RecipeCategory BottledChaosIsaMillCategory = new RecipeCategory(
+        "tst.bottledchaos.recipe.category.isamill.name",
+        BottledChaosRecipes,
+        RecipeCategorySetting::getDefault,
+        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+
     // #tr tst.bottledchaos.recipe.category.prismatic.name
     // # Bottled Chaos - Prismatic Acid
     // #zh_CN 瓶中混沌 - 海晶酸
@@ -442,11 +433,11 @@ public class GTCMRecipe {
         RecipeCategorySetting::getDefault,
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
-    // #tr tst.bottledchaos.recipe.category.radox.name
-    // # Bottled Chaos - Radox
-    // #zh_CN 瓶中混沌 - 拉多X
-    public static final RecipeCategory BottledChaosRadoxCategory = new RecipeCategory(
-        "tst.bottledchaos.recipe.category.radox.name",
+    // #tr tst.bottledchaos.recipe.category.purified_water.name
+    // # Bottled Chaos - Water Purification
+    // #zh_CN 瓶中混沌 - 净化水
+    public static final RecipeCategory BottledChaosPurifiedWaterCategory = new RecipeCategory(
+        "tst.bottledchaos.recipe.category.purified_water.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
@@ -456,6 +447,15 @@ public class GTCMRecipe {
     // #zh_CN 瓶中混沌 - 凯芙拉
     public static final RecipeCategory BottledChaosKevlarCategory = new RecipeCategory(
         "tst.bottledchaos.recipe.category.kevlar.name",
+        BottledChaosRecipes,
+        RecipeCategorySetting::getDefault,
+        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+
+    // #tr tst.bottledchaos.recipe.category.radox.name
+    // # Bottled Chaos - Radox
+    // #zh_CN 瓶中混沌 - 拉多X
+    public static final RecipeCategory BottledChaosRadoxCategory = new RecipeCategory(
+        "tst.bottledchaos.recipe.category.radox.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);

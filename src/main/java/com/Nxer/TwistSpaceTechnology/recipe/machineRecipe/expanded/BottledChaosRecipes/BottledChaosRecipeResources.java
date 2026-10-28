@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +12,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -61,7 +63,7 @@ public final class BottledChaosRecipeResources {
     private static final Map<TST_ItemID, TST_ItemID> UNIFIED_DUSTS = new HashMap<>();
     private static final List<ItemStack> FRUIT_INPUTS = GTOreDictUnificator.getOresImmutable("listAllfruit");
 
-    /** Stable credential identities; capacity costs are published by route registration. */
+    /** Tag identities and runtime indexes; capacity costs are published by route registration. */
     public static final class CredentialModel {
 
         // Item names are queried during post-init, before all recipe resources have been registered.
@@ -69,69 +71,69 @@ public final class BottledChaosRecipeResources {
         private static final boolean HAS_NETHERITE = Mods.EtFuturumRequiem.isModLoaded();
         private static final boolean HAS_ETERNITY = Mods.EternalSingularity.isModLoaded();
         private static final boolean HAS_CRYSTALLINE_ALLOY = Mods.EnderIO.isModLoaded();
-        public static final String ROUTE_MASK_NBT_KEY = "bottledChaosRouteMask";
+        public static final String TAGS_NBT_KEY = "bottledChaosTags";
         public static final String OCCUPIED_WEIGHT_NBT_KEY = "bottledChaosOccupiedWeight";
 
-        /** Stable declaration order defines credential bits; unlock order affects presentation only. */
+        /** Declaration order determines display priority and runtime indexes; NBT stores tag names. */
         @Desugar
-        private record TagDefinition(String tag, boolean enabled, int displayOrder, String family, String page) {}
+        private record TagDefinition(String tag, boolean enabled, String family, BottledChaosRecipePage page) {}
 
         // Material bindings stay in CredentialRoutes and are not initialized with this metadata.
         // spotless:off
         private static final TagDefinition[] DEFINITIONS = {
-            new TagDefinition("platinum_metallic_powder", true, 3, "platinum", "Platinum"),
-            new TagDefinition("platinum_residue", true, 5, "platinum", "Platinum"),
-            new TagDefinition("crude_rhodium_metal", true, 9, "platinum", "Platinum"),
-            new TagDefinition("leach_residue", true, 6, "platinum", "Platinum"),
-            new TagDefinition("palladium_metallic_powder", true, 4, "platinum", "Platinum"),
-            new TagDefinition("rarest_metal_residue", true, 7, "platinum", "Platinum"),
-            new TagDefinition("iridium_metal_residue", true, 8, "platinum", "Platinum"),
-            new TagDefinition("ancient_debris", HAS_NETHERITE, 24, "ancient_debris", "Netherite"),
-            new TagDefinition("crystalline_alloy_molten", HAS_CRYSTALLINE_ALLOY, 26, "prismatic", "Prismatic"),
-            new TagDefinition("prismatic_acid", true, 29, "prismatic", "Prismatic"),
-            new TagDefinition("bastnasite", true, 11, "lanthanide", "Lanthanide"),
-            new TagDefinition("monazite", true, 10, "lanthanide", "Lanthanide"),
-            new TagDefinition("rare_earth_cerium", true, 13, "lanthanide", "Lanthanide"),
-            new TagDefinition("cerium", true, 12, "lanthanide", "Lanthanide"),
-            new TagDefinition("samarium", true, 14, "lanthanide", "Lanthanide"),
-            new TagDefinition("naquadah", true, 15, "naquadah", "Naquadah"),
-            new TagDefinition("enriched_naquadah", true, 16, "naquadah", "Naquadah"),
-            new TagDefinition("naquadria", true, 17, "naquadah", "Naquadah"),
-            new TagDefinition("growth_medium_sterilized", true, 39, "biological", "Biological"),
-            new TagDefinition("stem_cells", true, 40, "biological", "Biological"),
-            new TagDefinition("seaweed_broth", true, 41, "biological", "Biological"),
-            new TagDefinition("tau_ceti_e_seaweed_extract", true, 42, "biological", "Biological"),
-            new TagDefinition("bio_medium_sterilized", true, 43, "biological", "Biological"),
-            new TagDefinition("bio_cells", true, 44, "biological", "Biological"),
-            new TagDefinition("xenoxene", true, 45, "radox", "Radox"),
-            new TagDefinition("super_heavy_radox", true, 33, "radox", "Radox"),
-            new TagDefinition("heavy_radox", true, 34, "radox", "Radox"),
-            new TagDefinition("light_radox", true, 35, "radox", "Radox"),
-            new TagDefinition("super_light_radox", true, 36, "radox", "Radox"),
-            new TagDefinition("kevlar", true, 32, "kevlar", "Kevlar"),
-            new TagDefinition("purified_water_1", true, 27, "purified_water", "PurifiedWater"),
-            new TagDefinition("purified_water_2", true, 28, "purified_water", "PurifiedWater"),
-            new TagDefinition("purified_water_3", true, 30, "purified_water", "PurifiedWater"),
-            new TagDefinition("purified_water_4", true, 31, "purified_water", "PurifiedWater"),
-            new TagDefinition("purified_water_5", true, 37, "purified_water", "PurifiedWater"),
-            new TagDefinition("purified_water_6", true, 38, "purified_water", "PurifiedWater"),
-            new TagDefinition("purified_water_7", true, 46, "purified_water", "PurifiedWater"),
-            new TagDefinition("purified_water_8", true, 47, "purified_water", "PurifiedWater"),
-            new TagDefinition("magmatter", true, 50, "magmatter", "Default"),
-            new TagDefinition("quark_gluon_plasma", true, 48, "quark_gluon_plasma", "Default"),
-            new TagDefinition("titanium", true, 0, "titanium", "Titanium"),
-            new TagDefinition("tungsten", true, 1, "tungsten", "Tungsten"),
-            new TagDefinition("indium", true, 2, "indium", "Indium"),
-            new TagDefinition("phonon_medium", true, 51, "phonon_medium", "Default"),
-            new TagDefinition("eternity", HAS_ETERNITY, 49, "eternity", "Default"),
-            new TagDefinition("honeycomb", HAS_HONEYCOMBS, 52, "honeycomb", "Default"),
-            new TagDefinition("isamill", true, 25, "isamill", "IsaMill"),
-            new TagDefinition("naquadah_fuel_4", true, 20, "naquadah_fuel_4", "NaquadahFuel"),
-            new TagDefinition("naquadah_fuel_preparation", true, 18, "naquadah_fuel_preparation", "NaquadahFuel"),
-            new TagDefinition("naquadah_fuel_5", true, 21, "naquadah_fuel_5", "NaquadahFuel"),
-            new TagDefinition("naquadah_fuel_6", true, 22, "naquadah_fuel_6", "NaquadahFuel"),
-            new TagDefinition("naquadah_fuel_3", true, 19, "naquadah_fuel_3", "NaquadahFuel"),
-            new TagDefinition("fusion", true, 23, "fusion", "Fusion")
+            new TagDefinition("honeycomb", HAS_HONEYCOMBS, "honeycomb", BottledChaosRecipePage.DEFAULT),
+            new TagDefinition("titanium", true, "titanium", BottledChaosRecipePage.TITANIUM),
+            new TagDefinition("tungsten", true, "tungsten", BottledChaosRecipePage.TUNGSTEN),
+            new TagDefinition("indium", true, "indium", BottledChaosRecipePage.INDIUM),
+            new TagDefinition("platinum_metallic_powder", true, "platinum", BottledChaosRecipePage.PLATINUM),
+            new TagDefinition("palladium_metallic_powder", true, "platinum", BottledChaosRecipePage.PLATINUM),
+            new TagDefinition("platinum_residue", true, "platinum", BottledChaosRecipePage.PLATINUM),
+            new TagDefinition("leach_residue", true, "platinum", BottledChaosRecipePage.PLATINUM),
+            new TagDefinition("rarest_metal_residue", true, "platinum", BottledChaosRecipePage.PLATINUM),
+            new TagDefinition("iridium_metal_residue", true, "platinum", BottledChaosRecipePage.PLATINUM),
+            new TagDefinition("crude_rhodium_metal", true, "platinum", BottledChaosRecipePage.PLATINUM),
+            new TagDefinition("monazite", true, "lanthanide", BottledChaosRecipePage.LANTHANIDE),
+            new TagDefinition("bastnasite", true, "lanthanide", BottledChaosRecipePage.LANTHANIDE),
+            new TagDefinition("cerium", true, "lanthanide", BottledChaosRecipePage.LANTHANIDE),
+            new TagDefinition("rare_earth_cerium", true, "lanthanide", BottledChaosRecipePage.LANTHANIDE),
+            new TagDefinition("samarium", true, "lanthanide", BottledChaosRecipePage.LANTHANIDE),
+            new TagDefinition("naquadah", true, "naquadah", BottledChaosRecipePage.NAQUADAH),
+            new TagDefinition("enriched_naquadah", true, "naquadah", BottledChaosRecipePage.NAQUADAH),
+            new TagDefinition("naquadria", true, "naquadah", BottledChaosRecipePage.NAQUADAH),
+            new TagDefinition("naquadah_fuel_preparation", true, "naquadah_fuel_preparation", BottledChaosRecipePage.NAQUADAH_FUEL),
+            new TagDefinition("naquadah_fuel_3", true, "naquadah_fuel_3", BottledChaosRecipePage.NAQUADAH_FUEL),
+            new TagDefinition("naquadah_fuel_4", true, "naquadah_fuel_4", BottledChaosRecipePage.NAQUADAH_FUEL),
+            new TagDefinition("naquadah_fuel_5", true, "naquadah_fuel_5", BottledChaosRecipePage.NAQUADAH_FUEL),
+            new TagDefinition("naquadah_fuel_6", true, "naquadah_fuel_6", BottledChaosRecipePage.NAQUADAH_FUEL),
+            new TagDefinition("fusion", true, "fusion", BottledChaosRecipePage.FUSION),
+            new TagDefinition("ancient_debris", HAS_NETHERITE, "ancient_debris", BottledChaosRecipePage.NETHERITE),
+            new TagDefinition("isamill", true, "isamill", BottledChaosRecipePage.ISA_MILL),
+            new TagDefinition("crystalline_alloy_molten", HAS_CRYSTALLINE_ALLOY, "prismatic", BottledChaosRecipePage.PRISMATIC),
+            new TagDefinition("purified_water_1", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
+            new TagDefinition("purified_water_2", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
+            new TagDefinition("prismatic_acid", true, "prismatic", BottledChaosRecipePage.PRISMATIC),
+            new TagDefinition("purified_water_3", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
+            new TagDefinition("purified_water_4", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
+            new TagDefinition("kevlar", true, "kevlar", BottledChaosRecipePage.KEVLAR),
+            new TagDefinition("super_heavy_radox", true, "radox", BottledChaosRecipePage.RADOX),
+            new TagDefinition("heavy_radox", true, "radox", BottledChaosRecipePage.RADOX),
+            new TagDefinition("light_radox", true, "radox", BottledChaosRecipePage.RADOX),
+            new TagDefinition("super_light_radox", true, "radox", BottledChaosRecipePage.RADOX),
+            new TagDefinition("purified_water_5", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
+            new TagDefinition("purified_water_6", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
+            new TagDefinition("growth_medium_sterilized", true, "biological", BottledChaosRecipePage.BIOLOGICAL),
+            new TagDefinition("stem_cells", true, "biological", BottledChaosRecipePage.BIOLOGICAL),
+            new TagDefinition("seaweed_broth", true, "biological", BottledChaosRecipePage.BIOLOGICAL),
+            new TagDefinition("tau_ceti_e_seaweed_extract", true, "biological", BottledChaosRecipePage.BIOLOGICAL),
+            new TagDefinition("bio_medium_sterilized", true, "biological", BottledChaosRecipePage.BIOLOGICAL),
+            new TagDefinition("bio_cells", true, "biological", BottledChaosRecipePage.BIOLOGICAL),
+            new TagDefinition("xenoxene", true, "radox", BottledChaosRecipePage.RADOX),
+            new TagDefinition("purified_water_7", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
+            new TagDefinition("purified_water_8", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
+            new TagDefinition("eternity", HAS_ETERNITY, "eternity", BottledChaosRecipePage.DEFAULT),
+            new TagDefinition("magmatter", true, "magmatter", BottledChaosRecipePage.DEFAULT),
+            new TagDefinition("phonon_medium", true, "phonon_medium", BottledChaosRecipePage.DEFAULT),
+            new TagDefinition("quark_gluon_plasma", true, "quark_gluon_plasma", BottledChaosRecipePage.DEFAULT)
         };
         // spotless:on
         private static final TagDefinition[] ACTIVE = Arrays.stream(DEFINITIONS)
@@ -140,10 +142,16 @@ public final class BottledChaosRecipeResources {
         public static final int ROUTE_COUNT = ACTIVE.length;
         public static final long ALL_ROUTE_MASK = (1L << ROUTE_COUNT) - 1;
         private static final int[] DISPLAY_ORDER = IntStream.range(0, ROUTE_COUNT)
-            .boxed()
-            .sorted(Comparator.comparingInt(index -> ACTIVE[index].displayOrder()))
-            .mapToInt(Integer::intValue)
             .toArray();
+        private static final Map<String, Integer> TAG_INDICES = new HashMap<>();
+
+        static {
+            if (ROUTE_COUNT >= Long.SIZE) throw new IllegalStateException("Too many credential tags for a route mask");
+            for (int index = 0; index < ROUTE_COUNT; index++) {
+                if (TAG_INDICES.put(ACTIVE[index].tag(), index) != null)
+                    throw new IllegalStateException("Duplicate credential tag: " + ACTIVE[index].tag());
+            }
+        }
 
         private static volatile int[] registeredCapacityCosts;
 
@@ -161,10 +169,7 @@ public final class BottledChaosRecipeResources {
         /** Honeycomb variants share their production tag's position, regardless of the authorization bit. */
         public static int displayIndex(long requiredTagMask) {
             int tagIndex = ownerTagIndex(requiredTagMask);
-            for (int order = 0; order < DISPLAY_ORDER.length; order++) {
-                if (DISPLAY_ORDER[order] == tagIndex) return order;
-            }
-            return Integer.MAX_VALUE;
+            return tagIndex < ROUTE_COUNT ? tagIndex : Integer.MAX_VALUE;
         }
 
         public static String tag(int index) {
@@ -172,10 +177,7 @@ public final class BottledChaosRecipeResources {
         }
 
         public static int indexForTag(String tag) {
-            for (int index = 0; index < ROUTE_COUNT; index++) {
-                if (tag(index).equals(tag)) return index;
-            }
-            return -1;
+            return TAG_INDICES.getOrDefault(tag, -1);
         }
 
         /** Processing families are independent of NEI pages; additional honeycomb authorization keeps its owner. */
@@ -190,8 +192,8 @@ public final class BottledChaosRecipeResources {
             return Long.numberOfTrailingZeros(requiredTagMask);
         }
 
-        public static String displayPage(int index) {
-            return index >= 0 && index < ROUTE_COUNT ? ACTIVE[index].page() : "Default";
+        public static BottledChaosRecipePage displayPage(int index) {
+            return index >= 0 && index < ROUTE_COUNT ? ACTIVE[index].page() : BottledChaosRecipePage.DEFAULT;
         }
 
         public static String translationKey(int index) {
@@ -199,12 +201,41 @@ public final class BottledChaosRecipeResources {
             return name == null ? null : "tst.bottledchaos.route." + name;
         }
 
+        /** One representative per NEI page; unrelated routes on the main page remain independent. */
+        public static List<String> groupedTranslationKeys(long mask) {
+            Map<String, Integer> lastByPage = new HashMap<>();
+            for (int index = 0; index < ROUTE_COUNT; index++) {
+                if ((mask & (1L << index)) == 0) continue;
+                lastByPage.put(displayPage(index).groupKey(tag(index)), index);
+            }
+            long representatives = 0;
+            for (int index : lastByPage.values()) representatives |= 1L << index;
+            List<String> keys = new ArrayList<>();
+            for (int index = 0; index < ROUTE_COUNT; index++) {
+                if ((representatives & (1L << index)) == 0) continue;
+                keys.add(displayPage(index).summaryKey(translationKey(index)));
+            }
+            if (keys.isEmpty()) keys.add("tst.bottledchaos.unbound");
+            return keys;
+        }
+
         public static long readRouteMask(NBTTagCompound tag) {
-            return tag == null ? 0 : tag.getLong(ROUTE_MASK_NBT_KEY) & ALL_ROUTE_MASK;
+            if (tag == null) return 0;
+            NBTTagList tags = tag.getTagList(TAGS_NBT_KEY, 8);
+            long mask = 0;
+            for (int i = 0; i < tags.tagCount(); i++) {
+                int index = indexForTag(tags.getStringTagAt(i));
+                if (index >= 0) mask |= 1L << index;
+            }
+            return mask;
         }
 
         public static void writeRouteMask(NBTTagCompound tag, long routeMask) {
-            tag.setLong(ROUTE_MASK_NBT_KEY, routeMask & ALL_ROUTE_MASK);
+            NBTTagList tags = new NBTTagList();
+            for (int index = 0; index < ROUTE_COUNT; index++) {
+                if ((routeMask & (1L << index)) != 0) tags.appendTag(new NBTTagString(tag(index)));
+            }
+            tag.setTag(TAGS_NBT_KEY, tags);
         }
 
         /** Every selected route pays its registered cost independently. */
@@ -221,7 +252,7 @@ public final class BottledChaosRecipeResources {
     }
 
     /**
-     * Stable credential identity: NBT mask bit, tag/text key, binding marker and display template.
+     * Credential identity: tag/text key, runtime mask bit, binding marker and display template.
      * Material templates are accessed after registration, independently of frame metadata and chain entry order.
      */
     @Desugar
@@ -253,24 +284,46 @@ public final class BottledChaosRecipeResources {
 
         static {
             // spotless:off
+            if (CredentialModel.HAS_HONEYCOMBS) register("honeycomb", recipeItemId(GTBees.combs.getStackForType(CombType.INDIUM, 1)), recipeItemId(GTBees.combs.getStackForType(CombType.INDIUM, 1)));
+            register("titanium", RutileDust, TitaniumIngot);
+            register("tungsten", CalciumTungstateDust, TungstenTrioxideDust);
+            register("indium", SphaleriteDust, IndiumDust);
             register("platinum_metallic_powder", PlatinumMetallicPowder, PlatinumMetallicPowder);
-            register("platinum_residue", PlatinumResidueDust, PlatinumResidueDust);
-            register("crude_rhodium_metal", CrudeRhodiumMetalDust, CrudeRhodiumMetalDust);
-            register("leach_residue", LeachResidueDust, LeachResidueDust);
             register("palladium_metallic_powder", PalladiumMetallicPowder, PalladiumMetallicPowder);
+            register("platinum_residue", PlatinumResidueDust, PlatinumResidueDust);
+            register("leach_residue", LeachResidueDust, LeachResidueDust);
             register("rarest_metal_residue", RarestMetalResidueDust, RarestMetalResidueDust);
             register("iridium_metal_residue", IridiumMetalResidueDust, IridiumMetalResidueDust);
-            if (Mods.EtFuturumRequiem.isModLoaded()) register("ancient_debris", AncientDebris, NetheriteNanoparticles);
-            if (CredentialModel.HAS_CRYSTALLINE_ALLOY) register("crystalline_alloy_molten", CrystallineAlloyMolten, CrystallineAlloyMolten);
-            register("prismatic_acid", PrismarineShard, PrismaticAcid);
-            register("bastnasite", BastnasiteDust, RoastedRareEarthOxidesDust);
+            register("crude_rhodium_metal", CrudeRhodiumMetalDust, CrudeRhodiumMetalDust);
             register("monazite", MonaziteDust, DilutedMonaziteMud);
-            register("rare_earth_cerium", CeriumDioxideDust, CeriumDust);
+            register("bastnasite", BastnasiteDust, RoastedRareEarthOxidesDust);
             register("cerium", CeriumRichMixtureDust, CeriumDust);
+            register("rare_earth_cerium", CeriumDioxideDust, CeriumDust);
             register("samarium", SamariumOreConcentrateDust, SamariumDust);
             register("naquadah", NaquadahOxideMixtureDust, NaquadahDust);
             register("enriched_naquadah", EnrichedNaquadahOxideMixtureDust, EnrichedNaquadahDust);
             register("naquadria", NaquadriaOxideMixtureDust, NaquadriaDust);
+            register("naquadah_fuel_preparation", NaquadriaDust, GGMaterial.heavyNaquadahFuel.getFluidOrGas(1).getFluid());
+            register("naquadah_fuel_3", recipeItemId(GGMaterial.extremelyUnstableNaquadah.get(OrePrefixes.dust, 1)), GGMaterial.naquadahBasedFuelMkIII.getFluidOrGas(1).getFluid());
+            register("naquadah_fuel_4", GGMaterial.naquadahBasedFuelMkIII.getFluidOrGas(1).getFluid(), GGMaterial.naquadahBasedFuelMkIV.getFluidOrGas(1).getFluid());
+            register("naquadah_fuel_5", GGMaterial.naquadahBasedFuelMkIV.getFluidOrGas(1).getFluid(), GGMaterial.naquadahBasedFuelMkV.getFluidOrGas(1).getFluid());
+            register("naquadah_fuel_6", GGMaterial.naquadahBasedFuelMkV.getFluidOrGas(1).getFluid(), GGMaterial.naquadahBasedFuelMkVI.getFluidOrGas(1).getFluid());
+            register("fusion", recipeItemId(Materials.Cobalt.getDust(1)), MaterialsElements.STANDALONE.ASTRAL_TITANIUM.getPlasma());
+            if (Mods.EtFuturumRequiem.isModLoaded()) register("ancient_debris", AncientDebris, NetheriteNanoparticles);
+            register("isamill", MilledSphalerite, MilledSphalerite);
+            if (CredentialModel.HAS_CRYSTALLINE_ALLOY) register("crystalline_alloy_molten", CrystallineAlloyMolten, CrystallineAlloyMolten);
+            register("purified_water_1", recipeItemId(Materials.Grade1PurifiedWater.getCells(1)), recipeItemId(Materials.Grade1PurifiedWater.getCells(1)));
+            register("purified_water_2", recipeItemId(Materials.Grade2PurifiedWater.getCells(1)), recipeItemId(Materials.Grade2PurifiedWater.getCells(1)));
+            register("prismatic_acid", PrismarineShard, PrismaticAcid);
+            register("purified_water_3", recipeItemId(Materials.Grade3PurifiedWater.getCells(1)), recipeItemId(Materials.Grade3PurifiedWater.getCells(1)));
+            register("purified_water_4", recipeItemId(Materials.Grade4PurifiedWater.getCells(1)), recipeItemId(Materials.Grade4PurifiedWater.getCells(1)));
+            register("kevlar", KevlarFiber, KevlarPlate);
+            register("super_heavy_radox", SuperHeavyRadox, SuperHeavyRadox);
+            register("heavy_radox", HeavyRadox, HeavyRadox);
+            register("light_radox", LightRadox, LightRadox);
+            register("super_light_radox", SuperLightRadox, SuperLightRadox);
+            register("purified_water_5", recipeItemId(Materials.Grade5PurifiedWater.getCells(1)), recipeItemId(Materials.Grade5PurifiedWater.getCells(1)));
+            register("purified_water_6", recipeItemId(Materials.Grade6PurifiedWater.getCells(1)), recipeItemId(Materials.Grade6PurifiedWater.getCells(1)));
             register("growth_medium_sterilized", GrowthMediumSterilized, GrowthMediumSterilized);
             register("stem_cells", StemCells, StemCells);
             register("seaweed_broth", SeaweedBroth, SeaweedBroth);
@@ -278,34 +331,12 @@ public final class BottledChaosRecipeResources {
             register("bio_medium_sterilized", BioMediumSterilized, BioMediumSterilized);
             register("bio_cells", BioCells, BioCells);
             register("xenoxene", Xenoxene, RawRadox);
-            register("super_heavy_radox", SuperHeavyRadox, SuperHeavyRadox);
-            register("heavy_radox", HeavyRadox, HeavyRadox);
-            register("light_radox", LightRadox, LightRadox);
-            register("super_light_radox", SuperLightRadox, SuperLightRadox);
-            register("kevlar", KevlarFiber, KevlarPlate);
-            register("purified_water_1", recipeItemId(Materials.Grade1PurifiedWater.getCells(1)), recipeItemId(Materials.Grade1PurifiedWater.getCells(1)));
-            register("purified_water_2", recipeItemId(Materials.Grade2PurifiedWater.getCells(1)), recipeItemId(Materials.Grade2PurifiedWater.getCells(1)));
-            register("purified_water_3", recipeItemId(Materials.Grade3PurifiedWater.getCells(1)), recipeItemId(Materials.Grade3PurifiedWater.getCells(1)));
-            register("purified_water_4", recipeItemId(Materials.Grade4PurifiedWater.getCells(1)), recipeItemId(Materials.Grade4PurifiedWater.getCells(1)));
-            register("purified_water_5", recipeItemId(Materials.Grade5PurifiedWater.getCells(1)), recipeItemId(Materials.Grade5PurifiedWater.getCells(1)));
-            register("purified_water_6", recipeItemId(Materials.Grade6PurifiedWater.getCells(1)), recipeItemId(Materials.Grade6PurifiedWater.getCells(1)));
             register("purified_water_7", recipeItemId(Materials.Grade7PurifiedWater.getCells(1)), recipeItemId(Materials.Grade7PurifiedWater.getCells(1)));
             register("purified_water_8", recipeItemId(Materials.Grade8PurifiedWater.getCells(1)), recipeItemId(Materials.Grade8PurifiedWater.getCells(1)));
-            register("magmatter", recipeItemId(Materials.MagMatter.getDust(1)), recipeItemId(Materials.MagMatter.getDust(1)));
-            register("quark_gluon_plasma", recipeItemId(Materials.QuarkGluonPlasma.getCells(1)), recipeItemId(Materials.QuarkGluonPlasma.getCells(1)));
-            register("titanium", RutileDust, TitaniumIngot);
-            register("tungsten", CalciumTungstateDust, TungstenTrioxideDust);
-            register("indium", SphaleriteDust, IndiumDust);
-            register("phonon_medium", MagMatterRound, PhononMedium);
             if (CredentialModel.HAS_ETERNITY) register("eternity", EternalSingularity, EternityMolten);
-            if (CredentialModel.HAS_HONEYCOMBS) register("honeycomb", recipeItemId(GTBees.combs.getStackForType(CombType.INDIUM, 1)), recipeItemId(GTBees.combs.getStackForType(CombType.INDIUM, 1)));
-            register("isamill", MilledSphalerite, MilledSphalerite);
-            register("naquadah_fuel_4", GGMaterial.naquadahBasedFuelMkIII.getFluidOrGas(1).getFluid(), GGMaterial.naquadahBasedFuelMkIV.getFluidOrGas(1).getFluid());
-            register("naquadah_fuel_preparation", NaquadriaDust, GGMaterial.heavyNaquadahFuel.getFluidOrGas(1).getFluid());
-            register("naquadah_fuel_5", GGMaterial.naquadahBasedFuelMkIV.getFluidOrGas(1).getFluid(), GGMaterial.naquadahBasedFuelMkV.getFluidOrGas(1).getFluid());
-            register("naquadah_fuel_6", GGMaterial.naquadahBasedFuelMkV.getFluidOrGas(1).getFluid(), GGMaterial.naquadahBasedFuelMkVI.getFluidOrGas(1).getFluid());
-            register("naquadah_fuel_3", recipeItemId(GGMaterial.extremelyUnstableNaquadah.get(OrePrefixes.dust, 1)), GGMaterial.naquadahBasedFuelMkIII.getFluidOrGas(1).getFluid());
-            register("fusion", recipeItemId(Materials.Cobalt.getDust(1)), MaterialsElements.STANDALONE.ASTRAL_TITANIUM.getPlasma());
+            register("magmatter", recipeItemId(Materials.MagMatter.getDust(1)), recipeItemId(Materials.MagMatter.getDust(1)));
+            register("phonon_medium", MagMatterRound, PhononMedium);
+            register("quark_gluon_plasma", recipeItemId(Materials.QuarkGluonPlasma.getCells(1)), recipeItemId(Materials.QuarkGluonPlasma.getCells(1)));
             // spotless:on
         }
 
