@@ -49,7 +49,7 @@ public class DeployedNanoCoreRecipePool {
                                     .getFluidOrGas(aStack.amount * Multiplier / 1000000);
                             } else {
                                 aCopy = aStack.copy();
-                                aStack.amount *= Multiplier;
+                                aCopy.amount *= Multiplier;
                             }
                             InputFluids.add(aCopy);
                         }
