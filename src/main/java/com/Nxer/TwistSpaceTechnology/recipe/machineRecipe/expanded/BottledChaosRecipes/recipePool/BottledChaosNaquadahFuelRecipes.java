@@ -459,7 +459,7 @@ public final class BottledChaosNaquadahFuelRecipes {
                             BottledChaosSourceResolver.require(
                                 Cutter,
                                 new ItemStack[] { GGMaterial.orundum.get(OrePrefixes.block, 1) },
-                                Materials.Water.getFluid(1_000))),
+                                Materials.Lubricant.getFluid(1_000))),
                         recipeItemId(GGMaterial.orundum.get(OrePrefixes.block, 1)))
                     .appendBalancedRecipe(
                         prepareSourceRecipe(
