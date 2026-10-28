@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+
 /** Integer, demand-driven planning on the startup-resolved material graph. Never touches real storage. */
 final class BottledChaosChainPlanner {
 
@@ -16,14 +19,16 @@ final class BottledChaosChainPlanner {
         final Map<Object, Long> inputs;
         final Map<Object, Long> outputs;
         final Map<Object, Long> catalysts;
+        final List<?> targets;
         final long voltage;
         final boolean availableInputsOnly;
 
         Stage(Map<Object, Long> inputs, Map<Object, Long> outputs, Map<Object, Long> catalysts, long voltage,
-            boolean availableInputsOnly) {
+            boolean availableInputsOnly, List<?> targets) {
             this.inputs = inputs;
             this.outputs = outputs;
             this.catalysts = catalysts;
+            this.targets = targets;
             this.voltage = voltage;
             this.availableInputsOnly = availableInputsOnly;
         }
@@ -31,7 +36,7 @@ final class BottledChaosChainPlanner {
 
     interface Conditions {
 
-        boolean canProcess(int stage, long voltage);
+        CheckRecipeResult check(int stage, long voltage);
 
         long retainedOutput(int stage, Object key, long amount);
 
@@ -121,6 +126,7 @@ final class BottledChaosChainPlanner {
     private final long batchLimit;
     private int attempts;
     private Result state;
+    private final Map<List<?>, CheckRecipeResult> rejectedTargets = new LinkedHashMap<>();
 
     BottledChaosChainPlanner(Stage[] stages, List<Map<Object, int[]>> suppliers, Conditions conditions,
         Set<?> virtualItems, long batchLimit) {
@@ -131,20 +137,32 @@ final class BottledChaosChainPlanner {
         this.batchLimit = batchLimit;
     }
 
+    CheckRecipeResult preparationFailure() {
+        for (CheckRecipeResult failure : rejectedTargets.values()) {
+            if (failure != CheckRecipeResultRegistry.NO_RECIPE) return failure;
+        }
+        return CheckRecipeResultRegistry.NO_RECIPE;
+    }
+
     Result prepare(int[] goalOrder, long[] targets, Map<Object, Long> external, Map<Object, Long> remaining,
         Map<Object, Long> released, boolean skipUnavailable) {
+        rejectedTargets.clear();
         state = new Result(stages.length, external, remaining, released);
         for (int goal : goalOrder) {
             if (targets[goal] == 0) continue;
             Result before = skipUnavailable ? new Result(state) : null;
             attempts = 0;
-            try {
-                if (execute(goal, Math.max(0, targets[goal] - state.batches[goal]))) {
-                    state.targets[goal] = targets[goal];
-                    continue;
-                }
-            } catch (ArithmeticException overflow) {
-                // An unrepresentable probe is discarded without committing any of its material deltas.
+            CheckRecipeResult result = trySupplier(goal, Math.max(0, targets[goal] - state.batches[goal]));
+            if (result.wasSuccessful()) {
+                state.targets[goal] = targets[goal];
+                continue;
+            }
+            if (!stages[goal].availableInputsOnly) {
+                // A verified material-only alternative still permits preparation of the same target.
+                rejectedTargets.merge(
+                    stages[goal].targets,
+                    result,
+                    (left, right) -> right == CheckRecipeResultRegistry.NO_RECIPE ? right : left);
             }
             if (!skipUnavailable) return null;
             state = before;
@@ -169,21 +187,23 @@ final class BottledChaosChainPlanner {
             if (count <= 0) continue;
             Result before = new Result(state);
             attempts = 0;
-            if (!trySupplier(index, count)) state = before;
+            if (!trySupplier(index, count).wasSuccessful()) state = before;
         }
     }
 
-    private boolean execute(int index, long count) {
-        if (count == 0) return true;
+    private CheckRecipeResult execute(int index, long count) {
+        if (count == 0) return CheckRecipeResultRegistry.SUCCESSFUL;
         if (++attempts > MAX_SUPPLY_ATTEMPTS || state.active[index] || count > batchLimit - state.batches[index])
-            return false;
+            return CheckRecipeResultRegistry.NO_RECIPE;
         Stage stage = stages[index];
         long voltage = Math.max(state.voltage, stage.voltage);
-        if (!conditions.canProcess(index, voltage)) return false;
+        CheckRecipeResult result = conditions.check(index, voltage);
+        if (!result.wasSuccessful()) return result;
         if (voltage > state.voltage) {
             for (int previous = 0; previous < stages.length; previous++) {
-                if ((state.batches[previous] != 0 || state.active[previous])
-                    && !conditions.canProcess(previous, voltage)) return false;
+                if (state.batches[previous] == 0 && !state.active[previous]) continue;
+                result = conditions.check(previous, voltage);
+                if (!result.wasSuccessful()) return result;
             }
         }
         if (voltage != state.voltage) {
@@ -207,17 +227,22 @@ final class BottledChaosChainPlanner {
             if (taken < needed) missing.put(input.getKey(), needed - taken);
         }
         // Recycling may use paid carry or supplied feed, but must not manufacture new feed for itself.
-        if (stage.availableInputsOnly && !missing.isEmpty()) return false;
+        if (stage.availableInputsOnly && !missing.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
         for (var input : missing.entrySet()) {
-            if (!supply(index, input.getKey(), input.getValue())) return false;
-            if (takeInput(index, input.getKey(), input.getValue()) != input.getValue()) return false;
+            result = supply(index, input.getKey(), input.getValue());
+            if (!result.wasSuccessful()) return result;
+            if (takeInput(index, input.getKey(), input.getValue()) != input.getValue())
+                return CheckRecipeResultRegistry.NO_RECIPE;
         }
         for (var catalyst : stage.catalysts.entrySet()) {
             Object key = catalyst.getKey();
             long needed = Math.max(0, catalyst.getValue() - Math.multiplyExact(inputs.getOrDefault(key, 0L), count));
             if (stage.availableInputsOnly && available(index, key) < needed
-                && !(needed == 1 && virtualItems.contains(key))) return false;
-            if (!(needed == 1 && virtualItems.contains(key)) && !supply(index, key, needed)) return false;
+                && !(needed == 1 && virtualItems.contains(key))) return CheckRecipeResultRegistry.NO_RECIPE;
+            if (!(needed == 1 && virtualItems.contains(key))) {
+                result = supply(index, key, needed);
+                if (!result.wasSuccessful()) return result;
+            }
         }
         for (var output : stage.outputs.entrySet()) {
             Object key = output.getKey();
@@ -236,35 +261,49 @@ final class BottledChaosChainPlanner {
         state.duration += conditions.cost(index, state.voltage) * count;
         if (!Double.isFinite(state.duration)) throw new ArithmeticException("duration overflow");
         state.active[index] = false;
-        return true;
+        return CheckRecipeResultRegistry.SUCCESSFUL;
     }
 
-    private boolean supply(int consumer, Object key, long needed) {
-        if (available(consumer, key) >= needed) return true;
+    private CheckRecipeResult supply(int consumer, Object key, long needed) {
+        if (available(consumer, key) >= needed) return CheckRecipeResultRegistry.SUCCESSFUL;
         int[] sources = suppliers.get(consumer)
             .get(key);
-        if (sources == null) return false;
+        if (sources == null) return CheckRecipeResultRegistry.NO_RECIPE;
+        boolean materialShortage = false;
+        CheckRecipeResult failure = CheckRecipeResultRegistry.NO_RECIPE;
         for (int sourceIndex = 0; sourceIndex < sources.length; sourceIndex++) {
             int source = sources[sourceIndex];
-            // A return cannot pay for its own unfinished consumer. Existing carry or external seed may break cycles.
+            // A return cannot pay for its own unfinished consumer. Existing stock may break cycles.
             if (state.active[source]) continue;
+            CheckRecipeResult result = conditions.check(source, Math.max(state.voltage, stages[source].voltage));
+            if (!result.wasSuccessful()) {
+                failure = result;
+                continue;
+            }
             long missing = needed - available(consumer, key);
             long output = stages[source].outputs.get(key);
             long count = Math
                 .min(batchLimit - state.batches[source], missing / output + (missing % output == 0 ? 0 : 1));
             count = suppliedInputLimit(source, count);
-            if (count <= 0) continue;
-            // Only an alternative supplier needs a local rollback. A failed last supplier rejects its caller.
-            Result before = sourceIndex + 1 < sources.length ? new Result(state) : null;
-            if (trySupplier(source, count)) {
-                if (available(consumer, key) >= needed) return true;
+            if (count <= 0) {
+                materialShortage = true;
                 continue;
             }
-            if (before == null) return false;
+            // Only an alternative supplier needs a local rollback. A failed last supplier rejects its caller.
+            Result before = sourceIndex + 1 < sources.length ? new Result(state) : null;
+            result = trySupplier(source, count);
+            if (result.wasSuccessful()) {
+                if (available(consumer, key) >= needed) return result;
+                materialShortage = true;
+                continue;
+            }
+            materialShortage |= result == CheckRecipeResultRegistry.NO_RECIPE;
+            failure = result;
+            if (before == null) break;
             state = before;
-            // Try each source once. The outer whole-line estimate shrinks if combined supply is insufficient.
         }
-        return false;
+        // Only a usable alternative waiting for materials may permit precursor preparation.
+        return materialShortage ? CheckRecipeResultRegistry.NO_RECIPE : failure;
     }
 
     /** Bound leaf inputs directly; recursive suppliers are checked once by execute, never binary-searched. */
@@ -318,7 +357,7 @@ final class BottledChaosChainPlanner {
             Result before = state;
             state = new Result(state);
             attempts = 0;
-            if (trySupplier(index, count)) state.targets[index] = state.batches[index];
+            if (trySupplier(index, count).wasSuccessful()) state.targets[index] = state.batches[index];
             else state = before;
         }
         return state;
@@ -336,7 +375,7 @@ final class BottledChaosChainPlanner {
             if (count <= 0) continue;
             Result before = new Result(state);
             attempts = 0;
-            if (trySupplier(index, count)) {
+            if (trySupplier(index, count).wasSuccessful()) {
                 state.targets[index] = state.batches[index];
                 budget = Math.max(0, budget - costs[index] * count);
             } else state = before;
@@ -344,11 +383,11 @@ final class BottledChaosChainPlanner {
         return state;
     }
 
-    private boolean trySupplier(int source, long count) {
+    private CheckRecipeResult trySupplier(int source, long count) {
         try {
             return execute(source, count);
         } catch (ArithmeticException overflow) {
-            return false;
+            return CheckRecipeResultRegistry.NO_RECIPE;
         }
     }
 

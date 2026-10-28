@@ -34,8 +34,6 @@ import gregtech.api.GregTechAPI;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.recipe.check.CheckRecipeResult;
-import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import kubatech.loaders.DEFCRecipes;
 
 /** Startup machine directory and per-controller pool inventory; no runtime registry scans. */
@@ -328,7 +326,6 @@ public final class BottledChaosMachineConfiguration {
         private final Map<SourceKey, Evaluation> evaluations = new HashMap<>();
         private final List<BottledChaosUpkeep.Demand> sourceUsage = new ArrayList<>();
         private long roundItemPools;
-        private CheckRecipeResult sourceFailure = CheckRecipeResultRegistry.NO_RECIPE;
 
         private RuntimeParameters(ConfigurationSnapshot installed, long inputVoltage, long inputPower,
             ItemStack[] items, FluidStack[] fluids, double masterTime, double masterEU, long masterParallel) {
@@ -367,7 +364,6 @@ public final class BottledChaosMachineConfiguration {
                     evaluations.put(key, result);
                 }
             }
-            if (!result.successful()) sourceFailure = result.failure();
             return result;
         }
 
@@ -435,11 +431,6 @@ public final class BottledChaosMachineConfiguration {
             Integer slot = poolIndexes.get(map);
             return slot != null && installed.quantities[slot] > 0
                 && ((installed.debugMask & (1L << slot)) != 0 || installed.sources[slot] != null);
-        }
-
-        @Override
-        public CheckRecipeResult sourceFailure() {
-            return sourceFailure;
         }
 
         @Override

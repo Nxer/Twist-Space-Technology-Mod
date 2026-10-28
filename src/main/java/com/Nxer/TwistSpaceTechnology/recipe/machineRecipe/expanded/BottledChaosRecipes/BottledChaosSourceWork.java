@@ -14,6 +14,8 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosR
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeSupport.TimeKey;
 import com.github.bsideup.jabel.Desugar;
 
+import gregtech.api.recipe.check.CheckRecipeResult;
+
 /** Startup-partitioned native sources, their material alternatives and normalized execution cost. */
 final class BottledChaosSourceWork {
 
@@ -46,7 +48,11 @@ final class BottledChaosSourceWork {
 
     @Desugar
     record Selection(double duration, long pools, List<SelectedSource> sources, Map<Object, Long> omittedInputs,
-        Map<Object, Long> inputs) {
+        Map<Object, Long> inputs, CheckRecipeResult failure) {
+
+        Selection rejected(CheckRecipeResult failure) {
+            return new Selection(duration, pools, sources, omittedInputs, inputs, failure);
+        }
 
         void recordUsage(BottledChaosSourceParameters parameters) {
             for (SelectedSource source : sources) parameters.recordSourceUsage(source.time.map(), source.parameters);
@@ -75,7 +81,7 @@ final class BottledChaosSourceWork {
     /** Select a cached native-pool version once per plan/voltage; unrelated pool work remains mandatory. */
     Selection select(BottledChaosSourceParameters parameters, long voltage) {
         Selection result = evaluateSources(ordinary, parameters, voltage, 1);
-        if (result == null) return null;
+        if (result.failure != null) return result;
         for (var segment : groups.entrySet()) {
             var group = segment.getKey();
             boolean installed = segment.getValue()
@@ -93,7 +99,9 @@ final class BottledChaosSourceWork {
                 if (!parameters.isSourceAvailable(pool.getKey())) continue;
                 for (var version : pool.getValue()) {
                     Selection candidate = evaluateSources(version.times(), parameters, voltage, version.scale());
-                    if (candidate == null || best != null && candidate.duration >= best.duration) continue;
+                    if (best != null
+                        && (candidate.failure != null || best.failure == null && candidate.duration >= best.duration))
+                        continue;
                     candidate.omittedInputs.putAll(version.omittedInputs());
                     best = candidate;
                 }
@@ -101,7 +109,7 @@ final class BottledChaosSourceWork {
             // Preserve the ordinary pool failures when no installed native version can run.
             if (best == null && !installed && !stellarForge)
                 best = evaluateSources(segment.getValue(), parameters, voltage, 1);
-            if (best == null) return null;
+            if (best.failure != null) return best;
             result.sources.addAll(best.sources);
             for (var omitted : best.omittedInputs.entrySet())
                 result.omittedInputs.merge(omitted.getKey(), omitted.getValue(), Math::addExact);
@@ -110,6 +118,7 @@ final class BottledChaosSourceWork {
                 result.pools | best.pools,
                 result.sources,
                 result.omittedInputs,
+                null,
                 null);
         }
         // A fully substituted gas demand disappears, including any source tick rounding difference.
@@ -128,7 +137,7 @@ final class BottledChaosSourceWork {
             for (var omitted : result.omittedInputs.entrySet())
                 takeAmount(inputs, omitted.getKey(), omitted.getValue());
         }
-        return new Selection(result.duration, result.pools, result.sources, result.omittedInputs, inputs);
+        return new Selection(result.duration, result.pools, result.sources, result.omittedInputs, inputs, null);
     }
 
     private static Selection evaluateSources(Map<TimeKey, Long> work, BottledChaosSourceParameters parameters,
@@ -139,7 +148,8 @@ final class BottledChaosSourceWork {
         for (var entry : work.entrySet()) {
             TimeKey key = entry.getKey();
             var source = parameters.evaluateSource(key.map(), voltage, key.requirements());
-            if (!source.successful()) return null;
+            if (!source.successful())
+                return new Selection(0, 0, sources, new LinkedHashMap<>(), null, source.failure());
             duration = BottledChaosRecipeSupport
                 .addDuration(duration, normalizedDuration(key, entry.getValue(), source, voltage) * scale, 1);
             pools |= BottledChaosMachineConfiguration.mask(key.map());
@@ -150,6 +160,7 @@ final class BottledChaosSourceWork {
             BottledChaosMachineConfiguration.withDependencies(pools),
             sources,
             new LinkedHashMap<>(),
+            null,
             null);
     }
 

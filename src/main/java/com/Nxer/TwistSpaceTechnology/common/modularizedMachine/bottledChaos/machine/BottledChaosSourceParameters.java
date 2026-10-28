@@ -8,16 +8,11 @@ import com.github.bsideup.jabel.Desugar;
 
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
-import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 
 /** Source-machine hooks use the final serial power without rebuilding material routes. */
 public interface BottledChaosSourceParameters {
 
     BottledChaosSourceParameters DEFAULT = new BottledChaosSourceParameters() {};
-
-    default CheckRecipeResult sourceFailure() {
-        return CheckRecipeResultRegistry.NO_RECIPE;
-    }
 
     default boolean isSourceAvailable(RecipeMap<?> pool) {
         return true;

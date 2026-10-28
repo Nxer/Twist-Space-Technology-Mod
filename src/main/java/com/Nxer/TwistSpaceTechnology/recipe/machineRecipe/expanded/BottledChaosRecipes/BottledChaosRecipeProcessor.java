@@ -37,6 +37,8 @@ import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
 
 import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.GTUtility.FluidId;
 
@@ -218,7 +220,7 @@ public final class BottledChaosRecipeProcessor {
     @FunctionalInterface
     public interface RouteFilter {
 
-        boolean allows(long voltage, long pools);
+        CheckRecipeResult check(long voltage, long pools);
     }
 
     /** One input/structure snapshot, sharing source checks and normalized costs across bounded batch probes. */
@@ -250,9 +252,10 @@ public final class BottledChaosRecipeProcessor {
         private int[] goalOrder;
         private long[] targets;
         private boolean deferCompletion;
+        private CheckRecipeResult preparationFailure = CheckRecipeResultRegistry.NO_RECIPE;
         private boolean targetExtensionAttempted;
         private boolean shortCorrectionAttempted;
-        private RouteFilter routeFilter = (voltage, pools) -> true;
+        private RouteFilter routeFilter = (voltage, pools) -> CheckRecipeResultRegistry.SUCCESSFUL;
         private java.util.function.LongToDoubleFunction durationLimit = voltage -> Double.MAX_VALUE;
 
         public void setLimits(RouteFilter routeFilter, java.util.function.LongToDoubleFunction durationLimit) {
@@ -280,30 +283,33 @@ public final class BottledChaosRecipeProcessor {
         private SourceChecks sourceChecks(long voltage) {
             return sourceChecks.computeIfAbsent(
                 voltage,
-                ignored -> new SourceChecks(
-                    new double[snapshot.routes.length],
-                    new boolean[snapshot.routes.length],
-                    new boolean[snapshot.routes.length],
-                    new Selection[snapshot.routes.length]));
+                ignored -> new SourceChecks(new double[snapshot.routes.length], new Selection[snapshot.routes.length]));
         }
 
-        private boolean checkSources(int index, long voltage) {
+        private CheckRecipeResult checkSources(int index, long voltage) {
             SourceChecks checks = sourceChecks(voltage);
-            if (!checks.checked[index]) {
+            if (checks.selections[index] == null) {
                 long diagnosticSourceStart = System.nanoTime();
                 diagnosticSourceCalls++;
-                checks.checked[index] = true;
                 Selection selected = snapshot.routes[index].work.select(parameters, voltage);
+                if (selected.failure() == null) {
+                    CheckRecipeResult result = routeFilter.check(voltage, selected.pools());
+                    if (!result.wasSuccessful()) selected = selected.rejected(result);
+                }
                 checks.selections[index] = selected;
-                checks.allowed[index] = selected != null && routeFilter.allows(voltage, selected.pools());
-                if (selected != null) checks.costs[index] = selected.duration();
+                checks.costs[index] = selected.duration();
                 diagnosticSourceNs += System.nanoTime() - diagnosticSourceStart;
             }
-            return checks.allowed[index];
+            CheckRecipeResult failure = checks.selections[index].failure();
+            return failure == null ? CheckRecipeResultRegistry.SUCCESSFUL : failure;
         }
 
         @Desugar
-        private record SourceChecks(double[] costs, boolean[] checked, boolean[] allowed, Selection[] selections) {}
+        private record SourceChecks(double[] costs, Selection[] selections) {}
+
+        public CheckRecipeResult preparationFailure() {
+            return preparationFailure;
+        }
 
         /** Entry fallbacks share the same input, authorization and source-cost snapshot. */
         public PreparedPlan prepareEntry(int entry) {
@@ -318,6 +324,7 @@ public final class BottledChaosRecipeProcessor {
         private PreparedPlan prepareEntry(int entry, boolean deferCompletion) {
             this.deferCompletion = deferCompletion;
             this.entry = entry;
+            preparationFailure = CheckRecipeResultRegistry.NO_RECIPE;
             goalOrder = null;
             targets = null;
             return prepare(1);
@@ -380,6 +387,8 @@ public final class BottledChaosRecipeProcessor {
                 long[] complete = graph.completeTargets[entry];
                 PreparedPlan first = prepareTargets(complete, true);
                 if (first == null) {
+                    // Failed machine conditions must not become a successful precursor-only plan.
+                    if (preparationFailure != CheckRecipeResultRegistry.NO_RECIPE) return null;
                     for (int index : goalOrder) {
                         long[] partial = new long[snapshot.routes.length];
                         partial[index] = 1;
@@ -505,7 +514,8 @@ public final class BottledChaosRecipeProcessor {
             int[] recovery = new int[goalOrder.length];
             int size = 0;
             for (int index : goalOrder) {
-                if (terminalRecovery(index) && checkSources(index, chosen.baseEUt)) recovery[size++] = index;
+                if (terminalRecovery(index) && checkSources(index, chosen.baseEUt).wasSuccessful())
+                    recovery[size++] = index;
             }
             if (size == 0) return chosen;
             var recovered = chainPlanner(Integer.MAX_VALUE)
@@ -530,8 +540,11 @@ public final class BottledChaosRecipeProcessor {
                 long batchLimit = Math.min(
                     Integer.MAX_VALUE,
                     Math.max(1, Math.min(10000, Config.BottledChaosMaxChainedRecipeBatches)) * Math.max(1, scale));
-                BottledChaosChainPlanner.Result result = chainPlanner(batchLimit)
+                BottledChaosChainPlanner planner = chainPlanner(batchLimit);
+                BottledChaosChainPlanner.Result result = planner
                     .prepare(goalOrder, requested, external, remaining, released, skipUnavailable);
+                if (skipUnavailable) preparationFailure = result == null ? planner.preparationFailure()
+                    : CheckRecipeResultRegistry.NO_RECIPE;
                 return result == null ? null : prepareResult(result);
 
             } finally {
@@ -543,13 +556,14 @@ public final class BottledChaosRecipeProcessor {
             return new BottledChaosChainPlanner(snapshot.stages, suppliers, new BottledChaosChainPlanner.Conditions() {
 
                 @Override
-                public boolean canProcess(int index, long voltage) {
-                    return authorized[index] && checkSources(index, voltage);
+                public CheckRecipeResult check(int index, long voltage) {
+                    return authorized[index] ? checkSources(index, voltage) : CheckRecipeResultRegistry.NO_RECIPE;
                 }
 
                 @Override
                 public double cost(int index, long voltage) {
-                    return checkSources(index, voltage) ? sourceChecks(voltage).costs[index] : Double.POSITIVE_INFINITY;
+                    return checkSources(index, voltage).wasSuccessful() ? sourceChecks(voltage).costs[index]
+                        : Double.POSITIVE_INFINITY;
                 }
 
                 @Override
@@ -559,8 +573,9 @@ public final class BottledChaosRecipeProcessor {
 
                 @Override
                 public Map<Object, Long> inputs(int index, long voltage) {
-                    return !snapshot.routes[index].work.hasAlternatives() || !checkSources(index, voltage) ? null
-                        : sourceChecks(voltage).selections[index].inputs();
+                    return !snapshot.routes[index].work.hasAlternatives()
+                        || !checkSources(index, voltage).wasSuccessful() ? null
+                            : sourceChecks(voltage).selections[index].inputs();
                 }
 
                 @Override
@@ -769,7 +784,8 @@ public final class BottledChaosRecipeProcessor {
                     data.outputs,
                     data.catalysts,
                     routes[entry].definition.baseEUt(),
-                    routes[entry].definition.availableInputsOnly());
+                    routes[entry].definition.availableInputsOnly(),
+                    Arrays.asList(routes[entry].definition.planningTargets()));
             }
             Map<String, Integer> families = new LinkedHashMap<>();
             familyOfEntry = new int[routes.length];
