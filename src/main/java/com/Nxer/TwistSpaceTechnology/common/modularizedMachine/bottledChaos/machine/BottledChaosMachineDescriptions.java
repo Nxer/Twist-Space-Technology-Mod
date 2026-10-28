@@ -1,12 +1,16 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineParameters.evaluate;
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
@@ -27,6 +31,35 @@ public final class BottledChaosMachineDescriptions {
 
     public static List<String> describe(ItemStack controller, Structure structure, RecipeMap<?> pool,
         int quantitySpeedExponent, boolean compact) {
+        return describe(controller, structure, pool, quantitySpeedExponent, compact, null);
+    }
+
+    /** The GUI receives numeric host-dependent values from the server, while translating locally. */
+    public static List<String> describeForGui(ItemStack controller, Structure structure, RecipeMap<?> pool,
+        int quantitySpeedExponent, NBTTagCompound runtime) {
+        if (runtime.getBoolean("debug")) {
+            return Arrays.asList(
+                EnumChatFormatting.GRAY
+                    + text("parallel", EnumChatFormatting.GOLD + number(runtime.getLong("parallel"))),
+                EnumChatFormatting.GRAY + text("eu", EnumChatFormatting.YELLOW + number(runtime.getDouble("eu"))),
+                EnumChatFormatting.GRAY + text(
+                    "time",
+                    EnumChatFormatting.GREEN
+                        + number(runtime.getDouble("time") / (1d + Math.max(0, quantitySpeedExponent)))),
+                EnumChatFormatting.GRAY + text(
+                    "oc",
+                    EnumChatFormatting.AQUA + clock(runtime.getDouble("power"), runtime.getDouble("divisor"))));
+        }
+        List<String> lines = describe(controller, structure, pool, quantitySpeedExponent, true, runtime);
+        // #tr tst.bottledchaos.machine_module.source_machine
+        // # Source machine: %s
+        // #zh_CN 来源机器: %s
+        if (controller != null) lines.add(0, text("source_machine", controller.getDisplayName()));
+        return lines;
+    }
+
+    private static List<String> describe(ItemStack controller, Structure structure, RecipeMap<?> pool,
+        int quantitySpeedExponent, boolean compact, NBTTagCompound runtime) {
         List<String> lines = new ArrayList<>();
         if (controller == null || pool == null) return lines;
         var source = new BottledChaosMachineParameters.InstalledSource(controller, structure);
@@ -42,12 +75,24 @@ public final class BottledChaosMachineDescriptions {
                 // #tr tst.bottledchaos.machine_module.energy_duration
                 // # Duration is normalized from total recipe energy.
                 // #zh_CN 按配方总能耗折算耗时.
-                lines.add(text("eu", base == null ? "-" : number(base.euMultiplier())));
+                String forgeEU = runtime != null && runtime.getBoolean("numeric") ? number(runtime.getDouble("eu"))
+                    : base == null ? "-" : number(base.euMultiplier());
+                lines.add(text("eu", forgeEU));
                 lines.add(text("energy_duration"));
                 // #tr tst.bottledchaos.machine_module.critical_photon
-                // # Critical Photon: 1 per module stack per round.
-                // #zh_CN 临界光子: 每堆每轮1个.
-                lines.add(text("critical_photon"));
+                // # Critical Photon: 1 per packaged machine per round.
+                // #zh_CN 临界光子: 每台封装机器每轮1个.
+                if (runtime == null) lines.add(text("critical_photon"));
+                else {
+                    // #tr tst.bottledchaos.machine_module.energy_duration_scaled
+                    // # Duration: total recipe energy x%s / recipe voltage / %s.
+                    // #zh_CN 耗时: 配方总能耗 x%s / 配方电压 / %s.
+                    lines.set(1, text("energy_duration_scaled", forgeEU, 1 + Math.max(0, quantitySpeedExponent)));
+                    // #tr tst.bottledchaos.machine_module.photon_demand
+                    // # Critical Photons per round: %s
+                    // #zh_CN 每轮临界光子: %s
+                    lines.add(text("photon_demand", runtime.getLong("quantity")));
+                }
             } else {
                 // #tr tst.bottledchaos.machine_module.free_cooling
                 // # Plasma cooling: 0 EU, 0 ticks of processing work.
@@ -71,7 +116,8 @@ public final class BottledChaosMachineDescriptions {
             "godforge_configuration",
             source.godforge.rings(),
             BottledChaosComplexStructures.godforgeUpgradeName(source.godforge));
-        if (base != null && BottledChaosMachineConfiguration.isPurificationPool(pool)) special = text("purification");
+        if (runtime == null && base != null && BottledChaosMachineConfiguration.isPurificationPool(pool))
+            special = text("purification");
         boolean recipeHeat = BottledChaosStructureCatalog.requiresRecipeHeat(pool);
         boolean variableTime = false;
         if (machine != null) switch (machine) {
@@ -102,7 +148,6 @@ public final class BottledChaosMachineDescriptions {
                     time = number(1d / quantitySpeed);
                 }
                 oc = clock(4, 2);
-                restrictions = base == null && structure != null ? tierName(u.glass) : "";
             }
             case INDISTINCT -> oc = text("conditional_oc", tierName(u.component));
             case CRYSTALLINE -> parallel = ((long) u.glass * u.field) + "P";
@@ -130,9 +175,6 @@ public final class BottledChaosMachineDescriptions {
                 variableTime = true;
             }
             case FORGE_HAMMER -> parallel = (6L * Math.max(1, u.solenoid)) + "T";
-            case LASER_ENGRAVER -> {
-                restrictions = text("laser_glass", tierName(u.glass), tierName(u.laserTier));
-            }
             case MACERATOR -> parallel = (shape > 1 ? "8" : "2") + "T";
             case MEGA_MACERATOR -> time = u.glass >= VoltageIndex.UMV ? number(0.125 / quantitySpeed)
                 : text("macerator_time", tierName(u.glass), number(0.125 / quantitySpeed), number(1d / quantitySpeed));
@@ -181,10 +223,8 @@ public final class BottledChaosMachineDescriptions {
             }
             case SWELEGFYR -> {
                 if (recipeHeat) eu = text("thermal_eu", "0.9");
-                if (base != null) special = StatCollector.translateToLocalFormatted(
-                    "GT5U.tooltip.fluid.temperature",
-                    shape > 1 ? (long) (Math.floor(Math.pow(structure.heat(), 1.08) / 100) * 100 + 1)
-                        : structure.heat());
+                if (structure != null)
+                    lines.add(StatCollector.translateToLocalFormatted("GT5U.machines.tier.fmt", shape));
             }
             case CENTRIFUGE -> parallel = "8T";
             case SPINMATRON -> {
@@ -224,6 +264,21 @@ public final class BottledChaosMachineDescriptions {
             }
             default -> {}
         }
+        if (runtime != null && runtime.getBoolean("numeric")) {
+            // Recipe-dependent expressions remain expressions; host voltage/power and installed upgrades are numeric.
+            if (machine != Machine.QUANTUM && machine != Machine.SPINMATRON
+                && machine != Machine.FUSION
+                && machine != Machine.BIO_VAT
+                && machine != Machine.BIOSPHERE) parallel = number(runtime.getLong("parallel"));
+            if (machine != Machine.SPINMATRON && machine != Machine.BIO_VAT && machine != Machine.BIOSPHERE) {
+                time = number(runtime.getDouble("time") / quantitySpeed);
+                variableTime = false;
+            }
+            if (!recipeHeat && machine != Machine.MEGA_ALLOY && machine != Machine.SPINMATRON)
+                eu = number(runtime.getDouble("eu"));
+            if (machine != Machine.INDISTINCT) oc = clock(runtime.getDouble("power"), runtime.getDouble("divisor"));
+            if (machine == Machine.BLAST_FURNACE) special = text("thermal_oc");
+        }
         // #tr tst.bottledchaos.machine_module.parallel
         // # Parallel: %s
         // #zh_CN 并行: %s
@@ -244,17 +299,30 @@ public final class BottledChaosMachineDescriptions {
         int voltageLimit = base != null && machine != Machine.ALLOY_BLAST ? base.maximumRecipeTier() : -1;
         if (voltageLimit >= 0)
             restrictions = append(restrictions, text("recipe_voltage_limit", tierName(voltageLimit)));
+        if (base != null
+            && (machine == Machine.BIO_VAT || machine == Machine.BIOSPHERE && pool != RecipeMaps.brewingRecipes
+                && pool != RecipeMaps.fermentingRecipes)) {
+            // #tr tst.bottledchaos.machine_module.recipe_glass_limit
+            // # Maximum culture recipe glass requirement: %s
+            // #zh_CN 培养配方所需玻璃等级最高: %s
+            restrictions = append(restrictions, text("recipe_glass_limit", tierName(base.glassTier())));
+        }
         if (base != null && base.casingTier() >= 0)
             restrictions = append(restrictions, text("casing_limit", base.casingTier()));
         if (base != null && base.compressionTier() >= 0)
             restrictions = append(restrictions, text("compression_limit", base.compressionTier()));
-        if (recipeHeat && base != null && base.heat() > 0) restrictions = append(
-            restrictions,
-            text(
-                "heat_limit",
-                machine == Machine.BLAST_FURNACE || machine == Machine.SWELEGFYR
-                    ? (structure == null ? 0 : structure.heat()) + " + 100 x max(T - 2, 0)"
-                    : base.heat()));
+        if (recipeHeat && base != null && base.heat() > 0) {
+            String limit = runtime != null && runtime.getBoolean("numeric") ? formatNumber(runtime.getLong("heat"))
+                : machine == Machine.BLAST_FURNACE || machine == Machine.SWELEGFYR
+                    ? formatNumber(structure == null ? 0 : structure.heat()) + " + 100 x max(T - 2, 0)"
+                    : formatNumber(base.heat());
+            String heat = machine == Machine.SWELEGFYR && structure != null ? formatNumber(
+                shape > 1 ? (long) (Math.floor(Math.pow(structure.heat(), 1.08) / 100) * 100 + 1) : structure.heat())
+                : limit;
+            if (!heat.equals(limit))
+                lines.add(EnumChatFormatting.YELLOW + text("heat_limit", EnumChatFormatting.WHITE + limit));
+            lines.add(StatCollector.translateToLocalFormatted("GT5U.multiblock.heat", heat));
+        }
         // #tr tst.bottledchaos.machine_module.limits
         // # Recipe limits: %s
         // #zh_CN 配方限制: %s
@@ -263,14 +331,6 @@ public final class BottledChaosMachineDescriptions {
                 "limits",
                 EnumChatFormatting.YELLOW
                     + (restrictions.isEmpty() ? StatCollector.translateToLocal("GT5U.gui.text.nil") : restrictions)));
-        if (!compact && recipeHeat
-            && base != null
-            && base.heat() > 0
-            && machine != Machine.BLAST_FURNACE
-            && machine != Machine.SWELEGFYR)
-            special = append(
-                special,
-                StatCollector.translateToLocalFormatted("GT5U.tooltip.fluid.temperature", base.heat()));
         if (machine == Machine.BIO_VAT || machine == Machine.BIOSPHERE && pool != RecipeMaps.brewingRecipes
             && pool != RecipeMaps.fermentingRecipes) special = append(special, text("radiation"));
         if (recipeHeat && (machine == Machine.DEHYDRATOR || machine == Machine.ADVANCED_BLAST
@@ -278,11 +338,16 @@ public final class BottledChaosMachineDescriptions {
             || machine == Machine.GODFORGE_MOLTEN
             || machine == Machine.HEARTH
             || machine == Machine.SWELEGFYR)) special = append(special, text("thermal_oc"));
-        if (base != null && base.upkeep().length > 0 && machine != Machine.SPINMATRON)
-            for (FluidStack fluid : base.upkeep())
-                special += (special.isEmpty() ? "" : "; ") + text("upkeep", fluid.getLocalizedName(), fluid.amount);
+        if (runtime == null && base != null && base.upkeep().length > 0 && machine != Machine.SPINMATRON)
+            for (FluidStack fluid : base.upkeep()) special += (special.isEmpty() ? "" : "; ") + text(
+                "upkeep",
+                fluid.getLocalizedName(),
+                BigDecimal.valueOf(fluid.amount)
+                    .divide(BigDecimal.valueOf(base.upkeepPeriodSeconds()))
+                    .stripTrailingZeros()
+                    .toPlainString());
         if (base != null && base.perfectOverclocks() > 0 && machine == Machine.FRIDGE)
-            special += "; " + text("perfect_stages", base.perfectOverclocks());
+            special = append(special, text("perfect_stages", base.perfectOverclocks()));
         if (base != null && base.perfectOverclocks() > 0 && machine == Machine.DE_FUSION)
             special = append(special, text("perfect_stages", base.perfectOverclocks()));
         if (machine == Machine.QUANTUM && u.quantumTier >= 1)
@@ -296,13 +361,11 @@ public final class BottledChaosMachineDescriptions {
             special = append(special, text("laser_oc_limit", tierName(u.laserTier + 1)));
         if (parallel.contains("T") || parallel.contains("P")
             || time.contains("P")
-            || machine == Machine.BLAST_FURNACE
-            || machine == Machine.SWELEGFYR) special = append(special, text("host_tiers"));
-        if (!special.isEmpty()) {
-            // #tr tst.bottledchaos.machine_module.special
-            // # Special: %s
-            // #zh_CN 特殊: %s
-            lines.add(EnumChatFormatting.GRAY + text("special", EnumChatFormatting.WHITE + special));
+            || (runtime == null || !runtime.getBoolean("numeric"))
+                && (machine == Machine.BLAST_FURNACE || machine == Machine.SWELEGFYR))
+            special = append(special, text("host_tiers"));
+        for (String line : special.split(";\\s*")) {
+            if (!line.isEmpty()) lines.add(EnumChatFormatting.WHITE + line);
         }
         return lines;
     }
@@ -406,20 +469,20 @@ public final class BottledChaosMachineDescriptions {
     // #zh_CN 主机耗时倍率
 
     // #tr tst.bottledchaos.machine_module.thermal_eu
-    // # %s^floor(excess heat/900K)
-    // #zh_CN %s^floor(余热/900K)
+    // # %s^floor(excess furnace temperature/900K)
+    // #zh_CN %s^floor(炉温差/900K)
 
     // #tr tst.bottledchaos.machine_module.voltage_heat
-    // # Coil heat %s K + 100 x max(T - 2, 0) K; one perfect OC per 1800 K excess heat
-    // #zh_CN 线圈炉温%s K + 100 x max(T - 2, 0) K; 每1800 K余热增加一档无损超频
+    // # Coil furnace temperature %s K + 100 x max(T - 2, 0) K; one perfect OC per 1800 K excess furnace temperature
+    // #zh_CN 线圈炉温%s K + 100 x max(T - 2, 0) K; 每1800 K炉温差增加一档无损超频
 
     // #tr tst.bottledchaos.machine_module.thermal_oc
-    // # Excess heat = temperature - required heat; one perfect OC per 1800 K excess heat
-    // #zh_CN 余热 = 炉温 - 配方所需热量; 每1800 K余热增加一档无损超频
+    // # Excess heat = heat - recipe heat; one perfect overclock for every 1800K above the recipe requirement
+    // #zh_CN 炉温差 = 炉温 - 配方所需炉温; 炉温每高出配方要求1800K, 增加一档无损超频
 
     // #tr tst.bottledchaos.machine_module.heat_limit
-    // # Maximum required recipe heat: %s K
-    // #zh_CN 最高配方所需热量: %s K
+    // # Recipe heat limit: %sK
+    // #zh_CN 配方炉温限制: %sK
 
     // #tr tst.bottledchaos.machine_module.casing_limit
     // # Maximum required casing tier: %s
@@ -448,10 +511,6 @@ public final class BottledChaosMachineDescriptions {
     // #tr tst.bottledchaos.machine_module.laser_oc_limit
     // # Maximum source tier after overclocking: %s
     // #zh_CN 原配方超频后最高等级: %s
-
-    // #tr tst.bottledchaos.machine_module.laser_glass
-    // # Glass: %s; laser source: %s
-    // #zh_CN 玻璃: %s; 激光源: %s
 
     // #tr tst.bottledchaos.machine_module.macerator_time
     // # Recipes below %s: %s; others: %s

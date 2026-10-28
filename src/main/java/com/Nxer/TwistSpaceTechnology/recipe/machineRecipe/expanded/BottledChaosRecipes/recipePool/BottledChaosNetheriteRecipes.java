@@ -58,7 +58,8 @@ public final class BottledChaosNetheriteRecipes {
             new Object[] { NetheriteNanoparticles, NitricAcid },
             new Object[] {},
             catalog.markRecipe(ChemicalBath, new Object[] { HotNetheriteScrap, HeavyHellishMud, PoorNetherWaste }, BrittleNetheriteScrap, -1),
-            catalog.markRecipe(Macerator, BrittleNetheriteScrap, NetheriteNanoparticles, -1));
+            catalog.markRecipe(Macerator, BrittleNetheriteScrap, NetheriteNanoparticles, -1))
+            .setDisplayOutputs(NetheriteNanoparticles);
 
         // Supply the bonding metal through either native process; one rhodium block represents nine dusts.
         catalog.registerAlternativeChain("ancient_debris", TierEU.RECIPE_UV, RhodiumDust,

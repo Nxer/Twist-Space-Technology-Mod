@@ -13,6 +13,7 @@ import java.util.StringJoiner;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -283,6 +284,98 @@ public final class BottledChaosMachineConfiguration {
     private static long quantity(ItemStack stack) {
         return ItemBottledChaosMachineModule.isModule(stack) ? ItemBottledChaosMachineModule.quantity(stack)
             : stack == null ? 0 : stack.stackSize;
+    }
+
+    /** Bounded GUI snapshot from cached installed sources; never validates packaged structures each tick. */
+    public NBTTagCompound moduleParameters(int slot, BottledChaosMachineParameters.Context context,
+        List<BottledChaosUpkeep.Demand> activeDemands) {
+        loadPendingMachines();
+        NBTTagCompound data = new NBTTagCompound();
+        data.setInteger("slot", slot);
+        if (slot < 0 || slot >= poolCount()) return data;
+        long quantity = machineQuantities[slot];
+        data.setLong("quantity", quantity);
+        if (isPurificationPlantSlot(slot)) {
+            long needed = 0;
+            for (int pool = 0; pool < pools.length; pool++) if (isPoolRequired(pool) && isPurificationPool(pools[pool]))
+                needed = Math.max(needed, Math.max(1, machineQuantities[pool]));
+            data.setLong("needed", needed);
+            return data;
+        }
+        var source = machineSources[slot];
+        boolean debug = (debugPools & (1L << slot)) != 0;
+        if ((!debug && source == null) || quantity <= 0) return data;
+        var profile = debug ? Evaluation.defaults(pools[slot], machineSpeeds[slot])
+            .profile()
+            : BottledChaosMachineParameters
+                .evaluate(source, pools[slot], 1, context, BottledChaosSourceRequirements.NONE)
+                .profile();
+        if (profile != null) {
+            data.setBoolean("numeric", true);
+            data.setLong("parallel", profile.parallel());
+            data.setDouble("eu", profile.euMultiplier());
+            data.setDouble("time", profile.timeMultiplier());
+            data.setDouble("power", profile.powerMultiplier());
+            data.setDouble("divisor", profile.timeDivisor());
+            data.setLong("heat", profile.heat());
+            if (debug) {
+                data.setBoolean("debug", true);
+                return data;
+            }
+        } else {
+            // A powerless host still has fixed structural upkeep. Do not invent recipe-dependent fuel rates.
+            profile = BottledChaosMachineParameters
+                .evaluate(
+                    source,
+                    pools[slot],
+                    1,
+                    new BottledChaosMachineParameters.Context(
+                        32,
+                        32,
+                        context.items(),
+                        context.fluids(),
+                        context.masterTime(),
+                        context.masterEU(),
+                        context.masterParallel()),
+                    BottledChaosSourceRequirements.NONE)
+                .profile();
+        }
+        List<BottledChaosUpkeep.Demand> demands = new ArrayList<>();
+        for (var demand : activeDemands) if (poolKey(slot).equals(demand.pool())) demands.add(demand);
+        if (demands.isEmpty() && profile != null
+            && source.machine != BottledChaosMachineParameters.Machine.SPINMATRON) {
+            for (FluidStack fluid : profile.upkeep()) if (fluid != null && fluid.amount > 0) demands.add(
+                new BottledChaosUpkeep.Demand(
+                    poolKey(slot),
+                    fluid,
+                    BigInteger.valueOf(quantity)
+                        .multiply(BigInteger.valueOf(fluid.amount)),
+                    profile.startupReserveSeconds(),
+                    profile.upkeepPeriodSeconds()));
+        }
+        // Multiple groups share a pool's upkeep; use its maximum rate for each fluid, as execution does.
+        NBTTagList upkeep = new NBTTagList();
+        for (int i = 0; i < demands.size(); i++) {
+            var demand = demands.get(i);
+            boolean duplicate = false;
+            for (int previous = 0; previous < i; previous++) if (demands.get(previous)
+                .fluid()
+                .isFluidEqual(demand.fluid())) duplicate = true;
+            if (duplicate) continue;
+            var rate = demand.perSecond();
+            for (var other : demands) if (other.fluid()
+                .isFluidEqual(demand.fluid())) rate = rate.max(other.perSecond());
+            if (rate.signum() <= 0) continue;
+            NBTTagCompound entry = demand.fluid()
+                .writeToNBT(new NBTTagCompound());
+            entry.setString(
+                "perSecond",
+                rate.stripTrailingZeros()
+                    .toPlainString());
+            upkeep.appendTag(entry);
+        }
+        data.setTag("upkeep", upkeep);
+        return data;
     }
 
     /** One candidate's immutable inventory snapshot; source requirements never leak into another credential. */

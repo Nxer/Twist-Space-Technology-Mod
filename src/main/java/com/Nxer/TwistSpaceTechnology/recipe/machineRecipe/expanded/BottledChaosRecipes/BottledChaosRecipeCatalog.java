@@ -51,6 +51,7 @@ public final class BottledChaosRecipeCatalog {
     private final Map<Integer, TST_ItemID> selectorCircuits = new LinkedHashMap<>();
     private final Set<Integer> availableInputChains = new LinkedHashSet<>();
     private final Map<Integer, Object[]> outputMarkers = new LinkedHashMap<>();
+    private final Map<Integer, Object[]> displayOutputs = new LinkedHashMap<>();
     private final Set<Object> keyOutputs = new LinkedHashSet<>();
     private final Map<Integer, Object[]> planningTargets = new LinkedHashMap<>();
     private final Map<String, List<Object>> displayRoots = new LinkedHashMap<>();
@@ -210,6 +211,15 @@ public final class BottledChaosRecipeCatalog {
 
         private Entry(int index) {
             this.index = index;
+        }
+
+        /** Presentation only: composition boundaries and execution targets keep their existing meanings. */
+        public void setDisplayOutputs(Object... outputs) {
+            displayOutputs.put(
+                index,
+                Arrays.stream(outputs)
+                    .map(BottledChaosRecipeCatalog::resourceKey)
+                    .toArray());
         }
 
         public void setPlanningTargets(Object... outputs) {
@@ -826,6 +836,9 @@ public final class BottledChaosRecipeCatalog {
                 if (!data.outputs.containsKey(target))
                     throw new IllegalStateException("execution target is not a route output: " + target);
             }
+            Set<Object> markers = new LinkedHashSet<>(
+                Arrays.asList(displayOutputs.getOrDefault(entry, keyOutputs(entry))));
+            markers.retainAll(data.outputs.keySet());
             routes[entry] = new CompiledRoute(
                 data,
                 chain.balanceRoot(),
@@ -836,14 +849,14 @@ public final class BottledChaosRecipeCatalog {
                 chain.requiredTagMask(),
                 availableInputChains.contains(entry),
                 displayInputAlternatives.get(entry),
-                hiddenDisplayEntries.contains(entry));
+                hiddenDisplayEntries.contains(entry),
+                Collections.unmodifiableSet(markers));
         }
         return new CompiledCatalog(
             routes,
             entryOrder(),
             displayOrder(),
             links.toArray(new ChainLink[0]),
-            Collections.unmodifiableSet(keyOutputs),
             resolved.size(),
             capacityCosts());
     }
@@ -852,11 +865,11 @@ public final class BottledChaosRecipeCatalog {
     @Desugar
     record CompiledRoute(RecipeData data, Object balanceRoot, Object[] planningTargets, long baseEUt, int tagIndex,
         int inputMultiplier, long requiredTagMask, boolean availableInputsOnly, ItemStack[][] inputAlternatives,
-        boolean hiddenDisplay) {}
+        boolean hiddenDisplay, Set<Object> displayOutputs) {}
 
     @Desugar
     record CompiledCatalog(CompiledRoute[] routes, int[] entryOrder, int[] displayOrder, ChainLink[] links,
-        Set<Object> keyOutputs, int resolvedStepCount, int[] capacityCosts) {}
+        int resolvedStepCount, int[] capacityCosts) {}
 
     private static Object resourceKey(Object resource) {
         return resource instanceof Fluid fluid ? FluidId.create(fluid) : resource;

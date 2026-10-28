@@ -410,8 +410,8 @@ public final class BottledChaosComplexStructures {
     public static String godforgeUpgradeName(GodforgeProfile profile) {
         StringJoiner branches = new StringJoiner(" + ");
         // #tr tst.bottledchaos.recipe.structure.godforge_heat
-        // # Heat
-        // #zh_CN 热量
+        // # Furnace temperature
+        // #zh_CN 炉温
         if (profile.upgrades()
             .contains(ForgeOfGodsUpgrade.SEFCP))
             branches.add(StatCollector.translateToLocal("tst.bottledchaos.recipe.structure.godforge_heat"));

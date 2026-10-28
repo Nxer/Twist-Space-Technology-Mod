@@ -69,12 +69,7 @@ public final class BottledChaosRecipeProcessor {
                         .mapToLong(time -> BottledChaosMachineConfiguration.mask(time.map()))
                         .reduce(0L, (left, right) -> left | right)));
         }
-        cache = new RouteCache(
-            routes,
-            compiled.entryOrder(),
-            compiled.displayOrder(),
-            compiled.links(),
-            compiled.keyOutputs());
+        cache = new RouteCache(routes, compiled.entryOrder(), compiled.displayOrder(), compiled.links());
     }
 
     /** Last successful family/entry first, then the fixed family directory, as in GT's buffered recipe lookup. */
@@ -98,21 +93,36 @@ public final class BottledChaosRecipeProcessor {
         return Arrays.copyOf(result, size);
     }
 
-    /** Waila groups final targets before other key outputs, then unmarked coproducts. */
+    /** Final products follow tag order; other products reverse tags while retaining each recipe's output order. */
     public static Map<Object, Integer> outputPriorities(long tagMask) {
         RouteCache snapshot = cache;
         if (snapshot == null || tagMask == 0) return Collections.emptyMap();
         Map<Object, Integer> priorities = new LinkedHashMap<>();
+        Map<Object, Integer> outputTags = new LinkedHashMap<>();
         for (int entry : snapshot.entryOrder) {
             CachedRoute route = snapshot.routes[entry];
             if (!route.isAuthorized(tagMask)) continue;
-            for (Object key : route.definition.data().outputs.keySet())
-                if (snapshot.keyOutputs.contains(key)) priorities.putIfAbsent(key, 1);
-            for (Object key : route.definition.planningTargets()) {
-                if (!snapshot.hasAuthorizedConsumer(entry, tagMask, key)) priorities.put(key, 0);
+            for (Object key : snapshot.outputRoles.get(entry)
+                .keySet()) {
+                int role = snapshot.hasAuthorizedConsumer(entry, tagMask, key) ? 1 : 0;
+                priorities.merge(key, role, Math::min);
+                outputTags.putIfAbsent(key, route.definition.tagIndex());
             }
         }
-        return priorities;
+        for (int entry : snapshot.entryOrder) {
+            CachedRoute route = snapshot.routes[entry];
+            if (route.isAuthorized(tagMask)) for (Object key : route.definition.data().outputs.keySet()) {
+                priorities.putIfAbsent(key, 2);
+                outputTags.putIfAbsent(key, route.definition.tagIndex());
+            }
+        }
+        Map<Object, Integer> ordered = new LinkedHashMap<>();
+        priorities.entrySet()
+            .stream()
+            .sorted(
+                Comparator.comparingInt(output -> output.getValue() == 0 ? 0 : -1 - outputTags.get(output.getKey())))
+            .forEach(output -> ordered.put(output.getKey(), output.getValue()));
+        return ordered;
     }
 
     /** One current authorization graph per processing group; quantities always belong to a fresh planner. */
@@ -714,7 +724,8 @@ public final class BottledChaosRecipeProcessor {
                     displayOrder,
                     cachedRoute.definition.requiredTagMask(),
                     inputAlternatives,
-                    snapshot.keyOutputs,
+                    Collections.unmodifiableMap(snapshot.outputRoles.get(entryIndex)),
+                    Collections.unmodifiableSet(snapshot.intermediateOutputs),
                     cachedRoute.definition.baseEUt(),
                     Collections.unmodifiableList(items),
                     Collections.unmodifiableList(fluids),
@@ -760,7 +771,8 @@ public final class BottledChaosRecipeProcessor {
         final int[] entryOrder;
         final int[] displayOrder;
         final ChainLink[] links;
-        final Set<Object> keyOutputs;
+        final List<Map<Object, Integer>> outputRoles = new ArrayList<>();
+        final Set<Object> intermediateOutputs = new LinkedHashSet<>();
         final int[][] familyEntries;
         final String[] familyNames;
         final int[] familyOfEntry;
@@ -768,16 +780,20 @@ public final class BottledChaosRecipeProcessor {
         final List<DisplayRecipe> displays;
         final int maxDisplaySourcePools;
 
-        RouteCache(CachedRoute[] routes, int[] entryOrder, int[] displayOrder, ChainLink[] links,
-            Set<Object> keyOutputs) {
+        RouteCache(CachedRoute[] routes, int[] entryOrder, int[] displayOrder, ChainLink[] links) {
             this.routes = routes;
             this.entryOrder = entryOrder;
             this.displayOrder = displayOrder;
             this.links = links;
-            this.keyOutputs = keyOutputs;
             stages = new BottledChaosChainPlanner.Stage[routes.length];
             for (int entry = 0; entry < routes.length; entry++) {
                 RecipeData data = routes[entry].definition.data();
+                Map<Object, Integer> roles = new LinkedHashMap<>();
+                for (Object key : data.outputs.keySet()) {
+                    if (routes[entry].definition.displayOutputs()
+                        .contains(key)) roles.put(key, 0);
+                }
+                outputRoles.add(roles);
                 stages[entry] = new BottledChaosChainPlanner.Stage(
                     data.inputs,
                     data.outputs,
@@ -785,6 +801,12 @@ public final class BottledChaosRecipeProcessor {
                     routes[entry].definition.baseEUt(),
                     routes[entry].definition.availableInputsOnly(),
                     Arrays.asList(routes[entry].definition.planningTargets()));
+            }
+            for (ChainLink link : links) {
+                Map<Object, Integer> roles = outputRoles.get(link.source());
+                if (!roles.containsKey(link.key())) continue;
+                roles.put(link.key(), 1);
+                intermediateOutputs.add(link.key());
             }
             Map<String, Integer> families = new LinkedHashMap<>();
             familyOfEntry = new int[routes.length];
@@ -978,12 +1000,12 @@ public final class BottledChaosRecipeProcessor {
     public record RecipeMapDuration(RecipeMap<?> map, double durationTicks) {}
 
     /**
-     * NEI row data: authorization, independent item alternatives, global key outputs, complete long quantities
-     * and grouped processing times. Key outputs restrict lookup without removing any displayed material.
+     * NEI row data: per-entry output markers and shared intermediate identities restrict lookup without hiding
+     * byproducts.
      */
     @Desugar
     public record DisplayRecipe(int tagIndex, int displayOrder, long requiredTagMask, ItemStack[][] inputAlternatives,
-        Set<Object> keyOutputs, long baseEUt, List<ItemStackLong> itemInputs, List<FluidStackLong> fluidInputs,
-        List<RecipeMapDuration> processingTimes, Plan plan) {}
+        Map<Object, Integer> outputRoles, Set<Object> intermediateOutputs, long baseEUt, List<ItemStackLong> itemInputs,
+        List<FluidStackLong> fluidInputs, List<RecipeMapDuration> processingTimes, Plan plan) {}
 
 }

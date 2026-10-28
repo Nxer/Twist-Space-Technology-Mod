@@ -20,6 +20,12 @@ public final class BottledChaosMaterialCache {
     private String lastFamily = "";
     private int lastEntry = -1;
     private long amountLimit = Integer.MAX_VALUE;
+    private int typeCount;
+
+    public int typeCount() {
+        if (typeCount < 0) typeCount = snapshot().size();
+        return typeCount;
+    }
 
     public long amountLimit() {
         return amountLimit;
@@ -67,6 +73,7 @@ public final class BottledChaosMaterialCache {
         }
         clearMaterials();
         inventories[index].set(remaining.items(), remaining.fluids());
+        typeCount = -1;
     }
 
     /** Newly produced intermediates become available only after the paid job finishes. */
@@ -93,6 +100,7 @@ public final class BottledChaosMaterialCache {
 
     public void clearMaterials() {
         for (BottledChaosOutputBuffer inventory : inventories) inventory.clear();
+        typeCount = 0;
     }
 
     private int indexOf(String family) {
@@ -116,6 +124,7 @@ public final class BottledChaosMaterialCache {
     }
 
     public void load(NBTTagCompound tag) {
+        typeCount = -1;
         lastFamily = tag.getString("lastFamily");
         setAmountLimit(tag.getLong("amountLimit"));
         lastEntry = -1; // Entry indexes are startup-local; material identities and family names are persistent.

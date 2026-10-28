@@ -8,6 +8,7 @@ import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledCha
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting.MATERIAL_SLOT_START;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting.OUTPUT_SLOT;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting.SLOT_COUNT;
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.defer;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.isAir;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
@@ -63,10 +64,12 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachin
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedMachineSupportAllModuleBase;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineConfiguration;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineParameters;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.material.BottledChaosMaterialSummary;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.material.BottledChaosOutputBuffer;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.processing.BottledChaosPowerAllocator;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.processing.BottledChaosProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.processing.BottledChaosStatus;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.processing.BottledChaosThread;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.processing.BottledChaosUpkeep;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.result.BottledChaosResultData;
@@ -74,6 +77,7 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IM
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ModularHatchBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.CredentialModel;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
@@ -120,6 +124,7 @@ import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
 import gregtech.common.tileentities.machines.IDualInputHatch;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
+import mcp.mobius.waila.overlay.tooltiprenderers.TTRenderStack;
 
 @IMetaTileEntity.SkipGenerateDescription
 public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_BottledChaos> {
@@ -139,7 +144,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private static final String WAILA_CREDENTIAL_HATCH_LIMIT = "bottledChaosCredentialHatchLimit";
     private static final String WAILA_RECIPE_CATEGORIES = "bottledChaosRecipeCategories";
     private static final String WAILA_RECIPE_TOKENS = "bottledChaosRecipeTokens";
-    private static final int THREAD_COUNT = 15;
+    public static final int THREAD_COUNT = 15;
     private static final String THREAD_NBT = "bottledChaosThreads";
     private static final Collection<ModularHatchTypes> SUPPORTED_MODULE_TYPES = ImmutableList.of(
         ModularHatchTypes.PARALLEL_CONTROLLER,
@@ -196,10 +201,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     // #tr tst.bottledchaos.input_share
     // # Power share: %s
     // #zh_CN 电力份额: %s
-
-    // #tr tst.bottledchaos.paused
-    // # Paused
-    // #zh_CN 已暂停
 
     // #tr tst.bottledchaos.capacity_exceeded
     // # Capacity exceeded
@@ -338,6 +339,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private final int[] inputPeerMasks = new int[THREAD_COUNT];
     private final long[] credentialCosts = new long[THREAD_COUNT];
     private CheckRecipeResult cacheExportResult = CheckRecipeResultRegistry.NONE;
+    private int cacheExportSlot = -1;
     private long cacheExportResultExpiresAt;
     private int processingGroupMask;
     private final long[] powerBudgets = new long[THREAD_COUNT];
@@ -1375,17 +1377,13 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     }
 
     /** Export available carry, including paused hatches, without voiding or touching unfinished job outputs. */
-    public void exportMaterialCaches() {
+    public void exportMaterialCache(TST_BottledChaosRecipeTokenHatch hatch, int slot) {
+        if (!isCredentialHatchConnected(hatch, slot) || !getBaseMetaTileEntity().isServerSide()) return;
+        cacheExportSlot = slot;
         cacheExportResultExpiresAt = getBaseMetaTileEntity().getWorld()
             .getTotalWorldTime() + 60;
-        boolean empty = true;
-        for (TST_BottledChaosRecipeTokenHatch hatch : credentialHatches) {
-            if (hatch != null && hatch.isValid()
-                && !hatch.getMaterialCache()
-                    .isEmpty())
-                empty = false;
-        }
-        if (empty) {
+        if (hatch.getMaterialCache()
+            .isEmpty()) {
             // #tr tst.bottledchaos.gui.cache_empty
             // # No materials to export.
             // #zh_CN 无可导出的材料.
@@ -1395,26 +1393,17 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         BottledChaosOutputBuffer.Transaction check = BottledChaosOutputBuffer.Transaction.forCacheExportCheck(this);
         cacheExportResult = reserveRunningOutputs(check);
         if (!cacheExportResult.wasSuccessful()) return;
-        for (TST_BottledChaosRecipeTokenHatch hatch : credentialHatches) {
-            if (hatch == null || !hatch.isValid()) continue;
-            cacheExportResult = hatch.getMaterialCache()
-                .reserveExport(check);
-            if (!cacheExportResult.wasSuccessful()) return;
-        }
+        cacheExportResult = hatch.getMaterialCache()
+            .reserveExport(check);
+        if (!cacheExportResult.wasSuccessful()) return;
         BottledChaosOutputBuffer.Transaction output = BottledChaosOutputBuffer.Transaction.forCacheExport(this);
-        for (TST_BottledChaosRecipeTokenHatch hatch : credentialHatches) {
-            if (hatch == null || !hatch.isValid()) continue;
-            cacheExportResult = hatch.getMaterialCache()
-                .reserveExport(output);
-            if (!cacheExportResult.wasSuccessful()) return;
-        }
+        cacheExportResult = hatch.getMaterialCache()
+            .reserveExport(output);
+        if (!cacheExportResult.wasSuccessful()) return;
         output.commit();
-        for (TST_BottledChaosRecipeTokenHatch hatch : credentialHatches) {
-            if (hatch == null || !hatch.isValid()) continue;
-            hatch.getMaterialCache()
-                .clearMaterials();
-            hatch.markDirty();
-        }
+        hatch.getMaterialCache()
+            .clearMaterials();
+        hatch.markDirty();
         // #tr tst.bottledchaos.gui.cache_exported
         // # Complete.
         // #zh_CN 完成.
@@ -1425,6 +1414,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     public CheckRecipeResult getCacheExportResult() {
         return getBaseMetaTileEntity().getWorld()
             .getTotalWorldTime() < cacheExportResultExpiresAt ? cacheExportResult : CheckRecipeResultRegistry.NONE;
+    }
+
+    public int getCacheExportSlot() {
+        return cacheExportSlot;
     }
 
     /** Checked input deltas; stateless immediate/probe modes need no per-attempt reservation maps. */
@@ -1607,7 +1600,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             CheckRecipeResult result = checkProcessing();
             if (failure == null) setCheckRecipeResult(result);
             for (BottledChaosThread thread : threads) {
-                if (thread.isBusy() && thread.status.equals("GT5U.gui.text.status.active")
+                if (thread.isBusy() && thread.status.equals(BottledChaosStatus.ACTIVE.key())
                     && thread.duration > mMaxProgresstime) {
                     mMaxProgresstime = thread.duration;
                     mProgresstime = thread.progress;
@@ -1960,56 +1953,237 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         return true;
     }
 
-    public int getCredentialHatchNumber(TST_BottledChaosRecipeTokenHatch hatch, int slot) {
-        return isCredentialHatchConnected(hatch, slot) ? slot + 1 : 0;
+    public TST_BottledChaosRecipeTokenHatch getManagedCredentialHatch(int slot) {
+        if (slot < 0 || slot >= THREAD_COUNT) return null;
+        return isCredentialHatchConnected(credentialHatches[slot], slot) ? credentialHatches[slot] : null;
     }
 
-    public int getCredentialHatchInputPeerMask(TST_BottledChaosRecipeTokenHatch hatch, int slot) {
-        if (!isCredentialHatchConnected(hatch, slot)) return 0;
-        return getInputPeerMask(slot);
+    /** Always synchronized while the host GUI is open; switching pages never clears the overview. */
+    public NBTTagCompound getCredentialHatchSummary() {
+        NBTTagCompound summary = new NBTTagCompound();
+        summary.setLong("capacity", capacity);
+        NBTTagList hatches = new NBTTagList();
+        for (int slot = 0; slot < THREAD_COUNT; slot++) {
+            hatches.appendTag(getCredentialHatchInformation(getManagedCredentialHatch(slot), this, slot, false));
+        }
+        summary.setTag("hatches", hatches);
+        return summary;
     }
 
-    public NBTTagCompound getCredentialHatchWailaData(TST_BottledChaosRecipeTokenHatch hatch, int slot) {
-        if (!isCredentialHatchConnected(hatch, slot)) return null;
-        BottledChaosThread thread = threads[slot];
-        NBTTagCompound job = new NBTTagCompound();
-        job.setInteger("slot", slot + 1);
-        job.setInteger("boundSlots", getCredentialHatchInputPeerMask(hatch, slot));
-        job.setInteger("progress", thread.progress);
-        job.setInteger("duration", thread.duration);
-        writeThreadWailaStatus(job, slot);
-        job.setLong(
-            "eut",
-            lEUt < 0 && thread.progress < thread.duration
-                && "GT5U.gui.text.status.active".equals(job.getString("status")) ? thread.eut : 0);
-        job.setLong("share", allocatedShares[slot]);
-        job.setLong("capacity", capacity);
-        job.setLong("energyTier", getInputVoltageTier());
-        job.setTag(
+    /** Detailed data is requested only for the hovered hatch, not for all fifteen slots each tick. */
+    public NBTTagCompound getCredentialHatchDetails(int slot) {
+        return getCredentialHatchInformation(getManagedCredentialHatch(slot), this, slot, true);
+    }
+
+    /**
+     * Authoritative hatch information. Detached hatches retain their physical inventory and settings,
+     * but never expose a stale controller job or allocation. Both GUI and Waila use these same fields.
+     */
+    public static NBTTagCompound getCredentialHatchInformation(TST_BottledChaosRecipeTokenHatch hatch,
+        MM_BottledChaos controller, int slot, boolean details) {
+        NBTTagCompound data = new NBTTagCompound();
+        boolean installed = hatch != null && hatch.isValid();
+        data.setBoolean("installed", installed);
+        if (!installed) return data;
+        ItemStack credential = hatch.getStackInSlot(0);
+        data.setBoolean("enabled", hatch.isExecutionEnabled());
+        data.setBoolean("hasCredential", ItemBottledChaosCredential.getCapacity(credential) > 0);
+        data.setString("family", ItemBottledChaosCredential.getDisplayRouteKeys(credential));
+        data.setString("tags", String.join(", ", ItemBottledChaosCredential.getRouteKeyList(credential)));
+        data.setInteger(
+            "cacheTypes",
+            hatch.getMaterialCache()
+                .typeCount());
+        data.setLong(
+            "cacheLimit",
+            hatch.getMaterialCache()
+                .amountLimit());
+        if (details) data.setTag(
+            "cache",
+            BottledChaosMaterialSummary
+                .forCache(hatch.getMaterialCache(), ItemBottledChaosCredential.getRouteMask(credential)));
+        boolean connected = controller != null && controller.isCredentialHatchConnected(hatch, slot);
+        data.setBoolean("connected", connected);
+        if (!connected) return data;
+        controller.writeProcessingGroupInformation(data, slot);
+        data.setInteger("boundSlots", controller.getInputPeerMask(slot));
+        data.setLong("capacity", controller.capacity);
+        BottledChaosThread thread = controller.threads[slot];
+        if (details) data.setTag(
             "outputs",
             BottledChaosMaterialSummary.forJob(
                 thread.outputs,
                 thread.pendingCache,
                 ItemBottledChaosCredential.getRouteMask(thread.credential)));
-        return job;
+        return data;
+    }
+
+    private void writeProcessingGroupInformation(NBTTagCompound data, int slot) {
+        data.setInteger("slot", slot + 1);
+        data.setLong("share", allocatedShares[slot]);
+        data.setInteger("progress", threads[slot].progress);
+        data.setInteger("duration", threads[slot].duration);
+        writeThreadWailaStatus(data, slot);
+        if (threads[slot].isBusy() && isFailure(threads[slot].blockedRoute)) {
+            NBTTagCompound failure = new NBTTagCompound();
+            BottledChaosResultData.write(failure, threads[slot].blockedRoute);
+            data.setTag("blockedRoute", failure);
+        }
+        data.setLong("energyTier", getInputVoltageTier());
+        data.setLong(
+            "eut",
+            lEUt < 0 && threads[slot].progress < threads[slot].duration
+                && BottledChaosStatus.ACTIVE.key()
+                    .equals(data.getString("status")) ? threads[slot].eut : 0);
     }
 
     private void writeThreadWailaStatus(NBTTagCompound job, int slot) {
         String status;
-        if (isThreadExecutionDisabled(slot)) status = "tst.bottledchaos.paused";
-        else if (overCapacity) status = "tst.bottledchaos.capacity_exceeded";
+        if (isThreadExecutionDisabled(slot)) status = BottledChaosStatus.PAUSED.key();
+        else if (overCapacity) status = BottledChaosStatus.CAPACITY_EXCEEDED.key();
         else if (validGroup(slot) && !ItemBottledChaosCredential.isBound(installedCredentials[slot]))
-            status = "tst.bottledchaos.unbound";
-        else if (!mMachine) status = "tst.bottledchaos.paused";
+            status = BottledChaosStatus.UNBOUND.key();
+        else if (!mMachine) status = BottledChaosStatus.PAUSED.key();
         else {
             CheckRecipeResult result = getThreadDisplayResult(slot);
             status = isFailure(result) ? ""
-                : !getBaseMetaTileEntity().isAllowedToWork() ? "tst.bottledchaos.paused" : threads[slot].status;
+                : !getBaseMetaTileEntity().isAllowedToWork() ? BottledChaosStatus.PAUSED.key() : threads[slot].status;
             job.setString("status", status);
             if (status.isEmpty()) BottledChaosResultData.write(job, result);
             return;
         }
         job.setString("status", status);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static String getCredentialHatchBoundInputs(int peers) {
+        // #tr tst.bottledchaos.credential_hatch.bound_inputs
+        // # Bound to %s
+        // #zh_CN 与%s绑定
+        return StatCollector
+            .translateToLocalFormatted("tst.bottledchaos.credential_hatch.bound_inputs", formatProcessingGroups(peers));
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static String getCredentialHatchTitle(NBTTagCompound data) {
+        if (data == null || !data.getBoolean("connected")) return "#-";
+        int peers = data.getInteger("boundSlots");
+        return "#" + data.getInteger("slot") + (peers == 0 ? "" : " | " + getCredentialHatchBoundInputs(peers));
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void appendCredentialHatchWaila(List<String> currentTip, NBTTagCompound data, boolean showCache) {
+        if (showCache) {
+            String keys = data.getString("tags");
+            if (!keys.isEmpty())
+                for (String key : keys.split(", ")) currentTip.add(StatCollector.translateToLocal(key));
+        } else {
+            currentTip.add(localizeKeyList(data.getString("family")));
+        }
+        int duration = data.getInteger("duration");
+        if (!data.getBoolean("connected")) {
+            // #tr tst.bottledchaos.credential_hatch.disconnected
+            // # Not connected to a formed Bottled Chaos controller.
+            // #zh_CN 未连接到成型的瓶中混沌主机.
+            currentTip.add(StatCollector.translateToLocal("tst.bottledchaos.credential_hatch.disconnected"));
+            if (!showCache) return;
+        } else {
+            currentTip.add(
+                "#" + data.getInteger("slot")
+                    + " "
+                    + getStatusColor(data.getString("status"))
+                    + getWailaStatusText(data)
+                    + EnumChatFormatting.RESET);
+            int boundSlots = data.getInteger("boundSlots");
+            String blockedRoute = getBlockedRouteText(data);
+            if (!blockedRoute.isEmpty()) currentTip.add(blockedRoute);
+            if (boundSlots != 0) currentTip.add(getCredentialHatchBoundInputs(boundSlots));
+            long eut = data.getLong("eut");
+            byte energyTier = (byte) data.getLong("energyTier");
+            long capacity = data.getLong("capacity");
+            // #tr tst.bottledchaos.credential_hatch.power_share
+            // # Total usable power share: %s%%
+            // #zh_CN 占总可用功率: %s%%
+            currentTip.add(
+                (energyTier > 0
+                    ? StatCollector.translateToLocalFormatted(
+                        "GT5U.waila.energy.use_with_amperage",
+                        formatNumber(eut),
+                        GTUtility.getAmperageForTier(eut, energyTier),
+                        GTUtility.getColoredTierNameFromTier(energyTier))
+                    : StatCollector.translateToLocalFormatted(
+                        "GT5U.waila.energy.use",
+                        formatNumber(eut),
+                        GTUtility.getColoredTierNameFromVoltage(eut)))
+                    + " | "
+                    + StatCollector.translateToLocalFormatted(
+                        "tst.bottledchaos.credential_hatch.power_share",
+                        String
+                            .format(Locale.ROOT, "%.2f", capacity > 0 ? 100.0 * data.getLong("share") / capacity : 0)));
+            if (duration > 0) {
+                currentTip.add(GTWaila.getMachineProgressString(duration, data.getInteger("progress")));
+            }
+        }
+        NBTTagCompound outputs = showCache ? data.getCompoundTag("cache") : data.getCompoundTag("outputs");
+        if (showCache) {
+            // #tr tst.bottledchaos.credential_hatch.cached_materials
+            // # Cached materials (%s types):
+            // #zh_CN 缓存材料(%s种):
+            currentTip.add(
+                StatCollector.translateToLocalFormatted(
+                    "tst.bottledchaos.credential_hatch.cached_materials",
+                    formatNumber(outputs.getInteger("total"))));
+            currentTip.addAll(getMaterialSummaryLines(outputs, true));
+        } else {
+            appendMaterialSummary(currentTip, getProcessingGroupOutputTitle(data), outputs);
+            // #tr tst.bottledchaos.intermediate_outputs
+            // # Intermediate products:
+            // #zh_CN 中间产物:
+            appendMaterialSummary(
+                currentTip,
+                StatCollector.translateToLocal("tst.bottledchaos.intermediate_outputs"),
+                outputs.getCompoundTag("intermediates"));
+            // #tr tst.bottledchaos.byproducts
+            // # Byproducts:
+            // #zh_CN 副产物:
+            appendMaterialSummary(
+                currentTip,
+                StatCollector.translateToLocal("tst.bottledchaos.byproducts"),
+                outputs.getCompoundTag("byproducts"));
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static void appendMaterialSummary(List<String> lines, String title, NBTTagCompound materials) {
+        if (materials.getInteger("total") <= 0) return;
+        lines.add(title);
+        lines.addAll(getMaterialSummaryLines(materials, true));
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static List<String> getMaterialSummaryLines(NBTTagCompound materials, boolean wailaIcons) {
+        List<String> lines = new ArrayList<>();
+        NBTTagList entries = materials.getTagList("entries", 10);
+        int shown = 0;
+        for (int i = 0; i < entries.tagCount(); i++) {
+            NBTTagCompound entry = entries.getCompoundTagAt(i);
+            ItemStack item = entry.hasKey("item", 10) ? ItemStack.loadItemStackFromNBT(entry.getCompoundTag("item"))
+                : null;
+            FluidStack fluid = entry.hasKey("fluid", 10)
+                ? FluidStack.loadFluidStackFromNBT(entry.getCompoundTag("fluid"))
+                : null;
+            if (item == null && fluid == null) continue;
+            lines.add(
+                (wailaIcons
+                    ? "  "
+                        + TTRenderStack.create(item != null ? item : GTUtility.getFluidDisplayStack(fluid, false), true)
+                    : "") + formatGroupOutput(item, fluid, entry.getLong("amount")));
+            shown++;
+        }
+        if (materials.getInteger("total") > shown) lines.add(
+            StatCollector
+                .translateToLocalFormatted("GT5U.waila.producing.andmore", materials.getInteger("total") - shown));
+        return lines;
     }
 
     public static String getWailaStatusText(NBTTagCompound job) {
@@ -2040,7 +2214,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     }
 
     public static String formatProcessingGroups(int mask) {
-        StringJoiner groups = new StringJoiner("");
+        StringJoiner groups = new StringJoiner(", ");
         for (int slot = 0; slot < THREAD_COUNT; slot++) if ((mask & (1 << slot)) != 0) groups.add("#" + (slot + 1));
         return groups.toString();
     }
@@ -2060,6 +2234,23 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             poolUsersDirty = false;
         }
         return recipePoolUsers[poolSlot];
+    }
+
+    public NBTTagCompound getModuleParameters(int slot) {
+        List<BottledChaosUpkeep.Demand> demands = new ArrayList<>();
+        for (int group = 0; group < THREAD_COUNT; group++)
+            if (hasAuthorizedWork(group)) demands.addAll(threads[group].upkeep);
+        return machineConfiguration.moduleParameters(
+            slot,
+            new BottledChaosMachineParameters.Context(
+                getMaxInputVoltage(),
+                Math.max(0, inputPower),
+                getCentralSupplyItems(),
+                getCentralSupplyFluids(),
+                getSpeedBonus(),
+                getEuModifier(),
+                getMaxParallelRecipes()),
+            demands);
     }
 
     public NBTTagCompound getBottledChaosStatusSummary() {
@@ -2123,7 +2314,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             NBTTagCompound entry = new NBTTagCompound();
             entry.setString(
                 "key",
-                base != null && !base.isAllowedToWork() ? "tst.bottledchaos.paused" : "GT5U.gui.hoverable.runningfine");
+                base != null && !base.isAllowedToWork() ? BottledChaosStatus.PAUSED.key()
+                    : "GT5U.gui.hoverable.runningfine");
             entries.appendTag(entry);
         }
         summary.setTag("entries", entries);
@@ -2150,21 +2342,27 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         tag.setString(WAILA_RECIPE_CATEGORIES, getRecipeCategoryKeyList());
         tag.setString(WAILA_RECIPE_TOKENS, getRecipeTokenKeyList());
         tag.setBoolean("bottledChaosOverCapacity", overCapacity);
+        tag.setTag(THREAD_NBT, getProcessingGroupSummary().getTagList(THREAD_NBT, 10));
+    }
+
+    /** Shared server snapshot for the runtime tab and controller Waila. */
+    public NBTTagCompound getProcessingGroupSummary() {
+        NBTTagCompound summary = new NBTTagCompound();
+        summary.setLong(WAILA_CAPACITY, capacity);
         NBTTagList jobs = new NBTTagList();
         for (int i = 0; i < THREAD_COUNT; i++) {
             if (installedCredentials[i] == null && !threads[i].isBusy()) continue;
             BottledChaosThread thread = threads[i];
             NBTTagCompound job = new NBTTagCompound();
-            job.setInteger("slot", i + 1);
-            job.setLong("share", allocatedShares[i]);
-            job.setInteger("progress", thread.progress);
-            job.setInteger("duration", thread.duration);
-            ItemStack family = ItemBottledChaosCredential.getRecipeFamily(installedCredentials[i]);
-            job.setString("family", family == null ? "tst.bottledchaos.unbound" : getCredentialRouteKeyList(family));
-            writeThreadWailaStatus(job, i);
+            writeProcessingGroupInformation(job, i);
+            ItemStack family = ItemBottledChaosCredential
+                .getRecipeFamily(thread.isBusy() ? thread.credential : installedCredentials[i]);
+            job.setString("family", ItemBottledChaosCredential.getDisplayRouteKeys(family));
+            job.setTag("outputs", thread.getFinalOutputSummary());
             jobs.appendTag(job);
         }
-        tag.setTag(THREAD_NBT, jobs);
+        summary.setTag(THREAD_NBT, jobs);
+        return summary;
     }
 
     @Override
@@ -2201,33 +2399,175 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 tag.getInteger(WAILA_CREDENTIAL_HATCHES),
                 tag.getInteger(WAILA_CREDENTIAL_HATCH_LIMIT)));
         if (tag.getBoolean("bottledChaosOverCapacity")) {
-            currentTip
-                .add(EnumChatFormatting.WHITE + StatCollector.translateToLocal("tst.bottledchaos.capacity_exceeded"));
-        }
-        NBTTagList jobs = tag.getTagList(THREAD_NBT, 10);
-        for (int i = 0; i < Math.min(THREAD_COUNT, jobs.tagCount()); i++) {
-            NBTTagCompound job = jobs.getCompoundTagAt(i);
-            double percent = tag.getLong(WAILA_CAPACITY) > 0
-                ? job.getLong("share") * 100.0 / tag.getLong(WAILA_CAPACITY)
-                : 0;
             currentTip.add(
-                "#" + job.getInteger("slot")
-                    + " "
-                    + localizeKeyList(job.getString("family"))
-                    + EnumChatFormatting.WHITE
-                    + " | "
-                    + StatCollector.translateToLocalFormatted(
-                        "tst.bottledchaos.input_share",
-                        String.format(Locale.ROOT, "%.2f%%", percent))
-                    + " | "
-                    + getStatusColor(job.getString("status"))
-                    + getWailaStatusText(job)
-                    + EnumChatFormatting.RESET);
-            if (job.getInteger("duration") > 0) {
-                currentTip
-                    .add(GTWaila.getMachineProgressString(job.getInteger("duration"), job.getInteger("progress")));
-            }
+                EnumChatFormatting.WHITE + StatCollector.translateToLocal(BottledChaosStatus.CAPACITY_EXCEEDED.key()));
         }
+        for (int i = 0; i < THREAD_COUNT; i++) currentTip.addAll(getProcessingGroupLines(tag, i));
+    }
+
+    public static int getProcessingGroupCount(NBTTagCompound summary) {
+        return summary == null ? 0
+            : Math.min(
+                THREAD_COUNT,
+                summary.getTagList(THREAD_NBT, 10)
+                    .tagCount());
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static List<String> getProcessingGroupLines(NBTTagCompound summary, int index) {
+        return getProcessingGroupLines(summary, index, true);
+    }
+
+    public static NBTTagCompound getProcessingGroupData(NBTTagCompound summary, int index) {
+        return index < 0 || index >= getProcessingGroupCount(summary) ? new NBTTagCompound()
+            : summary.getTagList(THREAD_NBT, 10)
+                .getCompoundTagAt(index);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static List<String> getProcessingGroupLines(NBTTagCompound summary, int index, boolean waila) {
+        List<String> lines = new ArrayList<>();
+        if (index < 0 || index >= getProcessingGroupCount(summary)) return lines;
+        NBTTagList jobs = summary.getTagList(THREAD_NBT, 10);
+        NBTTagCompound job = jobs.getCompoundTagAt(index);
+        String energy = waila ? "" : getProcessingGroupEnergyText(job);
+        lines.add(
+            EnumChatFormatting.WHITE + "#"
+                + job.getInteger("slot")
+                + " "
+                + localizeKeyList(job.getString("family"))
+                + EnumChatFormatting.WHITE
+                + " | "
+                + getProcessingGroupShareText(summary, job)
+                + (energy.isEmpty() ? "" : EnumChatFormatting.WHITE + " | " + energy)
+                + EnumChatFormatting.WHITE
+                + " | "
+                + getStatusColor(job.getString("status"))
+                + getWailaStatusText(job)
+                + EnumChatFormatting.RESET);
+        String blockedRoute = getBlockedRouteText(job);
+        if (!blockedRoute.isEmpty()) lines.add(blockedRoute);
+        if (waila && job.getInteger("duration") > 0) {
+            lines.add(GTWaila.getMachineProgressString(job.getInteger("duration"), job.getInteger("progress")));
+        }
+        String outputs = getProcessingGroupOutputText(job, waila);
+        if (!outputs.isEmpty()) lines.add(outputs);
+        return lines;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static String getProcessingGroupShareText(NBTTagCompound summary, NBTTagCompound job) {
+        return EnumChatFormatting.AQUA + StatCollector
+            .translateToLocalFormatted("tst.bottledchaos.input_share", getProcessingGroupShareValue(summary, job));
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static String getProcessingGroupShareValue(NBTTagCompound summary, NBTTagCompound job) {
+        return String.format(
+            Locale.ROOT,
+            "%.2f%%",
+            summary.getLong(WAILA_CAPACITY) > 0 ? job.getLong("share") * 100.0 / summary.getLong(WAILA_CAPACITY) : 0);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static String getProcessingGroupEnergyText(NBTTagCompound job) {
+        return job.getLong("eut") <= 0 ? ""
+            : getProcessingGroupPowerText(job) + " " + getProcessingGroupVoltageText(job);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static String getProcessingGroupPowerText(NBTTagCompound job) {
+        long eut = job.getLong("eut");
+        if (eut <= 0) return "";
+        return EnumChatFormatting.YELLOW + String.format(Locale.ROOT, "%.1e", (double) eut)
+            .replace("e+0", "e")
+            .replace("e+", "e") + EnumChatFormatting.WHITE + " EU/t";
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static String getProcessingGroupVoltageText(NBTTagCompound job) {
+        long eut = job.getLong("eut");
+        if (eut <= 0) return "";
+        byte tier = (byte) job.getLong("energyTier");
+        return EnumChatFormatting.WHITE + "("
+            + GTUtility.getAmperageForTier(eut, tier)
+            + "A "
+            + GTUtility.getColoredTierNameFromTier(tier)
+            + EnumChatFormatting.WHITE
+            + ")";
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static String getBlockedRouteText(NBTTagCompound job) {
+        // #tr tst.bottledchaos.partial_route_blocked
+        // # Some routes blocked: %s
+        // #zh_CN 部分路线受阻: %s
+        return job.hasKey("blockedRoute", 10)
+            ? EnumChatFormatting.YELLOW
+                + StatCollector
+                    .translateToLocalFormatted(
+                        "tst.bottledchaos.partial_route_blocked",
+                        BottledChaosResultData.read(job.getCompoundTag("blockedRoute"))
+                            .getDisplayString())
+            : "";
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static String getProcessingGroupOutputTitle(NBTTagCompound job) {
+        // #tr tst.bottledchaos.pending_outputs
+        // # Pending outputs:
+        // #zh_CN 待输出:
+        return StatCollector.translateToLocal(
+            job.getInteger("duration") > 0 && job.getInteger("progress") >= job.getInteger("duration")
+                ? "tst.bottledchaos.pending_outputs"
+                : "GT5U.waila.producing");
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static String getProcessingGroupOutputText(NBTTagCompound job) {
+        return getProcessingGroupOutputText(job, false);
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static String getProcessingGroupOutputText(NBTTagCompound job, boolean waila) {
+        String outputs = formatGroupOutputs(job.getCompoundTag("outputs"), waila);
+        return outputs.isEmpty() ? "" : EnumChatFormatting.WHITE + getProcessingGroupOutputTitle(job) + " " + outputs;
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static String formatGroupOutputs(NBTTagCompound outputs, boolean waila) {
+        NBTTagList entries = outputs.getTagList("entries", 10);
+        StringJoiner text = new StringJoiner(EnumChatFormatting.WHITE + ", ");
+        int shown = 0;
+        int limit = waila ? BottledChaosMaterialSummary.GROUP_OUTPUT_LIMIT : entries.tagCount();
+        for (int i = 0; i < Math.min(limit, entries.tagCount()); i++) {
+            NBTTagCompound entry = entries.getCompoundTagAt(i);
+            ItemStack item = entry.hasKey("item", 10) ? ItemStack.loadItemStackFromNBT(entry.getCompoundTag("item"))
+                : null;
+            FluidStack fluid = entry.hasKey("fluid", 10)
+                ? FluidStack.loadFluidStackFromNBT(entry.getCompoundTag("fluid"))
+                : null;
+            if (item == null && fluid == null) continue;
+            text.add(formatGroupOutput(item, fluid, entry.getLong("amount")));
+            shown++;
+        }
+        if (outputs.getInteger("total") > shown) text.add(
+            waila
+                ? StatCollector
+                    .translateToLocalFormatted("GT5U.waila.producing.andmore", outputs.getInteger("total") - shown)
+                : "...");
+        return text.toString();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static String formatGroupOutput(ItemStack item, FluidStack fluid, long amount) {
+        return EnumChatFormatting.AQUA + (item != null ? item.getDisplayName() : fluid.getLocalizedName())
+            + EnumChatFormatting.WHITE
+            + " x "
+            + EnumChatFormatting.GOLD
+            + formatNumber(amount)
+            + (fluid == null ? "" : "L")
+            + EnumChatFormatting.RESET;
     }
 
     private String getRecipeCategoryKeyList() {
@@ -2241,22 +2581,17 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     private String getRecipeTokenKeyList() {
         StringJoiner joiner = new StringJoiner(", ");
+        long mask = 0;
         for (ItemStack credential : installedCredentials) {
-            ItemStack token = ItemBottledChaosCredential.getRecipeFamily(credential);
-            if (token != null) {
-                for (String key : ItemBottledChaosCredential.getRouteKeyList(token)) joiner.add(key);
-            }
+            mask |= ItemBottledChaosCredential.getRouteMask(credential);
+        }
+        for (int index : CredentialModel.displayOrder()) {
+            if ((mask & (1L << index)) != 0) joiner.add(CredentialModel.translationKey(index));
         }
         return joiner.length() == 0 ? "GT5U.gui.text.nil" : joiner.toString();
     }
 
-    private static String getCredentialRouteKeyList(ItemStack credential) {
-        StringJoiner joiner = new StringJoiner(", ");
-        for (String key : ItemBottledChaosCredential.getRouteKeyList(credential)) joiner.add(key);
-        return joiner.length() == 0 ? "tst.bottledchaos.unbound" : joiner.toString();
-    }
-
-    private static String localizeKeyList(String keys) {
+    public static String localizeKeyList(String keys) {
         StringJoiner localized = new StringJoiner(", ");
         for (String key : keys.split(", ")) localized.add(StatCollector.translateToLocal(key));
         return localized.toString();
@@ -2269,9 +2604,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     }
 
     public static EnumChatFormatting getStatusColor(String status) {
-        if ("GT5U.gui.text.status.active".equals(status)) return EnumChatFormatting.GOLD;
-        if ("GT5U.waila.machine.idle".equals(status)) return EnumChatFormatting.AQUA;
-        return EnumChatFormatting.WHITE;
+        return BottledChaosStatus.fromKey(status)
+            .textColor();
     }
 
     @Override

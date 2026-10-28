@@ -99,6 +99,7 @@ public final class BottledChaosIsaMillRecipes {
             mineralEntry = catalog.registerAlternativeChain("isamill", baseEUt, crushed, products, new Object[] {}, steps);
         }
         mineralEntry.setPlanningTargets(target);
+        mineralEntry.setDisplayOutputs(target, RedMud);
         if (combCount == 0 && circuit == 1 && Mods.Forestry.isModLoaded() && GTBees.combs != null)
             mineralEntry.requireCircuit(1);
         // spotless:on
@@ -116,7 +117,8 @@ public final class BottledChaosIsaMillRecipes {
         // spotless:off
         catalog.registerAlternativeChain("isamill", TierEU.RECIPE_LV, RedMud,
             recovery.outputs.keySet().toArray(), new Object[] {},
-            catalog.markPreparedRecipe(CentrifugeNonCell, RedMud, Water, recovery));
+            catalog.markPreparedRecipe(CentrifugeNonCell, RedMud, Water, recovery))
+            .setDisplayOutputs(recovery.outputs.keySet().stream().filter(key -> key instanceof TST_ItemID).toArray());
         // spotless:on
     }
 

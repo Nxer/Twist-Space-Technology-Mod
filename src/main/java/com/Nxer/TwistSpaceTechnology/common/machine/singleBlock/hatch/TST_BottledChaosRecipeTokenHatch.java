@@ -1,45 +1,34 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
-
 import java.util.List;
-import java.util.Locale;
-import java.util.StringJoiner;
-import java.util.regex.Pattern;
 
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosCredential;
+import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.BottledChaosHatchControls;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_BottledChaos;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.material.BottledChaosMaterialCache;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.material.BottledChaosMaterialSummary;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
-import com.cleanroommc.modularui.api.IPanelHandler;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTextLayout;
 import com.cleanroommc.modularui.api.drawable.IKey;
-import com.cleanroommc.modularui.drawable.DynamicDrawable;
 import com.cleanroommc.modularui.drawable.text.TextRenderer;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.UISettings;
 import com.cleanroommc.modularui.utils.Alignment;
 import com.cleanroommc.modularui.utils.Color;
-import com.cleanroommc.modularui.value.sync.BooleanSyncValue;
-import com.cleanroommc.modularui.value.sync.IntSyncValue;
-import com.cleanroommc.modularui.value.sync.InteractionSyncHandler;
-import com.cleanroommc.modularui.value.sync.LongSyncValue;
+import com.cleanroommc.modularui.utils.serialization.ByteBufAdapters;
+import com.cleanroommc.modularui.value.sync.GenericSyncValue;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.widgets.ButtonWidget;
-import com.cleanroommc.modularui.widgets.textfield.TextFieldWidget;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -49,19 +38,15 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.modularui2.GTGuis;
-import gregtech.api.util.GTUtility;
-import gregtech.api.util.GTWaila;
 import gregtech.common.modularui2.widget.builder.ItemSlotGridBuilder;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
-import mcp.mobius.waila.overlay.tooltiprenderers.TTRenderStack;
 
 @IMetaTileEntity.SkipGenerateDescription
 public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizationHatch {
 
     private static final String EXECUTION_ENABLED_NBT = "bottledChaosExecutionEnabled";
-    private static final String WAILA_THREAD_NBT = "bottledChaosCredentialThread";
-    private static final String WAILA_CACHE_NBT = "bottledChaosCachedMaterials";
+    private static final String INFORMATION_NBT = "bottledChaosHatchInformation";
     private static final String MATERIAL_CACHE_NBT = "bottledChaosMaterialCache";
 
     private final BottledChaosMaterialCache materialCache = new BottledChaosMaterialCache();
@@ -70,8 +55,6 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
     private boolean clearRunningStateRequested;
     private MM_BottledChaos controller;
     private int processingGroup = -1;
-    private int displayedHatchNumber;
-    private int displayedInputPeerMask;
 
     // #tr tst.bottledchaos.credential_hatch.tooltip.info.01
     // # Holds one Bottled Chaos credential for one processing group.
@@ -119,7 +102,7 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
         return materialCache;
     }
 
-    private void setExecutionEnabled(boolean enabled) {
+    public void setExecutionEnabled(boolean enabled) {
         if (executionEnabled == enabled) return;
         setExecutionEnabledFromController(enabled);
         if (controller != null && getBaseMetaTileEntity() != null && getBaseMetaTileEntity().isServerSide()) {
@@ -131,6 +114,40 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
         if (executionEnabled == enabled) return;
         executionEnabled = enabled;
         if (getBaseMetaTileEntity() != null && getBaseMetaTileEntity().isServerSide()) markDirty();
+    }
+
+    public void clearRunningState() {
+        materialCache.clearMaterials();
+        clearRunningStateRequested = true;
+        markDirty();
+    }
+
+    public void setCacheLimit(long limit) {
+        materialCache.setAmountLimit(limit);
+        if (getBaseMetaTileEntity().isServerSide()) markDirty();
+    }
+
+    public void exportMaterialCache() {
+        if (controller != null) controller.exportMaterialCache(this, processingGroup);
+    }
+
+    /** Called by the managed hatch action on the server; never drops an item if the inventory is full. */
+    public void takeCredential(EntityPlayer player) {
+        if (!isValid() || !getBaseMetaTileEntity().isServerSide()) return;
+        ItemStack credential = getStackInSlot(0);
+        if (ItemBottledChaosCredential.getCapacity(credential) == 0) return;
+        if (player.inventory.getFirstEmptyStack() < 0) {
+            // #tr tst.bottledchaos.credential_hatch.inventory_full
+            // # No free inventory slot. The credential remains in its hatch.
+            // #zh_CN 背包没有空位, 凭证保留在仓内.
+            player.addChatMessage(new ChatComponentTranslation("tst.bottledchaos.credential_hatch.inventory_full"));
+            return;
+        }
+        if (!player.inventory.addItemStackToInventory(credential.copy())) return;
+        setInventorySlotContents(0, null);
+        onContentsChanged(0);
+        markDirty();
+        player.inventory.markDirty();
     }
 
     public boolean consumeClearRunningStateRequest() {
@@ -150,40 +167,16 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
         processingGroup = -1;
     }
 
-    private int getControllerHatchNumber() {
-        return controller == null ? 0 : controller.getCredentialHatchNumber(this, processingGroup);
-    }
-
-    private int getControllerInputPeerMask() {
-        return controller == null ? 0 : controller.getCredentialHatchInputPeerMask(this, processingGroup);
+    public NBTTagCompound getInformation(boolean details) {
+        return MM_BottledChaos.getCredentialHatchInformation(this, controller, processingGroup, details);
     }
 
     @SideOnly(Side.CLIENT)
-    private static String getBoundInputText(int peerMask) {
-        StringJoiner peers = new StringJoiner("");
-        for (int slot = 0; slot < 15; slot++) {
-            if ((peerMask & (1 << slot)) != 0) peers.add("#" + (slot + 1));
-        }
-        // #tr tst.bottledchaos.credential_hatch.bound_inputs
-        // # Bound to %s
-        // #zh_CN 与%s绑定
-        return StatCollector
-            .translateToLocalFormatted("tst.bottledchaos.credential_hatch.bound_inputs", peers.toString());
-    }
-
-    @SideOnly(Side.CLIENT)
-    private String getHatchDisplayText() {
-        if (displayedHatchNumber <= 0) return "#-";
-        String number = "#" + displayedHatchNumber;
-        return displayedInputPeerMask == 0 ? number : number + " | " + getBoundInputText(displayedInputPeerMask);
-    }
-
-    @SideOnly(Side.CLIENT)
-    private String getFittedHatchDisplayText() {
-        String text = getHatchDisplayText();
-        FontRenderer fontRenderer = TextRenderer.getFontRenderer();
-        if (fontRenderer.getStringWidth(text) <= 140) return text;
-        return fontRenderer.trimStringToWidth(text, 140 - fontRenderer.getStringWidth("...")) + "...";
+    private static String getFittedHatchDisplayText(NBTTagCompound data) {
+        return TSTTextLayout.ellipsize(
+            MM_BottledChaos.getCredentialHatchTitle(data),
+            140,
+            TextRenderer.getFontRenderer()::getStringWidth);
     }
 
     @Override
@@ -202,18 +195,7 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
     public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
         int z) {
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
-        tag.removeTag(WAILA_THREAD_NBT);
-        tag.setTag(
-            WAILA_CACHE_NBT,
-            BottledChaosMaterialSummary
-                .forCache(materialCache, ItemBottledChaosCredential.getRouteMask(mInventory[0])));
-        if (controller == null) return;
-        NBTTagCompound job = controller.getCredentialHatchWailaData(this, processingGroup);
-        if (job == null) {
-            unbindController(controller);
-            return;
-        }
-        tag.setTag(WAILA_THREAD_NBT, job);
+        tag.setTag(INFORMATION_NBT, getInformation(true));
     }
 
     @Override
@@ -221,98 +203,11 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
     public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
         IWailaConfigHandler config) {
         super.getWailaBody(itemStack, currentTip, accessor, config);
-        NBTTagCompound tag = accessor.getNBTData();
-        boolean showCache = GuiScreen.isShiftKeyDown();
-        NBTTagCompound job = tag.getCompoundTag(WAILA_THREAD_NBT);
-        int duration = job.getInteger("duration");
-        if (!tag.hasKey(WAILA_THREAD_NBT, 10)) {
-            // #tr tst.bottledchaos.credential_hatch.disconnected
-            // # Not connected to a formed Bottled Chaos controller.
-            // #zh_CN 未连接到成型的瓶中混沌主机.
-            currentTip.add(StatCollector.translateToLocal("tst.bottledchaos.credential_hatch.disconnected"));
-            if (!showCache) return;
-        } else {
-            currentTip.add(
-                "#" + job.getInteger("slot")
-                    + " "
-                    + MM_BottledChaos.getStatusColor(job.getString("status"))
-                    + MM_BottledChaos.getWailaStatusText(job)
-                    + EnumChatFormatting.RESET);
-            int boundSlots = job.getInteger("boundSlots");
-            if (boundSlots != 0) currentTip.add(getBoundInputText(boundSlots));
-            long eut = job.getLong("eut");
-            long capacity = job.getLong("capacity");
-            byte energyTier = (byte) job.getLong("energyTier");
-            // #tr tst.bottledchaos.credential_hatch.power_share
-            // # Total usable power share: %s%%
-            // #zh_CN 占总可用功率: %s%%
-            currentTip.add(
-                (energyTier > 0
-                    ? StatCollector.translateToLocalFormatted(
-                        "GT5U.waila.energy.use_with_amperage",
-                        formatNumber(eut),
-                        GTUtility.getAmperageForTier(eut, energyTier),
-                        GTUtility.getColoredTierNameFromTier(energyTier))
-                    : StatCollector.translateToLocalFormatted(
-                        "GT5U.waila.energy.use",
-                        formatNumber(eut),
-                        GTUtility.getColoredTierNameFromVoltage(eut)))
-                    + " | "
-                    + StatCollector.translateToLocalFormatted(
-                        "tst.bottledchaos.credential_hatch.power_share",
-                        String
-                            .format(Locale.ROOT, "%.2f", capacity > 0 ? 100.0 * job.getLong("share") / capacity : 0)));
-            if (duration > 0) {
-                currentTip.add(GTWaila.getMachineProgressString(duration, job.getInteger("progress")));
-            }
-        }
-        NBTTagCompound outputs = showCache ? tag.getCompoundTag(WAILA_CACHE_NBT) : job.getCompoundTag("outputs");
-        int total = outputs.getInteger("total");
-        if (total <= 0 && !showCache) return;
-        // #tr tst.bottledchaos.credential_hatch.expected_outputs
-        // # Expected outputs (%s types):
-        // #zh_CN 预计产物(%s种):
-
-        // #tr tst.bottledchaos.credential_hatch.pending_outputs
-        // # Pending outputs (%s types):
-        // #zh_CN 待输出产物(%s种):
-
-        // #tr tst.bottledchaos.credential_hatch.cached_materials
-        // # Cached materials (%s types):
-        // #zh_CN 缓存材料(%s种):
-        currentTip.add(
-            StatCollector.translateToLocalFormatted(
-                showCache ? "tst.bottledchaos.credential_hatch.cached_materials"
-                    : duration > 0 && job.getInteger("progress") >= duration
-                        ? "tst.bottledchaos.credential_hatch.pending_outputs"
-                        : "tst.bottledchaos.credential_hatch.expected_outputs",
-                formatNumber(total)));
-        NBTTagList entries = outputs.getTagList("entries", 10);
-        int shown = 0;
-        for (int i = 0; i < Math.min(BottledChaosMaterialSummary.WAILA_OUTPUT_LIMIT, entries.tagCount()); i++) {
-            NBTTagCompound entry = entries.getCompoundTagAt(i);
-            ItemStack output = entry.hasKey("item", 10) ? ItemStack.loadItemStackFromNBT(entry.getCompoundTag("item"))
-                : null;
-            FluidStack fluid = entry.hasKey("fluid", 10)
-                ? FluidStack.loadFluidStackFromNBT(entry.getCompoundTag("fluid"))
-                : null;
-            if (output == null && fluid == null) continue;
-            currentTip.add(
-                "  " + TTRenderStack
-                    .create(output != null ? output : GTUtility.getFluidDisplayStack(fluid, false), true)
-                    + EnumChatFormatting.AQUA
-                    + (output != null ? output.getDisplayName() : fluid.getLocalizedName())
-                    + EnumChatFormatting.RESET
-                    + " x "
-                    + EnumChatFormatting.GOLD
-                    + formatNumber(entry.getLong("amount"))
-                    + (fluid == null ? "" : "L"));
-            shown++;
-        }
-        if (total > shown) {
-            currentTip.add(
-                StatCollector.translateToLocalFormatted("GT5U.waila.producing.andmore", formatNumber(total - shown)));
-        }
+        MM_BottledChaos.appendCredentialHatchWaila(
+            currentTip,
+            accessor.getNBTData()
+                .getCompoundTag(INFORMATION_NBT),
+            GuiScreen.isShiftKeyDown());
     }
 
     @Override
@@ -349,147 +244,48 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
         return true;
     }
 
-    private ModularPanel createCacheSettingsPanel(ModularPanel parent) {
-        LongSyncValue limit = new LongSyncValue(materialCache::amountLimit, value -> {
-            materialCache.setAmountLimit(value);
-            if (getBaseMetaTileEntity().isServerSide()) markDirty();
-        }).allowC2S();
-        return GTGuis.createPopUpPanel("bottledChaosCacheSettings")
-            .relative(parent)
-            .leftRel(1)
-            .topRel(0)
-            .size(164, 78)
-            .child(
-                // #tr tst.bottledchaos.credential_hatch.cache_limit
-                // # Cache limit
-                // #zh_CN 缓存上限
-                IKey.lang("tst.bottledchaos.credential_hatch.cache_limit")
-                    .asWidget()
-                    .pos(8, 18)
-                    .size(148, 14))
-            .child(
-                new TextFieldWidget().value(limit)
-                    .setPattern(Pattern.compile("[0-9]*"))
-                    .setMaxLength(19)
-                    // MUI's numbersLong parses through double; keep all 63 integer bits here.
-                    .setValidator(text -> {
-                        try {
-                            return Long.toString(Math.max(0, Long.parseLong(text)));
-                        } catch (NumberFormatException invalid) {
-                            return Long.toString(limit.getLongValue());
-                        }
-                    })
-                    .setTextAlignment(Alignment.Center)
-                    .tooltipBuilder(
-                        tooltip -> tooltip
-                            .addLine(IKey.lang("GT5U.gui.text.recipe_result.rangedvalue", 0, Long.MAX_VALUE))
-                            // #tr tst.bottledchaos.credential_hatch.cache_limit.info
-                            // # Each item or fluid has this limit. Excess is sent to normal outputs.
-                            // #zh_CN 每种物品或流体分别使用此上限, 超出部分正常输出.
-                            .addLine(IKey.lang("tst.bottledchaos.credential_hatch.cache_limit.info")))
-                    .pos(8, 40)
-                    .size(148, 18));
-    }
-
     @Override
     public ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager, UISettings uiSettings) {
-        syncManager.syncValue(
-            "bottledChaosHatchNumber",
-            new IntSyncValue(this::getControllerHatchNumber, value -> displayedHatchNumber = value));
-        syncManager.syncValue(
-            "bottledChaosInputPeerMask",
-            new IntSyncValue(this::getControllerInputPeerMask, value -> displayedInputPeerMask = value));
-        BooleanSyncValue execution = new BooleanSyncValue(this::isExecutionEnabled);
-        syncManager.syncValue("bottledChaosExecutionEnabled", execution);
-        InteractionSyncHandler executionAction = new InteractionSyncHandler().setOnMousePressed(
-            mouse -> { if (mouse.mouseButton == 0 && !mouse.isClient()) setExecutionEnabled(!executionEnabled); });
-        syncManager.syncValue("bottledChaosToggleExecution", executionAction);
-        // #tr tst.bottledchaos.credential_hatch.pause
-        // # Pause this processing group.
-        // #zh_CN 暂停此加工组.
-
-        // #tr tst.bottledchaos.credential_hatch.resume
-        // # Resume this processing group.
-        // #zh_CN 恢复此加工组运行.
-
-        // #tr tst.bottledchaos.credential_hatch.clear
-        // # Clear this processing group's current job and cached materials.
-        // #zh_CN 清空此加工组的当前运行状态和缓存材料.
-        ButtonWidget<?> executionButton = new ButtonWidget<>().syncHandler(executionAction)
-            .onMousePressed(mouseButton -> mouseButton == 0 && executionAction.onMousePressed(mouseButton))
-            .playClickSound(true)
-            .background(
-                new DynamicDrawable(
-                    () -> execution.getBoolValue() ? GTGuiTextures.BUTTON_STANDARD
-                        : GTGuiTextures.BUTTON_STANDARD_PRESSED))
-            .overlay(
-                new DynamicDrawable(
-                    () -> execution.getBoolValue() ? GTGuiTextures.OVERLAY_BUTTON_POWER_SWITCH_ON
-                        : GTGuiTextures.OVERLAY_BUTTON_POWER_SWITCH_OFF))
-            .tooltipBuilder(
-                tooltip -> tooltip.addLine(
-                    IKey.lang(
-                        execution.getBoolValue() ? "tst.bottledchaos.credential_hatch.pause"
-                            : "tst.bottledchaos.credential_hatch.resume")))
-            .tooltipAutoUpdate(true)
-            .pos(52, 62)
-            .size(18, 18);
-        long[] clearPressedUntil = { 0 };
-        InteractionSyncHandler clearAction = new InteractionSyncHandler().setOnMousePressed(mouse -> {
-            if (mouse.mouseButton != 0) return;
-            clearPressedUntil[0] = System.currentTimeMillis() + 120;
-            if (!mouse.isClient()) {
-                materialCache.clearMaterials();
-                clearRunningStateRequested = true;
-                markDirty();
-            }
-        });
-        syncManager.syncValue("bottledChaosClearRunningState", clearAction);
-        ButtonWidget<?> clearButton = new ButtonWidget<>().syncHandler(clearAction)
-            .onMousePressed(mouseButton -> mouseButton == 0 && clearAction.onMousePressed(mouseButton))
-            .playClickSound(true)
-            .background(
-                new DynamicDrawable(
-                    () -> System.currentTimeMillis() < clearPressedUntil[0] ? GTGuiTextures.BUTTON_STANDARD_PRESSED
-                        : GTGuiTextures.BUTTON_STANDARD))
-            .overlay(GTGuiTextures.OVERLAY_BUTTON_CROSS)
-            .tooltipBuilder(tooltip -> tooltip.addLine(IKey.lang("tst.bottledchaos.credential_hatch.clear")))
-            .pos(106, 62)
-            .size(18, 18);
+        GenericSyncValue<NBTTagCompound, ?> information = GenericSyncValue.builder(NBTTagCompound.class)
+            .getter(() -> getInformation(false))
+            .adapter(ByteBufAdapters.NBT)
+            .copy(tag -> (NBTTagCompound) tag.copy())
+            .build();
+        syncManager.syncValue("bottledChaosHatchInformation", information);
         ModularPanel panel = GTGuis.mteTemplatePanelBuilder(this, guiData, syncManager, uiSettings)
             .build();
-        IPanelHandler cacheSettings = syncManager
-            .syncedPanel("bottledChaosCacheSettings", true, (manager, handler) -> createCacheSettingsPanel(panel));
+        List<ButtonWidget<?>> controls = BottledChaosHatchControls.create(
+            panel,
+            syncManager,
+            "bottledChaosHatch",
+            () -> this,
+            () -> information.getValue() != null && information.getValue()
+                .getBoolean("enabled"),
+            BottledChaosHatchControls.Action.EXECUTION,
+            BottledChaosHatchControls.Action.LIMIT,
+            BottledChaosHatchControls.Action.EXPORT,
+            BottledChaosHatchControls.Action.CLEAR);
+        int[] positions = { 36, 62, 88, 114 };
+        for (int i = 0; i < controls.size(); i++) panel.child(
+            controls.get(i)
+                .pos(positions[i], 62));
         return panel.child(
             new ItemSlotGridBuilder(inventoryHandler, syncManager).size(1)
                 .filter(this::isAuthorizationItem)
                 .build()
                 .pos(79, 34))
-            .child(executionButton)
-            .child(clearButton)
             .child(
-                new ButtonWidget<>().overlay(GTGuiTextures.OVERLAY_BUTTON_CYCLIC)
-                    .onMousePressed(button -> {
-                        if (button != 0) return false;
-                        if (cacheSettings.isPanelOpen()) cacheSettings.closePanel();
-                        else cacheSettings.openPanel();
-                        return true;
-                    })
-                    .playClickSound(true)
-                    .tooltipBuilder(
-                        tooltip -> tooltip.addLine(IKey.lang("tst.bottledchaos.credential_hatch.cache_limit")))
-                    .pos(142, 62)
-                    .size(18, 18))
-            .child(
-                IKey.dynamic(() -> getFittedHatchDisplayText())
+                IKey.dynamic(() -> getFittedHatchDisplayText(information.getValue()))
                     .asWidget()
                     .color(Color.WHITE.main)
                     .textAlign(Alignment.Center)
                     .background(GTGuiTextures.BACKGROUND_TEXT_FIELD)
                     .tooltipBuilder(
                         tooltip -> tooltip.addLine(
-                            displayedHatchNumber > 0 ? getHatchDisplayText()
-                                : StatCollector.translateToLocal("tst.bottledchaos.credential_hatch.disconnected")))
+                            information.getValue() != null && information.getValue()
+                                .getBoolean("connected")
+                                    ? MM_BottledChaos.getCredentialHatchTitle(information.getValue())
+                                    : StatCollector.translateToLocal("tst.bottledchaos.credential_hatch.disconnected")))
                     .tooltipAutoUpdate(true)
                     .pos(14, 8)
                     .size(148, 18));

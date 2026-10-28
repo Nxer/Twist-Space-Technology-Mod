@@ -6,8 +6,10 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosCredential;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineConfiguration;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.material.BottledChaosMaterialStacks;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.material.BottledChaosMaterialSummary;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.material.BottledChaosOutputBuffer;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.result.BottledChaosResultData;
 
@@ -30,9 +32,17 @@ public final class BottledChaosThread {
     public int progress;
     public int parallels;
     public long nextCheckTick;
-    public String status = "GT5U.waila.machine.idle";
+    public String status = BottledChaosStatus.IDLE.key();
     public CheckRecipeResult blockedRoute = CheckRecipeResultRegistry.NO_RECIPE;
     private CheckRecipeResult result = CheckRecipeResultRegistry.SUCCESSFUL;
+    private NBTTagCompound finalOutputSummary;
+
+    /** Paid-job materials are stable until completion; do not traverse the recipe graph each GUI tick. */
+    public NBTTagCompound getFinalOutputSummary() {
+        if (finalOutputSummary == null) finalOutputSummary = BottledChaosMaterialSummary
+            .forFinalJob(outputs, pendingCache, ItemBottledChaosCredential.getRouteMask(credential));
+        return finalOutputSummary;
+    }
 
     public CheckRecipeResult result() {
         return result;
@@ -45,6 +55,7 @@ public final class BottledChaosThread {
 
     /** Called only after the host's input transaction has succeeded. */
     public void begin(ItemStack authorization, BottledChaosProcessingLogic logic) {
+        finalOutputSummary = null;
         blockedRoute = logic.getBlockedRoute();
         credential = authorization.copy();
         requiredPools = logic.getRequiredPools();
@@ -58,19 +69,20 @@ public final class BottledChaosThread {
     }
 
     public void setPendingCache(String family, BottledChaosMaterialStacks pending) {
+        finalOutputSummary = null;
         processingFamily = family;
         pendingCache.set(pending.items(), pending.fluids());
     }
 
     public void searched(CheckRecipeResult searchResult, long retryTick) {
         result = searchResult;
-        status = result.wasSuccessful() ? "GT5U.gui.text.status.active"
-            : result == CheckRecipeResultRegistry.NO_RECIPE ? "GT5U.waila.machine.idle" : result.getDisplayString();
+        status = result.wasSuccessful() ? BottledChaosStatus.ACTIVE.key()
+            : result == CheckRecipeResultRegistry.NO_RECIPE ? BottledChaosStatus.IDLE.key() : result.getDisplayString();
         nextCheckTick = retryTick;
     }
 
     public void activate() {
-        status = "GT5U.gui.text.status.active";
+        status = BottledChaosStatus.ACTIVE.key();
         resetResult();
     }
 
@@ -81,7 +93,8 @@ public final class BottledChaosThread {
 
     /** Reuse the rendered failure until it changes; do not format a message every tick. */
     public void fail(CheckRecipeResult failure) {
-        if (!failure.equals(result) || "tst.bottledchaos.paused".equals(status)) status = failure.getDisplayString();
+        if (!failure.equals(result) || BottledChaosStatus.PAUSED.key()
+            .equals(status)) status = failure.getDisplayString();
         result = failure;
     }
 
@@ -93,14 +106,16 @@ public final class BottledChaosThread {
 
     /** Pausing preserves the paid job, pending cache and previous failure. */
     public boolean pause() {
-        if ("tst.bottledchaos.paused".equals(status)) return false;
-        status = "tst.bottledchaos.paused";
+        if (BottledChaosStatus.PAUSED.key()
+            .equals(status)) return false;
+        status = BottledChaosStatus.PAUSED.key();
         return true;
     }
 
     public boolean resumeIdle() {
-        if (isBusy() || !"tst.bottledchaos.paused".equals(status)) return false;
-        status = "GT5U.waila.machine.idle";
+        if (isBusy() || !BottledChaosStatus.PAUSED.key()
+            .equals(status)) return false;
+        status = BottledChaosStatus.IDLE.key();
         return true;
     }
 
@@ -109,6 +124,7 @@ public final class BottledChaosThread {
     }
 
     public void complete() {
+        finalOutputSummary = null;
         blockedRoute = CheckRecipeResultRegistry.NO_RECIPE;
         outputs.clear();
         pendingCache.clear();
@@ -117,7 +133,7 @@ public final class BottledChaosThread {
         credential = null;
         duration = progress = parallels = 0;
         eut = recipeVoltage = requiredPools = nextCheckTick = 0;
-        status = "GT5U.waila.machine.idle";
+        status = BottledChaosStatus.IDLE.key();
         resetResult();
     }
 
@@ -143,6 +159,7 @@ public final class BottledChaosThread {
     }
 
     public void load(NBTTagCompound tag) {
+        finalOutputSummary = null;
         credential = GTUtility.loadItem(tag, "credential");
         requiredPools = BottledChaosMachineConfiguration.maskFromKeys(tag.getString("recipePools"));
         recipeVoltage = tag.getLong("recipeVoltage");

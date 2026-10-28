@@ -30,7 +30,6 @@ public final class BottledChaosCrafting {
     private long revision;
     private boolean dirty = true;
     private boolean committing;
-    private boolean unloading;
     private String status = "tst.bottledchaos.gui.credential_injection.ready";
 
     public BottledChaosCrafting(ItemStackHandler inventory, Runnable changed) {
@@ -44,22 +43,12 @@ public final class BottledChaosCrafting {
         revision++;
     }
 
-    public boolean isUnloading() {
-        return unloading;
-    }
-
-    public void setUnloading(boolean unloading) {
-        if (this.unloading == unloading) return;
-        this.unloading = unloading;
-        invalidate();
-    }
-
     public String status() {
         preview();
         return status;
     }
 
-    /** Re-evaluate only after an input or mode change, including at most one copied-disk transaction. */
+    /** Re-evaluate only after an input change, including at most one copied-disk transaction. */
     public Preview preview() {
         if (!dirty) return preview;
         dirty = false;
@@ -72,7 +61,7 @@ public final class BottledChaosCrafting {
         ItemStackHandler after = new ItemStackHandler(inventory.getSlots());
         for (int slot = 0; slot < before.length; slot++) after.setStackInSlot(slot, copy(before[slot]));
         Result result = ItemBottledChaosMachineModule.isModule(before[CARRIER_SLOT])
-            ? BottledChaosStructurePackaging.execute(after, unloading)
+            ? BottledChaosStructurePackaging.execute(after)
             : inject(after);
         status = result.statusKey();
         if (!result.wasSuccessful()) return null;

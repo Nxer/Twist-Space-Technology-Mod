@@ -9,8 +9,10 @@ import static java.util.Collections.singletonList;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.client.Minecraft;
@@ -47,11 +49,12 @@ import gregtech.api.util.GTUtility;
 import gregtech.api.util.GTUtility.FluidId;
 import gregtech.nei.GTNEIDefaultHandler;
 
-/** Highlights key outputs while retaining GT's layout, alternatives, fluid lookup and category cache. */
+/** Highlights final products and intermediates without exposing incidental byproducts to recipe lookup. */
 @SideOnly(Side.CLIENT)
 public final class BottledChaosNEIHandler extends GTNEIDefaultHandler {
 
     private static final int OUTPUT_COLOR = 0xFFFFD24A;
+    private static final int INTERMEDIATE_COLOR = 0xFF45E6FF;
 
     private final TST_BottledChaosFrontend compactFrontend;
     private final ModularWindow compactWindow;
@@ -193,23 +196,25 @@ public final class BottledChaosNEIHandler extends GTNEIDefaultHandler {
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT | GL11.GL_COLOR_BUFFER_BIT | GL11.GL_CURRENT_BIT);
         try {
             NEIClientUtils.gl2DRenderContext(
-                () -> { for (PositionedStack stack : recipe.lookupOutputs) drawMarkerFrame(stack); });
+                () -> {
+                    for (var marker : recipe.markers.entrySet()) drawMarkerFrame(marker.getKey(), marker.getValue());
+                });
         } finally {
             GL11.glPopAttrib();
         }
     }
 
-    private static void drawMarkerFrame(PositionedStack stack) {
+    private static void drawMarkerFrame(PositionedStack stack, int role) {
         int x = stack.relx;
         int y = stack.rely;
         int right = x + stack.width;
         int bottom = y + stack.height;
-        int color = OUTPUT_COLOR;
+        int color = role == 1 ? INTERMEDIATE_COLOR : OUTPUT_COLOR;
         // Keep every colored pixel outside the icon, including its native quantity and catalyst badges.
         Gui.drawRect(x - 1, y - 1, right + 1, y, color);
         Gui.drawRect(x - 1, bottom, right + 1, bottom + 1, color);
-        Gui.drawRect(x - 1, y, x, bottom, color);
-        Gui.drawRect(right, y, right + 2, bottom, color);
+        Gui.drawRect(x - (role == 1 ? 2 : 1), y, x, bottom, color);
+        Gui.drawRect(right, y, right + (role == 0 ? 2 : 1), bottom, color);
         // Reinforce the four corners without covering the first or last row of icon pixels.
         Gui.drawRect(x - 2, y - 2, x + 3, y, color);
         Gui.drawRect(x - 2, y, x, y + 3, color);
@@ -225,12 +230,20 @@ public final class BottledChaosNEIHandler extends GTNEIDefaultHandler {
     public List<String> handleItemTooltip(GuiRecipe<?> gui, ItemStack stack, List<String> currentTip, int recipeIndex) {
         List<String> tooltip = super.handleItemTooltip(gui, stack, currentTip, recipeIndex);
         if (stack == null || !(arecipes.get(recipeIndex) instanceof SearchableRecipe recipe)) return tooltip;
-        for (PositionedStack output : recipe.lookupOutputs) {
-            if (!gui.isMouseOver(output, recipeIndex)) continue;
-            // #tr tst.bottledchaos.recipe.key_output
-            // # Key Output
-            // #zh_CN 关键输出
-            tooltip.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tst.bottledchaos.recipe.key_output"));
+        for (var marker : recipe.markers.entrySet()) {
+            if (!gui.isMouseOver(marker.getKey(), recipeIndex)) continue;
+            // #tr tst.bottledchaos.recipe.final_output
+            // # Final Product
+            // #zh_CN 最终产物
+
+            // #tr tst.bottledchaos.recipe.intermediate_output
+            // # Intermediate Product
+            // #zh_CN 中间产物
+            tooltip.add(
+                marker.getValue() == 0
+                    ? EnumChatFormatting.GOLD + StatCollector.translateToLocal("tst.bottledchaos.recipe.final_output")
+                    : EnumChatFormatting.AQUA
+                        + StatCollector.translateToLocal("tst.bottledchaos.recipe.intermediate_output"));
             break;
         }
         return tooltip;
@@ -241,6 +254,7 @@ public final class BottledChaosNEIHandler extends GTNEIDefaultHandler {
 
         private final List<PositionedStack> lookupInputs;
         private final List<PositionedStack> lookupOutputs;
+        private final Map<PositionedStack, Integer> markers = new LinkedHashMap<>();
 
         private SearchableRecipe(GTRecipe recipe) {
             super(recipe);
@@ -271,8 +285,20 @@ public final class BottledChaosNEIHandler extends GTNEIDefaultHandler {
                 lookupInputs = emptyList();
                 lookupOutputs = emptyList();
             } else {
-                lookupInputs = markedSlots(mInputs, display.keyOutputs());
-                lookupOutputs = markedSlots(mOutputs, display.keyOutputs());
+                lookupInputs = markedSlots(mInputs, display.intermediateOutputs());
+                lookupOutputs = markedSlots(
+                    mOutputs,
+                    display.outputRoles()
+                        .keySet());
+                for (PositionedStack output : lookupOutputs) {
+                    for (var marker : display.outputRoles()
+                        .entrySet()) {
+                        if (isMarkedSlot(output, marker.getKey())) {
+                            markers.put(output, marker.getValue());
+                            break;
+                        }
+                    }
+                }
             }
         }
 

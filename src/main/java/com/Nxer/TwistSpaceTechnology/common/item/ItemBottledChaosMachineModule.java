@@ -211,10 +211,16 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
         }
         if (!display && quantity <= 0) {
             // #tr tst.bottledchaos.machine_module.empty
-            // # Package machine structures on the controller's injection page.
-            // #zh_CN 在主机注入页面封装机器结构.
+            // # Place an empty module in the carrier slot to package a structure.
+            // #zh_CN 空模组放入载体槽后可封装结构.
             lines.add(StatCollector.translateToLocal("tst.bottledchaos.machine_module.empty"));
             return;
+        }
+        if (!display) {
+            // #tr tst.bottledchaos.machine_module.unload
+            // # Unload with an ME item disk in the controller workbench. Cannot add or merge structures.
+            // #zh_CN 放入载体槽, 材料槽放ME物品磁盘即可卸载; 不支持追加或合并结构.
+            lines.add(StatCollector.translateToLocal("tst.bottledchaos.machine_module.unload"));
         }
         if (BottledChaosStructureCatalog.isAuxiliaryController(controller)) {
             lines.add(PARAMETER_SEPARATOR);
