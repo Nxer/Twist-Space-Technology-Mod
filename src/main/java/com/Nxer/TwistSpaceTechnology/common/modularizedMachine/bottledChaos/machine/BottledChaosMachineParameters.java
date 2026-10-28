@@ -67,7 +67,7 @@ public final class BottledChaosMachineParameters {
         double powerMultiplier, int maximumRecipeTier, long heat, int glassTier, FluidStack[] upkeep,
         int maximumOverclocks, int perfectOverclocks, int casingTier, int compressionTier, double minimumSourceDuration,
         boolean heavyCentrifuge, int plasmaTier, boolean multiStepPlasma, int startupReserveSeconds,
-        long maximumSourcePower) {}
+        long maximumSourcePower, int upkeepPeriodSeconds) {}
 
     /** One case per machine, with mode-specific pools handled explicitly below. */
     enum Machine {
@@ -544,6 +544,8 @@ public final class BottledChaosMachineParameters {
                 value.heat = preset.heat();
                 value.plasmaTier = preset.plasmaTier();
                 value.multiStepPlasma = preset.multiStepPlasma();
+                value.upkeep = new FluidStack[] { Materials.MHDCSM.getMolten(preset.fuelPerFiveSeconds()) };
+                value.upkeepPeriodSeconds = 5;
                 if (machine == Machine.GODFORGE_SMELTING || machine == Machine.GODFORGE_MOLTEN)
                     value.heatDiscount = preset.heatDiscount();
             }
@@ -734,6 +736,7 @@ public final class BottledChaosMachineParameters {
         int plasmaTier;
         boolean multiStepPlasma;
         int startupReserveSeconds = 1;
+        int upkeepPeriodSeconds = 1;
         long maximumSourcePower = Long.MAX_VALUE;
         double heatDiscount;
         boolean requiresHeat;
@@ -768,7 +771,8 @@ public final class BottledChaosMachineParameters {
                 plasmaTier,
                 multiStepPlasma,
                 startupReserveSeconds,
-                maximumSourcePower);
+                maximumSourcePower,
+                upkeepPeriodSeconds);
         }
     }
 

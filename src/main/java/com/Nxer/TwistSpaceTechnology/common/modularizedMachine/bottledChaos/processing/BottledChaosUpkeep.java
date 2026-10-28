@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.processing;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,23 +22,34 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.util.GTUtility;
 
-/** Charges whole seconds before running, including the first partial second. */
+/** Prepays whole billing periods; only successful running ticks use the prepaid time. */
 public final class BottledChaosUpkeep {
 
     private final Map<RateKey, Bill> bills = new LinkedHashMap<>();
     private final List<Bill> activeBills = new ArrayList<>();
 
-    /** A type template and an unbounded integer per-second amount; no int-sized stack expansion. */
+    /** A type template and an unbounded integer amount per billing period. */
     @Desugar
-    public record Demand(String pool, FluidStack fluid, BigInteger perSecond, int startupReserveSeconds) {
+    public record Demand(String pool, FluidStack fluid, BigInteger amount, int startupReserveSeconds,
+        int periodSeconds) {
 
         public Demand(String pool, FluidStack fluid, BigInteger perSecond) {
-            this(pool, fluid, perSecond, 1);
+            this(pool, fluid, perSecond, 1, 1);
+        }
+
+        public Demand(String pool, FluidStack fluid, BigInteger perSecond, int startupReserveSeconds) {
+            this(pool, fluid, perSecond, startupReserveSeconds, 1);
         }
 
         public Demand {
             fluid = GTUtility.copyAmount(1, fluid);
             startupReserveSeconds = Math.max(1, startupReserveSeconds);
+            if (periodSeconds != 1 && periodSeconds != 5)
+                throw new IllegalArgumentException("Unsupported upkeep period");
+        }
+
+        public BigDecimal perSecond() {
+            return new BigDecimal(amount).divide(BigDecimal.valueOf(periodSeconds));
         }
     }
 
@@ -72,17 +84,17 @@ public final class BottledChaosUpkeep {
     }
 
     @Desugar
-    private record RateKey(String pool, GTUtility.FluidId fluid) {}
+    private record RateKey(String pool, GTUtility.FluidId fluid, int periodSeconds) {}
 
     private static final class Bill {
 
         private final RateKey key;
-        private BigInteger perSecond;
+        private BigInteger amount;
         private int remainingTicks;
 
-        private Bill(RateKey key, BigInteger perSecond) {
+        private Bill(RateKey key, BigInteger amount) {
             this.key = key;
-            this.perSecond = perSecond;
+            this.amount = amount;
         }
     }
 
@@ -94,14 +106,17 @@ public final class BottledChaosUpkeep {
     public void setActiveDemands(List<Demand> active) {
         Map<RateKey, BigInteger> rates = new LinkedHashMap<>();
         for (Demand demand : active) {
-            rates.merge(new RateKey(demand.pool(), fluidId(demand.fluid())), demand.perSecond(), BigInteger::max);
+            rates.merge(
+                new RateKey(demand.pool(), fluidId(demand.fluid()), demand.periodSeconds()),
+                demand.amount(),
+                BigInteger::max);
         }
         activeBills.clear();
         rates.forEach((key, rate) -> {
             Bill bill = bills.computeIfAbsent(key, ignored -> new Bill(key, rate));
-            if (!bill.perSecond.equals(rate)) {
-                // A new configuration starts a new whole second at its own rate.
-                bill.perSecond = rate;
+            if (!bill.amount.equals(rate)) {
+                // A new configuration starts a new billing period at its own rate.
+                bill.amount = rate;
                 bill.remainingTicks = 0;
             }
             activeBills.add(bill);
@@ -113,7 +128,7 @@ public final class BottledChaosUpkeep {
         return false;
     }
 
-    /** Only successful running ticks use the prepaid second. Pauses and output waits do not. */
+    /** Only successful running ticks use the prepaid period. Pauses and output waits do not. */
     public void advance() {
         for (Bill bill : activeBills) bill.remainingTicks--;
     }
@@ -122,16 +137,16 @@ public final class BottledChaosUpkeep {
     public CheckRecipeResult checkStart(List<Demand> active, List<Demand> starting, FluidStack[] inputs) {
         Map<RateKey, BigInteger> needed = new LinkedHashMap<>();
         for (Demand demand : active) {
-            RateKey key = new RateKey(demand.pool(), fluidId(demand.fluid()));
+            RateKey key = new RateKey(demand.pool(), fluidId(demand.fluid()), demand.periodSeconds());
             Bill bill = bills.get(key);
-            if (bill == null || bill.remainingTicks == 0 || !bill.perSecond.equals(demand.perSecond()))
-                needed.merge(key, demand.perSecond(), BigInteger::max);
+            if (bill == null || bill.remainingTicks == 0 || !bill.amount.equals(demand.amount()))
+                needed.merge(key, demand.amount(), BigInteger::max);
         }
         for (Demand demand : starting) {
             needed.merge(
-                new RateKey(demand.pool(), fluidId(demand.fluid())),
-                demand.perSecond()
-                    .multiply(BigInteger.valueOf(demand.startupReserveSeconds())),
+                new RateKey(demand.pool(), fluidId(demand.fluid()), demand.periodSeconds()),
+                demand.amount()
+                    .multiply(BigInteger.valueOf((demand.startupReserveSeconds() - 1L) / demand.periodSeconds() + 1)),
                 BigInteger::max);
         }
         Map<GTUtility.FluidId, BigInteger> amounts = new LinkedHashMap<>();
@@ -172,8 +187,8 @@ public final class BottledChaosUpkeep {
         for (Bill bill : activeBills) {
             if (bill.remainingTicks != 0) continue;
             due.add(bill);
-            perPool.put(bill.key, bill.perSecond);
-            amounts.merge(bill.key.fluid(), bill.perSecond, BigInteger::add);
+            perPool.put(bill.key, bill.amount);
+            amounts.merge(bill.key.fluid(), bill.amount, BigInteger::add);
         }
         IdentityHashMap<FluidStack, Integer> remaining = new IdentityHashMap<>();
         for (FluidStack input : inputs) {
@@ -220,7 +235,7 @@ public final class BottledChaosUpkeep {
         }
 
         public void commitAccounting() {
-            for (Bill bill : due) bill.remainingTicks = 20;
+            for (Bill bill : due) bill.remainingTicks = 20 * bill.key.periodSeconds();
         }
     }
 
@@ -232,7 +247,8 @@ public final class BottledChaosUpkeep {
                 .getFluidStack()
                 .writeToNBT(new NBTTagCompound());
             tag.setString("pool", bill.key.pool());
-            tag.setByteArray("rate", bill.perSecond.toByteArray());
+            tag.setInteger("periodSeconds", bill.key.periodSeconds());
+            tag.setByteArray("rate", bill.amount.toByteArray());
             tag.setInteger("remainingTicks", bill.remainingTicks);
             list.appendTag(tag);
         }
@@ -246,8 +262,9 @@ public final class BottledChaosUpkeep {
             NBTTagCompound tag = list.getCompoundTagAt(i);
             FluidStack fluid = FluidStack.loadFluidStackFromNBT(tag);
             byte[] rate = tag.getByteArray("rate");
-            if (fluid == null || rate.length == 0) continue;
-            RateKey key = new RateKey(tag.getString("pool"), fluidId(fluid));
+            int periodSeconds = tag.getInteger("periodSeconds");
+            if (fluid == null || rate.length == 0 || (periodSeconds != 1 && periodSeconds != 5)) continue;
+            RateKey key = new RateKey(tag.getString("pool"), fluidId(fluid), periodSeconds);
             Bill bill = new Bill(key, new BigInteger(rate));
             bill.remainingTicks = tag.getInteger("remainingTicks");
             bills.put(key, bill);
@@ -261,9 +278,10 @@ public final class BottledChaosUpkeep {
                 .writeToNBT(new NBTTagCompound());
             tag.setString("pool", demand.pool());
             tag.setInteger("startupReserveSeconds", demand.startupReserveSeconds());
+            tag.setInteger("periodSeconds", demand.periodSeconds());
             tag.setByteArray(
                 "rate",
-                demand.perSecond()
+                demand.amount()
                     .toByteArray());
             list.appendTag(tag);
         }
@@ -276,13 +294,16 @@ public final class BottledChaosUpkeep {
             NBTTagCompound tag = list.getCompoundTagAt(i);
             FluidStack fluid = FluidStack.loadFluidStackFromNBT(tag);
             byte[] rate = tag.getByteArray("rate");
-            if (fluid != null && rate.length > 0) demands.add(
+            int periodSeconds = tag.getInteger("periodSeconds");
+            if (fluid != null && rate.length > 0 && (periodSeconds == 1 || periodSeconds == 5)) demands.add(
                 new Demand(
                     tag.getString("pool"),
                     fluid,
                     new BigInteger(1, rate),
-                    tag.getInteger("startupReserveSeconds")));
+                    tag.getInteger("startupReserveSeconds"),
+                    periodSeconds));
         }
         return Collections.unmodifiableList(demands);
     }
+
 }

@@ -44,7 +44,7 @@ public final class BottledChaosComplexStructures {
     @Desugar
     public record GodforgeProfile(ItemStack module, int rings, int modules, long parallel, long heat,
         long overclockHeat, double eu, double time, double overclock, double heatDiscount, int fuelFactor, long battery,
-        Set<ForgeOfGodsUpgrade> upgrades, int plasmaTier, boolean multiStepPlasma) {}
+        Set<ForgeOfGodsUpgrade> upgrades, int plasmaTier, boolean multiStepPlasma, int fuelPerFiveSeconds) {}
 
     static void clear() {
         godforgeProfiles.clear();
@@ -265,7 +265,9 @@ public final class BottledChaosComplexStructures {
             data.getMaxBatteryCharge(),
             Collections.unmodifiableSet(EnumSet.copyOf(path)),
             module.getPlasmaTier(),
-            module.isMultiStepPlasma());
+            module.isMultiStepPlasma(),
+            // The packaged host operates at half battery, without charging. Round before scaling host quantity.
+            Math.toIntExact((long) Math.max(GodforgeMath.calculateFuelConsumption(data) * 5, 1)));
     }
 
     public static GodforgeProfile godforge(Structure structure) {

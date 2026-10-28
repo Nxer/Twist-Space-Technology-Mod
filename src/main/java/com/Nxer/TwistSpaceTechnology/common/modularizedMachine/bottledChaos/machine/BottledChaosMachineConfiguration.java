@@ -454,7 +454,8 @@ public final class BottledChaosMachineConfiguration {
                         fluid,
                         BigInteger.valueOf(installed.quantities[slot])
                             .multiply(BigInteger.valueOf(fluid.amount)),
-                        profile.startupReserveSeconds()));
+                        profile.startupReserveSeconds(),
+                        profile.upkeepPeriodSeconds()));
             }
         }
 
