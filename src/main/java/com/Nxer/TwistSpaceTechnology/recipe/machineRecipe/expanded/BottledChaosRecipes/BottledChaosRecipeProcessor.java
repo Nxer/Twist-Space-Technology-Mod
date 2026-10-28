@@ -24,7 +24,6 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.mach
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.material.BottledChaosMaterialCache;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.material.BottledChaosMaterialStacks;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.processing.BottledChaosUpkeep;
-import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosItemInputs.Requirement;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.ChainLink;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.CompiledCatalog;
@@ -544,13 +543,7 @@ public final class BottledChaosRecipeProcessor {
             diagnosticProbes++;
             try {
 
-                long scale = Arrays.stream(requested)
-                    .max()
-                    .orElse(1);
-                long batchLimit = Math.min(
-                    Integer.MAX_VALUE,
-                    Math.max(1, Math.min(10000, Config.BottledChaosMaxChainedRecipeBatches)) * Math.max(1, scale));
-                BottledChaosChainPlanner planner = chainPlanner(batchLimit);
+                BottledChaosChainPlanner planner = chainPlanner(Integer.MAX_VALUE);
                 BottledChaosChainPlanner.Result result = planner
                     .prepare(goalOrder, requested, external, remaining, released, skipUnavailable);
                 if (skipUnavailable) preparationFailure = planner.preparationFailure();
