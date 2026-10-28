@@ -285,7 +285,7 @@ public final class BottledChaosNEIHandler extends GTNEIDefaultHandler {
                 lookupInputs = emptyList();
                 lookupOutputs = emptyList();
             } else {
-                lookupInputs = markedSlots(mInputs, display.intermediateOutputs());
+                lookupInputs = markedSlots(mInputs, display.chainOutputs());
                 lookupOutputs = markedSlots(
                     mOutputs,
                     display.outputRoles()

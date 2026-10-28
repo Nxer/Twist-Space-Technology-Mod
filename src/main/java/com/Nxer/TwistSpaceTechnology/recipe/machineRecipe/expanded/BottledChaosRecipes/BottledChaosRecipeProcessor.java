@@ -104,7 +104,7 @@ public final class BottledChaosRecipeProcessor {
             if (!route.isAuthorized(tagMask)) continue;
             for (Object key : snapshot.outputRoles.get(entry)
                 .keySet()) {
-                int role = snapshot.hasAuthorizedConsumer(entry, tagMask, key) ? 1 : 0;
+                int role = snapshot.hasAuthorizedFamilyConsumer(entry, tagMask, key) ? 1 : 0;
                 priorities.merge(key, role, Math::min);
                 outputTags.putIfAbsent(key, route.definition.tagIndex());
             }
@@ -725,7 +725,7 @@ public final class BottledChaosRecipeProcessor {
                     cachedRoute.definition.requiredTagMask(),
                     inputAlternatives,
                     Collections.unmodifiableMap(snapshot.outputRoles.get(entryIndex)),
-                    Collections.unmodifiableSet(snapshot.intermediateOutputs),
+                    Collections.unmodifiableSet(snapshot.chainOutputs),
                     cachedRoute.definition.baseEUt(),
                     Collections.unmodifiableList(items),
                     Collections.unmodifiableList(fluids),
@@ -772,7 +772,7 @@ public final class BottledChaosRecipeProcessor {
         final int[] displayOrder;
         final ChainLink[] links;
         final List<Map<Object, Integer>> outputRoles = new ArrayList<>();
-        final Set<Object> intermediateOutputs = new LinkedHashSet<>();
+        final Set<Object> chainOutputs = new LinkedHashSet<>();
         final int[][] familyEntries;
         final String[] familyNames;
         final int[] familyOfEntry;
@@ -802,12 +802,6 @@ public final class BottledChaosRecipeProcessor {
                     routes[entry].definition.availableInputsOnly(),
                     Arrays.asList(routes[entry].definition.planningTargets()));
             }
-            for (ChainLink link : links) {
-                Map<Object, Integer> roles = outputRoles.get(link.source());
-                if (!roles.containsKey(link.key())) continue;
-                roles.put(link.key(), 1);
-                intermediateOutputs.add(link.key());
-            }
             Map<String, Integer> families = new LinkedHashMap<>();
             familyOfEntry = new int[routes.length];
             int[] counts = new int[routes.length];
@@ -816,6 +810,13 @@ public final class BottledChaosRecipeProcessor {
                 int family = families.computeIfAbsent(name, ignored -> families.size());
                 familyOfEntry[entry] = family;
                 counts[family]++;
+            }
+            for (ChainLink link : links) {
+                Map<Object, Integer> roles = outputRoles.get(link.source());
+                if (!roles.containsKey(link.key())) continue;
+                // Cross-family use does not turn a family's final product into its internal intermediate.
+                if (familyOfEntry[link.source()] == familyOfEntry[link.target()]) roles.put(link.key(), 1);
+                chainOutputs.add(link.key());
             }
             familyNames = families.keySet()
                 .toArray(new String[0]);
@@ -856,10 +857,12 @@ public final class BottledChaosRecipeProcessor {
             return available;
         }
 
-        private boolean hasAuthorizedConsumer(int source, long mask, Object key) {
+        private boolean hasAuthorizedFamilyConsumer(int source, long mask, Object key) {
             for (ChainLink link : links) {
-                if (link.source() == source && link.key()
-                    .equals(key) && routes[link.target()].isAuthorized(mask)) return true;
+                if (link.source() == source && familyOfEntry[source] == familyOfEntry[link.target()]
+                    && link.key()
+                        .equals(key)
+                    && routes[link.target()].isAuthorized(mask)) return true;
             }
             return false;
         }
@@ -1000,12 +1003,12 @@ public final class BottledChaosRecipeProcessor {
     public record RecipeMapDuration(RecipeMap<?> map, double durationTicks) {}
 
     /**
-     * NEI row data: per-entry output markers and shared intermediate identities restrict lookup without hiding
-     * byproducts.
+     * NEI row data: per-entry output markers and chainable final/intermediate identities restrict lookup without
+     * hiding byproducts.
      */
     @Desugar
     public record DisplayRecipe(int tagIndex, int displayOrder, long requiredTagMask, ItemStack[][] inputAlternatives,
-        Map<Object, Integer> outputRoles, Set<Object> intermediateOutputs, long baseEUt, List<ItemStackLong> itemInputs,
+        Map<Object, Integer> outputRoles, Set<Object> chainOutputs, long baseEUt, List<ItemStackLong> itemInputs,
         List<FluidStackLong> fluidInputs, List<RecipeMapDuration> processingTimes, Plan plan) {}
 
 }
