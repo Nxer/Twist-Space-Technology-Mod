@@ -239,6 +239,7 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
             }
             return;
         }
+        lines.addAll(BottledChaosMachineDescriptions.replacementDescriptions(controller, structure));
         // Merge only complete matching parameter blocks, retaining the configured pool order within each group.
         Map<List<String>, StringJoiner> parameterGroups = new LinkedHashMap<>();
         for (int slot = 0; slot < BottledChaosMachineConfiguration.poolCount(); slot++) {

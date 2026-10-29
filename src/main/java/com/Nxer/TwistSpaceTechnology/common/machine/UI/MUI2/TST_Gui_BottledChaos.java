@@ -26,7 +26,6 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_BottledChaos;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineConfiguration;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineDescriptions;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.result.BottledChaosResultData;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosProcessAlternatives;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTextLayout;
 import com.cleanroommc.modularui.api.GuiAxis;
 import com.cleanroommc.modularui.api.drawable.IDrawable;
@@ -105,6 +104,22 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
     // #tr tst.bottledchaos.gui.modules_tab
     // # Modules
     // #zh_CN 结构模组
+
+    // #tr tst.bottledchaos.gui.pools_tab
+    // # Recipe Pools
+    // #zh_CN 配方池
+
+    // #tr tst.bottledchaos.gui.passive_inputs
+    // # Passive inputs
+    // #zh_CN 被动消耗
+
+    // #tr tst.bottledchaos.gui.per_round
+    // # %s x%s / round
+    // #zh_CN %s x%s / 轮
+
+    // #tr tst.bottledchaos.gui.no_passive_inputs
+    // # No passive consumption.
+    // #zh_CN 当前无被动消耗.
 
     // #tr tst.bottledchaos.gui.recipe_category_configuration
     // # Machine Modules
@@ -223,7 +238,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
         super.registerSyncValues(syncManager);
         terminalPage = new IntSyncValue(
             () -> terminalPageIndex,
-            value -> terminalPageIndex = Math.max(0, Math.min(2, value))).allowC2S();
+            value -> terminalPageIndex = Math.max(0, Math.min(3, value))).allowC2S();
         syncManager.syncValue("bottledChaosTerminalPage", terminalPage);
         syncManager.syncValue("bottledChaosCapacity", new IntSyncValue(multiblock::getBottledChaosCapacity));
         syncManager.syncValue("bottledChaosUsedCapacity", new IntSyncValue(multiblock::getBottledChaosUsedCapacity));
@@ -520,11 +535,14 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             .child(
                 BottledChaosHatchPage.create(multiblock, panel, manager, () -> terminalPage.getIntValue() == 1, skin)
                     .setEnabledIf(widget -> terminalPage.getIntValue() == 1))
-            .child(createModuleConfiguration(manager).setEnabledIf(widget -> terminalPage.getIntValue() == 2));
+            .child(createModuleConfiguration(manager).setEnabledIf(widget -> terminalPage.getIntValue() == 2))
+            .child(createModuleInventory(manager).setEnabledIf(widget -> terminalPage.getIntValue() == 3));
         ParentWidget<?> main = new ParentWidget<>().size(PANEL_WIDTH, PANEL_HEIGHT)
             .child(createTerminalTab("tst.bottledchaos.gui.runtime_tab", 0).pos(8, TABS_TOP))
             .child(createTerminalTab("tst.bottledchaos.gui.hatches_tab", 1).pos(88, TABS_TOP))
-            .child(createTerminalTab("tst.bottledchaos.gui.modules_tab", 2).pos(168, TABS_TOP))
+            .child(createTerminalTab("tst.bottledchaos.gui.pools_tab", 2).pos(168, TABS_TOP))
+            .child(createTerminalTab("tst.bottledchaos.gui.modules_tab", 3).pos(248, TABS_TOP))
+            .child(createPassiveInputs(manager))
             .child(terminal)
             .child(
                 createPanelGap(panel, manager).pos(INVENTORY_LEFT, LOWER_TOP)
@@ -718,26 +736,6 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                     .childPadding(2)
                     .collapseDisabledChild()
                     .child(
-                        new Rectangle().color(0xFF3E6570)
-                            .asWidget()
-                            .size(1, 18)
-                            .marginLeft(9)
-                            .marginRight(2)
-                            .setEnabledIf(widget -> browser.tree.isChild(browser.row(row))))
-                    .child(
-                        new ButtonWidget<>().size(14, 23)
-                            .background(skin.BUTTON)
-                            .hoverBackground(skin.HOVER)
-                            .overlay(
-                                IKey.dynamic(() -> browser.tree.isExpanded(browser.row(row)) ? "-" : "+")
-                                    .color(skin::buttonText))
-                            .setEnabledIf(widget -> browser.tree.hasChildren(browser.row(row)))
-                            .onMousePressed(click -> {
-                                browser.tree.toggle(browser.row(row));
-                                browser.selectCurrent();
-                                return true;
-                            }))
-                    .child(
                         new ButtonWidget<>().expanded()
                             .height(23)
                             .background(
@@ -813,28 +811,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                         browser.turnPage(1);
                         return true;
                     }));
-        Flow slots = Flow.row()
-            .size(18, 18)
-            .collapseDisabledChild();
-        for (int slot = 0; slot < BottledChaosMachineConfiguration.poolCount(); slot++) {
-            final int poolSlot = slot;
-            slots.child(
-                new ItemSlot().size(18, 18)
-                    .setEnabledIf(widget -> browser.selected.getIntValue() == poolSlot)
-                    .syncHandler(
-                        new MachineSlotSyncHandler(
-                            createConfigurationSlot(
-                                multiblock.getMachineConfiguration()
-                                    .machines(),
-                                slot,
-                                () -> panelOpen.getAsBoolean() && browser.selected.getIntValue() == poolSlot)
-                                    .ignoreMaxStackSize(true)
-                                    .singletonSlotGroup()))
-                    .tooltip(
-                        tooltip -> tooltip.addLine(IKey.str(BottledChaosMachineConfiguration.poolName(poolSlot)))));
-        }
         int detailsWidth = TERMINAL_WIDTH - MODULE_LIST_WIDTH - 20;
-        int hintWidth = detailsWidth - 94;
         Flow details = Flow.column()
             .pos(MODULE_LIST_WIDTH + 14, 6)
             .size(detailsWidth, TERMINAL_HEIGHT - 12)
@@ -843,10 +820,20 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                     .fullWidth()
                     .height(40)
                     .childPadding(6)
-                    .child(slots)
+                    .child(
+                        new ButtonWidget<>().size(18, 18)
+                            .background(skin.SLOT)
+                            .overlay(new DynamicDrawable(() -> {
+                                ItemStack stack = browser.stack(browser.selected.getIntValue());
+                                return stack == null ? IDrawable.EMPTY : new ItemDrawable(stack);
+                            }))
+                            .onMousePressed(click -> {
+                                browser.nextSource();
+                                return true;
+                            }))
                     .child(
                         Flow.column()
-                            .width(64)
+                            .width(detailsWidth - 26)
                             .height(24)
                             .childPadding(2)
                             .child(
@@ -861,15 +848,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                                             : "x" + browser.quantity(browser.selected.getIntValue()))).fullWidth()
                                                 .height(10)
                                                 .shadow(false)
-                                                .color(MODULE_MUTED)))
-                    .child(
-                        IKey.dynamic(() -> moduleQuantityHint(hintWidth))
-                            .asWidget()
-                            .width(hintWidth)
-                            .height(36)
-                            .shadow(false)
-                            .color(MODULE_MUTED)
-                            .textAlign(Alignment.CenterLeft)))
+                                                .color(MODULE_MUTED))))
             .child(
                 new Rectangle().color(0xFF3E6570)
                     .asWidget()
@@ -892,17 +871,57 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             .child(details);
     }
 
-    @SideOnly(Side.CLIENT)
-    private static String moduleQuantityHint(int width) {
-        return String.join(
-            "\n",
-            BottledChaosTextLayout.wrap(
-                StatCollector.translateToLocal("tst.bottledchaos.gui.recipe_category_slot_hint"),
-                width,
-                TextRenderer.getFontRenderer()::getStringWidth));
+    private ParentWidget<?> createModuleInventory(PanelSyncManager manager) {
+        ParentWidget<?> page = new ParentWidget<>().size(TERMINAL_WIDTH, TERMINAL_HEIGHT);
+        for (int index = 0; index < BottledChaosMachineConfiguration.MODULE_SLOTS; index++) {
+            final int slot = index;
+            int left = 6 + (index % 6) * 70;
+            int top = 6 + (index / 6) * 43;
+            page.child(
+                new ItemSlot().size(18, 18)
+                    .pos(left + 25, top)
+                    .syncHandler(
+                        new MachineSlotSyncHandler(
+                            createConfigurationSlot(
+                                multiblock.getMachineConfiguration()
+                                    .machines(),
+                                slot,
+                                () -> terminalPage.getIntValue() == 3).ignoreMaxStackSize(true)
+                                    .singletonSlotGroup())));
+            page.child(
+                IKey.dynamic(
+                    () -> TSTTextLayout.ellipsize(
+                        BottledChaosMachineConfiguration.moduleName(
+                            multiblock.getMachineConfiguration()
+                                .machines()
+                                .getStackInSlot(slot)),
+                        64,
+                        TextRenderer.getFontRenderer()::getStringWidth))
+                    .asWidget()
+                    .pos(left, top + 22)
+                    .size(68, 13)
+                    .background(skin.BUTTON)
+                    .color(skin::buttonText)
+                    .shadow(false)
+                    .textAlign(Alignment.Center));
+        }
+        return page;
     }
 
-    /** Measure and hard-wrap each column before laying out rows; multiline values own their full height. */
+    private IWidget createPassiveInputs(PanelSyncManager manager) {
+        var inputs = new StringSyncValue(multiblock::getPassiveInputText);
+        manager.syncValue("bottledChaosPassiveInputs", inputs);
+        return GTGuiTextures.BUTTON_BOXED_EXCLAMATION_POINT_18x18.asWidget()
+            .size(18, 18)
+            .pos(PANEL_WIDTH - 48, TABS_TOP)
+            .tooltipBuilder(tooltip -> {
+                tooltip.addLine(IKey.lang("tst.bottledchaos.gui.passive_inputs"));
+                for (String line : inputs.getStringValue()
+                    .split("\n")) tooltip.addLine(IKey.str(line));
+            })
+            .tooltipAutoUpdate(true);
+    }
+
     private static final class ModuleDetails extends ListWidget<IWidget, ModuleDetails> {
 
         private static final float TEXT_SCALE = 1f;
@@ -1085,6 +1104,8 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
         private final LongSyncValue required;
         private final IntSyncValue[] users = new IntSyncValue[BottledChaosMachineConfiguration.poolCount()];
         private final IntSyncValue selected;
+        private final IntSyncValue source;
+        private int selectedSource;
         private final GenericSyncValue<NBTTagCompound, ?> parameters;
         private final BottledChaosModuleTree tree;
         private final long waterPools;
@@ -1110,6 +1131,8 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                 () -> selectedSlot,
                 value -> { if (value >= -1 && value < users.length) selectedSlot = value; }).allowC2S();
             syncManager.syncValue("bottledChaosSelectedPool", selected);
+            source = new IntSyncValue(() -> selectedSource, value -> selectedSource = Math.max(0, value)).allowC2S();
+            syncManager.syncValue("bottledChaosSelectedSource", source);
             parameters = GenericSyncValue.builder(NBTTagCompound.class)
                 .getter(() -> {
                     if (!panelOpen.getAsBoolean()) return snapshot;
@@ -1119,7 +1142,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                     if (snapshot.getInteger("slot") != selectedSlot || lastSnapshotTick == Long.MIN_VALUE
                         || !ItemStack.areItemStacksEqual(snapshotStack, stack(selectedSlot))
                         || tick - lastSnapshotTick >= 10) {
-                        snapshot = multiblock.getModuleParameters(selectedSlot);
+                        snapshot = multiblock.getModuleParameters(selectedSlot, selectedSource);
                         snapshotStack = stack(selectedSlot) == null ? null : stack(selectedSlot).copy();
                         lastSnapshotTick = tick;
                     }
@@ -1129,40 +1152,28 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                 .copy(tag -> (NBTTagCompound) tag.copy())
                 .build();
             syncManager.syncValue("bottledChaosModuleParameters", parameters);
-            int[] parents = new int[users.length];
-            Arrays.fill(parents, -1);
-            var preferredPools = BottledChaosProcessAlternatives.displayParents();
-            int[] preferredRoots = new int[preferredPools.size() + 1];
-            Arrays.fill(preferredRoots, -1);
             long water = 0;
             for (int slot = 0; slot < users.length; slot++) {
                 final int poolSlot = slot;
                 users[slot] = new IntSyncValue(() -> multiblock.getRecipePoolUsers(poolSlot));
                 syncManager.syncValue("bottledChaosPoolUsers" + slot, users[slot]);
                 if (BottledChaosMachineConfiguration.isPurificationPlantSlot(slot)) plantSlot = slot;
-                var pool = BottledChaosMachineConfiguration.pool(slot);
-                int preferred = preferredPools.indexOf(pool);
-                if (preferred >= 0) preferredRoots[preferred + 1] = slot;
-                if (BottledChaosMachineConfiguration.isPurificationPool(pool)) water |= 1L << slot;
+                if (BottledChaosMachineConfiguration.isPurificationPool(BottledChaosMachineConfiguration.pool(slot)))
+                    water |= 1L << slot;
             }
             waterPools = water;
-            for (int slot = 0; slot < users.length; slot++) {
-                var pool = BottledChaosMachineConfiguration.pool(slot);
-                if ((water & (1L << slot)) != 0) parents[slot] = plantSlot;
-                else {
-                    int preferred = preferredPools.indexOf(BottledChaosProcessAlternatives.displayParent(pool));
-                    if (preferred >= 0) parents[slot] = preferredRoots[preferred + 1];
-                }
-            }
-            preferredRoots[0] = plantSlot;
-            tree = new BottledChaosModuleTree(parents, preferredRoots);
+            tree = new BottledChaosModuleTree();
         }
 
         private ItemStack stack(int slot) {
-            return slot < 0 ? null
-                : multiblock.getMachineConfiguration()
-                    .machines()
-                    .getStackInSlot(slot);
+            return multiblock.getMachineConfiguration()
+                .poolStack(slot, slot == selected.getIntValue() ? source.getIntValue() : 0);
+        }
+
+        private void nextSource() {
+            int count = multiblock.getMachineConfiguration()
+                .sourcesForPool(selected.getIntValue()).length;
+            if (count > 1) source.setIntValue((source.getIntValue() + 1) % count, true, true);
         }
 
         private long quantity(int slot) {
@@ -1174,9 +1185,17 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
         }
 
         private int row(int row) {
-            long visible = required.getLongValue();
-            for (int slot = 0; slot < users.length; slot++) if (stack(slot) != null) visible |= 1L << slot;
-            tree.update(visible, required.getLongValue() | waterPools);
+            long visible = 0;
+            for (int slot = 0; slot < users.length; slot++)
+                if (stack(slot) != null || users[slot].getIntValue() != 0) visible |= 1L << slot;
+            long missing = 0, used = 0;
+            for (int slot = 0; slot < users.length; slot++) {
+                if (users[slot].getIntValue() != 0) {
+                    if (quantity(slot) <= 0) missing |= 1L << slot;
+                    else used |= 1L << slot;
+                }
+            }
+            tree.update(visible, missing, used);
             selectCurrent();
             return tree.row(row);
         }

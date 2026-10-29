@@ -1,9 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineParameters.Machine;
@@ -18,6 +18,7 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.common.tileentities.machines.multi.MTEFusionComputer;
 import gregtech.common.tileentities.machines.multi.purification.MTEPurificationPlant;
+import tectech.recipe.TecTechRecipeMaps;
 
 /** One registration per controller: structure reader, recipe-pool policy and runtime parameter implementation. */
 public enum BottledChaosSupportedMachine {
@@ -42,7 +43,7 @@ public enum BottledChaosSupportedMachine {
     TST_INDISTINCT_TENTACLE("com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle", "mainIndistinctTentacle", Machine.INDISTINCT),
     TST_INDUSTRIAL_MAGNETAR_SEPARATOR("com.Nxer.TwistSpaceTechnology.common.machine.TST_IndustrialMagnetarSeparator", "STRUCTURE_PIECE_MAIN", Machine.MAGNETAR_SEPARATOR),
     TST_MANUFACTURING_CENTER("com.Nxer.TwistSpaceTechnology.common.machine.TST_ManufacturingCenter", "main", Machine.MANUFACTURING),
-    TST_MIRACLE_DOOR("com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor", "mainMiracleDoor", Machine.STELLAR_FORGE, PoolPolicy.STELLAR_FORGE),
+    TST_MIRACLE_DOOR("com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor", "mainMiracleDoor", Machine.STELLAR_FORGE),
     TST_HYPER_THERMAL_CONVECTOR("com.Nxer.TwistSpaceTechnology.common.machine.TST_HyperThermalConvector", "main", Machine.HEAT_CONVECTOR),
     TST_MEGA_MACERATOR("com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaMacerator", "mainMegaMacerator", Machine.MEGA_MACERATOR),
     TST_SCAVENGER("com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger", "mainScavenger", Machine.SCAVENGER),
@@ -50,9 +51,11 @@ public enum BottledChaosSupportedMachine {
     TST_THERMAL_ENERGY_DEVOURER("com.Nxer.TwistSpaceTechnology.common.machine.TST_ThermalEnergyDevourer", "mainThermalEnergyDevourer", Machine.THERMAL_DEVOURER),
     TST_VACUUM_FILTER_EXTRACTOR("com.Nxer.TwistSpaceTechnology.common.machine.TST_VacuumFilterExtractor", "mainVacuumFilterExtractor", Machine.VACUUM_FILTER),
     MM_INDISTINCT_TENTACLE_PROTOTYPE_MK2("com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_IndistinctTentaclePrototypeMK2", "mainIndistinctTentaclePrototypeMK2", Machine.INDISTINCT_PROTOTYPE),
+    MM_DIMENSIONALLY_TRANSCENDENT_MATTER_PLASMA_FORGE_PROTOTYPE_MK2("com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2", "main", Machine.MODULAR_PLASMA_FORGE),
     MM_LARGE_NEUTRON_OSCILLATOR("com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_LargeNeutronOscillator", "main", Machine.MODULAR_NEUTRON),
     MTENEUTRON_ACTIVATOR("goodgenerator.blocks.tileEntity.MTENeutronActivator", "$", Machine.NEUTRON, StructureKind.REPEATING, PoolPolicy.NEUTRON),
     MTEPRECISE_ASSEMBLER("goodgenerator.blocks.tileEntity.MTEPreciseAssembler", "$", Machine.PRECISE_ASSEMBLER),
+    MTEPLASMA_FORGE("gregtech.common.tileentities.machines.multi.MTEPlasmaForge", "main", Machine.PLASMA_FORGE),
     MTECRYOGENIC_FREEZER("gregtech.common.tileentities.machines.multi.MTECryogenicFreezer", "main", Machine.CRYOGENIC_FREEZER),
     MTEFUSION_COMPUTER_1("gregtech.common.tileentities.machines.multi.MTEFusionComputer1", "main", Machine.FUSION),
     MTEFUSION_COMPUTER_2("gregtech.common.tileentities.machines.multi.MTEFusionComputer2", "main", Machine.FUSION),
@@ -139,8 +142,73 @@ public enum BottledChaosSupportedMachine {
     private enum PoolPolicy {
         NATIVE,
         NEUTRON,
-        STELLAR_FORGE,
         ARC_ONLY
+    }
+
+    /** Optional mold bypass adds an ingot route to the same pool; it never changes the molten route. */
+    @Desugar
+    public record Replacement(RecipeMap<?> pool, List<RecipeMap<?>> chain, boolean solidify, boolean removeGas,
+        boolean moldBypass) {}
+
+    public List<Replacement> replacements() {
+        List<Replacement> rules = new ArrayList<>();
+        switch (this) {
+            case TST_MIRACLE_DOOR -> {
+                metalReplacements(rules, GTCMRecipe.StellarForgeRecipeMap, true);
+                rules.add(
+                    new Replacement(
+                        GTCMRecipe.StellarForgeAlloySmelterRecipeMap,
+                        Arrays.asList(RecipeMaps.alloyBlastSmelterRecipes, RecipeMaps.fluidSolidifierRecipes),
+                        true,
+                        false,
+                        true));
+                rules.add(
+                    new Replacement(
+                        GTCMRecipe.StellarForgeAlloySmelterRecipeMap,
+                        Collections.singletonList(RecipeMaps.alloyBlastSmelterRecipes),
+                        false,
+                        false,
+                        false));
+            }
+            case MTEMOLTEN_MODULE -> metalReplacements(rules, TecTechRecipeMaps.godforgeMoltenRecipes, false);
+            case TST_HYPER_THERMAL_CONVECTOR -> rules.add(
+                new Replacement(
+                    GTCMRecipe.RapidCoolingDownRecipeMap,
+                    Collections.singletonList(RecipeMaps.vacuumFreezerRecipes),
+                    false,
+                    false,
+                    false));
+            default -> {}
+        }
+        return rules;
+    }
+
+    private static void metalReplacements(List<Replacement> rules, RecipeMap<?> pool, boolean door) {
+        rules.add(
+            new Replacement(
+                pool,
+                Arrays.asList(
+                    RecipeMaps.blastFurnaceRecipes,
+                    RecipeMaps.vacuumFreezerRecipes,
+                    RecipeMaps.fluidExtractionRecipes),
+                false,
+                door,
+                false));
+        rules.add(
+            new Replacement(
+                pool,
+                Arrays.asList(RecipeMaps.blastFurnaceRecipes, RecipeMaps.fluidExtractionRecipes),
+                false,
+                door,
+                false));
+        rules.add(
+            new Replacement(
+                pool,
+                Arrays.asList(RecipeMaps.blastFurnaceRecipes, RecipeMaps.vacuumFreezerRecipes),
+                true,
+                door,
+                door));
+        rules.add(new Replacement(pool, Collections.singletonList(RecipeMaps.blastFurnaceRecipes), true, door, door));
     }
 
     final String className;
@@ -197,11 +265,7 @@ public enum BottledChaosSupportedMachine {
         if (supported.poolPolicy == PoolPolicy.ARC_ONLY) return nativePools.contains(RecipeMaps.arcFurnaceRecipes)
             ? Collections.singletonList(RecipeMaps.arcFurnaceRecipes)
             : Collections.emptyList();
-        Collection<RecipeMap<?>> result = new LinkedHashSet<>(nativePools);
-        result.add(
-            supported.poolPolicy == PoolPolicy.NEUTRON ? GTCMRecipe.NeutronActivatorWithEURecipeMap
-                : RecipeMaps.alloyBlastSmelterRecipes);
-        return result;
+        return Collections.singletonList(GTCMRecipe.NeutronActivatorWithEURecipeMap);
     }
 
     long poolMask(IMetaTileEntity machine) {

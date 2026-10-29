@@ -490,7 +490,7 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
         }
     }
 
-    protected static GTRecipe turnToIngotRecipe(GTRecipe recipe) {
+    public static GTRecipe turnToIngotRecipe(GTRecipe recipe) {
         GTRecipe r = recipe.copy();
         List<FluidStack> outputFluidList = new ArrayList<>();
         List<ItemStack> outputItemList = new ArrayList<>(Arrays.asList(r.mOutputs));

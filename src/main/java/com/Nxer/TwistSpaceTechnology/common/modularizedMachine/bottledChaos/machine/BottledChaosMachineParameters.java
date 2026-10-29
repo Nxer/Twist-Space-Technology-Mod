@@ -104,6 +104,7 @@ public final class BottledChaosMachineParameters {
         CRYSTALLINE,
         MANUFACTURING,
         BLAST_FURNACE,
+        PLASMA_FORGE,
         BIOSPHERE,
         OIL_CRACKER,
         MEGA_OIL_CRACKER,
@@ -161,6 +162,7 @@ public final class BottledChaosMachineParameters {
         FRIDGE,
         NEUTRON,
         MODULAR_NEUTRON,
+        MODULAR_PLASMA_FORGE,
         NAQUADAH_REFINERY,
         FUSION;
         // spotless:on
@@ -196,6 +198,16 @@ public final class BottledChaosMachineParameters {
             godforge = BottledChaosComplexStructures.godforge(structure);
             foundry = machine == Machine.FOUNDRY ? BottledChaosComplexStructures.foundry(structure) : null;
             fourHeliocasts = foundry != null && BottledChaosComplexStructures.fourHeliocasts(structure);
+        }
+
+        int poolSpeedDivisor() {
+            if (original instanceof com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.WirelessEnergyMultiMachineBase
+                || godforge != null) return 1;
+            return Math.max(
+                1,
+                (int) pools.stream()
+                    .distinct()
+                    .count());
         }
     }
 
@@ -290,6 +302,7 @@ public final class BottledChaosMachineParameters {
             case BREWERY -> value.set(4L * t, 1, 2d / 3);
             case CHEMICAL_BATH -> value.set(4L * t, 1, 0.2);
             case DISTILLATION_TOWER, DISSOLUTION, VACUUM_FREEZER -> {}
+            case PLASMA_FORGE -> value.requiresHeat = true;
             case ALLOY_BLAST -> value.maximumRecipeTier = t;
             case VACUUM_FILTER -> {
                 if (pool != RecipeMaps.distillationTowerRecipes && pool != RecipeMaps.distilleryRecipes)
@@ -505,8 +518,9 @@ public final class BottledChaosMachineParameters {
                 value.timeDivisor = electrode.OCSpeedFactor;
                 value.powerMultiplier = electrode.OCPowerFactor;
             }
-            case INDISTINCT_PROTOTYPE, MODULAR_NEUTRON -> {
+            case INDISTINCT_PROTOTYPE, MODULAR_NEUTRON, MODULAR_PLASMA_FORGE -> {
                 value.set(masterParallel, masterEU, masterTime);
+                value.requiresHeat = machine == Machine.MODULAR_PLASMA_FORGE;
                 if (machine == Machine.INDISTINCT_PROTOTYPE) {
                     value.timeDivisor = 1;
                     value.powerMultiplier = 1;
@@ -518,8 +532,8 @@ public final class BottledChaosMachineParameters {
                 value.upkeep = pyrotheum(10);
             }
             case STELLAR_FORGE -> {
-                if (pool != GTCMRecipe.StellarForgeRecipeMap && pool != RecipeMaps.alloyBlastSmelterRecipes
-                    && pool != GTCMRecipe.StellarForgeAlloySmelterRecipeMap) return Evaluation.INVALID;
+                if (pool != GTCMRecipe.StellarForgeRecipeMap && pool != GTCMRecipe.StellarForgeAlloySmelterRecipeMap)
+                    return Evaluation.INVALID;
                 value.euMultiplier = Math.max(
                     1,
                     pool == GTCMRecipe.StellarForgeRecipeMap ? Config.multiplierOfMiracleDoorEUCostEBFMode
@@ -807,12 +821,14 @@ public final class BottledChaosMachineParameters {
         boolean basicAlloyCoil;
         boolean ballChip;
         boolean gravityLens;
+        boolean ingotMold;
         double rotorScore;
         ArcFurnaceElectrode electrode;
 
         Upgrades(ItemStack[] materials) {
             for (ItemStack stack : materials) {
                 if (stack == null || stack.stackSize <= 0) continue;
+                ingotMold |= GTCMItemList.WhiteDwarfMold_Ingot.equal(stack);
                 Block block = Block.getBlockFromItem(stack.getItem());
                 int meta = stack.getItemDamage();
                 if (block instanceof IHeatingCoil heating) coil = heating.getCoilHeat(meta);

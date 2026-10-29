@@ -54,6 +54,10 @@ final class BottledChaosChainPlanner {
             return 0;
         }
 
+        default Map<Object, Long> catalysts(int stage, long voltage) {
+            return null;
+        }
+
         default Map<Object, Long> inputs(int stage, long voltage) {
             return null;
         }
@@ -238,7 +242,7 @@ final class BottledChaosChainPlanner {
             if (takeInput(index, input.getKey(), input.getValue()) != input.getValue())
                 return CheckRecipeResultRegistry.NO_RECIPE;
         }
-        for (var catalyst : stage.catalysts.entrySet()) {
+        for (var catalyst : catalysts(index, state.voltage).entrySet()) {
             Object key = catalyst.getKey();
             long needed = Math.max(0, catalyst.getValue() - Math.multiplyExact(inputs.getOrDefault(key, 0L), count));
             if (stage.availableInputsOnly && available(index, key) < needed
@@ -354,7 +358,7 @@ final class BottledChaosChainPlanner {
                 if (cost > 0) count = Math.min(count, (long) Math.max(0, (durationLimit - state.duration) / cost));
                 if (count <= 0) continue;
                 boolean catalystsAvailable = true;
-                for (var catalyst : stage.catalysts.entrySet()) {
+                for (var catalyst : catalysts(index, state.voltage).entrySet()) {
                     Object key = catalyst.getKey();
                     long consumed = Math.multiplyExact(inputs.getOrDefault(key, 0L), count);
                     long needed = Math.max(0, catalyst.getValue() - consumed);
@@ -403,6 +407,11 @@ final class BottledChaosChainPlanner {
         } catch (ArithmeticException overflow) {
             return CheckRecipeResultRegistry.NO_RECIPE;
         }
+    }
+
+    private Map<Object, Long> catalysts(int index, long voltage) {
+        Map<Object, Long> selected = conditions.catalysts(index, voltage);
+        return selected == null ? stages[index].catalysts : selected;
     }
 
     private Map<Object, Long> inputs(int index, long voltage) {

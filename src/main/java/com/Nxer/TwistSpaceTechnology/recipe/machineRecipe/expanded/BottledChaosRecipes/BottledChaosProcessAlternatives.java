@@ -13,19 +13,22 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineConfiguration;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosSupportedMachine;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosSupportedMachine.Replacement;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeSupport.RecipeData;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeSupport.TimeKey;
-import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
-import com.google.common.collect.ImmutableList;
 
 import bartworks.system.material.WerkstoffLoader;
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
 import gregtech.api.util.GTUtility.FluidId;
 import tectech.recipe.TecTechRecipeMaps;
 
@@ -36,42 +39,29 @@ public final class BottledChaosProcessAlternatives {
     public static final RecipeMap<?> GODFORGE_MOLTEN = TecTechRecipeMaps.godforgeMoltenRecipes;
     public static final RecipeMap<?> COOLING = GTCMRecipe.RapidCoolingDownRecipeMap;
 
-    @Desugar
-    public record Alternative(RecipeMap<?> pool, RecipeMap<?> displayParent) {}
-
-    private static final List<Alternative> ALTERNATIVES = ImmutableList.of(
-        new Alternative(STELLAR_FORGE, RecipeMaps.blastFurnaceRecipes),
-        new Alternative(GODFORGE_MOLTEN, RecipeMaps.blastFurnaceRecipes),
-        new Alternative(COOLING, RecipeMaps.vacuumFreezerRecipes));
-    private static final List<RecipeMap<?>> DISPLAY_PARENTS = ImmutableList.copyOf(
-        ALTERNATIVES.stream()
-            .map(Alternative::displayParent)
-            .distinct()
-            .iterator());
-    private static final DisplayGroup DISPLAY_GROUP = new DisplayGroup(
-        ImmutableList
-            .of(RecipeMaps.blastFurnaceRecipes, RecipeMaps.vacuumFreezerRecipes, RecipeMaps.fluidExtractionRecipes),
-        ImmutableList.copyOf(
-            ALTERNATIVES.stream()
-                .map(Alternative::pool)
-                .iterator()));
+    private static final List<Replacement> RULES = java.util.Arrays.stream(BottledChaosSupportedMachine.values())
+        .flatMap(
+            machine -> machine.replacements()
+                .stream())
+        .collect(java.util.stream.Collectors.toList());
     private static final List<Group> pending = new ArrayList<>();
-
-    /** Pool-list membership and original-column order only; valid substitutions still come from cached versions. */
-    @Desugar
-    public record DisplayGroup(List<RecipeMap<?>> originals, List<RecipeMap<?>> alternatives) {}
-
-    public static DisplayGroup displayGroup() {
-        return DISPLAY_GROUP;
-    }
+    private static Map<Object, Long> additionalCatalysts = Collections.emptyMap();
 
     public static RecipeMap<?> displayParent(RecipeMap<?> pool) {
-        for (Alternative alternative : ALTERNATIVES) if (alternative.pool() == pool) return alternative.displayParent();
+        for (Replacement rule : RULES) if (rule.pool() == pool) return rule.chain()
+            .get(0);
         return null;
     }
 
-    public static List<RecipeMap<?>> displayParents() {
-        return DISPLAY_PARENTS;
+    public static List<RecipeMap<?>> replacementPools() {
+        List<RecipeMap<?>> pools = new ArrayList<>();
+        for (Replacement rule : RULES) if (!pools.contains(rule.pool())) pools.add(rule.pool());
+        if (!pools.contains(RecipeMaps.fluidSolidifierRecipes)) pools.add(RecipeMaps.fluidSolidifierRecipes);
+        return pools;
+    }
+
+    static Map<Object, Long> additionalCatalysts() {
+        return additionalCatalysts;
     }
 
     static final class Source {
@@ -114,10 +104,13 @@ public final class BottledChaosProcessAlternatives {
         final TimeKey basis;
         final Map<Object, Long> inputs;
         final double scale;
+        final List<RecipeMap<?>> chain;
         volatile Map<RecipeMap<?>, List<Version>> versions = Collections.emptyMap();
 
-        Group(RecipeData baseline, TimeKey basis, Map<TimeKey, Long> work, Map<Object, Long> inputs) {
+        Group(RecipeData baseline, TimeKey basis, Map<TimeKey, Long> work, Map<Object, Long> inputs,
+            List<RecipeMap<?>> chain) {
             this.baseline = baseline;
+            this.chain = chain;
             this.basis = basis;
             this.inputs = inputs;
             scale = (double) work.get(basis) / baseline.times.get(basis);
@@ -125,12 +118,15 @@ public final class BottledChaosProcessAlternatives {
     }
 
     @Desugar
-    record Version(Map<TimeKey, Long> times, double scale, Map<Object, Long> omittedInputs) {}
+    record Version(Map<TimeKey, Long> times, double scale, Map<Object, Long> omittedInputs, boolean ingotMold) {}
 
     static Source capture(RecipeMap<?> map, Map<Object, Long> inputs, Map<Object, Long> outputs,
         Map<Object, Long> catalysts, long ticks) {
-        return map == RecipeMaps.blastFurnaceRecipes || map == RecipeMaps.vacuumFreezerRecipes
-            || map == RecipeMaps.fluidExtractionRecipes
+        return !catalysts.isEmpty() || map == RecipeMaps.fluidSolidifierRecipes
+            || RULES.stream()
+                .anyMatch(
+                    rule -> rule.pool() == map || rule.chain()
+                        .contains(map))
             || inputs.keySet()
                 .stream()
                 .anyMatch(BottledChaosProcessAlternatives::protectionGas)
@@ -140,63 +136,62 @@ public final class BottledChaosProcessAlternatives {
 
     static void clearPending() {
         pending.clear();
+        additionalCatalysts = Collections.emptyMap();
     }
 
-    /** Preserve net materials and NEI work; mark only complete segments whose intermediates are fully internal. */
+    /** Longest complete chain first; exported/shared intermediate work is never stolen by a replacement. */
     static RecipeData group(RecipeData route) {
         Map<TimeKey, Long> remaining = new LinkedHashMap<>(route.times);
         Map<TimeKey, Long> grouped = new LinkedHashMap<>();
-        for (TimeKey furnace : route.times.keySet()) {
-            if (furnace.map() != RecipeMaps.blastFurnaceRecipes || !remaining.containsKey(furnace)) continue;
-            if (furnace.source() == null) continue;
-            Object ingot = singleItem(furnace.source().outputs);
-            if (ingot == null || route.outputs.containsKey(ingot) || route.inputs.containsKey(ingot)) continue;
-            RecipeData baseline = furnace.source()
-                .data(furnace);
-            TimeKey extraction = next(remaining, RecipeMaps.fluidExtractionRecipes, ingot);
-            if (extraction == null) {
-                TimeKey freezer = next(remaining, RecipeMaps.vacuumFreezerRecipes, ingot);
-                if (freezer == null) continue;
-                Object cooled = singleItem(freezer.source().outputs);
-                if (cooled == null || route.outputs.containsKey(cooled) || route.inputs.containsKey(cooled)) continue;
-                extraction = next(remaining, RecipeMaps.fluidExtractionRecipes, cooled);
-                if (extraction == null) continue;
+        List<List<RecipeMap<?>>> chains = new ArrayList<>();
+        for (Replacement rule : RULES) if (!chains.contains(rule.chain())) chains.add(rule.chain());
+        chains.sort(
+            java.util.Comparator.comparingInt((List<RecipeMap<?>> chain) -> chain.size())
+                .reversed());
+        for (List<RecipeMap<?>> chain : chains) for (TimeKey first : new ArrayList<>(remaining.keySet())) {
+            if (first.map() != chain.get(0) || first.source() == null) continue;
+            if (first.map() == RecipeMaps.vacuumFreezerRecipes && !plasmaCooling(first.source())) continue;
+            RecipeData baseline = first.source()
+                .data(first);
+            boolean complete = true;
+            for (int step = 1; step < chain.size(); step++) {
+                TimeKey next = null;
+                Object intermediate = null;
+                for (Object output : baseline.outputs.keySet()) {
+                    if (route.inputs.containsKey(output) || route.outputs.containsKey(output)) continue;
+                    next = next(remaining, chain.get(step), output);
+                    if (next != null) {
+                        intermediate = output;
+                        break;
+                    }
+                }
+                if (next == null) {
+                    complete = false;
+                    break;
+                }
                 baseline = baseline.appendBalancedRecipe(
-                    freezer.source()
-                        .data(freezer),
-                    ingot);
-                ingot = cooled;
+                    next.source()
+                        .data(next),
+                    intermediate);
             }
-            if (extraction.source().outputs.size() != 1 || !(extraction.source().outputs.keySet()
-                .iterator()
-                .next() instanceof FluidId)) continue;
-            baseline = baseline.appendBalancedRecipe(
-                extraction.source()
-                    .data(extraction),
-                ingot);
-            // Partial conversion cannot substitute work belonging to exported ingots or another downstream use.
-            long numerator = remaining.get(furnace);
-            long denominator = baseline.times.get(furnace);
-            if (!proportional(baseline.times, remaining, numerator, denominator, false)) continue;
-            mark(grouped, remaining, new Group(baseline, furnace, remaining, route.inputs));
-        }
-        for (TimeKey freezer : new ArrayList<>(remaining.keySet())) {
-            Source source = freezer.source();
-            if (freezer.map() != RecipeMaps.vacuumFreezerRecipes || source == null
-                || source.inputs.size() != 1
-                || source.outputs.size() != 1
-                || !(source.inputs.keySet()
-                    .iterator()
-                    .next() instanceof FluidId fluid)
-                || !fluid.getFluidStack(1)
-                    .getFluid()
-                    .getName()
-                    .startsWith("plasma."))
+            if (!complete
+                || !proportional(baseline.times, remaining, remaining.get(first), baseline.times.get(first), false))
                 continue;
-            mark(grouped, remaining, new Group(source.data(freezer), freezer, remaining, route.inputs));
+            mark(grouped, remaining, new Group(baseline, first, remaining, route.inputs, chain));
         }
         grouped.putAll(remaining);
         return route.withTimes(grouped);
+    }
+
+    private static boolean plasmaCooling(Source source) {
+        return source.inputs.size() == 1 && source.outputs.size() == 1
+            && source.inputs.keySet()
+                .iterator()
+                .next() instanceof FluidId fluid
+            && fluid.getFluidStack(1)
+                .getFluid()
+                .getName()
+                .startsWith("plasma.");
     }
 
     private static void mark(Map<TimeKey, Long> grouped, Map<TimeKey, Long> remaining, Group group) {
@@ -206,106 +201,125 @@ public final class BottledChaosProcessAlternatives {
         pending.add(group);
     }
 
-    private static Object singleItem(Map<Object, Long> amounts) {
-        Object result = null;
-        for (Object key : amounts.keySet()) if (key instanceof TST_ItemID) {
-            if (result != null) return null;
-            result = key;
-        }
-        return result;
-    }
-
     private static TimeKey next(Map<TimeKey, Long> times, RecipeMap<?> pool, Object input) {
         for (TimeKey key : times.keySet()) {
             Source source = key.source();
-            if (key.map() == pool && source != null && source.inputs.size() == 1 && source.inputs.containsKey(input))
-                return key;
+            if (key.map() == pool && source != null && source.inputs.containsKey(input)) return key;
         }
         return null;
     }
 
-    /** Native Stellar Forge recipes are generated at server-start, after the ordinary recipe cache. */
+    /** Resolve native recipes once, after Miracle Door publishes its generated pools. */
     static void resolve() {
-        int stellarForge = 0, godforge = 0, cooling = 0;
+        Map<RecipeMap<?>, List<GTRecipe>> nativeRecipes = new LinkedHashMap<>();
+        for (Replacement rule : RULES)
+            nativeRecipes.computeIfAbsent(rule.pool(), pool -> new ArrayList<>(pool.getAllRecipes()));
+        Map<FluidId, List<RecipeData>> solidifiers = new LinkedHashMap<>();
+        for (GTRecipe recipe : RecipeMaps.fluidSolidifierRecipes.getAllRecipes()) {
+            if (recipe.mFluidInputs.length != 1 || recipe.mOutputs.length != 1
+                || recipe.mFluidOutputs.length != 0
+                || recipe.mInputs.length != 1
+                || recipe.mInputs[0].stackSize != 0
+                || !GTUtility.areStacksEqual(recipe.mInputs[0], ItemList.Shape_Mold_Ingot.get(1))) continue;
+            solidifiers.computeIfAbsent(FluidId.create(recipe.mFluidInputs[0]), ignored -> new ArrayList<>())
+                .add(prepareSourceRecipe(RecipeMaps.fluidSolidifierRecipes, recipe));
+        }
+        Map<Object, Long> catalysts = new LinkedHashMap<>();
+        int count = 0;
         for (Group group : pending) {
             Map<RecipeMap<?>, List<Version>> versions = new LinkedHashMap<>();
-            if (group.basis.map() == RecipeMaps.blastFurnaceRecipes) {
-                if (cacheVersions(group, STELLAR_FORGE, versions)) stellarForge++;
-                if (cacheVersions(group, GODFORGE_MOLTEN, versions)) godforge++;
-            } else if (cacheVersions(group, COOLING, versions)) cooling++;
+            for (Replacement rule : RULES) {
+                if (!rule.chain()
+                    .equals(group.chain)) continue;
+                for (GTRecipe recipe : nativeRecipes.get(rule.pool())) {
+                    if (recipe.mDuration <= 0 || recipe.mEUt < 0) continue;
+                    RecipeData nativeData;
+                    if (rule.pool() == COOLING) {
+                        if (recipe.mFluidInputs.length != 1 || recipe.mFluidOutputs.length != 1
+                            || recipe.mInputs.length != 0
+                            || recipe.mOutputs.length != 0) continue;
+                        nativeData = new RecipeData(
+                            Collections.singletonMap(
+                                FluidId.create(recipe.mFluidInputs[0]),
+                                (long) recipe.mFluidInputs[0].amount),
+                            Collections.singletonMap(
+                                FluidId.create(recipe.mFluidOutputs[0]),
+                                (long) recipe.mFluidOutputs[0].amount),
+                            Collections.emptyMap(),
+                            Collections.singletonMap(new TimeKey(COOLING, 0), 1L));
+                    } else {
+                        if (recipe.mEUt == 0) continue;
+                        nativeData = prepareSourceRecipe(rule.pool(), recipe);
+                    }
+                    if (!rule.solidify()) addVersion(group, rule, nativeData, false, versions, catalysts);
+                    else {
+                        for (Object output : nativeData.outputs.keySet()) if (output instanceof FluidId fluid)
+                            for (RecipeData finish : solidifiers.getOrDefault(fluid, Collections.emptyList()))
+                                addVersion(
+                                    group,
+                                    rule,
+                                    nativeData.appendBalancedRecipe(finish, fluid),
+                                    false,
+                                    versions,
+                                    catalysts);
+                        if (rule.moldBypass()) addVersion(
+                            group,
+                            rule,
+                            prepareSourceRecipe(rule.pool(), TST_MiracleDoor.turnToIngotRecipe(recipe)),
+                            true,
+                            versions,
+                            catalysts);
+                    }
+                }
+            }
             group.versions = Collections.unmodifiableMap(versions);
+            count += versions.values()
+                .stream()
+                .mapToInt(List::size)
+                .sum();
         }
-        TwistSpaceTechnology.LOG.info(
-            "Bottled Chaos process alternatives: {} Stellar Forge, {} Godforge Molten, {} plasma cooling ({} segments).",
-            stellarForge,
-            godforge,
-            cooling,
-            pending.size());
+        additionalCatalysts = Collections.unmodifiableMap(catalysts);
+        TwistSpaceTechnology.LOG
+            .info("Bottled Chaos: {} alternatives for {} complete source chains.", count, pending.size());
         pending.clear();
     }
 
-    private static boolean cacheVersions(Group group, RecipeMap<?> pool, Map<RecipeMap<?>, List<Version>> versions) {
-        List<Version> matches = match(group, pool);
-        if (matches.isEmpty()) return false;
-        versions.put(pool, Collections.unmodifiableList(matches));
-        return true;
-    }
-
-    private static List<Version> match(Group group, RecipeMap<?> nativePool) {
-        List<Version> matches = new ArrayList<>();
+    private static void addVersion(Group group, Replacement rule, RecipeData candidate, boolean mold,
+        Map<RecipeMap<?>, List<Version>> versions, Map<Object, Long> catalysts) {
         Map<Object, Long> inputs = new LinkedHashMap<>(group.baseline.inputs);
         Set<Object> gases = new java.util.LinkedHashSet<>();
-        if (nativePool == STELLAR_FORGE) inputs.keySet()
+        if (rule.removeGas()) inputs.keySet()
             .removeIf(key -> {
                 if (!protectionGas(key)) return false;
                 gases.add(key);
                 return true;
             });
-        for (GTRecipe recipe : nativePool.getAllRecipes()) {
-            if (recipe.mDuration <= 0 || recipe.mEUt < 0) continue;
-            RecipeData candidate;
-            if (nativePool == COOLING) {
-                if (recipe.mFluidInputs.length != 1 || recipe.mFluidOutputs.length != 1
-                    || recipe.mInputs.length != 0
-                    || recipe.mOutputs.length != 0) continue;
-                candidate = new RecipeData(
-                    Collections
-                        .singletonMap(FluidId.create(recipe.mFluidInputs[0]), (long) recipe.mFluidInputs[0].amount),
-                    Collections
-                        .singletonMap(FluidId.create(recipe.mFluidOutputs[0]), (long) recipe.mFluidOutputs[0].amount),
-                    Collections.emptyMap(),
-                    Collections.singletonMap(new TimeKey(COOLING, 0), 1L));
-            } else {
-                if (recipe.mEUt == 0) continue;
-                candidate = prepareSourceRecipe(nativePool, recipe);
-            }
-            if (!inputs.keySet()
-                .equals(candidate.inputs.keySet())
-                || !group.baseline.outputs.keySet()
-                    .equals(candidate.outputs.keySet())
-                || !group.baseline.catalysts.equals(candidate.catalysts)) continue;
-            Object output = candidate.outputs.keySet()
-                .iterator()
-                .next();
-            long original = group.baseline.outputs.get(output);
-            long replacement = candidate.outputs.get(output);
-            long gcd = getGCD(original, replacement);
-            long numerator = original / gcd, denominator = replacement / gcd;
-            if (!proportional(candidate.inputs, inputs, numerator, denominator, true)
-                || !proportional(candidate.outputs, group.baseline.outputs, numerator, denominator, true)) continue;
-            Map<Object, Long> omittedInputs = new LinkedHashMap<>();
-            for (Object gas : gases) omittedInputs.put(
-                gas,
-                Math.min(
-                    group.inputs.getOrDefault(gas, 0L),
-                    (long) Math.floor(group.baseline.inputs.get(gas) * group.scale)));
-            matches.add(
+        if (candidate.outputs.isEmpty() || !inputs.keySet()
+            .equals(candidate.inputs.keySet())
+            || !group.baseline.outputs.keySet()
+                .equals(candidate.outputs.keySet()))
+            return;
+        Object output = candidate.outputs.keySet()
+            .iterator()
+            .next();
+        long original = group.baseline.outputs.get(output), replacement = candidate.outputs.get(output);
+        long gcd = getGCD(original, replacement), numerator = original / gcd, denominator = replacement / gcd;
+        if (!proportional(candidate.inputs, inputs, numerator, denominator, true)
+            || !proportional(candidate.outputs, group.baseline.outputs, numerator, denominator, true)) return;
+        Map<Object, Long> omitted = new LinkedHashMap<>();
+        for (Object gas : gases) omitted.put(
+            gas,
+            Math.min(
+                group.inputs.getOrDefault(gas, 0L),
+                (long) Math.floor(group.baseline.inputs.get(gas) * group.scale)));
+        versions.computeIfAbsent(rule.pool(), ignored -> new ArrayList<>())
+            .add(
                 new Version(
                     candidate.times,
                     group.scale * numerator / denominator,
-                    Collections.unmodifiableMap(omittedInputs)));
-        }
-        return matches;
+                    Collections.unmodifiableMap(omitted),
+                    mold));
+        candidate.catalysts.forEach((key, amount) -> catalysts.merge(key, amount, Math::max));
     }
 
     private static <K> boolean proportional(Map<K, Long> source, Map<K, Long> target, long numerator, long denominator,

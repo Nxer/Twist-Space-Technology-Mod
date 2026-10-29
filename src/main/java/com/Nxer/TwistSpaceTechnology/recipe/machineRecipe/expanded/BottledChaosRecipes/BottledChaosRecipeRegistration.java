@@ -33,9 +33,7 @@ public final class BottledChaosRecipeRegistration {
             var compiled = catalog.compile();
             Set<RecipeMap<?>> selectedPools = new LinkedHashSet<>();
             selectedPools.add(RecipeMaps.fusionRecipes);
-            selectedPools.addAll(
-                BottledChaosProcessAlternatives.displayGroup()
-                    .alternatives());
+            selectedPools.addAll(BottledChaosProcessAlternatives.replacementPools());
             for (var route : compiled.routes())
                 for (TimeKey time : route.data().times.keySet()) selectedPools.add(time.map());
             BottledChaosMachineConfiguration.initialize(selectedPools.toArray(new RecipeMap<?>[0]));

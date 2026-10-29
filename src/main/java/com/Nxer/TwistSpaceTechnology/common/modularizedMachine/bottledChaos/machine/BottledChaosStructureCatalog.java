@@ -153,6 +153,7 @@ public final class BottledChaosStructureCatalog {
             for (int i = 0; i < requirements.length; i++) {
                 Requirement requirement = requirements[i];
                 int amount = requirement.minimum;
+                if (amount == 0 && requirement.maximum == 1) amount = Math.floorMod(variant, 2);
                 if (amount == 0) continue;
                 if (requirement.alternatives.length == 0) return null;
                 addMaterial(
@@ -705,6 +706,13 @@ public final class BottledChaosStructureCatalog {
     private static List<Requirement> dedicatedMaterials(BottledChaosSupportedMachine supported, int profile) {
         List<Requirement> requirements = new ArrayList<>();
         switch (supported) {
+            case TST_MIRACLE_DOOR -> require(
+                requirements,
+                "ingot_mold",
+                0,
+                1,
+                false,
+                new ItemStack[] { GTCMItemList.WhiteDwarfMold_Ingot.get(1) });
             case MTESPINMATRON -> {
                 // All four tiers have eight real Rotor Assemblies. Controller inventory has 2/4/6/8 rotor slots.
                 require(

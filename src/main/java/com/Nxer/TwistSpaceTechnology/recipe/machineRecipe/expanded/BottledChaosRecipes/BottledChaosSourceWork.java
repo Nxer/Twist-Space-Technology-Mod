@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineConfiguration;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosSourceParameters;
@@ -15,6 +16,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosR
 import com.github.bsideup.jabel.Desugar;
 
 import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 
 /** Startup-partitioned native sources, their material alternatives and normalized execution cost. */
 final class BottledChaosSourceWork {
@@ -48,10 +50,10 @@ final class BottledChaosSourceWork {
 
     @Desugar
     record Selection(double duration, long pools, List<SelectedSource> sources, Map<Object, Long> omittedInputs,
-        Map<Object, Long> inputs, CheckRecipeResult failure) {
+        Map<Object, Long> inputs, Map<Object, Long> catalysts, CheckRecipeResult failure) {
 
         Selection rejected(CheckRecipeResult failure) {
-            return new Selection(duration, pools, sources, omittedInputs, inputs, failure);
+            return new Selection(duration, pools, sources, omittedInputs, inputs, catalysts, failure);
         }
 
         void recordUsage(BottledChaosSourceParameters parameters) {
@@ -80,6 +82,10 @@ final class BottledChaosSourceWork {
 
     /** Select a cached native-pool version once per plan/voltage; unrelated pool work remains mandatory. */
     Selection select(BottledChaosSourceParameters parameters, long voltage) {
+        return select(parameters, voltage, ignored -> true);
+    }
+
+    Selection select(BottledChaosSourceParameters parameters, long voltage, Predicate<Object> availableCatalyst) {
         Selection result = evaluateSources(ordinary, parameters, voltage, 1);
         if (result.failure != null) return result;
         for (var segment : groups.entrySet()) {
@@ -90,25 +96,42 @@ final class BottledChaosSourceWork {
                 .allMatch(key -> parameters.isSourceAvailable(key.map()));
             // Installing Miracle Door selects its native material contract as well as its timing.
             // Its gas-free inputs stay the same when the chain's common voltage rises.
-            boolean stellarForge = parameters.isSourceAvailable(BottledChaosProcessAlternatives.STELLAR_FORGE)
-                && group.versions.containsKey(BottledChaosProcessAlternatives.STELLAR_FORGE);
-            Selection best = installed && !stellarForge ? evaluateSources(segment.getValue(), parameters, voltage, 1)
-                : null;
+            boolean stellarForge = false;
+            Selection best = installed ? evaluateSources(segment.getValue(), parameters, voltage, 1) : null;
             for (var pool : group.versions.entrySet()) {
                 if (stellarForge && pool.getKey() != BottledChaosProcessAlternatives.STELLAR_FORGE) continue;
                 if (!parameters.isSourceAvailable(pool.getKey())) continue;
                 for (var version : pool.getValue()) {
-                    Selection candidate = evaluateSources(version.times(), parameters, voltage, version.scale());
-                    if (best != null
-                        && (candidate.failure != null || best.failure == null && candidate.duration >= best.duration))
+                    if (!version.times()
+                        .keySet()
+                        .stream()
+                        .allMatch(key -> parameters.isSourceAvailable(key.map()))) continue;
+                    Selection candidate = evaluateSources(
+                        version.times(),
+                        parameters,
+                        voltage,
+                        version.scale(),
+                        version.ingotMold());
+                    // New tools belong to the replacement, not the original route's material contract.
+                    if (candidate.failure == null && candidate.sources.stream()
+                        .filter(source -> source.time.source() != null)
+                        .flatMap(
+                            source -> source.time.source().catalysts.keySet()
+                                .stream())
+                        .anyMatch(key -> !group.baseline.catalysts.containsKey(key) && !availableCatalyst.test(key)))
+                        candidate = candidate.rejected(CheckRecipeResultRegistry.NO_RECIPE);
+                    boolean preferred = pool.getKey() == BottledChaosProcessAlternatives.STELLAR_FORGE
+                        && candidate.failure == null;
+                    if (best != null && (candidate.failure != null
+                        || best.failure == null && (!preferred || stellarForge) && candidate.duration >= best.duration))
                         continue;
                     candidate.omittedInputs.putAll(version.omittedInputs());
                     best = candidate;
+                    stellarForge = preferred;
                 }
             }
             // Preserve the ordinary pool failures when no installed native version can run.
-            if (best == null && !installed && !stellarForge)
-                best = evaluateSources(segment.getValue(), parameters, voltage, 1);
+            if (best == null) best = evaluateSources(segment.getValue(), parameters, voltage, 1);
             if (best.failure != null) return best;
             result.sources.addAll(best.sources);
             for (var omitted : best.omittedInputs.entrySet())
@@ -118,6 +141,7 @@ final class BottledChaosSourceWork {
                 result.pools | best.pools,
                 result.sources,
                 result.omittedInputs,
+                null,
                 null,
                 null);
         }
@@ -137,21 +161,54 @@ final class BottledChaosSourceWork {
             for (var omitted : result.omittedInputs.entrySet())
                 takeAmount(inputs, omitted.getKey(), omitted.getValue());
         }
-        return new Selection(result.duration, result.pools, result.sources, result.omittedInputs, inputs, null);
+        Map<Object, Long> catalysts = new LinkedHashMap<>(data.catalysts);
+        for (var group : groups.keySet()) for (Object key : group.baseline.catalysts.keySet()) catalysts.remove(key);
+        for (SelectedSource source : result.sources) if (source.time.source() != null)
+            source.time.source().catalysts.forEach((key, amount) -> catalysts.merge(key, amount, Math::max));
+        return new Selection(
+            result.duration,
+            result.pools,
+            result.sources,
+            result.omittedInputs,
+            inputs,
+            catalysts,
+            null);
     }
 
     private static Selection evaluateSources(Map<TimeKey, Long> work, BottledChaosSourceParameters parameters,
         long voltage, double scale) {
+        return evaluateSources(work, parameters, voltage, scale, false);
+    }
+
+    private static Selection evaluateSources(Map<TimeKey, Long> work, BottledChaosSourceParameters parameters,
+        long voltage, double scale, boolean ingotMold) {
         double duration = 0;
         long pools = 0;
         List<SelectedSource> sources = new ArrayList<>(work.size());
         for (var entry : work.entrySet()) {
             TimeKey key = entry.getKey();
-            var source = parameters.evaluateSource(key.map(), voltage, key.requirements());
+            BottledChaosSourceParameters.Evaluation source = null;
+            double bestDuration = Double.POSITIVE_INFINITY;
+            for (var candidate : parameters.evaluateCandidates(key.map(), voltage, key.requirements())) {
+                if (ingotMold && !candidate.ingotMold()) continue;
+                double cost = candidate.successful() ? normalizedDuration(key, entry.getValue(), candidate, voltage)
+                    : Double.POSITIVE_INFINITY;
+                if (source == null || candidate.successful() && (!source.successful() || cost < bestDuration)) {
+                    source = candidate;
+                    bestDuration = cost;
+                }
+            }
+            // #tr tst.bottledchaos.result.ingot_mold
+            // # Packaged White Dwarf Ingot Mold required.
+            // #zh_CN 需要封装白矮星锭模具.
+            if (source == null) source = BottledChaosSourceParameters.Evaluation.rejected(
+                com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.result.BottledChaosPoolFailure.of(
+                    key.map().unlocalizedName,
+                    com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText
+                        .ofFailure("tst.bottledchaos.result.ingot_mold")));
             if (!source.successful())
-                return new Selection(0, 0, sources, new LinkedHashMap<>(), null, source.failure());
-            duration = BottledChaosRecipeSupport
-                .addDuration(duration, normalizedDuration(key, entry.getValue(), source, voltage) * scale, 1);
+                return new Selection(0, 0, sources, new LinkedHashMap<>(), null, null, source.failure());
+            duration = BottledChaosRecipeSupport.addDuration(duration, bestDuration * scale, 1);
             pools |= BottledChaosMachineConfiguration.mask(key.map());
             sources.add(new SelectedSource(key, source));
         }
@@ -160,6 +217,7 @@ final class BottledChaosSourceWork {
             BottledChaosMachineConfiguration.withDependencies(pools),
             sources,
             new LinkedHashMap<>(),
+            null,
             null,
             null);
     }

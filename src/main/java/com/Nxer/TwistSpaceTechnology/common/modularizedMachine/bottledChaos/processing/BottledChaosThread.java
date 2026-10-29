@@ -24,6 +24,7 @@ public final class BottledChaosThread {
     public final BottledChaosOutputBuffer pendingCache = new BottledChaosOutputBuffer();
     public String processingFamily = "";
     public List<BottledChaosUpkeep.Demand> upkeep = Collections.emptyList();
+    public List<BottledChaosUpkeep.ItemDemand> roundItems = Collections.emptyList();
     public ItemStack credential;
     public long requiredPools;
     public long recipeVoltage;
@@ -60,6 +61,8 @@ public final class BottledChaosThread {
         credential = authorization.copy();
         requiredPools = logic.getRequiredPools();
         upkeep = logic.getUpkeep();
+        roundItems = logic.getPreparedPlan()
+            .roundItems();
         recipeVoltage = logic.getBaseRecipeVoltage();
         eut = logic.getCalculatedEut();
         duration = Math.max(1, logic.getDuration());
@@ -130,6 +133,7 @@ public final class BottledChaosThread {
         pendingCache.clear();
         processingFamily = "";
         upkeep = Collections.emptyList();
+        roundItems = Collections.emptyList();
         credential = null;
         duration = progress = parallels = 0;
         eut = recipeVoltage = requiredPools = nextCheckTick = 0;
@@ -150,6 +154,7 @@ public final class BottledChaosThread {
         tag.setString("processingFamily", processingFamily);
         tag.setTag("pendingCache", pendingCache.save());
         tag.setTag("upkeep", BottledChaosUpkeep.saveDemands(upkeep));
+        tag.setTag("roundItems", BottledChaosUpkeep.saveItems(roundItems));
         if (blockedRoute != CheckRecipeResultRegistry.NO_RECIPE) {
             NBTTagCompound failure = new NBTTagCompound();
             BottledChaosResultData.write(failure, blockedRoute);
@@ -171,6 +176,7 @@ public final class BottledChaosThread {
         processingFamily = tag.getString("processingFamily");
         pendingCache.load(tag.getCompoundTag("pendingCache"));
         upkeep = BottledChaosUpkeep.loadDemands(tag.getTagList("upkeep", 10));
+        roundItems = BottledChaosUpkeep.loadItems(tag.getTagList("roundItems", 10));
         blockedRoute = tag.hasKey("blockedRoute", 10) ? BottledChaosResultData.read(tag.getCompoundTag("blockedRoute"))
             : CheckRecipeResultRegistry.NO_RECIPE;
         nextCheckTick = 0;

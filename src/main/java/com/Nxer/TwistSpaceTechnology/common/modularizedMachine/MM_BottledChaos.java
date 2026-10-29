@@ -302,6 +302,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private final int[][] capacityTierCounts = new int[CAPACITY_REGION_COUNT][CAPACITY_LEVEL_COUNT];
     private final BottledChaosMachineConfiguration machineConfiguration = new BottledChaosMachineConfiguration(() -> {
         authorizationDirty = true;
+        poolUsersDirty = true;
         markDirty();
     });
     private final ItemStackHandler credentialInjectionInventory = new ItemStackHandler(SLOT_COUNT) {
@@ -2245,10 +2246,19 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     public int getRecipePoolUsers(int poolSlot) {
         if (poolUsersDirty) {
             Arrays.fill(recipePoolUsers, 0);
+            var parameters = machineConfiguration.runtime(
+                Math.max(32, getMaxInputVoltage()),
+                Math.max(32, inputPower),
+                getCentralSupplyItems(),
+                getCentralSupplyFluids(),
+                getSpeedBonus(),
+                getEuModifier(),
+                getMaxParallelRecipes());
             for (int slot = 0; slot < THREAD_COUNT; slot++) {
-                long required = BottledChaosRecipeProcessor
-                    .requiredPoolMask(ItemBottledChaosCredential.getRouteMask(installedCredentials[slot]));
-                if (threads[slot].isBusy()) required |= threads[slot].requiredPools;
+                long required = threads[slot].isBusy() ? threads[slot].requiredPools
+                    : BottledChaosRecipeProcessor.displayPoolMask(
+                        ItemBottledChaosCredential.getRouteMask(installedCredentials[slot]),
+                        parameters);
                 required = BottledChaosMachineConfiguration.withDependencies(required);
                 for (int pool = 0; pool < BottledChaosMachineConfiguration.poolCount(); pool++) {
                     if ((required & (1L << pool)) != 0) recipePoolUsers[pool] |= 1 << slot;
@@ -2259,12 +2269,13 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         return recipePoolUsers[poolSlot];
     }
 
-    public NBTTagCompound getModuleParameters(int slot) {
+    public NBTTagCompound getModuleParameters(int slot, int source) {
         List<BottledChaosUpkeep.Demand> demands = new ArrayList<>();
         for (int group = 0; group < THREAD_COUNT; group++)
             if (hasAuthorizedWork(group)) demands.addAll(threads[group].upkeep);
         return machineConfiguration.moduleParameters(
             slot,
+            source,
             new BottledChaosMachineParameters.Context(
                 getMaxInputVoltage(),
                 Math.max(0, inputPower),
@@ -2274,6 +2285,30 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 getEuModifier(),
                 getMaxParallelRecipes()),
             demands);
+    }
+
+    public String getPassiveInputText() {
+        if (getBaseMetaTileEntity() == null || !getBaseMetaTileEntity().isActive())
+            return StatCollector.translateToLocal("tst.bottledchaos.gui.no_passive_inputs");
+        StringJoiner text = new StringJoiner("\n");
+        text.add(structureUpkeep.activeFluidText());
+        java.util.Map<com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID, java.math.BigInteger> items = new java.util.LinkedHashMap<>();
+        for (int group = 0; group < THREAD_COUNT; group++) if (advancing[group]) {
+            for (var demand : threads[group].roundItems) items.merge(
+                com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID.create(demand.item()),
+                java.math.BigInteger.valueOf(demand.amount()),
+                java.math.BigInteger::add);
+        }
+        items.forEach(
+            (item, amount) -> text.add(
+                StatCollector.translateToLocalFormatted(
+                    "tst.bottledchaos.gui.per_round",
+                    item.getItemStack(1)
+                        .getDisplayName(),
+                    formatNumber(amount))));
+        String result = text.toString()
+            .trim();
+        return result.isEmpty() ? StatCollector.translateToLocal("tst.bottledchaos.gui.no_passive_inputs") : result;
     }
 
     public NBTTagCompound getBottledChaosStatusSummary() {

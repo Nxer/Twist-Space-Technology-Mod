@@ -21,7 +21,23 @@ public interface BottledChaosSourceParameters {
     /** Complete result for one source/voltage/requirements key; arrays and profiles are read-only. */
     @Desugar
     record Evaluation(BottledChaosMachineParameters.Profile profile, double quantitySpeedMultiplier, boolean energyOnly,
-        int maximumOverclocks, int perfectOverclocks, int[] overclockLimitAlternatives, CheckRecipeResult failure) {
+        int maximumOverclocks, int perfectOverclocks, int[] overclockLimitAlternatives, CheckRecipeResult failure,
+        int installation, boolean ingotMold) {
+
+        public Evaluation(BottledChaosMachineParameters.Profile profile, double quantitySpeedMultiplier,
+            boolean energyOnly, int maximumOverclocks, int perfectOverclocks, int[] overclockLimitAlternatives,
+            CheckRecipeResult failure) {
+            this(
+                profile,
+                quantitySpeedMultiplier,
+                energyOnly,
+                maximumOverclocks,
+                perfectOverclocks,
+                overclockLimitAlternatives,
+                failure,
+                -1,
+                false);
+        }
 
         private static final Evaluation NORMAL = new Evaluation(
             BottledChaosMachineParameters.defaultProfile(false),
@@ -45,7 +61,7 @@ public interface BottledChaosSourceParameters {
             return quantitySpeed == 1 ? base : new Evaluation(base.profile, quantitySpeed, false, -1, 0, null, null);
         }
 
-        static Evaluation rejected(CheckRecipeResult failure) {
+        public static Evaluation rejected(CheckRecipeResult failure) {
             return new Evaluation(null, 1, false, -1, 0, null, failure);
         }
 
@@ -60,6 +76,11 @@ public interface BottledChaosSourceParameters {
     }
 
     default void resetSourceUsage() {}
+
+    default List<Evaluation> evaluateCandidates(RecipeMap<?> pool, long recipeVoltage,
+        BottledChaosSourceRequirements requirements) {
+        return Collections.singletonList(evaluateSource(pool, recipeVoltage, requirements));
+    }
 
     default void recordSourceUsage(RecipeMap<?> map, Evaluation source) {}
 

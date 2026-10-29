@@ -3,78 +3,29 @@ package com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Client-side ordering and pagination. Expanded children occupy ordinary rows, never sticky headers. */
+/** Client-side pool ordering: missing, in use, then provided but unused. */
 final class BottledChaosModuleTree {
 
     static final int PAGE_SIZE = 6;
-    private final int[] parents;
-    private final int[] preferredRoots;
     private final List<Integer> rows = new ArrayList<>();
     private long visible;
-    private long grouped;
-    private long expanded;
+    private long missing;
+    private long used;
     private int page;
     private int selected = -1;
 
-    BottledChaosModuleTree(int[] parents, int[] preferredRoots) {
-        this.parents = parents.clone();
-        this.preferredRoots = preferredRoots.clone();
-    }
-
-    void update(long visible, long grouped) {
-        if (this.visible == visible && this.grouped == grouped) return;
+    void update(long visible, long missing, long used) {
+        if (this.visible == visible && this.missing == missing && this.used == used) return;
         this.visible = visible;
-        this.grouped = grouped;
-        rebuild();
-    }
-
-    private void rebuild() {
+        this.missing = missing;
+        this.used = used;
         rows.clear();
-        long roots = visible;
-        for (int slot = 0; slot < parents.length; slot++) if (isChild(slot)) {
-            roots &= ~(1L << slot);
-            roots |= 1L << parents[slot];
-        }
-        for (int i = 0; i < preferredRoots.length; i++) {
-            int root = preferredRoots[i];
-            if (root >= 0 && (roots & (1L << root)) != 0 && (i == 0 || hasChildren(root))) {
-                append(root);
-                roots &= ~(1L << root);
-            }
-        }
-        for (int slot = 0; slot < parents.length; slot++) if ((roots & (1L << slot)) != 0) append(slot);
+        for (long section : new long[] { visible & missing, visible & ~missing & used, visible & ~(missing | used) })
+            for (int pool = 0; pool < Long.SIZE; pool++) if ((section & (1L << pool)) != 0) rows.add(pool);
         int selectedIndex = rows.indexOf(selected);
         if (selectedIndex >= 0) page = selectedIndex / PAGE_SIZE;
         page = Math.min(page, pageCount() - 1);
         if (selectedIndex < 0) selected = row(0);
-    }
-
-    private void append(int slot) {
-        rows.add(slot);
-        if (!isExpanded(slot)) return;
-        for (int child = 0; child < parents.length; child++)
-            if (parents[child] == slot && isChild(child)) rows.add(child);
-    }
-
-    boolean isChild(int slot) {
-        return slot >= 0 && parents[slot] >= 0 && ((visible & grouped) & (1L << slot)) != 0;
-    }
-
-    boolean hasChildren(int slot) {
-        if (slot < 0) return false;
-        for (int child = 0; child < parents.length; child++) if (parents[child] == slot && isChild(child)) return true;
-        return false;
-    }
-
-    boolean isExpanded(int slot) {
-        return slot >= 0 && (expanded & (1L << slot)) != 0;
-    }
-
-    void toggle(int slot) {
-        if (!hasChildren(slot)) return;
-        selected = slot;
-        expanded ^= 1L << slot;
-        rebuild();
     }
 
     void select(int slot) {

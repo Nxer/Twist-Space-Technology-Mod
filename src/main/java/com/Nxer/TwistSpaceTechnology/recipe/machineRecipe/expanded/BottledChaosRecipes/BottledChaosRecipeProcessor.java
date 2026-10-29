@@ -300,7 +300,11 @@ public final class BottledChaosRecipeProcessor {
             if (checks.selections[index] == null) {
                 long diagnosticSourceStart = System.nanoTime();
                 diagnosticSourceCalls++;
-                Selection selected = snapshot.routes[index].work.select(parameters, voltage);
+                Selection selected = snapshot.routes[index].work.select(
+                    parameters,
+                    voltage,
+                    key -> virtualItems.contains(key) || external.getOrDefault(key, 0L) > 0
+                        || remaining.getOrDefault(key, 0L) > 0);
                 if (selected.failure() == null) {
                     CheckRecipeResult result = routeFilter.check(voltage, selected.pools());
                     if (!result.wasSuccessful()) selected = selected.rejected(result);
@@ -592,6 +596,13 @@ public final class BottledChaosRecipeProcessor {
                 }
 
                 @Override
+                public Map<Object, Long> catalysts(int index, long voltage) {
+                    return checkSources(index, voltage).wasSuccessful()
+                        ? sourceChecks(voltage).selections[index].catalysts()
+                        : null;
+                }
+
+                @Override
                 public long retainedOutput(int index, Object key, long amount) {
                     return retainedOutputs.get(index)
                         .contains(key) ? amount : 0;
@@ -632,12 +643,15 @@ public final class BottledChaosRecipeProcessor {
                 Map<Object, Long> internalPresence = new LinkedHashMap<>(remaining);
                 for (int index = 0; index < result.batches.length; index++) {
                     if (result.batches[index] == 0) continue;
-                    requirements.addAll(
-                        BottledChaosItemInputs.scale(
-                            snapshot.routes[index].definition.data().itemRequirements,
-                            result.batches[index],
-                            1,
-                            null));
+                    var data = snapshot.routes[index].definition.data();
+                    var catalysts = sourceChecks(result.voltage).selections[index].catalysts();
+                    List<Requirement> selected = new ArrayList<>();
+                    for (Requirement requirement : data.itemRequirements)
+                        if (requirement.amount > 0 || catalysts.containsKey(requirement.key)) selected.add(requirement);
+                    Map<Object, Long> extra = new LinkedHashMap<>(catalysts);
+                    for (Object key : data.catalysts.keySet()) extra.remove(key);
+                    selected.addAll(BottledChaosItemInputs.defaults(Collections.emptyMap(), extra));
+                    requirements.addAll(BottledChaosItemInputs.scale(selected, result.batches[index], 1, null));
                     snapshot.routes[index].definition.data().outputs
                         .forEach((key, amount) -> internalPresence.put(key, 1L));
                 }
@@ -748,11 +762,23 @@ public final class BottledChaosRecipeProcessor {
             pools |= route.poolMask;
             for (TimeKey key : route.definition.data().times.keySet()) {
                 var group = key.alternatives();
-                if (group != null) for (RecipeMap<?> pool : group.versions.keySet())
-                    pools |= BottledChaosMachineConfiguration.mask(pool);
+                if (group != null) for (var versions : group.versions.values())
+                    for (var version : versions) for (TimeKey time : version.times()
+                        .keySet()) pools |= BottledChaosMachineConfiguration.mask(time.map());
             }
         }
         return pools;
+    }
+
+    /** Query-page requirements follow complete selected transformations, excluding unused optional alternatives. */
+    public static long displayPoolMask(long tagMask, BottledChaosSourceParameters parameters) {
+        RouteCache snapshot = cache;
+        long pools = 0;
+        if (snapshot != null) for (CachedRoute route : snapshot.routes) if (route.isAuthorized(tagMask)) {
+            var selected = route.work.select(parameters, Math.max(1, route.definition.baseEUt()));
+            pools |= selected.failure() == null ? selected.pools() : route.poolMask;
+        }
+        return BottledChaosMachineConfiguration.withDependencies(pools);
     }
 
     // Cache availability.
@@ -846,7 +872,11 @@ public final class BottledChaosRecipeProcessor {
         private Map<Object, Long> collectAvailableInputs(AuthorizedGraph graph,
             BottledChaosItemInputs.Matching matching, FluidStack[] fluids, Set<TST_ItemID> virtualItems) {
             Map<Object, Long> available = new LinkedHashMap<>();
-            matching.slotsByKey(graph.itemRequirements)
+            List<Requirement> requirements = new ArrayList<>(graph.itemRequirements);
+            requirements.addAll(
+                BottledChaosItemInputs
+                    .defaults(Collections.emptyMap(), BottledChaosProcessAlternatives.additionalCatalysts()));
+            matching.slotsByKey(requirements)
                 .forEach((key, slots) -> {
                     for (int slot = 0; slot < slots.length; slot++) {
                         if (!slots[slot]) continue;

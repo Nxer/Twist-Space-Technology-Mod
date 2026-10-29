@@ -29,6 +29,45 @@ import gregtech.common.tileentities.machines.multi.foundry.FoundryData;
 /** Player-facing parameter descriptions, derived from the same machine profiles used for execution. */
 public final class BottledChaosMachineDescriptions {
 
+    public static List<String> replacementDescriptions(ItemStack controller, Structure structure) {
+        List<String> lines = new ArrayList<>();
+        var source = new BottledChaosMachineParameters.InstalledSource(controller, structure);
+        var machine = BottledChaosSupportedMachine.find(source.original);
+        if (machine == null) return lines;
+        // #tr tst.bottledchaos.machine_module.replaces_chain
+        // # Replaces: %s
+        // #zh_CN 可替代: %s
+
+        // #tr tst.bottledchaos.machine_module.mold_finishing
+        // # White Dwarf Ingot Mold adds ingot routes while retaining molten routes.
+        // #zh_CN 白矮星锭模具新增直出锭路线, 同时保留熔融路线.
+        for (var rule : machine.replacements()) {
+            String chain = rule.chain()
+                .stream()
+                .map(BottledChaosMachineConfiguration::poolName)
+                .collect(java.util.stream.Collectors.joining(" -> "));
+            String replacement = BottledChaosMachineConfiguration.poolName(rule.pool());
+            lines.add(
+                text(
+                    "replaces_chain",
+                    chain + " => "
+                        + replacement
+                        + (rule.solidify()
+                            ? " -> " + BottledChaosMachineConfiguration.poolName(RecipeMaps.fluidSolidifierRecipes)
+                            : "")));
+            if (rule.moldBypass() && source.upgrades.ingotMold) lines.add(
+                text(
+                    "replaces_chain",
+                    chain + " => "
+                        + replacement
+                        + " + "
+                        + com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WhiteDwarfMold_Ingot.get(1)
+                            .getDisplayName()));
+        }
+        if (source.upgrades.ingotMold) lines.add(text("mold_finishing"));
+        return lines;
+    }
+
     public static List<String> describe(ItemStack controller, Structure structure, RecipeMap<?> pool,
         int quantitySpeedExponent, boolean compact) {
         return describe(controller, structure, pool, quantitySpeedExponent, compact, null);
@@ -101,7 +140,8 @@ public final class BottledChaosMachineDescriptions {
             }
             return lines;
         }
-        double quantitySpeed = 1d + Math.max(0, quantitySpeedExponent);
+        double quantitySpeed = runtime != null && runtime.hasKey("speed") ? runtime.getDouble("speed")
+            : (1d + Math.max(0, quantitySpeedExponent)) / source.poolSpeedDivisor();
         String parallel = base == null ? "-" : number(base.parallel());
         String eu = base == null ? "-" : number(base.euMultiplier());
         String time = base == null ? "-" : number(base.timeMultiplier() / quantitySpeed);
@@ -185,7 +225,7 @@ public final class BottledChaosMachineDescriptions {
             case THERMAL_CENTRIFUGE -> parallel = u.solenoid <= 0 ? "8T" : "8T + " + (2 * u.solenoid);
             case THERMAL_DEVOURER -> time = number(0.5 / quantitySpeed) + "/(1 + P)";
             case SOLIDIFIER -> parallel = "10T";
-            case INDISTINCT_PROTOTYPE, MODULAR_NEUTRON -> {
+            case INDISTINCT_PROTOTYPE, MODULAR_NEUTRON, MODULAR_PLASMA_FORGE -> {
                 parallel = text("master_parallel");
                 eu = text("master_eu");
                 time = text("master_time");
@@ -290,7 +330,7 @@ public final class BottledChaosMachineDescriptions {
         // #tr tst.bottledchaos.machine_module.time
         // # Duration multiplier: x%s
         // #zh_CN 耗时倍率: x%s
-        if (variableTime && quantitySpeed > 1) time = "(" + time + ")/" + number(quantitySpeed);
+        if (variableTime && quantitySpeed != 1) time = "(" + time + ")/" + number(quantitySpeed);
         lines.add(EnumChatFormatting.GRAY + text("time", EnumChatFormatting.GREEN + time));
         // #tr tst.bottledchaos.machine_module.oc
         // # Overclock: %s
