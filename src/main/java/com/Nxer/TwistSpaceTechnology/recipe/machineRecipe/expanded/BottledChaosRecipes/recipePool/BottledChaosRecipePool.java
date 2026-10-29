@@ -121,7 +121,7 @@ public final class BottledChaosRecipePool {
         catalog.registerChain("crystal_cycle", 1, TierEU.RECIPE_HV, EuropiumMolten,
             new Object[] { RawCrystalChip },
             catalog.markRecipe(ForgeHammer, RawCrystalChip, RawCrystalParts, -1),
-            catalog.markRecipe(Autoclave, new Object[] { RawCrystalParts, EuropiumMolten }, RawCrystalChip, -1));
+            catalog.markRecipe(Autoclave, new Object[] { RawCrystalParts, EuropiumMolten }, RawCrystalChip, -1)).hideInputMarker();
 
         // Oganesson with a seed: 1 + 2 * 20% exquisite gems. Hammering one exquisite gem returns four seeds.
         catalog.registerChain("cerium_lutetium_garnet", 1, TierEU.RECIPE_UHV, CeriumLutetiumAluminiumOxygenBlendDust,

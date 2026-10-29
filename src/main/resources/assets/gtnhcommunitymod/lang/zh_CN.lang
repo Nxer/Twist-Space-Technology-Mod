@@ -897,6 +897,7 @@ tst.bottledchaos.recipe.category.tungsten.name=瓶中混沌 - 钨
 tst.bottledchaos.recipe.credential.name=瓶中混沌 - 凭证注入
 tst.bottledchaos.recipe.final_output=最终产物
 tst.bottledchaos.recipe.intermediate_output=中间产物
+tst.bottledchaos.recipe.lookup_input=起始原料
 tst.bottledchaos.recipe.name=瓶中混沌
 tst.bottledchaos.recipe.recipe_map_time=%s: %s秒
 tst.bottledchaos.recipe.recipe_maps=配方池:

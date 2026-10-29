@@ -118,7 +118,7 @@ public final class BottledChaosIsaMillRecipes {
         catalog.registerAlternativeChain("isamill", TierEU.RECIPE_LV, RedMud,
             recovery.outputs.keySet().toArray(), new Object[] {},
             catalog.markPreparedRecipe(CentrifugeNonCell, RedMud, Water, recovery))
-            .setDisplayOutputs(recovery.outputs.keySet().stream().filter(key -> key instanceof TST_ItemID).toArray());
+            .setDisplayOutputs();
         // spotless:on
     }
 

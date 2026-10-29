@@ -33,7 +33,7 @@ public final class BottledChaosAdvancedMaterialRecipes {
         catalog.registerChain("phonon_medium", 1, TierEU.RECIPE_UXV, MagMatterRound,
             new Object[] { PhononMedium },
             crystalSolution,
-            catalog.markRecipe(AlloyBlastSmelter, PhononCrystalSolution, PhononMedium, 5));
+            catalog.markRecipe(AlloyBlastSmelter, PhononCrystalSolution, PhononMedium, 5)).hideInputMarker();
         catalog.setExistingEntriesKeyOutputs("phonon_medium", new Object[] { PhononMedium });
 
         // Main trunk: arc-furnace preparation followed by the expected QFT coproducts.

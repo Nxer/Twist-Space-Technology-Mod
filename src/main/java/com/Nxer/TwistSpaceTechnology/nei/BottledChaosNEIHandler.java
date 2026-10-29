@@ -49,12 +49,13 @@ import gregtech.api.util.GTUtility;
 import gregtech.api.util.GTUtility.FluidId;
 import gregtech.nei.GTNEIDefaultHandler;
 
-/** Highlights final products and intermediates without exposing incidental byproducts to recipe lookup. */
+/** Highlights lookup inputs and products without exposing incidental byproducts to recipe lookup. */
 @SideOnly(Side.CLIENT)
 public final class BottledChaosNEIHandler extends GTNEIDefaultHandler {
 
     private static final int OUTPUT_COLOR = 0xFFFFD24A;
     private static final int INTERMEDIATE_COLOR = 0xFF45E6FF;
+    private static final int INPUT_COLOR = 0xFF79E08B;
 
     private final TST_BottledChaosFrontend compactFrontend;
     private final ModularWindow compactWindow;
@@ -192,7 +193,7 @@ public final class BottledChaosNEIHandler extends GTNEIDefaultHandler {
     @Override
     public void drawForeground(int recipeIndex) {
         super.drawForeground(recipeIndex);
-        if (!(arecipes.get(recipeIndex) instanceof SearchableRecipe recipe) || recipe.lookupOutputs.isEmpty()) return;
+        if (!(arecipes.get(recipeIndex) instanceof SearchableRecipe recipe) || recipe.markers.isEmpty()) return;
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT | GL11.GL_COLOR_BUFFER_BIT | GL11.GL_CURRENT_BIT);
         try {
             NEIClientUtils.gl2DRenderContext(
@@ -209,7 +210,7 @@ public final class BottledChaosNEIHandler extends GTNEIDefaultHandler {
         int y = stack.rely;
         int right = x + stack.width;
         int bottom = y + stack.height;
-        int color = role == 1 ? INTERMEDIATE_COLOR : OUTPUT_COLOR;
+        int color = role == 2 ? INPUT_COLOR : role == 1 ? INTERMEDIATE_COLOR : OUTPUT_COLOR;
         // Keep every colored pixel outside the icon, including its native quantity and catalyst badges.
         Gui.drawRect(x - 1, y - 1, right + 1, y, color);
         Gui.drawRect(x - 1, bottom, right + 1, bottom + 1, color);
@@ -239,11 +240,18 @@ public final class BottledChaosNEIHandler extends GTNEIDefaultHandler {
             // #tr tst.bottledchaos.recipe.intermediate_output
             // # Intermediate Product
             // #zh_CN 中间产物
-            tooltip.add(
-                marker.getValue() == 0
-                    ? EnumChatFormatting.GOLD + StatCollector.translateToLocal("tst.bottledchaos.recipe.final_output")
-                    : EnumChatFormatting.AQUA
-                        + StatCollector.translateToLocal("tst.bottledchaos.recipe.intermediate_output"));
+
+            // #tr tst.bottledchaos.recipe.lookup_input
+            // # Starting Material
+            // #zh_CN 起始原料
+            tooltip.add(switch (marker.getValue()) {
+                case 2 -> EnumChatFormatting.GREEN
+                    + StatCollector.translateToLocal("tst.bottledchaos.recipe.lookup_input");
+                case 1 -> EnumChatFormatting.AQUA
+                    + StatCollector.translateToLocal("tst.bottledchaos.recipe.intermediate_output");
+                default -> EnumChatFormatting.GOLD
+                    + StatCollector.translateToLocal("tst.bottledchaos.recipe.final_output");
+            });
             break;
         }
         return tooltip;
@@ -286,6 +294,11 @@ public final class BottledChaosNEIHandler extends GTNEIDefaultHandler {
                 lookupOutputs = emptyList();
             } else {
                 lookupInputs = markedSlots(mInputs, display.chainOutputs());
+                for (PositionedStack input : mInputs) {
+                    if (!isMarkedSlot(input, display.lookupInput())) continue;
+                    markers.put(input, 2);
+                    if (!lookupInputs.contains(input)) lookupInputs.add(input);
+                }
                 lookupOutputs = markedSlots(
                     mOutputs,
                     display.outputRoles()

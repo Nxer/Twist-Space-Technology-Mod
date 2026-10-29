@@ -33,20 +33,13 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.FluorinatedSamaricConcentrateDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.GadoliniumDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.HafniumDioxideDust;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.HafniumDust;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.HafniumIngot;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.HafniumIodideDust;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.HafniumTetrachlorideDust;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.HafniumTetrachlorideSolution;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.HafniumZirconiumOxideBlendDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.HexafluorosilicicAcid;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.HolmiumDust;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.HotHafniumIngot;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.HotZirconiumIngot;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.LanthanumChlorideDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.LanthanumDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.LeachedBastnasiteRareEarthOxidesDust;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.LowPurityHafniumDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.MonaziteDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.MonaziteHalogenicRareEarthMixtureDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.MonaziteRareEarthFiltrateDust;
@@ -226,17 +219,20 @@ public final class BottledChaosLanthanideRecipes {
         var monaziteSamarium = catalog.registerChain("monazite", 1, TierEU.RECIPE_UV, NitricMonaziteLeachedConcentrate,
             monaziteSamariumTerminals, new Object[] {}, monaziteSamariumSteps);
         monaziteSamarium.requireCircuit(1);
-        catalog.registerAlternativeChain("monazite", TierEU.RECIPE_UV, MonaziteDust,
-            new Object[] { DilutedMonaziteMud, HafniumDust, ZirconiumDust, ThoriumDust }, new Object[] { DilutedMonaziteMud }, monazitePreparationSteps);
+        monaziteSamarium.setDisplayOutputs(monaziteSamariumTerminals);
+        var monazitePreparation = catalog.registerAlternativeChain("monazite", TierEU.RECIPE_UV, MonaziteDust,
+            new Object[] { DilutedMonaziteMud, HafniumDioxideDust, ZirconiumDust, ThoriumDust }, new Object[] { DilutedMonaziteMud }, monazitePreparationSteps);
+        monazitePreparation.setDisplayOutputs(DilutedMonaziteMud, HafniumDioxideDust);
         catalog.registerAlternativeChain("monazite", TierEU.RECIPE_UV, DilutedMonaziteMud,
-            new Object[] { AcidicMonaziteDust }, new Object[] { AcidicMonaziteDust }, monaziteAcidificationSteps);
+            new Object[] { AcidicMonaziteDust }, new Object[] { AcidicMonaziteDust }, monaziteAcidificationSteps).setDisplayOutputs(AcidicMonaziteDust);
         var monaziteFinishing = catalog.registerAlternativeChain("monazite", TierEU.RECIPE_UV, AcidicMonaziteDust,
             monaziteFinishingTerminals, monaziteFinishingLinks, monaziteFinishingSteps);
         monaziteFinishing.requireCircuit(1);
+        monaziteFinishing.setDisplayOutputs(monaziteFinishingLinks);
         catalog.registerAlternativeChain("monazite", TierEU.RECIPE_UV, AcidicMonaziteDust,
-            monaziteFinishingTerminals, monaziteFinishingLinks, ceriumBoostedMonazite);
+            monaziteFinishingTerminals, monaziteFinishingLinks, ceriumBoostedMonazite).setDisplayOutputs(monaziteFinishingLinks);
         catalog.registerAlternativeChain("monazite", TierEU.RECIPE_UV, NitricMonaziteLeachedConcentrate,
-            monaziteSamariumTerminals, new Object[] {}, samariumBoostedMonazite);
+            monaziteSamariumTerminals, new Object[] {}, samariumBoostedMonazite).setDisplayOutputs(monaziteSamariumTerminals);
 
         // 3. Shared cerium-dioxide finishing and the separately authorized cerium-rich feed.
         StepRef[] ceriumSteps = {
@@ -272,7 +268,7 @@ public final class BottledChaosLanthanideRecipes {
         catalog.setExistingEntriesKeyOutputs("bastnasite",
             new Object[] { RoastedRareEarthOxidesDust, LanthanumDust, NeodymiumDust, CeriumDioxideDust, SamaricRareEarthConcentrateDust, HolmiumDust, SamariumDust, GadoliniumDust, TerbiumDust });
         catalog.setExistingEntriesKeyOutputs("monazite",
-            new Object[] { DilutedMonaziteMud, HafniumDust, ZirconiumDust, ThoriumDust, AcidicMonaziteDust, UraniumDust, Uranium235Dust, CeriumDioxideDust, NitricMonaziteLeachedConcentrate, SamariumDust, GadoliniumDust, EuropiumDust });
+            new Object[] { DilutedMonaziteMud, HafniumDioxideDust, ZirconiumDust, ThoriumDust, AcidicMonaziteDust, UraniumDust, Uranium235Dust, CeriumDioxideDust, NitricMonaziteLeachedConcentrate, SamariumDust, GadoliniumDust, EuropiumDust });
         catalog.orderDisplayRecipes("lanthanide", MonaziteDust, DilutedMonaziteMud, AcidicMonaziteDust,
             NitricMonaziteLeachedConcentrate, BastnasiteDust, RoastedRareEarthOxidesDust, SamaricRareEarthConcentrateDust,
             SamariumOreConcentrateDust, CeriumRichMixtureDust, CeriumDioxideDust);
@@ -291,16 +287,9 @@ public final class BottledChaosLanthanideRecipes {
         catalog.includeDecompositionStep(Sifter, NeutralizedUraniumFiltrateDust, UraniumDust, -1);
         catalog.includeDecompositionStep(ElectrolyzerNonCell, ThoriumDioxideDust, ThoriumDust, -1);
 
-        // Hafnia/zirconia separation and refining belong to this mineral family.
+        // Stop the hafnium branch at hafnia; refine the zirconia coproduct separately.
         catalog.includeDecompositionStep(CentrifugeNonCell, HafniumZirconiumOxideBlendDust,
             new Object[] { HafniumDioxideDust, ZirconiumDioxideDust }, -1);
-        catalog.includeDecompositionStep(LargeChemicalReactor, HafniumDioxideDust, HafniumTetrachlorideDust, 1);
-        catalog.includeDecompositionStep(LargeChemicalReactor, HafniumTetrachlorideDust, HafniumTetrachlorideSolution, 1);
-        catalog.includeDecompositionStep(BlastFurnace, HafniumTetrachlorideSolution, LowPurityHafniumDust, 2);
-        catalog.includeDecompositionStep(LargeChemicalReactor, LowPurityHafniumDust, HafniumIodideDust, 1);
-        catalog.includeDecompositionStep(BlastFurnace, HafniumIodideDust, HotHafniumIngot, 13);
-        catalog.includeDecompositionStep(VacuumFreezer, HotHafniumIngot, HafniumIngot, -1);
-        catalog.includeDecompositionStep(Macerator, HafniumIngot, HafniumDust, -1);
         catalog.includeDecompositionStep(LargeChemicalReactor, ZirconiumDioxideDust, ZirconiumTetrachlorideDust, 1);
         catalog.includeDecompositionStep(LargeChemicalReactor, ZirconiumTetrachlorideDust, ZirconiumTetrachlorideSolution, 1);
         catalog.includeDecompositionStep(BlastFurnace, ZirconiumTetrachlorideSolution, HotZirconiumIngot, 2);

@@ -57,6 +57,7 @@ public final class BottledChaosRecipeCatalog {
     private final Map<String, List<Object>> displayRoots = new LinkedHashMap<>();
     private final Map<Integer, ItemStack[][]> displayInputAlternatives = new LinkedHashMap<>();
     private final Set<Integer> hiddenDisplayEntries = new LinkedHashSet<>();
+    private final Set<Integer> hiddenInputMarkers = new LinkedHashSet<>();
     private final Set<Object> registeredReagentSyntheses = new LinkedHashSet<>();
     private final Set<Object> registeredReagentDecompositions = new LinkedHashSet<>();
     private final Set<Object> externalReagents = new LinkedHashSet<>();
@@ -220,6 +221,11 @@ public final class BottledChaosRecipeCatalog {
                 Arrays.stream(outputs)
                     .map(BottledChaosRecipeCatalog::resourceKey)
                     .toArray());
+        }
+
+        /** A calculation root need not represent a meaningful starting material for NEI. */
+        public void hideInputMarker() {
+            hiddenInputMarkers.add(index);
         }
 
         public void setPlanningTargets(Object... outputs) {
@@ -854,6 +860,7 @@ public final class BottledChaosRecipeCatalog {
                 availableInputChains.contains(entry),
                 displayInputAlternatives.get(entry),
                 hiddenDisplayEntries.contains(entry),
+                hiddenInputMarkers.contains(entry) ? null : chain.balanceRoot(),
                 Collections.unmodifiableSet(markers));
         }
         return new CompiledCatalog(
@@ -869,7 +876,7 @@ public final class BottledChaosRecipeCatalog {
     @Desugar
     record CompiledRoute(RecipeData data, Object balanceRoot, Object[] planningTargets, long baseEUt, int tagIndex,
         int inputMultiplier, long requiredTagMask, boolean availableInputsOnly, ItemStack[][] inputAlternatives,
-        boolean hiddenDisplay, Set<Object> displayOutputs) {}
+        boolean hiddenDisplay, Object lookupInput, Set<Object> displayOutputs) {}
 
     @Desugar
     record CompiledCatalog(CompiledRoute[] routes, int[] entryOrder, int[] displayOrder, ChainLink[] links,

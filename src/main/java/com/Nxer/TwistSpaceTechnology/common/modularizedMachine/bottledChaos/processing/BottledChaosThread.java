@@ -40,7 +40,7 @@ public final class BottledChaosThread {
     /** Paid-job materials are stable until completion; do not traverse the recipe graph each GUI tick. */
     public NBTTagCompound getFinalOutputSummary() {
         if (finalOutputSummary == null) finalOutputSummary = BottledChaosMaterialSummary
-            .forFinalJob(outputs, pendingCache, ItemBottledChaosCredential.getRouteMask(credential));
+            .forFinalJob(outputs, ItemBottledChaosCredential.getRouteMask(credential));
         return finalOutputSummary;
     }
 

@@ -24,37 +24,43 @@ public final class BottledChaosMaterialSummary {
 
     public static NBTTagCompound forCache(BottledChaosMaterialCache cache, long tagMask) {
         Map<Object, Long> amounts = cache.snapshot();
-        return summarize(amounts, outputPriorities(amounts, tagMask), WAILA_OUTPUT_LIMIT, -1);
+        return summarize(amounts, outputPriorities(amounts, tagMask, false), WAILA_OUTPUT_LIMIT, -1);
     }
 
-    /** Include newly produced cache materials without making them available before the job finishes. */
+    /** Actual exports and pending carry are separate presentation sources; never merge carry into final products. */
     public static NBTTagCompound forJob(BottledChaosOutputBuffer outputs, BottledChaosOutputBuffer pendingCache,
         long tagMask) {
-        var amounts = jobAmounts(outputs, pendingCache);
-        var priorities = outputPriorities(amounts, tagMask);
+        var amounts = outputAmounts(outputs);
+        var priorities = outputPriorities(amounts, tagMask, false);
         NBTTagCompound summary = summarize(amounts, priorities, Integer.MAX_VALUE, 0);
-        summary.setTag("intermediates", summarize(amounts, priorities, Integer.MAX_VALUE, 1));
+        var intermediates = outputAmounts(pendingCache);
+        amounts.forEach(
+            (key, amount) -> {
+                if (priorities.getOrDefault(key, 2) == 1) intermediates.merge(key, amount, Math::addExact);
+            });
+        summary.setTag(
+            "intermediates",
+            summarize(intermediates, outputPriorities(intermediates, tagMask, true), Integer.MAX_VALUE, -1));
         summary.setTag("byproducts", summarize(amounts, priorities, BYPRODUCT_OUTPUT_LIMIT, 2));
         return summary;
     }
 
     /** Only terminal targets of the authorized chain, never intermediate materials or unmarked coproducts. */
-    public static NBTTagCompound forFinalJob(BottledChaosOutputBuffer outputs, BottledChaosOutputBuffer pendingCache,
-        long tagMask) {
-        var amounts = jobAmounts(outputs, pendingCache);
-        return summarize(amounts, outputPriorities(amounts, tagMask), Integer.MAX_VALUE, 0);
+    public static NBTTagCompound forFinalJob(BottledChaosOutputBuffer outputs, long tagMask) {
+        var amounts = outputAmounts(outputs);
+        return summarize(amounts, outputPriorities(amounts, tagMask, false), Integer.MAX_VALUE, 0);
     }
 
-    private static Map<Object, Long> jobAmounts(BottledChaosOutputBuffer outputs,
-        BottledChaosOutputBuffer pendingCache) {
+    private static Map<Object, Long> outputAmounts(BottledChaosOutputBuffer outputs) {
         Map<Object, Long> amounts = new LinkedHashMap<>();
         outputs.collectAmounts(amounts);
-        pendingCache.collectAmounts(amounts);
         return amounts;
     }
 
-    private static Map<Object, Integer> outputPriorities(Map<Object, Long> amounts, long tagMask) {
-        return amounts.isEmpty() ? Collections.emptyMap() : BottledChaosRecipeProcessor.outputPriorities(tagMask);
+    private static Map<Object, Integer> outputPriorities(Map<Object, Long> amounts, long tagMask,
+        boolean intermediateOnly) {
+        return amounts.isEmpty() ? Collections.emptyMap()
+            : BottledChaosRecipeProcessor.outputPriorities(tagMask, intermediateOnly);
     }
 
     private static NBTTagCompound summarize(Map<Object, Long> amounts, Map<Object, Integer> priorities, int limit,

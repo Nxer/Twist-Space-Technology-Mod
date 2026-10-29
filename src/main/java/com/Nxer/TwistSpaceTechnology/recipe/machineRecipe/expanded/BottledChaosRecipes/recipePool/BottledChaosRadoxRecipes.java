@@ -51,7 +51,8 @@ public final class BottledChaosRadoxRecipes {
             catalog.markRecipe(DistillationTower, RawRadox, DilutedXenoxene, -1),
             catalog.markRecipe(DistillationTower, DilutedXenoxene, Xenoxene, -1),
             // Recover the fermented sludge coproduct within the fractionation entry.
-            catalog.markRecipe(Distillery, FermentedBacterialSludge, Mutagen, 3));
+            catalog.markRecipe(Distillery, FermentedBacterialSludge, Mutagen, 3))
+            .setDisplayOutputs(SuperHeavyRadox, HeavyRadox, LightRadox, SuperLightRadox);
 
         // Superheavy fraction: centrifuge -> heavy -> light -> closed return -> polymer.
         catalog.registerChain("super_heavy_radox", 1, TierEU.RECIPE_UHV, SuperHeavyRadox,

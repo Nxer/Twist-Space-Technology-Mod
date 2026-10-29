@@ -93,7 +93,7 @@ public final class BottledChaosRecipeProcessor {
     }
 
     /** Final products follow tag order; other products reverse tags while retaining each recipe's output order. */
-    public static Map<Object, Integer> outputPriorities(long tagMask) {
+    public static Map<Object, Integer> outputPriorities(long tagMask, boolean intermediateOnly) {
         RouteCache snapshot = cache;
         if (snapshot == null || tagMask == 0) return Collections.emptyMap();
         Map<Object, Integer> priorities = new LinkedHashMap<>();
@@ -103,7 +103,7 @@ public final class BottledChaosRecipeProcessor {
             if (!route.isAuthorized(tagMask)) continue;
             for (Object key : snapshot.outputRoles.get(entry)
                 .keySet()) {
-                int role = snapshot.hasAuthorizedFamilyConsumer(entry, tagMask, key) ? 1 : 0;
+                int role = intermediateOnly || snapshot.hasAuthorizedDisplayConsumer(entry, tagMask, key) ? 1 : 0;
                 priorities.merge(key, role, Math::min);
                 outputTags.putIfAbsent(key, route.definition.tagIndex());
             }
@@ -111,7 +111,7 @@ public final class BottledChaosRecipeProcessor {
         for (int entry : snapshot.entryOrder) {
             CachedRoute route = snapshot.routes[entry];
             if (route.isAuthorized(tagMask)) for (Object key : route.definition.data().outputs.keySet()) {
-                priorities.putIfAbsent(key, 2);
+                priorities.putIfAbsent(key, intermediateOnly ? 1 : 2);
                 outputTags.putIfAbsent(key, route.definition.tagIndex());
             }
         }
@@ -727,6 +727,7 @@ public final class BottledChaosRecipeProcessor {
                     cachedRoute.definition.tagIndex(),
                     displayOrder,
                     cachedRoute.definition.requiredTagMask(),
+                    cachedRoute.definition.lookupInput(),
                     inputAlternatives,
                     Collections.unmodifiableMap(snapshot.outputRoles.get(entryIndex)),
                     Collections.unmodifiableSet(snapshot.chainOutputs),
@@ -819,8 +820,8 @@ public final class BottledChaosRecipeProcessor {
             for (ChainLink link : links) {
                 Map<Object, Integer> roles = outputRoles.get(link.source());
                 if (!roles.containsKey(link.key())) continue;
-                // Cross-family use does not turn a family's final product into its internal intermediate.
-                if (familyOfEntry[link.source()] == familyOfEntry[link.target()]) roles.put(link.key(), 1);
+                // Presentation follows NEI families, independently of the runtime scheduling groups.
+                if (sameDisplayFamily(link.source(), link.target())) roles.put(link.key(), 1);
                 chainOutputs.add(link.key());
             }
             familyNames = families.keySet()
@@ -862,9 +863,19 @@ public final class BottledChaosRecipeProcessor {
             return available;
         }
 
-        private boolean hasAuthorizedFamilyConsumer(int source, long mask, Object key) {
+        private boolean sameDisplayFamily(int first, int second) {
+            int firstTag = CredentialModel.ownerTagIndex(routes[first].definition.requiredTagMask());
+            int secondTag = CredentialModel.ownerTagIndex(routes[second].definition.requiredTagMask());
+            return CredentialModel.displayPage(firstTag)
+                .groupKey(CredentialModel.tag(firstTag))
+                .equals(
+                    CredentialModel.displayPage(secondTag)
+                        .groupKey(CredentialModel.tag(secondTag)));
+        }
+
+        private boolean hasAuthorizedDisplayConsumer(int source, long mask, Object key) {
             for (ChainLink link : links) {
-                if (link.source() == source && familyOfEntry[source] == familyOfEntry[link.target()]
+                if (link.source() == source && sameDisplayFamily(source, link.target())
                     && link.key()
                         .equals(key)
                     && routes[link.target()].isAuthorized(mask)) return true;
@@ -1008,12 +1019,13 @@ public final class BottledChaosRecipeProcessor {
     public record RecipeMapDuration(RecipeMap<?> map, double durationTicks) {}
 
     /**
-     * NEI row data: per-entry output markers and chainable final/intermediate identities restrict lookup without
-     * hiding byproducts.
+     * NEI row data: lookup inputs, per-entry output markers and chainable final/intermediate identities restrict
+     * lookup without hiding byproducts.
      */
     @Desugar
-    public record DisplayRecipe(int tagIndex, int displayOrder, long requiredTagMask, ItemStack[][] inputAlternatives,
-        Map<Object, Integer> outputRoles, Set<Object> chainOutputs, long baseEUt, List<ItemStackLong> itemInputs,
-        List<FluidStackLong> fluidInputs, List<RecipeMapDuration> processingTimes, Plan plan) {}
+    public record DisplayRecipe(int tagIndex, int displayOrder, long requiredTagMask, Object lookupInput,
+        ItemStack[][] inputAlternatives, Map<Object, Integer> outputRoles, Set<Object> chainOutputs, long baseEUt,
+        List<ItemStackLong> itemInputs, List<FluidStackLong> fluidInputs, List<RecipeMapDuration> processingTimes,
+        Plan plan) {}
 
 }

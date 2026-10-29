@@ -111,6 +111,7 @@ public final class BottledChaosExoticMatterRecipes {
             new Object[] { product }, new Object[] {},
             catalog.markPreparedRecipe(TecTechRecipeMaps.godforgeExoticMatterRecipes, plasmaInputs[0].getFluid(), product,
                 prepareSourceRecipe(TecTechRecipeMaps.godforgeExoticMatterRecipes, exotic)));
+        quarkGluonPlasma.hideInputMarker();
         // Input branches: every selected plasma keeps the native preparation's own processing requirements.
         for (SolidCandidate candidate : solids) quarkGluonPlasma.includeSynthesisStep(candidate.plasma(), preparations.get(candidate.source()));
         for (FluidCandidate candidate : fluids) quarkGluonPlasma.includeSynthesisStep(candidate.plasma(), preparations.get(candidate.source()));
@@ -153,6 +154,7 @@ public final class BottledChaosExoticMatterRecipes {
             new Object[] { product }, new Object[] {},
             catalog.markPreparedRecipe(TecTechRecipeMaps.godforgeExoticMatterRecipes, plasmaInputs[0].getFluid(), product,
                 prepareSourceRecipe(TecTechRecipeMaps.godforgeExoticMatterRecipes, exotic)));
+        magmatter.hideInputMarker();
         // Input branches: feed the expected challenge through the selected native plasma recipes.
         for (SolidCandidate candidate : solids)
             magmatter.includeSynthesisStep(candidate.plasma(), preparations.get(candidate.source()));

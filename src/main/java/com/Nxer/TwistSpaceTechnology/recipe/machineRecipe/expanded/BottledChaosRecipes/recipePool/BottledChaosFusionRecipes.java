@@ -144,10 +144,11 @@ public final class BottledChaosFusionRecipes {
     }
 
     private BottledChaosRecipeCatalog.Entry registerFusion(long voltage, Object root, Object output, StepRef... steps) {
-        if (firstFusion) {
-            firstFusion = false;
-            return catalog.registerChain(TAG, 1, voltage, root, new Object[] { output }, steps);
-        } else return catalog.registerAlternativeChain(TAG, voltage, root, new Object[] { output }, steps);
+        var entry = firstFusion ? catalog.registerChain(TAG, 1, voltage, root, new Object[] { output }, steps)
+            : catalog.registerAlternativeChain(TAG, voltage, root, new Object[] { output }, steps);
+        firstFusion = false;
+        entry.hideInputMarker();
+        return entry;
     }
 
     private StepRef astralFusion() {

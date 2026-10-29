@@ -95,6 +95,7 @@ public final class BottledChaosNanoExtractionRecipes {
                     digestion,
                     preparation);
             ore.setPlanningTargets(concentrate);
+            ore.setDisplayOutputs(concentrate);
             roots.add(feed);
             if (element.concentrate() != null) {
                 ItemStack powder = element.concentrate()
@@ -108,6 +109,7 @@ public final class BottledChaosNanoExtractionRecipes {
                     catalog.markRecipe(Digester, powderFeed, chloride, -1),
                     preparation);
                 alternative.setPlanningTargets(concentrate);
+                alternative.setDisplayOutputs(concentrate);
                 // One crushed ore and three concentrate dusts have equal material yield; retain native work per route.
                 catalog.groupDisplayRecipes(Arrays.asList(ore, alternative), new ItemStack[] { crushed, powder });
                 roots.add(powderFeed);

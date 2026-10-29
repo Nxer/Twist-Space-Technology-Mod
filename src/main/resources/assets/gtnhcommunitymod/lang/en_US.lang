@@ -897,6 +897,7 @@ tst.bottledchaos.recipe.category.tungsten.name=Bottled Chaos - Tungsten
 tst.bottledchaos.recipe.credential.name=Bottled Chaos - Credential Injection
 tst.bottledchaos.recipe.final_output=Final Product
 tst.bottledchaos.recipe.intermediate_output=Intermediate Product
+tst.bottledchaos.recipe.lookup_input=Starting Material
 tst.bottledchaos.recipe.name=Bottled Chaos
 tst.bottledchaos.recipe.recipe_map_time=%s: %s s
 tst.bottledchaos.recipe.recipe_maps=Recipe Maps:

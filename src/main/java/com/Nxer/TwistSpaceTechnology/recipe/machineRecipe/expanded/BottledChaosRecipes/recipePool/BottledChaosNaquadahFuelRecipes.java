@@ -208,6 +208,7 @@ public final class BottledChaosNaquadahFuelRecipes {
             catalog.markPreparedRecipe(CentrifugeNonCell, sludge, naquadah,
                 prepareSourceRecipe(CentrifugeNonCell, sludgeCentrifugation)));
         sludgeRecovery.useAvailableInputsOnly();
+        sludgeRecovery.setDisplayOutputs();
         // spotless:on
 
         registerCatalysts(catalog, moltenCatalyst);
@@ -223,7 +224,7 @@ public final class BottledChaosNaquadahFuelRecipes {
         catalog.registerAlternativeChain(PREPARATION_TAG,
             precursor.times.keySet().stream().mapToLong(time -> time.eut()).max().getAsLong(), precursorInputs[0],
             new Object[] { denseUranium, densePlutonium },
-            catalog.markPreparedRecipe(ElectricImplosionCompressor, precursorInputs[0], denseUranium, precursor));
+            catalog.markPreparedRecipe(ElectricImplosionCompressor, precursorInputs[0], denseUranium, precursor)).hideInputMarker();
         // spotless:on
     }
 
@@ -529,6 +530,7 @@ public final class BottledChaosNaquadahFuelRecipes {
                 }
             }
         }
+        for (var variant : variants) variant.hideInputMarker();
         catalog.groupDisplayRecipes(variants, rawInputs);
     }
 

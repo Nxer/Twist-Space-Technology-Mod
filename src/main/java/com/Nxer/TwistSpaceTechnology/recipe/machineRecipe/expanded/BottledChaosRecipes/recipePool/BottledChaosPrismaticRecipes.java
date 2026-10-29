@@ -102,9 +102,9 @@ public final class BottledChaosPrismaticRecipes {
                     catalog.markRecipe(FluidExtractor, CrystallineAlloyIngot, CrystallineAlloyMolten, -1)
                 };
                 if (gas == OganessonGas) catalog.registerChain("crystalline_alloy_molten", 1, TierEU.RECIPE_UHV, DiamondGem,
-                    new Object[] { CrystallineAlloyMolten }, new Object[] { CrystallineAlloyMolten }, steps);
+                    new Object[] { CrystallineAlloyMolten }, new Object[] { CrystallineAlloyMolten }, steps).hideInputMarker();
                 else catalog.registerAlternativeChain("crystalline_alloy_molten", TierEU.RECIPE_UHV, DiamondGem,
-                    new Object[] { CrystallineAlloyMolten }, new Object[] { CrystallineAlloyMolten }, steps);
+                    new Object[] { CrystallineAlloyMolten }, new Object[] { CrystallineAlloyMolten }, steps).hideInputMarker();
             }
             catalog.includeSynthesisPath(PulsatingIronMolten);
         }

@@ -69,13 +69,13 @@ public final class BottledChaosBiologicalRecipes {
                 new Object[] { StemCells, BacterialSludge }, -1),
             catalog.markRecipe(Brewery, new Object[] { BacterialSludge, UraniumDust }, EnrichedBacterialSludge, -1),
             catalog.markRecipe(Fermenter, EnrichedBacterialSludge, FermentedBacterialSludge, -1),
-            catalog.markRecipe(Distillery, FermentedBacterialSludge, Mutagen, 3));
+            catalog.markRecipe(Distillery, FermentedBacterialSludge, Mutagen, 3)).setDisplayOutputs(StemCells);
 
         // Stage 1: raw materials -> mutagen growth medium -> sterile growth medium.
         catalog.registerChain("growth_medium_sterilized", 1, TierEU.RECIPE_UHV, RawMeatDust,
             new Object[] { GrowthMediumSterilized }, new Object[] { GrowthMediumSterilized },
             catalog.markRecipe(BacterialVat, new Object[] { RawMeatDust, Agar, Mutagen }, GrowthMediumRaw, -1),
-            catalog.markRecipe(FluidHeater, GrowthMediumRaw, GrowthMediumSterilized, -1));
+            catalog.markRecipe(FluidHeater, GrowthMediumRaw, GrowthMediumSterilized, -1)).hideInputMarker();
 
         // Resolve the native centrifuge selector for the registered Tau Ceti E crop variant.
         int seaweedCircuit = 0;
@@ -92,7 +92,7 @@ public final class BottledChaosBiologicalRecipes {
         catalog.registerChain("bio_cells", 1, TierEU.RECIPE_UHV, BioMediumSterilized,
             new Object[] { BioCells }, new Object[] { Mutagen },
             catalog.markRecipe(LargeChemicalReactor, new Object[] { StemCells, CosmicNeutroniumDust },
-                new Object[] { BioCells, Mutagen }, -1));
+                new Object[] { BioCells, Mutagen }, -1)).setDisplayOutputs(BioCells);
 
         // Stage 3: stem cells and raw materials -> nutrient agar -> seaweed broth.
         catalog.registerChain("seaweed_broth", 1, TierEU.RECIPE_UHV, StemCells,
