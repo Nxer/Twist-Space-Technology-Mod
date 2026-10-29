@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.processing;
 
+import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,6 +30,8 @@ public final class BottledChaosThread {
     public long requiredPools;
     public long recipeVoltage;
     public long eut;
+    private BigInteger wirelessCost = BigInteger.ZERO;
+
     public int duration;
     public int progress;
     public int parallels;
@@ -37,6 +40,15 @@ public final class BottledChaosThread {
     public CheckRecipeResult blockedRoute = CheckRecipeResultRegistry.NO_RECIPE;
     private CheckRecipeResult result = CheckRecipeResultRegistry.SUCCESSFUL;
     private NBTTagCompound finalOutputSummary;
+
+    public boolean isWireless() {
+        return wirelessCost.signum() > 0;
+    }
+
+    public BigInteger power() {
+        return isWireless() ? wirelessCost.add(BigInteger.valueOf(BottledChaosProcessingLogic.WIRELESS_TICKS - 1))
+            .divide(BigInteger.valueOf(BottledChaosProcessingLogic.WIRELESS_TICKS)) : BigInteger.valueOf(eut);
+    }
 
     /** Paid-job materials are stable until completion; do not traverse the recipe graph each GUI tick. */
     public NBTTagCompound getFinalOutputSummary() {
@@ -65,6 +77,7 @@ public final class BottledChaosThread {
             .roundItems();
         recipeVoltage = logic.getBaseRecipeVoltage();
         eut = logic.getCalculatedEut();
+        wirelessCost = logic.getWirelessCost();
         duration = Math.max(1, logic.getDuration());
         progress = 0;
         parallels = logic.getCurrentParallels();
@@ -137,6 +150,7 @@ public final class BottledChaosThread {
         credential = null;
         duration = progress = parallels = 0;
         eut = recipeVoltage = requiredPools = nextCheckTick = 0;
+        wirelessCost = BigInteger.ZERO;
         status = BottledChaosStatus.IDLE.key();
         resetResult();
     }
@@ -147,6 +161,7 @@ public final class BottledChaosThread {
         tag.setString("recipePools", BottledChaosMachineConfiguration.poolKeys(requiredPools));
         tag.setLong("recipeVoltage", recipeVoltage);
         tag.setLong("eut", eut);
+        tag.setByteArray("wirelessCost", wirelessCost.toByteArray());
         tag.setInteger("duration", duration);
         tag.setInteger("progress", progress);
         tag.setInteger("parallels", parallels);
@@ -169,6 +184,8 @@ public final class BottledChaosThread {
         requiredPools = BottledChaosMachineConfiguration.maskFromKeys(tag.getString("recipePools"));
         recipeVoltage = tag.getLong("recipeVoltage");
         eut = Math.max(0, tag.getLong("eut"));
+        byte[] cost = tag.getByteArray("wirelessCost");
+        wirelessCost = cost.length == 0 ? BigInteger.ZERO : new BigInteger(1, cost);
         duration = Math.max(0, tag.getInteger("duration"));
         progress = Math.max(0, Math.min(duration, tag.getInteger("progress")));
         parallels = Math.max(0, tag.getInteger("parallels"));

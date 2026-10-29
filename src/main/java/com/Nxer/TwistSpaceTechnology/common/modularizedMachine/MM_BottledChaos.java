@@ -26,7 +26,10 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
+import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
+import static gregtech.common.misc.WirelessNetworkManager.strongCheckOrAddUser;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -222,6 +225,14 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     // # Shared power is drained once per tick; insufficient power pauses every processing group.
     // #zh_CN 每tick统一扣除总耗电; 电力不足时全部加工组暂停.
 
+    // #tr tst.bottledchaos.tooltip.wireless
+    // # At UXV, omitting energy hatches enables wireless power. Each group prepays its normalized energy and runs for 2s without further overclocking.
+    // #zh_CN UXV等级未安装能源仓时启用无线模式. 每组预付折算后的总电量, 固定运行2s, 不额外超频.
+
+    // #tr tst.bottledchaos.wireless_mode
+    // # Wireless mode
+    // #zh_CN 无线模式
+
     // #tr tst.bottledchaos.structure.body
     // # The main body uses the blocks shown in the structure projection.
     // #zh_CN 主体使用结构投影中显示的方块.
@@ -366,6 +377,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private int capacity;
     private int allocatedCapacity = -1;
     private long inputPower = -1;
+    private boolean allocationWireless;
+    private BigInteger runningPower = BigInteger.ZERO;
     private long poolMask;
     private long schedulerTick;
     private boolean authorizationDirty = true;
@@ -715,7 +728,16 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         return activeConcentratedPower;
     }
 
+    public boolean isWirelessMode() {
+        return generatorLevel >= 4 && mEnergyHatches.isEmpty() && mExoticEnergyHatches.isEmpty();
+    }
+
+    private long parameterVoltage() {
+        return isWirelessMode() ? GTValues.V[VoltageIndex.MAX] : getMaxInputVoltage();
+    }
+
     public void setConcentratedPowerEnabled(boolean enabled) {
+        if (isWirelessMode()) return;
         if (concentratedPower == enabled) return;
         concentratedPower = enabled;
         authorizationDirty = true;
@@ -734,8 +756,9 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     }
 
     private void refreshPowerRound() {
+        if (isWirelessMode()) return;
         for (int slot = 0; slot < THREAD_COUNT; slot++) {
-            if ((powerRoundMask & (1 << slot)) != 0 && !hasAuthorizedWork(slot)) {
+            if ((powerRoundMask & (1 << slot)) != 0 && (!hasAuthorizedWork(slot) || threads[slot].isWireless())) {
                 powerRoundMask &= ~(1 << slot);
                 if (activeConcentratedPower || powerWeights[slot] == 0) powerBudgets[slot] = 0;
                 markDirty();
@@ -751,11 +774,13 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         }
         if (activeConcentratedPower) return;
         for (int slot = 0; slot < THREAD_COUNT; slot++) {
-            if (hasAuthorizedWork(slot) && (powerRoundMask & (1 << slot)) == 0) powerAllocationPending = true;
+            if (!threads[slot].isWireless() && hasAuthorizedWork(slot) && (powerRoundMask & (1 << slot)) == 0)
+                powerAllocationPending = true;
         }
         if (!powerAllocationPending || powerRoundMask != 0) return;
         // Paid jobs retain their original EU/t and finish in compatible rounds before new reservations apply.
-        for (int slot = 0; slot < THREAD_COUNT; slot++) if (hasAuthorizedWork(slot)) return;
+        for (int slot = 0; slot < THREAD_COUNT; slot++)
+            if (!threads[slot].isWireless() && hasAuthorizedWork(slot)) return;
         long[] budgets = BottledChaosPowerAllocator.proportionalBudgets(inputPower, powerWeights);
         System.arraycopy(budgets, 0, powerBudgets, 0, THREAD_COUNT);
         powerAllocationPending = false;
@@ -764,6 +789,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     }
 
     private boolean isWaitingForPowerRound(int slot) {
+        if (isWirelessMode() || threads[slot].isWireless()) return false;
         return (activeConcentratedPower || powerAllocationPending || concentratedPower != activeConcentratedPower)
             && (powerRoundMask & (1 << slot)) == 0
             && threads[slot].progress < threads[slot].duration;
@@ -785,7 +811,9 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         for (int slot = 0; slot < THREAD_COUNT; slot++) if (validGroup(slot)) newValidInputGroupMask |= 1 << slot;
         boolean changed = authorizationDirty || allocatedCapacity != capacity
             || inputGroupingDirty
-            || validInputGroupMask != newValidInputGroupMask;
+            || validInputGroupMask != newValidInputGroupMask
+            || allocationWireless != isWirelessMode();
+        allocationWireless = isWirelessMode();
         authorizationDirty = false;
         if (changed) {
             poolUsersDirty = true;
@@ -824,12 +852,20 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                     : 0;
             }
         }
-        long power = changed || schedulerTick % 20 == 0 ? Math.max(0, getMaxInputEu()) : inputPower;
+        long power = isWirelessMode() ? GTValues.V[VoltageIndex.MAX]
+            : changed || schedulerTick % 20 == 0 ? Math.max(0, getMaxInputEu()) : inputPower;
         changed |= power != inputPower;
         if (!changed) return;
         inputPower = power;
         allocatedCapacity = capacity;
         overCapacity = capacity <= 0 || getBottledChaosUsedCapacity() > capacity;
+        if (isWirelessMode()) {
+            powerRoundMask = 0;
+            powerAllocationPending = false;
+            Arrays.fill(powerBudgets, 0);
+            for (BottledChaosThread thread : threads) thread.nextCheckTick = 0;
+            return;
+        }
         if (!activeConcentratedPower) powerAllocationPending = !Arrays
             .equals(powerBudgets, BottledChaosPowerAllocator.proportionalBudgets(inputPower, powerWeights));
         for (BottledChaosThread thread : threads) thread.nextCheckTick = 0;
@@ -928,9 +964,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if ((poolMask & thread.requiredPools) != thread.requiredPools) {
             return BottledChaosProcessingLogic.missingPools(thread.requiredPools, poolMask);
         }
-        if (thread.progress < thread.duration && thread.eut > inputPower)
-            return CheckRecipeResultRegistry.insufficientPower(thread.eut);
-        if (!isWaitingForPowerRound(slot) && thread.progress < thread.duration && thread.eut > powerBudgets[slot]) {
+        if (thread.isWireless() || thread.progress >= thread.duration) return CheckRecipeResultRegistry.SUCCESSFUL;
+        if (isWirelessMode()) return CheckRecipeResultRegistry.insufficientPower(thread.eut);
+        if (thread.eut > inputPower) return CheckRecipeResultRegistry.insufficientPower(thread.eut);
+        if (!isWaitingForPowerRound(slot) && thread.eut > powerBudgets[slot]) {
             return SimpleResultWithText.ofFailure("tst.bottledchaos.result.insufficient_power_share");
         }
         return CheckRecipeResultRegistry.SUCCESSFUL;
@@ -950,9 +987,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                     || result == CheckRecipeResultRegistry.FLUID_OUTPUT_FULL))
                 return result;
         }
-        if (activeConcentratedPower || powerAllocationPending)
+        if (!isWirelessMode() && (activeConcentratedPower || powerAllocationPending))
             return checkPowerRoundProcessing(!activeConcentratedPower);
-        if (concentratedPower != activeConcentratedPower) return CheckRecipeResultRegistry.SUCCESSFUL;
+        if (!isWirelessMode() && concentratedPower != activeConcentratedPower)
+            return CheckRecipeResultRegistry.SUCCESSFUL;
         CheckRecipeResult failure = null;
         boolean hasWork = false;
         for (int slot = 0; slot < THREAD_COUNT; slot++) {
@@ -983,7 +1021,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 thread.pause();
                 continue;
             }
-            if (schedulerTick < thread.nextCheckTick || thread.isBusy() && !hasAuthorizedWork(slot)) continue;
+            if (thread.isWireless() || schedulerTick < thread.nextCheckTick
+                || thread.isBusy() && !hasAuthorizedWork(slot)) continue;
             if (!validGroup(slot) || !ItemBottledChaosCredential.isBound(installedCredentials[slot])) continue;
             candidates |= 1 << slot;
             if (thread.isBusy()) paidCandidates |= 1 << slot;
@@ -1112,7 +1151,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if (!ItemBottledChaosCredential.isBound(installedCredentials[slot])) {
             return SimpleResultWithText.ofFailure("tst.bottledchaos.result.unbound");
         }
-        if (powerBudgets[slot] <= 0)
+        if (!isWirelessMode() && powerBudgets[slot] <= 0)
             return SimpleResultWithText.ofFailure("tst.bottledchaos.result.insufficient_power_share");
 
         CheckRecipeResult result = withGroupInputs(slot, () -> {
@@ -1126,7 +1165,12 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             }
         });
         // ME extraction failures follow GT's failure-consumption semantics: never award outputs.
-        if (!checkRecipeResult.wasSuccessful()) return checkRecipeResult;
+        if (!checkRecipeResult.wasSuccessful()) {
+            if (result.wasSuccessful() && threadLogics[slot].getWirelessCost()
+                .signum() > 0)
+                addEUToGlobalEnergyMap(getBaseMetaTileEntity().getOwnerUuid(), threadLogics[slot].getWirelessCost());
+            return checkRecipeResult;
+        }
         if (!result.wasSuccessful()) return result;
         commitPreparedThread(slot);
         return CheckRecipeResultRegistry.SUCCESSFUL;
@@ -1136,7 +1180,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         BottledChaosProcessingLogic logic = threadLogics[slot];
         BottledChaosThread thread = threads[slot];
         thread.begin(installedCredentials[slot], logic);
-        powerRoundMask |= 1 << slot;
+        if (!thread.isWireless()) powerRoundMask |= 1 << slot;
         matchingCredentials[slot] = true;
         upkeepDirty = poolUsersDirty = true;
         BottledChaosRecipeProcessor.PreparedPlan prepared = logic.getPreparedPlan();
@@ -1284,10 +1328,11 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         logic.setRecipeMapSupplier(this::getRecipeMap);
         logic.setRecipeLocking(null, false);
         logic.setAuthorization(installedCredentials[slot], poolMask);
+        logic.setWireless(isWirelessMode());
         logic.setMachineConfiguration(
             getMaximumRecipeVoltage(),
             machineConfiguration.runtime(
-                getMaxInputVoltage(),
+                parameterVoltage(),
                 Math.max(0, inputPower),
                 itemCopies,
                 supply,
@@ -1302,13 +1347,14 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         logic.setEuModifier(getEuModifier());
         logic.setSpeedBonus(getSpeedBonus());
         logic.setOverclockType(overclockType);
-        logic.setAvailableVoltage(budget);
+        // Wireless jobs request their total energy after planning; only wired jobs use an EU/t budget.
+        if (!isWirelessMode()) logic.setAvailableVoltage(budget);
         logic.setAvailableAmperage(1);
         logic.setAmperageOC(true);
         logic.setVoidProtection(protectsExcessItem(), protectsExcessFluid());
         CheckRecipeResult result = logic.process();
         if (!result.wasSuccessful()) return result;
-        if (logic.getCalculatedEut() < 0 || logic.getCalculatedEut() > budget) {
+        if (!isWirelessMode() && (logic.getCalculatedEut() < 0 || logic.getCalculatedEut() > budget)) {
             return SimpleResultWithText.ofFailure("tst.bottledchaos.result.insufficient_power_share");
         }
         List<BottledChaosUpkeep.Demand> active = new ArrayList<>();
@@ -1333,6 +1379,19 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             if (!result.wasSuccessful()) return result;
         }
         // Both modes accept the same checked deltas; only the transaction decides when to apply them.
+        if (isWirelessMode() && inputs == InputTransaction.IMMEDIATE) {
+            var owner = getBaseMetaTileEntity().getOwnerUuid();
+            strongCheckOrAddUser(owner);
+            if (!addEUToGlobalEnergyMap(
+                owner,
+                logic.getWirelessCost()
+                    .negate())) {
+                // #tr tst.bottledchaos.result.insufficient_wireless_energy
+                // # Insufficient wireless energy.
+                // #zh_CN 无线电网电量不足.
+                return SimpleResultWithText.ofFailure("tst.bottledchaos.result.insufficient_wireless_energy");
+            }
+        }
         if (inputs.accept(originals, itemCopies, originalFluids, fluidCopies, roundItemCopies)) updateSlots();
         return CheckRecipeResultRegistry.SUCCESSFUL;
     }
@@ -1486,6 +1545,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     protected void runMachine(IGregTechTileEntity base, long tick) {
         schedulerTick = tick;
         statusSummaryTick = Long.MIN_VALUE;
+        runningPower = BigInteger.ZERO;
         if (base.isAllowedToWork()) processingGroupMask = 0;
         boolean controlsChanged = false;
         for (int slot = 0; slot < THREAD_COUNT; slot++) {
@@ -1608,6 +1668,11 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             }
         }
         if (failure != null) setCheckRecipeResult(failure);
+        // Use the current jobs on both sides of the ratio, including replacements started this tick.
+        for (BottledChaosThread thread : threads) {
+            if (thread.progress < thread.duration && BottledChaosStatus.ACTIVE.key()
+                .equals(thread.status)) runningPower = runningPower.add(thread.power());
+        }
         mEfficiency = mEfficiencyIncrease = 10000;
     }
 
@@ -1637,7 +1702,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 }
                 return false;
             }
-        } else if (!drainEnergyInput(usage)) {
+        } else if (usage > 0 && !drainEnergyInput(usage)) {
             stopMachine(ShutDownReasonRegistry.POWER_LOSS);
             return false;
         }
@@ -1691,7 +1756,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             recordRunningFailure(payment.result());
             return false;
         }
-        if (!drainEnergyInput(usage)) {
+        if (usage > 0 && !drainEnergyInput(usage)) {
             endRecipeProcessing();
             stopMachine(ShutDownReasonRegistry.POWER_LOSS);
             return false;
@@ -2020,8 +2085,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     private void writeProcessingGroupInformation(NBTTagCompound data, int slot) {
         data.setInteger("slot", slot + 1);
-        data.setLong("share", powerWeights[slot] > 0 && !isWaitingForPowerRound(slot) ? powerBudgets[slot] : 0);
-        data.setLong("totalPower", inputPower);
         data.setInteger("progress", threads[slot].progress);
         data.setInteger("duration", threads[slot].duration);
         writeThreadWailaStatus(data, slot);
@@ -2030,12 +2093,25 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             BottledChaosResultData.write(failure, threads[slot].blockedRoute);
             data.setTag("blockedRoute", failure);
         }
-        data.setLong("energyTier", getInputVoltageTier());
+        boolean active = runningPower.signum() > 0 && threads[slot].progress < threads[slot].duration
+            && BottledChaosStatus.ACTIVE.key()
+                .equals(data.getString("status"));
+        BigInteger power = active ? threads[slot].power() : BigInteger.ZERO;
+        data.setByteArray("power", power.toByteArray());
         data.setLong(
-            "eut",
-            lEUt < 0 && threads[slot].progress < threads[slot].duration
-                && BottledChaosStatus.ACTIVE.key()
-                    .equals(data.getString("status")) ? threads[slot].eut : 0);
+            "energyTier",
+            isWirelessMode() || threads[slot].isWireless() ? VoltageIndex.MAX : getInputVoltageTier());
+        if (isWirelessMode() || threads[slot].isWireless()) {
+            data.setDouble(
+                "powerRatio",
+                runningPower.signum() > 0 ? power.doubleValue() / runningPower.doubleValue() : 0);
+        } else {
+            data.setDouble(
+                "powerRatio",
+                inputPower > 0 && powerWeights[slot] > 0 && !isWaitingForPowerRound(slot)
+                    ? (double) powerBudgets[slot] / inputPower
+                    : 0);
+        }
     }
 
     private void writeThreadWailaStatus(NBTTagCompound job, int slot) {
@@ -2108,9 +2184,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             String blockedRoute = getBlockedRouteText(data);
             if (!blockedRoute.isEmpty()) currentTip.add(blockedRoute);
             if (boundSlots != 0) currentTip.add(getCredentialHatchBoundInputs(boundSlots));
-            long eut = data.getLong("eut");
+            BigInteger eut = processingGroupPower(data);
             byte energyTier = (byte) data.getLong("energyTier");
-            long totalPower = data.getLong("totalPower");
             // #tr tst.bottledchaos.credential_hatch.power_share
             // # Power share: %s%%
             // #zh_CN 电力份额: %s%%
@@ -2119,19 +2194,16 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                     ? StatCollector.translateToLocalFormatted(
                         "GT5U.waila.energy.use_with_amperage",
                         formatNumber(eut),
-                        GTUtility.getAmperageForTier(eut, energyTier),
+                        processingGroupAmperage(data),
                         GTUtility.getColoredTierNameFromTier(energyTier))
                     : StatCollector.translateToLocalFormatted(
                         "GT5U.waila.energy.use",
                         formatNumber(eut),
-                        GTUtility.getColoredTierNameFromVoltage(eut)))
+                        GTUtility.getColoredTierNameFromVoltage(eut.longValue())))
                     + " | "
                     + StatCollector.translateToLocalFormatted(
                         "tst.bottledchaos.credential_hatch.power_share",
-                        String.format(
-                            Locale.ROOT,
-                            "%.2f",
-                            totalPower > 0 ? 100.0 * data.getLong("share") / totalPower : 0)));
+                        String.format(Locale.ROOT, "%.2f", data.getDouble("powerRatio") * 100)));
             if (duration > 0) {
                 currentTip.add(GTWaila.getMachineProgressString(duration, data.getInteger("progress")));
             }
@@ -2237,7 +2309,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             missingRecipePools = 0;
             long installed = machineConfiguration.installedPoolMask();
             var parameters = machineConfiguration.runtime(
-                Math.max(32, getMaxInputVoltage()),
+                Math.max(32, parameterVoltage()),
                 Math.max(32, inputPower),
                 getCentralSupplyItems(),
                 getCentralSupplyFluids(),
@@ -2275,7 +2347,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             slot,
             source,
             new BottledChaosMachineParameters.Context(
-                getMaxInputVoltage(),
+                parameterVoltage(),
                 Math.max(0, inputPower),
                 getCentralSupplyItems(),
                 getCentralSupplyFluids(),
@@ -2322,6 +2394,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     private NBTTagCompound buildBottledChaosStatusSummary() {
         NBTTagCompound summary = new NBTTagCompound();
+        summary.setBoolean("wireless", isWirelessMode());
         NBTTagList entries = new NBTTagList();
         IGregTechTileEntity base = getBaseMetaTileEntity();
         if (!mMachine) BottledChaosResultData
@@ -2396,6 +2469,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         tag.setString(WAILA_RECIPE_CATEGORIES, getRecipeCategoryKeyList());
         tag.setString(WAILA_RECIPE_TOKENS, getRecipeTokenKeyList());
         tag.setBoolean("bottledChaosOverCapacity", overCapacity);
+        tag.setBoolean("bottledChaosWireless", isWirelessMode());
         tag.setTag(THREAD_NBT, getProcessingGroupSummary().getTagList(THREAD_NBT, 10));
     }
 
@@ -2425,6 +2499,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         IWailaConfigHandler config) {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         NBTTagCompound tag = accessor.getNBTData();
+        if (tag.getBoolean("bottledChaosWireless"))
+            currentTip.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tst.bottledchaos.wireless_mode"));
         currentTip.remove(
             GTWaila.getMachineProgressString(
                 tag.getBoolean("isActive"),
@@ -2517,34 +2593,42 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     @SideOnly(Side.CLIENT)
     public static String getProcessingGroupShareValue(NBTTagCompound job) {
-        return String.format(
-            Locale.ROOT,
-            "%.2f%%",
-            job.getLong("totalPower") > 0 ? job.getLong("share") * 100.0 / job.getLong("totalPower") : 0);
+        return String.format(Locale.ROOT, "%.2f%%", job.getDouble("powerRatio") * 100);
+    }
+
+    private static BigInteger processingGroupPower(NBTTagCompound job) {
+        byte[] power = job.getByteArray("power");
+        return power.length == 0 ? BigInteger.ZERO : new BigInteger(1, power);
+    }
+
+    private static BigInteger processingGroupAmperage(NBTTagCompound job) {
+        BigInteger voltage = BigInteger.valueOf(GTValues.V[(int) job.getLong("energyTier")]);
+        return processingGroupPower(job).add(voltage)
+            .subtract(BigInteger.ONE)
+            .divide(voltage);
     }
 
     @SideOnly(Side.CLIENT)
     public static String getProcessingGroupEnergyText(NBTTagCompound job) {
-        return job.getLong("eut") <= 0 ? ""
+        return processingGroupPower(job).signum() <= 0 ? ""
             : getProcessingGroupPowerText(job) + " " + getProcessingGroupVoltageText(job);
     }
 
     @SideOnly(Side.CLIENT)
     public static String getProcessingGroupPowerText(NBTTagCompound job) {
-        long eut = job.getLong("eut");
-        if (eut <= 0) return "";
-        return EnumChatFormatting.YELLOW + String.format(Locale.ROOT, "%.1e", (double) eut)
+        BigInteger eut = processingGroupPower(job);
+        if (eut.signum() <= 0) return "";
+        return EnumChatFormatting.YELLOW + String.format(Locale.ROOT, "%.1e", eut.doubleValue())
             .replace("e+0", "e")
             .replace("e+", "e") + EnumChatFormatting.WHITE + " EU/t";
     }
 
     @SideOnly(Side.CLIENT)
     public static String getProcessingGroupVoltageText(NBTTagCompound job) {
-        long eut = job.getLong("eut");
-        if (eut <= 0) return "";
+        if (processingGroupPower(job).signum() <= 0) return "";
         byte tier = (byte) job.getLong("energyTier");
         return EnumChatFormatting.WHITE + "("
-            + GTUtility.getAmperageForTier(eut, tier)
+            + processingGroupAmperage(job)
             + "A "
             + GTUtility.getColoredTierNameFromTier(tier)
             + EnumChatFormatting.WHITE
@@ -2669,6 +2753,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 .addMachineType(TSTUtils.tr("tst.bottledchaos.tooltip.machine_type"))
                 .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.01"))
                 .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.02"))
+                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.wireless"))
                 .addSeparator()
                 .beginStructureBlock(29, 41, 29, false)
                 .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.body"))

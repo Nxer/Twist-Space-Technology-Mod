@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.processing;
 
+import java.math.BigInteger;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
@@ -28,6 +29,9 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
 
     private static final int MAX_BATCH_TICKS = 200;
+    public static final int WIRELESS_TICKS = 40;
+    private boolean wireless;
+    private BigInteger wirelessCost = BigInteger.ZERO;
 
     private final BottledChaosRecipeProcessor.PlanningCache planningCache = new BottledChaosRecipeProcessor.PlanningCache();
     private long routeMask;
@@ -39,6 +43,14 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
     private final Map<Long, Double> durationLimits = new HashMap<>();
     private Function<BottledChaosRecipeProcessor.Plan, CheckRecipeResult> outputCheck;
     private BottledChaosSourceParameters machineParameters = BottledChaosSourceParameters.DEFAULT;
+
+    public void setWireless(boolean wireless) {
+        this.wireless = wireless;
+    }
+
+    public BigInteger getWirelessCost() {
+        return wirelessCost;
+    }
 
     public void setMaterialCache(BottledChaosMaterialCache materials,
         Function<BottledChaosRecipeProcessor.Plan, CheckRecipeResult> outputCheck) {
@@ -81,6 +93,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
     public @NotNull CheckRecipeResult process() {
         long diagnosticStart = System.nanoTime();
         preparedPlan = null;
+        wirelessCost = BigInteger.ZERO;
         blockedRoute = CheckRecipeResultRegistry.NO_RECIPE;
         durationLimits.clear();
         if (routeMask == 0) {
@@ -156,17 +169,24 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
                     break;
                 }
                 long diagnosticChecked = System.nanoTime();
-                BottledChaosOverclock.Result clock = overclock(chosen);
-                result = validateClock(clock);
-                if (!result.wasSuccessful()) {
-                    failure = result;
-                    break;
+                if (wireless) {
+                    wirelessCost = BottledChaosOverclock
+                        .wirelessCost(chosen.baseEUt() * euModifier, chosen.durationTicks() * speedBoost);
+                    calculatedEut = 0;
+                    duration = WIRELESS_TICKS;
+                } else {
+                    BottledChaosOverclock.Result clock = overclock(chosen);
+                    result = validateClock(clock);
+                    if (!result.wasSuccessful()) {
+                        failure = result;
+                        break;
+                    }
+                    calculatedEut = clock.eut();
+                    duration = Math.max(1, clock.duration());
                 }
                 chosen.consumeInputCopies(inputItems, inputFluids);
                 preparedPlan = chosen;
                 blockedRoute = preparationFailure;
-                calculatedEut = clock.eut();
-                duration = Math.max(1, clock.duration());
                 BottledChaosRecipeProcessor.Plan outputs = chosen.outputPlan();
                 calculatedParallels = outputs.executions();
                 setLongOutputs(outputs.itemOutputs(), outputs.fluidOutputs());
@@ -266,7 +286,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
             return CheckRecipeResultRegistry.POWER_OVERFLOW;
         double time = plan.durationTicks() * speedBoost;
         if (!Double.isFinite(time) || time <= 0) return CheckRecipeResultRegistry.DURATION_OVERFLOW;
-        if (Math.ceil(power) > availableVoltage)
+        if (!wireless && Math.ceil(power) > availableVoltage)
             return CheckRecipeResultRegistry.insufficientPower((long) Math.ceil(power));
         return CheckRecipeResultRegistry.SUCCESSFUL;
     }
@@ -287,6 +307,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
     }
 
     private double batchDurationLimit(long voltage) {
+        if (wireless) return Double.MAX_VALUE;
         return durationLimits.computeIfAbsent(
             voltage,
             key -> Math.min(

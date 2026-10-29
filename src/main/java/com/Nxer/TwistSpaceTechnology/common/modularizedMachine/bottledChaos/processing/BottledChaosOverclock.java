@@ -1,9 +1,23 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.processing;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
+
 /** Shared source normalization and final execution overclocks. Only final execution has a two-second stop. */
 public final class BottledChaosOverclock {
 
     public static final int MIN_OVERCLOCK_TICKS = 40;
+
+    /** Preserve normalized energy; compressing a wireless job adds no overclock loss. */
+    public static BigInteger wirelessCost(double power, double workTicks) {
+        if (!Double.isFinite(power) || power <= 0 || !Double.isFinite(workTicks) || workTicks <= 0)
+            throw new IllegalArgumentException("Invalid wireless work");
+        return BigDecimal.valueOf(power)
+            .multiply(BigDecimal.valueOf(workTicks))
+            .setScale(0, RoundingMode.CEILING)
+            .toBigIntegerExact();
+    }
 
     public static final class Result {
 

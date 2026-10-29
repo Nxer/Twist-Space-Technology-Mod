@@ -497,6 +497,8 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
     private static String getStatusSummaryText(NBTTagCompound summary) {
         if (summary == null) return "";
         StringJoiner lines = new StringJoiner("\n");
+        if (summary.getBoolean("wireless"))
+            lines.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tst.bottledchaos.wireless_mode"));
         NBTTagList entries = summary.getTagList("entries", 10);
         for (int i = 0; i < entries.tagCount(); i++) {
             NBTTagCompound entry = entries.getCompoundTagAt(i);
@@ -1477,16 +1479,25 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             .child(createStructureUpdateButton(syncManager));
     }
 
+    @SuppressWarnings("unchecked")
     private IWidget createPowerAllocationButton(PanelSyncManager syncManager) {
+        GenericSyncValue<NBTTagCompound, ?> status = syncManager
+            .findSyncHandler("bottledChaosStatusSummary", GenericSyncValue.class);
+        BooleanSupplier wireless = () -> status.getValue() != null && status.getValue()
+            .getBoolean("wireless");
         BooleanSyncValue mode = syncManager.findSyncHandler("bottledChaosConcentratedPower", BooleanSyncValue.class);
         BooleanSyncValue activeMode = syncManager
             .findSyncHandler("bottledChaosActiveConcentratedPower", BooleanSyncValue.class);
         return createDisableableToggleButton(
             mode,
-            () -> true,
+            () -> !wireless.getAsBoolean(),
             GTGuiTextures.OVERLAY_BUTTON_INPUT_SEPARATION_OFF,
             GTGuiTextures.OVERLAY_BUTTON_INPUT_SEPARATION_ON,
             tooltip -> {
+                if (wireless.getAsBoolean()) {
+                    tooltip.addLine(IKey.lang("tst.bottledchaos.wireless_mode"));
+                    return;
+                }
                 tooltip.addLine(IKey.lang("tst.bottledchaos.gui.power_allocation"));
                 tooltip.addLine(
                     IKey.dynamic(
