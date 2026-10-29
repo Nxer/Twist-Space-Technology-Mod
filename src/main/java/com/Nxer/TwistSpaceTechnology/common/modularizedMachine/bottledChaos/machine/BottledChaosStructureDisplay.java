@@ -71,7 +71,8 @@ public final class BottledChaosStructureDisplay {
     }
 
     public int poolOrder() {
-        return rules.isEmpty() ? Integer.MAX_VALUE
+        // Disk loading/unloading examples precede every machine pool.
+        return rules.isEmpty() ? -1
             : Long.numberOfTrailingZeros(
                 rules.get(0)
                     .poolMask());
