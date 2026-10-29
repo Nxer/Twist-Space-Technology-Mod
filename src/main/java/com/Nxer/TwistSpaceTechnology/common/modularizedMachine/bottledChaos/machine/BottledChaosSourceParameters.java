@@ -56,7 +56,7 @@ public interface BottledChaosSourceParameters {
             null,
             null);
 
-        static Evaluation defaults(RecipeMap<?> pool, double quantitySpeed) {
+        public static Evaluation defaults(RecipeMap<?> pool, double quantitySpeed) {
             Evaluation base = BottledChaosMachineConfiguration.isPurificationPool(pool) ? PERFECT : NORMAL;
             return quantitySpeed == 1 ? base : new Evaluation(base.profile, quantitySpeed, false, -1, 0, null, null);
         }
@@ -70,16 +70,11 @@ public interface BottledChaosSourceParameters {
         }
     }
 
-    default Evaluation evaluateSource(RecipeMap<?> pool, long recipeVoltage,
-        BottledChaosSourceRequirements requirements) {
-        return Evaluation.defaults(pool, 1);
-    }
-
     default void resetSourceUsage() {}
 
     default List<Evaluation> evaluateCandidates(RecipeMap<?> pool, long recipeVoltage,
         BottledChaosSourceRequirements requirements) {
-        return Collections.singletonList(evaluateSource(pool, recipeVoltage, requirements));
+        return Collections.singletonList(Evaluation.defaults(pool, 1));
     }
 
     default void recordSourceUsage(RecipeMap<?> map, Evaluation source) {}

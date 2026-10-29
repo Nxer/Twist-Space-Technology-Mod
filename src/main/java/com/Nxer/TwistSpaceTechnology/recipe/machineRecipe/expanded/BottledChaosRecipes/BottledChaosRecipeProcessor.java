@@ -47,7 +47,6 @@ import gregtech.api.util.GTUtility.FluidId;
  */
 public final class BottledChaosRecipeProcessor {
 
-    private static final BottledChaosSourceParameters DEFAULT_PARAMETERS = BottledChaosSourceParameters.DEFAULT;
     private static volatile RouteCache cache;
 
     // Registration owns declaration/compilation and lifecycle ordering; execution owns the published snapshot.
@@ -721,12 +720,10 @@ public final class BottledChaosRecipeProcessor {
                 double part = BottledChaosSourceWork.normalizedDuration(
                     time.getKey(),
                     time.getValue(),
-                    DEFAULT_PARAMETERS.evaluateSource(
+                    BottledChaosSourceParameters.Evaluation.defaults(
                         time.getKey()
                             .map(),
-                        cachedRoute.definition.baseEUt(),
-                        time.getKey()
-                            .requirements()),
+                        1),
                     cachedRoute.definition.baseEUt());
                 totalDuration = BottledChaosRecipeSupport.addDuration(totalDuration, part, 1);
                 RecipeMap<?> map = time.getKey()

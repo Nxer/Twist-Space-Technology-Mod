@@ -9,7 +9,6 @@ import net.minecraft.util.StatCollector;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineConfiguration;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosProcessAlternatives;
 
 import gregtech.api.recipe.check.CheckRecipeResult;
 
@@ -34,13 +33,11 @@ public final class BottledChaosMissingCategoriesResult implements CheckRecipeRes
 
     @Override
     public @NotNull String getDisplayString() {
-        long displayMissing = missing;
+        long displayMissing = 0;
         for (int slot = 0; slot < BottledChaosMachineConfiguration.poolCount(); slot++) {
             long bit = 1L << slot;
             if ((missing & bit) == 0) continue;
-            var parent = BottledChaosProcessAlternatives.displayParent(BottledChaosMachineConfiguration.pool(slot));
-            long parentMask = parent == null ? 0 : BottledChaosMachineConfiguration.mask(parent);
-            if (parentMask != 0) displayMissing = (displayMissing & ~bit) | parentMask;
+            displayMissing |= 1L << BottledChaosMachineConfiguration.displayPoolSlot(slot);
         }
         StringJoiner names = new StringJoiner(", ");
         for (int slot = 0; slot < BottledChaosMachineConfiguration.poolCount(); slot++) {

@@ -165,6 +165,10 @@ public final class BottledChaosPoolFailure implements CheckRecipeResult {
     // # Compression tier
     // #zh_CN 压缩等级
 
+    // #tr tst.bottledchaos.parameter.field
+    // # Field generator tier
+    // #zh_CN 力场发生器等级
+
     // #tr tst.bottledchaos.parameter.plasma
     // # Plasma tier
     // #zh_CN 等离子等级
@@ -178,8 +182,8 @@ public final class BottledChaosPoolFailure implements CheckRecipeResult {
     // #zh_CN 多步等离子能力
 
     // #tr tst.bottledchaos.parameter.purification_capacity
-    // # Purification plant capacity
-    // #zh_CN 净水厂堆叠组数
+    // # Main purification plant capacity
+    // #zh_CN 主净化厂堆叠组数
 
     // #tr tst.bottledchaos.parameter.culture
     // # Culture dishes

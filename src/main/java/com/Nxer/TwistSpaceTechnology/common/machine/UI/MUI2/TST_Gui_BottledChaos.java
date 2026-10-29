@@ -5,11 +5,13 @@ import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledCha
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting.OUTPUT_SLOT;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting.SECOND_OUTPUT_SLOT;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
+import java.util.function.ToIntFunction;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -127,19 +129,13 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
 
     // spotless:off
     // #tr tst.bottledchaos.gui.recipe_category_slot_hint
-    // # Install packaged modules. Every 8x quantity adds 100% pool speed.
-    // #zh_CN 装入已封装模组. 数量每增至8倍, 配方池加速100%.
+    // # Every 8x quantity adds 100% pool speed.
+    // #zh_CN 数量每增至8倍, 配方池加速100%.
     // spotless:on
 
     // #tr tst.bottledchaos.gui.credential_injection
     // # Credential Injection / Structure Packaging
     // #zh_CN 凭证注入 / 结构封装
-
-    // spotless:off
-    // #tr tst.bottledchaos.gui.credential_injection.hint
-    // # Insert a carrier and materials. Take the preview to confirm.
-    // #zh_CN 放入载体与材料, 取出预览结果执行.
-    // spotless:on
 
     // #tr tst.bottledchaos.gui.credential_injection.frame
     // # Carrier
@@ -172,12 +168,12 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
     // #zh_CN 标签已写入.
 
     // #tr tst.bottledchaos.gui.credential_injection.missing_target
-    // # Insert a credential frame.
-    // #zh_CN 放入凭证框架.
+    // # Missing credential frame.
+    // #zh_CN 缺少凭证框架.
 
     // #tr tst.bottledchaos.gui.credential_injection.missing_source
-    // # Insert route markers or bound credentials.
-    // #zh_CN 放入路线标志物或已绑定凭证.
+    // # Missing route markers or bound credentials.
+    // #zh_CN 缺少路线标志物或已绑定凭证.
 
     // #tr tst.bottledchaos.gui.credential_injection.invalid_source
     // # Incompatible inputs.
@@ -192,12 +188,12 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
     // #zh_CN 超出凭证容量.
 
     // #tr tst.bottledchaos.gui.credential_injection.output_occupied
-    // # Clear both output slots first.
-    // #zh_CN 先清空结果槽.
+    // # Output slots occupied.
+    // #zh_CN 结果槽被占用.
 
     // #tr tst.bottledchaos.gui.power_allocation
     // # Power Allocation
-    // #zh_CN 功率分配
+    // #zh_CN 电力分配
 
     // #tr tst.bottledchaos.gui.power_allocation.distributed
     // # Distributed
@@ -207,20 +203,24 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
     // # Concentrated
     // #zh_CN 集中
 
+    // #tr tst.bottledchaos.gui.power_allocation.current
+    // # Current: %s
+    // #zh_CN 当前: %s
+
     // #tr tst.bottledchaos.gui.power_allocation.pending
-    // # Applies after the current round finishes.
-    // #zh_CN 当前轮完成后生效.
+    // # Waiting for this round to finish.
+    // #zh_CN 等待本轮完成.
 
     // spotless:off
     // #tr tst.bottledchaos.gui.power_allocation.distributed.hint
-    // # Distributed mode reserves power in proportion to credential frame capacity, including idle groups with valid enabled credentials. Tag costs do not affect power shares.
-    // #zh_CN 均分模式按凭证容量比例预留功率, 有效且启用的待机组仍保留份额, 不按TAG消耗分配.
+    // # Reserve power by valid credential capacity.
+    // #zh_CN 按有效凭证容量预留功率.
     // spotless:on
 
     // spotless:off
     // #tr tst.bottledchaos.gui.power_allocation.concentrated.hint
-    // # Concentrated mode shares power among executing groups in proportion to credential frame capacity. New or resumed jobs wait for the current round.
-    // #zh_CN 集中模式按凭证容量比例向执行组分配功率, 新任务和恢复任务等待当前轮完成.
+    // # Allocate power by the credential capacity of running groups.
+    // #zh_CN 按运行加工组的凭证容量分配功率.
     // spotless:on
 
     public TST_Gui_BottledChaos(MM_BottledChaos multiblock) {
@@ -313,8 +313,8 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
         GenericSyncValue<CheckRecipeResult, ?> cacheExport = syncManager
             .findSyncHandler("bottledChaosCacheExportResult", GenericSyncValue.class);
         // #tr tst.bottledchaos.gui.cache_export_result
-        // # Cache export: %s
-        // #zh_CN 缓存导出: %s
+        // # Cache export result: %s
+        // #zh_CN 缓存排出结果: %s
         terminal.child(
             IKey.dynamic(
                 () -> (cacheExport.getValue()
@@ -608,16 +608,8 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                 createCredentialItemArea(open, outputs).pos(0, 24)
                     .size(PACKAGING_WIDTH, 48))
             .child(
-                IKey.lang("tst.bottledchaos.gui.credential_injection.hint")
-                    .asWidget()
-                    .pos(0, 74)
-                    .size(PACKAGING_WIDTH - 30, 18)
-                    .shadow(false)
-                    .color(skin::workspaceMuted)
-                    .textAlign(Alignment.TopLeft))
-            .child(
                 new ScrollingTextWidget(IKey.dynamic(() -> StatCollector.translateToLocal(status.getStringValue())))
-                    .pos(0, 93)
+                    .pos(0, 74)
                     .size(PACKAGING_WIDTH - 30, 9)
                     .shadow(false)
                     .color(skin::workspaceMuted)
@@ -727,7 +719,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
         Flow rows = Flow.column()
             .fullWidth()
             .height(150);
-        for (int index = 0; index < BottledChaosModuleTree.PAGE_SIZE; index++) {
+        for (int index = 0; index < ModuleBrowser.PAGE_SIZE; index++) {
             final int row = index;
             rows.child(
                 Flow.row()
@@ -762,7 +754,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                                                 widget -> !browser.rowState(row)
                                                     .isEmpty())))
                             .onMousePressed(click -> {
-                                browser.tree.select(browser.row(row));
+                                browser.select(browser.row(row));
                                 browser.selectCurrent();
                                 return true;
                             })
@@ -792,7 +784,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                         return true;
                     }))
             .child(
-                IKey.dynamic(() -> (browser.tree.page() + 1) + "/" + browser.tree.pageCount())
+                IKey.dynamic(() -> (browser.page + 1) + "/" + browser.pageCount())
                     .asWidget()
                     .expanded()
                     .height(18)
@@ -973,10 +965,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                 if (colon < 0) {
                     child(
                         textColumn(
-                            BottledChaosTextLayout.wrap(
-                                line,
-                                width - 2,
-                                value -> (int) Math.ceil(font.getStringWidth(value) * TEXT_SCALE)),
+                            wrap(line, width - 2, value -> (int) Math.ceil(font.getStringWidth(value) * TEXT_SCALE)),
                             width,
                             lineHeight,
                             upkeep ? valueColor : MODULE_MUTED,
@@ -987,11 +976,11 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                             line.substring(colon + 1)
                                 .trim())
                             * TEXT_SCALE > valueWidth - 2;
-                    List<String> labels = BottledChaosTextLayout.wrap(
+                    List<String> labels = wrap(
                         line.substring(0, colon),
                         (stacked ? width : labelWidth) - 2,
                         value -> (int) Math.ceil(font.getStringWidth(value) * TEXT_SCALE));
-                    List<String> values = BottledChaosTextLayout.wrap(
+                    List<String> values = wrap(
                         line.substring(colon + 1)
                             .trim(),
                         (stacked ? width : valueWidth) - 2,
@@ -1019,6 +1008,32 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                 }
             }
             scheduleResize();
+        }
+
+        /** Break descriptions at semicolons, then hard-wrap long clauses by rendered width. */
+        private static List<String> wrap(String text, int width, ToIntFunction<String> measure) {
+            List<String> lines = new ArrayList<>();
+            for (String paragraph : text.replace("; ", "\n")
+                .replace(';', '\n')
+                .split("\n", -1)) {
+                if (paragraph.isEmpty()) {
+                    lines.add("");
+                    continue;
+                }
+                int start = 0;
+                while (start < paragraph.length()) {
+                    int end = start;
+                    while (end < paragraph.length()) {
+                        int next = paragraph.offsetByCodePoints(end, 1);
+                        if (end > start && measure.applyAsInt(paragraph.substring(start, next)) > Math.max(1, width))
+                            break;
+                        end = next;
+                    }
+                    lines.add(paragraph.substring(start, end));
+                    start = end;
+                }
+            }
+            return lines;
         }
 
         private static int parameterColor(String label) {
@@ -1063,10 +1078,6 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
         }
     }
 
-    // #tr tst.bottledchaos.gui.module_legend
-    // # Hover a name to see its processing groups.
-    // #zh_CN 悬停名称可查看加工组.
-
     // #tr tst.bottledchaos.gui.pool_users
     // # Processing groups: %s
     // #zh_CN 加工组: %s
@@ -1092,8 +1103,8 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
     // #zh_CN 所需数量: %s
 
     // #tr tst.bottledchaos.gui.module_empty
-    // # No recipe pools. Insert a bound credential to configure modules.
-    // #zh_CN 暂无配方池. 放入已绑定凭证后配置模组.
+    // # No recipe pools.
+    // #zh_CN 暂无配方池.
 
     // #tr tst.bottledchaos.gui.upkeep
     // # Maintenance fluids / second
@@ -1101,13 +1112,20 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
 
     private final class ModuleBrowser {
 
+        private static final int PAGE_SIZE = 6;
+        private final List<Integer> rows = new ArrayList<>();
+        private long visibleRows;
+        private long missingRows;
+        private long usedRows;
+        private int page;
+        private int selectedRow = -1;
         private final LongSyncValue required;
+        private final LongSyncValue missing;
         private final IntSyncValue[] users = new IntSyncValue[BottledChaosMachineConfiguration.poolCount()];
         private final IntSyncValue selected;
         private final IntSyncValue source;
         private int selectedSource;
         private final GenericSyncValue<NBTTagCompound, ?> parameters;
-        private final BottledChaosModuleTree tree;
         private final long waterPools;
         private final boolean client;
         private int selectedSlot = -1;
@@ -1127,6 +1145,8 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                     .requiredPoolMask(),
                 multiblock.getMachineConfiguration()::setRequiredPoolMask);
             syncManager.syncValue("bottledChaosRequiredPools", required);
+            missing = new LongSyncValue(multiblock::getMissingRecipePoolMask);
+            syncManager.syncValue("bottledChaosMissingPools", missing);
             selected = new IntSyncValue(
                 () -> selectedSlot,
                 value -> { if (value >= -1 && value < users.length) selectedSlot = value; }).allowC2S();
@@ -1162,7 +1182,6 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                     water |= 1L << slot;
             }
             waterPools = water;
-            tree = new BottledChaosModuleTree();
         }
 
         private ItemStack stack(int slot) {
@@ -1172,7 +1191,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
 
         private void nextSource() {
             int count = multiblock.getMachineConfiguration()
-                .sourcesForPool(selected.getIntValue()).length;
+                .displaySourcesForPool(selected.getIntValue()).length;
             if (count > 1) source.setIntValue((source.getIntValue() + 1) % count, true, true);
         }
 
@@ -1187,26 +1206,57 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
         private int row(int row) {
             long visible = 0;
             for (int slot = 0; slot < users.length; slot++)
-                if (stack(slot) != null || users[slot].getIntValue() != 0) visible |= 1L << slot;
+                if (BottledChaosMachineConfiguration.displayPoolSlot(slot) == slot
+                    && (stack(slot) != null || users[slot].getIntValue() != 0)) visible |= 1L << slot;
             long missing = 0, used = 0;
             for (int slot = 0; slot < users.length; slot++) {
                 if (users[slot].getIntValue() != 0) {
-                    if (quantity(slot) <= 0) missing |= 1L << slot;
+                    if (isMissing(slot)) missing |= 1L << slot;
                     else used |= 1L << slot;
                 }
             }
-            tree.update(visible, missing, used);
+            updateRows(visible, missing, used);
             selectCurrent();
-            return tree.row(row);
+            return pageRow(row);
+        }
+
+        /** Preserve selection while ordering missing pools, used pools, then unused pools. */
+        private void updateRows(long visible, long missing, long used) {
+            if (visibleRows == visible && missingRows == missing && usedRows == used) return;
+            visibleRows = visible;
+            missingRows = missing;
+            usedRows = used;
+            rows.clear();
+            for (long section : new long[] { visible & missing, visible & ~missing & used,
+                visible & ~(missing | used) })
+                for (int pool = 0; pool < Long.SIZE; pool++) if ((section & (1L << pool)) != 0) rows.add(pool);
+            int selectedIndex = rows.indexOf(selectedRow);
+            if (selectedIndex >= 0) page = selectedIndex / PAGE_SIZE;
+            page = Math.min(page, pageCount() - 1);
+            if (selectedIndex < 0) selectedRow = pageRow(0);
+        }
+
+        private void select(int slot) {
+            if (rows.indexOf(slot) / PAGE_SIZE == page && rows.contains(slot)) selectedRow = slot;
+        }
+
+        private int pageRow(int index) {
+            int offset = page * PAGE_SIZE + index;
+            return offset < rows.size() ? rows.get(offset) : -1;
+        }
+
+        private int pageCount() {
+            return Math.max(1, (rows.size() + PAGE_SIZE - 1) / PAGE_SIZE);
         }
 
         private void selectCurrent() {
-            if (client && selected.getIntValue() != tree.selected()) selected.setIntValue(tree.selected(), true, true);
+            if (client && selected.getIntValue() != selectedRow) selected.setIntValue(selectedRow, true, true);
         }
 
         private void turnPage(int direction) {
             row(0);
-            tree.turnPage(direction);
+            page = Math.max(0, Math.min(pageCount() - 1, page + direction));
+            selectedRow = pageRow(0);
             selectCurrent();
         }
 
@@ -1231,14 +1281,17 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
 
         private int rowStateColor(int row) {
             int slot = row(row);
-            return slot >= 0 && (quantity(slot) <= 0 || users[slot].getIntValue() == 0) ? MODULE_UNUSED
-                : MODULE_WARNING;
+            return slot >= 0 && (isMissing(slot) || users[slot].getIntValue() == 0) ? MODULE_UNUSED : MODULE_WARNING;
+        }
+
+        private boolean isMissing(int slot) {
+            return (missing.getLongValue() & (1L << slot)) != 0 || quantity(slot) <= 0;
         }
 
         private String rowState(int row) {
             int slot = row(row);
             if (slot < 0) return "";
-            if (quantity(slot) <= 0) return StatCollector.translateToLocal("tst.bottledchaos.gui.module_missing");
+            if (isMissing(slot)) return StatCollector.translateToLocal("tst.bottledchaos.gui.module_missing");
             if (users[slot].getIntValue() == 0)
                 return StatCollector.translateToLocal("tst.bottledchaos.gui.module_unused");
             String state = "";
@@ -1280,7 +1333,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                         List<String> lines = BottledChaosMachineDescriptions.describeForGui(
                             structure.controller(),
                             structure,
-                            BottledChaosMachineConfiguration.pool(slot),
+                            BottledChaosMachineConfiguration.pool(data.getInteger("sourcePool")),
                             ItemBottledChaosMachineModule.quantitySpeedExponent(quantity(slot)),
                             data);
                         description = String.join("\n", lines);
@@ -1432,16 +1485,22 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                 tooltip.addLine(IKey.lang("tst.bottledchaos.gui.power_allocation"));
                 tooltip.addLine(
                     IKey.dynamic(
-                        () -> StatCollector.translateToLocal(
-                            mode.getBoolValue() ? "tst.bottledchaos.gui.power_allocation.concentrated"
-                                : "tst.bottledchaos.gui.power_allocation.distributed")));
+                        () -> EnumChatFormatting.AQUA + StatCollector.translateToLocalFormatted(
+                            "tst.bottledchaos.gui.power_allocation.current",
+                            StatCollector.translateToLocal(
+                                activeMode.getBoolValue() ? "tst.bottledchaos.gui.power_allocation.concentrated"
+                                    : "tst.bottledchaos.gui.power_allocation.distributed"))));
                 tooltip.addLine(
                     IKey.dynamic(
                         () -> StatCollector.translateToLocal(
-                            mode.getBoolValue() ? "tst.bottledchaos.gui.power_allocation.concentrated.hint"
+                            activeMode.getBoolValue() ? "tst.bottledchaos.gui.power_allocation.concentrated.hint"
                                 : "tst.bottledchaos.gui.power_allocation.distributed.hint")));
-                if (mode.getBoolValue() != activeMode.getBoolValue())
-                    tooltip.addLine(IKey.lang("tst.bottledchaos.gui.power_allocation.pending"));
+                if (mode.getBoolValue() != activeMode.getBoolValue()) {
+                    tooltip.addLine(
+                        IKey.dynamic(
+                            () -> EnumChatFormatting.YELLOW
+                                + StatCollector.translateToLocal("tst.bottledchaos.gui.power_allocation.pending")));
+                }
             }).tooltipAutoUpdate(true);
     }
 }

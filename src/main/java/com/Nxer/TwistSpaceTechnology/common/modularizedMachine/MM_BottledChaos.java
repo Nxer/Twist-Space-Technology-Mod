@@ -352,6 +352,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private final ArrayList<MTEHatchInput> centralInputHatches = new ArrayList<>();
     private final ArrayList<IDualInputHatch> centralDualInputs = new ArrayList<>();
     private final int[] recipePoolUsers = new int[BottledChaosMachineConfiguration.MAX_POOLS];
+    private long missingRecipePools;
     private boolean poolUsersDirty = true;
     private boolean upkeepDirty = true;
     private int upkeepGroupMask = -1;
@@ -1398,9 +1399,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             .getTotalWorldTime() + 60;
         if (hatch.getMaterialCache()
             .isEmpty()) {
-            // #tr tst.bottledchaos.gui.cache_empty
-            // # No materials to export.
-            // #zh_CN 无可导出的材料.
             cacheExportResult = SimpleResultWithText.ofSuccess("tst.bottledchaos.gui.cache_empty");
             return;
         }
@@ -2070,6 +2068,13 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             CheckRecipeResult result = getThreadDisplayResult(slot);
             status = isFailure(result) ? ""
                 : !getBaseMetaTileEntity().isAllowedToWork() ? BottledChaosStatus.PAUSED.key() : threads[slot].status;
+            if (BottledChaosStatus.IDLE.key()
+                .equals(status) && powerWeights[slot] > 0
+                && powerRoundMask != 0
+                && (activeConcentratedPower || powerAllocationPending
+                    || concentratedPower != activeConcentratedPower)) {
+                status = BottledChaosStatus.WAITING_POWER.key();
+            }
             job.setString("status", status);
             if (status.isEmpty()) BottledChaosResultData.write(job, result);
             return;
@@ -2124,8 +2129,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             byte energyTier = (byte) data.getLong("energyTier");
             long totalPower = data.getLong("totalPower");
             // #tr tst.bottledchaos.credential_hatch.power_share
-            // # Total usable power share: %s%%
-            // #zh_CN 占总可用功率: %s%%
+            // # Power share: %s%%
+            // #zh_CN 电力份额: %s%%
             currentTip.add(
                 (energyTier > 0
                     ? StatCollector.translateToLocalFormatted(
@@ -2246,6 +2251,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     public int getRecipePoolUsers(int poolSlot) {
         if (poolUsersDirty) {
             Arrays.fill(recipePoolUsers, 0);
+            missingRecipePools = 0;
+            long installed = machineConfiguration.installedPoolMask();
             var parameters = machineConfiguration.runtime(
                 Math.max(32, getMaxInputVoltage()),
                 Math.max(32, inputPower),
@@ -2261,12 +2268,20 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                         parameters);
                 required = BottledChaosMachineConfiguration.withDependencies(required);
                 for (int pool = 0; pool < BottledChaosMachineConfiguration.poolCount(); pool++) {
-                    if ((required & (1L << pool)) != 0) recipePoolUsers[pool] |= 1 << slot;
+                    if ((required & (1L << pool)) == 0) continue;
+                    int display = BottledChaosMachineConfiguration.displayPoolSlot(pool);
+                    recipePoolUsers[display] |= 1 << slot;
+                    if ((installed & (1L << pool)) == 0) missingRecipePools |= 1L << display;
                 }
             }
             poolUsersDirty = false;
         }
         return recipePoolUsers[poolSlot];
+    }
+
+    public long getMissingRecipePoolMask() {
+        getRecipePoolUsers(0);
+        return missingRecipePools;
     }
 
     public NBTTagCompound getModuleParameters(int slot, int source) {

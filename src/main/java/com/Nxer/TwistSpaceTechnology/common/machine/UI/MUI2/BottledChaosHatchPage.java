@@ -164,6 +164,7 @@ final class BottledChaosHatchPage {
             target,
             () -> current.get()
                 .getBoolean("enabled"),
+            true,
             BottledChaosHatchControls.Action.values());
         for (int i = 0; i < controls.size(); i++) {
             BottledChaosHatchControls.Action action = BottledChaosHatchControls.Action.values()[i];

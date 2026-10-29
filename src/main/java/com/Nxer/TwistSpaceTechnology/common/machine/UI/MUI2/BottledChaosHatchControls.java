@@ -48,14 +48,6 @@ public final class BottledChaosHatchControls {
     // # Clear
     // #zh_CN 清空
 
-    // #tr tst.bottledchaos.credential_hatch.pause
-    // # Pause this processing group.
-    // #zh_CN 暂停此加工组.
-
-    // #tr tst.bottledchaos.credential_hatch.resume
-    // # Resume this processing group.
-    // #zh_CN 恢复此加工组运行.
-
     // #tr tst.bottledchaos.credential_hatch.clear
     // # Clear this processing group's current job and cached materials.
     // #zh_CN 清空此加工组的当前运行状态和缓存材料.
@@ -85,16 +77,11 @@ public final class BottledChaosHatchControls {
             };
         }
 
-        private String tooltip(boolean enabled) {
+        private String tooltip() {
             return switch (this) {
-                // #tr tst.bottledchaos.credential_hatch.take
-                // # Move this credential to your inventory.
-                // #zh_CN 将本仓凭证取到玩家背包.
-                case TAKE -> "tst.bottledchaos.credential_hatch.take";
-                case EXECUTION -> "tst.bottledchaos.credential_hatch." + (enabled ? "pause" : "resume");
-                case LIMIT -> label(enabled);
                 case EXPORT -> "tst.bottledchaos.gui.export_material_cache";
                 case CLEAR -> "tst.bottledchaos.credential_hatch.clear";
+                default -> null;
             };
         }
 
@@ -121,7 +108,8 @@ public final class BottledChaosHatchControls {
     }
 
     public static List<ButtonWidget<?>> create(ModularPanel parent, PanelSyncManager manager, String id,
-        Supplier<TST_BottledChaosRecipeTokenHatch> target, BooleanSupplier enabled, Action... actions) {
+        Supplier<TST_BottledChaosRecipeTokenHatch> target, BooleanSupplier enabled, boolean labeled,
+        Action... actions) {
         IPanelHandler settings = manager.syncedPanel(id + "Limit", true, (sync, handler) -> {
             // Freeze the selected hatch when opening: later selection/removal cannot redirect an edit.
             TST_BottledChaosRecipeTokenHatch opened = target.get();
@@ -158,7 +146,11 @@ public final class BottledChaosHatchControls {
                                 ? GTGuiTextures.BUTTON_STANDARD_PRESSED
                                 : GTGuiTextures.BUTTON_STANDARD))
                     .overlay(new DynamicDrawable(() -> action.icon(enabled.getAsBoolean())))
-                    .tooltipBuilder(tooltip -> tooltip.addLine(IKey.lang(action.tooltip(enabled.getAsBoolean()))))
+                    .tooltipBuilder(tooltip -> {
+                        String key = action.tooltip();
+                        if (key != null) tooltip.addLine(IKey.lang(key));
+                        else if (!labeled) tooltip.addLine(IKey.lang(action.label(enabled.getAsBoolean())));
+                    })
                     .tooltipAutoUpdate(true));
         }
         return buttons;

@@ -45,6 +45,8 @@ public final class BottledChaosMachineConfiguration {
     public static final int MODULE_SLOTS = 24;
     private static RecipeMap<?>[] pools = new RecipeMap<?>[0];
     private static final Map<RecipeMap<?>, Integer> poolIndexes = new IdentityHashMap<>();
+    private static int[] displayPools = new int[0];
+    private static long[] displaySources = new long[0];
     private static long[] machinePools = new long[0];
     private static int purificationPlantSlot = -1;
     private static long purificationPools;
@@ -127,6 +129,17 @@ public final class BottledChaosMachineConfiguration {
         if (poolCount() > MAX_POOLS) throw new IllegalStateException("Too many Bottled Chaos machine slots");
         poolIndexes.clear();
         for (int slot = 0; slot < pools.length; slot++) poolIndexes.put(pools[slot], slot);
+        displayPools = java.util.stream.IntStream.range(0, poolCount())
+            .toArray();
+        displaySources = new long[poolCount()];
+        for (var machine : BottledChaosSupportedMachine.values()) for (var route : machine.replacements()) {
+            Integer source = poolIndexes.get(route.pool());
+            Integer target = poolIndexes.get(
+                route.chain()
+                    .get(0));
+            if (source != null && target != null) displayPools[source] = target;
+        }
+        for (int slot = 0; slot < poolCount(); slot++) displaySources[displayPools[slot]] |= 1L << slot;
         machinePools = new long[GregTechAPI.METATILEENTITIES.length];
         for (int id = 0; id < machinePools.length; id++) {
             IMetaTileEntity machine = GregTechAPI.METATILEENTITIES[id];
@@ -153,6 +166,11 @@ public final class BottledChaosMachineConfiguration {
         return pools.length + (purificationPlantSlot < 0 ? 0 : 1);
     }
 
+    /** Query-page grouping only; native recipe identities and execution masks stay distinct. */
+    public static int displayPoolSlot(int slot) {
+        return displayPools[slot];
+    }
+
     public static String poolKey(int slot) {
         return isPurificationPlantSlot(slot) ? PURIFICATION_PLANT_KEY : pools[slot].unlocalizedName;
     }
@@ -174,7 +192,7 @@ public final class BottledChaosMachineConfiguration {
         if (key.equals(PURIFICATION_PLANT_KEY)) {
             // #tr tst.bottledchaos.machine_module.purification_plant
             // # Main Water Purification Plant
-            // #zh_CN 主净水厂
+            // #zh_CN 主净化厂
             return StatCollector.translateToLocal("tst.bottledchaos.machine_module.purification_plant");
         }
         if (key.equals(GTCMRecipe.NeutronActivatorWithEURecipeMap.unlocalizedName)
@@ -237,15 +255,25 @@ public final class BottledChaosMachineConfiguration {
     public int[] sourcesForPool(int pool) {
         loadPendingMachines();
         if (pool < 0 || pool >= poolCount()) return new int[0];
+        return sourcesForMask(1L << pool);
+    }
+
+    public int[] displaySourcesForPool(int pool) {
+        loadPendingMachines();
+        if (pool < 0 || pool >= poolCount() || displayPools[pool] != pool) return new int[0];
+        return sourcesForMask(displaySources[pool]);
+    }
+
+    private int[] sourcesForMask(long mask) {
         return java.util.stream.IntStream.range(0, MODULE_SLOTS)
             .filter(
                 slot -> machineQuantities[slot] > 0 && ((debugPools & (1L << slot)) != 0
-                    || machineStructures[slot] != null && (machineStructures[slot].poolMask() & (1L << pool)) != 0))
+                    || machineStructures[slot] != null && (machineStructures[slot].poolMask() & mask) != 0))
             .toArray();
     }
 
     public ItemStack poolStack(int pool, int candidate) {
-        int[] sources = sourcesForPool(pool);
+        int[] sources = displaySourcesForPool(pool);
         return sources.length == 0 ? null : machines.getStackInSlot(sources[Math.floorMod(candidate, sources.length)]);
     }
 
@@ -314,7 +342,7 @@ public final class BottledChaosMachineConfiguration {
         NBTTagCompound data = new NBTTagCompound();
         data.setInteger("slot", slot);
         if (slot < 0 || slot >= poolCount()) return data;
-        int[] candidates = sourcesForPool(slot);
+        int[] candidates = displaySourcesForPool(slot);
         int sourceSlot = candidates.length == 0 ? -1 : candidates[Math.floorMod(candidate, candidates.length)];
         long quantity = sourceSlot < 0 ? 0 : machineQuantities[sourceSlot];
         data.setLong("quantity", quantity);
@@ -329,12 +357,21 @@ public final class BottledChaosMachineConfiguration {
         if (sourceSlot < 0) return data;
         var source = machineSources[sourceSlot];
         boolean debug = (debugPools & (1L << sourceSlot)) != 0;
+        int nativeSlot = slot;
+        if (!debug) for (int pool = 0; pool < pools.length; pool++) {
+            if (displayPools[pool] == slot && (machineStructures[sourceSlot].poolMask() & (1L << pool)) != 0) {
+                nativeSlot = pool;
+                break;
+            }
+        }
+        RecipeMap<?> nativePool = pools[nativeSlot];
+        data.setInteger("sourcePool", nativeSlot);
         data.setDouble("speed", machineSpeeds[sourceSlot]);
         if ((!debug && source == null) || quantity <= 0) return data;
-        var profile = debug ? Evaluation.defaults(pools[slot], machineSpeeds[sourceSlot])
+        var profile = debug ? Evaluation.defaults(nativePool, machineSpeeds[sourceSlot])
             .profile()
             : BottledChaosMachineParameters
-                .evaluate(source, pools[slot], 1, context, BottledChaosSourceRequirements.NONE)
+                .evaluate(source, nativePool, 1, context, BottledChaosSourceRequirements.NONE)
                 .profile();
         if (profile != null) {
             data.setBoolean("numeric", true);
@@ -353,7 +390,7 @@ public final class BottledChaosMachineConfiguration {
             profile = BottledChaosMachineParameters
                 .evaluate(
                     source,
-                    pools[slot],
+                    nativePool,
                     1,
                     new BottledChaosMachineParameters.Context(
                         32,
@@ -455,14 +492,6 @@ public final class BottledChaosMachineConfiguration {
                 masterTime,
                 masterEU,
                 masterParallel);
-        }
-
-        @Override
-        public Evaluation evaluateSource(RecipeMap<?> map, long recipeVoltage,
-            BottledChaosSourceRequirements requirements) {
-            List<Evaluation> candidates = evaluateCandidates(map, recipeVoltage, requirements);
-            for (Evaluation candidate : candidates) if (candidate.successful()) return candidate;
-            return candidates.get(0);
         }
 
         @Override

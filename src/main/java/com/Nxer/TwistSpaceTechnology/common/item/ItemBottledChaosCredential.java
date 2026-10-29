@@ -167,8 +167,8 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
                 getCapacity(stack)));
         if (!isBound(stack)) {
             // #tr tst.bottledchaos.credential.tooltip.empty
-            // # Inject route tags on the controller's injection page.
-            // #zh_CN 在主机注入页面写入路线标签.
+            // # Write route tags in the controller's credential injection area.
+            // #zh_CN 在主机的凭证注入区域写入路线标签.
             lines.add(StatCollector.translateToLocal("tst.bottledchaos.credential.tooltip.empty"));
         } else {
             long displayTagMask = stack.getTagCompound()

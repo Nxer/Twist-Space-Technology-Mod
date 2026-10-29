@@ -35,7 +35,7 @@ public enum BottledChaosSupportedMachine {
     GT_TILE_ENTITY_PRECISE_HIGH_ENERGY_PHOTONIC_QUANTUM_MASTER("com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster", "main", Machine.PHOTON_MASTER),
     GT_TILE_ENTITY_SPACE_SCALER("com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler", "mainSpaceScaler", Machine.SPACE_SCALER),
     TST_ADVANCED_MEGA_OIL_CRACKER("com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvancedMegaOilCracker", "mainAdvancedMegaOilCracker", Machine.ADVANCED_OIL_CRACKER),
-    TST_BALL_LIGHTNING("com.Nxer.TwistSpaceTechnology.common.machine.TST_BallLightning", "BallLightningMK1", Machine.BALL_LIGHTNING),
+    TST_BALL_LIGHTNING("com.Nxer.TwistSpaceTechnology.common.machine.TST_BallLightning", "BallLightningMK1", Machine.BALL_LIGHTNING, PoolPolicy.ARC_ONLY),
     TST_BIOSPHERE_III("com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII", "mainBiosphereIII", Machine.BIOSPHERE),
     TST_CORE_DEVICE_OF_HUMAN_POWER_GENERATION_FACILITY("com.Nxer.TwistSpaceTechnology.common.machine.TST_CoreDeviceOfHumanPowerGenerationFacility", "mainCoreDeviceOfHumanPowerGenerationFacility", Machine.HUMAN_POWER),
     TST_GIANT_VACUUM_DRYING_FURNACE("com.Nxer.TwistSpaceTechnology.common.machine.TST_GiantVacuumDryingFurnace", "VacuumPump", Machine.GIANT_DRYER, StructureKind.REPEATING),

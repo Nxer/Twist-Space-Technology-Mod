@@ -14,7 +14,6 @@ import java.util.Set;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineConfiguration;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosSupportedMachine;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosSupportedMachine.Replacement;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -44,18 +43,24 @@ public final class BottledChaosProcessAlternatives {
             machine -> machine.replacements()
                 .stream())
         .collect(java.util.stream.Collectors.toList());
+    private static final List<List<RecipeMap<?>>> CHAINS = RULES.stream()
+        .map(Replacement::chain)
+        .distinct()
+        .sorted(
+            java.util.Comparator.comparingInt((List<RecipeMap<?>> chain) -> chain.size())
+                .reversed())
+        .collect(java.util.stream.Collectors.toList());
     private static final List<Group> pending = new ArrayList<>();
     private static Map<Object, Long> additionalCatalysts = Collections.emptyMap();
 
-    public static RecipeMap<?> displayParent(RecipeMap<?> pool) {
-        for (Replacement rule : RULES) if (rule.pool() == pool) return rule.chain()
-            .get(0);
-        return null;
-    }
-
     public static List<RecipeMap<?>> replacementPools() {
         List<RecipeMap<?>> pools = new ArrayList<>();
-        for (Replacement rule : RULES) if (!pools.contains(rule.pool())) pools.add(rule.pool());
+        for (Replacement rule : RULES) {
+            if (!pools.contains(rule.pool())) pools.add(rule.pool());
+            RecipeMap<?> parent = rule.chain()
+                .get(0);
+            if (!pools.contains(parent)) pools.add(parent);
+        }
         if (!pools.contains(RecipeMaps.fluidSolidifierRecipes)) pools.add(RecipeMaps.fluidSolidifierRecipes);
         return pools;
     }
@@ -143,12 +148,7 @@ public final class BottledChaosProcessAlternatives {
     static RecipeData group(RecipeData route) {
         Map<TimeKey, Long> remaining = new LinkedHashMap<>(route.times);
         Map<TimeKey, Long> grouped = new LinkedHashMap<>();
-        List<List<RecipeMap<?>>> chains = new ArrayList<>();
-        for (Replacement rule : RULES) if (!chains.contains(rule.chain())) chains.add(rule.chain());
-        chains.sort(
-            java.util.Comparator.comparingInt((List<RecipeMap<?>> chain) -> chain.size())
-                .reversed());
-        for (List<RecipeMap<?>> chain : chains) for (TimeKey first : new ArrayList<>(remaining.keySet())) {
+        for (List<RecipeMap<?>> chain : CHAINS) for (TimeKey first : new ArrayList<>(remaining.keySet())) {
             if (first.map() != chain.get(0) || first.source() == null) continue;
             if (first.map() == RecipeMaps.vacuumFreezerRecipes && !plasmaCooling(first.source())) continue;
             RecipeData baseline = first.source()
@@ -357,7 +357,4 @@ public final class BottledChaosProcessAlternatives {
                 .getFluid();
     }
 
-    public static long coolingMask() {
-        return BottledChaosMachineConfiguration.mask(COOLING);
-    }
 }

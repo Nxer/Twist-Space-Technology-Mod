@@ -385,7 +385,7 @@ public final class BottledChaosMachineParameters {
                 value.timeDivisor = u.field >= 3 ? 4 : 2;
             }
             case MANUFACTURING -> {
-                if (!manufacturingPool(pool) || u.core < 5) return Evaluation.INVALID;
+                if (u.core < 5) return Evaluation.INVALID;
                 value.set(2L * t, 1 - 0.15 * Math.max(u.core - 5, 0), 1 / (1.2 + 0.5 * (u.core - 5)));
                 value.maximumRecipeTier = u.core;
                 value.compressionTier = 0;
@@ -434,9 +434,12 @@ public final class BottledChaosMachineParameters {
                 value.set(8L * u.itemPipe, 0.85, 1d / 3);
             }
             case SPACE_SCALER -> {
-                if (pool == BartWorksRecipeMaps.electricImplosionCompressorRecipes) {
-                    if (u.field < 11) return Evaluation.INVALID;
-                } else if (pool != RecipeMaps.extractorRecipes || u.field < 1) return Evaluation.INVALID;
+                if (pool != RecipeMaps.compressorRecipes && pool != RecipeMaps.extractorRecipes
+                    && pool != BartWorksRecipeMaps.electricImplosionCompressorRecipes) return Evaluation.INVALID;
+                int requiredField = pool == BartWorksRecipeMaps.electricImplosionCompressorRecipes ? 11 : 1;
+                if (u.field < requiredField) return reject(pool, "field", u.field, requiredField);
+                if (pool == RecipeMaps.compressorRecipes)
+                    value.compressionTier = u.field >= 11 ? Integer.MAX_VALUE : u.field - 1;
                 value.set(Integer.MAX_VALUE, 1, u.field >= 2 ? 0.1 : 1);
                 value.timeDivisor = u.field >= 2 ? 4 : 2;
             }
@@ -451,10 +454,16 @@ public final class BottledChaosMachineParameters {
             }
             case FORGE_HAMMER -> value.set(6L * Math.max(1, u.solenoid) * t, 1, 0.5);
             case PRESSURE_FORMER -> {
-                if (pool != RecipeMaps.hammerRecipes && pool != RecipeMaps.benderRecipes || c < 0)
-                    return Evaluation.INVALID;
-                value.set(1024, 0.75, 1d / (16 * (c + 1)));
-                value.timeDivisor = 4;
+                if (c < 0) return Evaluation.INVALID;
+                boolean extruder = pool == RecipeMaps.extruderRecipes;
+                value.set(
+                    Config.Parallel_MagneticDrivePressureFormer,
+                    Config.EU_Multiplier_MagneticDrivePressureFormer,
+                    1d / ((extruder ? Config.SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer
+                        : Config.SpeedUpMultiplier_OtherMode_MagneticDrivePressureFormer)
+                        * (1 + c * Config.SpeedUpMultiplier_Coil_MagneticDrivePressureFormer)));
+                value.timeDivisor = !extruder
+                    || c >= Config.CoilTier_EnablePerfectOverclockExtruderMode_MagneticDrivePressureFormer ? 4 : 2;
             }
             case COKE_OVEN -> {
                 if (c < 0) return Evaluation.INVALID;
@@ -692,14 +701,6 @@ public final class BottledChaosMachineParameters {
         return new Evaluation(
             null,
             BottledChaosPoolFailure.parameter(pool.unlocalizedName, parameter, available, required));
-    }
-
-    private static boolean manufacturingPool(RecipeMap<?> pool) {
-        return pool == RecipeMaps.autoclaveRecipes || pool == RecipeMaps.extractorRecipes
-            || pool == RecipeMaps.fermentingRecipes
-            || pool == RecipeMaps.fluidExtractionRecipes
-            || pool == RecipeMaps.fluidSolidifierRecipes
-            || pool == RecipeMaps.laserEngraverRecipes;
     }
 
     private static long powerOfTwo(long power) {

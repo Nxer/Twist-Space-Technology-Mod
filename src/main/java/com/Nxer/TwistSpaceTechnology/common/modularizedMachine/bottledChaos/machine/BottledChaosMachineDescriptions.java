@@ -30,6 +30,10 @@ import gregtech.common.tileentities.machines.multi.foundry.FoundryData;
 public final class BottledChaosMachineDescriptions {
 
     public static List<String> replacementDescriptions(ItemStack controller, Structure structure) {
+        return replacementDescriptions(controller, structure, null);
+    }
+
+    private static List<String> replacementDescriptions(ItemStack controller, Structure structure, RecipeMap<?> pool) {
         List<String> lines = new ArrayList<>();
         var source = new BottledChaosMachineParameters.InstalledSource(controller, structure);
         var machine = BottledChaosSupportedMachine.find(source.original);
@@ -42,6 +46,7 @@ public final class BottledChaosMachineDescriptions {
         // # White Dwarf Ingot Mold adds ingot routes while retaining molten routes.
         // #zh_CN 白矮星锭模具新增直出锭路线, 同时保留熔融路线.
         for (var rule : machine.replacements()) {
+            if (pool != null && rule.pool() != pool) continue;
             String chain = rule.chain()
                 .stream()
                 .map(BottledChaosMachineConfiguration::poolName)
@@ -94,6 +99,7 @@ public final class BottledChaosMachineDescriptions {
         // # Source machine: %s
         // #zh_CN 来源机器: %s
         if (controller != null) lines.add(0, text("source_machine", controller.getDisplayName()));
+        lines.addAll(replacementDescriptions(controller, structure, pool));
         return lines;
     }
 
@@ -103,12 +109,22 @@ public final class BottledChaosMachineDescriptions {
         if (controller == null || pool == null) return lines;
         var source = new BottledChaosMachineParameters.InstalledSource(controller, structure);
         Machine machine = source.machine;
-        Profile base = evaluate(
+        var evaluation = evaluate(
             source,
             pool,
             1,
             new BottledChaosMachineParameters.Context(32, 32, new ItemStack[0], new FluidStack[0], 1, 1, 1),
-            BottledChaosSourceRequirements.NONE).profile();
+            BottledChaosSourceRequirements.NONE);
+        Profile base = evaluation.profile();
+        String unavailable = evaluation.failure() == null
+            ? StatCollector.translateToLocal("tst.bottledchaos.result.invalid_source_configuration")
+            : evaluation.failure()
+                .getDisplayString();
+        // Recipe-dependent profiles are described symbolically below; unavailable modes have no numeric parameters.
+        if (base == null && machine != Machine.BIOSPHERE && machine != Machine.QUANTUM && machine != Machine.FOUNDRY) {
+            lines.add(EnumChatFormatting.YELLOW + unavailable);
+            return lines;
+        }
         if (machine == Machine.STELLAR_FORGE || machine == Machine.HEAT_CONVECTOR) {
             if (machine == Machine.STELLAR_FORGE) {
                 // #tr tst.bottledchaos.machine_module.energy_duration
@@ -146,9 +162,7 @@ public final class BottledChaosMachineDescriptions {
         String eu = base == null ? "-" : number(base.euMultiplier());
         String time = base == null ? "-" : number(base.timeMultiplier() / quantitySpeed);
         String oc = base == null ? "-" : clock(base.powerMultiplier(), base.timeDivisor());
-        String restrictions = base == null
-            ? StatCollector.translateToLocal("GT5U.gui.multimachine.incomplete_structure")
-            : machine == Machine.BIO_VAT ? text("culture") : "";
+        String restrictions = base == null ? unavailable : machine == Machine.BIO_VAT ? text("culture") : "";
         String special = "";
         Upgrades u = source.upgrades;
         int shape = structure == null ? 1 : structure.profile();
@@ -320,8 +334,8 @@ public final class BottledChaosMachineDescriptions {
             if (machine == Machine.BLAST_FURNACE) special = text("thermal_oc");
         }
         // #tr tst.bottledchaos.machine_module.parallel
-        // # Parallel: %s
-        // #zh_CN 并行: %s
+        // # Duration normalization basis: %s
+        // #zh_CN 耗时折算基数: %s
         lines.add(EnumChatFormatting.GRAY + text("parallel", EnumChatFormatting.GOLD + parallel));
         // #tr tst.bottledchaos.machine_module.eu
         // # Power multiplier: x%s
@@ -330,26 +344,29 @@ public final class BottledChaosMachineDescriptions {
         // #tr tst.bottledchaos.machine_module.time
         // # Duration multiplier: x%s
         // #zh_CN 耗时倍率: x%s
-        if (variableTime && quantitySpeed != 1) time = "(" + time + ")/" + number(quantitySpeed);
+        if (variableTime && quantitySpeed != 1)
+            time = time.startsWith("1/") ? number(1 / quantitySpeed) + time.substring(1)
+                : number(1 / quantitySpeed) + " x (" + time + ")";
         lines.add(EnumChatFormatting.GRAY + text("time", EnumChatFormatting.GREEN + time));
         // #tr tst.bottledchaos.machine_module.oc
-        // # Overclock: %s
-        // #zh_CN 超频系数: %s
+        // # Per overclock: %s
+        // #zh_CN 每档超频: %s
         lines.add(EnumChatFormatting.GRAY + text("oc", EnumChatFormatting.AQUA + oc));
         int voltageLimit = base != null && machine != Machine.ALLOY_BLAST ? base.maximumRecipeTier() : -1;
         if (voltageLimit >= 0)
             restrictions = append(restrictions, text("recipe_voltage_limit", tierName(voltageLimit)));
-        if (base != null
-            && (machine == Machine.BIO_VAT || machine == Machine.BIOSPHERE && pool != RecipeMaps.brewingRecipes
-                && pool != RecipeMaps.fermentingRecipes)) {
+        if (machine == Machine.BIO_VAT || machine == Machine.BIOSPHERE && pool != RecipeMaps.brewingRecipes
+            && pool != RecipeMaps.fermentingRecipes) {
             // #tr tst.bottledchaos.machine_module.recipe_glass_limit
             // # Maximum culture recipe glass requirement: %s
             // #zh_CN 培养配方所需玻璃等级最高: %s
-            restrictions = append(restrictions, text("recipe_glass_limit", tierName(base.glassTier())));
+            restrictions = append(restrictions, text("recipe_glass_limit", tierName(u.glass)));
         }
         if (base != null && base.casingTier() >= 0)
             restrictions = append(restrictions, text("casing_limit", base.casingTier()));
-        if (base != null && base.compressionTier() >= 0)
+        if (base != null && pool == RecipeMaps.compressorRecipes
+            && base.compressionTier() >= 0
+            && base.compressionTier() < Integer.MAX_VALUE)
             restrictions = append(restrictions, text("compression_limit", base.compressionTier()));
         if (recipeHeat && base != null && base.heat() > 0) {
             String limit = runtime != null && runtime.getBoolean("numeric") ? formatNumber(runtime.getLong("heat"))
@@ -395,10 +412,12 @@ public final class BottledChaosMachineDescriptions {
         if (base != null && base.maximumOverclocks() >= 0
             && machine != Machine.FOUNDRY
             && machine != Machine.NEUTRON
+            && machine != Machine.FUSION
             && machine != Machine.SPINMATRON
             && machine != Machine.LASER_ENGRAVER) special = append(special, text("oc_limit", base.maximumOverclocks()));
         if (machine == Machine.LASER_ENGRAVER)
             special = append(special, text("laser_oc_limit", tierName(u.laserTier + 1)));
+        if (machine == Machine.FUSION) special = append(special, text("fusion_oc_limit"));
         if (parallel.contains("T") || parallel.contains("P")
             || time.contains("P")
             || (runtime == null || !runtime.getBoolean("numeric"))
@@ -421,8 +440,8 @@ public final class BottledChaosMachineDescriptions {
     }
 
     private static String number(double value) {
-        if (value == Integer.MAX_VALUE) return "int";
-        if (value >= Long.MAX_VALUE) return "long";
+        if (value == Integer.MAX_VALUE) return formatNumber(Integer.MAX_VALUE);
+        if (value >= Long.MAX_VALUE) return formatNumber(Long.MAX_VALUE);
         return value == Math.rint(value) ? Long.toString((long) value)
             : String.format(Locale.ROOT, "%.6g", value)
                 .replaceFirst("(\\.\\d*?)0+(?=e|$)", "$1")
@@ -430,9 +449,14 @@ public final class BottledChaosMachineDescriptions {
     }
 
     private static String clock(double power, double divisor) {
+        if (power == 1 && divisor == 1) return StatCollector.translateToLocal("GT5U.gui.text.nil");
+        // #tr tst.bottledchaos.machine_module.clock_fixed_duration
+        // # Power x%s, duration unchanged
+        // #zh_CN 耗电 x%s, 耗时不变
+        if (divisor == 1) return text("clock_fixed_duration", number(power));
         // #tr tst.bottledchaos.machine_module.clock
-        // # EU/t x%s, duration /%s
-        // #zh_CN EU/t x%s, 耗时/%s
+        // # Power x%s, duration /%s
+        // #zh_CN 耗电 x%s, 耗时/%s
         return text("clock", number(power), number(divisor));
     }
 
@@ -477,8 +501,8 @@ public final class BottledChaosMachineDescriptions {
     // #zh_CN 自动培养模式
 
     // #tr tst.bottledchaos.machine_module.radiation
-    // # Packaged radiation hatch is adjustable to the source recipe requirement
-    // #zh_CN 已封装辐射仓可调节至原配方所需辐射
+    // # Ignores radiation requirements
+    // #zh_CN 忽略辐射要求
 
     // #tr tst.bottledchaos.machine_module.dish_count
     // # Matching culture dish count
@@ -489,16 +513,16 @@ public final class BottledChaosMachineDescriptions {
     // #zh_CN 1/[1.6 + 0.6 x (玻璃等级 - 所需玻璃等级)]
 
     // #tr tst.bottledchaos.machine_module.electrode
-    // # Packaged electrode; no startup or durability consumption
-    // #zh_CN 已封装电极; 无启动或耐久消耗
+    // # Ignores electrode startup and durability consumption
+    // #zh_CN 忽略电极启动及耐久消耗
 
     // #tr tst.bottledchaos.machine_module.master
     // # Module duration and power bonuses stack with the main controller's bonuses
     // #zh_CN 模组耗时和耗电增益与主机增益叠加
 
     // #tr tst.bottledchaos.machine_module.master_parallel
-    // # Main controller parallel limit
-    // #zh_CN 主机并行上限
+    // # Main controller duration normalization basis
+    // #zh_CN 主机耗时折算基数
 
     // #tr tst.bottledchaos.machine_module.master_eu
     // # Main controller power multiplier
@@ -545,12 +569,16 @@ public final class BottledChaosMachineDescriptions {
     // #zh_CN T = 主机电压等级; P = 主机可用功率等级
 
     // #tr tst.bottledchaos.machine_module.oc_limit
-    // # Maximum source overclocks: %s
-    // #zh_CN 原配方最大超频次数: %s
+    // # Maximum overclock stages: %s
+    // #zh_CN 最多超频档数: %s
 
     // #tr tst.bottledchaos.machine_module.laser_oc_limit
-    // # Maximum source tier after overclocking: %s
-    // #zh_CN 原配方超频后最高等级: %s
+    // # Overclock voltage limit: %s
+    // #zh_CN 超频电压上限: %s
+
+    // #tr tst.bottledchaos.machine_module.fusion_oc_limit
+    // # Overclock stages depend on the recipe's fusion tier
+    // #zh_CN 超频档数受配方聚变等级限制
 
     // #tr tst.bottledchaos.machine_module.macerator_time
     // # Recipes below %s: %s; others: %s
@@ -602,7 +630,7 @@ public final class BottledChaosMachineDescriptions {
 
     // #tr tst.bottledchaos.machine_module.purification
     // # Purification unit quantity must not exceed main plant quantity
-    // #zh_CN 净化水机器堆叠组数不能超过主净水厂堆叠组数
+    // #zh_CN 净化水机器堆叠组数不能超过主净化厂堆叠组数
 
     // #tr tst.bottledchaos.machine_module.neutron
     // # Source duration is at least 1 tick before quantity speed is applied
