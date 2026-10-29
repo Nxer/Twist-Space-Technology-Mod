@@ -263,7 +263,7 @@ final class BottledChaosHatchPage {
 
     private static ButtonWidget<?> indicator(IntSupplier color, Supplier<List<String>> text, Runnable select) {
         return new ButtonWidget<>().size(8, 8)
-            .background(new DynamicDrawable(() -> new Rectangle().color(color.getAsInt())))
+            .background(BottledChaosGuiSkin.indicator(color))
             .disableHoverBackground()
             .tooltipBuilder(
                 tooltip -> text.get()

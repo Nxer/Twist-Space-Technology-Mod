@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2;
 
 import java.util.function.DoubleSupplier;
+import java.util.function.IntSupplier;
 
 import com.cleanroommc.modularui.api.drawable.IDrawable;
 import com.cleanroommc.modularui.drawable.Rectangle;
@@ -87,6 +88,18 @@ final class BottledChaosGuiSkin {
             fill(context, x + 1, y + 1, width - 2, height - 2, 0xFF101B22, theme);
             int filled = (int) Math.floor((width - 2) * Math.max(0, Math.min(1, value.getAsDouble())));
             fill(context, x + 1, y + 1, filled, height - 2, 0xFF549532, theme);
+        };
+    }
+
+    static IDrawable indicator(IntSupplier color) {
+        return (context, x, y, width, height, theme) -> {
+            fill(context, x, y, width, height, 0xFF252B31, theme);
+            fill(context, x + 1, y + 1, width - 2, height - 2, color.getAsInt(), theme);
+            fill(context, x + 1, y + 1, width - 2, 1, 0x40FFFFFF, theme);
+            fill(context, x + 1, y + 2, 1, height - 3, 0x22FFFFFF, theme);
+            fill(context, x + 2, y + 2, width - 4, height - 5, 0x24FFFFFF, theme);
+            fill(context, x + 1, y + height - 2, width - 2, 1, 0x50000000, theme);
+            fill(context, x + width - 2, y + 2, 1, height - 3, 0x40000000, theme);
         };
     }
 
