@@ -504,7 +504,9 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             NBTTagCompound entry = entries.getCompoundTagAt(i);
             String slots = MM_BottledChaos.formatProcessingGroups(entry.getInteger("slots"));
             lines.add(
-                (summary.getBoolean("errors") ? EnumChatFormatting.RED : EnumChatFormatting.AQUA)
+                (summary.getBoolean("errors") ? EnumChatFormatting.RED
+                    : "gt.interact.desc.mb.running".equals(entry.getString("key")) ? EnumChatFormatting.GOLD
+                        : EnumChatFormatting.AQUA)
                     + (slots.length() == 0 ? "" : slots + " ")
                     + BottledChaosResultData.displayText(entry, "key")
                     + EnumChatFormatting.RESET);

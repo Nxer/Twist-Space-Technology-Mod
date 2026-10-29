@@ -2452,7 +2452,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             entry.setString(
                 "key",
                 base != null && !base.isAllowedToWork() && mMaxProgresstime <= 0 ? BottledChaosStatus.PAUSED.key()
-                    : "GT5U.gui.hoverable.runningfine");
+                    : "gt.interact.desc.mb.running");
             entries.appendTag(entry);
         }
         summary.setTag("entries", entries);
