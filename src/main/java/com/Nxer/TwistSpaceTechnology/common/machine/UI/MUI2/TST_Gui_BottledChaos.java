@@ -28,6 +28,7 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.mach
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.result.BottledChaosResultData;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosProcessAlternatives;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTextLayout;
+import com.cleanroommc.modularui.api.GuiAxis;
 import com.cleanroommc.modularui.api.drawable.IDrawable;
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.api.widget.IWidget;
@@ -314,67 +315,73 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             .findSyncHandler("bottledChaosProcessingGroups", GenericSyncValue.class);
         for (int i = 0; i < MM_BottledChaos.THREAD_COUNT; i++) {
             int index = i;
-            terminal.child(
-                Flow.column()
-                    .fullWidth()
-                    .coverChildrenHeight(0)
-                    .crossAxisAlignment(Alignment.CrossAxis.START)
-                    .collapseDisabledChild()
-                    .childPadding(2)
-                    .marginTop(6)
-                    .marginBottom(4)
-                    .setEnabledIf(widget -> index < MM_BottledChaos.getProcessingGroupCount(groups.getValue()))
-                    .child(groupHeader(groups::getValue, index))
-                    .child(
-                        IKey.dynamic(
-                            () -> MM_BottledChaos
-                                .getBlockedRouteText(MM_BottledChaos.getProcessingGroupData(groups.getValue(), index)))
+            terminal.child(new Flow(GuiAxis.Y) {
+
+                @Override
+                public void onChildChangeEnabled(IWidget child, boolean enabled) {
+                    super.onChildChangeEnabled(child, enabled);
+                    // Local Flow layout does not remeasure its height or reposition subsequent groups.
+                    terminal.scheduleResize();
+                }
+            }.fullWidth()
+                .coverChildrenHeight(0)
+                .crossAxisAlignment(Alignment.CrossAxis.START)
+                .collapseDisabledChild()
+                .childPadding(2)
+                .marginTop(6)
+                .marginBottom(4)
+                .setEnabledIf(widget -> index < MM_BottledChaos.getProcessingGroupCount(groups.getValue()))
+                .child(groupHeader(groups::getValue, index))
+                .child(
+                    IKey.dynamic(
+                        () -> MM_BottledChaos
+                            .getBlockedRouteText(MM_BottledChaos.getProcessingGroupData(groups.getValue(), index)))
+                        .asWidget()
+                        .fullWidth()
+                        .textAlign(Alignment.TopLeft)
+                        .shadow(false)
+                        .setEnabledIf(
+                            widget -> MM_BottledChaos.getProcessingGroupData(groups.getValue(), index)
+                                .hasKey("blockedRoute", 10)))
+                .child(
+                    new ParentWidget<>().fullWidth()
+                        .height(11)
+                        .background(skin.progress(() -> {
+                            NBTTagCompound job = MM_BottledChaos.getProcessingGroupData(groups.getValue(), index);
+                            return job.getInteger("progress") / (double) Math.max(1, job.getInteger("duration"));
+                        }))
+                        .disableHoverBackground()
+                        .child(IKey.dynamic(() -> {
+                            NBTTagCompound job = MM_BottledChaos.getProcessingGroupData(groups.getValue(), index);
+                            return job.getInteger("duration") < 20
+                                ? StatCollector.translateToLocalFormatted(
+                                    "GT5U.waila.machine.progress_tick",
+                                    job.getInteger("progress"),
+                                    job.getInteger("duration"))
+                                : StatCollector.translateToLocalFormatted(
+                                    "GT5U.waila.machine.progress_second",
+                                    String.format("%.2f", job.getInteger("progress") / 20d),
+                                    String.format("%.2f", job.getInteger("duration") / 20d));
+                        })
                             .asWidget()
                             .fullWidth()
-                            .textAlign(Alignment.TopLeft)
-                            .shadow(false)
-                            .setEnabledIf(
-                                widget -> MM_BottledChaos.getProcessingGroupData(groups.getValue(), index)
-                                    .hasKey("blockedRoute", 10)))
-                    .child(
-                        new ParentWidget<>().fullWidth()
                             .height(11)
-                            .background(skin.progress(() -> {
-                                NBTTagCompound job = MM_BottledChaos.getProcessingGroupData(groups.getValue(), index);
-                                return job.getInteger("progress") / (double) Math.max(1, job.getInteger("duration"));
-                            }))
-                            .disableHoverBackground()
-                            .child(IKey.dynamic(() -> {
-                                NBTTagCompound job = MM_BottledChaos.getProcessingGroupData(groups.getValue(), index);
-                                return job.getInteger("duration") < 20
-                                    ? StatCollector.translateToLocalFormatted(
-                                        "GT5U.waila.machine.progress_tick",
-                                        job.getInteger("progress"),
-                                        job.getInteger("duration"))
-                                    : StatCollector.translateToLocalFormatted(
-                                        "GT5U.waila.machine.progress_second",
-                                        String.format("%.2f", job.getInteger("progress") / 20d),
-                                        String.format("%.2f", job.getInteger("duration") / 20d));
-                            })
-                                .asWidget()
-                                .fullWidth()
-                                .height(11)
-                                .textAlign(Alignment.Center)
-                                .color(MODULE_TEXT)
-                                .shadow(false))
-                            .setEnabledIf(
-                                widget -> MM_BottledChaos.getProcessingGroupData(groups.getValue(), index)
-                                    .getInteger("duration") > 0))
-                    .child(
-                        new ParentWidget<>().fullWidth()
-                            .height(12)
-                            .background(new DynamicDrawable(() -> groupOutput(groups.getValue(), index)))
-                            .disableHoverBackground()
-                            .setEnabledIf(
-                                widget -> MM_BottledChaos.getProcessingGroupData(groups.getValue(), index)
-                                    .getCompoundTag("outputs")
-                                    .getTagList("entries", 10)
-                                    .tagCount() > 0)));
+                            .textAlign(Alignment.Center)
+                            .color(MODULE_TEXT)
+                            .shadow(false))
+                        .setEnabledIf(
+                            widget -> MM_BottledChaos.getProcessingGroupData(groups.getValue(), index)
+                                .getInteger("duration") > 0))
+                .child(
+                    new ParentWidget<>().fullWidth()
+                        .height(12)
+                        .background(new DynamicDrawable(() -> groupOutput(groups.getValue(), index)))
+                        .disableHoverBackground()
+                        .setEnabledIf(
+                            widget -> MM_BottledChaos.getProcessingGroupData(groups.getValue(), index)
+                                .getCompoundTag("outputs")
+                                .getTagList("entries", 10)
+                                .tagCount() > 0)));
         }
         return terminal;
     }
