@@ -8,12 +8,15 @@ import java.util.regex.Pattern;
 
 import net.minecraft.entity.player.EntityPlayer;
 
+import org.lwjgl.input.Mouse;
+
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BottledChaosRecipeTokenHatch;
 import com.cleanroommc.modularui.api.IPanelHandler;
 import com.cleanroommc.modularui.api.drawable.IDrawable;
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.drawable.DynamicDrawable;
 import com.cleanroommc.modularui.screen.ModularPanel;
+import com.cleanroommc.modularui.theme.WidgetThemeEntry;
 import com.cleanroommc.modularui.utils.Alignment;
 import com.cleanroommc.modularui.value.sync.InteractionSyncHandler;
 import com.cleanroommc.modularui.value.sync.LongSyncValue;
@@ -21,6 +24,8 @@ import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.widgets.ButtonWidget;
 import com.cleanroommc.modularui.widgets.textfield.TextFieldWidget;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.modularui2.GTGuis;
 
@@ -126,18 +131,18 @@ public final class BottledChaosHatchControls {
         });
         List<ButtonWidget<?>> buttons = new ArrayList<>();
         for (Action action : actions) {
-            InteractionSyncHandler interaction = new InteractionSyncHandler().setOnMousePressed(mouse -> {
+            InteractionSyncHandler interaction = new InteractionSyncHandler().setOnMouseReleased(mouse -> {
                 if (mouse.mouseButton != 0 || mouse.isClient()) return;
                 TST_BottledChaosRecipeTokenHatch hatch = target.get();
                 if (hatch != null && hatch.isValid()) action.execute(hatch, manager.getPlayer());
             });
             manager.syncValue(id + action.name(), interaction);
             buttons.add(
-                new ButtonWidget<>().size(18, 18)
+                new ActionButton().size(18, 18)
                     .syncHandler(interaction)
-                    .onMousePressed(mouse -> {
+                    .onMouseReleased(mouse -> {
                         if (mouse != 0) return false;
-                        if (action != Action.LIMIT) return interaction.onMousePressed(mouse);
+                        if (action != Action.LIMIT) return interaction.onMouseReleased(mouse);
                         if (settings.isPanelOpen()) settings.closePanel();
                         else {
                             // MUI caches closed panels; rebuild this slot-free editor for the newly selected hatch.
@@ -157,6 +162,34 @@ public final class BottledChaosHatchControls {
                     .tooltipAutoUpdate(true));
         }
         return buttons;
+    }
+
+    private static final class ActionButton extends ButtonWidget<ActionButton> {
+
+        private boolean pressed;
+
+        @Override
+        public Result onMousePressed(int mouseButton) {
+            if (mouseButton != 0) return Result.IGNORE;
+            pressed = true;
+            playClickSound();
+            return Result.SUCCESS;
+        }
+
+        @Override
+        public boolean onMouseRelease(int mouseButton) {
+            if (mouseButton != 0 || !pressed) return false;
+            pressed = false;
+            return isHovering() && super.onMouseRelease(mouseButton);
+        }
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public IDrawable getCurrentBackground(WidgetThemeEntry<?> theme) {
+            // A release outside the button need not be dispatched to it by MUI.
+            if (!isHovering() || !Mouse.isButtonDown(0)) pressed = false;
+            return pressed ? GTGuiTextures.BUTTON_STANDARD_PRESSED : super.getCurrentBackground(theme);
+        }
     }
 
     private static ModularPanel createLimitPanel(ModularPanel parent,
