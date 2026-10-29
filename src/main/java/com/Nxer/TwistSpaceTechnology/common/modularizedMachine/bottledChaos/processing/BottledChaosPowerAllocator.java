@@ -1,27 +1,18 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.processing;
 
-import java.math.BigInteger;
-
 /** Proportional power allocation; credential frame capacities are independent of tag costs. */
 public final class BottledChaosPowerAllocator {
 
-    public static long powerForShare(long power, long share, long totalCapacity) {
+    public static long powerForShare(long power, int share, int totalCapacity) {
         if (power <= 0 || share <= 0 || totalCapacity <= 0 || share > totalCapacity) return 0;
-        // Split before multiplication to keep ordinary credential capacities entirely in long arithmetic.
-        try {
-            return power / totalCapacity * share + Math.multiplyExact(power % totalCapacity, share) / totalCapacity;
-        } catch (ArithmeticException exception) {
-            return BigInteger.valueOf(power)
-                .multiply(BigInteger.valueOf(share))
-                .divide(BigInteger.valueOf(totalCapacity))
-                .longValueExact();
-        }
+        // The remainder and share are bounded by int; their product fits in long even at maximum power.
+        return power / totalCapacity * share + (power % totalCapacity) * share / totalCapacity;
     }
 
     /** Lower hatch numbers receive indivisible EU/t remainders first; zero-weight slots reserve nothing. */
-    public static long[] proportionalBudgets(long power, long[] capacities) {
-        long total = 0;
-        for (long capacity : capacities) {
+    public static long[] proportionalBudgets(long power, int[] capacities) {
+        int total = 0;
+        for (int capacity : capacities) {
             if (capacity < 0) throw new IllegalArgumentException("Negative capacity");
             total = Math.addExact(total, capacity);
         }

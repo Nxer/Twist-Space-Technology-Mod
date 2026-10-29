@@ -64,10 +64,10 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
         return StatCollector.translateToLocal("tst.bottledchaos.credential." + stack.getItemDamage() + ".name");
     }
 
-    public static long getCapacity(ItemStack stack) {
+    public static int getCapacity(ItemStack stack) {
         if (stack == null || stack.getItem() != TstItems.BottledChaosCredential || stack.stackSize != 1) return 0;
         int meta = stack.getItemDamage();
-        return meta >= 0 && meta <= MAX_META ? 1L << (2 * meta) : 0;
+        return meta >= 0 && meta <= MAX_META ? 1 << (2 * meta) : 0;
     }
 
     public static ItemStack getRecipeFamily(ItemStack stack) {
@@ -91,7 +91,7 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
     }
 
     public static boolean setBinding(ItemStack stack, long routeMask, int occupiedWeight) {
-        long capacity = getCapacity(stack);
+        int capacity = getCapacity(stack);
         if (capacity == 0 || (routeMask & ~CredentialModel.ALL_ROUTE_MASK) != 0
             || (routeMask == 0) != (occupiedWeight == 0)
             || occupiedWeight < getRequiredWeight(routeMask)

@@ -184,7 +184,7 @@ public final class BottledChaosCrafting {
 
     private static Result inject(ItemStackHandler inventory) {
         ItemStack target = inventory.getStackInSlot(CARRIER_SLOT);
-        long targetCapacity = ItemBottledChaosCredential.getCapacity(target);
+        int targetCapacity = ItemBottledChaosCredential.getCapacity(target);
         if (targetCapacity <= 0) {
             return Result.failure("tst.bottledchaos.gui.credential_injection.missing_target");
         }
@@ -209,7 +209,7 @@ public final class BottledChaosCrafting {
             ItemStack source = inventory.getStackInSlot(slot);
             if (source == null) continue;
             hasSource = true;
-            long sourceCapacity = ItemBottledChaosCredential.getCapacity(source);
+            int sourceCapacity = ItemBottledChaosCredential.getCapacity(source);
             long sourceMask;
             int sourceWeight;
             if (sourceCapacity > 0) {
@@ -260,7 +260,7 @@ public final class BottledChaosCrafting {
     }
 
     /** Null means splitting does not apply; ordinary injection must still be attempted. */
-    private static Result trySplit(ItemStackHandler inventory, ItemStack target, long targetCapacity) {
+    private static Result trySplit(ItemStackHandler inventory, ItemStack target, int targetCapacity) {
         if (ItemBottledChaosCredential.getRouteMask(target) != 0) return null;
 
         int sourceSlot = -1;
@@ -275,14 +275,12 @@ public final class BottledChaosCrafting {
         if (!ItemBottledChaosCredential.isBound(source)) return null;
 
         long sourceMask = ItemBottledChaosCredential.getRouteMask(source);
+        if (ItemBottledChaosCredential.getRequiredWeight(sourceMask) <= targetCapacity) return null;
         List<Integer> routeIndices = new ArrayList<>();
-        long individualCostSum = 0;
         for (int index = 0; index < CredentialModel.ROUTE_COUNT; index++) {
             if ((sourceMask & (1L << index)) == 0) continue;
             routeIndices.add(index);
-            individualCostSum += ItemBottledChaosCredential.getRequiredWeight(1L << index);
         }
-        if (individualCostSum <= targetCapacity) return null;
 
         routeIndices.sort(
             (left, right) -> Integer.compare(

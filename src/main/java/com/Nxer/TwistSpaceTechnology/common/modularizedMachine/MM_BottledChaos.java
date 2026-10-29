@@ -337,8 +337,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private final ItemStack[] installedCredentials = new ItemStack[THREAD_COUNT];
     private final boolean[] matchingCredentials = new boolean[THREAD_COUNT];
     private final int[] inputPeerMasks = new int[THREAD_COUNT];
-    private final long[] credentialCosts = new long[THREAD_COUNT];
-    private final long[] powerWeights = new long[THREAD_COUNT];
+    private final int[] credentialCosts = new int[THREAD_COUNT];
+    private final int[] powerWeights = new int[THREAD_COUNT];
     private CheckRecipeResult cacheExportResult = CheckRecipeResultRegistry.NONE;
     private int cacheExportSlot = -1;
     private long cacheExportResultExpiresAt;
@@ -361,8 +361,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private int generatorLevel = -1;
     private int minimumUpgradeGlassTier;
     private int maximumUpgradeGlassTier;
-    private long capacity;
-    private long allocatedCapacity = -1;
+    private int capacity;
+    private int allocatedCapacity = -1;
     private long inputPower = -1;
     private long poolMask;
     private long schedulerTick;
@@ -668,7 +668,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     }
 
     private boolean calculateCapacity() {
-        long calculatedCapacity = 0;
+        int calculatedCapacity = 0;
         for (int region = 0; region < CAPACITY_REGION_COUNT; region++) {
             int selectedTier = -1;
             for (int tier = 0; tier < CAPACITY_LEVEL_COUNT; tier++) {
@@ -677,19 +677,19 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 if (selectedTier >= 0 || count != CAPACITY_REGION_BLOCK_COUNT) return false;
                 selectedTier = tier;
             }
-            calculatedCapacity += 1L << ((selectedTier + 1) * 2);
+            calculatedCapacity += 1 << ((selectedTier + 1) * 2);
         }
         capacity = calculatedCapacity;
         return true;
     }
 
-    public long getBottledChaosCapacity() {
+    public int getBottledChaosCapacity() {
         return capacity;
     }
 
-    public long getBottledChaosUsedCapacity() {
-        long used = 0;
-        for (long cost : credentialCosts) used += cost;
+    public int getBottledChaosUsedCapacity() {
+        int used = 0;
+        for (int cost : credentialCosts) used += cost;
         return used;
     }
 
@@ -841,7 +841,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             for (int slot = 0; slot < THREAD_COUNT; slot++) {
                 credentialCosts[slot] = validGroup(slot) && !isThreadExecutionDisabled(slot)
                     && ItemBottledChaosCredential.isBound(installedCredentials[slot])
-                        ? (long) ItemBottledChaosCredential
+                        ? ItemBottledChaosCredential
                             .getRequiredWeight(ItemBottledChaosCredential.getRouteMask(installedCredentials[slot]))
                             * (activeConcentratedPower ? Integer.bitCount(getInputPeerMask(slot)) + 1 : 1)
                         : 0;
@@ -1045,7 +1045,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             }
             // At most one candidate is removed per attempt. Rebuild all reservations after removal.
             while (candidates != 0) {
-                long[] weights = new long[THREAD_COUNT];
+                int[] weights = new int[THREAD_COUNT];
                 for (int slot = 0; slot < THREAD_COUNT; slot++) {
                     if ((candidates & (1 << slot)) != 0) weights[slot] = powerWeights[slot];
                 }
@@ -1979,7 +1979,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     /** Always synchronized while the host GUI is open; switching pages never clears the overview. */
     public NBTTagCompound getCredentialHatchSummary() {
         NBTTagCompound summary = new NBTTagCompound();
-        summary.setLong("capacity", capacity);
+        summary.setInteger("capacity", capacity);
         NBTTagList hatches = new NBTTagList();
         for (int slot = 0; slot < THREAD_COUNT; slot++) {
             hatches.appendTag(getCredentialHatchInformation(getManagedCredentialHatch(slot), this, slot, false));
@@ -2025,7 +2025,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if (!connected) return data;
         controller.writeProcessingGroupInformation(data, slot);
         data.setInteger("boundSlots", controller.getInputPeerMask(slot));
-        data.setLong("capacity", controller.capacity);
+        data.setInteger("capacity", controller.capacity);
         BottledChaosThread thread = controller.threads[slot];
         if (details) data.setTag(
             "outputs",
@@ -2356,8 +2356,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         tag.removeTag("powerPanelMaxParallel");
         // Replace absolute EU/t with per-credential allocation percentages.
         tag.removeTag("energyUsage");
-        tag.setLong(WAILA_CAPACITY, capacity);
-        tag.setLong(WAILA_USED_CAPACITY, getBottledChaosUsedCapacity());
+        tag.setInteger(WAILA_CAPACITY, capacity);
+        tag.setInteger(WAILA_USED_CAPACITY, getBottledChaosUsedCapacity());
         tag.setInteger(WAILA_CREDENTIAL_HATCHES, getInstalledCredentialHatchCount());
         tag.setInteger(WAILA_CREDENTIAL_HATCH_LIMIT, credentialHatchLimit);
         tag.setString(WAILA_RECIPE_CATEGORIES, getRecipeCategoryKeyList());
@@ -2369,7 +2369,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     /** Shared server snapshot for the runtime tab and controller Waila. */
     public NBTTagCompound getProcessingGroupSummary() {
         NBTTagCompound summary = new NBTTagCompound();
-        summary.setLong(WAILA_CAPACITY, capacity);
+        summary.setInteger(WAILA_CAPACITY, capacity);
         NBTTagList jobs = new NBTTagList();
         for (int i = 0; i < THREAD_COUNT; i++) {
             if (installedCredentials[i] == null && !threads[i].isBusy()) continue;
@@ -2412,8 +2412,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         currentTip.add(
             EnumChatFormatting.WHITE + StatCollector.translateToLocalFormatted(
                 "tst.bottledchaos.capacity_usage",
-                tag.getLong(WAILA_USED_CAPACITY),
-                tag.getLong(WAILA_CAPACITY)));
+                tag.getInteger(WAILA_USED_CAPACITY),
+                tag.getInteger(WAILA_CAPACITY)));
         currentTip.add(
             EnumChatFormatting.WHITE + StatCollector.translateToLocalFormatted(
                 "tst.bottledchaos.credential_hatches",

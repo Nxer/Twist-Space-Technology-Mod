@@ -225,8 +225,8 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             () -> terminalPageIndex,
             value -> terminalPageIndex = Math.max(0, Math.min(2, value))).allowC2S();
         syncManager.syncValue("bottledChaosTerminalPage", terminalPage);
-        syncManager.syncValue("bottledChaosCapacity", new LongSyncValue(multiblock::getBottledChaosCapacity));
-        syncManager.syncValue("bottledChaosUsedCapacity", new LongSyncValue(multiblock::getBottledChaosUsedCapacity));
+        syncManager.syncValue("bottledChaosCapacity", new IntSyncValue(multiblock::getBottledChaosCapacity));
+        syncManager.syncValue("bottledChaosUsedCapacity", new IntSyncValue(multiblock::getBottledChaosUsedCapacity));
         syncManager
             .syncValue("bottledChaosCredentialHatches", new IntSyncValue(multiblock::getInstalledCredentialHatchCount));
         syncManager
@@ -265,8 +265,8 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
     protected ListWidget<IWidget, ?> createTerminalTextWidget(PanelSyncManager syncManager, ModularPanel parent) {
         ListWidget<IWidget, ?> terminal = new ListWidget<>().fullWidth()
             .crossAxisAlignment(Alignment.CrossAxis.START);
-        LongSyncValue capacity = syncManager.findSyncHandler("bottledChaosCapacity", LongSyncValue.class);
-        LongSyncValue usedCapacity = syncManager.findSyncHandler("bottledChaosUsedCapacity", LongSyncValue.class);
+        IntSyncValue capacity = syncManager.findSyncHandler("bottledChaosCapacity", IntSyncValue.class);
+        IntSyncValue usedCapacity = syncManager.findSyncHandler("bottledChaosUsedCapacity", IntSyncValue.class);
         IntSyncValue hatches = syncManager.findSyncHandler("bottledChaosCredentialHatches", IntSyncValue.class);
         IntSyncValue hatchLimit = syncManager.findSyncHandler("bottledChaosCredentialHatchLimit", IntSyncValue.class);
         GenericSyncValue<NBTTagCompound, ?> status = syncManager
@@ -281,8 +281,8 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             IKey.dynamic(
                 () -> EnumChatFormatting.WHITE + StatCollector.translateToLocalFormatted(
                     "tst.bottledchaos.capacity_usage",
-                    usedCapacity.getLongValue(),
-                    capacity.getLongValue()))
+                    usedCapacity.getIntValue(),
+                    capacity.getIntValue()))
                 .asWidget()
                 .fullWidth()
                 .marginBottom(2));
