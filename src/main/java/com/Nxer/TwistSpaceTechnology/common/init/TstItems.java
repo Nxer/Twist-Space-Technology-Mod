@@ -14,6 +14,7 @@ import com.Nxer.TwistSpaceTechnology.common.item.ItemEcoSphereExecutionProtocol;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemEcoSphereUpgrade;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemHatchUpdateTool;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemInfinityDistilledWaterStorageCell;
+import com.Nxer.TwistSpaceTechnology.common.item.ItemLifeEssenceSingularity;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemMultiStructuresLinkTool;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemNamedCircuit;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemProofOfHeroes;
@@ -23,6 +24,7 @@ import com.Nxer.TwistSpaceTechnology.common.item.TSTGeneratedItem;
 public class TstItems {
 
     public static final ItemAdder01 MetaItem01 = new ItemAdder01();
+    public static final Item LifeEssenceSingularity = new ItemLifeEssenceSingularity();
     public static final ItemEcoSphereExecutionProtocol EcoSphereExecutionProtocol = new ItemEcoSphereExecutionProtocol();
     public static final ItemEcoSphereUpgrade EcoSphereUpgrade = new ItemEcoSphereUpgrade();
     public static final ItemAdderRune MetaItemRune = new ItemAdderRune();

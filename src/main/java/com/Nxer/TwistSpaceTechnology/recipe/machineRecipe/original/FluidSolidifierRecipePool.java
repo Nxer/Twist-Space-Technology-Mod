@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.LifeEssenceSingularity;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MoldSingularity;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.ModItem.getModItem;
 import static gregtech.api.enums.TierEU.RECIPE_UEV;
@@ -37,6 +38,19 @@ public class FluidSolidifierRecipePool {
                 .eut(19198100)
                 .duration(20 * 514)
                 .addTo(fs);
+
+            // Life Essence Singularity
+            FluidStack lifeEssence = FluidRegistry.getFluidStack("lifeessence", Integer.MAX_VALUE);
+            if (lifeEssence != null) {
+                GTValues.RA.stdBuilder()
+                    .itemInputs(MoldSingularity.get(0))
+                    .fluidInputs(lifeEssence)
+                    .itemOutputs(LifeEssenceSingularity.get(1))
+                    .eut(RECIPE_UV)
+                    .duration(20)
+                    .addTo(fs);
+            }
+
             // Iron Singularity
             GTValues.RA.stdBuilder()
                 .itemInputs(MoldSingularity.get(0))

@@ -475,7 +475,8 @@ public class TSTUtils {
             }
         }
 
-        return itemMap.values().toArray(new ItemStack[0]);
+        return itemMap.values()
+            .toArray(new ItemStack[0]);
     }
 
     public static ItemStack[] remove0Stack(ItemStack... stacks) {

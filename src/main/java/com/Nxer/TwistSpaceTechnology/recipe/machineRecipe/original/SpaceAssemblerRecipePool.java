@@ -22,7 +22,6 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
-import gtPlusPlus.core.item.ModItems;
 import gtPlusPlus.core.material.MaterialMisc;
 import gtnhintergalactic.recipe.IGRecipeMaps;
 
@@ -42,7 +41,7 @@ public class SpaceAssemblerRecipePool {
                 .itemInputs(
                     GTUtility.getIntegratedCircuit(24),
                     Materials.Neutronium.getNanite(1),
-                    new ItemStack(ModItems.itemStandarParticleBase, 3),
+                    ItemList.StableBosonContainmentUnit.get(3),
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.ElectrumFlux, 64),
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Lanthanum, 64),
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Lanthanum, 64),

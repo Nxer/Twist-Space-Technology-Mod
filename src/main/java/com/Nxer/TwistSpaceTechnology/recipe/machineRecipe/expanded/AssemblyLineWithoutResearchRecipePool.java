@@ -83,7 +83,6 @@ import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTRecipeBuilder;
 import gregtech.api.util.GTUtility;
-import gtPlusPlus.core.item.ModItems;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
@@ -916,7 +915,7 @@ public class AssemblyLineWithoutResearchRecipePool {
                     Materials.Neutronium.getNanite(1),
                     GTUtility.copyAmountUnsafe(4096, Materials.Lanthanum.getPlates(1)),
                     GTUtility.copyAmountUnsafe(6144, Materials.NaquadahAlloy.getPlates(1)),
-                    new ItemStack(ModItems.itemStandarParticleBase, 1))
+                    ItemList.StableBosonContainmentUnit.get(1))
                 .fluidInputs(
                     new FluidStack(solderUEV, 144 * 1024),
                     Materials.Lead.getMolten(144 * 16 * 1024),

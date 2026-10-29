@@ -24,6 +24,7 @@ public enum GTCMItemList {
     ProofOfHeroes,
     ProofOfGods,
     MoldSingularity,
+    LifeEssenceSingularity,
     ParticleTrapTimeSpaceShield,
     LapotronShard,
     PerfectLapotronCrystal,

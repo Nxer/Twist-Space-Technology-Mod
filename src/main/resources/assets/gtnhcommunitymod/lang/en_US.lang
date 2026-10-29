@@ -343,6 +343,7 @@ item.tst.ecosphere.upgrade.5.name=Eco-Sphere Upgrade: Perfect Genetics
 item.tst.ecosphere.upgrade.5.tooltip=Enhanced Genetic Attributes
 item.tst.ecosphere.upgrade.6.name=Eco-Sphere Upgrade: Output Pulverization
 item.tst.ecosphere.upgrade.6.tooltip=Pulverized Outputs
+item.tst.life_essence_singularity.name=Life Essence Singularity
 itemGroup.TST=Twist Space Technology
 itemGroup.TSTBlocks1=TST Blocks 1
 itemGroup.TSTGears=TST Gears
@@ -1372,7 +1373,7 @@ tst.common.machine.MegaSolarPanelFactory.tooltip.info.02=§dPerfect overclocking
 tst.common.machine.MegaSolarPanelFactory.tooltip.info.03=Recipe Time Multiplier = 100% / Component Casing Tier.
 tst.common.machine.MegaSolarPanelFactory.tooltip.machine_type=Solar Factory
 tst.common.machine.MegaSolarPanelFactory.waila.tst_mega_solar_panel_factory.1=§aBatch mode is ON
-tst.common.machine.MegaSolarPanelFactory.waila.tst_mega_solar_panel_factory.2=§aCurrent Speed Bonus
+tst.common.machine.MegaSolarPanelFactory.waila.tst_mega_solar_panel_factory.2=§aCurrent Recipe Time Multiplier
 tst.common.machine.MegaStoneBreaker.name=Silicon Rock Synthesizer
 tst.common.machine.MegaStoneBreaker.tooltip.controller=Controller block for the Silicon Rock Synthesizer
 tst.common.machine.MegaStoneBreaker.tooltip.info.01=§fHey, I heard you come from a sky island?

@@ -59,13 +59,13 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.FusionReactor
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.MixerRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.NACRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.NanoForgeRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.ParticleColliderRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.QFTRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.SpaceAssemblerRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.DragonBloodRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.LanthanidesRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipes.CropsMutationRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.tempRecipe.ElvenWorkshopTransitionRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.tempRecipe.SoulFragmentRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.tempRecipe.SwelegfyrTransitionRecipes;
 import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.logic.StaticMiscs;
 import com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipeHandler;
@@ -96,6 +96,7 @@ public class RecipeLoader {
         CardiganRecipes.loadRecipes();
         ElvenWorkshopTransitionRecipes.loadRecipes();
         SwelegfyrTransitionRecipes.loadRecipes();
+        SoulFragmentRecipes.loadRecipes();
 
         // Original GTNH RecipeMap
         BeamCrafterRecipePool.loadRecipes();
@@ -110,7 +111,6 @@ public class RecipeLoader {
         QFTRecipePool.loadRecipes();
         NanoForgeRecipePool.loadRecipes();
         FluidHeaterRecipePool.loadRecipes();
-        ParticleColliderRecipePool.loadRecipes();
         FusionReactorRecipePool.loadRecipes();
         SpaceAssemblerRecipePool.loadRecipes();
         TCRecipePool.loadRecipes();
