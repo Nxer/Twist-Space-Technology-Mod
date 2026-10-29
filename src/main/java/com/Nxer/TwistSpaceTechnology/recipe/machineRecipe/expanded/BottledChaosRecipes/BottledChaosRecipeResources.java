@@ -133,6 +133,7 @@ public final class BottledChaosRecipeResources {
             new TagDefinition("purified_water_8", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
             new TagDefinition("crystal_cycle", true, "crystal_cycle", BottledChaosRecipePage.DEFAULT),
             new TagDefinition("cerium_lutetium_garnet", true, "cerium_lutetium_garnet", BottledChaosRecipePage.DEFAULT),
+            new TagDefinition("tesseract", true, "tesseract", BottledChaosRecipePage.DEFAULT),
             new TagDefinition("eternity", HAS_ETERNITY, "eternity", BottledChaosRecipePage.DEFAULT),
             new TagDefinition("magmatter", true, "magmatter", BottledChaosRecipePage.DEFAULT),
             new TagDefinition("phonon_medium", true, "phonon_medium", BottledChaosRecipePage.DEFAULT),
@@ -339,6 +340,7 @@ public final class BottledChaosRecipeResources {
             register("purified_water_8", recipeItemId(Materials.Grade8PurifiedWater.getCells(1)), recipeItemId(Materials.Grade8PurifiedWater.getCells(1)));
             register("crystal_cycle", RawCrystalChip, RawCrystalChip);
             register("cerium_lutetium_garnet", CeriumLutetiumAluminiumOxygenBlendDust, ExquisiteCeriumLutetiumAluminiumGarnet);
+            register("tesseract", Materials.ExcitedDTRC.getFluid(1).getFluid(), recipeItemId(ItemList.Tesseract.get(1)));
             if (CredentialModel.HAS_ETERNITY) register("eternity", EternalSingularity, EternityMolten);
             register("magmatter", recipeItemId(Materials.MagMatter.getDust(1)), recipeItemId(Materials.MagMatter.getDust(1)));
             register("phonon_medium", MagMatterRound, PhononMedium);
@@ -778,6 +780,9 @@ public final class BottledChaosRecipeResources {
     public static final TST_ItemID PulsatingCrystalDust = enderIOItem(14);
 
     // Advanced-material process items and optional singularity identities.
+    public static final TST_ItemID EnderQuantumComponent = modItem(Mods.SuperSolarPanels, "enderquantumcomponent", 0);
+    public static final TST_ItemID EnrichedSunnarium = modItem(Mods.AdvancedSolarPanel, "asp_crafting_items", 3);
+    public static final TST_ItemID IrradiantUranium = modItem(Mods.AdvancedSolarPanel, "asp_crafting_items", 2);
     public static final TST_ItemID MagMatterRound = TST_ItemID.create(GTOreDictUnificator.get(OrePrefixes.round, Materials.MagMatter, 1));
     public static final TST_ItemID PhononicSeedCrystal = TST_ItemID.create(ItemList.Phononic_Seed_Crystal.get(1));
     public static final TST_ItemID RawCrystalChip = recipeItemId(ItemList.Circuit_Parts_RawCrystalChip.get(1));

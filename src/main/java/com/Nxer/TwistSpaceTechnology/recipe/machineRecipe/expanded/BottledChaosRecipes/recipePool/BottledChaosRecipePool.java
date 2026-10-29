@@ -73,6 +73,7 @@ public final class BottledChaosRecipePool {
         BottledChaosRadoxRecipes.registerRecipeChains(catalog);
         BottledChaosBiologicalRecipes.registerRecipeChains(catalog);
         registerCrystalCycles(catalog);
+        BottledChaosTesseractRecipes.registerRecipeChains(catalog);
         BottledChaosAdvancedMaterialRecipes.registerRecipeChains(catalog);
         BottledChaosExoticMatterRecipes.registerRecipeChains(catalog);
         BottledChaosIndiumRecipes.registerCombRecipeChains(catalog);

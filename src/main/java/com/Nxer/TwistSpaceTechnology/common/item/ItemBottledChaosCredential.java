@@ -415,6 +415,10 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
         // # Cerium-doped Lutetium Aluminium Garnet
         // #zh_CN 掺铈镥铝石榴石
 
+        // #tr tst.bottledchaos.route.tesseract
+        // # Raw Tesseract
+        // #zh_CN 粗制超立方体
+
         // #tr tst.bottledchaos.route.eternity
         // # Eternity
         // #zh_CN 永恒
