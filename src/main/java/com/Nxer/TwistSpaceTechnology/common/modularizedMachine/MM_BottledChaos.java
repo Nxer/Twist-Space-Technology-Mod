@@ -976,6 +976,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     @Override
     public @NotNull CheckRecipeResult checkProcessingMM() {
         if (!mMachine) return SimpleResultWithText.ofFailure("GT5U.gui.multimachine.incomplete_structure");
+        if (!getBaseMetaTileEntity().isAllowedToWork()) return CheckRecipeResultRegistry.NO_RECIPE;
         refreshAllocation();
         refreshPowerRound();
         if (overCapacity) return SimpleResultWithText.ofFailure("tst.bottledchaos.result.capacity_exceeded");
@@ -1566,13 +1567,14 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if (controlsChanged) markDirty();
         refreshAllocation();
         refreshPowerRound();
-        mMaxProgresstime = mProgresstime = 0;
+        // Like GT, disabling work prevents new recipes; stopMachine clears this running marker on faults.
         lEUt = 0;
         if (overCapacity) {
+            mMaxProgresstime = mProgresstime = 0;
             setCheckRecipeResult(SimpleResultWithText.ofFailure("tst.bottledchaos.result.capacity_exceeded"));
             return;
         }
-        if (!base.isAllowedToWork()) return;
+        if (!base.isAllowedToWork() && mMaxProgresstime <= 0) return;
 
         long usage = 0;
         Arrays.fill(advancing, false);
@@ -1592,12 +1594,12 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 failure = result;
                 continue;
             }
+            runnable[i] = true;
             if (isWaitingForPowerRound(i)) {
                 thread.status = BottledChaosStatus.WAITING_POWER.key();
                 thread.resetResult();
                 continue;
             }
-            runnable[i] = true;
             if (thread.progress < thread.duration) {
                 advancing[i] = true;
                 runningMask |= 1 << i;
@@ -1611,6 +1613,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             return;
         }
         if (runningMask != 0 && !payRunningCosts(usage, runningMask)) return;
+        // Keep GT's running marker through transient payment failures; rebuild it after successful processing.
+        mMaxProgresstime = mProgresstime = 0;
         boolean completed = false;
         boolean progressed = false;
         for (int i = 0; i < THREAD_COUNT; i++) {
@@ -1647,8 +1651,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 // Keep the output failure visible between the bounded delivery retries.
                 failure = threads[i].result();
             }
-            if (thread.isBusy() && (advancing[i] || thread.progress >= thread.duration)
-                && thread.duration > mMaxProgresstime) {
+            // Paid jobs waiting for a power round remain part of shutdown completion.
+            if (thread.isBusy() && runnable[i] && thread.duration > mMaxProgresstime) {
                 mMaxProgresstime = thread.duration;
                 mProgresstime = thread.progress;
             }
@@ -1657,7 +1661,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         // Failed/empty slots retry at most once a second. Successful slots may start their next job immediately.
         boolean shouldSearch = completed || tick % 20 == 0 || base.hasWorkJustBeenEnabled();
         if (shouldSearch) {
-            CheckRecipeResult result = checkProcessing();
+            CheckRecipeResult result = base.isAllowedToWork() ? checkProcessing()
+                : !isWirelessMode() && (activeConcentratedPower || powerAllocationPending)
+                    ? checkPowerRoundProcessing(true)
+                    : CheckRecipeResultRegistry.NO_RECIPE;
             if (failure == null) setCheckRecipeResult(result);
             for (BottledChaosThread thread : threads) {
                 if (thread.isBusy() && thread.status.equals(BottledChaosStatus.ACTIVE.key())
@@ -2121,12 +2128,15 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         else if (validGroup(slot) && !ItemBottledChaosCredential.isBound(installedCredentials[slot]))
             status = BottledChaosStatus.UNBOUND.key();
         else if (!mMachine) status = BottledChaosStatus.PAUSED.key();
-        else if (hasAuthorizedWork(slot) && threads[slot].eut <= inputPower && isWaitingForPowerRound(slot))
-            status = BottledChaosStatus.WAITING_POWER.key();
+        else if ((getBaseMetaTileEntity().isAllowedToWork() || mMaxProgresstime > 0) && hasAuthorizedWork(slot)
+            && threads[slot].eut <= inputPower
+            && isWaitingForPowerRound(slot)) status = BottledChaosStatus.WAITING_POWER.key();
         else {
             CheckRecipeResult result = getThreadDisplayResult(slot);
             status = isFailure(result) ? ""
-                : !getBaseMetaTileEntity().isAllowedToWork() ? BottledChaosStatus.PAUSED.key() : threads[slot].status;
+                : !getBaseMetaTileEntity().isAllowedToWork() && (!threads[slot].isBusy() || mMaxProgresstime <= 0)
+                    ? BottledChaosStatus.PAUSED.key()
+                    : threads[slot].status;
             if (BottledChaosStatus.IDLE.key()
                 .equals(status) && powerWeights[slot] > 0
                 && powerRoundMask != 0
@@ -2434,14 +2444,14 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 if (isFailure(result)) BottledChaosResultData.addGrouped(entries, result, 1 << slot);
             }
         }
-        if (base != null && base.isAllowedToWork() && usage > inputPower)
+        if (base != null && (base.isAllowedToWork() || mMaxProgresstime > 0) && usage > inputPower)
             BottledChaosResultData.addGrouped(entries, CheckRecipeResultRegistry.insufficientPower(usage), usageGroups);
         summary.setBoolean("errors", entries.tagCount() > 0);
         if (entries.tagCount() == 0) {
             NBTTagCompound entry = new NBTTagCompound();
             entry.setString(
                 "key",
-                base != null && !base.isAllowedToWork() ? BottledChaosStatus.PAUSED.key()
+                base != null && !base.isAllowedToWork() && mMaxProgresstime <= 0 ? BottledChaosStatus.PAUSED.key()
                     : "GT5U.gui.hoverable.runningfine");
             entries.appendTag(entry);
         }
