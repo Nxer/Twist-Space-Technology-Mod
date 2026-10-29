@@ -338,6 +338,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private final boolean[] matchingCredentials = new boolean[THREAD_COUNT];
     private final int[] inputPeerMasks = new int[THREAD_COUNT];
     private final long[] credentialCosts = new long[THREAD_COUNT];
+    private final long[] powerWeights = new long[THREAD_COUNT];
     private CheckRecipeResult cacheExportResult = CheckRecipeResultRegistry.NONE;
     private int cacheExportSlot = -1;
     private long cacheExportResultExpiresAt;
@@ -357,7 +358,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private CheckRecipeResult upkeepFailure = CheckRecipeResultRegistry.SUCCESSFUL;
     private long statusSummaryTick = Long.MIN_VALUE;
     private NBTTagCompound statusSummary;
-    private long[] allocatedShares = new long[THREAD_COUNT];
     private int generatorLevel = -1;
     private int minimumUpgradeGlassTier;
     private int maximumUpgradeGlassTier;
@@ -374,6 +374,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private boolean concentratedPower;
     private boolean activeConcentratedPower;
     private int powerRoundMask;
+    private boolean powerAllocationPending = true;
     private int credentialHatchLimit;
 
     public MM_BottledChaos(int id, String name, String nameRegional) {
@@ -412,7 +413,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         NBTTagCompound budgets = new NBTTagCompound();
         for (int slot = 0; slot < THREAD_COUNT; slot++) {
             budgets.setLong(Integer.toString(slot), powerBudgets[slot]);
-            budgets.setLong("share" + slot, allocatedShares[slot]);
         }
         nbt.setTag("bottledChaosRoundBudgets", budgets);
     }
@@ -437,12 +437,13 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         NBTTagCompound budgets = nbt.getCompoundTag("bottledChaosRoundBudgets");
         for (int slot = 0; slot < THREAD_COUNT; slot++) {
             powerBudgets[slot] = Math.max(0, budgets.getLong(Integer.toString(slot)));
-            allocatedShares[slot] = Math.max(0, budgets.getLong("share" + slot));
         }
         authorizationDirty = true;
         inputGroupingDirty = true;
         Arrays.fill(inputPeerMasks, 0);
         Arrays.fill(credentialCosts, 0);
+        Arrays.fill(powerWeights, 0);
+        powerAllocationPending = true;
         allocatedCapacity = -1;
         inputPower = -1;
     }
@@ -731,30 +732,39 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     }
 
     private void refreshPowerRound() {
-        if (activeConcentratedPower) {
-            for (int slot = 0; slot < THREAD_COUNT; slot++) {
-                if ((powerRoundMask & (1 << slot)) != 0 && !hasAuthorizedWork(slot)) {
-                    powerRoundMask &= ~(1 << slot);
-                    powerBudgets[slot] = allocatedShares[slot] = 0;
-                    markDirty();
-                }
+        for (int slot = 0; slot < THREAD_COUNT; slot++) {
+            if ((powerRoundMask & (1 << slot)) != 0 && !hasAuthorizedWork(slot)) {
+                powerRoundMask &= ~(1 << slot);
+                if (activeConcentratedPower || powerWeights[slot] == 0) powerBudgets[slot] = 0;
+                markDirty();
             }
         }
-        if (concentratedPower == activeConcentratedPower) return;
-        if (activeConcentratedPower) {
+        if (concentratedPower != activeConcentratedPower) {
             if (powerRoundMask != 0) return;
-        } else {
-            for (int slot = 0; slot < THREAD_COUNT; slot++) {
-                if (hasAuthorizedWork(slot)) return;
-            }
+            activeConcentratedPower = concentratedPower;
+            Arrays.fill(powerBudgets, 0);
+            authorizationDirty = true;
+            refreshAllocation();
+            markDirty();
         }
-        activeConcentratedPower = concentratedPower;
-        powerRoundMask = 0;
-        Arrays.fill(powerBudgets, 0);
-        Arrays.fill(allocatedShares, 0);
-        authorizationDirty = true;
-        refreshAllocation();
+        if (activeConcentratedPower) return;
+        for (int slot = 0; slot < THREAD_COUNT; slot++) {
+            if (hasAuthorizedWork(slot) && (powerRoundMask & (1 << slot)) == 0) powerAllocationPending = true;
+        }
+        if (!powerAllocationPending || powerRoundMask != 0) return;
+        // Paid jobs retain their original EU/t and finish in compatible rounds before new reservations apply.
+        for (int slot = 0; slot < THREAD_COUNT; slot++) if (hasAuthorizedWork(slot)) return;
+        long[] budgets = BottledChaosPowerAllocator.proportionalBudgets(inputPower, powerWeights);
+        System.arraycopy(budgets, 0, powerBudgets, 0, THREAD_COUNT);
+        powerAllocationPending = false;
+        for (BottledChaosThread thread : threads) thread.nextCheckTick = 0;
         markDirty();
+    }
+
+    private boolean isWaitingForPowerRound(int slot) {
+        return (activeConcentratedPower || powerAllocationPending || concentratedPower != activeConcentratedPower)
+            && (powerRoundMask & (1 << slot)) == 0
+            && threads[slot].progress < threads[slot].duration;
     }
 
     private boolean validGroup(int slot) {
@@ -835,6 +845,9 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                             .getRequiredWeight(ItemBottledChaosCredential.getRouteMask(installedCredentials[slot]))
                             * (activeConcentratedPower ? Integer.bitCount(getInputPeerMask(slot)) + 1 : 1)
                         : 0;
+                powerWeights[slot] = credentialCosts[slot] > 0 && (!threads[slot].isBusy() || matchingCredentials[slot])
+                    ? ItemBottledChaosCredential.getCapacity(installedCredentials[slot])
+                    : 0;
             }
         }
         long power = changed || schedulerTick % 20 == 0 ? Math.max(0, getMaxInputEu()) : inputPower;
@@ -842,17 +855,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if (!changed) return;
         inputPower = power;
         allocatedCapacity = capacity;
-        long[] shares = BottledChaosPowerAllocator.allocate(capacity, credentialCosts);
-        overCapacity = shares == null;
-        if (activeConcentratedPower || concentratedPower != activeConcentratedPower) {
-            for (BottledChaosThread thread : threads) thread.nextCheckTick = 0;
-            return;
-        }
-        allocatedShares = overCapacity ? new long[THREAD_COUNT] : shares;
-        for (int i = 0; i < THREAD_COUNT; i++) {
-            powerBudgets[i] = BottledChaosPowerAllocator.powerForShare(inputPower, allocatedShares[i], capacity);
-            threads[i].nextCheckTick = 0;
-        }
+        overCapacity = capacity <= 0 || getBottledChaosUsedCapacity() > capacity;
+        if (!activeConcentratedPower) powerAllocationPending = !Arrays
+            .equals(powerBudgets, BottledChaosPowerAllocator.proportionalBudgets(inputPower, powerWeights));
+        for (BottledChaosThread thread : threads) thread.nextCheckTick = 0;
     }
 
     public void onCredentialHatchContentsChanged(TST_BottledChaosRecipeTokenHatch hatch, int slot) {
@@ -947,7 +953,9 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if ((poolMask & thread.requiredPools) != thread.requiredPools) {
             return BottledChaosProcessingLogic.missingPools(thread.requiredPools, poolMask);
         }
-        if (thread.progress < thread.duration && thread.eut > powerBudgets[slot]) {
+        if (thread.progress < thread.duration && thread.eut > inputPower)
+            return CheckRecipeResultRegistry.insufficientPower(thread.eut);
+        if (!isWaitingForPowerRound(slot) && thread.progress < thread.duration && thread.eut > powerBudgets[slot]) {
             return SimpleResultWithText.ofFailure("tst.bottledchaos.result.insufficient_power_share");
         }
         return CheckRecipeResultRegistry.SUCCESSFUL;
@@ -967,7 +975,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                     || result == CheckRecipeResultRegistry.FLUID_OUTPUT_FULL))
                 return result;
         }
-        if (activeConcentratedPower) return checkConcentratedProcessing();
+        if (activeConcentratedPower || powerAllocationPending)
+            return checkPowerRoundProcessing(!activeConcentratedPower);
         if (concentratedPower != activeConcentratedPower) return CheckRecipeResultRegistry.SUCCESSFUL;
         CheckRecipeResult failure = null;
         boolean hasWork = false;
@@ -989,9 +998,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             : hasWork ? CheckRecipeResultRegistry.SUCCESSFUL : CheckRecipeResultRegistry.NO_RECIPE;
     }
 
-    private CheckRecipeResult checkConcentratedProcessing() {
+    private CheckRecipeResult checkPowerRoundProcessing(boolean resumeOnly) {
         if (powerRoundMask != 0) return CheckRecipeResultRegistry.SUCCESSFUL;
         int candidates = 0;
+        int paidCandidates = 0;
         for (int slot = 0; slot < THREAD_COUNT; slot++) {
             BottledChaosThread thread = threads[slot];
             if (isThreadExecutionDisabled(slot)) {
@@ -1001,7 +1011,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             if (schedulerTick < thread.nextCheckTick || thread.isBusy() && !hasAuthorizedWork(slot)) continue;
             if (!validGroup(slot) || !ItemBottledChaosCredential.isBound(installedCredentials[slot])) continue;
             candidates |= 1 << slot;
+            if (thread.isBusy()) paidCandidates |= 1 << slot;
         }
+        // Resumed jobs must not compete with newly planned jobs which could repeatedly take their power.
+        if (resumeOnly || paidCandidates != 0) candidates = paidCandidates;
         if (candidates == 0) return CheckRecipeResultRegistry.NO_RECIPE;
 
         ArrayList<MTEHatchInputBus> allBuses = mInputBusses;
@@ -1034,9 +1047,9 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             while (candidates != 0) {
                 long[] weights = new long[THREAD_COUNT];
                 for (int slot = 0; slot < THREAD_COUNT; slot++) {
-                    if ((candidates & (1 << slot)) != 0) weights[slot] = credentialCosts[slot];
+                    if ((candidates & (1 << slot)) != 0) weights[slot] = powerWeights[slot];
                 }
-                budgets = BottledChaosPowerAllocator.concentratedBudgets(inputPower, weights);
+                budgets = BottledChaosPowerAllocator.proportionalBudgets(inputPower, weights);
                 inputs = new InputTransaction();
                 int failed = -1;
                 for (int slot = 0; slot < THREAD_COUNT; slot++) {
@@ -1057,7 +1070,12 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                                 }
                             }
                         }
-                        setThreadSearchResult(failed, result);
+                        if ("insufficient_power".equals(result.getID()) && Integer.bitCount(candidates) > 1) {
+                            setThreadSearchResult(failed, CheckRecipeResultRegistry.SUCCESSFUL);
+                            threads[failed].status = BottledChaosStatus.WAITING_POWER.key();
+                        } else {
+                            setThreadSearchResult(failed, result);
+                        }
                         break;
                     }
                     if (!threads[slot].isBusy()) inputs.prepared[slot] = true;
@@ -1088,13 +1106,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if (candidates == 0) return failure;
         powerRoundMask = candidates;
         System.arraycopy(budgets, 0, powerBudgets, 0, THREAD_COUNT);
-        long weightSum = 0;
         for (int slot = 0; slot < THREAD_COUNT; slot++) {
-            if ((candidates & (1 << slot)) != 0) weightSum += credentialCosts[slot];
-        }
-        for (int slot = 0; slot < THREAD_COUNT; slot++) {
-            allocatedShares[slot] = (candidates & (1 << slot)) == 0 ? 0
-                : BottledChaosPowerAllocator.powerForShare(capacity, credentialCosts[slot], weightSum);
             if ((candidates & (1 << slot)) == 0) continue;
             if (inputs.prepared[slot]) commitPreparedThread(slot);
             threads[slot].activate();
@@ -1149,6 +1161,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         BottledChaosProcessingLogic logic = threadLogics[slot];
         BottledChaosThread thread = threads[slot];
         thread.begin(installedCredentials[slot], logic);
+        powerRoundMask |= 1 << slot;
         matchingCredentials[slot] = true;
         upkeepDirty = poolUsersDirty = true;
         BottledChaosRecipeProcessor.PreparedPlan prepared = logic.getPreparedPlan();
@@ -1537,6 +1550,11 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 failure = result;
                 continue;
             }
+            if (isWaitingForPowerRound(i)) {
+                thread.status = BottledChaosStatus.WAITING_POWER.key();
+                thread.resetResult();
+                continue;
+            }
             runnable[i] = true;
             if (thread.progress < thread.duration) {
                 advancing[i] = true;
@@ -1545,7 +1563,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             }
         }
         lEUt = -usage;
-        if ((activeConcentratedPower || concentratedPower != activeConcentratedPower) && usage > inputPower) {
+        if (usage > inputPower) {
             lEUt = 0;
             recordRunningFailure(CheckRecipeResultRegistry.insufficientPower(usage));
             return;
@@ -2020,7 +2038,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     private void writeProcessingGroupInformation(NBTTagCompound data, int slot) {
         data.setInteger("slot", slot + 1);
-        data.setLong("share", allocatedShares[slot]);
+        data.setLong("share", powerWeights[slot] > 0 && !isWaitingForPowerRound(slot) ? powerBudgets[slot] : 0);
+        data.setLong("totalPower", inputPower);
         data.setInteger("progress", threads[slot].progress);
         data.setInteger("duration", threads[slot].duration);
         writeThreadWailaStatus(data, slot);
@@ -2044,6 +2063,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         else if (validGroup(slot) && !ItemBottledChaosCredential.isBound(installedCredentials[slot]))
             status = BottledChaosStatus.UNBOUND.key();
         else if (!mMachine) status = BottledChaosStatus.PAUSED.key();
+        else if (hasAuthorizedWork(slot) && threads[slot].eut <= inputPower && isWaitingForPowerRound(slot))
+            status = BottledChaosStatus.WAITING_POWER.key();
         else {
             CheckRecipeResult result = getThreadDisplayResult(slot);
             status = isFailure(result) ? ""
@@ -2100,7 +2121,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             if (boundSlots != 0) currentTip.add(getCredentialHatchBoundInputs(boundSlots));
             long eut = data.getLong("eut");
             byte energyTier = (byte) data.getLong("energyTier");
-            long capacity = data.getLong("capacity");
+            long totalPower = data.getLong("totalPower");
             // #tr tst.bottledchaos.credential_hatch.power_share
             // # Total usable power share: %s%%
             // #zh_CN 占总可用功率: %s%%
@@ -2118,8 +2139,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                     + " | "
                     + StatCollector.translateToLocalFormatted(
                         "tst.bottledchaos.credential_hatch.power_share",
-                        String
-                            .format(Locale.ROOT, "%.2f", capacity > 0 ? 100.0 * data.getLong("share") / capacity : 0)));
+                        String.format(
+                            Locale.ROOT,
+                            "%.2f",
+                            totalPower > 0 ? 100.0 * data.getLong("share") / totalPower : 0)));
             if (duration > 0) {
                 currentTip.add(GTWaila.getMachineProgressString(duration, data.getInteger("progress")));
             }
@@ -2293,7 +2316,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 } else if (threads[slot].isBusy()) {
                     result = canRunThread(slot);
                     if (result.wasSuccessful()) {
-                        if (threads[slot].progress < threads[slot].duration) {
+                        if (threads[slot].progress < threads[slot].duration && !isWaitingForPowerRound(slot)) {
                             usage += threads[slot].eut;
                             usageGroups |= 1 << slot;
                         }
@@ -2305,9 +2328,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 if (isFailure(result)) BottledChaosResultData.addGrouped(entries, result, 1 << slot);
             }
         }
-        if (base != null && base.isAllowedToWork()
-            && (activeConcentratedPower || concentratedPower != activeConcentratedPower)
-            && usage > inputPower)
+        if (base != null && base.isAllowedToWork() && usage > inputPower)
             BottledChaosResultData.addGrouped(entries, CheckRecipeResultRegistry.insufficientPower(usage), usageGroups);
         summary.setBoolean("errors", entries.tagCount() > 0);
         if (entries.tagCount() == 0) {
@@ -2458,15 +2479,15 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     @SideOnly(Side.CLIENT)
     public static String getProcessingGroupShareText(NBTTagCompound summary, NBTTagCompound job) {
         return EnumChatFormatting.AQUA + StatCollector
-            .translateToLocalFormatted("tst.bottledchaos.input_share", getProcessingGroupShareValue(summary, job));
+            .translateToLocalFormatted("tst.bottledchaos.input_share", getProcessingGroupShareValue(job));
     }
 
     @SideOnly(Side.CLIENT)
-    public static String getProcessingGroupShareValue(NBTTagCompound summary, NBTTagCompound job) {
+    public static String getProcessingGroupShareValue(NBTTagCompound job) {
         return String.format(
             Locale.ROOT,
             "%.2f%%",
-            summary.getLong(WAILA_CAPACITY) > 0 ? job.getLong("share") * 100.0 / summary.getLong(WAILA_CAPACITY) : 0);
+            job.getLong("totalPower") > 0 ? job.getLong("share") * 100.0 / job.getLong("totalPower") : 0);
     }
 
     @SideOnly(Side.CLIENT)

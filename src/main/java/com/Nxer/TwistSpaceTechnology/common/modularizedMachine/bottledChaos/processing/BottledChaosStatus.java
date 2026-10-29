@@ -15,6 +15,10 @@ public enum BottledChaosStatus {
     // # Paused
     // #zh_CN 已暂停
     PAUSED("tst.bottledchaos.paused", EnumChatFormatting.YELLOW, 0xFFFFD75F),
+    // #tr tst.bottledchaos.waiting_power
+    // # Waiting for power allocation
+    // #zh_CN 等待电力分配
+    WAITING_POWER("tst.bottledchaos.waiting_power", EnumChatFormatting.YELLOW, 0xFFFFD75F),
     CAPACITY_EXCEEDED("tst.bottledchaos.capacity_exceeded", EnumChatFormatting.RED, 0xFFFF6262),
     UNBOUND("tst.bottledchaos.unbound", EnumChatFormatting.RED, 0xFFFF6262),
     UNINSTALLED("tst.bottledchaos.gui.module_missing", EnumChatFormatting.DARK_RED, 0xFF52616A),

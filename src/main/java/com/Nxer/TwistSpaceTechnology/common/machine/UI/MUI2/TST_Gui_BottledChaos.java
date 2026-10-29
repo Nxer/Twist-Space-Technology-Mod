@@ -197,13 +197,15 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
 
     // spotless:off
     // #tr tst.bottledchaos.gui.power_allocation.distributed.hint
-    // # Distributed mode allocates power to each processing group according to its allocated capacity, reserving shares for idle groups.
-    // #zh_CN 均分模式按分配容量向各加工组分配功率, 待机组仍保留功率份额.
+    // # Distributed mode reserves power in proportion to credential frame capacity, including idle groups with valid enabled credentials. Tag costs do not affect power shares.
+    // #zh_CN 均分模式按凭证容量比例预留功率, 有效且启用的待机组仍保留份额, 不按TAG消耗分配.
     // spotless:on
 
+    // spotless:off
     // #tr tst.bottledchaos.gui.power_allocation.concentrated.hint
-    // # Concentrated mode shares power only among executable groups, in proportion to used credential capacity.
-    // #zh_CN 集中模式仅按实际凭证容量消耗比例向可执行的加工组分配功率.
+    // # Concentrated mode shares power among executing groups in proportion to credential frame capacity. New or resumed jobs wait for the current round.
+    // #zh_CN 集中模式按凭证容量比例向执行组分配功率, 新任务和恢复任务等待当前轮完成.
+    // spotless:on
 
     public TST_Gui_BottledChaos(MM_BottledChaos multiblock) {
         super(multiblock);
@@ -388,7 +390,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                     job.get()
                         .getString("family")),
             () -> EnumChatFormatting.AQUA + StatCollector.translateToLocalFormatted("tst.bottledchaos.input_share", ""),
-            () -> EnumChatFormatting.AQUA + MM_BottledChaos.getProcessingGroupShareValue(summary.get(), job.get()),
+            () -> EnumChatFormatting.AQUA + MM_BottledChaos.getProcessingGroupShareValue(job.get()),
             () -> MM_BottledChaos.getProcessingGroupPowerText(job.get()),
             () -> MM_BottledChaos.getProcessingGroupVoltageText(job.get()),
             () -> MM_BottledChaos.getStatusColor(

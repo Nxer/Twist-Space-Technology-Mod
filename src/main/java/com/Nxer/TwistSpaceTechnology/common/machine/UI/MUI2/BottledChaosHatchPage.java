@@ -3,7 +3,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.function.BooleanSupplier;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
@@ -189,15 +188,7 @@ final class BottledChaosHatchPage {
         }
         page.child(label(() -> fit(family(current.get()), 268), 268).pos(7, 146));
         page.child(label(() -> {
-            long capacity = summary.getValue() == null ? 0
-                : summary.getValue()
-                    .getLong("capacity");
-            String share = String.format(
-                Locale.ROOT,
-                "%.2f%%",
-                capacity > 0 ? current.get()
-                    .getLong("share") * 100d
-                    / capacity : 0);
+            String share = MM_BottledChaos.getProcessingGroupShareValue(current.get());
             int peers = current.get()
                 .getInteger("boundSlots");
             return fit(
