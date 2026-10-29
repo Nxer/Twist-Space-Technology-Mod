@@ -164,7 +164,8 @@ final class BottledChaosHatchPage {
             target,
             () -> current.get()
                 .getBoolean("enabled"),
-            true,
+            selected,
+            skin::buttonText,
             BottledChaosHatchControls.Action.values());
         for (int i = 0; i < controls.size(); i++) {
             BottledChaosHatchControls.Action action = BottledChaosHatchControls.Action.values()[i];
@@ -174,13 +175,6 @@ final class BottledChaosHatchPage {
                     .size(48, 18)
                     .background(skin.BUTTON)
                     .hoverBackground(skin.HOVER)
-                    .overlay(
-                        IKey.dynamic(
-                            () -> StatCollector.translateToLocal(
-                                action.label(
-                                    current.get()
-                                        .getBoolean("enabled"))))
-                            .color(skin::buttonText))
                     .setEnabledIf(
                         widget -> current.get()
                             .getBoolean("installed")

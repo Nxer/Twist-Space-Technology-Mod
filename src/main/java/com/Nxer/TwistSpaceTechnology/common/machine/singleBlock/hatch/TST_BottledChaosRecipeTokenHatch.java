@@ -117,9 +117,16 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
     }
 
     public void clearRunningState() {
+        if (!isValid() || !getBaseMetaTileEntity().isServerSide()) return;
         materialCache.clearMaterials();
         clearRunningStateRequested = true;
         markDirty();
+    }
+
+    public boolean consumeClearRunningStateRequest() {
+        if (!clearRunningStateRequested) return false;
+        clearRunningStateRequested = false;
+        return true;
     }
 
     public void setCacheLimit(long limit) {
@@ -148,12 +155,6 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
         onContentsChanged(0);
         markDirty();
         player.inventory.markDirty();
-    }
-
-    public boolean consumeClearRunningStateRequest() {
-        if (!clearRunningStateRequested) return false;
-        clearRunningStateRequested = false;
-        return true;
     }
 
     public void bindController(MM_BottledChaos controller, int slot) {
@@ -261,7 +262,8 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
             () -> this,
             () -> information.getValue() != null && information.getValue()
                 .getBoolean("enabled"),
-            false,
+            null,
+            null,
             BottledChaosHatchControls.Action.EXECUTION,
             BottledChaosHatchControls.Action.LIMIT,
             BottledChaosHatchControls.Action.EXPORT,

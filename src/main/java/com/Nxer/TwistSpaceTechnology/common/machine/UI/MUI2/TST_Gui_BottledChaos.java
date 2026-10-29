@@ -1147,11 +1147,16 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             syncManager.syncValue("bottledChaosRequiredPools", required);
             missing = new LongSyncValue(multiblock::getMissingRecipePoolMask);
             syncManager.syncValue("bottledChaosMissingPools", missing);
-            selected = new IntSyncValue(
-                () -> selectedSlot,
-                value -> { if (value >= -1 && value < users.length) selectedSlot = value; }).allowC2S();
+            selected = new IntSyncValue(() -> selectedSlot, value -> {
+                if (value < -1 || value >= users.length) return;
+                selectedSlot = value;
+                lastSnapshotTick = Long.MIN_VALUE;
+            }).allowC2S();
             syncManager.syncValue("bottledChaosSelectedPool", selected);
-            source = new IntSyncValue(() -> selectedSource, value -> selectedSource = Math.max(0, value)).allowC2S();
+            source = new IntSyncValue(() -> selectedSource, value -> {
+                selectedSource = Math.max(0, value);
+                lastSnapshotTick = Long.MIN_VALUE;
+            }).allowC2S();
             syncManager.syncValue("bottledChaosSelectedSource", source);
             parameters = GenericSyncValue.builder(NBTTagCompound.class)
                 .getter(() -> {
@@ -1159,7 +1164,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                     long tick = multiblock.getBaseMetaTileEntity()
                         .getWorld()
                         .getTotalWorldTime();
-                    if (snapshot.getInteger("slot") != selectedSlot || lastSnapshotTick == Long.MIN_VALUE
+                    if (lastSnapshotTick == Long.MIN_VALUE
                         || !ItemStack.areItemStacksEqual(snapshotStack, stack(selectedSlot))
                         || tick - lastSnapshotTick >= 10) {
                         snapshot = multiblock.getModuleParameters(selectedSlot, selectedSource);

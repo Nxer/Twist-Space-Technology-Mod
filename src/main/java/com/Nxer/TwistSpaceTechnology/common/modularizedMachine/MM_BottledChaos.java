@@ -780,34 +780,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         return hatch != null && hatch.isValid() && !hatch.isExecutionEnabled();
     }
 
-    private void applyCredentialHatchControls() {
-        boolean changed = false;
-        for (int slot = 0; slot < THREAD_COUNT; slot++) {
-            TST_BottledChaosRecipeTokenHatch hatch = credentialHatches[slot];
-            if (hatch == null || !hatch.isValid()) continue;
-            BottledChaosThread thread = threads[slot];
-            if (hatch.consumeClearRunningStateRequest()) {
-                hatch.getMaterialCache()
-                    .clearMaterials();
-                hatch.markDirty();
-                if (thread.isBusy()) {
-                    upkeepDirty = poolUsersDirty = true;
-                    threadLogics[slot] = new BottledChaosProcessingLogic();
-                }
-                thread.complete();
-                if (!hatch.isExecutionEnabled()) thread.pause();
-                thread.nextCheckTick = schedulerTick + 20;
-                changed = true;
-            }
-            if (!hatch.isExecutionEnabled()) {
-                changed |= thread.pause();
-            } else {
-                changed |= thread.resumeIdle();
-            }
-        }
-        if (changed) markDirty();
-    }
-
     private void refreshAllocation() {
         int newValidInputGroupMask = 0;
         for (int slot = 0; slot < THREAD_COUNT; slot++) if (validGroup(slot)) newValidInputGroupMask |= 1 << slot;
@@ -873,7 +845,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if (!isCredentialHatchConnected(hatch, slot)) return;
         requestedExecutionSlot = enabled ? slot : -1;
         authorizationDirty = true;
-        refreshAllocation();
+        statusSummaryTick = Long.MIN_VALUE;
         scheduleRecipeCheckImmediate();
         markDirty();
     }
@@ -899,6 +871,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             for (int member = 0; member < THREAD_COUNT; member++) {
                 if ((group & (1 << member)) != 0 && member != selected && !isThreadExecutionDisabled(member)) {
                     credentialHatches[member].setExecutionEnabledFromController(false);
+                    threads[member].pause();
                     changed = true;
                 }
             }
@@ -1511,16 +1484,26 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     @Override
     protected void runMachine(IGregTechTileEntity base, long tick) {
-        if (base.isAllowedToWork()) {
-            processingGroupMask = 0;
-            for (int slot = 0; slot < THREAD_COUNT; slot++) {
-                if (!isThreadExecutionDisabled(slot) && (installedCredentials[slot] != null || threads[slot].isBusy()))
-                    processingGroupMask |= 1 << slot;
-            }
-        }
         schedulerTick = tick;
         statusSummaryTick = Long.MIN_VALUE;
-        applyCredentialHatchControls();
+        if (base.isAllowedToWork()) processingGroupMask = 0;
+        boolean controlsChanged = false;
+        for (int slot = 0; slot < THREAD_COUNT; slot++) {
+            TST_BottledChaosRecipeTokenHatch hatch = credentialHatches[slot];
+            BottledChaosThread thread = threads[slot];
+            if (hatch != null && hatch.isValid()) {
+                if (hatch.consumeClearRunningStateRequest()) {
+                    threadLogics[slot] = new BottledChaosProcessingLogic();
+                    thread.complete();
+                    upkeepDirty = poolUsersDirty = authorizationDirty = true;
+                    controlsChanged = true;
+                }
+                controlsChanged |= hatch.isExecutionEnabled() ? thread.resumeIdle() : thread.pause();
+            }
+            if (base.isAllowedToWork() && !isThreadExecutionDisabled(slot)
+                && (installedCredentials[slot] != null || thread.isBusy())) processingGroupMask |= 1 << slot;
+        }
+        if (controlsChanged) markDirty();
         refreshAllocation();
         refreshPowerRound();
         mMaxProgresstime = mProgresstime = 0;

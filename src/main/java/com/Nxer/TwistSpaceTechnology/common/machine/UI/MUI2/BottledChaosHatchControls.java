@@ -1,23 +1,28 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
+import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 import net.minecraft.entity.player.EntityPlayer;
-
-import org.lwjgl.input.Mouse;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.StatCollector;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BottledChaosRecipeTokenHatch;
 import com.cleanroommc.modularui.api.IPanelHandler;
 import com.cleanroommc.modularui.api.drawable.IDrawable;
 import com.cleanroommc.modularui.api.drawable.IKey;
+import com.cleanroommc.modularui.api.widget.IGuiAction;
 import com.cleanroommc.modularui.drawable.DynamicDrawable;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.theme.WidgetThemeEntry;
 import com.cleanroommc.modularui.utils.Alignment;
+import com.cleanroommc.modularui.value.sync.BooleanSyncValue;
+import com.cleanroommc.modularui.value.sync.IntSyncValue;
 import com.cleanroommc.modularui.value.sync.InteractionSyncHandler;
 import com.cleanroommc.modularui.value.sync.LongSyncValue;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
@@ -99,17 +104,52 @@ public final class BottledChaosHatchControls {
         private void execute(TST_BottledChaosRecipeTokenHatch hatch, EntityPlayer player) {
             switch (this) {
                 case TAKE -> hatch.takeCredential(player);
-                case EXECUTION -> hatch.setExecutionEnabled(!hatch.isExecutionEnabled());
                 case EXPORT -> hatch.exportMaterialCache();
                 case CLEAR -> hatch.clearRunningState();
-                case LIMIT -> {}
+                case EXECUTION, LIMIT -> {}
             }
         }
     }
 
     public static List<ButtonWidget<?>> create(ModularPanel parent, PanelSyncManager manager, String id,
-        Supplier<TST_BottledChaosRecipeTokenHatch> target, BooleanSupplier enabled, boolean labeled,
-        Action... actions) {
+        Supplier<TST_BottledChaosRecipeTokenHatch> target, BooleanSupplier enabled, IntSyncValue selection,
+        IntSupplier labelColor, Action... actions) {
+        BooleanSyncValue execution = new BooleanSyncValue(() -> {
+            if (manager.isClient()) return enabled.getAsBoolean();
+            TST_BottledChaosRecipeTokenHatch hatch = target.get();
+            return hatch != null && hatch.isValid() && hatch.isExecutionEnabled();
+        }, value -> {
+            if (manager.isClient()) return;
+            TST_BottledChaosRecipeTokenHatch hatch = target.get();
+            if (hatch != null && hatch.isValid()) hatch.setExecutionEnabled(value);
+        }) {
+
+            @Override
+            public void write(PacketBuffer buffer) {
+                buffer.writeInt(selection == null ? 0 : selection.getIntValue());
+                super.write(buffer);
+            }
+
+            @Override
+            public void readOnClient(int packetId, PacketBuffer buffer) throws IOException {
+                if (packetId == SYNC_VALUE && buffer.readInt() == (selection == null ? 0 : selection.getIntValue()))
+                    super.readOnClient(packetId, buffer);
+            }
+
+            @Override
+            public void readOnServer(int packetId, PacketBuffer buffer) throws IOException {
+                if (packetId != SYNC_VALUE) return;
+                if (buffer.readInt() == (selection == null ? 0 : selection.getIntValue()))
+                    super.readOnServer(packetId, buffer);
+                // Always acknowledge the actual result, including rejected or normalized requests.
+                notifyUpdate();
+            }
+        }.allowC2S();
+        manager.syncValue(id + "ExecutionState", execution);
+        if (selection != null) selection.setChangeListener(() -> {
+            if (manager.isClient()) execution.setBoolValue(enabled.getAsBoolean(), false, false);
+            else execution.notifyUpdate();
+        });
         IPanelHandler settings = manager.syncedPanel(id + "Limit", true, (sync, handler) -> {
             // Freeze the selected hatch when opening: later selection/removal cannot redirect an edit.
             TST_BottledChaosRecipeTokenHatch opened = target.get();
@@ -130,6 +170,10 @@ public final class BottledChaosHatchControls {
                     .syncHandler(interaction)
                     .onMouseReleased(mouse -> {
                         if (mouse != 0) return false;
+                        if (action == Action.EXECUTION) {
+                            execution.setBoolValue(!execution.getBoolValue(), false, true);
+                            return true;
+                        }
                         if (action != Action.LIMIT) return interaction.onMouseReleased(mouse);
                         if (settings.isPanelOpen()) settings.closePanel();
                         else {
@@ -142,14 +186,17 @@ public final class BottledChaosHatchControls {
                     .playClickSound(true)
                     .background(
                         new DynamicDrawable(
-                            () -> action == Action.EXECUTION && !enabled.getAsBoolean()
+                            () -> action == Action.EXECUTION && !execution.getBoolValue()
                                 ? GTGuiTextures.BUTTON_STANDARD_PRESSED
                                 : GTGuiTextures.BUTTON_STANDARD))
-                    .overlay(new DynamicDrawable(() -> action.icon(enabled.getAsBoolean())))
+                    .overlay(
+                        labelColor == null ? new DynamicDrawable(() -> action.icon(execution.getBoolValue()))
+                            : IKey.dynamic(() -> StatCollector.translateToLocal(action.label(execution.getBoolValue())))
+                                .color(labelColor))
                     .tooltipBuilder(tooltip -> {
                         String key = action.tooltip();
                         if (key != null) tooltip.addLine(IKey.lang(key));
-                        else if (!labeled) tooltip.addLine(IKey.lang(action.label(enabled.getAsBoolean())));
+                        else if (labelColor == null) tooltip.addLine(IKey.lang(action.label(execution.getBoolValue())));
                     })
                     .tooltipAutoUpdate(true));
         }
@@ -159,6 +206,18 @@ public final class BottledChaosHatchControls {
     private static final class ActionButton extends ButtonWidget<ActionButton> {
 
         private boolean pressed;
+
+        private ActionButton() {
+            // MUI may not dispatch releases outside this button. A new press starts a new gesture.
+            listenGuiAction((IGuiAction.MousePressed) mouseButton -> {
+                if (mouseButton == 0) pressed = false;
+                return false;
+            });
+            listenGuiAction((IGuiAction.MouseReleased) mouseButton -> {
+                if (mouseButton == 0 && !isHovering()) pressed = false;
+                return false;
+            });
+        }
 
         @Override
         public Result onMousePressed(int mouseButton) {
@@ -178,9 +237,8 @@ public final class BottledChaosHatchControls {
         @Override
         @SideOnly(Side.CLIENT)
         public IDrawable getCurrentBackground(WidgetThemeEntry<?> theme) {
-            // A release outside the button need not be dispatched to it by MUI.
-            if (!isHovering() || !Mouse.isButtonDown(0)) pressed = false;
-            return pressed ? GTGuiTextures.BUTTON_STANDARD_PRESSED : super.getCurrentBackground(theme);
+            // Keep the pressed frame until the same release event updates the button's value.
+            return pressed && isHovering() ? GTGuiTextures.BUTTON_STANDARD_PRESSED : super.getCurrentBackground(theme);
         }
     }
 
