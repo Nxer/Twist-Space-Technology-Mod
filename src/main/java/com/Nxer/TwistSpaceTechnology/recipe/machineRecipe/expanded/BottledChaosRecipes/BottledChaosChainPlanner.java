@@ -454,7 +454,7 @@ final class BottledChaosChainPlanner {
         return taken;
     }
 
-    private static long saturatedAdd(long left, long right) {
+    static long saturatedAdd(long left, long right) {
         return left > Long.MAX_VALUE - right ? Long.MAX_VALUE : left + right;
     }
 }

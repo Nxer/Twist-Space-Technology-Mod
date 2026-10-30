@@ -34,8 +34,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.function.Supplier;
@@ -61,6 +63,7 @@ import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosCredential;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosMachineModule;
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_BottledChaos;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellHelper.InputSource;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BottledChaosRecipeTokenHatch;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularHatchTypes;
@@ -112,6 +115,7 @@ import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.ErrorType;
 import gregtech.api.structure.error.StructureError;
@@ -361,7 +365,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private final boolean[] runnable = new boolean[THREAD_COUNT];
     private final ArrayList<MTEHatchInputBus> centralInputBuses = new ArrayList<>();
     private final ArrayList<MTEHatchInput> centralInputHatches = new ArrayList<>();
-    private final ArrayList<IDualInputHatch> centralDualInputs = new ArrayList<>();
     private final int[] recipePoolUsers = new int[BottledChaosMachineConfiguration.MAX_POOLS];
     private long missingRecipePools;
     private boolean poolUsersDirty = true;
@@ -605,7 +608,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         clearCredentialHatchBindings();
         centralInputBuses.clear();
         centralInputHatches.clear();
-        centralDualInputs.clear();
         inputGroupingDirty = true;
         Arrays.fill(inputPeerMasks, 0);
         Arrays.fill(credentialCosts, 0);
@@ -678,7 +680,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         }
         for (MTEHatchInputBus bus : mInputBusses) if (!isDedicatedInput(bus)) centralInputBuses.add(bus);
         for (MTEHatchInput hatch : mInputHatches) if (!isDedicatedInput(hatch)) centralInputHatches.add(hatch);
-        for (IDualInputHatch hatch : mDualInputHatches) if (!isDedicatedInput(hatch)) centralDualInputs.add(hatch);
         return true;
     }
 
@@ -1051,7 +1052,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 CheckRecipeResult result = threads[slot].isBusy()
                     ? threads[slot].eut <= inputPower ? CheckRecipeResultRegistry.SUCCESSFUL
                         : CheckRecipeResultRegistry.insufficientPower(threads[slot].eut)
-                    : prepareScopedThread(slot, inputPower, InputTransaction.PROBE);
+                    : prepareScopedThread(slot, inputPower, new InputTransaction(false, true));
                 if (!result.wasSuccessful()) {
                     candidates &= ~(1 << slot);
                     failure = result;
@@ -1099,11 +1100,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 candidates &= ~(1 << failed);
                 inputs = null;
             }
-            if (candidates != 0) {
-                inputs.commit();
-                updateSlots();
-            }
-            setCheckRecipeResult(candidates == 0 ? failure : CheckRecipeResultRegistry.SUCCESSFUL);
+            setCheckRecipeResult(candidates == 0 ? failure : commitInputs(inputs));
+            if (candidates != 0 && checkRecipeResult.wasSuccessful()) updateSlots();
         } finally {
             try {
                 endRecipeProcessing();
@@ -1155,10 +1153,11 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if (!isWirelessMode() && powerBudgets[slot] <= 0)
             return SimpleResultWithText.ofFailure("tst.bottledchaos.result.insufficient_power_share");
 
+        InputTransaction inputs = new InputTransaction(false, false);
         CheckRecipeResult result = withGroupInputs(slot, () -> {
             try {
                 startRecipeProcessing();
-                CheckRecipeResult prepared = prepareThread(slot, powerBudgets[slot], InputTransaction.IMMEDIATE);
+                CheckRecipeResult prepared = prepareThread(slot, powerBudgets[slot], inputs);
                 setCheckRecipeResult(prepared);
                 return prepared;
             } finally {
@@ -1167,9 +1166,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         });
         // ME extraction failures follow GT's failure-consumption semantics: never award outputs.
         if (!checkRecipeResult.wasSuccessful()) {
-            if (result.wasSuccessful() && threadLogics[slot].getWirelessCost()
-                .signum() > 0)
-                addEUToGlobalEnergyMap(getBaseMetaTileEntity().getOwnerUuid(), threadLogics[slot].getWirelessCost());
+            if (inputs.wirelessPaid.signum() > 0)
+                addEUToGlobalEnergyMap(getBaseMetaTileEntity().getOwnerUuid(), inputs.wirelessPaid);
             return checkRecipeResult;
         }
         if (!result.wasSuccessful()) return result;
@@ -1259,68 +1257,51 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     }
 
     private CheckRecipeResult prepareThread(int slot, long budget, InputTransaction inputs) {
-        ArrayList<ItemStack> commonItems = getStoredNonDualInputs();
-        ArrayList<FluidStack> commonFluids = getStoredFluids();
+        InputTransaction.View common = withNonDualInputs(
+            mInputBusses,
+            mInputHatches,
+            () -> captureInputs(inputs, true));
+        InputTransaction.View central = withCentralInputs(() -> captureInputs(inputs, false));
         CheckRecipeResult result = CheckRecipeResultRegistry.NO_RECIPE;
-        // Every crafting-buffer pattern is checked separately with this group's ordinary and shared inputs.
+        // Each pattern remains isolated; only ordinary and shared inputs are common to every attempt.
         for (IDualInputHatch dual : mDualInputHatches) {
+            ItemStack[] sharedItems = dual.getSharedItems();
             for (var iterator = dual.inventories(); iterator.hasNext();) {
                 var inventory = iterator.next();
                 if (inventory.isEmpty()) continue;
-                ArrayList<ItemStack> items = new ArrayList<>(commonItems);
-                ItemStack[] sharedItems = dual.getSharedItems();
-                if (sharedItems != null) items.addAll(Arrays.asList(sharedItems));
-                ItemStack[] patternItems = inventory.getItemInputs();
-                if (patternItems != null) items.addAll(Arrays.asList(patternItems));
-                ArrayList<FluidStack> fluids = new ArrayList<>(commonFluids);
-                FluidStack[] patternFluids = inventory.getFluidInputs();
-                if (patternFluids != null) fluids.addAll(Arrays.asList(patternFluids));
-                CheckRecipeResult candidate = prepareThread(slot, items, fluids, budget, inputs);
-                if (candidate.wasSuccessful()) return candidate;
+                InputTransaction.View pattern = common.copy();
+                if (sharedItems != null) for (ItemStack item : sharedItems) pattern.add(item);
+                ItemStack[] items = inventory.getItemInputs();
+                if (items != null) for (ItemStack item : items) pattern.add(item);
+                FluidStack[] fluids = inventory.getFluidInputs();
+                if (fluids != null) for (FluidStack fluid : fluids) pattern.add(fluid);
+                CheckRecipeResult candidate = prepareThread(slot, pattern, central, budget, inputs);
+                if (candidate.wasSuccessful() || inputs.commitFailed) return candidate;
                 if (candidate != CheckRecipeResultRegistry.NO_RECIPE) result = candidate;
             }
         }
-        CheckRecipeResult commonResult = prepareThread(slot, commonItems, commonFluids, budget, inputs);
+        CheckRecipeResult commonResult = prepareThread(slot, common, central, budget, inputs);
         return commonResult != CheckRecipeResultRegistry.NO_RECIPE ? commonResult : result;
     }
 
-    private ArrayList<ItemStack> getStoredNonDualInputs() {
-        ArrayList<MTEHatchInputBus> scopedBuses = mInputBusses;
-        ArrayList<MTEHatchInputBus> ordinaryBuses = new ArrayList<>();
-        for (MTEHatchInputBus bus : scopedBuses) {
-            if (!(bus instanceof IDualInputHatch)) ordinaryBuses.add(bus);
-        }
-        ArrayList<ItemStack> storedItems;
-        mInputBusses = ordinaryBuses;
-        try {
-            storedItems = getStoredInputs();
-        } finally {
-            mInputBusses = scopedBuses;
-        }
-        // The controller and category GUI slots are not additional material inputs.
-        storedItems.removeIf(stack -> stack == mInventory[1]);
-        return storedItems;
+    /** Capture the caller's ordinary-input scope; dual inventories are added only by prepareThread(). */
+    private InputTransaction.View captureInputs(InputTransaction inputs, boolean includeItems) {
+        InputTransaction.View view = inputs.new View();
+        if (includeItems) getLongItemInputs().getSources()
+            .forEach(view::add);
+        getLongFluidInputs().getSources()
+            .forEach(view::add);
+        view.limits.keySet()
+            .removeIf(source -> source.owner == mInventory[1]);
+        return view;
     }
 
-    private CheckRecipeResult prepareThread(int slot, List<ItemStack> storedItems, List<FluidStack> storedFluids,
+    private CheckRecipeResult prepareThread(int slot, InputTransaction.View recipe, InputTransaction.View central,
         long budget, InputTransaction inputs) {
         processingGroupMask = 1 << slot;
-        ItemStack[] originals = uniqueItemReferences(storedItems);
-        FluidStack[] originalFluids = uniqueFluidReferences(storedFluids);
-        ItemStack[] itemCopies = Arrays.stream(originals)
-            .map(inputs::copyItem)
-            .toArray(ItemStack[]::new);
-        FluidStack[] fluidCopies = Arrays.stream(originalFluids)
-            .map(inputs::copyFluid)
-            .toArray(FluidStack[]::new);
-        // Shared recipe fluids and upkeep use the same pending copies, including earlier concentrated candidates.
-        IdentityHashMap<FluidStack, FluidStack> workingFluids = new IdentityHashMap<>();
-        for (int i = 0; i < originalFluids.length; i++) workingFluids.put(originalFluids[i], fluidCopies[i]);
-        FluidStack[] supply = getCentralSupplyFluids();
-        for (int i = 0; i < supply.length; i++) {
-            FluidStack working = workingFluids.get(supply[i]);
-            supply[i] = working != null ? working : inputs.copyFluid(supply[i]);
-        }
+        InputTransaction candidate = inputs.fork();
+        InputTransaction.Snapshot working = candidate.snapshot(recipe);
+        InputTransaction.Snapshot supply = candidate.snapshot(central);
 
         BottledChaosProcessingLogic logic = threadLogics[slot];
         logic.clear();
@@ -1335,14 +1316,13 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             machineConfiguration.runtime(
                 parameterVoltage(),
                 Math.max(0, inputPower),
-                itemCopies,
-                supply,
+                working.itemStacks(),
+                supply.fluidStacks(),
                 getSpeedBonus(),
                 getEuModifier(),
                 getMaxParallelRecipes()));
         logic.setMaterialCache(credentialHatches[slot].getMaterialCache(), plan -> reserveThreadOutputs(plan, inputs));
-        logic.setInputItems(itemCopies);
-        logic.setInputFluids(fluidCopies);
+        logic.setInputs(working.getInputItems(), working.getInputFluids());
         logic.setMaxParallel(1);
         logic.setBatchSize(getMaxBatchSize());
         logic.setEuModifier(getEuModifier());
@@ -1364,23 +1344,20 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             if (hasAuthorizedWork(other)) active.addAll(threads[other].upkeep);
             if (inputs.isPrepared(other)) starting.addAll(threadLogics[other].getUpkeep());
         }
-        result = structureUpkeep.checkStart(active, starting, supply);
+        candidate.accept(working);
+        supply = candidate.snapshot(central);
+        result = structureUpkeep.checkStart(active, starting, supply.getInputFluids());
         if (!result.wasSuccessful()) return result;
-        IdentityHashMap<ItemStack, ItemStack> roundItemCopies = new IdentityHashMap<>();
         List<BottledChaosUpkeep.ItemDemand> roundItems = logic.getPreparedPlan()
             .roundItems();
         if (!roundItems.isEmpty()) {
-            for (int i = 0; i < originals.length; i++) roundItemCopies.put(originals[i], itemCopies[i]);
-            ItemStack[] itemSupply = getCentralSupplyItems();
-            for (int i = 0; i < itemSupply.length; i++) {
-                ItemStack original = itemSupply[i];
-                itemSupply[i] = roundItemCopies.computeIfAbsent(original, inputs::copyItem);
-            }
-            result = BottledChaosUpkeep.consumeRoundItems(roundItems, itemSupply);
+            supply = candidate.snapshot(withCentralInputs(() -> captureInputs(inputs, true)));
+            result = BottledChaosUpkeep.consumeRoundItems(roundItems, supply.getInputItems());
             if (!result.wasSuccessful()) return result;
+            candidate.accept(supply);
         }
         // Both modes accept the same checked deltas; only the transaction decides when to apply them.
-        if (isWirelessMode() && inputs == InputTransaction.IMMEDIATE) {
+        if (isWirelessMode() && !inputs.deferred() && !inputs.probeOnly) {
             var owner = getBaseMetaTileEntity().getOwnerUuid();
             strongCheckOrAddUser(owner);
             if (!addEUToGlobalEnergyMap(
@@ -1393,8 +1370,23 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 return SimpleResultWithText.ofFailure("tst.bottledchaos.result.insufficient_wireless_energy");
             }
         }
-        if (inputs.accept(originals, itemCopies, originalFluids, fluidCopies, roundItemCopies)) updateSlots();
+        if (!inputs.probeOnly) {
+            inputs.accept(candidate);
+            if (!inputs.deferred()) {
+                if (isWirelessMode()) inputs.wirelessPaid = logic.getWirelessCost();
+                result = commitInputs(inputs);
+                inputs.commitFailed = !result.wasSuccessful();
+                if (result.wasSuccessful()) updateSlots();
+                return result;
+            }
+        }
         return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    private CheckRecipeResult commitInputs(InputTransaction inputs) {
+        CheckRecipeResult result = inputs.commit();
+        if (!result.wasSuccessful()) stopMachine(ShutDownReasonRegistry.CRITICAL_NONE);
+        return result;
     }
 
     /** Shared output reservation used by every candidate, including family fallback and concentrated probes. */
@@ -1465,25 +1457,31 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         return cacheExportSlot;
     }
 
-    /** Checked input deltas; stateless immediate/probe modes need no per-attempt reservation maps. */
+    /** Shared reservations belong to this scheduling attempt; source access stays in the existing input adapters. */
     private static final class InputTransaction {
 
-        private static final InputTransaction IMMEDIATE = new InputTransaction(false, false);
-        private static final InputTransaction PROBE = new InputTransaction(false, true);
-        private final IdentityHashMap<ItemStack, ItemStack> items;
-        private final IdentityHashMap<FluidStack, FluidStack> fluids;
+        private final Map<Object, Map<Object, InputSource>> sources;
+        private final Map<InputSource, Long> reserved = new LinkedHashMap<>();
         private final boolean[] prepared;
         private final boolean probeOnly;
+        private boolean commitFailed;
+        private BigInteger wirelessPaid = BigInteger.ZERO;
 
         private InputTransaction() {
             this(true, false);
         }
 
         private InputTransaction(boolean deferred, boolean probeOnly) {
-            items = deferred ? new IdentityHashMap<>() : null;
-            fluids = deferred ? new IdentityHashMap<>() : null;
+            sources = new IdentityHashMap<>();
             prepared = deferred ? new boolean[THREAD_COUNT] : null;
             this.probeOnly = probeOnly;
+        }
+
+        private InputTransaction(InputTransaction original) {
+            sources = original.sources;
+            prepared = original.prepared;
+            probeOnly = original.probeOnly;
+            reserved.putAll(original.reserved);
         }
 
         private boolean deferred() {
@@ -1494,33 +1492,123 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             return deferred() && prepared[slot];
         }
 
-        private ItemStack copyItem(ItemStack original) {
-            return (deferred() ? items.getOrDefault(original, original) : original).copy();
+        private InputTransaction fork() {
+            return new InputTransaction(this);
         }
 
-        private FluidStack copyFluid(FluidStack original) {
-            return (deferred() ? fluids.getOrDefault(original, original) : original).copy();
-        }
+        private final class View {
 
-        /** Returns true only when real inputs were changed and the host must update its slots. */
-        private boolean accept(ItemStack[] originals, ItemStack[] itemCopies, FluidStack[] originalFluids,
-            FluidStack[] fluidCopies, IdentityHashMap<ItemStack, ItemStack> roundItems) {
-            if (probeOnly) return false;
-            if (deferred()) {
-                for (int i = 0; i < originals.length; i++) items.put(originals[i], itemCopies[i]);
-                items.putAll(roundItems);
-                for (int i = 0; i < originalFluids.length; i++) fluids.put(originalFluids[i], fluidCopies[i]);
-                return false;
+            private final Map<InputSource, Long> limits = new LinkedHashMap<>();
+
+            private View copy() {
+                View copy = new View();
+                copy.limits.putAll(limits);
+                return copy;
             }
-            for (int i = 0; i < originals.length; i++) originals[i].stackSize = itemCopies[i].stackSize;
-            roundItems.forEach((original, copy) -> original.stackSize = copy.stackSize);
-            for (int i = 0; i < originalFluids.length; i++) originalFluids[i].amount = fluidCopies[i].amount;
-            return true;
+
+            private void add(ItemStack stack) {
+                add(InputSource.of(stack, stack));
+            }
+
+            private void add(FluidStack stack) {
+                add(InputSource.of(stack, stack));
+            }
+
+            private void add(InputSource input) {
+                if (input == null) return;
+                long limit = input.amount;
+                InputSource source = input.register(sources);
+                if (source != null) limits.merge(source, limit, Math::max);
+            }
         }
 
-        private void commit() {
-            items.forEach((original, copy) -> original.stackSize = copy.stackSize);
-            fluids.forEach((original, copy) -> original.amount = copy.amount);
+        private Snapshot snapshot(View view) {
+            return new Snapshot(view, reserved);
+        }
+
+        private void accept(Snapshot snapshot) {
+            for (int i = 0; i < snapshot.sources.size(); i++) {
+                long remaining = i < snapshot.items.length ? snapshot.items[i].stackSize()
+                    : snapshot.fluids[i - snapshot.items.length].amount();
+                long used = snapshot.initial[i] - remaining;
+                if (used < 0 || remaining < 0) throw new IllegalStateException("Invalid input reservation");
+                if (used > 0) reserved.merge(snapshot.sources.get(i), used, Math::addExact);
+            }
+        }
+
+        private void accept(InputTransaction candidate) {
+            reserved.clear();
+            reserved.putAll(candidate.reserved);
+        }
+
+        private CheckRecipeResult commit() {
+            for (var entry : reserved.entrySet()) {
+                if (entry.getKey().available.getAsLong() < entry.getValue()) return extractionFailure(entry.getKey());
+            }
+            // A short real extraction follows GT's non-rollback semantics; never retry an already debited candidate.
+            for (var entry : reserved.entrySet()) {
+                if (entry.getKey().extract.applyAsLong(entry.getValue()) != entry.getValue()) {
+                    reserved.clear();
+                    return extractionFailure(entry.getKey());
+                }
+            }
+            reserved.clear();
+            return CheckRecipeResultRegistry.SUCCESSFUL;
+        }
+
+        private static CheckRecipeResult extractionFailure(InputSource source) {
+            return SimpleCheckRecipeResult.ofFailurePersistOnShutdown(
+                source.template instanceof ItemStack ? "stocking_bus_fail_extraction"
+                    : "stocking_hatch_fail_extraction");
+        }
+
+        private static final class Snapshot {
+
+            private final List<InputSource> sources = new ArrayList<>();
+            private final ItemStackLong[] items;
+            private final FluidStackLong[] fluids;
+            private final long[] initial;
+
+            private Snapshot(View view, Map<InputSource, Long> reserved) {
+                for (InputSource source : view.limits.keySet())
+                    if (source.template instanceof ItemStack) sources.add(source);
+                int itemCount = sources.size();
+                for (InputSource source : view.limits.keySet())
+                    if (source.template instanceof FluidStack) sources.add(source);
+                items = new ItemStackLong[itemCount];
+                fluids = new FluidStackLong[sources.size() - itemCount];
+                initial = new long[sources.size()];
+                for (int i = 0; i < sources.size(); i++) {
+                    InputSource source = sources.get(i);
+                    initial[i] = Math
+                        .min(view.limits.get(source), Math.max(0, source.amount - reserved.getOrDefault(source, 0L)));
+                    if (i < itemCount) items[i] = new ItemStackLong(((ItemStack) source.template).copy(), initial[i]);
+                    else fluids[i - itemCount] = new FluidStackLong(((FluidStack) source.template).copy(), initial[i]);
+                }
+            }
+
+            private ItemStackLong[] getInputItems() {
+                return items;
+            }
+
+            private FluidStackLong[] getInputFluids() {
+                return fluids;
+            }
+
+            /** Bounded copies for structure parameter checks only, never for recipe allocation. */
+            private ItemStack[] itemStacks() {
+                ItemStack[] result = new ItemStack[items.length];
+                for (int i = 0; i < result.length; i++) result[i] = GTUtility
+                    .copyAmountUnsafe((int) Math.min(Integer.MAX_VALUE, items[i].stackSize()), items[i].itemStack());
+                return result;
+            }
+
+            private FluidStack[] fluidStacks() {
+                FluidStack[] result = new FluidStack[fluids.length];
+                for (int i = 0; i < result.length; i++) result[i] = GTUtility
+                    .copyAmount((int) Math.min(Integer.MAX_VALUE, fluids[i].amount()), fluids[i].fluidStack());
+                return result;
+            }
         }
     }
 
@@ -1718,20 +1806,31 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     }
 
     private FluidStack[] getCentralSupplyFluids() {
-        return withCentralInputs(() -> uniqueFluidReferences(getStoredFluidsWithDualInput()));
+        return withCentralInputs(() -> uniqueFluidReferences(getStoredFluids()));
     }
 
     private ItemStack[] getCentralSupplyItems() {
         return withCentralInputs(() -> {
-            ArrayList<ItemStack> items = getStoredInputsNoSeparation();
+            ArrayList<ItemStack> items = getStoredInputs();
             items.removeIf(stack -> stack == mInventory[1]);
             return uniqueItemReferences(items);
         });
     }
 
-    /** Source-machine upkeep belongs to the controller, not the credential's private input positions. */
+    /** Upkeep uses only central ordinary/long inputs; no private inputs or dual-inventory materials. */
     private <T> T withCentralInputs(Supplier<T> action) {
-        return withInputs(centralInputBuses, centralInputHatches, centralDualInputs, action);
+        return withNonDualInputs(centralInputBuses, centralInputHatches, action);
+    }
+
+    /** The host adds dual busses for GT's lifecycle, but must read their inventories separately. */
+    private <T> T withNonDualInputs(List<MTEHatchInputBus> buses, List<MTEHatchInput> hatches, Supplier<T> action) {
+        return withInputs(withoutDualInputs(buses), withoutDualInputs(hatches), new ArrayList<>(), action);
+    }
+
+    private static <T> ArrayList<T> withoutDualInputs(List<T> hatches) {
+        ArrayList<T> ordinary = new ArrayList<>();
+        for (T hatch : hatches) if (!(hatch instanceof IDualInputHatch)) ordinary.add(hatch);
+        return ordinary;
     }
 
     /** Scope only the exposed inputs; the caller owns GT's start/end processing lifecycle. */
@@ -1753,25 +1852,25 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     }
 
     private boolean payRunningCosts(long usage) {
+        BottledChaosUpkeep.Transaction payment;
         startRecipeProcessing();
-        BottledChaosUpkeep.Transaction payment = structureUpkeep
-            .prepare(uniqueFluidReferences(getStoredFluidsWithDualInput()));
-        if (!payment.result()
-            .wasSuccessful()) {
+        try {
+            InputTransaction inputs = new InputTransaction(false, false);
+            InputTransaction.Snapshot supply = inputs.snapshot(captureInputs(inputs, false));
+            payment = structureUpkeep.prepare(supply.getInputFluids());
+            setCheckRecipeResult(payment.result());
+            if (checkRecipeResult.wasSuccessful()) {
+                if (usage > 0 && !drainEnergyInput(usage)) {
+                    stopMachine(ShutDownReasonRegistry.POWER_LOSS);
+                    return false;
+                }
+                payment.commitInputs();
+                inputs.accept(supply);
+                setCheckRecipeResult(commitInputs(inputs));
+            }
+        } finally {
             endRecipeProcessing();
-            lEUt = 0;
-            recordRunningFailure(payment.result());
-            return false;
         }
-        if (usage > 0 && !drainEnergyInput(usage)) {
-            endRecipeProcessing();
-            stopMachine(ShutDownReasonRegistry.POWER_LOSS);
-            return false;
-        }
-        payment.commitInputs();
-        setCheckRecipeResult(CheckRecipeResultRegistry.SUCCESSFUL);
-        endRecipeProcessing();
-        // Extraction failures follow GT's failure-consumption rule; the jobs do not advance.
         if (!checkRecipeResult.wasSuccessful()) {
             lEUt = 0;
             recordRunningFailure(checkRecipeResult);

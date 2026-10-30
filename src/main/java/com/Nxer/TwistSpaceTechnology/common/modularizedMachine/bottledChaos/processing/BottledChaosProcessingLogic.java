@@ -14,6 +14,8 @@ import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosCredential;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.FluidStackLong;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosSourceParameters;
@@ -30,6 +32,9 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
 
     private static final int MAX_BATCH_TICKS = 200;
     public static final int WIRELESS_TICKS = 40;
+    private ItemStackLong[] items;
+    private FluidStackLong[] fluids;
+
     private boolean wireless;
     private BigInteger wirelessCost = BigInteger.ZERO;
 
@@ -43,6 +48,11 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
     private final Map<Long, Double> durationLimits = new HashMap<>();
     private Function<BottledChaosRecipeProcessor.Plan, CheckRecipeResult> outputCheck;
     private BottledChaosSourceParameters machineParameters = BottledChaosSourceParameters.DEFAULT;
+
+    public void setInputs(ItemStackLong[] items, FluidStackLong[] fluids) {
+        this.items = items;
+        this.fluids = fluids;
+    }
 
     public void setWireless(boolean wireless) {
         this.wireless = wireless;
@@ -107,7 +117,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
         }
         CheckRecipeResult failure = CheckRecipeResultRegistry.NO_RECIPE;
         var planner = BottledChaosRecipeProcessor
-            .executionPlanner(routeMask, inputItems, inputFluids, machineParameters, materials, planningCache);
+            .executionPlanner(routeMask, items, fluids, machineParameters, materials, planningCache);
         planner.setLimits(this::validateLimits, this::batchDurationLimit);
         // Output checks are reused only within this input/output snapshot, including fallback candidates.
         Map<PreparedPlan, CheckRecipeResult> outputChecks = new IdentityHashMap<>();
@@ -184,7 +194,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
                     calculatedEut = clock.eut();
                     duration = Math.max(1, clock.duration());
                 }
-                chosen.consumeInputCopies(inputItems, inputFluids);
+                chosen.consumeInputCopies(items, fluids);
                 preparedPlan = chosen;
                 blockedRoute = preparationFailure;
                 BottledChaosRecipeProcessor.Plan outputs = chosen.outputPlan();

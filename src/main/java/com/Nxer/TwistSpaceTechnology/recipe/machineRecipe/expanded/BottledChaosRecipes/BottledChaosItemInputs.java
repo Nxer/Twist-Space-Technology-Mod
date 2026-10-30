@@ -10,6 +10,7 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import gregtech.api.objects.ItemData;
@@ -80,6 +81,7 @@ final class BottledChaosItemInputs {
     static final class Matching {
 
         final ItemStack[] items;
+        final long[] amounts;
         private final ItemData[] associations;
         private final TST_ItemID[] identities;
         private final boolean[] valid;
@@ -89,10 +91,28 @@ final class BottledChaosItemInputs {
         private Map<TST_ItemID, boolean[]> combinedSlots;
 
         Matching(ItemStack[] provided) {
-            this(provided, null);
+            this(
+                provided,
+                provided == null ? new long[0]
+                    : Arrays.stream(provided)
+                        .mapToLong(item -> item == null ? 0 : item.stackSize)
+                        .toArray(),
+                null);
         }
 
-        Matching(ItemStack[] provided, Matching previous) {
+        Matching(ItemStackLong[] provided, Matching previous) {
+            this(
+                Arrays.stream(provided)
+                    .map(ItemStackLong::itemStack)
+                    .toArray(ItemStack[]::new),
+                Arrays.stream(provided)
+                    .mapToLong(ItemStackLong::stackSize)
+                    .toArray(),
+                previous);
+        }
+
+        private Matching(ItemStack[] provided, long[] amounts, Matching previous) {
+            this.amounts = amounts;
             items = provided == null ? new ItemStack[0] : provided;
             if (previous != null && previous.sameSlots(items)) {
                 associations = previous.associations;
@@ -252,9 +272,9 @@ final class BottledChaosItemInputs {
     static final class Consumption {
 
         private final TST_ItemID[] identities;
-        private final int[] amounts;
+        private final long[] amounts;
 
-        Consumption(ItemStack[] items, int[] amounts) {
+        Consumption(ItemStack[] items, long[] amounts) {
             identities = new TST_ItemID[amounts.length];
             this.amounts = amounts;
             for (int i = 0; i < amounts.length; i++) {
@@ -262,18 +282,21 @@ final class BottledChaosItemInputs {
             }
         }
 
-        void validate(ItemStack[] items) {
+        void validate(ItemStackLong[] items) {
             if (items == null && amounts.length != 0 || items != null && items.length != amounts.length)
                 throw new IllegalStateException("input inventory changed after allocation");
             for (int i = 0; i < amounts.length; i++) {
-                if (amounts[i] > 0 && (items[i] == null || items[i].stackSize < amounts[i]
-                    || !identities[i].equals(TST_ItemID.create(items[i]))))
+                if (amounts[i] > 0 && (items[i] == null || items[i].stackSize() < amounts[i]
+                    || !identities[i].equals(TST_ItemID.create(items[i].itemStack()))))
                     throw new IllegalStateException("input stack changed after allocation");
             }
         }
 
-        void consume(ItemStack[] items) {
-            for (int i = 0; i < amounts.length; i++) if (amounts[i] > 0) items[i].stackSize -= amounts[i];
+        void consume(ItemStackLong[] items) {
+            for (int i = 0; i < amounts.length; i++) {
+                if (amounts[i] > 0)
+                    items[i] = new ItemStackLong(items[i].itemStack(), items[i].stackSize() - amounts[i]);
+            }
         }
     }
 
@@ -309,7 +332,7 @@ final class BottledChaosItemInputs {
         }
         internal.replaceAll((key, amount) -> amount - consumed.getOrDefault(key, 0L));
         for (long amount : internal.values()) if (amount < 0) return null;
-        int[] direct = allocateDirect(demands, internal, matching);
+        long[] direct = allocateDirect(demands, internal, matching);
         if (direct != null) return new Consumption(items, direct);
         List<TST_ItemID> keys = new ArrayList<>(internal.keySet());
         int source = 0;
@@ -332,9 +355,9 @@ final class BottledChaosItemInputs {
         for (int i = 0; i < items.length; i++) {
             int node = firstSupply + keys.size() + i;
             slots.add(flow.add(source, node, 0));
-            if (items[i] == null || items[i].stackSize <= 0) continue;
+            if (items[i] == null || matching.amounts[i] <= 0) continue;
             for (int j = 0; j < demands.size(); j++) {
-                if (matching.slots(demands.get(j))[i]) flow.add(node, firstDemand + j, items[i].stackSize);
+                if (matching.slots(demands.get(j))[i]) flow.add(node, firstDemand + j, matching.amounts[i]);
             }
         }
         List<Edge> remaining = new ArrayList<>();
@@ -343,20 +366,19 @@ final class BottledChaosItemInputs {
         flow.fill(source, sink);
         for (Edge edge : internalEdges) if (edge.capacity != 0) return null;
         for (int i = 0; i < slots.size(); i++) {
-            if (items[i] != null && items[i].stackSize > 0) slots.get(i).capacity = items[i].stackSize;
+            if (items[i] != null && matching.amounts[i] > 0) slots.get(i).capacity = matching.amounts[i];
         }
         flow.fill(source, sink);
         for (Edge edge : remaining) if (edge.capacity != 0) return null;
-        int[] amounts = new int[items.length];
+        long[] amounts = new long[items.length];
         for (int i = 0; i < amounts.length; i++) {
-            amounts[i] = items[i] == null || items[i].stackSize <= 0 ? 0
-                : (int) (items[i].stackSize - slots.get(i).capacity);
+            amounts[i] = items[i] == null || matching.amounts[i] <= 0 ? 0 : matching.amounts[i] - slots.get(i).capacity;
         }
         return new Consumption(items, amounts);
     }
 
     /** Try the ordinary disjoint-input case first; overlapping native rules still fall back to residual paths. */
-    private static int[] allocateDirect(List<Requirement> demands, Map<TST_ItemID, Long> internal, Matching matching) {
+    private static long[] allocateDirect(List<Requirement> demands, Map<TST_ItemID, Long> internal, Matching matching) {
         ItemStack[] items = matching.items;
         Map<TST_ItemID, Long> remainingInternal = new LinkedHashMap<>(internal);
         long[] needed = new long[demands.size()];
@@ -371,12 +393,12 @@ final class BottledChaosItemInputs {
             needed[i] -= taken;
         }
         for (long amount : remainingInternal.values()) if (amount != 0) return null;
-        int[] amounts = new int[items.length];
+        long[] amounts = new long[items.length];
         for (int i = 0; i < demands.size(); i++) {
             for (int slot = 0; needed[i] > 0 && slot < items.length; slot++) {
-                if (items[slot] == null || items[slot].stackSize <= amounts[slot]
+                if (items[slot] == null || matching.amounts[slot] <= amounts[slot]
                     || !matching.slots(demands.get(i))[slot]) continue;
-                int taken = (int) Math.min(needed[i], items[slot].stackSize - amounts[slot]);
+                long taken = Math.min(needed[i], matching.amounts[slot] - amounts[slot]);
                 amounts[slot] += taken;
                 needed[i] -= taken;
             }

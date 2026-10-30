@@ -3,8 +3,8 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.pro
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +15,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.FluidStackLong;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.result.BottledChaosPoolFailure;
 import com.github.bsideup.jabel.Desugar;
 
@@ -67,23 +69,21 @@ public final class BottledChaosUpkeep {
     }
 
     /** Only mutate the caller's working copies after every pool's startup items are available. */
-    public static CheckRecipeResult consumeRoundItems(List<ItemDemand> demands, ItemStack[] inputs) {
-        IdentityHashMap<ItemStack, Integer> remaining = new IdentityHashMap<>();
-        for (ItemStack input : inputs) {
-            if (input != null && input.stackSize > 0) remaining.putIfAbsent(input, input.stackSize);
-        }
+    public static CheckRecipeResult consumeRoundItems(List<ItemDemand> demands, ItemStackLong[] inputs) {
+        long[] remaining = Arrays.stream(inputs)
+            .mapToLong(ItemStackLong::stackSize)
+            .toArray();
         for (ItemDemand demand : demands) {
             long needed = demand.amount();
-            for (ItemStack input : inputs) {
-                if (needed == 0) break;
-                if (input == null || !GTUtility.areStacksEqual(input, demand.item())) continue;
-                int taken = (int) Math.min(needed, remaining.getOrDefault(input, 0));
-                remaining.put(input, remaining.getOrDefault(input, 0) - taken);
+            for (int i = 0; needed > 0 && i < inputs.length; i++) {
+                if (!GTUtility.areStacksEqual(inputs[i].itemStack(), demand.item())) continue;
+                long taken = Math.min(needed, remaining[i]);
+                remaining[i] -= taken;
                 needed -= taken;
             }
             if (needed > 0) return BottledChaosPoolFailure.missingItem(demand.pool(), demand.item(), needed);
         }
-        remaining.forEach((item, amount) -> item.stackSize = amount);
+        for (int i = 0; i < inputs.length; i++) inputs[i] = new ItemStackLong(inputs[i].itemStack(), remaining[i]);
         return CheckRecipeResultRegistry.SUCCESSFUL;
     }
 
@@ -193,7 +193,7 @@ public final class BottledChaosUpkeep {
     }
 
     /** Startup reserves are checked, never consumed here. Already prepaid pools need no running reserve. */
-    public CheckRecipeResult checkStart(List<Demand> active, List<Demand> starting, FluidStack[] inputs) {
+    public CheckRecipeResult checkStart(List<Demand> active, List<Demand> starting, FluidStackLong[] inputs) {
         Map<RateKey, BigInteger> needed = new LinkedHashMap<>();
         for (Demand demand : active) {
             RateKey key = key(demand);
@@ -210,11 +210,11 @@ public final class BottledChaosUpkeep {
         }
         Map<GTUtility.FluidId, BigInteger> amounts = new LinkedHashMap<>();
         needed.forEach((key, amount) -> amounts.merge(key.fluid(), amount, BigInteger::add));
-        IdentityHashMap<FluidStack, Boolean> seen = new IdentityHashMap<>();
-        for (FluidStack input : inputs) {
-            if (input == null || input.amount <= 0 || seen.put(input, Boolean.TRUE) != null) continue;
-            amounts
-                .computeIfPresent(fluidId(input), (key, amount) -> amount.subtract(BigInteger.valueOf(input.amount)));
+        for (int i = 0; i < inputs.length; i++) {
+            long available = inputs[i].amount();
+            amounts.computeIfPresent(
+                fluidId(inputs[i].fluidStack()),
+                (key, amount) -> amount.subtract(BigInteger.valueOf(available)));
         }
         for (var entry : amounts.entrySet()) {
             if (entry.getValue()
@@ -239,7 +239,7 @@ public final class BottledChaosUpkeep {
     }
 
     /** Precheck every due pool before consuming any fluid. No fractional or deferred charges. */
-    public Transaction prepare(FluidStack[] inputs) {
+    public Transaction prepare(FluidStackLong[] inputs) {
         Map<RateKey, BigInteger> perPool = new LinkedHashMap<>();
         Map<GTUtility.FluidId, BigInteger> amounts = new LinkedHashMap<>();
         List<Bill> due = new ArrayList<>();
@@ -249,37 +249,36 @@ public final class BottledChaosUpkeep {
             perPool.put(bill.key, bill.amount);
             amounts.merge(bill.key.fluid(), bill.amount, BigInteger::add);
         }
-        IdentityHashMap<FluidStack, Integer> remaining = new IdentityHashMap<>();
-        for (FluidStack input : inputs) {
-            if (input != null && input.amount > 0) remaining.putIfAbsent(input, input.amount);
-        }
+        long[] remaining = Arrays.stream(inputs)
+            .mapToLong(FluidStackLong::amount)
+            .toArray();
         for (var entry : amounts.entrySet()) {
             BigInteger needed = entry.getValue();
-            for (FluidStack input : inputs) {
-                if (needed.signum() == 0) break;
-                if (input == null || !entry.getKey()
-                    .matches(input)) continue;
-                int available = remaining.getOrDefault(input, 0);
-                int taken = needed.min(BigInteger.valueOf(available))
-                    .intValue();
-                remaining.put(input, available - taken);
+            for (int i = 0; needed.signum() > 0 && i < inputs.length; i++) {
+                if (!entry.getKey()
+                    .matches(inputs[i].fluidStack())) continue;
+                long taken = needed.min(BigInteger.valueOf(remaining[i]))
+                    .longValueExact();
+                remaining[i] -= taken;
                 needed = needed.subtract(BigInteger.valueOf(taken));
             }
             if (needed.signum() > 0) {
-                return new Transaction(missingFluid(perPool, entry.getKey(), needed), null, null);
+                return new Transaction(missingFluid(perPool, entry.getKey(), needed), null, null, null);
             }
         }
-        return new Transaction(CheckRecipeResultRegistry.SUCCESSFUL, remaining, due);
+        return new Transaction(CheckRecipeResultRegistry.SUCCESSFUL, inputs, remaining, due);
     }
 
     /** One preparation result. Only a successful result has input and accounting changes to commit. */
     public static final class Transaction {
 
         private final CheckRecipeResult result;
-        private final IdentityHashMap<FluidStack, Integer> remaining;
+        private final FluidStackLong[] inputs;
+        private final long[] remaining;
         private final List<Bill> due;
 
-        private Transaction(CheckRecipeResult result, IdentityHashMap<FluidStack, Integer> remaining, List<Bill> due) {
+        private Transaction(CheckRecipeResult result, FluidStackLong[] inputs, long[] remaining, List<Bill> due) {
+            this.inputs = inputs;
             this.result = result;
             this.remaining = remaining;
             this.due = due;
@@ -290,7 +289,8 @@ public final class BottledChaosUpkeep {
         }
 
         public void commitInputs() {
-            remaining.forEach((fluid, amount) -> fluid.amount = amount);
+            for (int i = 0; i < inputs.length; i++)
+                inputs[i] = new FluidStackLong(inputs[i].fluidStack(), remaining[i]);
         }
 
         public void commitAccounting() {

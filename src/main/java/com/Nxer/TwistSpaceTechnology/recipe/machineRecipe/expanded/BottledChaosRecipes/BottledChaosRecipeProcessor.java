@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.FluidStackLong;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
@@ -141,7 +140,7 @@ public final class BottledChaosRecipeProcessor {
             return graph;
         }
 
-        private BottledChaosItemInputs.Matching matching(ItemStack[] items) {
+        private BottledChaosItemInputs.Matching matching(ItemStackLong[] items) {
             matching = new BottledChaosItemInputs.Matching(items, matching);
             return matching;
         }
@@ -212,12 +211,11 @@ public final class BottledChaosRecipeProcessor {
 
     }
 
-    public static ExecutionPlanner executionPlanner(long tagMask, ItemStack[] items, FluidStack[] fluids,
+    public static ExecutionPlanner executionPlanner(long tagMask, ItemStackLong[] items, FluidStackLong[] fluids,
         BottledChaosSourceParameters parameters, BottledChaosMaterialCache materials, PlanningCache planningCache) {
         return new ExecutionPlanner(
             cache,
             tagMask,
-            items,
             fluids,
             parameters,
             materials,
@@ -242,8 +240,7 @@ public final class BottledChaosRecipeProcessor {
         private final RouteCache snapshot;
         private final long tagMask;
         private int entry = -1;
-        private final ItemStack[] items;
-        private final FluidStack[] fluids;
+        private final FluidStackLong[] fluids;
         private final BottledChaosSourceParameters parameters;
         private final BottledChaosMaterialCache materials;
         private final Map<Long, SourceChecks> sourceChecks = new LinkedHashMap<>();
@@ -271,7 +268,7 @@ public final class BottledChaosRecipeProcessor {
             this.durationLimit = durationLimit;
         }
 
-        private ExecutionPlanner(RouteCache snapshot, long tagMask, ItemStack[] items, FluidStack[] fluids,
+        private ExecutionPlanner(RouteCache snapshot, long tagMask, FluidStackLong[] fluids,
             BottledChaosSourceParameters parameters, BottledChaosMaterialCache materials, AuthorizedGraph graph,
             BottledChaosItemInputs.Matching matching) {
             this.graph = graph;
@@ -282,7 +279,6 @@ public final class BottledChaosRecipeProcessor {
             authorized = graph == null ? null : graph.authorized;
             this.snapshot = snapshot;
             this.tagMask = tagMask;
-            this.items = items;
             this.fluids = fluids;
             this.parameters = parameters;
             this.materials = materials;
@@ -867,7 +863,7 @@ public final class BottledChaosRecipeProcessor {
         }
 
         private Map<Object, Long> collectAvailableInputs(AuthorizedGraph graph,
-            BottledChaosItemInputs.Matching matching, FluidStack[] fluids, Set<TST_ItemID> virtualItems) {
+            BottledChaosItemInputs.Matching matching, FluidStackLong[] fluids, Set<TST_ItemID> virtualItems) {
             Map<Object, Long> available = new LinkedHashMap<>();
             List<Requirement> requirements = new ArrayList<>(graph.itemRequirements);
             requirements.addAll(
@@ -877,15 +873,16 @@ public final class BottledChaosRecipeProcessor {
                 .forEach((key, slots) -> {
                     for (int slot = 0; slot < slots.length; slot++) {
                         if (!slots[slot]) continue;
-                        int amount = matching.items[slot].stackSize;
-                        available.merge(key, (long) amount, Math::addExact);
+                        long amount = matching.amounts[slot];
+                        available.merge(key, amount, BottledChaosChainPlanner::saturatedAdd);
                         if (amount == 0) virtualItems.add(key);
                     }
                 });
-            if (fluids != null) for (FluidStack stack : fluids) {
-                if (stack == null || stack.amount <= 0) continue;
-                FluidId key = FluidId.create(stack);
-                if (graph.requiredInputs.contains(key)) available.merge(key, (long) stack.amount, Math::addExact);
+            for (FluidStackLong fluid : fluids) {
+                if (fluid.amount() <= 0) continue;
+                FluidId key = FluidId.create(fluid.fluidStack());
+                if (graph.requiredInputs.contains(key))
+                    available.merge(key, fluid.amount(), BottledChaosChainPlanner::saturatedAdd);
             }
             return available;
         }
@@ -1000,20 +997,20 @@ public final class BottledChaosRecipeProcessor {
         }
 
         /** Consume only the caller's working copies, after power, time and output checks have succeeded. */
-        public void consumeInputCopies(ItemStack[] items, FluidStack[] fluids) {
+        public void consumeInputCopies(ItemStackLong[] items, FluidStackLong[] fluids) {
             Map<Object, Long> needed = new LinkedHashMap<>(consumed);
             needed.keySet()
                 .removeIf(key -> key instanceof TST_ItemID);
             itemConsumption.validate(items);
             Map<Object, Long> fluidCheck = new LinkedHashMap<>(needed);
-            if (fluids != null) for (FluidStack stack : fluids) {
-                if (stack != null && stack.amount > 0) takeAmount(fluidCheck, FluidId.create(stack), stack.amount);
-            }
+            for (FluidStackLong fluid : fluids)
+                takeAmount(fluidCheck, FluidId.create(fluid.fluidStack()), fluid.amount());
             if (!fluidCheck.isEmpty()) throw new IllegalStateException("input fluids changed after allocation");
             itemConsumption.consume(items);
-            if (fluids != null) for (FluidStack stack : fluids) {
-                if (stack != null && stack.amount > 0)
-                    stack.amount -= (int) takeAmount(needed, FluidId.create(stack), stack.amount);
+            for (int i = 0; i < fluids.length; i++) {
+                FluidStackLong fluid = fluids[i];
+                long taken = takeAmount(needed, FluidId.create(fluid.fluidStack()), fluid.amount());
+                if (taken > 0) fluids[i] = new FluidStackLong(fluid.fluidStack(), fluid.amount() - taken);
             }
             if (!needed.isEmpty()) throw new IllegalStateException("unrepresentable input consumption: " + needed);
         }
