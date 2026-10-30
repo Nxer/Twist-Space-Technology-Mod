@@ -912,7 +912,10 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
         int z) {
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
         if (!processingRecipe && !showRecipeRemainder) refreshSelectedContents(hasStorageCell());
-        tag.setLong("cacheCapacity", (long) Integer.MAX_VALUE * Config.MaxTotalIntSegments_AEStorageCellInput);
+        tag.setLong(
+            "cacheCapacity",
+            TST_AEStorageCellHelper
+                .limitPullableAmount(Long.MAX_VALUE, Config.MaxTotalIntSegments_AEStorageCellInput, pullMode));
 
         List<Integer> entries = new ArrayList<>();
         for (int i = 0; i < selectedContents.length; i++) {
