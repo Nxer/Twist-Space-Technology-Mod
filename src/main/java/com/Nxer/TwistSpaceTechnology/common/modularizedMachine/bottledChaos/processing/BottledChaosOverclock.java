@@ -21,12 +21,18 @@ public final class BottledChaosOverclock {
         return efficiency > 0 || efficiency == 0 && candidate.timeReduction > timeDivisor;
     }
 
-    /** Preserve normalized energy; compressing a wireless job adds no overclock loss. */
-    public static BigInteger wirelessCost(double power, double workTicks) {
+    /** Apply the final host overclock curve without a wired power ceiling or per-stage iteration. */
+    public static BigInteger wirelessCost(double power, double workTicks, double timeReduction, double powerIncrease) {
         if (!Double.isFinite(power) || power <= 0 || !Double.isFinite(workTicks) || workTicks <= 0)
             throw new IllegalArgumentException("Invalid wireless work");
+        validateMultipliers(timeReduction, powerIncrease);
+        double speed = Math.max(1, workTicks / MIN_OVERCLOCK_TICKS);
+        double energyMultiplier = timeReduction > 1
+            ? Math.pow(speed, scalingExponent(timeReduction, powerIncrease / timeReduction))
+            : 1;
         return BigDecimal.valueOf(power)
             .multiply(BigDecimal.valueOf(workTicks))
+            .multiply(BigDecimal.valueOf(energyMultiplier))
             .setScale(0, RoundingMode.CEILING)
             .toBigIntegerExact();
     }
@@ -135,7 +141,7 @@ public final class BottledChaosOverclock {
         double speed = Math.min(maximumSpeed, targetSpeed);
         double power = Math.ceil(basePower);
         if (timeReduction > 1 && powerIncrease > 1) {
-            power *= Math.pow(speed, Math.log(powerIncrease) / Math.log(timeReduction));
+            power *= Math.pow(speed, scalingExponent(timeReduction, powerIncrease));
         }
         long eut = (long) Math.min(availablePower, Math.ceil(power));
         double ticks = workTicks > MIN_OVERCLOCK_TICKS && maximumSpeed >= targetSpeed ? MIN_OVERCLOCK_TICKS
@@ -161,6 +167,10 @@ public final class BottledChaosOverclock {
         if (!Double.isFinite(timeDivisor) || timeDivisor < 1
             || !Double.isFinite(powerMultiplier)
             || powerMultiplier < 1) throw new IllegalArgumentException("Invalid overclock parameters");
+    }
+
+    private static double scalingExponent(double timeReduction, double multiplier) {
+        return Math.log(multiplier) / Math.log(timeReduction);
     }
 
     /** Wireless folding discounts unused target power; wired folding and final execution retain their speed curve. */

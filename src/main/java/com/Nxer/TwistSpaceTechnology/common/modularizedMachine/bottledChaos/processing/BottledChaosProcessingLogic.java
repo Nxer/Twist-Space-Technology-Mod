@@ -31,7 +31,7 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
 
     private static final int MAX_BATCH_TICKS = 200;
-    public static final int WIRELESS_TICKS = 40;
+    public static final int WIRELESS_TICKS = BottledChaosOverclock.MIN_OVERCLOCK_TICKS;
     private ItemStackLong[] items;
     private FluidStackLong[] fluids;
 
@@ -245,7 +245,8 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
                 // BigInteger billing has no host EU/t or long power ceiling; reject only invalid arithmetic.
                 if (!Double.isFinite(power) || power <= 0) return CheckRecipeResultRegistry.POWER_OVERFLOW;
                 if (!Double.isFinite(work) || work <= 0) return CheckRecipeResultRegistry.DURATION_OVERFLOW;
-                wirelessCost = BottledChaosOverclock.wirelessCost(power, work);
+                wirelessCost = BottledChaosOverclock
+                    .wirelessCost(power, work, overClockTimeReduction, overClockPowerIncrease);
                 calculatedEut = 0;
                 duration = WIRELESS_TICKS;
                 acceptPlan(chosen, preparationFailure);
