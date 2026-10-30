@@ -15,10 +15,12 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineParameters.Machine;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineParameters.Profile;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineParameters.Upgrades;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructureCatalog.Structure;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.processing.BottledChaosOverclock;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.VoltageIndex;
@@ -113,7 +115,17 @@ public final class BottledChaosMachineDescriptions {
             source,
             pool,
             1,
-            new BottledChaosMachineParameters.Context(32, 32, new ItemStack[0], new FluidStack[0], 1, 1, 1),
+            new BottledChaosMachineParameters.Context(
+                32,
+                32,
+                new ItemStack[0],
+                new FluidStack[0],
+                1,
+                1,
+                1,
+                OverclockType.NormalOverclock,
+                false,
+                false),
             BottledChaosSourceRequirements.NONE);
         Profile base = evaluation.profile();
         String unavailable = evaluation.failure() == null
@@ -203,7 +215,6 @@ public final class BottledChaosMachineDescriptions {
                 }
                 oc = clock(4, 2);
             }
-            case INDISTINCT -> oc = text("conditional_oc", tierName(u.component));
             case CRYSTALLINE -> parallel = ((long) u.glass * u.field) + "P";
             case MANUFACTURING -> parallel = "2T";
             case BLAST_FURNACE -> {
@@ -318,6 +329,10 @@ public final class BottledChaosMachineDescriptions {
             }
             default -> {}
         }
+        // #tr tst.bottledchaos.machine_module.master_oc
+        // # Host overclock parameters
+        // #zh_CN 主机超频参数
+        if (source.inheritsMasterOverclock) oc = text("master_oc");
         if (runtime != null && runtime.getBoolean("numeric")) {
             // Recipe-dependent expressions remain expressions; host voltage/power and installed upgrades are numeric.
             if (machine != Machine.QUANTUM && machine != Machine.SPINMATRON
@@ -351,7 +366,22 @@ public final class BottledChaosMachineDescriptions {
         // #tr tst.bottledchaos.machine_module.oc
         // # Per overclock: %s
         // #zh_CN 每档超频: %s
-        lines.add(EnumChatFormatting.GRAY + text("oc", EnumChatFormatting.AQUA + oc));
+        if (machine == Machine.INDISTINCT) {
+            OverclockType sourceOverclock = runtime != null && runtime.getBoolean("numeric")
+                && runtime.hasKey("sourceOverclock") ? OverclockType.getFromID(runtime.getInteger("sourceOverclock"))
+                    : OverclockType.NONE;
+            lines.add(EnumChatFormatting.GRAY + text("oc", ""));
+            // #tr tst.bottledchaos.machine_module.oc_below_tier
+            // # Recipe <= %s: %s
+            // #zh_CN 配方<=%s: %s
+            lines.add(
+                EnumChatFormatting.GRAY + text("oc_below_tier", tierName(u.component), clock(4, 4, sourceOverclock)));
+            // #tr tst.bottledchaos.machine_module.oc_above_tier
+            // # Recipe > %s: %s
+            // #zh_CN 配方>%s: %s
+            lines.add(
+                EnumChatFormatting.GRAY + text("oc_above_tier", tierName(u.component), clock(4, 2, sourceOverclock)));
+        } else lines.add(EnumChatFormatting.GRAY + text("oc", EnumChatFormatting.AQUA + oc));
         int voltageLimit = base != null && machine != Machine.ALLOY_BLAST ? base.maximumRecipeTier() : -1;
         if (voltageLimit >= 0)
             restrictions = append(restrictions, text("recipe_voltage_limit", tierName(voltageLimit)));
@@ -448,6 +478,14 @@ public final class BottledChaosMachineDescriptions {
                 .replaceFirst("\\.(?=e|$)", "");
     }
 
+    private static String clock(double power, double divisor, OverclockType sourceOverclock) {
+        if (BottledChaosOverclock.isBetterSourceOverclock(sourceOverclock, divisor, power)) {
+            power = sourceOverclock.powerIncrease;
+            divisor = sourceOverclock.timeReduction;
+        }
+        return EnumChatFormatting.AQUA + clock(power, divisor);
+    }
+
     private static String clock(double power, double divisor) {
         if (power == 1 && divisor == 1) return StatCollector.translateToLocal("GT5U.gui.text.nil");
         // #tr tst.bottledchaos.machine_module.clock_fixed_duration
@@ -487,10 +525,6 @@ public final class BottledChaosMachineDescriptions {
     // #tr tst.bottledchaos.machine_module.recipe_tier
     // # recipe tier
     // #zh_CN 配方等级
-
-    // #tr tst.bottledchaos.machine_module.conditional_oc
-    // # EU/t x4; recipes up to %s: duration /4; others: /2
-    // #zh_CN EU/t x4; 配方<=%s: 耗时/4; 其他: /2
 
     // #tr tst.bottledchaos.machine_module.culture
     // # Matching culture and sufficient glass tier are required

@@ -368,7 +368,7 @@ public final class BottledChaosMachineConfiguration {
         data.setInteger("sourcePool", nativeSlot);
         data.setDouble("speed", machineSpeeds[sourceSlot]);
         if ((!debug && source == null) || quantity <= 0) return data;
-        var profile = debug ? Evaluation.defaults(nativePool, machineSpeeds[sourceSlot])
+        var profile = debug ? Evaluation.defaults(nativePool, machineSpeeds[sourceSlot], context.sourceOverclock())
             .profile()
             : BottledChaosMachineParameters
                 .evaluate(source, nativePool, 1, context, BottledChaosSourceRequirements.NONE)
@@ -380,6 +380,10 @@ public final class BottledChaosMachineConfiguration {
             data.setDouble("time", profile.timeMultiplier());
             data.setDouble("power", profile.powerMultiplier());
             data.setDouble("divisor", profile.timeDivisor());
+            data.setInteger(
+                "sourceOverclock",
+                context.sourceOverclock()
+                    .getID());
             data.setLong("heat", profile.heat());
             if (debug) {
                 data.setBoolean("debug", true);
@@ -399,7 +403,10 @@ public final class BottledChaosMachineConfiguration {
                         context.fluids(),
                         context.masterTime(),
                         context.masterEU(),
-                        context.masterParallel()),
+                        context.masterParallel(),
+                        context.masterOverclock(),
+                        context.wireless(),
+                        context.hasOverclockController()),
                     BottledChaosSourceRequirements.NONE)
                 .profile();
         }
@@ -443,19 +450,10 @@ public final class BottledChaosMachineConfiguration {
     }
 
     /** One candidate's immutable inventory snapshot; source requirements never leak into another credential. */
-    public RuntimeParameters runtime(long inputVoltage, long inputPower, ItemStack[] items, FluidStack[] supplyFluids,
-        double masterTime, double masterEU, long masterParallel) {
+    public RuntimeParameters runtime(BottledChaosMachineParameters.Context context) {
         loadPendingMachines();
         if (configurationSnapshot == null) configurationSnapshot = new ConfigurationSnapshot();
-        return new RuntimeParameters(
-            configurationSnapshot,
-            inputVoltage,
-            inputPower,
-            items,
-            supplyFluids,
-            masterTime,
-            masterEU,
-            masterParallel);
+        return new RuntimeParameters(configurationSnapshot, context);
     }
 
     /** Stable until a module changes; each planning attempt shares these read-only arrays. */
@@ -481,24 +479,26 @@ public final class BottledChaosMachineConfiguration {
         private final List<BottledChaosUpkeep.Demand> sourceUsage = new ArrayList<>();
         private long roundItemPools;
 
-        private RuntimeParameters(ConfigurationSnapshot installed, long inputVoltage, long inputPower,
-            ItemStack[] items, FluidStack[] fluids, double masterTime, double masterEU, long masterParallel) {
+        private RuntimeParameters(ConfigurationSnapshot installed, BottledChaosMachineParameters.Context context) {
             this.installed = installed;
-            context = new BottledChaosMachineParameters.Context(
-                inputVoltage,
-                inputPower,
-                items,
-                fluids,
-                masterTime,
-                masterEU,
-                masterParallel);
+            this.context = context;
+        }
+
+        @Override
+        public long normalizationVoltage(long recipeVoltage) {
+            return context.wireless() ? context.inputVoltage() : recipeVoltage;
+        }
+
+        @Override
+        public boolean normalizeSourceEnergy() {
+            return context.wireless();
         }
 
         @Override
         public List<Evaluation> evaluateCandidates(RecipeMap<?> map, long recipeVoltage,
             BottledChaosSourceRequirements requirements) {
             Integer pool = poolIndexes.get(map);
-            if (pool == null) return Collections.singletonList(Evaluation.defaults(map, 1));
+            if (pool == null) return Collections.singletonList(Evaluation.defaults(map, 1, context.sourceOverclock()));
             List<Evaluation> results = new ArrayList<>();
             for (int installation : installed.candidates[pool]) {
                 SourceKey key = new SourceKey(pool, installation, recipeVoltage, requirements);
@@ -508,7 +508,7 @@ public final class BottledChaosMachineConfiguration {
                         ignored -> evaluate(pool, installation, map, recipeVoltage, requirements)));
             }
             // Pool admission reports a missing installation; no uninstalled source can become a replacement.
-            if (results.isEmpty()) results.add(Evaluation.defaults(map, 1));
+            if (results.isEmpty()) results.add(Evaluation.defaults(map, 1, context.sourceOverclock()));
             return results;
         }
 
@@ -522,7 +522,7 @@ public final class BottledChaosMachineConfiguration {
                     installed.purificationPlantQuantity,
                     installed.quantities[installation]);
             if ((installed.debugMask & (1L << installation)) != 0) {
-                var defaults = Evaluation.defaults(map, installed.speeds[installation]);
+                var defaults = Evaluation.defaults(map, installed.speeds[installation], context.sourceOverclock());
                 return new Evaluation(
                     defaults.profile(),
                     defaults.quantitySpeedMultiplier(),

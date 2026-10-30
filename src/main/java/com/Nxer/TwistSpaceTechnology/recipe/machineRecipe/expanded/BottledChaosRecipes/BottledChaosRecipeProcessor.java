@@ -264,8 +264,12 @@ public final class BottledChaosRecipeProcessor {
         private java.util.function.LongToDoubleFunction durationLimit = voltage -> Double.MAX_VALUE;
 
         public void setLimits(RouteFilter routeFilter, java.util.function.LongToDoubleFunction durationLimit) {
-            this.routeFilter = routeFilter;
+            setRouteFilter(routeFilter);
             this.durationLimit = durationLimit;
+        }
+
+        public void setRouteFilter(RouteFilter routeFilter) {
+            this.routeFilter = routeFilter;
         }
 
         private ExecutionPlanner(RouteCache snapshot, long tagMask, FluidStackLong[] fluids,
@@ -422,6 +426,61 @@ public final class BottledChaosRecipeProcessor {
                 full = appendAvailableTargets(full, durationLimit, fits);
             }
             return fitTargets(full, (long) Math.min(Integer.MAX_VALUE, durationLimit / full.duration), fits);
+        }
+
+        /** Wireless goals grow from material ratios; no time budget, power fit or short-round correction is used. */
+        public PreparedPlan maximizeWireless(PreparedPlan full) {
+            // Balance the one-set branches before scaling; otherwise a high-yield precursor floods its consumers.
+            full = appendAvailableTargets(full, Double.POSITIVE_INFINITY, candidate -> true);
+            PreparedPlan reference = null;
+            // A cache-fed seed needs one small external-input probe, then a growth estimate and rounding correction.
+            for (int pass = 0; pass < 3; pass++) {
+                double multiplier = full.chain.materialScale(
+                    reference == null ? null : reference.chain,
+                    snapshot.stages,
+                    external,
+                    remaining,
+                    Integer.MAX_VALUE);
+                if (reference == null && full.consumed.isEmpty() && !external.isEmpty())
+                    multiplier = Math.min(2, multiplier);
+                if (multiplier <= 1) break;
+                PreparedPlan previous = full;
+                for (; multiplier > 1; multiplier = 1 + (multiplier - 1) / 2) {
+                    long[] requested = full.targets.clone();
+                    for (int index : goalOrder) {
+                        long base = reference == null ? 0 : reference.targets[index];
+                        requested[index] = (long) Math
+                            .min(Integer.MAX_VALUE, Math.floor(base + (requested[index] - base) * multiplier));
+                    }
+                    if (Arrays.equals(requested, full.targets)) break;
+                    PreparedPlan candidate = probeTargets(requested, false);
+                    if (candidate == null) continue;
+                    candidate = finishCandidate(candidate);
+                    if (candidate == null) continue;
+                    full = candidate;
+                    break;
+                }
+                full = appendAvailableTargets(full, Double.POSITIVE_INFINITY, candidate -> true);
+                if (full == previous) break;
+                reference = previous;
+            }
+            return full;
+        }
+
+        /** Only shrink on actual output/matching failure; never refill a rejected wireless candidate. */
+        public PreparedPlan reduceWireless(PreparedPlan blocked, Predicate<PreparedPlan> fits) {
+            long[] requested = blocked.targets.clone();
+            while (true) {
+                boolean reduced = false;
+                for (int index : goalOrder) {
+                    if (requested[index] <= 1) continue;
+                    requested[index] = Math.max(1, requested[index] / 2);
+                    reduced = true;
+                }
+                if (!reduced) return null;
+                PreparedPlan candidate = probeTargets(requested, false);
+                if (candidate != null && fits.test(candidate)) return candidate;
+            }
         }
 
         /** Correct an underfilled estimate at most twice; ordinary rounds never enter this path. */

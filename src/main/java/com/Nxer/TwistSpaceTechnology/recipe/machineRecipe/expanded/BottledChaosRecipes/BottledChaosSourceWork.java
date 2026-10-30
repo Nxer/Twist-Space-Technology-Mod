@@ -23,6 +23,11 @@ final class BottledChaosSourceWork {
 
     static double normalizedDuration(TimeKey key, long rawTicks, BottledChaosSourceParameters.Evaluation source,
         long recipeVoltage) {
+        return normalizedDuration(key, rawTicks, source, recipeVoltage, false);
+    }
+
+    private static double normalizedDuration(TimeKey key, long rawTicks, BottledChaosSourceParameters.Evaluation source,
+        long recipeVoltage, boolean normalizeEnergy) {
         if (key.eut() == 0) return 0;
         var profile = source.profile();
         if (source.energyOnly()) return rawTicks * (double) key.eut()
@@ -31,10 +36,11 @@ final class BottledChaosSourceWork {
             / recipeVoltage;
         double sourceSpeed = 1 / profile.timeMultiplier();
         double sourceDuration = Math.max(profile.minimumSourceDuration(), key.recipeTicks() / sourceSpeed);
+        long sourceVoltage = Math.min(recipeVoltage, profile.maximumSourcePower());
         return BottledChaosOverclock.calculateNormalizedDuration(
             rawTicks,
             key.eut(),
-            Math.min(recipeVoltage, profile.maximumSourcePower()),
+            sourceVoltage,
             profile.parallel(),
             key.recipeTicks() / sourceDuration * source.quantitySpeedMultiplier(),
             profile.euMultiplier(),
@@ -42,7 +48,8 @@ final class BottledChaosSourceWork {
             profile.powerMultiplier(),
             source.maximumOverclocks(),
             source.perfectOverclocks(),
-            source.overclockLimitAlternatives());
+            source.overclockLimitAlternatives(),
+            normalizeEnergy) * (normalizeEnergy ? (double) sourceVoltage / recipeVoltage : 1);
     }
 
     @Desugar
@@ -182,6 +189,9 @@ final class BottledChaosSourceWork {
 
     private static Selection evaluateSources(Map<TimeKey, Long> work, BottledChaosSourceParameters parameters,
         long voltage, double scale, boolean ingotMold) {
+        long normalizationVoltage = parameters.normalizationVoltage(voltage);
+        double voltageRatio = (double) normalizationVoltage / voltage;
+        boolean normalizeEnergy = parameters.normalizeSourceEnergy();
         double duration = 0;
         long pools = 0;
         List<SelectedSource> sources = new ArrayList<>(work.size());
@@ -191,7 +201,11 @@ final class BottledChaosSourceWork {
             double bestDuration = Double.POSITIVE_INFINITY;
             for (var candidate : parameters.evaluateCandidates(key.map(), voltage, key.requirements())) {
                 if (ingotMold && !candidate.ingotMold()) continue;
-                double cost = candidate.successful() ? normalizedDuration(key, entry.getValue(), candidate, voltage)
+                // Keep the planner's existing energy unit: chain voltage x duration = folding voltage x folded
+                // duration.
+                double cost = candidate.successful()
+                    ? normalizedDuration(key, entry.getValue(), candidate, normalizationVoltage, normalizeEnergy)
+                        * voltageRatio
                     : Double.POSITIVE_INFINITY;
                 if (source == null || candidate.successful() && (!source.successful() || cost < bestDuration)) {
                     source = candidate;

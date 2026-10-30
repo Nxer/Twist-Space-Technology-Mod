@@ -733,6 +733,22 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         return generatorLevel >= 4 && mEnergyHatches.isEmpty() && mExoticEnergyHatches.isEmpty();
     }
 
+    private BottledChaosMachineParameters.Context machineParameterContext(long voltage, long power, ItemStack[] items,
+        FluidStack[] fluids) {
+        var controllers = modularHatches.get(ModularHatchTypes.OVERCLOCK_CONTROLLER);
+        return new BottledChaosMachineParameters.Context(
+            voltage,
+            power,
+            items,
+            fluids,
+            getSpeedBonus(),
+            getEuModifier(),
+            getMaxParallelRecipes(),
+            overclockType,
+            isWirelessMode(),
+            controllers != null && !controllers.isEmpty());
+    }
+
     private long parameterVoltage() {
         return isWirelessMode() ? GTValues.V[VoltageIndex.MAX] : getMaxInputVoltage();
     }
@@ -752,7 +768,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             && !isThreadExecutionDisabled(slot)
             && validGroup(slot)
             && matchingCredentials[slot]
-            && thread.recipeVoltage <= getMaximumRecipeVoltage()
+            && (thread.isWireless() || thread.recipeVoltage <= getMaximumRecipeVoltage())
             && (poolMask & thread.requiredPools) == thread.requiredPools;
     }
 
@@ -960,7 +976,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if (!validGroup(slot) || !matchingCredentials[slot]) {
             return SimpleResultWithText.ofFailure("tst.bottledchaos.result.credential_changed");
         }
-        if (thread.recipeVoltage > getMaximumRecipeVoltage())
+        if (!thread.isWireless() && thread.recipeVoltage > getMaximumRecipeVoltage())
             return SimpleResultWithText.ofFailure("tst.bottledchaos.result.recipe_voltage_limit");
         if ((poolMask & thread.requiredPools) != thread.requiredPools) {
             return BottledChaosProcessingLogic.missingPools(thread.requiredPools, poolMask);
@@ -1314,13 +1330,11 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         logic.setMachineConfiguration(
             getMaximumRecipeVoltage(),
             machineConfiguration.runtime(
-                parameterVoltage(),
-                Math.max(0, inputPower),
-                working.itemStacks(),
-                supply.fluidStacks(),
-                getSpeedBonus(),
-                getEuModifier(),
-                getMaxParallelRecipes()));
+                machineParameterContext(
+                    parameterVoltage(),
+                    Math.max(0, inputPower),
+                    working.itemStacks(),
+                    supply.fluidStacks())));
         logic.setMaterialCache(credentialHatches[slot].getMaterialCache(), plan -> reserveThreadOutputs(plan, inputs));
         logic.setInputs(working.getInputItems(), working.getInputFluids());
         logic.setMaxParallel(1);
@@ -2418,13 +2432,11 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             missingRecipePools = 0;
             long installed = machineConfiguration.installedPoolMask();
             var parameters = machineConfiguration.runtime(
-                Math.max(32, parameterVoltage()),
-                Math.max(32, inputPower),
-                getCentralSupplyItems(),
-                getCentralSupplyFluids(),
-                getSpeedBonus(),
-                getEuModifier(),
-                getMaxParallelRecipes());
+                machineParameterContext(
+                    Math.max(32, parameterVoltage()),
+                    Math.max(32, inputPower),
+                    getCentralSupplyItems(),
+                    getCentralSupplyFluids()));
             for (int slot = 0; slot < THREAD_COUNT; slot++) {
                 long required = threads[slot].isBusy() ? threads[slot].requiredPools
                     : BottledChaosRecipeProcessor.displayPoolMask(
@@ -2455,14 +2467,11 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         return machineConfiguration.moduleParameters(
             slot,
             source,
-            new BottledChaosMachineParameters.Context(
+            machineParameterContext(
                 parameterVoltage(),
                 Math.max(0, inputPower),
                 getCentralSupplyItems(),
-                getCentralSupplyFluids(),
-                getSpeedBonus(),
-                getEuModifier(),
-                getMaxParallelRecipes()),
+                getCentralSupplyFluids()),
             demands);
     }
 

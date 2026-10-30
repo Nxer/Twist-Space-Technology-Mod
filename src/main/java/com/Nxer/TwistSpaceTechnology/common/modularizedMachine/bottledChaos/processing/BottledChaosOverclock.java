@@ -4,10 +4,22 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 
+import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
+
 /** Shared source normalization and final execution overclocks. Only final execution has a two-second stop. */
 public final class BottledChaosOverclock {
 
     public static final int MIN_OVERCLOCK_TICKS = 40;
+
+    /** Compare speed at equal power growth; keep the stronger native step on equal efficiency. */
+    public static boolean isBetterSourceOverclock(OverclockType candidate, double timeDivisor, double powerMultiplier) {
+        // Fixed-speed sources retain their explicit no-overclock behavior.
+        if (candidate == OverclockType.NONE || powerMultiplier <= 1) return false;
+        int efficiency = Double.compare(
+            Math.log(candidate.timeReduction) / Math.log(candidate.powerIncrease),
+            Math.log(timeDivisor) / Math.log(powerMultiplier));
+        return efficiency > 0 || efficiency == 0 && candidate.timeReduction > timeDivisor;
+    }
 
     /** Preserve normalized energy; compressing a wireless job adds no overclock loss. */
     public static BigInteger wirelessCost(double power, double workTicks) {
@@ -41,7 +53,7 @@ public final class BottledChaosOverclock {
     /** Normalize original source work once; stochastic limits average costs rather than overclock counts. */
     public static double calculateNormalizedDuration(long duration, long recipeEUt, long targetEUt, long parallelLimit,
         double speedMultiplier, double euMultiplier, double timeDivisor, double powerMultiplier, int maximumOverclocks,
-        int perfectOverclocks, int[] overclockLimitAlternatives) {
+        int perfectOverclocks, int[] overclockLimitAlternatives, boolean normalizeEnergy) {
         if (duration <= 0 || recipeEUt <= 0
             || targetEUt <= 0
             || parallelLimit <= 0
@@ -64,14 +76,15 @@ public final class BottledChaosOverclock {
         double parallelPower = parallelLimit == parallelTier ? 1 : parallelLimit / (parallelTier * 4.0);
         double modifiedPower = recipeEUt * euMultiplier * parallelPower;
         double work = duration / speedMultiplier;
-        if (!Double.isFinite(modifiedPower) || modifiedPower <= 0 || modifiedPower >= Long.MAX_VALUE)
+        if (!Double.isFinite(modifiedPower) || modifiedPower <= 0
+            || !normalizeEnergy && modifiedPower >= Long.MAX_VALUE)
             throw new ArithmeticException("Recipe power overflow");
         if (!Double.isFinite(work) || work <= 0) throw new ArithmeticException("Duration overflow");
         // Modes explicitly disabling overclocks keep their fixed source speed, including at 1/1.
-        if (powerMultiplier == 1) return work;
-        long basePower = (long) Math.ceil(modifiedPower);
+        if (powerMultiplier == 1) return normalizeEnergy ? work * modifiedPower / targetEUt : work;
+        double basePower = Math.ceil(modifiedPower);
         while (basePower > targetEUt) {
-            basePower = (long) Math.ceil(basePower / powerMultiplier);
+            basePower = Math.ceil(basePower / powerMultiplier);
             work *= timeDivisor;
             if (!Double.isFinite(work)) throw new ArithmeticException("Duration overflow");
         }
@@ -88,7 +101,8 @@ public final class BottledChaosOverclock {
                 powerMultiplier,
                 maximumOverclocks < 0 ? -1 : (long) maximumOverclocks + parallelOverclocks,
                 finitePerfect,
-                false);
+                false,
+                normalizeEnergy);
         } else {
             normalized = 0;
             for (int limit : overclockLimitAlternatives) {
@@ -101,7 +115,8 @@ public final class BottledChaosOverclock {
                         powerMultiplier,
                         limit < 0 ? -1 : (long) limit + parallelOverclocks,
                         finitePerfect,
-                        false)
+                        false,
+                        normalizeEnergy)
                     / overclockLimitAlternatives.length;
             }
         }
@@ -139,7 +154,7 @@ public final class BottledChaosOverclock {
         validateMultipliers(timeReduction, powerIncrease);
         if (timeReduction == 1) return 1;
         if (powerIncrease == 1) return Double.MAX_VALUE;
-        return overclockSpeed(Math.ceil(basePower), availablePower, timeReduction, powerIncrease, -1, 0, true);
+        return overclockSpeed(Math.ceil(basePower), availablePower, timeReduction, powerIncrease, -1, 0, true, false);
     }
 
     private static void validateMultipliers(double timeDivisor, double powerMultiplier) {
@@ -148,9 +163,10 @@ public final class BottledChaosOverclock {
             || powerMultiplier < 1) throw new IllegalArgumentException("Invalid overclock parameters");
     }
 
-    /** Whole source steps and the master's optional fractional last step follow the same power curve. */
+    /** Wireless folding discounts unused target power; wired folding and final execution retain their speed curve. */
     private static double overclockSpeed(double basePower, long availablePower, double timeDivisor,
-        double powerMultiplier, long maximumOverclocks, long perfectOverclocks, boolean fractionalLastStep) {
+        double powerMultiplier, long maximumOverclocks, long perfectOverclocks, boolean fractionalLastStep,
+        boolean normalizeEnergy) {
         double power = basePower;
         double speed = 1;
         int count = 0;
@@ -166,6 +182,7 @@ public final class BottledChaosOverclock {
             speed *= nextSpeed;
             count++;
         }
+        if (normalizeEnergy) speed *= availablePower / power;
         return Double.isFinite(speed) ? speed : Double.MAX_VALUE;
     }
 }

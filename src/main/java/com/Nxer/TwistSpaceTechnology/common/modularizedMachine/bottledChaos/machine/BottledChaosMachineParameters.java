@@ -13,7 +13,11 @@ import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BallLightning;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaMacerator;
+import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.IModularizedMachine;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularHatchTypes;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructureCatalog.Structure;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.processing.BottledChaosOverclock;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.result.BottledChaosPoolFailure;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
@@ -184,6 +188,7 @@ public final class BottledChaosMachineParameters {
         final BottledChaosComplexStructures.GodforgeProfile godforge;
         final FoundryData foundry;
         final boolean fourHeliocasts;
+        final boolean inheritsMasterOverclock;
 
         InstalledSource(ItemStack controller, Structure structure) {
             this.structure = structure;
@@ -192,6 +197,11 @@ public final class BottledChaosMachineParameters {
             original = controller != null && controller.getItem() instanceof ItemMachines
                 ? ItemMachines.getMetaTileEntity(controller)
                 : null;
+            inheritsMasterOverclock = original instanceof IModularizedMachine modular
+                && (modular.getSupportedModularHatchTypes()
+                    .contains(ModularHatchTypes.ALL)
+                    || modular.getSupportedModularHatchTypes()
+                        .contains(ModularHatchTypes.OVERCLOCK_CONTROLLER));
             pools = BottledChaosSupportedMachine.recipeMaps(original);
             machine = original == null ? null : Machine.find(original);
             upgrades = new Upgrades(structure == null ? new ItemStack[0] : structure.materials());
@@ -214,7 +224,13 @@ public final class BottledChaosMachineParameters {
     /** References are the caller-owned, unmodified input snapshot for one planning attempt. */
     @Desugar
     public record Context(long inputVoltage, long inputPower, ItemStack[] items, FluidStack[] fluids, double masterTime,
-        double masterEU, long masterParallel) {}
+        double masterEU, long masterParallel, OverclockType masterOverclock, boolean wireless,
+        boolean hasOverclockController) {
+
+        public OverclockType sourceOverclock() {
+            return wireless && hasOverclockController ? masterOverclock : OverclockType.NONE;
+        }
+    }
 
     @Desugar
     record Evaluation(Profile profile, CheckRecipeResult failure) {
@@ -223,9 +239,13 @@ public final class BottledChaosMachineParameters {
     }
 
     static Profile defaultProfile(boolean perfect) {
+        return defaultProfile(perfect, OverclockType.NONE);
+    }
+
+    static Profile defaultProfile(boolean perfect, OverclockType sourceOverclock) {
         Values values = new Values();
         if (perfect) values.timeDivisor = 4;
-        return values.profile();
+        return values.profile(sourceOverclock);
     }
 
     static Evaluation evaluate(InstalledSource source, RecipeMap<?> pool, long recipeVoltage, Context context,
@@ -257,7 +277,7 @@ public final class BottledChaosMachineParameters {
             || masterEU <= 0
             || masterParallel <= 0
             || requiredHeat < 0) return Evaluation.INVALID;
-        if (source.debug) return new Evaluation(new Values().profile(), null);
+        if (source.debug) return new Evaluation(new Values().profile(context.sourceOverclock()), null);
         IMetaTileEntity original = source.original;
         Machine machine = source.machine;
         Structure structure = source.structure;
@@ -266,7 +286,7 @@ public final class BottledChaosMachineParameters {
         if (machine == null) {
             if (!(original instanceof MTEBasicMachine basic) || basic.mTier <= 0) return Evaluation.INVALID;
             value.maximumRecipeTier = basic.mTier;
-            return new Evaluation(value.profile(), null);
+            return new Evaluation(value.profile(context.sourceOverclock()), null);
         }
         if (structure == null) return Evaluation.INVALID;
         Upgrades u = source.upgrades;
@@ -675,6 +695,10 @@ public final class BottledChaosMachineParameters {
                 value.maximumOverclocks = 0;
             }
         }
+        if (source.inheritsMasterOverclock) {
+            value.timeDivisor = context.masterOverclock().timeReduction;
+            value.powerMultiplier = context.masterOverclock().powerIncrease;
+        }
         // Only source machines whose glass limits voltage inherit a recipe voltage cap.
         switch (machine) {
             case MEGA_CHEMICAL, MEGA_OIL_CRACKER, HEARTH, LARGE_FLUID_EXTRACTOR, SOLIDIFIER -> value.maximumRecipeTier = u.glass;
@@ -694,7 +718,9 @@ public final class BottledChaosMachineParameters {
         if (value.requiresHeat && (value.heat <= 0 || requiredHeat > value.heat))
             return reject(pool, "heat", value.heat, Math.max(1, requiredHeat));
         if (requiredGlassTier > value.glassTier) return reject(pool, "glass", value.glassTier, requiredGlassTier);
-        return new Evaluation(value.profile(), null);
+        return new Evaluation(
+            value.profile(source.inheritsMasterOverclock ? OverclockType.NONE : context.sourceOverclock()),
+            null);
     }
 
     private static Evaluation reject(RecipeMap<?> pool, String parameter, long available, long required) {
@@ -762,7 +788,11 @@ public final class BottledChaosMachineParameters {
             timeMultiplier = time;
         }
 
-        Profile profile() {
+        Profile profile(OverclockType sourceOverclock) {
+            if (BottledChaosOverclock.isBetterSourceOverclock(sourceOverclock, timeDivisor, powerMultiplier)) {
+                timeDivisor = sourceOverclock.timeReduction;
+                powerMultiplier = sourceOverclock.powerIncrease;
+            }
             if (parallel <= 0 || !Double.isFinite(euMultiplier)
                 || euMultiplier <= 0
                 || !Double.isFinite(timeMultiplier)

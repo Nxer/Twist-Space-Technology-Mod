@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.mac
 import java.util.Collections;
 import java.util.List;
 
+import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.processing.BottledChaosUpkeep;
 import com.github.bsideup.jabel.Desugar;
 
@@ -13,6 +14,16 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 public interface BottledChaosSourceParameters {
 
     BottledChaosSourceParameters DEFAULT = new BottledChaosSourceParameters() {};
+
+    /** Folding voltage is independent of the original recipe's admission checks. */
+    default long normalizationVoltage(long recipeVoltage) {
+        return recipeVoltage;
+    }
+
+    /** Wireless execution bills source energy; wired execution retains its original time folding. */
+    default boolean normalizeSourceEnergy() {
+        return false;
+    }
 
     default boolean isSourceAvailable(RecipeMap<?> pool) {
         return true;
@@ -59,6 +70,19 @@ public interface BottledChaosSourceParameters {
         public static Evaluation defaults(RecipeMap<?> pool, double quantitySpeed) {
             Evaluation base = BottledChaosMachineConfiguration.isPurificationPool(pool) ? PERFECT : NORMAL;
             return quantitySpeed == 1 ? base : new Evaluation(base.profile, quantitySpeed, false, -1, 0, null, null);
+        }
+
+        public static Evaluation defaults(RecipeMap<?> pool, double quantitySpeed, OverclockType sourceOverclock) {
+            if (sourceOverclock == OverclockType.NONE) return defaults(pool, quantitySpeed);
+            return new Evaluation(
+                BottledChaosMachineParameters
+                    .defaultProfile(BottledChaosMachineConfiguration.isPurificationPool(pool), sourceOverclock),
+                quantitySpeed,
+                false,
+                -1,
+                0,
+                null,
+                null);
         }
 
         public static Evaluation rejected(CheckRecipeResult failure) {

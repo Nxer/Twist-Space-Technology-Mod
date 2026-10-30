@@ -101,6 +101,34 @@ final class BottledChaosChainPlanner {
             pools = other.pools;
             duration = other.duration;
         }
+
+        /** Bound a wireless expansion by integer stage capacity and observed external input use, not work time. */
+        double materialScale(Result previous, Stage[] stages, Map<Object, Long> available, Map<Object, Long> carry,
+            long batchLimit) {
+            double scale = batchLimit;
+            for (int index = 0; index < batches.length; index++) {
+                long baseTarget = previous == null ? 0 : previous.targets[index];
+                if (targets[index] > baseTarget)
+                    scale = Math.min(scale, (double) (batchLimit - baseTarget) / (targets[index] - baseTarget));
+                // Recovery is optional and may leave carry; it must not throttle the main production goals.
+                long baseBatches = previous == null ? 0 : previous.batches[index];
+                if (batches[index] > baseBatches && !stages[index].availableInputsOnly)
+                    scale = Math.min(scale, (double) (batchLimit - baseBatches) / (batches[index] - baseBatches));
+            }
+            for (var input : consumed.entrySet()) {
+                long base = previous == null ? 0 : previous.consumed.getOrDefault(input.getKey(), 0L);
+                if (input.getValue() > base) scale = Math.min(
+                    scale,
+                    (double) (available.getOrDefault(input.getKey(), 0L) - base) / (input.getValue() - base));
+            }
+            // Cache-only recycling has no external consumption from which to estimate its batch count.
+            if (available.isEmpty()) for (var input : carry.entrySet()) {
+                long base = previous == null ? input.getValue() : previous.remaining.getOrDefault(input.getKey(), 0L);
+                long used = base - remaining.getOrDefault(input.getKey(), 0L);
+                if (used > 0) scale = Math.min(scale, (double) base / used);
+            }
+            return Math.max(1, scale);
+        }
     }
 
     /** Split carry only after chaining. Check every output sum before changing any candidate inventory. */
