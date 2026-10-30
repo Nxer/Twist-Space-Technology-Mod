@@ -101,7 +101,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
 
     @Override
     public @NotNull CheckRecipeResult process() {
-        long diagnosticStart = System.nanoTime();
+        BottledChaosDiagnostics diagnostics = BottledChaosDiagnostics.begin();
         preparedPlan = null;
         wirelessCost = BigInteger.ZERO;
         blockedRoute = CheckRecipeResultRegistry.NO_RECIPE;
@@ -115,13 +115,13 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
             // #zh_CN 瓶中混沌处理配方不可用. 请检查启动日志.
             return SimpleResultWithText.ofFailure("tst.bottledchaos.result.recipe_cache_unavailable");
         }
-        return wireless ? processWireless(diagnosticStart) : processWired(diagnosticStart);
+        return wireless ? processWireless(diagnostics) : processWired(diagnostics);
     }
 
-    private CheckRecipeResult processWired(long diagnosticStart) {
+    private CheckRecipeResult processWired(BottledChaosDiagnostics diagnostics) {
         CheckRecipeResult failure = CheckRecipeResultRegistry.NO_RECIPE;
         var planner = BottledChaosRecipeProcessor
-            .executionPlanner(routeMask, items, fluids, machineParameters, materials, planningCache);
+            .executionPlanner(routeMask, items, fluids, machineParameters, materials, planningCache, diagnostics);
         planner.setLimits(this::validateLimits, this::batchDurationLimit);
         // Output checks are reused only within this input/output snapshot, including fallback candidates.
         Map<PreparedPlan, CheckRecipeResult> outputChecks = new IdentityHashMap<>();
@@ -129,13 +129,13 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
             .computeIfAbsent(candidate, plan -> prepareAndCheckOutputs(planner, plan));
         Predicate<PreparedPlan> fitsWork = candidate -> validatePlan(candidate).wasSuccessful()
             && candidate.durationTicks() <= batchDurationLimit(candidate);
-        long diagnosticSetup = System.nanoTime();
+        diagnostics.setupComplete();
         // 1. Try the last successful family first. Failures may select another entry/family without any consumption.
         for (int entry : BottledChaosRecipeProcessor.candidateEntries(routeMask, materials)) {
             for (int attempt = 0; attempt < 2; attempt++) {
-                long diagnosticPrepareStart = System.nanoTime();
+                diagnostics.prepareStarted();
                 PreparedPlan baseline = attempt == 0 ? planner.prepareEntry(entry) : planner.retryEntry(entry);
-                long diagnosticPrepared = System.nanoTime();
+                diagnostics.prepared();
                 if (baseline == null) {
                     if (failure == CheckRecipeResultRegistry.NO_RECIPE) failure = planner.preparationFailure();
                     break;
@@ -153,12 +153,12 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
                     <= batchDurationLimit(chosen) * BottledChaosOverclock.MIN_OVERCLOCK_TICKS / MAX_BATCH_TICKS) {
                     chosen = planner.refineShortPlan(chosen, fitsWork);
                 }
-                long diagnosticFitted = System.nanoTime();
+                diagnostics.fitted();
                 // 3. Reserve outputs before changing even the caller's input copies; a smaller plan may still fit.
                 PreparedPlan mainPlan = chosen;
                 PreparedPlan recovered = planner.recoverAvailable(chosen, batchDurationLimit(chosen));
                 if (fitsWork.test(recovered)) chosen = recovered;
-                long diagnosticRecovered = System.nanoTime();
+                diagnostics.recovered();
                 result = checkOutputs.apply(chosen);
                 if (!result.wasSuccessful() && chosen != mainPlan) {
                     chosen = mainPlan;
@@ -182,7 +182,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
                     if (result != CheckRecipeResultRegistry.NO_RECIPE) failure = result;
                     break;
                 }
-                long diagnosticChecked = System.nanoTime();
+                diagnostics.outputsChecked();
                 BottledChaosOverclock.Result clock = overclock(chosen);
                 result = validateClock(clock);
                 if (!result.wasSuccessful()) {
@@ -192,18 +192,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
                 calculatedEut = clock.eut();
                 duration = Math.max(1, clock.duration());
                 acceptPlan(chosen, preparationFailure);
-                long diagnosticEnd = System.nanoTime();
-                logRound(
-                    entry,
-                    planner,
-                    diagnosticStart,
-                    diagnosticSetup,
-                    diagnosticPrepareStart,
-                    diagnosticPrepared,
-                    diagnosticFitted,
-                    diagnosticRecovered,
-                    diagnosticChecked,
-                    diagnosticEnd);
+                diagnostics.finish(entry, duration, calculatedEut);
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
         }
@@ -211,27 +200,27 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
     }
 
     /** Wireless rounds fill from materials, then bill the finished chain once at a fixed execution time. */
-    private CheckRecipeResult processWireless(long diagnosticStart) {
+    private CheckRecipeResult processWireless(BottledChaosDiagnostics diagnostics) {
         CheckRecipeResult failure = CheckRecipeResultRegistry.NO_RECIPE;
         var planner = BottledChaosRecipeProcessor
-            .executionPlanner(routeMask, items, fluids, machineParameters, materials, planningCache);
+            .executionPlanner(routeMask, items, fluids, machineParameters, materials, planningCache, diagnostics);
         planner.setRouteFilter((voltage, requiredPools) -> validatePools(requiredPools));
-        long diagnosticSetup = System.nanoTime();
+        diagnostics.setupComplete();
         for (int entry : BottledChaosRecipeProcessor.candidateEntries(routeMask, materials)) {
             for (int attempt = 0; attempt < 2; attempt++) {
-                long diagnosticPrepareStart = System.nanoTime();
+                diagnostics.prepareStarted();
                 PreparedPlan baseline = attempt == 0 ? planner.prepareEntry(entry) : planner.retryEntry(entry);
-                long diagnosticPrepared = System.nanoTime();
+                diagnostics.prepared();
                 if (baseline == null) {
                     if (failure == CheckRecipeResultRegistry.NO_RECIPE) failure = planner.preparationFailure();
                     break;
                 }
                 CheckRecipeResult preparationFailure = planner.preparationFailure();
                 PreparedPlan chosen = planner.maximizeWireless(baseline);
-                long diagnosticFitted = System.nanoTime();
+                diagnostics.fitted();
                 PreparedPlan mainPlan = chosen;
                 chosen = planner.recoverAvailable(chosen, Double.POSITIVE_INFINITY);
-                long diagnosticRecovered = System.nanoTime();
+                diagnostics.recovered();
                 CheckRecipeResult result = prepareAndCheckOutputs(planner, chosen);
                 if (!result.wasSuccessful() && chosen != mainPlan) {
                     chosen = mainPlan;
@@ -250,7 +239,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
                     if (result != CheckRecipeResultRegistry.NO_RECIPE) failure = result;
                     break;
                 }
-                long diagnosticChecked = System.nanoTime();
+                diagnostics.outputsChecked();
                 double power = chosen.baseEUt() * euModifier;
                 double work = chosen.durationTicks() * speedBoost;
                 // BigInteger billing has no host EU/t or long power ceiling; reject only invalid arithmetic.
@@ -260,17 +249,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
                 calculatedEut = 0;
                 duration = WIRELESS_TICKS;
                 acceptPlan(chosen, preparationFailure);
-                logRound(
-                    entry,
-                    planner,
-                    diagnosticStart,
-                    diagnosticSetup,
-                    diagnosticPrepareStart,
-                    diagnosticPrepared,
-                    diagnosticFitted,
-                    diagnosticRecovered,
-                    diagnosticChecked,
-                    System.nanoTime());
+                diagnostics.finish(entry, duration, calculatedEut);
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
         }
@@ -284,58 +263,6 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
         BottledChaosRecipeProcessor.Plan outputs = chosen.outputPlan();
         calculatedParallels = outputs.executions();
         setLongOutputs(outputs.itemOutputs(), outputs.fluidOutputs());
-    }
-
-    /** Formatting stays outside planning; all timestamps are sampled at the original stage boundaries. */
-    private void logRound(int entry, BottledChaosRecipeProcessor.ExecutionPlanner planner, long diagnosticStart,
-        long diagnosticSetup, long diagnosticPrepareStart, long diagnosticPrepared, long diagnosticFitted,
-        long diagnosticRecovered, long diagnosticChecked, long diagnosticEnd) {
-        com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG.info(
-            "BC_ROUND entry=" + entry
-                + " total="
-                + (diagnosticEnd - diagnosticStart)
-                + " setup="
-                + (diagnosticSetup - diagnosticStart)
-                + " prepare="
-                + (diagnosticPrepared - diagnosticPrepareStart)
-                + " fit="
-                + (diagnosticFitted - diagnosticPrepared)
-                + " recover="
-                + (diagnosticRecovered - diagnosticFitted)
-                + " output="
-                + (diagnosticChecked - diagnosticRecovered)
-                + " finish="
-                + (diagnosticEnd - diagnosticChecked)
-                + " probes="
-                + planner.diagnosticProbes
-                + " probeNs="
-                + planner.diagnosticProbeNs
-                + " targetPasses="
-                + planner.diagnosticTargetPasses
-                + " targetExtensions="
-                + planner.diagnosticTargetExtensions
-                + " targetPassNs="
-                + planner.diagnosticTargetPassNs
-                + " shortProbes="
-                + planner.diagnosticShortProbes
-                + " shortExtensions="
-                + planner.diagnosticShortExtensions
-                + " shortBefore="
-                + planner.diagnosticShortBefore
-                + " shortAfter="
-                + planner.diagnosticShortAfter
-                + " sources="
-                + planner.diagnosticSourceCalls
-                + " sourceNs="
-                + planner.diagnosticSourceNs
-                + " inputNs="
-                + planner.diagnosticInputNs
-                + " matchNs="
-                + planner.diagnosticMatchNs
-                + " ticks="
-                + duration
-                + " eut="
-                + calculatedEut);
     }
 
     private CheckRecipeResult prepareAndCheckOutputs(BottledChaosRecipeProcessor.ExecutionPlanner planner,

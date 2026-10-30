@@ -22,6 +22,7 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.mach
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosSourceParameters;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.material.BottledChaosMaterialCache;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.material.BottledChaosMaterialStacks;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.processing.BottledChaosDiagnostics;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.processing.BottledChaosUpkeep;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosItemInputs.Requirement;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.ChainLink;
@@ -212,7 +213,8 @@ public final class BottledChaosRecipeProcessor {
     }
 
     public static ExecutionPlanner executionPlanner(long tagMask, ItemStackLong[] items, FluidStackLong[] fluids,
-        BottledChaosSourceParameters parameters, BottledChaosMaterialCache materials, PlanningCache planningCache) {
+        BottledChaosSourceParameters parameters, BottledChaosMaterialCache materials, PlanningCache planningCache,
+        BottledChaosDiagnostics diagnostics) {
         return new ExecutionPlanner(
             cache,
             tagMask,
@@ -220,7 +222,8 @@ public final class BottledChaosRecipeProcessor {
             parameters,
             materials,
             planningCache.get(cache, tagMask),
-            planningCache.matching(items));
+            planningCache.matching(items),
+            diagnostics);
     }
 
     @FunctionalInterface
@@ -232,10 +235,7 @@ public final class BottledChaosRecipeProcessor {
     /** One input/structure snapshot, sharing source checks and normalized costs across bounded batch probes. */
     public static final class ExecutionPlanner {
 
-        public long diagnosticProbeNs, diagnosticSourceNs, diagnosticMatchNs, diagnosticInputNs, diagnosticTargetPassNs;
-        public int diagnosticProbes, diagnosticSourceCalls, diagnosticTargetPasses, diagnosticTargetExtensions;
-        public int diagnosticShortProbes, diagnosticShortExtensions;
-        public double diagnosticShortBefore, diagnosticShortAfter;
+        private final BottledChaosDiagnostics diagnostics;
 
         private final RouteCache snapshot;
         private final long tagMask;
@@ -274,7 +274,8 @@ public final class BottledChaosRecipeProcessor {
 
         private ExecutionPlanner(RouteCache snapshot, long tagMask, FluidStackLong[] fluids,
             BottledChaosSourceParameters parameters, BottledChaosMaterialCache materials, AuthorizedGraph graph,
-            BottledChaosItemInputs.Matching matching) {
+            BottledChaosItemInputs.Matching matching, BottledChaosDiagnostics diagnostics) {
+            this.diagnostics = diagnostics;
             this.graph = graph;
             this.matching = matching;
             suppliers = graph == null ? null : graph.suppliers;
@@ -297,8 +298,7 @@ public final class BottledChaosRecipeProcessor {
         private CheckRecipeResult checkSources(int index, long voltage) {
             SourceChecks checks = sourceChecks(voltage);
             if (checks.selections[index] == null) {
-                long diagnosticSourceStart = System.nanoTime();
-                diagnosticSourceCalls++;
+                long diagnosticSourceStart = diagnostics.startTimer();
                 Selection selected = snapshot.routes[index].work.select(
                     parameters,
                     voltage,
@@ -310,7 +310,7 @@ public final class BottledChaosRecipeProcessor {
                 }
                 checks.selections[index] = selected;
                 checks.costs[index] = selected.duration();
-                diagnosticSourceNs += System.nanoTime() - diagnosticSourceStart;
+                diagnostics.sourceChecked(diagnosticSourceStart);
             }
             CheckRecipeResult failure = checks.selections[index].failure();
             return failure == null ? CheckRecipeResultRegistry.SUCCESSFUL : failure;
@@ -347,9 +347,9 @@ public final class BottledChaosRecipeProcessor {
             if (snapshot == null || !snapshot.routes[entry].isAuthorized(tagMask)) return null;
             if (external == null) {
                 Set<Object> cachedInputs = graph.cachedInputs;
-                long diagnosticInputStart = System.nanoTime();
+                long diagnosticInputStart = diagnostics.startTimer();
                 external = snapshot.collectAvailableInputs(graph, matching, fluids, virtualItems);
-                diagnosticInputNs += System.nanoTime() - diagnosticInputStart;
+                diagnostics.inputsCollected(diagnosticInputStart);
                 remaining = materials.snapshot();
                 released = new LinkedHashMap<>();
                 for (var iterator = remaining.entrySet()
@@ -492,8 +492,7 @@ public final class BottledChaosRecipeProcessor {
             if (shortCorrectionAttempted) return chosen;
             shortCorrectionAttempted = true;
             double share = chosen.duration / durationLimit.applyAsDouble(chosen.baseEUt);
-            diagnosticShortBefore = share;
-            diagnosticShortAfter = share;
+            diagnostics.shortCorrectionStarted(share);
             double scale = 1 / share;
             for (long target : chosen.targets) {
                 if (target != 0) scale = Math.min(scale, (double) Integer.MAX_VALUE / target);
@@ -502,15 +501,15 @@ public final class BottledChaosRecipeProcessor {
                 long[] requested = chosen.targets.clone();
                 for (int index : goalOrder) requested[index] = (long) Math.floor(requested[index] * scale);
                 if (Arrays.equals(requested, chosen.targets)) break;
-                diagnosticShortProbes++;
+                diagnostics.shortProbed();
                 PreparedPlan candidate = probeTargets(requested, false);
                 if (candidate != null && fits.test(candidate))
                     candidate = appendAvailableTargets(candidate, durationLimit.applyAsDouble(candidate.baseEUt), fits);
                 if (candidate != null && candidate.duration > chosen.duration && fits.test(candidate)) {
                     candidate = finishCandidate(candidate);
                     if (candidate != null) {
-                        diagnosticShortExtensions++;
-                        diagnosticShortAfter = candidate.duration / durationLimit.applyAsDouble(candidate.baseEUt);
+                        if (BottledChaosDiagnostics.ENABLED) diagnostics
+                            .shortExtended(candidate.duration / durationLimit.applyAsDouble(candidate.baseEUt));
                         return candidate;
                     }
                 }
@@ -525,8 +524,7 @@ public final class BottledChaosRecipeProcessor {
 
         private PreparedPlan appendAvailableTargets(PreparedPlan full, double durationLimit,
             Predicate<PreparedPlan> fits) {
-            long diagnosticStart = System.nanoTime();
-            diagnosticTargetPasses++;
+            long diagnosticStart = diagnostics.startTimer();
             try {
                 var expanded = chainPlanner(Integer.MAX_VALUE)
                     .appendAvailableTargets(full.chain, snapshot.entryOrder, durationLimit);
@@ -535,10 +533,10 @@ public final class BottledChaosRecipeProcessor {
                 if (!fits.test(candidate)) return full;
                 candidate = finishCandidate(candidate);
                 if (candidate == null) return full;
-                diagnosticTargetExtensions++;
+                diagnostics.targetsExtended();
                 return candidate;
             } finally {
-                diagnosticTargetPassNs += System.nanoTime() - diagnosticStart;
+                diagnostics.targetsChecked(diagnosticStart);
             }
         }
 
@@ -612,8 +610,7 @@ public final class BottledChaosRecipeProcessor {
         }
 
         private PreparedPlan probeTargets(long[] requested, boolean skipUnavailable) {
-            long diagnosticStart = System.nanoTime();
-            diagnosticProbes++;
+            long diagnosticStart = diagnostics.startTimer();
             try {
 
                 BottledChaosChainPlanner planner = chainPlanner(Integer.MAX_VALUE);
@@ -623,7 +620,7 @@ public final class BottledChaosRecipeProcessor {
                 return result == null ? null : prepareResult(result);
 
             } finally {
-                diagnosticProbeNs += System.nanoTime() - diagnosticStart;
+                diagnostics.probed(diagnosticStart);
             }
         }
 
@@ -713,10 +710,10 @@ public final class BottledChaosRecipeProcessor {
                     snapshot.routes[index].definition.data().outputs
                         .forEach((key, amount) -> internalPresence.put(key, 1L));
                 }
-                long diagnosticMatchStart = System.nanoTime();
+                long diagnosticMatchStart = diagnostics.startTimer();
                 plan.itemConsumption = BottledChaosItemInputs
                     .allocate(requirements, result.consumed, internalPresence, matching);
-                diagnosticMatchNs += System.nanoTime() - diagnosticMatchStart;
+                diagnostics.inputsMatched(diagnosticMatchStart);
             } catch (ArithmeticException overflow) {
                 return null;
             }
