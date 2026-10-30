@@ -177,7 +177,7 @@ public final class BottledChaosStructureDisplay {
             fixed.toArray(new ItemStack[0]),
             orderVariableMaterials(rule, variant, variable),
             GTCMItemList.BottledChaosMachineModule.get(1),
-            new ItemStack[] { ItemBottledChaosMachineModule.createDisplay(structure) },
+            new ItemStack[] { ItemBottledChaosMachineModule.create(structure, 1) },
             rule.profile(),
             structure);
     }
