@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_AEStorageCellHatchGui;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellHelper.InputSource;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellHelper.MEInputFilter;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
@@ -327,7 +328,8 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
     public static final class LongItemInputs {
 
         private final List<ItemStack> ordinaryInputs;
-        private final Map<GTUtility.ItemId, List<ItemSource>> longInputs = new HashMap<>();
+        private final List<MTEHatchInputBus> inputSources;
+        private final Map<GTUtility.ItemId, List<ItemSource>> longInputs = new LinkedHashMap<>();
         private final Map<GTUtility.ItemId, ItemStack> itemTypes = new LinkedHashMap<>();
         private final Map<GTUtility.ItemId, Long> availableAmounts = new HashMap<>();
 
@@ -340,6 +342,7 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
         }
 
         private LongItemInputs(MTEMultiBlockBase machine, Optional<Byte> color) {
+            inputSources = machine.mInputBusses;
             List<TST_AEStorageCellInputBus> longBusses = new ArrayList<>();
             for (MTEHatchInputBus bus : GTUtility.filterValidMTEs(machine.mInputBusses)) {
                 if (!(bus instanceof TST_AEStorageCellInputBus longBus)) continue;
@@ -379,6 +382,34 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
                     itemTypes.putIfAbsent(id, config);
                 }
             }
+        }
+
+        /** Export native sources without int segments; ordinary ME aliases keep their network identity. */
+        public List<InputSource> getSources() {
+            List<InputSource> inputs = new ArrayList<>();
+            IdentityHashMap<ItemStack, Object> owners = new IdentityHashMap<>();
+            for (MTEHatchInputBus bus : GTUtility.filterValidMTEs(inputSources)) {
+                if (!(bus instanceof MTEHatchInputBusME me) || bus instanceof TST_AEStorageCellInputBus) continue;
+                IGrid network = TST_AEStorageCellHelper.getNetwork(me.getProxy());
+                if (network == null) continue;
+                for (int i = 0; i < MTEHatchInputBusME.SLOT_COUNT; i++) {
+                    ItemStack stack = me.getStackInSlot(i);
+                    if (stack != null) owners.put(stack, network);
+                }
+            }
+            for (ItemStack stack : ordinaryInputs) inputs.add(InputSource.of(owners.getOrDefault(stack, stack), stack));
+            for (List<ItemSource> sources : longInputs.values()) {
+                for (ItemSource source : sources) {
+                    inputs.add(
+                        new InputSource(
+                            source.bus.getTSTInputSource(),
+                            source.config,
+                            () -> simulateLong(source.bus, source.config),
+                            amount -> extractLong(source.bus, source.config, amount),
+                            true));
+                }
+            }
+            return InputSource.unique(inputs);
         }
 
         public List<ItemStack> getItemTypes() {

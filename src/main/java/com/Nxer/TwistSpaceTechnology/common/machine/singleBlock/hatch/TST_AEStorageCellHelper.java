@@ -10,10 +10,13 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.LongSupplier;
+import java.util.function.LongUnaryOperator;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 import appeng.api.AEApi;
 import appeng.api.networking.IGrid;
@@ -23,6 +26,7 @@ import appeng.api.storage.StorageChannel;
 import appeng.api.storage.data.IAEStack;
 import appeng.me.GridAccessException;
 import appeng.me.helpers.AENetworkProxy;
+import gregtech.api.util.GTUtility;
 
 public final class TST_AEStorageCellHelper {
 
@@ -36,6 +40,79 @@ public final class TST_AEStorageCellHelper {
     }
 
     private TST_AEStorageCellHelper() {}
+
+    /** One physical slot, storage cell or ME resource. Quantities never pass through an int stack. */
+    public static final class InputSource {
+
+        public final Object owner;
+        public final Object type;
+        public final Object template;
+        public long amount;
+        public LongSupplier available;
+        public LongUnaryOperator extract;
+        private boolean nativeLong;
+
+        public InputSource(Object owner, Object template, LongSupplier available, LongUnaryOperator extract,
+            boolean nativeLong) {
+            this.owner = owner;
+            this.template = template;
+            type = template instanceof ItemStack item ? GTUtility.ItemId.create(item)
+                : GTUtility.FluidId.create((FluidStack) template);
+            this.available = available;
+            this.extract = extract;
+            this.nativeLong = nativeLong;
+            amount = Math.max(0, available.getAsLong());
+        }
+
+        public static InputSource of(Object owner, ItemStack stack) {
+            if (stack == null || stack.stackSize < 0) return null;
+            return new InputSource(
+                owner,
+                GTUtility.copyAmount(1, stack),
+                () -> Math.max(0, stack.stackSize),
+                amount -> {
+                    int taken = (int) Math.min(amount, Math.max(0, stack.stackSize));
+                    stack.stackSize -= taken;
+                    return taken;
+                },
+                false);
+        }
+
+        public static InputSource of(Object owner, FluidStack stack) {
+            if (stack == null || stack.amount <= 0) return null;
+            return new InputSource(owner, GTUtility.copyAmount(1, stack), () -> Math.max(0, stack.amount), amount -> {
+                int taken = (int) Math.min(amount, Math.max(0, stack.amount));
+                stack.amount -= taken;
+                return taken;
+            }, false);
+        }
+
+        /** Reuse the source identity across views; native long access supersedes an int ME alias. */
+        public InputSource register(Map<Object, Map<Object, InputSource>> sources) {
+            if (nativeLong && amount == 0) return null;
+            Map<Object, InputSource> types = sources.computeIfAbsent(owner, ignored -> new LinkedHashMap<>());
+            InputSource previous = types.putIfAbsent(type, this);
+            if (previous == null) return this;
+            if (nativeLong && !previous.nativeLong || nativeLong == previous.nativeLong && amount > previous.amount) {
+                previous.available = available;
+                previous.extract = extract;
+                previous.nativeLong = nativeLong;
+                previous.amount = amount;
+            }
+            return previous;
+        }
+
+        public static List<InputSource> unique(List<InputSource> inputs) {
+            Map<Object, Map<Object, InputSource>> sources = new IdentityHashMap<>();
+            Set<InputSource> seen = Collections.newSetFromMap(new IdentityHashMap<>());
+            List<InputSource> result = new ArrayList<>();
+            for (InputSource input : inputs) {
+                InputSource source = input == null ? null : input.register(sources);
+                if (source != null && seen.add(source)) result.add(source);
+            }
+            return result;
+        }
+    }
 
     @Nullable
     public static IGrid getNetwork(AENetworkProxy proxy) {

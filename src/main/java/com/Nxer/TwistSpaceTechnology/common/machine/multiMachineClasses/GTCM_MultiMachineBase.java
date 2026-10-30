@@ -37,6 +37,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.ITSTSegmen
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.ITSTSegmentedItemInput;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellHelper;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellHelper.SegmentedInputs;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellInputBus.LongItemInputs;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellInputHatch.LongFluidInputs;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
@@ -579,6 +581,19 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
             rList.add(getStackInSlot(1));
         }
         return rList;
+    }
+
+    /**
+     * Wrap GT's current item input scope, using native long storage when present.
+     * Acquire after startRecipeProcessing(); the caller retains GT's dual-inventory separation.
+     */
+    public LongItemInputs getLongItemInputs() {
+        return LongItemInputs.of(this);
+    }
+
+    /** Same quantity representation for ordinary tanks and native long fluid storage. */
+    public LongFluidInputs getLongFluidInputs() {
+        return LongFluidInputs.of(this);
     }
 
     public ArrayList<ItemStack> getStoredInputItemsWithDualInputHatch() {
