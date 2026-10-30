@@ -406,11 +406,10 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
         List<Supplier<String>> columns = Arrays.asList(
             () -> EnumChatFormatting.WHITE + "#"
                 + job.get()
-                    .getInteger("slot")
-                + " "
-                + MM_BottledChaos.localizeKeyList(
-                    job.get()
-                        .getString("family")),
+                    .getInteger("slot"),
+            () -> EnumChatFormatting.WHITE + MM_BottledChaos.localizeKeyList(
+                job.get()
+                    .getString("family")),
             () -> EnumChatFormatting.AQUA + StatCollector.translateToLocalFormatted("tst.bottledchaos.input_share", ""),
             () -> EnumChatFormatting.AQUA + MM_BottledChaos.getProcessingGroupShareValue(job.get()),
             () -> MM_BottledChaos.getProcessingGroupPowerText(job.get()),
@@ -419,9 +418,10 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                 job.get()
                     .getString("status"))
                 + MM_BottledChaos.getWailaStatusText(job.get()));
+        // Keep IDs separate from names so one- and two-digit groups share the same text anchors.
         // Reserve the same columns in every row, including paused groups without current power use.
         // The label ends at a fixed colon anchor; percentages grow rightward in their own column.
-        int[] widths = { 104, 46, 40, 70, 92, 40 };
+        int[] widths = { 18, 64, 46, 40, 68, 114, 38 };
         ParentWidget<?> header = new ParentWidget<>().size(TERMINAL_WIDTH - 20, 10);
         int x = 0;
         for (int column = 0; column < columns.size(); column++) {
@@ -433,7 +433,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                     .asWidget()
                     .pos(x, 0)
                     .size(width, 10)
-                    .textAlign(column == 0 || column == 2 ? Alignment.TopLeft : Alignment.TopRight)
+                    .textAlign(column == 1 || column == 3 ? Alignment.TopLeft : Alignment.TopRight)
                     .shadow(false)
                     .tooltipBuilder(tooltip -> {
                         String full = text.get();
