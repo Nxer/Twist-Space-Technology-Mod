@@ -401,12 +401,16 @@ public final class BottledChaosRecipeProcessor {
                 if (first == null) {
                     // Failed machine conditions must not become a successful precursor-only plan.
                     if (preparationFailure != CheckRecipeResultRegistry.NO_RECIPE) return null;
+                    CheckRecipeResult fallbackFailure = CheckRecipeResultRegistry.NO_RECIPE;
                     for (int index : goalOrder) {
                         long[] partial = new long[snapshot.routes.length];
                         partial[index] = 1;
-                        first = prepareTargets(partial, false);
+                        first = prepareTargets(partial, true);
                         if (first != null) break;
+                        if (preparationFailure != CheckRecipeResultRegistry.NO_RECIPE)
+                            fallbackFailure = preparationFailure;
                     }
+                    if (first == null) preparationFailure = fallbackFailure;
                 }
                 if (first == null) return null;
                 targets = first.targets.clone();

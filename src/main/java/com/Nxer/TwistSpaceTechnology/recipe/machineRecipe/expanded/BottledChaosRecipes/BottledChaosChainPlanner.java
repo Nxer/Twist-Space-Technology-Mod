@@ -193,7 +193,10 @@ final class BottledChaosChainPlanner {
                 rejectedTargets.put(stages[goal].targets, CheckRecipeResultRegistry.NO_RECIPE);
                 continue;
             }
-            if (!stages[goal].availableInputsOnly) {
+            if (skipUnavailable) state = before;
+            if (!stages[goal].availableInputsOnly && result == CheckRecipeResultRegistry.NO_RECIPE
+                || suppliedInputLimit(goal, 1) > 0) {
+                // Supplied recovery feed needs its machine too; absent leaf inputs do not demand unrelated pools.
                 // A verified material-only alternative still permits preparation of the same target.
                 rejectedTargets.merge(
                     stages[goal].targets,
@@ -201,7 +204,6 @@ final class BottledChaosChainPlanner {
                     (left, right) -> right == CheckRecipeResultRegistry.NO_RECIPE ? right : left);
             }
             if (!skipUnavailable) return null;
-            state = before;
         }
         for (long target : state.targets) if (target != 0) {
             recoverProduced();
