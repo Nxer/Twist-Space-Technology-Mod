@@ -372,12 +372,16 @@ public final class BottledChaosRecipeSupport {
             return result;
         }
 
-        /** Reduce by the material GCD; source work uses integer division with accepted tick rounding. */
-        RecipeData reduceBatch() {
+        long batchDivisor() {
             long divisor = 0;
             for (long amount : inputs.values()) divisor = getGCD(divisor, amount);
             for (long amount : outputs.values()) divisor = getGCD(divisor, amount);
             for (Requirement input : itemRequirements) if (input.amount > 0) divisor = getGCD(divisor, input.amount);
+            return Math.max(1, divisor);
+        }
+
+        /** Reduce after recognizing source chains; ordinary work retains its existing tick rounding. */
+        RecipeData reduceBatch(long divisor) {
             if (divisor <= 1) return this;
             Map<TimeKey, Long> reducedTimes = new LinkedHashMap<>();
             for (var entry : times.entrySet())

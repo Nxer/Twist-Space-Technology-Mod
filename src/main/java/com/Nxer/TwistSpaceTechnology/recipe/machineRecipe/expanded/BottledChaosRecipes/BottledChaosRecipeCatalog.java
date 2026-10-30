@@ -613,9 +613,9 @@ public final class BottledChaosRecipeCatalog {
         // 3. Cancel complete routes before expanding net reagents, then reduce materials and source work together.
         for (int i = 0; i < routes.length; i++) {
             RecipeChain chain = chains.get(i);
-            routes[i] = expandInputsAndOutputs(routes[i], chain.protectedOutputs(), true, i)
-                .netInputsAndOutputs(chain.balanceRoot())
-                .reduceBatch();
+            routes[i] = BottledChaosProcessAlternatives.groupAndReduce(
+                expandInputsAndOutputs(routes[i], chain.protectedOutputs(), true, i)
+                    .netInputsAndOutputs(chain.balanceRoot()));
             TST_ItemID selector = selectorCircuits.get(i);
             if (selector != null) routes[i] = routes[i].requireCatalyst(selector);
         }
@@ -839,7 +839,7 @@ public final class BottledChaosRecipeCatalog {
         RecipeData[] prepared = composeRecipeChains();
         CompiledRoute[] routes = new CompiledRoute[prepared.length];
         for (int entry = 0; entry < prepared.length; entry++) {
-            RecipeData data = BottledChaosProcessAlternatives.group(prepared[entry]);
+            RecipeData data = prepared[entry];
             RecipeChain chain = chains.get(entry);
             Object[] targets = planningTargets.getOrDefault(entry, chain.protectedOutputs());
             for (Object target : targets) {

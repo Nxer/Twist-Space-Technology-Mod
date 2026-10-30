@@ -113,12 +113,12 @@ public final class BottledChaosProcessAlternatives {
         volatile Map<RecipeMap<?>, List<Version>> versions = Collections.emptyMap();
 
         Group(RecipeData baseline, TimeKey basis, Map<TimeKey, Long> work, Map<Object, Long> inputs,
-            List<RecipeMap<?>> chain) {
+            List<RecipeMap<?>> chain, long divisor) {
             this.baseline = baseline;
             this.chain = chain;
             this.basis = basis;
             this.inputs = inputs;
-            scale = (double) work.get(basis) / baseline.times.get(basis);
+            scale = (double) work.get(basis) / baseline.times.get(basis) / divisor;
         }
     }
 
@@ -145,7 +145,10 @@ public final class BottledChaosProcessAlternatives {
     }
 
     /** Longest complete chain first; exported/shared intermediate work is never stolen by a replacement. */
-    static RecipeData group(RecipeData route) {
+    static RecipeData groupAndReduce(RecipeData route) {
+        long divisor = route.batchDivisor();
+        Map<Object, Long> inputs = new LinkedHashMap<>();
+        route.inputs.forEach((key, amount) -> inputs.put(key, amount / divisor));
         Map<TimeKey, Long> remaining = new LinkedHashMap<>(route.times);
         Map<TimeKey, Long> grouped = new LinkedHashMap<>();
         for (List<RecipeMap<?>> chain : CHAINS) for (TimeKey first : new ArrayList<>(remaining.keySet())) {
@@ -177,10 +180,11 @@ public final class BottledChaosProcessAlternatives {
             if (!complete
                 || !proportional(baseline.times, remaining, remaining.get(first), baseline.times.get(first), false))
                 continue;
-            mark(grouped, remaining, new Group(baseline, first, remaining, route.inputs, chain));
+            mark(grouped, remaining, new Group(baseline, first, remaining, inputs, chain, divisor));
         }
         grouped.putAll(remaining);
-        return route.withTimes(grouped);
+        return route.withTimes(grouped)
+            .reduceBatch(divisor);
     }
 
     private static boolean plasmaCooling(Source source) {
@@ -251,8 +255,9 @@ public final class BottledChaosProcessAlternatives {
                         if (recipe.mEUt == 0) continue;
                         nativeData = prepareSourceRecipe(rule.pool(), recipe);
                     }
-                    if (!rule.solidify()) addVersion(group, rule, nativeData, false, versions, catalysts);
-                    else {
+                    // Some furnace recipes already preserve their outputs without solidification.
+                    addVersion(group, rule, nativeData, false, versions, catalysts);
+                    if (rule.solidify()) {
                         for (Object output : nativeData.outputs.keySet()) if (output instanceof FluidId fluid)
                             for (RecipeData finish : solidifiers.getOrDefault(fluid, Collections.emptyList()))
                                 addVersion(
