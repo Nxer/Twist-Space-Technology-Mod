@@ -307,7 +307,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
     }
 
     private CheckRecipeResult validatePools(long requiredPools) {
-        if ((pools & requiredPools) != requiredPools) return missingPools(requiredPools, pools);
+        if ((pools & requiredPools) != requiredPools) return missingPools(requiredPools, pools, false);
         return CheckRecipeResultRegistry.SUCCESSFUL;
     }
 
@@ -341,7 +341,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
         return CheckRecipeResultRegistry.SUCCESSFUL;
     }
 
-    public static CheckRecipeResult missingPools(long required, long available) {
-        return new BottledChaosMissingCategoriesResult(required & ~available);
+    public static CheckRecipeResult missingPools(long required, long available, boolean running) {
+        return new BottledChaosMissingCategoriesResult(required & ~available, running);
     }
 }

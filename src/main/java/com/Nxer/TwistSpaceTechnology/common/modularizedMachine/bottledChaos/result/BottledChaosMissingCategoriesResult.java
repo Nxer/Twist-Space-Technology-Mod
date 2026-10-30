@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.result;
 
-import java.util.StringJoiner;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -16,9 +17,15 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 public final class BottledChaosMissingCategoriesResult implements CheckRecipeResult {
 
     private long missing;
+    private boolean running;
 
     public BottledChaosMissingCategoriesResult(long missing) {
+        this(missing, false);
+    }
+
+    public BottledChaosMissingCategoriesResult(long missing, boolean running) {
         this.missing = missing;
+        this.running = running;
     }
 
     @Override
@@ -37,27 +44,32 @@ public final class BottledChaosMissingCategoriesResult implements CheckRecipeRes
         for (int slot = 0; slot < BottledChaosMachineConfiguration.poolCount(); slot++) {
             long bit = 1L << slot;
             if ((missing & bit) == 0) continue;
-            displayMissing |= 1L << BottledChaosMachineConfiguration.displayPoolSlot(slot);
+            displayMissing |= 1L << (running ? slot : BottledChaosMachineConfiguration.displayPoolSlot(slot));
         }
-        StringJoiner names = new StringJoiner(", ");
+        Set<String> names = new LinkedHashSet<>();
         for (int slot = 0; slot < BottledChaosMachineConfiguration.poolCount(); slot++) {
-            if ((displayMissing & (1L << slot)) != 0) names.add(BottledChaosMachineConfiguration.poolName(slot));
+            if ((displayMissing & (1L << slot)) != 0) names.add(
+                running ? BottledChaosMachineConfiguration.sourceName(slot)
+                    : BottledChaosMachineConfiguration.poolName(slot));
         }
         // #tr tst.bottledchaos.missing_recipe_types
         // # Missing machines for recipe pools: %s
         // #zh_CN 缺少配方池对应的机器: %s
-        return StatCollector.translateToLocalFormatted("tst.bottledchaos.missing_recipe_types", names.toString());
+        return StatCollector
+            .translateToLocalFormatted("tst.bottledchaos.missing_recipe_types", String.join(", ", names));
     }
 
     @Override
     public @NotNull NBTTagCompound writeToNBT(@NotNull NBTTagCompound tag) {
         tag.setLong("missing", missing);
+        tag.setBoolean("running", running);
         return tag;
     }
 
     @Override
     public void readFromNBT(@NotNull NBTTagCompound tag) {
         missing = tag.getLong("missing");
+        running = tag.getBoolean("running");
     }
 
     @Override
@@ -68,11 +80,13 @@ public final class BottledChaosMissingCategoriesResult implements CheckRecipeRes
     @Override
     public void encode(@NotNull PacketBuffer buffer) {
         buffer.writeLong(missing);
+        buffer.writeBoolean(running);
     }
 
     @Override
     public void decode(@NotNull PacketBuffer buffer) {
         missing = buffer.readLong();
+        running = buffer.readBoolean();
     }
 
     @Override
@@ -82,11 +96,12 @@ public final class BottledChaosMissingCategoriesResult implements CheckRecipeRes
 
     @Override
     public boolean equals(Object other) {
-        return other instanceof BottledChaosMissingCategoriesResult result && result.missing == missing;
+        return other instanceof BottledChaosMissingCategoriesResult result && result.missing == missing
+            && result.running == running;
     }
 
     @Override
     public int hashCode() {
-        return Long.hashCode(missing);
+        return 31 * Long.hashCode(missing) + Boolean.hashCode(running);
     }
 }

@@ -184,6 +184,15 @@ public final class BottledChaosMachineConfiguration {
         return poolName(poolKey(slot));
     }
 
+    /** A running job retains its selected source, rather than the query page's parent pool. */
+    public static String sourceName(int slot) {
+        RecipeMap<?> source = pool(slot);
+        if (source == GTCMRecipe.StellarForgeRecipeMap || source == GTCMRecipe.StellarForgeAlloySmelterRecipeMap)
+            return GTCMItemList.MiracleDoor.get(1)
+                .getDisplayName();
+        return poolName(slot);
+    }
+
     public static String poolName(RecipeMap<?> map) {
         return poolName(map.unlocalizedName);
     }

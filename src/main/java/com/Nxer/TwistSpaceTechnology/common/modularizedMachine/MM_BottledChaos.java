@@ -979,7 +979,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if (!thread.isWireless() && thread.recipeVoltage > getMaximumRecipeVoltage())
             return SimpleResultWithText.ofFailure("tst.bottledchaos.result.recipe_voltage_limit");
         if ((poolMask & thread.requiredPools) != thread.requiredPools) {
-            return BottledChaosProcessingLogic.missingPools(thread.requiredPools, poolMask);
+            return BottledChaosProcessingLogic.missingPools(thread.requiredPools, poolMask, true);
         }
         if (thread.isWireless() || thread.progress >= thread.duration) return CheckRecipeResultRegistry.SUCCESSFUL;
         if (isWirelessMode()) return CheckRecipeResultRegistry.insufficientPower(thread.eut);
