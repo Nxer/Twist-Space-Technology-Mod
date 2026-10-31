@@ -268,10 +268,9 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
             BottledChaosHatchControls.Action.LIMIT,
             BottledChaosHatchControls.Action.EXPORT,
             BottledChaosHatchControls.Action.CLEAR);
-        int[] positions = { 36, 62, 88, 114 };
         for (int i = 0; i < controls.size(); i++) panel.child(
             controls.get(i)
-                .pos(positions[i], 62));
+                .pos(40 + 26 * i, 62));
         return panel.child(
             new ItemSlotGridBuilder(inventoryHandler, syncManager).size(1)
                 .filter(this::isAuthorizationItem)
