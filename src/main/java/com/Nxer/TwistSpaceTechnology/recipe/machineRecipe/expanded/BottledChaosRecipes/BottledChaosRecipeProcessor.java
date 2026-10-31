@@ -436,21 +436,23 @@ public final class BottledChaosRecipeProcessor {
 
         /** Wireless goals grow from material ratios; no time budget, power fit or short-round correction is used. */
         public PreparedPlan maximizeWireless(PreparedPlan full) {
-            // Balance the one-set branches before scaling; otherwise a high-yield precursor floods its consumers.
+            // Balance selected production goals without making cached upstream steps independent batch targets.
             full = appendAvailableTargets(full, Double.POSITIVE_INFINITY, candidate -> true);
             PreparedPlan reference = null;
             // A cache-fed seed needs one small external-input probe, then a growth estimate and rounding correction.
             for (int pass = 0; pass < 3; pass++) {
+                SourceChecks checks = sourceChecks(full.baseEUt);
                 var multiplier = full.chain.materialScale(
                     reference == null ? null : reference.chain,
                     snapshot.stages,
                     external,
                     remaining,
-                    batchLimit);
+                    batchLimit,
+                    index -> checks.selections[index].inputs());
                 if (reference == null && full.consumed.isEmpty() && !external.isEmpty()) multiplier.limit(2, 1);
                 if (!multiplier.grows()) break;
                 PreparedPlan previous = full;
-                for (; multiplier.grows(); multiplier.halve()) {
+                for (; multiplier.grows(); multiplier.reduce()) {
                     long[] requested = full.targets.clone();
                     for (int index : goalOrder) {
                         long base = reference == null ? 0 : reference.targets[index];
@@ -526,7 +528,11 @@ public final class BottledChaosRecipeProcessor {
             Predicate<PreparedPlan> fits) {
             long diagnosticStart = diagnostics.startTimer();
             try {
-                var expanded = chainPlanner().appendAvailableTargets(full.chain, snapshot.entryOrder, durationLimit);
+                int[] order = snapshot.entryOrder;
+                if (parameters.normalizeSourceEnergy()) order = Arrays.stream(order)
+                    .filter(index -> full.targets[index] > 0)
+                    .toArray();
+                var expanded = chainPlanner().appendAvailableTargets(full.chain, order, durationLimit);
                 if (Arrays.equals(expanded.targets, full.targets)) return full;
                 PreparedPlan candidate = prepareResult(expanded);
                 if (!fits.test(candidate)) return full;

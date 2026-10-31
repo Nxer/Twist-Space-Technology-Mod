@@ -7,6 +7,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.IntFunction;
 
 import com.github.bsideup.jabel.Desugar;
 
@@ -23,12 +24,18 @@ final class BottledChaosChainPlanner {
 
         private long numerator;
         private long denominator = 1;
+        private long roundingUnit = 1;
+        private boolean trimmed;
 
         BatchScale(long limit) {
             numerator = limit;
         }
 
         void limit(long available, long used) {
+            limit(available, used, 1);
+        }
+
+        void limit(long available, long used, long roundingUnit) {
             if (used <= 0) return;
             available = Math.max(0, available);
             if (BigInteger.valueOf(available)
@@ -39,6 +46,7 @@ final class BottledChaosChainPlanner {
                 < 0) {
                 numerator = available;
                 denominator = used;
+                this.roundingUnit = Math.max(1, roundingUnit);
             }
         }
 
@@ -46,7 +54,20 @@ final class BottledChaosChainPlanner {
             return numerator > denominator;
         }
 
-        void halve() {
+        void reduce() {
+            // Two integer samples can differ by a whole source batch. Try that rounding margin before halving.
+            if (!trimmed) {
+                trimmed = true;
+                long margin = BigInteger.valueOf(numerator / denominator + (numerator % denominator == 0 ? 0 : 1))
+                    .multiply(BigInteger.valueOf(roundingUnit))
+                    .shiftLeft(1)
+                    .min(BigInteger.valueOf((numerator - denominator) / 2))
+                    .longValueExact();
+                if (margin > 0) {
+                    numerator -= margin;
+                    return;
+                }
+            }
             numerator = denominator + (numerator - denominator) / 2;
         }
 
@@ -134,7 +155,7 @@ final class BottledChaosChainPlanner {
 
         /** Bound a wireless expansion by integer stage capacity and observed external input use, not work time. */
         BatchScale materialScale(Result previous, Stage[] stages, Map<Object, Long> available, Map<Object, Long> carry,
-            long batchLimit) {
+            long batchLimit, IntFunction<Map<Object, Long>> selectedInputs) {
             BatchScale scale = new BatchScale(batchLimit);
             for (int index = 0; index < batches.length; index++) {
                 long baseTarget = previous == null ? 0 : previous.targets[index];
@@ -145,20 +166,39 @@ final class BottledChaosChainPlanner {
                     long limit = batchLimit;
                     for (long amount : stages[index].outputs.values())
                         if (amount > 0) limit = Math.min(limit, Long.MAX_VALUE / amount);
+                    // Cached and external portions still share one long-sized gross input requirement.
+                    for (long amount : selectedInputs.apply(index)
+                        .values()) if (amount > 0) limit = Math.min(limit, Long.MAX_VALUE / amount);
                     scale.limit(limit - baseBatches, batches[index] - baseBatches);
                 }
             }
             for (var input : consumed.entrySet()) {
                 long base = previous == null ? 0 : previous.consumed.getOrDefault(input.getKey(), 0L);
-                if (input.getValue() > base)
-                    scale.limit(available.getOrDefault(input.getKey(), 0L) - base, input.getValue() - base);
+                if (input.getValue() > base) {
+                    long roundingUnit = 0;
+                    for (int index = 0; index < batches.length; index++)
+                        if (batches[index] > 0) roundingUnit = saturatedAdd(
+                            roundingUnit,
+                            selectedInputs.apply(index)
+                                .getOrDefault(input.getKey(), 0L));
+                    scale.limit(
+                        available.getOrDefault(input.getKey(), 0L) - base,
+                        input.getValue() - base,
+                        roundingUnit);
+                }
             }
             limitOutputScale(
                 scale,
                 outputs,
                 previous == null ? Collections.emptyMap() : previous.outputs,
-                Collections.emptyMap());
-            limitOutputScale(scale, produced, previous == null ? Collections.emptyMap() : previous.produced, remaining);
+                Collections.emptyMap(),
+                stages);
+            limitOutputScale(
+                scale,
+                produced,
+                previous == null ? Collections.emptyMap() : previous.produced,
+                remaining,
+                stages);
             // Cache-only recycling has no external consumption from which to estimate its batch count.
             if (available.isEmpty()) for (var input : carry.entrySet()) {
                 long base = previous == null ? input.getValue() : previous.remaining.getOrDefault(input.getKey(), 0L);
@@ -168,12 +208,18 @@ final class BottledChaosChainPlanner {
             return scale;
         }
 
-        private static void limitOutputScale(BatchScale scale, Map<Object, Long> amounts, Map<Object, Long> previous,
-            Map<Object, Long> reserved) {
+        private void limitOutputScale(BatchScale scale, Map<Object, Long> amounts, Map<Object, Long> previous,
+            Map<Object, Long> reserved, Stage[] stages) {
             for (var entry : amounts.entrySet()) {
                 long base = previous.getOrDefault(entry.getKey(), 0L);
-                if (entry.getValue() > base) scale
-                    .limit(Long.MAX_VALUE - reserved.getOrDefault(entry.getKey(), 0L) - base, entry.getValue() - base);
+                if (entry.getValue() <= base) continue;
+                long roundingUnit = 0;
+                for (int index = 0; index < batches.length; index++) if (batches[index] > 0)
+                    roundingUnit = saturatedAdd(roundingUnit, stages[index].outputs.getOrDefault(entry.getKey(), 0L));
+                scale.limit(
+                    Long.MAX_VALUE - reserved.getOrDefault(entry.getKey(), 0L) - base,
+                    entry.getValue() - base,
+                    roundingUnit);
             }
         }
     }
