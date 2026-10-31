@@ -240,8 +240,10 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
                     break;
                 }
                 diagnostics.outputsChecked();
-                double power = chosen.baseEUt() * euModifier;
-                double work = chosen.durationTicks() * speedBoost;
+                long voltage = machineParameters.normalizationVoltage(chosen.baseEUt());
+                double power = voltage * euModifier;
+                // Restore the source-folding voltage before applying the final host overclock curve.
+                double work = chosen.durationTicks() * ((double) chosen.baseEUt() / voltage) * speedBoost;
                 // BigInteger billing has no host EU/t or long power ceiling; reject only invalid arithmetic.
                 if (!Double.isFinite(power) || power <= 0) return CheckRecipeResultRegistry.POWER_OVERFLOW;
                 if (!Double.isFinite(work) || work <= 0) return CheckRecipeResultRegistry.DURATION_OVERFLOW;
@@ -262,7 +264,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
         preparedPlan = chosen;
         blockedRoute = preparationFailure;
         BottledChaosRecipeProcessor.Plan outputs = chosen.outputPlan();
-        calculatedParallels = outputs.executions();
+        calculatedParallels = (int) Math.min(Integer.MAX_VALUE, outputs.executions());
         setLongOutputs(outputs.itemOutputs(), outputs.fluidOutputs());
     }
 

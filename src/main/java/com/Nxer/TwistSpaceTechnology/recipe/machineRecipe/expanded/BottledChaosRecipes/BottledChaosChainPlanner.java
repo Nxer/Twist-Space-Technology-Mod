@@ -1,10 +1,14 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes;
 
+import java.math.BigInteger;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import com.github.bsideup.jabel.Desugar;
 
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
@@ -14,26 +18,52 @@ final class BottledChaosChainPlanner {
 
     private static final int MAX_SUPPLY_ATTEMPTS = 2048;
 
-    static final class Stage {
+    /** Exact ratio for bounded wireless probes; no floating-point rounding at long-scale quantities. */
+    static final class BatchScale {
 
-        final Map<Object, Long> inputs;
-        final Map<Object, Long> outputs;
-        final Map<Object, Long> catalysts;
-        final List<?> targets;
-        final Object balanceRoot;
-        final long voltage;
-        final boolean availableInputsOnly;
+        private long numerator;
+        private long denominator = 1;
 
-        Stage(Map<Object, Long> inputs, Map<Object, Long> outputs, Map<Object, Long> catalysts, long voltage,
-            boolean availableInputsOnly, List<?> targets, Object balanceRoot) {
-            this.inputs = inputs;
-            this.outputs = outputs;
-            this.catalysts = catalysts;
-            this.targets = targets;
-            this.balanceRoot = balanceRoot;
-            this.voltage = voltage;
-            this.availableInputsOnly = availableInputsOnly;
+        BatchScale(long limit) {
+            numerator = limit;
         }
+
+        void limit(long available, long used) {
+            if (used <= 0) return;
+            available = Math.max(0, available);
+            if (BigInteger.valueOf(available)
+                .multiply(BigInteger.valueOf(denominator))
+                .compareTo(
+                    BigInteger.valueOf(numerator)
+                        .multiply(BigInteger.valueOf(used)))
+                < 0) {
+                numerator = available;
+                denominator = used;
+            }
+        }
+
+        boolean grows() {
+            return numerator > denominator;
+        }
+
+        void halve() {
+            numerator = denominator + (numerator - denominator) / 2;
+        }
+
+        long apply(long base, long target, long limit) {
+            return BigInteger.valueOf(target - base)
+                .multiply(BigInteger.valueOf(numerator))
+                .divide(BigInteger.valueOf(denominator))
+                .add(BigInteger.valueOf(base))
+                .min(BigInteger.valueOf(limit))
+                .longValueExact();
+        }
+    }
+
+    @Desugar
+    record Stage(Map<Object, Long> inputs, Map<Object, Long> outputs, Map<Object, Long> catalysts, long voltage,
+        boolean availableInputsOnly, List<?> targets, Object balanceRoot) {
+
     }
 
     interface Conditions {
@@ -103,31 +133,48 @@ final class BottledChaosChainPlanner {
         }
 
         /** Bound a wireless expansion by integer stage capacity and observed external input use, not work time. */
-        double materialScale(Result previous, Stage[] stages, Map<Object, Long> available, Map<Object, Long> carry,
+        BatchScale materialScale(Result previous, Stage[] stages, Map<Object, Long> available, Map<Object, Long> carry,
             long batchLimit) {
-            double scale = batchLimit;
+            BatchScale scale = new BatchScale(batchLimit);
             for (int index = 0; index < batches.length; index++) {
                 long baseTarget = previous == null ? 0 : previous.targets[index];
-                if (targets[index] > baseTarget)
-                    scale = Math.min(scale, (double) (batchLimit - baseTarget) / (targets[index] - baseTarget));
+                if (targets[index] > baseTarget) scale.limit(batchLimit - baseTarget, targets[index] - baseTarget);
                 // Recovery is optional and may leave carry; it must not throttle the main production goals.
                 long baseBatches = previous == null ? 0 : previous.batches[index];
-                if (batches[index] > baseBatches && !stages[index].availableInputsOnly)
-                    scale = Math.min(scale, (double) (batchLimit - baseBatches) / (batches[index] - baseBatches));
+                if (batches[index] > baseBatches && !stages[index].availableInputsOnly) {
+                    long limit = batchLimit;
+                    for (long amount : stages[index].outputs.values())
+                        if (amount > 0) limit = Math.min(limit, Long.MAX_VALUE / amount);
+                    scale.limit(limit - baseBatches, batches[index] - baseBatches);
+                }
             }
             for (var input : consumed.entrySet()) {
                 long base = previous == null ? 0 : previous.consumed.getOrDefault(input.getKey(), 0L);
-                if (input.getValue() > base) scale = Math.min(
-                    scale,
-                    (double) (available.getOrDefault(input.getKey(), 0L) - base) / (input.getValue() - base));
+                if (input.getValue() > base)
+                    scale.limit(available.getOrDefault(input.getKey(), 0L) - base, input.getValue() - base);
             }
+            limitOutputScale(
+                scale,
+                outputs,
+                previous == null ? Collections.emptyMap() : previous.outputs,
+                Collections.emptyMap());
+            limitOutputScale(scale, produced, previous == null ? Collections.emptyMap() : previous.produced, remaining);
             // Cache-only recycling has no external consumption from which to estimate its batch count.
             if (available.isEmpty()) for (var input : carry.entrySet()) {
                 long base = previous == null ? input.getValue() : previous.remaining.getOrDefault(input.getKey(), 0L);
                 long used = base - remaining.getOrDefault(input.getKey(), 0L);
-                if (used > 0) scale = Math.min(scale, (double) base / used);
+                if (used > 0) scale.limit(base, used);
             }
-            return Math.max(1, scale);
+            return scale;
+        }
+
+        private static void limitOutputScale(BatchScale scale, Map<Object, Long> amounts, Map<Object, Long> previous,
+            Map<Object, Long> reserved) {
+            for (var entry : amounts.entrySet()) {
+                long base = previous.getOrDefault(entry.getKey(), 0L);
+                if (entry.getValue() > base) scale
+                    .limit(Long.MAX_VALUE - reserved.getOrDefault(entry.getKey(), 0L) - base, entry.getValue() - base);
+            }
         }
     }
 

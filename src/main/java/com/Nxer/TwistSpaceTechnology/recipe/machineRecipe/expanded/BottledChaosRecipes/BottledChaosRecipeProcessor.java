@@ -242,6 +242,7 @@ public final class BottledChaosRecipeProcessor {
         private int entry = -1;
         private final FluidStackLong[] fluids;
         private final BottledChaosSourceParameters parameters;
+        private final long batchLimit;
         private final BottledChaosMaterialCache materials;
         private final Map<Long, SourceChecks> sourceChecks = new LinkedHashMap<>();
         private final Set<TST_ItemID> virtualItems = new LinkedHashSet<>();
@@ -286,6 +287,7 @@ public final class BottledChaosRecipeProcessor {
             this.tagMask = tagMask;
             this.fluids = fluids;
             this.parameters = parameters;
+            batchLimit = parameters.normalizeSourceEnergy() ? Long.MAX_VALUE : Integer.MAX_VALUE;
             this.materials = materials;
         }
 
@@ -439,22 +441,20 @@ public final class BottledChaosRecipeProcessor {
             PreparedPlan reference = null;
             // A cache-fed seed needs one small external-input probe, then a growth estimate and rounding correction.
             for (int pass = 0; pass < 3; pass++) {
-                double multiplier = full.chain.materialScale(
+                var multiplier = full.chain.materialScale(
                     reference == null ? null : reference.chain,
                     snapshot.stages,
                     external,
                     remaining,
-                    Integer.MAX_VALUE);
-                if (reference == null && full.consumed.isEmpty() && !external.isEmpty())
-                    multiplier = Math.min(2, multiplier);
-                if (multiplier <= 1) break;
+                    batchLimit);
+                if (reference == null && full.consumed.isEmpty() && !external.isEmpty()) multiplier.limit(2, 1);
+                if (!multiplier.grows()) break;
                 PreparedPlan previous = full;
-                for (; multiplier > 1; multiplier = 1 + (multiplier - 1) / 2) {
+                for (; multiplier.grows(); multiplier.halve()) {
                     long[] requested = full.targets.clone();
                     for (int index : goalOrder) {
                         long base = reference == null ? 0 : reference.targets[index];
-                        requested[index] = (long) Math
-                            .min(Integer.MAX_VALUE, Math.floor(base + (requested[index] - base) * multiplier));
+                        requested[index] = multiplier.apply(base, requested[index], batchLimit);
                     }
                     if (Arrays.equals(requested, full.targets)) break;
                     PreparedPlan candidate = probeTargets(requested, false);
@@ -526,8 +526,7 @@ public final class BottledChaosRecipeProcessor {
             Predicate<PreparedPlan> fits) {
             long diagnosticStart = diagnostics.startTimer();
             try {
-                var expanded = chainPlanner(Integer.MAX_VALUE)
-                    .appendAvailableTargets(full.chain, snapshot.entryOrder, durationLimit);
+                var expanded = chainPlanner().appendAvailableTargets(full.chain, snapshot.entryOrder, durationLimit);
                 if (Arrays.equals(expanded.targets, full.targets)) return full;
                 PreparedPlan candidate = prepareResult(expanded);
                 if (!fits.test(candidate)) return full;
@@ -574,13 +573,13 @@ public final class BottledChaosRecipeProcessor {
 
         /** Recycle terminal outputs or exclusive recovery feed, without stealing normal processing inputs. */
         private boolean automaticRecovery(int index) {
-            if (!authorized[index] || !snapshot.stages[index].availableInputsOnly) return false;
+            if (!authorized[index] || !snapshot.stages[index].availableInputsOnly()) return false;
             for (Object output : snapshot.routes[index].definition.planningTargets()) {
                 if (!retainedOutputs.get(index)
                     .contains(output)) return true;
             }
             for (int consumer = 0; consumer < snapshot.stages.length; consumer++) {
-                if (authorized[consumer] && !snapshot.stages[consumer].availableInputsOnly
+                if (authorized[consumer] && !snapshot.stages[consumer].availableInputsOnly()
                     && suppliers.get(consumer)
                         .containsKey(snapshot.routes[index].definition.balanceRoot()))
                     return false;
@@ -598,7 +597,7 @@ public final class BottledChaosRecipeProcessor {
                     recovery[size++] = index;
             }
             if (size == 0) return chosen;
-            var recovered = chainPlanner(Integer.MAX_VALUE)
+            var recovered = chainPlanner()
                 .recover(chosen.chain, Arrays.copyOf(recovery, size), budget, sourceChecks(chosen.baseEUt).costs);
             if (Arrays.equals(recovered.batches, chosen.chain.batches)) return chosen;
             PreparedPlan result = finishCandidate(prepareResult(recovered));
@@ -613,7 +612,7 @@ public final class BottledChaosRecipeProcessor {
             long diagnosticStart = diagnostics.startTimer();
             try {
 
-                BottledChaosChainPlanner planner = chainPlanner(Integer.MAX_VALUE);
+                BottledChaosChainPlanner planner = chainPlanner();
                 BottledChaosChainPlanner.Result result = planner
                     .prepare(goalOrder, requested, external, remaining, released, skipUnavailable);
                 if (skipUnavailable) preparationFailure = planner.preparationFailure();
@@ -624,7 +623,7 @@ public final class BottledChaosRecipeProcessor {
             }
         }
 
-        private BottledChaosChainPlanner chainPlanner(long batchLimit) {
+        private BottledChaosChainPlanner chainPlanner() {
             return new BottledChaosChainPlanner(snapshot.stages, suppliers, new BottledChaosChainPlanner.Conditions() {
 
                 @Override
@@ -682,7 +681,7 @@ public final class BottledChaosRecipeProcessor {
                 result.remaining,
                 result.produced,
                 materials.amountLimit(),
-                (int) Math.max(1, result.batches[entry]),
+                Math.max(1, result.batches[entry]),
                 result);
         }
 
@@ -985,14 +984,14 @@ public final class BottledChaosRecipeProcessor {
         private final Map<Object, Long> pendingCache;
         private final long cacheLimit;
         private Plan outputPlan;
-        private final int executions;
+        private final long executions;
         private final long[] targets;
         private final BottledChaosChainPlanner.Result chain;
         private BottledChaosItemInputs.Consumption itemConsumption;
 
         private PreparedPlan(String family, int entry, long baseEUt, double duration, long requiredPools,
             Map<Object, Long> consumed, Map<Object, Long> outputs, Map<Object, Long> remainingCache,
-            Map<Object, Long> pendingCache, long cacheLimit, int executions, BottledChaosChainPlanner.Result chain) {
+            Map<Object, Long> pendingCache, long cacheLimit, long executions, BottledChaosChainPlanner.Result chain) {
             this.family = family;
             this.entry = entry;
             this.baseEUt = baseEUt;
@@ -1076,7 +1075,7 @@ public final class BottledChaosRecipeProcessor {
         }
     }
 
-    private static Plan createOutputPlan(Map<Object, Long> outputs, double duration, int executions) {
+    private static Plan createOutputPlan(Map<Object, Long> outputs, double duration, long executions) {
         List<ItemStackLong> items = new ArrayList<>();
         List<FluidStackLong> fluids = new ArrayList<>();
         outputs.forEach((key, amount) -> appendResourceStack(key, amount, items, fluids));
@@ -1092,7 +1091,7 @@ public final class BottledChaosRecipeProcessor {
      */
     @Desugar
     public record Plan(double durationTicks, List<ItemStackLong> itemOutputs, List<FluidStackLong> fluidOutputs,
-        int executions) {}
+        long executions) {}
 
     // NEI display result types.
     /**

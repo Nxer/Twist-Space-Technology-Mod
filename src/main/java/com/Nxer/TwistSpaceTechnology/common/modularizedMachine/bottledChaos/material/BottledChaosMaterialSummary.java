@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.material;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -33,10 +34,12 @@ public final class BottledChaosMaterialSummary {
         var amounts = outputAmounts(outputs);
         var priorities = outputPriorities(amounts, tagMask, false);
         NBTTagCompound summary = summarize(amounts, priorities, Integer.MAX_VALUE, 0);
-        var intermediates = outputAmounts(pendingCache);
+        Map<Object, BigInteger> intermediates = new LinkedHashMap<>();
+        outputAmounts(pendingCache).forEach((key, amount) -> intermediates.put(key, BigInteger.valueOf(amount)));
         amounts.forEach(
             (key, amount) -> {
-                if (priorities.getOrDefault(key, 2) == 1) intermediates.merge(key, amount, Math::addExact);
+                if (priorities.getOrDefault(key, 2) == 1)
+                    intermediates.merge(key, BigInteger.valueOf(amount), BigInteger::add);
             });
         summary.setTag(
             "intermediates",
@@ -57,21 +60,21 @@ public final class BottledChaosMaterialSummary {
         return amounts;
     }
 
-    private static Map<Object, Integer> outputPriorities(Map<Object, Long> amounts, long tagMask,
+    private static Map<Object, Integer> outputPriorities(Map<Object, ?> amounts, long tagMask,
         boolean intermediateOnly) {
         return amounts.isEmpty() ? Collections.emptyMap()
             : BottledChaosRecipeProcessor.outputPriorities(tagMask, intermediateOnly);
     }
 
-    private static NBTTagCompound summarize(Map<Object, Long> amounts, Map<Object, Integer> priorities, int limit,
-        int category) {
-        Map<Object, Long> ordered = new LinkedHashMap<>();
+    private static NBTTagCompound summarize(Map<Object, ? extends Number> amounts, Map<Object, Integer> priorities,
+        int limit, int category) {
+        Map<Object, Number> ordered = new LinkedHashMap<>();
         for (Object key : priorities.keySet()) {
-            Long amount = amounts.get(key);
+            Number amount = amounts.get(key);
             if (amount != null) ordered.put(key, amount);
         }
         amounts.forEach(ordered::putIfAbsent);
-        List<Map.Entry<Object, Long>> entries = new ArrayList<>(ordered.entrySet());
+        List<Map.Entry<Object, Number>> entries = new ArrayList<>(ordered.entrySet());
         NBTTagCompound tag = new NBTTagCompound();
         int total = 0;
         NBTTagList outputs = new NBTTagList();
@@ -97,7 +100,10 @@ public final class BottledChaosMaterialSummary {
                         ((GTUtility.FluidId) key).getFluidStack(1)
                             .writeToNBT(new NBTTagCompound()));
                 }
-                entry.setLong("amount", output.getValue());
+                entry.setString(
+                    "amount",
+                    output.getValue()
+                        .toString());
                 outputs.appendTag(entry);
             }
         }

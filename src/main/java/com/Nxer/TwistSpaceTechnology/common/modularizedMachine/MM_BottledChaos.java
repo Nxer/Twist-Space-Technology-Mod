@@ -2384,7 +2384,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 (wailaIcons
                     ? "  "
                         + TTRenderStack.create(item != null ? item : GTUtility.getFluidDisplayStack(fluid, false), true)
-                    : "") + formatGroupOutput(item, fluid, entry.getLong("amount")));
+                    : "") + formatGroupOutput(item, fluid, entry));
             shown++;
         }
         if (materials.getInteger("total") > shown) lines.add(
@@ -2804,7 +2804,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 ? FluidStack.loadFluidStackFromNBT(entry.getCompoundTag("fluid"))
                 : null;
             if (item == null && fluid == null) continue;
-            text.add(formatGroupOutput(item, fluid, entry.getLong("amount")));
+            text.add(formatGroupOutput(item, fluid, entry));
             shown++;
         }
         if (outputs.getInteger("total") > shown) text.add(
@@ -2816,12 +2816,12 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     }
 
     @SideOnly(Side.CLIENT)
-    public static String formatGroupOutput(ItemStack item, FluidStack fluid, long amount) {
+    public static String formatGroupOutput(ItemStack item, FluidStack fluid, NBTTagCompound entry) {
         return EnumChatFormatting.AQUA + (item != null ? item.getDisplayName() : fluid.getLocalizedName())
             + EnumChatFormatting.WHITE
             + " x "
             + EnumChatFormatting.GOLD
-            + formatNumber(amount)
+            + formatNumber(new BigInteger(entry.getString("amount")))
             + (fluid == null ? "" : "L")
             + EnumChatFormatting.RESET;
     }

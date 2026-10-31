@@ -479,7 +479,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                     icon.asIcon()
                         .size(12))
                 .add(" ");
-            String text = MM_BottledChaos.formatGroupOutput(item, fluid, entry.getLong("amount"));
+            String text = MM_BottledChaos.formatGroupOutput(item, fluid, entry);
             boolean more = i + 1 < entries.tagCount() || outputs.getInteger("total") > entries.tagCount();
             // Reserve an ellipsis for subsequent outputs, measuring icons as well as text.
             if (font.getStringWidth(text) + (more ? font.getStringWidth("...") : 0) > remaining) {
