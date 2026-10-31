@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2;
 
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
+import static gregtech.api.modularui2.GTGuis.createPopUpPanel;
 
 import java.util.function.Predicate;
 
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellInputBus;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellInputHatch;
+import com.cleanroommc.modularui.api.IPanelHandler;
 import com.cleanroommc.modularui.api.drawable.IDrawable;
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.api.widget.IWidget;
@@ -30,6 +32,7 @@ import com.cleanroommc.modularui.value.sync.FluidSlotSyncHandler;
 import com.cleanroommc.modularui.value.sync.LongSyncValue;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.widget.ParentWidget;
+import com.cleanroommc.modularui.widgets.ButtonWidget;
 import com.cleanroommc.modularui.widgets.layout.Flow;
 import com.cleanroommc.modularui.widgets.layout.Grid;
 import com.cleanroommc.modularui.widgets.slot.FluidSlot;
@@ -40,6 +43,7 @@ import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.common.gui.modularui.hatch.MTEHatchInputBusMEGui;
 import gregtech.common.gui.modularui.hatch.MTEHatchInputMEGui;
+import gregtech.common.modularui2.widget.builder.ItemSlotGridBuilder;
 import gregtech.common.tileentities.machines.MTEHatchInputBusME;
 import gregtech.common.tileentities.machines.MTEHatchInputME;
 
@@ -91,18 +95,40 @@ public final class TST_AEStorageCellHatchGui {
             .tooltip(tooltip -> tooltip.addLine(getCellSlotName()));
     }
 
-    private static boolean bindSpecialInputSlot(IWidget widget, TST_AEStorageCellInputBus bus) {
+    private static boolean replaceSpecialInputSlot(IWidget widget, TST_AEStorageCellInputBus bus,
+        PanelSyncManager syncManager) {
         if (widget instanceof ParentWidget<?>parent) {
-            for (IWidget child : parent.getChildren()) {
+            for (int i = 0; i < parent.getChildren()
+                .size(); i++) {
+                IWidget child = parent.getChildren()
+                    .get(i);
                 if (child instanceof ItemSlot itemSlot && itemSlot.getSlot()
                     .getItemHandler() == bus.inventoryHandler
                     && itemSlot.getSlot()
                         .getSlotIndex() == bus.getManualSlot()) {
-                    // Keep GT's middle column and tooltip; only its backing slot moves.
-                    itemSlot.slot(new ModularSlot(bus.getSpecialInputHandler(), 0).slotGroup("item_inv"));
+                    IPanelHandler popup = syncManager.syncedPanel(
+                        "manual_slots_panel",
+                        true,
+                        (manager, handler) -> createPopUpPanel("manual_slots_panel").size(68, 76)
+                            .bottomRelOffset(0.5f, 52)
+                            .child(
+                                new ItemSlotGridBuilder(bus.getSpecialInputHandler(), manager).size(3, 3)
+                                    .slotGroupKey("special_inputs")
+                                    .build()
+                                    .marginTop(16)
+                                    .horizontalCenter()));
+                    parent.remove(i);
+                    parent.addChild(
+                        new ButtonWidget<>().size(18)
+                            .overlay(GTGuiTextures.OVERLAY_BUTTON_PLUS_LARGE)
+                            .onMousePressed(mouseButton -> {
+                                popup.openPanel();
+                                return popup.isPanelOpen();
+                            }),
+                        i);
                     return true;
                 }
-                if (bindSpecialInputSlot(child, bus)) return true;
+                if (replaceSpecialInputSlot(child, bus, syncManager)) return true;
             }
         }
         return false;
@@ -120,7 +146,7 @@ public final class TST_AEStorageCellHatchGui {
         @Override
         protected ParentWidget<?> createContentSection(ModularPanel panel, PanelSyncManager syncManager) {
             ParentWidget<?> content = super.createContentSection(panel, syncManager);
-            bindSpecialInputSlot(content, (TST_AEStorageCellInputBus) machine);
+            replaceSpecialInputSlot(content, (TST_AEStorageCellInputBus) machine, syncManager);
             if (!content.getChildren()
                 .isEmpty()
                 && content.getChildren()
