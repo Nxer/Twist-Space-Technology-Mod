@@ -15,6 +15,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineParameters.Machine;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineParameters.Profile;
@@ -191,8 +192,16 @@ public final class BottledChaosMachineDescriptions {
             case BREWERY, CHEMICAL_BATH, MAGNETAR_SEPARATOR, ELECTROLYZER, SIFTER -> parallel = "4T";
             case FLUID_HEATER, MIXER -> parallel = "8T";
             case BENDING -> parallel = "6T";
+            case CUTTER -> {
+                if (base != null) parallel = number(base.parallel())
+                    + (base.maximumRecipeTier() < 0 ? "T" : " x min(T, " + base.maximumRecipeTier() + ")");
+            }
             case VACUUM_FILTER -> {
                 time = "1/(1 + P)";
+                variableTime = true;
+            }
+            case HOLY_SEPARATOR -> {
+                time = number(ValueEnum.SpeedBonus_MultiplyPerTier_HolySeparator) + "^P";
                 variableTime = true;
             }
             case PHYSICAL_SWITCHER, MOLECULE -> {

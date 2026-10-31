@@ -98,7 +98,7 @@ public final class BottledChaosStructureRecipes {
     }
 
     private static boolean add(BottledChaosStructureDisplay display) {
-        var frame = display.frame(0);
+        var frame = display.frame();
         var recipe = GTValues.RA.stdBuilder()
             .itemInputsUnsafe(frame.inputs())
             .itemOutputs(frame.outputs())

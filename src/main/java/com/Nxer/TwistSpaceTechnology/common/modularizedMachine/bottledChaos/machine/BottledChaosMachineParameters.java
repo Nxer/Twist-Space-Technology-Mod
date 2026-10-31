@@ -13,6 +13,7 @@ import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BallLightning;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaMacerator;
+import com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.IModularizedMachine;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularHatchTypes;
@@ -31,6 +32,7 @@ import goodgenerator.loader.Loaders;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.HeatingCoilLevel;
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.VoltageIndex;
 import gregtech.api.interfaces.IHeatingCoil;
@@ -65,6 +67,9 @@ import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoTunnel;
 /** Explicit source-machine parameters. Runtime reads only paid materials and the current input snapshot. */
 public final class BottledChaosMachineParameters {
 
+    static final ItemList[] CUTTER_BLADES = { ItemList.T1Sawblade, ItemList.T2Sawblade, ItemList.T3Sawblade,
+        ItemList.T4Sawblade };
+
     /** Multipliers are per source recipe; quantity speed is applied separately after source duration limits. */
     @Desugar
     public record Profile(long parallel, double euMultiplier, double timeMultiplier, double timeDivisor,
@@ -80,6 +85,8 @@ public final class BottledChaosMachineParameters {
         AUTO_CRAFTER,
         BREWERY,
         CHEMICAL_BATH,
+        CUTTER,
+        HOLY_SEPARATOR,
         DISTILLATION_TOWER,
         ALLOY_BLAST,
         VACUUM_FILTER,
@@ -321,7 +328,24 @@ public final class BottledChaosMachineParameters {
             case AUTO_CRAFTER -> value.set(2L * Math.max(1, t), 1, 1d / 3);
             case BREWERY -> value.set(4L * t, 1, 2d / 3);
             case CHEMICAL_BATH -> value.set(4L * t, 1, 0.2);
+            case CUTTER -> {
+                if (u.sawblade < 0) return Evaluation.INVALID;
+                value.maximumRecipeTier = new int[] { VoltageIndex.LuV, VoltageIndex.UV, VoltageIndex.UEV,
+                    -1 }[u.sawblade];
+                value.set(
+                    new int[] { 2, 3, 4, 6 }[u.sawblade]
+                        * (long) (value.maximumRecipeTier < 0 ? t : Math.min(t, value.maximumRecipeTier)),
+                    new double[] { 0.9, 0.8, 0.7, 0.6 }[u.sawblade],
+                    1d / new double[] { 2.5, 3, 3.5, 4.5 }[u.sawblade]);
+            }
             case DISTILLATION_TOWER, DISSOLUTION, VACUUM_FREEZER -> {}
+            case HOLY_SEPARATOR -> {
+                value.set(
+                    (long) ValueEnum.ParallelPerPiece_HolySeparator * shape,
+                    1,
+                    Math.pow(ValueEnum.SpeedBonus_MultiplyPerTier_HolySeparator, p));
+                if (shape >= ValueEnum.Piece_EnablePerfectOverclock_HolySeparator) value.timeDivisor = 4;
+            }
             case PLASMA_FORGE -> value.requiresHeat = true;
             case ALLOY_BLAST -> value.maximumRecipeTier = t;
             case VACUUM_FILTER -> {
@@ -847,6 +871,7 @@ public final class BottledChaosMachineParameters {
         int draconicFusionTier;
         int refineryCoil;
         int magnet = -1;
+        int sawblade = -1;
         long photonSpeed;
         boolean photonPerfect;
         boolean basicAlloyCoil;
@@ -860,6 +885,8 @@ public final class BottledChaosMachineParameters {
             for (ItemStack stack : materials) {
                 if (stack == null || stack.stackSize <= 0) continue;
                 ingotMold |= GTCMItemList.WhiteDwarfMold_Ingot.equal(stack);
+                for (int i = 0; i < CUTTER_BLADES.length; i++)
+                    if (CUTTER_BLADES[i].isStackEqual(stack, false, true)) sawblade = i;
                 Block block = Block.getBlockFromItem(stack.getItem());
                 int meta = stack.getItemDamage();
                 if (block instanceof IHeatingCoil heating) coil = heating.getCoilHeat(meta);

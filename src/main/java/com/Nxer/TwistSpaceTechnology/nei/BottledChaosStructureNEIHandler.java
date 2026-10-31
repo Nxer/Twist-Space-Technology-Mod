@@ -1,20 +1,28 @@
 package com.Nxer.TwistSpaceTechnology.nei;
 
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosMachineModule;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosComplexStructures;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructureDisplay;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructureDisplay.Selection;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_BottledChaosStructureFrontend;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
@@ -30,6 +38,8 @@ import codechicken.nei.recipe.IRecipeHandler;
 import codechicken.nei.recipe.IUsageHandler;
 import codechicken.nei.recipe.RecipeInfo;
 import codechicken.nei.recipe.TemplateRecipeHandler;
+import cpw.mods.fml.client.config.GuiSlider;
+import cpw.mods.fml.client.config.GuiUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.GTValues;
@@ -43,7 +53,12 @@ import gregtech.nei.GTNEIDefaultHandler;
 @SideOnly(Side.CLIENT)
 public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
 
-    private int structureCycleTicks;
+    private static final int SLIDER_HEIGHT = 16;
+    private static final int SELECTION_HEIGHT = SLIDER_HEIGHT + 1;
+
+    private StructureRecipe dragOwner;
+    private int dragRow;
+
     private List<CachedDefaultRecipe> sourceCache;
     private List<CachedDefaultRecipe> structureCache;
 
@@ -71,27 +86,127 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
     }
 
     @Override
-    public void onUpdate() {
-        super.onUpdate();
-        if (!structureCyclePaused()) structureCycleTicks++;
-    }
-
-    private boolean structureCyclePaused() {
-        if (GuiScreen.isShiftKeyDown()) return true;
-        if (Minecraft.getMinecraft().currentScreen instanceof GuiRecipe<?>gui && gui.getHandler() == this) {
-            for (int index : gui.getRecipeIndices()) {
-                for (PositionedStack input : getIngredientStacks(index)) if (gui.isMouseOver(input, index)) return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
     public List<PositionedStack> getIngredientStacks(int recipe) {
         // NEI snapshots inputs and outputs together when refreshing its recipe widget. Drawing is too late:
         // the widget can keep an older snapshot while a hovered slot or overlay button pauses its cycle.
-        if (arecipes.get(recipe) instanceof StructureRecipe structure) structure.update(structureCycleTicks);
+        if (arecipes.get(recipe) instanceof StructureRecipe structure) structure.update();
         return super.getIngredientStacks(recipe);
+    }
+
+    private int selectionY(StructureRecipe structure) {
+        return getDescriptionYOffset() + 4
+            + Minecraft.getMinecraft().fontRenderer
+                .listFormattedStringToWidth(TST_BottledChaosStructureFrontend.poolText(structure.display), 156)
+                .size() * 10;
+    }
+
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        if (dragOwner == null) return;
+        boolean visible = Minecraft.getMinecraft().currentScreen instanceof GuiRecipe<?>gui && gui.getHandler() == this
+            && gui.getRecipeIndices()
+                .stream()
+                .anyMatch(index -> arecipes.get(index) == dragOwner);
+        if (!visible || !Mouse.isButtonDown(0)) {
+            GuiSlider slider = dragOwner.sliders.get(dragRow);
+            slider.mouseReleased(0, 0);
+            if (visible) dragOwner.select(dragRow, slider.getValueInt());
+            else slider.setValue(dragOwner.selected(dragRow));
+            dragOwner = null;
+        }
+    }
+
+    private static boolean contains(GuiSlider slider, Point mouse) {
+        return new Rectangle(slider.xPosition, slider.yPosition, slider.width, slider.height).contains(mouse);
+    }
+
+    @Override
+    public void drawForeground(int recipe) {
+        super.drawForeground(recipe);
+        if (!(arecipes.get(recipe) instanceof StructureRecipe structure)) return;
+        Point mouse = Minecraft.getMinecraft().currentScreen instanceof GuiRecipe<?>gui
+            ? gui.getRecipeMousePosition(recipe)
+            : new Point(-1, -1);
+        var font = Minecraft.getMinecraft().fontRenderer;
+        int y = selectionY(structure);
+        for (int row = 0; row < structure.sliders.size(); row++) {
+            GuiSlider slider = structure.sliders.get(row);
+            slider.displayString = structure.selections.get(row)
+                .text(slider.getValueInt());
+            slider.drawButton(Minecraft.getMinecraft(), mouse.x, mouse.y);
+            y += SELECTION_HEIGHT;
+        }
+        if (structure.mRecipe.mSpecialValue != 0) {
+            String[] notes = structure.mRecipe.getNeiDesc();
+            if (notes != null) for (String note : notes) {
+                for (String line : font.listFormattedStringToWidth(note, 156)) {
+                    font.drawString(line, 7, y, 0x404040);
+                    y += 10;
+                }
+            }
+        }
+    }
+
+    @Override
+    public int getRecipeHeight(int recipe) {
+        if (!(arecipes.get(recipe) instanceof StructureRecipe structure)) return super.getRecipeHeight(recipe);
+        int height = selectionY(structure) + structure.selections.size() * SELECTION_HEIGHT + 20;
+        String[] notes = structure.mRecipe.getNeiDesc();
+        if (notes != null) for (String note : notes)
+            height += Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(note, 156)
+                .size() * 10;
+        return Math.max(TST_BottledChaosStructureFrontend.PAGE_HEIGHT, height);
+    }
+
+    @Override
+    public List<String> handleTooltip(GuiRecipe<?> gui, List<String> tooltip, int recipe) {
+        if (arecipes.get(recipe) instanceof StructureRecipe structure) {
+            Point mouse = gui.getRecipeMousePosition(recipe);
+            int y = selectionY(structure);
+            for (Selection selection : structure.selections) {
+                if (new Rectangle(7, y, 156, SLIDER_HEIGHT).contains(mouse) && !selection.detail()
+                    .isEmpty()) tooltip.add(selection.detail());
+                y += SELECTION_HEIGHT;
+            }
+        }
+        return super.handleTooltip(gui, tooltip, recipe);
+    }
+
+    @Override
+    public boolean mouseClicked(GuiRecipe<?> gui, int button, int recipe) {
+        if (button == 0 && arecipes.get(recipe) instanceof StructureRecipe structure) {
+            Point mouse = gui.getRecipeMousePosition(recipe);
+            for (int row = 0; row < structure.sliders.size(); row++) {
+                GuiSlider slider = structure.sliders.get(row);
+                if (!contains(slider, mouse)) continue;
+                if (dragOwner != null) {
+                    GuiSlider previous = dragOwner.sliders.get(dragRow);
+                    previous.mouseReleased(0, 0);
+                    previous.setValue(dragOwner.selected(dragRow));
+                }
+                if (slider.mousePressed(Minecraft.getMinecraft(), mouse.x, mouse.y)) {
+                    dragOwner = structure;
+                    dragRow = row;
+                    return true;
+                }
+            }
+        }
+        return super.mouseClicked(gui, button, recipe);
+    }
+
+    @Override
+    public boolean mouseScrolled(GuiRecipe<?> gui, int scroll, int recipe) {
+        if (scroll != 0 && dragOwner == null && arecipes.get(recipe) instanceof StructureRecipe structure) {
+            Point mouse = gui.getRecipeMousePosition(recipe);
+            for (int row = 0; row < structure.sliders.size(); row++) {
+                if (contains(structure.sliders.get(row), mouse)) {
+                    structure.select(row, structure.selected(row) + Integer.signum(scroll));
+                    return true;
+                }
+            }
+        }
+        return super.mouseScrolled(gui, scroll, recipe);
     }
 
     @Override
@@ -138,27 +253,104 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
             .orElseThrow(() -> new IllegalArgumentException("Invalid structure display recipe"));
     }
 
-    /** Inputs and output advance together once per two-second structure frame. */
+    /** Inputs, output and transfer metadata advance atomically in NEI's snapshot refresh. */
     private final class StructureRecipe extends CachedDefaultRecipe {
 
         private final BottledChaosStructureDisplay display;
-        private BottledChaosStructureDisplay.Frame currentFrame;
-        private int currentCycle = -1;
-        private int lastCycleTick;
+        private final Map<String, Integer> choices = new LinkedHashMap<>();
+        private List<Selection> selections = new ArrayList<>();
+        private final List<GuiSlider> sliders = new ArrayList<>();
+        private final Map<String, Integer> appliedChoices = new LinkedHashMap<>();
+        private boolean selectionDirty = true;
 
         private StructureRecipe(GTRecipe recipe) {
-            // Never mutate the map's fake recipe while animating the client cache.
             super(copyDisplayRecipe(recipe));
             display = recipe.getMetadata(BottledChaosStructureDisplay.DISPLAY);
-            update(0);
+            update();
         }
 
-        private void update(int tick) {
-            if (currentCycle >= 0 && tick - lastCycleTick < 40) return;
-            // A hovered overlay can delay NEI's refresh. Resume with the next complete frame, without skipping ahead.
-            lastCycleTick = tick;
-            var frame = display.frame(++currentCycle);
-            if (frame == currentFrame) return;
+        private int selected(int row) {
+            Selection selection = selections.get(row);
+            return Math.floorMod(choices.getOrDefault(selection.key(), 0), selection.count());
+        }
+
+        private void select(int row, int value) {
+            Selection selection = selections.get(row);
+            value = Math.max(0, Math.min(selection.count() - 1, value));
+            sliders.get(row)
+                .setValue(value);
+            if (value == selected(row)) return;
+            choices.put(selection.key(), value);
+            selectionDirty = true;
+        }
+
+        private void update() {
+            if (!selectionDirty || dragOwner == this) return;
+            // Accumulate all wheel events immediately; resolve only the latest choice at the next NEI snapshot.
+            var frame = display.frame(choices);
+            if (frame == null) {
+                choices.clear();
+                choices.putAll(appliedChoices);
+                frame = display.frame(choices);
+            }
+            selectionDirty = false;
+            appliedChoices.clear();
+            appliedChoices.putAll(choices);
+            selections = display.selections(choices);
+            sliders.clear();
+            int y = selectionY(this);
+            for (int row = 0; row < selections.size(); row++) {
+                Selection selection = selections.get(row);
+                // Same Forge track/handle textures as the structure-preview channel sliders, without a BR dependency.
+                GuiSlider slider = new GuiSlider(
+                    row,
+                    7,
+                    y,
+                    156,
+                    SLIDER_HEIGHT,
+                    "",
+                    "",
+                    0,
+                    selection.count() - 1,
+                    selected(row),
+                    false,
+                    false) {
+
+                    @Override
+                    protected void mouseDragged(Minecraft mc, int mouseX, int mouseY) {
+                        if (dragging) {
+                            sliderValue = (mouseX - (xPosition + 4)) / (double) (width - 8);
+                            updateSlider();
+                        }
+                        // Match BlockRenderer's channel handle: 8 px wide, stretched to the 16 px track height.
+                        int x = xPosition + (int) (sliderValue * (width - 8));
+                        GL11.glColor4f(1, 1, 1, 1);
+                        GuiUtils.drawContinuousTexturedBox(x, yPosition, 0, 66, 8, height, 200, 20, 2, 3, 2, 2, 0);
+                    }
+
+                    @Override
+                    public void drawButton(Minecraft mc, int mouseX, int mouseY) {
+                        String label = displayString;
+                        displayString = "";
+                        GL11.glColor4f(1, 1, 1, 1);
+                        GL11.glDisable(GL11.GL_LIGHTING);
+                        GL11.glEnable(GL11.GL_BLEND);
+                        OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+                        super.drawButton(mc, mouseX, mouseY);
+                        displayString = label;
+                        drawCenteredString(
+                            mc.fontRenderer,
+                            label,
+                            xPosition + width / 2,
+                            yPosition - 1 + height - mc.fontRenderer.FONT_HEIGHT,
+                            BottledChaosStructureNEIHandler.contains(this, new Point(mouseX, mouseY)) ? 0xFFFFA0
+                                : 0xE0E0E0);
+                    }
+                };
+                slider.displayString = selection.text(selected(row));
+                sliders.add(slider);
+                y += SELECTION_HEIGHT;
+            }
             mInputs.clear();
             mOutputs.clear();
             mRecipe.mInputs = new ItemStack[TST_BottledChaosStructureFrontend.INPUT_SLOTS];
@@ -184,7 +376,6 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
                         false,
                         false));
             }
-            currentFrame = frame;
         }
 
         private void addInputs(ItemStack[] materials, int start) {

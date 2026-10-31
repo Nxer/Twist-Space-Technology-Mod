@@ -138,15 +138,16 @@ public final class TST_BottledChaosStructureFrontend extends RecipeMapFrontend {
     public void drawDescription(@NotNull RecipeDisplayInfo info) {
         var display = info.recipe.getMetadata(BottledChaosStructureDisplay.DISPLAY);
         if (display == null) return;
+        drawLines(info, poolText(display));
         if (info.recipe.mSpecialValue == 0) {
             drawLines(info, StatCollector.translateToLocal("tst.bottledchaos.recipe.structure.disk"));
             drawLines(info, StatCollector.translateToLocal("tst.bottledchaos.recipe.structure.capacity"));
         }
-        drawLines(
-            info,
-            StatCollector.translateToLocalFormatted("tst.bottledchaos.machine_module.pool", display.poolNames()));
-        String[] notes = info.recipe.getNeiDesc();
-        if (notes != null) for (String note : notes) drawLines(info, note);
+        // The handler places independent selectors before the remaining structure notes.
+    }
+
+    public static String poolText(BottledChaosStructureDisplay display) {
+        return StatCollector.translateToLocalFormatted("tst.bottledchaos.machine_module.pool", display.poolNames());
     }
 
     private static void drawLines(RecipeDisplayInfo info, String text) {

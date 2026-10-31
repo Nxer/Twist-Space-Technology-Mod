@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.IntUnaryOperator;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -135,30 +136,35 @@ public final class BottledChaosStructureCatalog {
         Requirement[] requirements) {
 
         public Structure example() {
-            return example(0);
+            return example(group -> 0, index -> 0);
         }
 
-        public Structure example(int variant) {
+        public Structure example(IntUnaryOperator groupChoice, IntUnaryOperator requirementChoice) {
             if (BottledChaosComplexStructures.isFoundry(this))
-                return BottledChaosComplexStructures.foundryExample(this, variant);
+                return BottledChaosComplexStructures.foundryExample(this, groupChoice.applyAsInt(0));
             Map<TST_ItemID, ItemStack> materials = new LinkedHashMap<>();
             for (Part part : parts) if (part.group == 0) addMaterial(materials, part.material, part.material.stackSize);
-            // Every independent group advances on the same clock, with its own period.
+            // Select each material group independently, then reuse the normal complete-structure validation.
             for (int group = 1; group <= groups; group++) {
                 List<Part> alternatives = new ArrayList<>();
                 for (Part part : parts) if (part.group == group) alternatives.add(part);
-                Part selected = alternatives.get(Math.floorMod(variant, alternatives.size()));
+                Part selected = alternatives.get(Math.floorMod(groupChoice.applyAsInt(group), alternatives.size()));
                 addMaterial(materials, selected.material, selected.material.stackSize);
             }
             for (int i = 0; i < requirements.length; i++) {
                 Requirement requirement = requirements[i];
                 int amount = requirement.minimum;
-                if (amount == 0 && requirement.maximum == 1) amount = Math.floorMod(variant, 2);
+                int choice = requirementChoice.applyAsInt(i);
+                if (amount == 0 && requirement.maximum == 1) {
+                    choice = Math.floorMod(choice, requirement.alternatives.length + 1);
+                    amount = choice == 0 ? 0 : 1;
+                    choice--;
+                }
                 if (amount == 0) continue;
                 if (requirement.alternatives.length == 0) return null;
                 addMaterial(
                     materials,
-                    requirement.alternatives[Math.floorMod(variant, requirement.alternatives.length)],
+                    requirement.alternatives[Math.floorMod(choice, requirement.alternatives.length)],
                     amount);
                 if (requirement.replacements.length > 0) {
                     ItemStack replaced = null;
@@ -706,6 +712,13 @@ public final class BottledChaosStructureCatalog {
     private static List<Requirement> dedicatedMaterials(BottledChaosSupportedMachine supported, int profile) {
         List<Requirement> requirements = new ArrayList<>();
         switch (supported) {
+            case MTEINDUSTRIAL_CUTTING_MACHINE -> require(
+                requirements,
+                "sawblade",
+                1,
+                1,
+                false,
+                items(BottledChaosMachineParameters.CUTTER_BLADES));
             case TST_MIRACLE_DOOR -> require(
                 requirements,
                 "ingot_mold",

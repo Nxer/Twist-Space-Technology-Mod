@@ -26,6 +26,7 @@ public enum BottledChaosSupportedMachine {
     // spotless:off
     MTEBIO_VAT("bartworks.common.tileentities.multis.MTEBioVat", "main", Machine.BIO_VAT),
     GTCM_CRYSTALLINE_INFINITIER("com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier", "mainCrystallineInfinitier", Machine.CRYSTALLINE),
+    GT_TILE_ENTITY_HOLY_SEPARATOR("com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_HolySeparator", "mainHolySeparator", Machine.HOLY_SEPARATOR, StructureKind.REPEATING),
     GT_TILE_ENTITY_INTENSIFY_CHEMICAL_DISTORTER("com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IntensifyChemicalDistorter", "main", Machine.CHEMICAL_DISTORTER),
     GT_TILE_ENTITY_MAGNETIC_DOMAIN_CONSTRUCTOR("com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDomainConstructor", "mainMagneticDomainConstructor", Machine.MAGNETIC_DOMAIN, StructureKind.REPEATING),
     GT_TILE_ENTITY_MAGNETIC_DRIVE_PRESSURE_FORMER("com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDrivePressureFormer", "main", Machine.PRESSURE_FORMER),
@@ -77,6 +78,7 @@ public enum BottledChaosSupportedMachine {
     MTEINDUSTRIAL_CENTRIFUGE("gregtech.common.tileentities.machines.multi.MTEIndustrialCentrifuge", "main", Machine.CENTRIFUGE),
     MTEINDUSTRIAL_CHEMICAL_BATH("gregtech.common.tileentities.machines.multi.MTEIndustrialChemicalBath", "main", Machine.CHEMICAL_BATH),
     MTEINDUSTRIAL_COKE_OVEN("gregtech.common.tileentities.machines.multi.MTEIndustrialCokeOven", "main", Machine.COKE_OVEN, StructureKind.REPEATING),
+    MTEINDUSTRIAL_CUTTING_MACHINE("gregtech.common.tileentities.machines.multi.MTEIndustrialCuttingMachine", "main", Machine.CUTTER),
     MTEINDUSTRIAL_ELECTROLYZER("gregtech.common.tileentities.machines.multi.MTEIndustrialElectrolyzer", "main", Machine.ELECTROLYZER),
     MTEINDUSTRIAL_ELECTROMAGNETIC_SEPARATOR("gregtech.common.tileentities.machines.multi.MTEIndustrialElectromagneticSeparator", "main", Machine.MAGNET_SEPARATOR),
     MTEINDUSTRIAL_EXTRACTOR("gregtech.common.tileentities.machines.multi.MTEIndustrialExtractor", "main", Machine.EXTRACTOR),
@@ -260,6 +262,12 @@ public enum BottledChaosSupportedMachine {
     static Collection<RecipeMap<?>> recipeMaps(IMetaTileEntity machine) {
         if (!(machine instanceof RecipeMapWorkable workable)) return Collections.emptyList();
         Collection<RecipeMap<?>> nativePools = workable.getAvailableRecipeMaps();
+        if (nativePools.contains(RecipeMaps.cutterFakeRecipes)) {
+            // The NEI cutting map advertises the same machine, but execution uses the real cutting pool.
+            var actualPools = new ArrayList<>(nativePools);
+            actualPools.replaceAll(pool -> pool == RecipeMaps.cutterFakeRecipes ? RecipeMaps.cutterRecipes : pool);
+            nativePools = actualPools;
+        }
         var supported = find(machine);
         if (supported == null || supported.poolPolicy == PoolPolicy.NATIVE) return nativePools;
         if (supported.poolPolicy == PoolPolicy.ARC_ONLY) return nativePools.contains(RecipeMaps.arcFurnaceRecipes)
@@ -276,7 +284,7 @@ public enum BottledChaosSupportedMachine {
         return mask;
     }
 
-    /** Only real finite bounds are expanded. Unbounded structures publish representative complete sizes. */
+    /** Display sizes only; unbounded structures remain unrestricted when packaging. */
     int[] displayProfiles() {
         return switch (this) {
             case MTEDISTILLATION_TOWER -> new int[] { 12 };
@@ -286,8 +294,9 @@ public enum BottledChaosSupportedMachine {
             case MTESPINMATRON -> range(1, 4);
             case MTEINDUSTRIAL_MACERATOR, TST_SWELEGFYR_BLAST_FURNACE -> range(1, 2);
             case MTEINDUSTRIAL_COKE_OVEN -> new int[] { 1, 2, 16 };
-            case GT_TILE_ENTITY_MAGNETIC_DOMAIN_CONSTRUCTOR, GT_TILE_ENTITY_MOLECULE_DECONSTRUCTOR, TST_GIANT_VACUUM_DRYING_FURNACE -> new int[] {
-                1, 2 };
+            case GT_TILE_ENTITY_HOLY_SEPARATOR, GT_TILE_ENTITY_MAGNETIC_DOMAIN_CONSTRUCTOR, GT_TILE_ENTITY_MOLECULE_DECONSTRUCTOR, TST_GIANT_VACUUM_DRYING_FURNACE -> range(
+                1,
+                64);
             case MTEEXO_FOUNDRY -> range(1, 3);
             default -> new int[] { 1 };
         };
@@ -315,6 +324,11 @@ public enum BottledChaosSupportedMachine {
     List<Piece> pieces(IMetaTileEntity machine, int size) {
         List<Piece> pieces = new ArrayList<>();
         switch (this) {
+            case GT_TILE_ENTITY_HOLY_SEPARATOR -> {
+                pieces.add(new Piece("mainHolySeparator", 7, 2, 0));
+                for (int i = 1; i <= size; i++) pieces.add(new Piece("middleHolySeparator", 7, 2 + 4 * i, 0));
+                pieces.add(new Piece("endHolySeparator", 7, 6 + 4 * size, 0));
+            }
             case GT_TILE_ENTITY_MAGNETIC_DOMAIN_CONSTRUCTOR, GT_TILE_ENTITY_MOLECULE_DECONSTRUCTOR -> {
                 String suffix = this == GT_TILE_ENTITY_MAGNETIC_DOMAIN_CONSTRUCTOR ? "MagneticDomainConstructor"
                     : "MoleculeDeconstructor";
