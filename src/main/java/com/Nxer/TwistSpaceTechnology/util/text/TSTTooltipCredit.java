@@ -17,7 +17,7 @@ import net.minecraft.util.StatCollector;
 
 import com.Nxer.TwistSpaceTechnology.Tags;
 
-import gregtech.api.enums.GTAuthors;
+import gregtech.api.util.StringUtils;
 
 public interface TSTTooltipCredit {
 
@@ -114,47 +114,55 @@ public interface TSTTooltipCredit {
     }
 
     static Supplier<String> buildCreditLine(Role role, ID... ids) {
-        Supplier<String> creditLine;
-        if (role == Role.AUTHOR) {
-            creditLine = GTAuthors.buildAuthorsWithFormatSupplier(ids);
-        } else {
-            String translationKey = (role == Role.MAINTAINER ? "tst.common.shared.credit.maintainer"
+        String translationKey = (role == Role.AUTHOR ? "tst.common.shared.credit.author"
+            : role == Role.MAINTAINER ? "tst.common.shared.credit.maintainer"
                 : role == Role.STRUCTURE ? "tst.common.shared.credit.structure" : "tst.common.shared.credit.art")
-                + (ids.length == 1 ? "" : "s");
-            creditLine = () -> StatCollector.translateToLocalFormatted(
+            + (ids.length == 1 ? "" : "s");
+        Supplier<String> creditLine = () -> role == Role.AUTHOR && ids.length == 0 ? ""
+            : StatCollector.translateToLocalFormatted(
                 translationKey,
-                GTAuthors.formatAuthors(
+                StringUtils.formatList(
                     Arrays.stream(ids)
-                        .map(Supplier::get)
+                        .map(
+                            id -> EnumChatFormatting.GREEN + id.get()
+                                + EnumChatFormatting.RESET
+                                + EnumChatFormatting.GRAY)
                         .toArray(String[]::new)));
-        }
         return () -> "" + EnumChatFormatting.RESET
             + EnumChatFormatting.GRAY
             + creditLine.get()
             + EnumChatFormatting.RESET;
     }
 
+    // #tr tst.common.shared.credit.author
+    // # Author: %s
+    // #zh_CN 作者: %s
+
+    // #tr tst.common.shared.credit.authors
+    // # Authors: %s
+    // #zh_CN 作者: %s
+
     // #tr tst.common.shared.credit.maintainer
     // # Maintainer: %s
-    // #zh_CN 维护：%s
+    // #zh_CN 维护: %s
 
     // #tr tst.common.shared.credit.maintainers
     // # Maintainers: %s
-    // #zh_CN 维护：%s
+    // #zh_CN 维护: %s
 
     // #tr tst.common.shared.credit.structure
     // # Structure: %s
-    // #zh_CN 结构：%s
+    // #zh_CN 结构: %s
 
     // #tr tst.common.shared.credit.structures
     // # Structures: %s
-    // #zh_CN 结构：%s
+    // #zh_CN 结构: %s
 
     // #tr tst.common.shared.credit.art
-    // # Artist %s
-    // #zh_CN 美术 %s
+    // # Artist: %s
+    // #zh_CN 美术: %s
 
     // #tr tst.common.shared.credit.arts
-    // # Artists %s
-    // #zh_CN 美术 %s
+    // # Artists: %s
+    // #zh_CN 美术: %s
 }
