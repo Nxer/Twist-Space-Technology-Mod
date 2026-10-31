@@ -21,6 +21,7 @@ import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResult
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosSourceParameters;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.material.BottledChaosMaterialCache;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.result.BottledChaosMissingCategoriesResult;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor.PreparedPlan;
 
@@ -30,8 +31,6 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 /** Folds only the cached recipe chains, against the input snapshot of one processing group. */
 public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
 
-    private static final int MAX_BATCH_TICKS = 200;
-    public static final int WIRELESS_TICKS = BottledChaosOverclock.MIN_OVERCLOCK_TICKS;
     private ItemStackLong[] items;
     private FluidStackLong[] fluids;
 
@@ -150,7 +149,8 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
                 PreparedPlan fallback = baseline;
                 PreparedPlan chosen = planner.fitDownstream(baseline, batchDurationLimit(baseline), fitsWork);
                 if (chosen.durationTicks()
-                    <= batchDurationLimit(chosen) * BottledChaosOverclock.MIN_OVERCLOCK_TICKS / MAX_BATCH_TICKS) {
+                    <= batchDurationLimit(chosen) * Config.BottledChaosMinimumOverclockSeconds
+                        / Config.BottledChaosChainedProcessingSeconds) {
                     chosen = planner.refineShortPlan(chosen, fitsWork);
                 }
                 diagnostics.fitted();
@@ -250,7 +250,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
                 wirelessCost = BottledChaosOverclock
                     .wirelessCost(power, work, overClockTimeReduction, overClockPowerIncrease);
                 calculatedEut = 0;
-                duration = WIRELESS_TICKS;
+                duration = BottledChaosOverclock.minimumOverclockTicks();
                 acceptPlan(chosen, preparationFailure);
                 diagnostics.finish(entry, duration, calculatedEut);
                 return CheckRecipeResultRegistry.SUCCESSFUL;
@@ -323,7 +323,7 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
             voltage,
             key -> Math.min(
                 Double.MAX_VALUE,
-                MAX_BATCH_TICKS * BottledChaosOverclock
+                Config.BottledChaosChainedProcessingSeconds * 20.0 * BottledChaosOverclock
                     .maximumSpeed(key * euModifier, availableVoltage, overClockTimeReduction, overClockPowerIncrease)
                     / speedBoost));
     }

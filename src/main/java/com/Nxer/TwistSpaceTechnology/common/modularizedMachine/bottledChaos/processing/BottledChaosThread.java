@@ -46,8 +46,8 @@ public final class BottledChaosThread {
     }
 
     public BigInteger power() {
-        return isWireless() ? wirelessCost.add(BigInteger.valueOf(BottledChaosProcessingLogic.WIRELESS_TICKS - 1))
-            .divide(BigInteger.valueOf(BottledChaosProcessingLogic.WIRELESS_TICKS)) : BigInteger.valueOf(eut);
+        return isWireless() ? wirelessCost.add(BigInteger.valueOf(Math.max(1, duration) - 1))
+            .divide(BigInteger.valueOf(Math.max(1, duration))) : BigInteger.valueOf(eut);
     }
 
     /** Paid-job materials are stable until completion; do not traverse the recipe graph each GUI tick. */

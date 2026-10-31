@@ -230,8 +230,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     // #zh_CN 每tick统一扣除总耗电; 电力不足时全部加工组暂停.
 
     // #tr tst.bottledchaos.tooltip.wireless
-    // # At UXV, omitting energy hatches enables wireless power. Each group prepays its normalized energy and runs for 2s without further overclocking.
-    // #zh_CN UXV等级未安装能源仓时启用无线模式. 每组预付折算后的总电量, 固定运行2s, 不额外超频.
+    // # At UXV, omitting energy hatches enables wireless power. Each group prepays its overclocked energy and runs for the configured minimum overclock time.
+    // #zh_CN UXV等级未安装能源仓时启用无线模式. 每组预付超频后的总电量, 按配置的最低超频时间运行.
 
     // #tr tst.bottledchaos.wireless_mode
     // # Wireless mode

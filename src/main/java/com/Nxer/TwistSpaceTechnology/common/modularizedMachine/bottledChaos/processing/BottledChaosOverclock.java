@@ -5,11 +5,14 @@ import java.math.BigInteger;
 import java.math.RoundingMode;
 
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 
-/** Shared source normalization and final execution overclocks. Only final execution has a two-second stop. */
+/** Shared source normalization and final execution overclocks. Only final execution uses the configured time target. */
 public final class BottledChaosOverclock {
 
-    public static final int MIN_OVERCLOCK_TICKS = 40;
+    public static int minimumOverclockTicks() {
+        return Config.BottledChaosMinimumOverclockSeconds * 20;
+    }
 
     /** Compare speed at equal power growth; keep the stronger native step on equal efficiency. */
     public static boolean isBetterSourceOverclock(OverclockType candidate, double timeDivisor, double powerMultiplier) {
@@ -26,7 +29,7 @@ public final class BottledChaosOverclock {
         if (!Double.isFinite(power) || power <= 0 || !Double.isFinite(workTicks) || workTicks <= 0)
             throw new IllegalArgumentException("Invalid wireless work");
         validateMultipliers(timeReduction, powerIncrease);
-        double speed = Math.max(1, workTicks / MIN_OVERCLOCK_TICKS);
+        double speed = Math.max(1, workTicks / minimumOverclockTicks());
         double energyMultiplier = timeReduction > 1
             ? Math.pow(speed, scalingExponent(timeReduction, powerIncrease / timeReduction))
             : 1;
@@ -137,14 +140,15 @@ public final class BottledChaosOverclock {
         if (!Double.isFinite(workTicks) || workTicks <= 0) {
             throw new IllegalArgumentException("Invalid recipe duration");
         }
-        double targetSpeed = Math.max(1, workTicks / MIN_OVERCLOCK_TICKS);
+        int minimumTicks = minimumOverclockTicks();
+        double targetSpeed = Math.max(1, workTicks / minimumTicks);
         double speed = Math.min(maximumSpeed, targetSpeed);
         double power = Math.ceil(basePower);
         if (timeReduction > 1 && powerIncrease > 1) {
             power *= Math.pow(speed, scalingExponent(timeReduction, powerIncrease));
         }
         long eut = (long) Math.min(availablePower, Math.ceil(power));
-        double ticks = workTicks > MIN_OVERCLOCK_TICKS && maximumSpeed >= targetSpeed ? MIN_OVERCLOCK_TICKS
+        double ticks = workTicks > minimumTicks && maximumSpeed >= targetSpeed ? minimumTicks
             : Math.ceil(workTicks / speed);
         return new Result(eut, ticks >= Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) Math.max(1, ticks));
     }
