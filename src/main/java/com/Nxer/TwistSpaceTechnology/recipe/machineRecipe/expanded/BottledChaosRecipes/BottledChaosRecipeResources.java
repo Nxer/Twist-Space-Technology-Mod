@@ -615,7 +615,6 @@ public final class BottledChaosRecipeResources {
     public static final TST_ItemID TriniumSulfateDust = dust(GGMaterial.triniumSulphate);
     public static final TST_ItemID GalliumHydroxideDust = dust(GGMaterial.galliumHydroxide);
     public static final TST_ItemID IndiumPhosphateDust = dust(GGMaterial.indiumPhosphate);
-    public static final TST_ItemID RoquesiteDust = dust(WerkstoffLoader.Roquesit);
     public static final TST_ItemID SodiumOxideDust = dust(Materials.SodiumOxide);
     public static final TST_ItemID QuicklimeDust = dust(Materials.Quicklime);
     public static final TST_ItemID BariumSulfateDust = dust(Materials.Barite);

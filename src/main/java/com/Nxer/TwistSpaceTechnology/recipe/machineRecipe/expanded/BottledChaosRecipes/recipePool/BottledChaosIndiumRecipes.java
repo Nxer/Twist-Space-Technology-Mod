@@ -3,14 +3,12 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaos
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.GalenaDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.IndiumConcentrate;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.IndiumDust;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.IndiumPhosphateDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.LeadDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.LeadZincSolution;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.PurifiedGalena;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.PurifiedSphalerite;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.ElectrolyzerNonCell;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.LargeChemicalReactor;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RoquesiteDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.SphaleriteDust;
 
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog;
@@ -44,16 +42,6 @@ public final class BottledChaosIndiumRecipes {
         if (Mods.Forestry.isModLoaded() && GTBees.combs != null) sphalerite.requireCircuit(1);
         catalog.setExistingEntriesKeyOutputs("indium", new Object[] { IndiumDust });
 
-        var indiumPhosphate = catalog.registerAlternativeChain("indium", TierEU.RECIPE_LV, IndiumPhosphateDust,
-            new Object[] { IndiumDust }, new Object[] {},
-            catalog.markRecipe(LargeChemicalReactor, IndiumPhosphateDust, IndiumDust, 1));
-        indiumPhosphate.hideInputMarker();
-        if (Mods.Forestry.isModLoaded() && GTBees.combs != null) indiumPhosphate.requireCircuit(1);
-        var roquesite = catalog.registerAlternativeChain("indium", TierEU.RECIPE_MV, RoquesiteDust,
-            new Object[] { IndiumDust }, new Object[] {},
-            catalog.markRecipe(ElectrolyzerNonCell, RoquesiteDust, IndiumDust, -1));
-        roquesite.hideInputMarker();
-        if (Mods.Forestry.isModLoaded() && GTBees.combs != null) roquesite.requireCircuit(1);
         // spotless:on
     }
 
@@ -69,12 +57,6 @@ public final class BottledChaosIndiumRecipes {
             catalog.markRecipe(LargeChemicalReactor, new Object[] { IndiumConcentrate, indiumComb }, IndiumDust, 3),
             catalog.markRecipe(ElectrolyzerNonCell, LeadZincSolution, LeadDust, -1)).hideInputMarker();
         catalog.setExistingEntriesKeyOutputs("honeycomb", new Object[] { IndiumDust });
-        catalog.registerAugmentedChain("honeycomb", "indium", TierEU.RECIPE_LV, IndiumPhosphateDust,
-            new Object[] { IndiumDust }, new Object[] {},
-            catalog.markRecipe(LargeChemicalReactor, new Object[] { IndiumPhosphateDust, indiumComb }, IndiumDust, 2)).hideInputMarker();
-        catalog.registerAugmentedChain("honeycomb", "indium", TierEU.RECIPE_HV, RoquesiteDust,
-            new Object[] { IndiumDust }, new Object[] {},
-            catalog.markRecipe(LargeChemicalReactor, new Object[] { RoquesiteDust, indiumComb }, IndiumDust, -1)).hideInputMarker();
         // spotless:on
     }
 }
