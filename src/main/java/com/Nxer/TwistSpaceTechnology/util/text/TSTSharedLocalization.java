@@ -304,6 +304,11 @@ public class TSTSharedLocalization {
         // #zh_CN {\AQUA}{\BOLD}Twist Space Technology : {\RESET}{\BLUE}Tec{\DARK_BLUE}Tech
         public static final String Mark_TwistSpaceTechnology_TecTech = TSTUtils.tr("tst.common.shared.machine_tooltip.mark_twist_space_technology_tec_tech");
 
+        // #tr tst.common.shared.machine_tooltip.mark_tec_tech_elemental_matter
+        // # {\BLUE}Tec{\DARK_BLUE}Tech{\BLUE}: Elemental Matter
+        // #zh_CN {\BLUE}Tec{\DARK_BLUE}Tech{\BLUE}: 元素物质
+        public static final String Mark_TecTech_ElementalMatter = TSTUtils.tr("tst.common.shared.machine_tooltip.mark_tec_tech_elemental_matter");
+
         // #tr tst.common.shared.machine_tooltip.text_screwdriver_change_mode
         // # Use screwdriver to change mode.
         // #zh_CN 使用螺丝刀切换模式.

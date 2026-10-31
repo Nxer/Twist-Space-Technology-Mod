@@ -19,6 +19,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 
 import cpw.mods.fml.relauncher.Side;
@@ -40,7 +41,6 @@ import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoTunnel;
 import tectech.thing.metaTileEntity.hatch.MTEHatchEnergyTunnel;
 import tectech.thing.metaTileEntity.pipe.MTEPipeLaser;
 import tectech.thing.metaTileEntity.pipe.MTEPipeLaserMirror;
-import tectech.util.CommonValues;
 
 @SkipGenerateDescription
 public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock
@@ -93,7 +93,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock
     @Override
     public String[] getDescription() {
         // spotless:off
-        return new String[] { CommonValues.TEC_MARK_EM,
+        return new String[] { TSTSharedLocalization.MachineTooltip.Mark_TecTech_ElementalMatter,
             // #tr tst.common.machine.LaserSmartNode.tooltip.info.01
             // # Reflect after precise calculation.
             // #zh_CN 精密计算, 然后, 反射！
