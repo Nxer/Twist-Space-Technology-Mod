@@ -650,14 +650,21 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             errors.add(StructureErrors.of("tst.bottledchaos.structure.multiple_parallel_controllers"));
             return false;
         }
+        int parallelTier = 0;
         if (parallelControllerCount == 1) {
             IModularHatch controller = parallelControllers.iterator()
                 .next();
             if (controller instanceof ModularHatchBase hatch) {
-                credentialHatchLimit = Math
-                    .min(THREAD_COUNT, Math.max(0, (hatch.getTierForStructure() - VoltageIndex.ZPM + 1) * 2 - 1));
+                parallelTier = Math.min(
+                    BottledChaosMachineConfiguration.MAX_CONTROLLER_TIER,
+                    Math.max(0, hatch.getTierForStructure() - VoltageIndex.ZPM + 1));
             }
         }
+        credentialHatchLimit = Math.min(THREAD_COUNT, 1 + parallelTier * 2);
+        machineConfiguration.setModuleSlotLimit(
+            BottledChaosMachineConfiguration.BASE_MODULE_SLOTS
+                + parallelTier * BottledChaosMachineConfiguration.MODULE_SLOTS_PER_TIER);
+        dropMachineModules(machineConfiguration.getModuleSlotLimit());
         int installedCredentialHatches = 0;
         for (int i = 0; i < THREAD_COUNT; i++) {
             if (credentialHatches[i] != null) installedCredentialHatches++;
@@ -1928,25 +1935,9 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     @Override
     public void onBlockDestroyed() {
         clearCredentialHatchBindings();
+        dropMachineModules(0);
         IGregTechTileEntity base = getBaseMetaTileEntity();
         if (base != null && base.isServerSide()) {
-            ItemStackHandler inventory = machineConfiguration.machines();
-            for (int slot = 0; slot < inventory.getSlots(); slot++) {
-                ItemStack stack = inventory.getStackInSlot(slot);
-                if (stack == null) continue;
-                inventory.setStackInSlot(slot, null);
-                while (stack.stackSize > 0) {
-                    ItemStack drop = stack.copy();
-                    drop.stackSize = Math.min(stack.stackSize, stack.getMaxStackSize());
-                    stack.stackSize -= drop.stackSize;
-                    GTUtility.dropItemToBlockPos(
-                        base.getWorld(),
-                        base.getXCoord(),
-                        base.getYCoord(),
-                        base.getZCoord(),
-                        drop);
-                }
-            }
             for (int slot = 0; slot < SLOT_COUNT; slot++) {
                 ItemStack stack = credentialInjectionInventory.getStackInSlot(slot);
                 if (stack == null) continue;
@@ -1956,6 +1947,24 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             }
         }
         super.onBlockDestroyed();
+    }
+
+    private void dropMachineModules(int firstSlot) {
+        IGregTechTileEntity base = getBaseMetaTileEntity();
+        if (base == null || !base.isServerSide() || GregTechAPI.isDummyWorld(base.getWorld())) return;
+        ItemStackHandler inventory = machineConfiguration.machines();
+        for (int slot = firstSlot; slot < inventory.getSlots(); slot++) {
+            ItemStack stack = inventory.getStackInSlot(slot);
+            if (stack == null) continue;
+            inventory.setStackInSlot(slot, null);
+            while (stack.stackSize > 0) {
+                ItemStack drop = stack.copy();
+                drop.stackSize = Math.min(stack.stackSize, stack.getMaxStackSize());
+                stack.stackSize -= drop.stackSize;
+                GTUtility
+                    .dropItemToBlockPos(base.getWorld(), base.getXCoord(), base.getYCoord(), base.getZCoord(), drop);
+            }
+        }
     }
 
     @Override

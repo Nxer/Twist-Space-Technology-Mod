@@ -42,7 +42,10 @@ public final class BottledChaosMachineConfiguration {
 
     public static final int MAX_POOLS = Long.SIZE;
     public static final int MACHINE_LIMIT = 4096;
-    public static final int MODULE_SLOTS = 24;
+    public static final int MAX_CONTROLLER_TIER = 7;
+    public static final int BASE_MODULE_SLOTS = 6;
+    public static final int MODULE_SLOTS_PER_TIER = 6;
+    public static final int MODULE_SLOTS = BASE_MODULE_SLOTS + MAX_CONTROLLER_TIER * MODULE_SLOTS_PER_TIER;
     private static RecipeMap<?>[] pools = new RecipeMap<?>[0];
     private static final Map<RecipeMap<?>, Integer> poolIndexes = new IdentityHashMap<>();
     private static int[] displayPools = new int[0];
@@ -64,8 +67,11 @@ public final class BottledChaosMachineConfiguration {
     private NBTTagCompound pendingMachines;
     private long requiredPools;
     private final ItemStackHandler machines;
+    private final Runnable changed;
+    private int moduleSlotLimit = BASE_MODULE_SLOTS;
 
     public BottledChaosMachineConfiguration(Runnable changed) {
+        this.changed = changed;
         Arrays.fill(machineSpeeds, 1);
         machines = new ItemStackHandler(MODULE_SLOTS) {
 
@@ -81,8 +87,9 @@ public final class BottledChaosMachineConfiguration {
 
             @Override
             public boolean isItemValid(int slot, ItemStack stack) {
-                return stack != null && (GTCMItemList.TestItem0.equal(stack)
-                    || ItemBottledChaosMachineModule.structure(stack) != null && quantity(stack) > 0);
+                return slot < moduleSlotLimit && stack != null
+                    && (GTCMItemList.TestItem0.equal(stack)
+                        || ItemBottledChaosMachineModule.structure(stack) != null && quantity(stack) > 0);
             }
 
             @Override
@@ -106,16 +113,31 @@ public final class BottledChaosMachineConfiguration {
                 machineSources[slot] = controller == null ? null
                     : new BottledChaosMachineParameters.InstalledSource(controller, machineStructures[slot]);
                 if (machineSources[slot] != null) machineSpeeds[slot] /= machineSources[slot].poolSpeedDivisor();
-                supportedPools = 0;
-                for (int i = 0; i < MODULE_SLOTS; i++) {
-                    if ((debugPools & (1L << i)) != 0) supportedPools = -1L;
-                    else if (machineStructures[i] != null && machineQuantities[i] > 0)
-                        supportedPools |= machineStructures[i].poolMask();
-                }
-                configurationSnapshot = null;
-                changed.run();
+                refreshInstalledPools();
             }
         };
+    }
+
+    public int getModuleSlotLimit() {
+        return moduleSlotLimit;
+    }
+
+    public void setModuleSlotLimit(int limit) {
+        limit = Math.max(BASE_MODULE_SLOTS, Math.min(MODULE_SLOTS, limit));
+        if (moduleSlotLimit == limit) return;
+        moduleSlotLimit = limit;
+        refreshInstalledPools();
+    }
+
+    private void refreshInstalledPools() {
+        supportedPools = 0;
+        for (int slot = 0; slot < moduleSlotLimit; slot++) {
+            if ((debugPools & (1L << slot)) != 0) supportedPools = -1L;
+            else if (machineStructures[slot] != null && machineQuantities[slot] > 0)
+                supportedPools |= machineStructures[slot].poolMask();
+        }
+        configurationSnapshot = null;
+        changed.run();
     }
 
     /** Uses the same public interface as GT's NEI machine catalyst registration. */
@@ -274,7 +296,7 @@ public final class BottledChaosMachineConfiguration {
     }
 
     private int[] sourcesForMask(long mask) {
-        return java.util.stream.IntStream.range(0, MODULE_SLOTS)
+        return java.util.stream.IntStream.range(0, moduleSlotLimit)
             .filter(
                 slot -> machineQuantities[slot] > 0 && ((debugPools & (1L << slot)) != 0
                     || machineStructures[slot] != null && (machineStructures[slot].poolMask() & mask) != 0))
@@ -662,6 +684,7 @@ public final class BottledChaosMachineConfiguration {
 
     public void save(NBTTagCompound nbt) {
         loadPendingMachines();
+        nbt.setInteger("bottledChaosModuleSlotLimit", moduleSlotLimit);
         NBTTagList items = new NBTTagList();
         for (int slot = 0; slot < MODULE_SLOTS; slot++) {
             ItemStack stack = machines.getStackInSlot(slot);
@@ -675,6 +698,7 @@ public final class BottledChaosMachineConfiguration {
     }
 
     public void load(NBTTagCompound nbt) {
+        setModuleSlotLimit(nbt.getInteger("bottledChaosModuleSlotLimit"));
         pendingMachines = (NBTTagCompound) nbt.copy();
         loadPendingMachines();
     }

@@ -247,6 +247,11 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
         syncManager
             .syncValue("bottledChaosCredentialHatchLimit", new IntSyncValue(multiblock::getCredentialHatchLimit));
         syncManager.syncValue(
+            "bottledChaosModuleSlotLimit",
+            new IntSyncValue(
+                multiblock.getMachineConfiguration()::getModuleSlotLimit,
+                multiblock.getMachineConfiguration()::setModuleSlotLimit));
+        syncManager.syncValue(
             "bottledChaosStatusSummary",
             GenericSyncValue.builder(NBTTagCompound.class)
                 .getter(multiblock::getBottledChaosStatusSummary)
@@ -869,39 +874,47 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
 
     private ParentWidget<?> createModuleInventory(PanelSyncManager manager) {
         ParentWidget<?> page = new ParentWidget<>().size(TERMINAL_WIDTH, TERMINAL_HEIGHT);
+        BottledChaosMachineConfiguration configuration = multiblock.getMachineConfiguration();
+        ListWidget<IWidget, ?> rows = new ListWidget<>().pos(6, 6)
+            .size(TERMINAL_WIDTH - 12, TERMINAL_HEIGHT - 12)
+            .crossAxisAlignment(Alignment.CrossAxis.START);
+        ParentWidget<?> row = null;
         for (int index = 0; index < BottledChaosMachineConfiguration.MODULE_SLOTS; index++) {
             final int slot = index;
-            int left = 6 + (index % 6) * 70;
-            int top = 6 + (index / 6) * 43;
-            page.child(
+            if (index % 6 == 0) {
+                row = new ParentWidget<>().size(414, 43)
+                    .setEnabledIf(widget -> slot < configuration.getModuleSlotLimit());
+                rows.child(row);
+            }
+            int left = (index % 6) * 69;
+            row.child(
                 new ItemSlot().size(18, 18)
-                    .pos(left + 25, top)
+                    .pos(left + 25, 0)
                     .syncHandler(
                         new MachineSlotSyncHandler(
                             createConfigurationSlot(
-                                multiblock.getMachineConfiguration()
-                                    .machines(),
+                                configuration.machines(),
                                 slot,
-                                () -> terminalPage.getIntValue() == 3).ignoreMaxStackSize(true)
+                                () -> terminalPage.getIntValue() == 3 && slot < configuration.getModuleSlotLimit())
+                                    .ignoreMaxStackSize(true)
                                     .singletonSlotGroup())));
-            page.child(
+            row.child(
                 IKey.dynamic(
                     () -> TSTTextLayout.ellipsize(
                         BottledChaosMachineConfiguration.moduleName(
-                            multiblock.getMachineConfiguration()
-                                .machines()
+                            configuration.machines()
                                 .getStackInSlot(slot)),
-                        64,
+                        63,
                         TextRenderer.getFontRenderer()::getStringWidth))
                     .asWidget()
-                    .pos(left, top + 22)
-                    .size(68, 13)
+                    .pos(left, 22)
+                    .size(67, 13)
                     .background(skin.BUTTON)
                     .color(skin::buttonText)
                     .shadow(false)
                     .textAlign(Alignment.Center));
         }
-        return page;
+        return page.child(rows);
     }
 
     private IWidget createPassiveInputs(PanelSyncManager manager) {
