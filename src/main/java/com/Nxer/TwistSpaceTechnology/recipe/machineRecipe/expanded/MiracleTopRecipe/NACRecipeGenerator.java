@@ -5,10 +5,10 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Miracl
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipe.MiracleTopRecipeCommon.addRecipeMT;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipe.MiracleTopRecipeCommon.convertCircuitRecipeItems;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipe.MiracleTopRecipeCommon.mergeSameFluid;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipe.MiracleTopRecipeCommon.mergeSameItem;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipe.MiracleTopRecipeCommon.packageCircuitRecipe;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipe.MiracleTopRecipeCommon.reduplicateRecipe;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipe.MiracleTopRecipeInitialization.NAC_UNWRAP_RECIPE_MAPS;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.mergeSameItem;
 import static gregtech.api.util.GTUtility.areStacksEqual;
 import static gregtech.api.util.GTUtility.copyAmount;
 import static gregtech.api.util.GTUtility.copyAmountUnsafe;
