@@ -148,9 +148,8 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
                 // 2. Extend selected goals from present stock once, then estimate/halve complete-line targets.
                 PreparedPlan fallback = baseline;
                 PreparedPlan chosen = planner.fitDownstream(baseline, batchDurationLimit(baseline), fitsWork);
-                if (chosen.durationTicks()
-                    <= batchDurationLimit(chosen) * Config.BottledChaosMinimumOverclockSeconds
-                        / Config.BottledChaosChainedProcessingSeconds) {
+                if (chosen.durationTicks() <= batchDurationLimit(chosen) * Config.BottledChaosMinimumOverclockSeconds
+                    / Config.BottledChaosChainedProcessingSeconds) {
                     chosen = planner.refineShortPlan(chosen, fitsWork);
                 }
                 diagnostics.fitted();
@@ -323,8 +322,12 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
             voltage,
             key -> Math.min(
                 Double.MAX_VALUE,
-                Config.BottledChaosChainedProcessingSeconds * 20.0 * BottledChaosOverclock
-                    .maximumSpeed(key * euModifier, availableVoltage, overClockTimeReduction, overClockPowerIncrease)
+                Config.BottledChaosChainedProcessingSeconds * 20.0
+                    * BottledChaosOverclock.maximumSpeed(
+                        key * euModifier,
+                        availableVoltage,
+                        overClockTimeReduction,
+                        overClockPowerIncrease)
                     / speedBoost));
     }
 
