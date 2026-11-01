@@ -335,8 +335,8 @@ public class GTCMRecipe {
         .build();
 
     // #tr tst.bottledchaos.recipe.category.titanium.name
-    // # Bottled Chaos - Titanium
-    // #zh_CN 瓶中混沌 - 钛
+    // # Titanium
+    // #zh_CN 钛
     public static final RecipeCategory BottledChaosTitaniumCategory = new RecipeCategory(
         "tst.bottledchaos.recipe.category.titanium.name",
         BottledChaosRecipes,
@@ -344,8 +344,8 @@ public class GTCMRecipe {
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
     // #tr tst.bottledchaos.recipe.category.tungsten.name
-    // # Bottled Chaos - Tungsten
-    // #zh_CN 瓶中混沌 - 钨
+    // # Tungsten
+    // #zh_CN 钨
     public static final RecipeCategory BottledChaosTungstenCategory = new RecipeCategory(
         "tst.bottledchaos.recipe.category.tungsten.name",
         BottledChaosRecipes,
@@ -353,8 +353,8 @@ public class GTCMRecipe {
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
     // #tr tst.bottledchaos.recipe.category.indium.name
-    // # Bottled Chaos - Indium
-    // #zh_CN 瓶中混沌 - 铟
+    // # Indium
+    // #zh_CN 铟
     public static final RecipeCategory BottledChaosIndiumCategory = new RecipeCategory(
         "tst.bottledchaos.recipe.category.indium.name",
         BottledChaosRecipes,
@@ -362,8 +362,8 @@ public class GTCMRecipe {
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
     // #tr tst.bottledchaos.recipe.category.platinum.name
-    // # Bottled Chaos - Platinum Group
-    // #zh_CN 瓶中混沌 - 铂系
+    // # Platinum Group
+    // #zh_CN 铂系
     public static final RecipeCategory BottledChaosPlatinumCategory = new RecipeCategory(
         "tst.bottledchaos.recipe.category.platinum.name",
         BottledChaosRecipes,
@@ -371,8 +371,8 @@ public class GTCMRecipe {
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
     // #tr tst.bottledchaos.recipe.category.lanthanide.name
-    // # Bottled Chaos - Lanthanides
-    // #zh_CN 瓶中混沌 - 镧系
+    // # Lanthanides
+    // #zh_CN 镧系
     public static final RecipeCategory BottledChaosLanthanideCategory = new RecipeCategory(
         "tst.bottledchaos.recipe.category.lanthanide.name",
         BottledChaosRecipes,
@@ -380,8 +380,8 @@ public class GTCMRecipe {
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
     // #tr tst.bottledchaos.recipe.category.nano_extraction.name
-    // # Bottled Chaos - Nano Resin Extraction
-    // #zh_CN 瓶中混沌 - 纳米萃取
+    // # Nano Resin Extraction
+    // #zh_CN 纳米萃取
     public static final RecipeCategory BottledChaosNanoExtractionCategory = new RecipeCategory(
         "tst.bottledchaos.recipe.category.nano_extraction.name",
         BottledChaosRecipes,
@@ -389,8 +389,8 @@ public class GTCMRecipe {
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
     // #tr tst.bottledchaos.recipe.category.naquadah.name
-    // # Bottled Chaos - Naquadah Processing
-    // #zh_CN 瓶中混沌 - 硅岩处理
+    // # Naquadah Processing
+    // #zh_CN 硅岩处理
     public static final RecipeCategory BottledChaosNaquadahCategory = new RecipeCategory(
         "tst.bottledchaos.recipe.category.naquadah.name",
         BottledChaosRecipes,
@@ -398,8 +398,8 @@ public class GTCMRecipe {
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
     // #tr tst.bottledchaos.recipe.category.naquadah_fuel.name
-    // # Bottled Chaos - Naquadah Fuel
-    // #zh_CN 瓶中混沌 - 硅岩燃料
+    // # Naquadah Fuel
+    // #zh_CN 硅岩燃料
     public static final RecipeCategory BottledChaosNaquadahFuelCategory = new RecipeCategory(
         "tst.bottledchaos.recipe.category.naquadah_fuel.name",
         BottledChaosRecipes,
@@ -407,8 +407,8 @@ public class GTCMRecipe {
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
     // #tr tst.bottledchaos.recipe.category.fusion.name
-    // # Bottled Chaos - Fusion
-    // #zh_CN 瓶中混沌 - 聚变
+    // # Fusion
+    // #zh_CN 聚变
     public static final RecipeCategory BottledChaosFusionCategory = new RecipeCategory(
         "tst.bottledchaos.recipe.category.fusion.name",
         BottledChaosRecipes,
@@ -416,8 +416,8 @@ public class GTCMRecipe {
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
     // #tr tst.bottledchaos.recipe.category.netherite.name
-    // # Bottled Chaos - Netherite
-    // #zh_CN 瓶中混沌 - 下界合金
+    // # Netherite
+    // #zh_CN 下界合金
     public static final RecipeCategory BottledChaosNetheriteCategory = new RecipeCategory(
         "tst.bottledchaos.recipe.category.netherite.name",
         BottledChaosRecipes,
@@ -425,8 +425,8 @@ public class GTCMRecipe {
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
     // #tr tst.bottledchaos.recipe.category.isamill.name
-    // # Bottled Chaos - IsaMill Processing
-    // #zh_CN 瓶中混沌 - 艾萨矿物处理
+    // # IsaMill Processing
+    // #zh_CN 艾萨矿物处理
     public static final RecipeCategory BottledChaosIsaMillCategory = new RecipeCategory(
         "tst.bottledchaos.recipe.category.isamill.name",
         BottledChaosRecipes,
@@ -434,8 +434,8 @@ public class GTCMRecipe {
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
     // #tr tst.bottledchaos.recipe.category.prismatic.name
-    // # Bottled Chaos - Prismatic Acid
-    // #zh_CN 瓶中混沌 - 海晶酸
+    // # Prismatic Acid
+    // #zh_CN 海晶酸
     public static final RecipeCategory BottledChaosPrismaticCategory = new RecipeCategory(
         "tst.bottledchaos.recipe.category.prismatic.name",
         BottledChaosRecipes,
@@ -443,8 +443,8 @@ public class GTCMRecipe {
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
     // #tr tst.bottledchaos.recipe.category.purified_water.name
-    // # Bottled Chaos - Water Purification
-    // #zh_CN 瓶中混沌 - 净化水
+    // # Water Purification
+    // #zh_CN 净化水
     public static final RecipeCategory BottledChaosPurifiedWaterCategory = new RecipeCategory(
         "tst.bottledchaos.recipe.category.purified_water.name",
         BottledChaosRecipes,
@@ -452,8 +452,8 @@ public class GTCMRecipe {
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
     // #tr tst.bottledchaos.recipe.category.kevlar.name
-    // # Bottled Chaos - Kevlar
-    // #zh_CN 瓶中混沌 - 凯芙拉
+    // # Kevlar
+    // #zh_CN 凯芙拉
     public static final RecipeCategory BottledChaosKevlarCategory = new RecipeCategory(
         "tst.bottledchaos.recipe.category.kevlar.name",
         BottledChaosRecipes,
@@ -461,8 +461,8 @@ public class GTCMRecipe {
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
     // #tr tst.bottledchaos.recipe.category.radox.name
-    // # Bottled Chaos - Radox
-    // #zh_CN 瓶中混沌 - 拉多X
+    // # Radox
+    // #zh_CN 拉多X
     public static final RecipeCategory BottledChaosRadoxCategory = new RecipeCategory(
         "tst.bottledchaos.recipe.category.radox.name",
         BottledChaosRecipes,
@@ -470,8 +470,8 @@ public class GTCMRecipe {
         BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
 
     // #tr tst.bottledchaos.recipe.category.biological.name
-    // # Bottled Chaos - Biological Processing
-    // #zh_CN 瓶中混沌 - 生物线
+    // # Biological Processing
+    // #zh_CN 生物线
     public static final RecipeCategory BottledChaosBiologicalCategory = new RecipeCategory(
         "tst.bottledchaos.recipe.category.biological.name",
         BottledChaosRecipes,

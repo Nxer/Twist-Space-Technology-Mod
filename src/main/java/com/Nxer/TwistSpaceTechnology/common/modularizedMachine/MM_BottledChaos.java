@@ -2839,11 +2839,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     public static String localizeKeyList(String keys) {
         StringJoiner localized = new StringJoiner(", ");
-        String prefix = StatCollector.translateToLocal("tst.bottledchaos.recipe.name") + " - ";
-        for (String key : keys.split(", ")) {
-            String name = StatCollector.translateToLocal(key);
-            localized.add(name.startsWith(prefix) ? name.substring(prefix.length()) : name);
-        }
+        for (String key : keys.split(", ")) localized.add(StatCollector.translateToLocal(key));
         return localized.toString();
     }
 

@@ -93,6 +93,12 @@ public final class BottledChaosNEIHandler extends GTNEIDefaultHandler {
     }
 
     @Override
+    public String getRecipeTabName() {
+        return recipeCategory == recipeMap.getDefaultRecipeCategory() ? super.getRecipeTabName()
+            : StatCollector.translateToLocal(recipeMap.unlocalizedName) + " - " + super.getRecipeTabName();
+    }
+
+    @Override
     public TemplateRecipeHandler newInstance() {
         return new BottledChaosNEIHandler(recipeCategory);
     }
