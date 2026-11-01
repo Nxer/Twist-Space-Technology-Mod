@@ -423,7 +423,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                 job.get()
                     .getString("status"))
                 + MM_BottledChaos.getWailaStatusText(job.get()));
-        // Keep IDs separate from names so one- and two-digit groups share the same text anchors.
+        // Left-align IDs at the # anchor; keep names in a separate fixed column.
         // Reserve the same columns in every row, including paused groups without current power use.
         // The label ends at a fixed colon anchor; percentages grow rightward in their own column.
         int[] widths = { 18, 64, 46, 40, 68, 114, 38 };
@@ -438,7 +438,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                     .asWidget()
                     .pos(x, 0)
                     .size(width, 10)
-                    .textAlign(column == 1 || column == 3 ? Alignment.TopLeft : Alignment.TopRight)
+                    .textAlign(column <= 1 || column == 3 ? Alignment.TopLeft : Alignment.TopRight)
                     .shadow(false)
                     .tooltipBuilder(tooltip -> {
                         String full = text.get();

@@ -129,6 +129,7 @@ import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
 import gregtech.common.tileentities.machines.IDualInputHatch;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
+import mcp.mobius.waila.api.SpecialChars;
 import mcp.mobius.waila.overlay.tooltiprenderers.TTRenderStack;
 
 @IMetaTileEntity.SkipGenerateDescription
@@ -2670,17 +2671,23 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         NBTTagList jobs = summary.getTagList(THREAD_NBT, 10);
         NBTTagCompound job = jobs.getCompoundTagAt(index);
         String energy = waila ? "" : getProcessingGroupEnergyText(job);
+        String separator = EnumChatFormatting.WHITE + (waila ? SpecialChars.TAB : " | ");
+        String share = waila
+            ? SpecialChars.ALIGNRIGHT + EnumChatFormatting.AQUA
+                + StatCollector.translateToLocalFormatted("tst.bottledchaos.input_share", "")
+                + SpecialChars.TAB
+                + EnumChatFormatting.AQUA
+                + getProcessingGroupShareValue(job)
+            : getProcessingGroupShareText(summary, job);
         lines.add(
             EnumChatFormatting.WHITE + "#"
                 + job.getInteger("slot")
-                + " "
+                + (waila ? separator : " ")
                 + localizeKeyList(job.getString("family"))
-                + EnumChatFormatting.WHITE
-                + " | "
-                + getProcessingGroupShareText(summary, job)
-                + (energy.isEmpty() ? "" : EnumChatFormatting.WHITE + " | " + energy)
-                + EnumChatFormatting.WHITE
-                + " | "
+                + separator
+                + share
+                + (energy.isEmpty() ? "" : separator + energy)
+                + separator
                 + getStatusColor(job.getString("status"))
                 + getWailaStatusText(job)
                 + EnumChatFormatting.RESET);
