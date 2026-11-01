@@ -266,30 +266,39 @@ public final class BottledChaosHatchControls {
                     .asWidget()
                     .pos(8, 18)
                     .size(148, 14))
-            .child(
-                new TextFieldWidget().value(limit)
-                    .setPattern(Pattern.compile("[0-9]*"))
-                    .setMaxLength(19)
-                    .setValidator(text -> {
-                        try {
-                            return Long.toString(Math.max(0, Long.parseLong(text)));
-                        } catch (NumberFormatException invalid) {
-                            return Long.toString(limit.getLongValue());
-                        }
-                    })
-                    .setTextAlignment(Alignment.Center)
-                    .tooltipBuilder(
-                        tooltip -> tooltip
-                            // #tr tst.bottledchaos.credential_hatch.cache_limit.range
-                            // # Range: %s - %s
-                            // #zh_CN 范围: %s - %s
-                            .addLine(
-                                IKey.lang("tst.bottledchaos.credential_hatch.cache_limit.range", 0, Long.MAX_VALUE))
-                            // #tr tst.bottledchaos.credential_hatch.cache_limit.info
-                            // # Each item or fluid has this limit. Excess is sent to normal outputs.
-                            // #zh_CN 每种物品或流体分别使用此上限, 超出部分正常输出.
-                            .addLine(IKey.lang("tst.bottledchaos.credential_hatch.cache_limit.info")))
-                    .pos(8, 40)
-                    .size(148, 18));
+            .child(new TextFieldWidget() {
+
+                @Override
+                protected void onTextChanged() {
+                    String text = getText();
+                    if ("int".equalsIgnoreCase(text) || "long".equalsIgnoreCase(text)) {
+                        setText(Long.toString("int".equalsIgnoreCase(text) ? Integer.MAX_VALUE : Long.MAX_VALUE));
+                        handler.setCursor(0, getText().length(), false);
+                    }
+                    super.onTextChanged();
+                }
+            }.value(limit)
+                .setPattern(Pattern.compile("[0-9]*|[a-zA-Z]*"))
+                .setMaxLength(19)
+                .setValidator(text -> {
+                    try {
+                        return Long.toString(Math.max(0, Long.parseLong(text)));
+                    } catch (NumberFormatException invalid) {
+                        return Long.toString(limit.getLongValue());
+                    }
+                })
+                .setTextAlignment(Alignment.Center)
+                .tooltipBuilder(
+                    tooltip -> tooltip
+                        // #tr tst.bottledchaos.credential_hatch.cache_limit.range
+                        // # Range: %s - %s
+                        // #zh_CN 范围: %s - %s
+                        .addLine(IKey.lang("tst.bottledchaos.credential_hatch.cache_limit.range", 0, Long.MAX_VALUE))
+                        // #tr tst.bottledchaos.credential_hatch.cache_limit.info
+                        // # Each item or fluid has this limit. Excess is sent to normal outputs.
+                        // #zh_CN 每种物品或流体分别使用此上限, 超出部分正常输出.
+                        .addLine(IKey.lang("tst.bottledchaos.credential_hatch.cache_limit.info")))
+                .pos(8, 40)
+                .size(148, 18));
     }
 }
