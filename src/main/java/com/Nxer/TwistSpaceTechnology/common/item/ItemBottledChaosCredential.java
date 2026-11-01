@@ -203,6 +203,10 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
         // #tr tst.bottledchaos.route_group.lanthanide
         // # Lanthanides
         // #zh_CN 镧系
+
+        // #tr tst.bottledchaos.route_group.radox
+        // # Radox
+        // #zh_CN 拉多X
         return String.join(", ", CredentialModel.groupedTranslationKeys(getRouteMask(stack)));
     }
 
@@ -262,10 +266,6 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
         // #tr tst.bottledchaos.route.cerium
         // # Cerium
         // #zh_CN 铈
-
-        // #tr tst.bottledchaos.route.rare_earth_cerium
-        // # Monazite + Bastnasite
-        // #zh_CN 独居石 + 氟碳镧铈
 
         // #tr tst.bottledchaos.route.samarium
         // # Samarium

@@ -998,7 +998,6 @@ tst.bottledchaos.route.purified_water_6=6级净化水
 tst.bottledchaos.route.purified_water_7=7级净化水
 tst.bottledchaos.route.purified_water_8=8级净化水
 tst.bottledchaos.route.quark_gluon_plasma=夸克胶子等离子体
-tst.bottledchaos.route.rare_earth_cerium=独居石 + 氟碳镧铈
 tst.bottledchaos.route.rarest_metal_residue=稀有金属渣粉
 tst.bottledchaos.route.samarium=钐
 tst.bottledchaos.route.seaweed_broth=海藻基质
@@ -1012,6 +1011,7 @@ tst.bottledchaos.route.tungsten=钨
 tst.bottledchaos.route.xenoxene=异氙分馏
 tst.bottledchaos.route_group.lanthanide=镧系
 tst.bottledchaos.route_group.platinum=铂系
+tst.bottledchaos.route_group.radox=拉多X
 tst.bottledchaos.structure.body=主体使用结构投影中显示的方块.
 tst.bottledchaos.structure.capacity_channel=瓶中混沌容量区: 1 = 空气, 2-6 = 容量方块 I-V
 tst.bottledchaos.structure.capacity_columns=每个容量区全为非容量方块(含空气)时提供1容量; 完整安装64个同级容量方块时提供4/16/64/256/1024容量.

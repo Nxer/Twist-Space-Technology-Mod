@@ -25,7 +25,7 @@ public enum BottledChaosRecipePage {
     PRISMATIC(() -> GTCMRecipe.BottledChaosPrismaticCategory),
     PURIFIED_WATER(() -> GTCMRecipe.BottledChaosPurifiedWaterCategory),
     KEVLAR(() -> GTCMRecipe.BottledChaosKevlarCategory),
-    RADOX(() -> GTCMRecipe.BottledChaosRadoxCategory),
+    RADOX(() -> GTCMRecipe.BottledChaosRadoxCategory, "tst.bottledchaos.route_group.radox"),
     BIOLOGICAL(() -> GTCMRecipe.BottledChaosBiologicalCategory);
     // spotless:on
 

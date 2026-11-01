@@ -95,7 +95,6 @@ public final class BottledChaosRecipeResources {
             new TagDefinition("monazite", true, "lanthanide", BottledChaosRecipePage.LANTHANIDE),
             new TagDefinition("bastnasite", true, "lanthanide", BottledChaosRecipePage.LANTHANIDE),
             new TagDefinition("cerium", true, "lanthanide", BottledChaosRecipePage.LANTHANIDE),
-            new TagDefinition("rare_earth_cerium", true, "lanthanide", BottledChaosRecipePage.LANTHANIDE),
             new TagDefinition("samarium", true, "lanthanide", BottledChaosRecipePage.LANTHANIDE),
             new TagDefinition("nano_extraction", true, "nano_extraction", BottledChaosRecipePage.NANO_EXTRACTION),
             new TagDefinition("naquadah", true, "naquadah", BottledChaosRecipePage.NAQUADAH),
@@ -302,7 +301,6 @@ public final class BottledChaosRecipeResources {
             register("monazite", MonaziteDust, DilutedMonaziteMud);
             register("bastnasite", BastnasiteDust, RoastedRareEarthOxidesDust);
             register("cerium", CeriumRichMixtureDust, CeriumDust);
-            register("rare_earth_cerium", CeriumDioxideDust, CeriumDust);
             register("samarium", SamariumOreConcentrateDust, SamariumDust);
             register("nano_extraction", recipeItemId(GTOreDictUnificator.get(OrePrefixes.crushed, Materials.Lanthanum, 1)), Materials.Lanthanum.getMolten(1).getFluid());
             register("naquadah", NaquadahOxideMixtureDust, NaquadahDust);

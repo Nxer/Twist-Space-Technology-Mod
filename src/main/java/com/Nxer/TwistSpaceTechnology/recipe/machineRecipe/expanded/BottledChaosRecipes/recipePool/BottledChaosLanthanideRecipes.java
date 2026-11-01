@@ -234,19 +234,19 @@ public final class BottledChaosLanthanideRecipes {
         catalog.registerAlternativeChain("monazite", TierEU.RECIPE_UV, NitricMonaziteLeachedConcentrate,
             monaziteSamariumTerminals, new Object[] {}, samariumBoostedMonazite).setDisplayOutputs(monaziteSamariumTerminals);
 
-        // 3. Shared cerium-dioxide finishing and the separately authorized cerium-rich feed.
+        // 3. Shared cerium finishing from cerium-rich mixture or cerium dioxide.
         StepRef[] ceriumSteps = {
             catalog.markRecipe(LargeChemicalReactor, CeriumDioxideDust, CeriumChlorideDust, -1),
             catalog.markRecipe(LargeChemicalReactor, CeriumChlorideDust, CeriumOxalateDust, 1),
             catalog.markRecipe(BlastFurnace, CeriumOxalateDust, CeriumIIIOxideDust, -1),
             catalog.markRecipe(ElectrolyzerNonCell, CeriumIIIOxideDust, CeriumDust, -1)
         };
-        catalog.registerChain("rare_earth_cerium", 1, TierEU.RECIPE_UV, CeriumDioxideDust,
-            new Object[] { CeriumDust }, new Object[] {}, ceriumSteps);
         StepRef[] ceriumRichMixtureSteps = ceriumSteps.clone();
         ceriumRichMixtureSteps[0] = catalog.markRecipe(LargeChemicalReactor, CeriumRichMixtureDust, CeriumChlorideDust, -1);
         catalog.registerChain("cerium", 1, TierEU.RECIPE_UV, CeriumRichMixtureDust,
             new Object[] { CeriumDust, MonaziteDust }, new Object[] {}, ceriumRichMixtureSteps);
+        catalog.registerAlternativeChain("cerium", TierEU.RECIPE_UV, CeriumDioxideDust,
+            new Object[] { CeriumDust }, new Object[] {}, ceriumSteps);
 
         // Samarium concentrate: digestion -> dissolution -> oxalate -> chloride -> full-dust electrolysis.
         // The dissolution/precipitation sequence returns muddy solution; cancel that loop before adding digestion.
