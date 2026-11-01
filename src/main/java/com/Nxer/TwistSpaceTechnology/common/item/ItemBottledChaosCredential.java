@@ -196,17 +196,6 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
 
     /** Grouped names for compact summaries; the item tooltip retains every tag in registration order. */
     public static String getDisplayRouteKeys(ItemStack stack) {
-        // #tr tst.bottledchaos.route_group.platinum
-        // # Platinum Group
-        // #zh_CN 铂系
-
-        // #tr tst.bottledchaos.route_group.lanthanide
-        // # Lanthanides
-        // #zh_CN 镧系
-
-        // #tr tst.bottledchaos.route_group.radox
-        // # Radox
-        // #zh_CN 拉多X
         return String.join(", ", CredentialModel.groupedTranslationKeys(getRouteMask(stack)));
     }
 

@@ -869,6 +869,7 @@ tst.bottledchaos.machine_module.unload=放入载体槽, 材料槽放ME物品磁�
 tst.bottledchaos.machine_module.upkeep=%s: 每组完整结构%s L/s
 tst.bottledchaos.machine_module.voltage_heat=线圈炉温%s K + 100 x max(T - 2, 0) K; 每1800 K炉温差增加一档无损超频
 tst.bottledchaos.missing_recipe_types=缺少配方池对应的机器: %s
+tst.bottledchaos.more_processing_groups=并且还有 %d 个加工组...
 tst.bottledchaos.parameter.casing=机械方块等级
 tst.bottledchaos.parameter.catalyst=催化剂
 tst.bottledchaos.parameter.compression=压缩等级
@@ -1009,9 +1010,6 @@ tst.bottledchaos.route.tesseract=粗制超立方体
 tst.bottledchaos.route.titanium=钛
 tst.bottledchaos.route.tungsten=钨
 tst.bottledchaos.route.xenoxene=异氙分馏
-tst.bottledchaos.route_group.lanthanide=镧系
-tst.bottledchaos.route_group.platinum=铂系
-tst.bottledchaos.route_group.radox=拉多X
 tst.bottledchaos.structure.body=主体使用结构投影中显示的方块.
 tst.bottledchaos.structure.capacity_channel=瓶中混沌容量区: 1 = 空气, 2-6 = 容量方块 I-V
 tst.bottledchaos.structure.capacity_columns=每个容量区全为非容量方块(含空气)时提供1容量; 完整安装64个同级容量方块时提供4/16/64/256/1024容量.

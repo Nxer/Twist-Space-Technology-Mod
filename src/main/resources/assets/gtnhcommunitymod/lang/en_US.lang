@@ -869,6 +869,7 @@ tst.bottledchaos.machine_module.unload=Unload with an ME item disk in the contro
 tst.bottledchaos.machine_module.upkeep=%s: %s L/s per complete structure
 tst.bottledchaos.machine_module.voltage_heat=Coil furnace temperature %s K + 100 x max(T - 2, 0) K; one perfect OC per 1800 K excess furnace temperature
 tst.bottledchaos.missing_recipe_types=Missing machines for recipe pools: %s
+tst.bottledchaos.more_processing_groups=And %d More Processing Groups...
 tst.bottledchaos.parameter.casing=Casing tier
 tst.bottledchaos.parameter.catalyst=Catalyst
 tst.bottledchaos.parameter.compression=Compression tier
@@ -1009,9 +1010,6 @@ tst.bottledchaos.route.tesseract=Raw Tesseract
 tst.bottledchaos.route.titanium=Titanium
 tst.bottledchaos.route.tungsten=Tungsten
 tst.bottledchaos.route.xenoxene=Xenoxene Fractionation
-tst.bottledchaos.route_group.lanthanide=Lanthanides
-tst.bottledchaos.route_group.platinum=Platinum Group
-tst.bottledchaos.route_group.radox=Radox
 tst.bottledchaos.structure.body=The main body uses the blocks shown in the structure projection.
 tst.bottledchaos.structure.capacity_channel=Bottled Chaos Capacity: 1 = Air, 2-6 = Capacity Blocks I-V
 tst.bottledchaos.structure.capacity_columns=Each capacity region provides 1 with non-capacity blocks (including air), or 4/16/64/256/1024 with 64 same-tier capacity blocks.

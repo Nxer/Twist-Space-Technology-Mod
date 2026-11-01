@@ -14,10 +14,10 @@ public enum BottledChaosRecipePage {
     TITANIUM(() -> GTCMRecipe.BottledChaosTitaniumCategory),
     TUNGSTEN(() -> GTCMRecipe.BottledChaosTungstenCategory),
     INDIUM(() -> GTCMRecipe.BottledChaosIndiumCategory),
-    PLATINUM(() -> GTCMRecipe.BottledChaosPlatinumCategory, "tst.bottledchaos.route_group.platinum"),
-    LANTHANIDE(() -> GTCMRecipe.BottledChaosLanthanideCategory, "tst.bottledchaos.route_group.lanthanide"),
+    PLATINUM(() -> GTCMRecipe.BottledChaosPlatinumCategory, "tst.bottledchaos.recipe.category.platinum.name"),
+    LANTHANIDE(() -> GTCMRecipe.BottledChaosLanthanideCategory, "tst.bottledchaos.recipe.category.lanthanide.name"),
     NANO_EXTRACTION(() -> GTCMRecipe.BottledChaosNanoExtractionCategory, true),
-    NAQUADAH(() -> GTCMRecipe.BottledChaosNaquadahCategory),
+    NAQUADAH(() -> GTCMRecipe.BottledChaosNaquadahCategory, "tst.bottledchaos.recipe.category.naquadah.name"),
     NAQUADAH_FUEL(() -> GTCMRecipe.BottledChaosNaquadahFuelCategory),
     FUSION(() -> GTCMRecipe.BottledChaosFusionCategory, true),
     NETHERITE(() -> GTCMRecipe.BottledChaosNetheriteCategory),
@@ -25,7 +25,7 @@ public enum BottledChaosRecipePage {
     PRISMATIC(() -> GTCMRecipe.BottledChaosPrismaticCategory),
     PURIFIED_WATER(() -> GTCMRecipe.BottledChaosPurifiedWaterCategory),
     KEVLAR(() -> GTCMRecipe.BottledChaosKevlarCategory),
-    RADOX(() -> GTCMRecipe.BottledChaosRadoxCategory, "tst.bottledchaos.route_group.radox"),
+    RADOX(() -> GTCMRecipe.BottledChaosRadoxCategory, "tst.bottledchaos.recipe.category.radox.name"),
     BIOLOGICAL(() -> GTCMRecipe.BottledChaosBiologicalCategory);
     // spotless:on
 

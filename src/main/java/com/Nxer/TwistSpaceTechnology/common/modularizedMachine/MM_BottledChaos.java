@@ -2642,7 +2642,20 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             currentTip.add(
                 EnumChatFormatting.WHITE + StatCollector.translateToLocal(BottledChaosStatus.CAPACITY_EXCEEDED.key()));
         }
-        for (int i = 0; i < THREAD_COUNT; i++) currentTip.addAll(getProcessingGroupLines(tag, i));
+        List<Integer> groups = new ArrayList<>();
+        for (int i = 0; i < getProcessingGroupCount(tag); i++) groups.add(i);
+        groups.sort(
+            (first, second) -> processingGroupPower(getProcessingGroupData(tag, second))
+                .compareTo(processingGroupPower(getProcessingGroupData(tag, first))));
+        List<Integer> shown = groups.subList(0, Math.min(5, groups.size()));
+        shown.sort(Integer::compare);
+        for (int index : shown) currentTip.addAll(getProcessingGroupLines(tag, index));
+        if (groups.size() > shown.size()) currentTip.add(
+            // #tr tst.bottledchaos.more_processing_groups
+            // # And %d More Processing Groups...
+            // #zh_CN 并且还有 %d 个加工组...
+            StatCollector
+                .translateToLocalFormatted("tst.bottledchaos.more_processing_groups", groups.size() - shown.size()));
     }
 
     public static int getProcessingGroupCount(NBTTagCompound summary) {
@@ -2826,7 +2839,11 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     public static String localizeKeyList(String keys) {
         StringJoiner localized = new StringJoiner(", ");
-        for (String key : keys.split(", ")) localized.add(StatCollector.translateToLocal(key));
+        String prefix = StatCollector.translateToLocal("tst.bottledchaos.recipe.name") + " - ";
+        for (String key : keys.split(", ")) {
+            String name = StatCollector.translateToLocal(key);
+            localized.add(name.startsWith(prefix) ? name.substring(prefix.length()) : name);
+        }
         return localized.toString();
     }
 
