@@ -90,6 +90,7 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
     private int[] segmentAllocations = new int[TST_AEStorageCellHelper.MAX_TYPES];
     private final int configuredTier;
     private TST_AEStorageCellHelper.PullMode pullMode = TST_AEStorageCellHelper.PullMode.GT_SINGLE_STACK;
+    private TST_AEStorageCellHelper.PullMode recipePullMode = TST_AEStorageCellHelper.PullMode.GT_SINGLE_STACK;
     private boolean storageCellPresent;
     private boolean usingCellDuringRecipe;
     private boolean exposedInputsPrepared;
@@ -616,6 +617,8 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
     private void prepareRecipeInputsIfNeeded() {
         if (!processingRecipe || exposedInputsPrepared || longExtractionUsed || !cachedActivity) return;
         // Special machines can pull long directly without building the GT int stacks.
+        setPullMode(recipePullMode);
+        showRecipeRemainder = false;
         exposedInputsPrepared = true;
         refreshSelectedContents(usingCellDuringRecipe);
         prepareExposedFluids();
@@ -731,7 +734,7 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
 
     @Override
     public void setTSTSegmentedInputMode() {
-        setPullMode(TST_AEStorageCellHelper.PullMode.TST_SEGMENTED);
+        recipePullMode = TST_AEStorageCellHelper.PullMode.TST_SEGMENTED;
     }
 
     @Override
@@ -842,8 +845,8 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
         processingRecipe = true;
         exposedInputsPrepared = false;
         longExtractionUsed = false;
-        setPullMode(TST_AEStorageCellHelper.PullMode.GT_SINGLE_STACK);
-        showRecipeRemainder = false;
+        // Lifecycle setup is not an input request; keep the last displayed mode and remainder until read.
+        recipePullMode = TST_AEStorageCellHelper.PullMode.GT_SINGLE_STACK;
         Arrays.fill(displayedThisRecipe, false);
         lastGuiAmountRefreshTick = Long.MIN_VALUE;
         if (!cachedActivity) {
@@ -1068,6 +1071,7 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
     }
 
     private void setLongInputMode() {
+        showRecipeRemainder = false;
         setPullMode(TST_AEStorageCellHelper.PullMode.LONG);
     }
 
