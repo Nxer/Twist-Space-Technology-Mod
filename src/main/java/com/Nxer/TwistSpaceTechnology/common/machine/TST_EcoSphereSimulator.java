@@ -261,7 +261,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     public IStructureDefinition<TST_EcoSphereSimulator> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
             IStructureElement<TST_EcoSphereSimulator> glass = withChannel(
-                "EcoSphereGlass",
+                "ecosphereglass",
                 ofBlocksTiered((block, meta) -> {
                     if (block != bw_realglas) return null;
                     return switch (meta) {
@@ -318,7 +318,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                 .addElement(
                     'O',
                     withChannel(
-                        "LightScreen",
+                        "lightscreen",
                         ofBlocksTiered(
                             (block, meta) -> block == ModBlocksHandler.GreenScreen ? 0 : null,
                             IntStream.range(0, 16)
