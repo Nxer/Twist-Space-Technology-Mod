@@ -82,14 +82,14 @@ public final class BottledChaosNanoExtractionRecipes {
                 ? catalog.registerChain(
                     "nano_extraction",
                     1,
-                    TierEU.RECIPE_UV,
+                    TierEU.RECIPE_UHV,
                     feed,
                     new Object[] { concentrate, molten },
                     digestion,
                     preparation)
                 : catalog.registerAlternativeChain(
                     "nano_extraction",
-                    TierEU.RECIPE_UV,
+                    TierEU.RECIPE_UHV,
                     feed,
                     new Object[] { concentrate, molten },
                     digestion,
@@ -103,7 +103,7 @@ public final class BottledChaosNanoExtractionRecipes {
                 var powderFeed = recipeItemId(powder);
                 var alternative = catalog.registerAlternativeChain(
                     "nano_extraction",
-                    TierEU.RECIPE_UV,
+                    TierEU.RECIPE_UHV,
                     powderFeed,
                     new Object[] { concentrate, molten },
                     catalog.markRecipe(Digester, powderFeed, chloride, -1),
@@ -130,7 +130,7 @@ public final class BottledChaosNanoExtractionRecipes {
             // Keep a single target through all three shared stages, and recover all three loaded resin portions.
             var extraction = catalog.registerAlternativeChain(
                 "nano_extraction",
-                TierEU.RECIPE_UV,
+                TierEU.RECIPE_UHV,
                 concentrate,
                 new Object[] { molten },
                 catalog.markRecipe(LargeChemicalReactor, new Object[] { concentrate, resin }, enriched, -1),

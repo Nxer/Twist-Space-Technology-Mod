@@ -70,12 +70,12 @@ public final class BottledChaosPrismaticRecipes {
             catalog.markRecipe(VacuumFreezer, PrismaticGas, PrismaticAcid, -1));
 
         // Independent shard supply; the honeycomb source replaces quartz and doubles the native yield.
-        catalog.registerAlternativeChain("prismatic_acid", TierEU.RECIPE_LuV, RedAlgaeBiomass,
+        catalog.registerAlternativeChain("prismatic_acid", TierEU.RECIPE_UHV, RedAlgaeBiomass,
             new Object[] { PrismarineShard }, new Object[] { PrismarineShard },
             catalog.markRecipe(Autoclave,
                 new Object[] { RedAlgaeBiomass, TST_ItemID.create(Materials.CertusQuartz.getDust(1)) }, PrismarineShard, -1));
         if (Mods.Forestry.isModLoaded() && GTBees.combs != null) {
-            catalog.registerAugmentedChain("prismatic_acid", "honeycomb", TierEU.RECIPE_LuV, RedAlgaeBiomass,
+            catalog.registerAugmentedChain("prismatic_acid", "honeycomb", TierEU.RECIPE_UHV, RedAlgaeBiomass,
                 new Object[] { PrismarineShard }, new Object[] { PrismarineShard },
                 catalog.markRecipe(Autoclave,
                     new Object[] { RedAlgaeBiomass, TST_ItemID.create(GTBees.combs.getStackForType(CombType.PRISMATIC, 1)) }, PrismarineShard, -1));

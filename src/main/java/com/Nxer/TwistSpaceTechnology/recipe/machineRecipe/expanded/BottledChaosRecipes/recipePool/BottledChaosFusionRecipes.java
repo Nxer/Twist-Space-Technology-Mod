@@ -57,7 +57,7 @@ public final class BottledChaosFusionRecipes {
 
     private void registerLaserRoutes() {
         // spotless:off
-        catalog.registerAlternativeChain(PREPARATION_TAG, TierEU.RECIPE_UHV, recipeItemId(Materials.Titanium.getDust(1)),
+        catalog.registerAlternativeChain(PREPARATION_TAG, TierEU.RECIPE_UEV, recipeItemId(Materials.Titanium.getDust(1)),
             new Object[] { recipeItemId(MaterialsElements.STANDALONE.ASTRAL_TITANIUM.getDust(1)) },
             catalog.markRecipe(LaserEngraver, recipeItemId(Materials.Titanium.getDust(1)),
                 recipeItemId(MaterialsElements.STANDALONE.ASTRAL_TITANIUM.getDust(1)), -1));
@@ -73,9 +73,9 @@ public final class BottledChaosFusionRecipes {
             MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN }) {
             var ingot = recipeItemId(material.getIngot(1));
             var dust = recipeItemId(material.getDust(1));
-            // Native plasma cooling uses MV; solidification uses the material's voltage multiplier.
+            // Cooling retains its native work; the preparation route still requires UEV.
             // spotless:off
-            catalog.registerAlternativeChain(PREPARATION_TAG, Math.max(TierEU.RECIPE_MV, material.voltageMultiplier),
+            catalog.registerAlternativeChain(PREPARATION_TAG, Math.max(TierEU.RECIPE_UEV, material.voltageMultiplier),
                 material.getPlasma(), new Object[] { dust },
                 catalog.markRecipe(VacuumFreezer, material.getPlasma(), material.getFluid(), -1),
                 catalog.markRecipe(FluidSolidifier, material.getFluid(), ingot, -1),
@@ -144,6 +144,7 @@ public final class BottledChaosFusionRecipes {
     }
 
     private BottledChaosRecipeCatalog.Entry registerFusion(long voltage, Object root, Object output, StepRef... steps) {
+        voltage = Math.max(TierEU.RECIPE_UEV, voltage);
         var entry = firstFusion ? catalog.registerChain(TAG, 1, voltage, root, new Object[] { output }, steps)
             : catalog.registerAlternativeChain(TAG, voltage, root, new Object[] { output }, steps);
         firstFusion = false;

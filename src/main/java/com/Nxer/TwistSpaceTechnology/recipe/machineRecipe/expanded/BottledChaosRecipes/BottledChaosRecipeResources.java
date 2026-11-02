@@ -79,13 +79,25 @@ public final class BottledChaosRecipeResources {
         @Desugar
         private record TagDefinition(String tag, boolean enabled, String family, BottledChaosRecipePage page) {}
 
+        // Families follow their entry voltage, then progression; main-page tags stay last.
+        // This order also drives credential injection and NEI tabs. NBT stores names, not indexes.
         // Material bindings stay in CredentialRoutes and are not initialized with this metadata.
         // spotless:off
         private static final TagDefinition[] DEFINITIONS = {
-            new TagDefinition("honeycomb", HAS_HONEYCOMBS, "honeycomb", BottledChaosRecipePage.DEFAULT),
+            // LuV families.
             new TagDefinition("titanium", true, "titanium", BottledChaosRecipePage.TITANIUM),
             new TagDefinition("tungsten", true, "tungsten", BottledChaosRecipePage.TUNGSTEN),
             new TagDefinition("indium", true, "indium", BottledChaosRecipePage.INDIUM),
+            new TagDefinition("isamill", true, "isamill", BottledChaosRecipePage.ISA_MILL),
+            new TagDefinition("purified_water_1", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
+            new TagDefinition("purified_water_2", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
+            new TagDefinition("purified_water_3", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
+            new TagDefinition("purified_water_4", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
+            new TagDefinition("purified_water_5", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
+            new TagDefinition("purified_water_6", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
+            new TagDefinition("purified_water_7", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
+            new TagDefinition("purified_water_8", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
+            // ZPM families.
             new TagDefinition("platinum_metallic_powder", true, "platinum", BottledChaosRecipePage.PLATINUM),
             new TagDefinition("palladium_metallic_powder", true, "platinum", BottledChaosRecipePage.PLATINUM),
             new TagDefinition("platinum_residue", true, "platinum", BottledChaosRecipePage.PLATINUM),
@@ -93,50 +105,46 @@ public final class BottledChaosRecipeResources {
             new TagDefinition("leach_residue", true, "platinum", BottledChaosRecipePage.PLATINUM),
             new TagDefinition("rarest_metal_residue", true, "platinum", BottledChaosRecipePage.PLATINUM),
             new TagDefinition("iridium_metal_residue", true, "platinum", BottledChaosRecipePage.PLATINUM),
+            // UV families.
             new TagDefinition("monazite", true, "lanthanide", BottledChaosRecipePage.LANTHANIDE),
             new TagDefinition("bastnasite", true, "lanthanide", BottledChaosRecipePage.LANTHANIDE),
             new TagDefinition("cerium", true, "lanthanide", BottledChaosRecipePage.LANTHANIDE),
             new TagDefinition("samarium", true, "lanthanide", BottledChaosRecipePage.LANTHANIDE),
-            new TagDefinition("nano_extraction", true, "nano_extraction", BottledChaosRecipePage.NANO_EXTRACTION),
+            new TagDefinition("ancient_debris", HAS_NETHERITE, "ancient_debris", BottledChaosRecipePage.NETHERITE),
+            new TagDefinition("kevlar", true, "kevlar", BottledChaosRecipePage.KEVLAR),
+            // UHV families.
             new TagDefinition("naquadah", true, "naquadah", BottledChaosRecipePage.NAQUADAH),
             new TagDefinition("enriched_naquadah", true, "naquadah", BottledChaosRecipePage.NAQUADAH),
             new TagDefinition("naquadria", true, "naquadah", BottledChaosRecipePage.NAQUADAH),
-            new TagDefinition("naquadah_fuel_preparation", true, "naquadah_fuel_preparation", BottledChaosRecipePage.NAQUADAH_FUEL),
-            new TagDefinition("naquadah_fuel_3", true, "naquadah_fuel_3", BottledChaosRecipePage.NAQUADAH_FUEL),
-            new TagDefinition("naquadah_fuel_4", true, "naquadah_fuel_4", BottledChaosRecipePage.NAQUADAH_FUEL),
-            new TagDefinition("naquadah_fuel_5", true, "naquadah_fuel_5", BottledChaosRecipePage.NAQUADAH_FUEL),
-            new TagDefinition("naquadah_fuel_6", true, "naquadah_fuel_6", BottledChaosRecipePage.NAQUADAH_FUEL),
-            new TagDefinition("fusion", true, "fusion", BottledChaosRecipePage.FUSION),
-            new TagDefinition("ancient_debris", HAS_NETHERITE, "ancient_debris", BottledChaosRecipePage.NETHERITE),
-            new TagDefinition("isamill", true, "isamill", BottledChaosRecipePage.ISA_MILL),
+            new TagDefinition("nano_extraction", true, "nano_extraction", BottledChaosRecipePage.NANO_EXTRACTION),
             new TagDefinition("crystalline_alloy_molten", HAS_CRYSTALLINE_ALLOY, "prismatic", BottledChaosRecipePage.PRISMATIC),
-            new TagDefinition("purified_water_1", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
-            new TagDefinition("purified_water_2", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
             new TagDefinition("prismatic_acid", true, "prismatic", BottledChaosRecipePage.PRISMATIC),
-            new TagDefinition("purified_water_3", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
-            new TagDefinition("purified_water_4", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
-            new TagDefinition("kevlar", true, "kevlar", BottledChaosRecipePage.KEVLAR),
-            new TagDefinition("super_heavy_radox", true, "radox", BottledChaosRecipePage.RADOX),
-            new TagDefinition("heavy_radox", true, "radox", BottledChaosRecipePage.RADOX),
-            new TagDefinition("light_radox", true, "radox", BottledChaosRecipePage.RADOX),
-            new TagDefinition("super_light_radox", true, "radox", BottledChaosRecipePage.RADOX),
-            new TagDefinition("purified_water_5", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
-            new TagDefinition("purified_water_6", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
             new TagDefinition("growth_medium_sterilized", true, "biological", BottledChaosRecipePage.BIOLOGICAL),
             new TagDefinition("stem_cells", true, "biological", BottledChaosRecipePage.BIOLOGICAL),
             new TagDefinition("seaweed_broth", true, "biological", BottledChaosRecipePage.BIOLOGICAL),
             new TagDefinition("tau_ceti_e_seaweed_extract", true, "biological", BottledChaosRecipePage.BIOLOGICAL),
             new TagDefinition("bio_medium_sterilized", true, "biological", BottledChaosRecipePage.BIOLOGICAL),
             new TagDefinition("bio_cells", true, "biological", BottledChaosRecipePage.BIOLOGICAL),
+            // UEV families; higher fuel variants retain their native power.
+            new TagDefinition("super_heavy_radox", true, "radox", BottledChaosRecipePage.RADOX),
+            new TagDefinition("heavy_radox", true, "radox", BottledChaosRecipePage.RADOX),
+            new TagDefinition("light_radox", true, "radox", BottledChaosRecipePage.RADOX),
+            new TagDefinition("super_light_radox", true, "radox", BottledChaosRecipePage.RADOX),
             new TagDefinition("xenoxene", true, "radox", BottledChaosRecipePage.RADOX),
-            new TagDefinition("purified_water_7", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
-            new TagDefinition("purified_water_8", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
+            new TagDefinition("naquadah_fuel_preparation", true, "naquadah_fuel_preparation", BottledChaosRecipePage.NAQUADAH_FUEL),
+            new TagDefinition("naquadah_fuel_3", true, "naquadah_fuel_3", BottledChaosRecipePage.NAQUADAH_FUEL),
+            new TagDefinition("naquadah_fuel_4", true, "naquadah_fuel_4", BottledChaosRecipePage.NAQUADAH_FUEL),
+            new TagDefinition("naquadah_fuel_5", true, "naquadah_fuel_5", BottledChaosRecipePage.NAQUADAH_FUEL),
+            new TagDefinition("naquadah_fuel_6", true, "naquadah_fuel_6", BottledChaosRecipePage.NAQUADAH_FUEL),
+            new TagDefinition("fusion", true, "fusion", BottledChaosRecipePage.FUSION),
+            // Main-page routes always follow the dedicated families.
+            new TagDefinition("honeycomb", HAS_HONEYCOMBS, "honeycomb", BottledChaosRecipePage.DEFAULT),
             new TagDefinition("crystal_cycle", Config.BottledChaosCycleRecipes, "crystal_cycle", BottledChaosRecipePage.DEFAULT),
             new TagDefinition("cerium_lutetium_garnet", Config.BottledChaosCycleRecipes, "cerium_lutetium_garnet", BottledChaosRecipePage.DEFAULT),
             new TagDefinition("tesseract", Config.BottledChaosCycleRecipes, "tesseract", BottledChaosRecipePage.DEFAULT),
             new TagDefinition("eternity", HAS_ETERNITY && Config.BottledChaosCycleRecipes, "eternity", BottledChaosRecipePage.DEFAULT),
-            new TagDefinition("magmatter", true, "magmatter", BottledChaosRecipePage.DEFAULT),
             new TagDefinition("phonon_medium", Config.BottledChaosCycleRecipes, "phonon_medium", BottledChaosRecipePage.DEFAULT),
+            new TagDefinition("magmatter", true, "magmatter", BottledChaosRecipePage.DEFAULT),
             new TagDefinition("quark_gluon_plasma", true, "quark_gluon_plasma", BottledChaosRecipePage.DEFAULT)
         };
         // spotless:on

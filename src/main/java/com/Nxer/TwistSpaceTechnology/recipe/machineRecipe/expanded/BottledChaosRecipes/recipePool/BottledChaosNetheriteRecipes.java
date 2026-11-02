@@ -54,7 +54,7 @@ public final class BottledChaosNetheriteRecipes {
         // spotless:off
         // Main trunk: UHV chemical bath -> brittle scrap -> ordinary nanoparticles.
         // Nether air remains a consumed execution root after the returned hot scraps cancel.
-        catalog.registerChain("ancient_debris", 1, TierEU.RECIPE_UHV, NetherAir,
+        catalog.registerChain("ancient_debris", 1, TierEU.RECIPE_UV, NetherAir,
             new Object[] { NetheriteNanoparticles, NitricAcid },
             new Object[] {},
             catalog.markRecipe(ChemicalBath, new Object[] { HotNetheriteScrap, HeavyHellishMud, PoorNetherWaste }, BrittleNetheriteScrap, -1),
@@ -65,17 +65,17 @@ public final class BottledChaosNetheriteRecipes {
         catalog.registerAlternativeChain("ancient_debris", TierEU.RECIPE_UV, RhodiumDust,
             new Object[] { HellishMetalMolten },
             catalog.markRecipe(FusionCrafting, RhodiumDust, HellishMetalMolten, -1));
-        catalog.registerAlternativeChain("ancient_debris", TierEU.RECIPE_ZPM, RhodiumDust,
+        catalog.registerAlternativeChain("ancient_debris", TierEU.RECIPE_UV, RhodiumDust,
             new Object[] { HellishMetalMolten },
             catalog.markRecipeWithSubstitutedInput(ElectrolyzerNonCell, RhodiumBlock, RhodiumDust, 9, HellishMetalBlock, -1),
             catalog.markRecipe(FluidExtractor, HellishMetalBlock, HellishMetalMolten, -1));
 
         // Keep the two native bonding recipes as independently searchable, chainable finishing stages.
-        catalog.registerAlternativeChain("ancient_debris", TierEU.RECIPE_ZPM, NetheriteNanoparticles,
+        catalog.registerAlternativeChain("ancient_debris", TierEU.RECIPE_UV, NetheriteNanoparticles,
             new Object[] { IntenselyBondedNetheriteNanoparticles }, new Object[] {},
             catalog.markRecipe(BlastFurnace, NetheriteNanoparticles, IntenselyBondedNetheriteNanoparticles, 1));
         if (Mods.Forestry.isModLoaded() && GTBees.combs != null) {
-            catalog.registerAugmentedChain("ancient_debris", "honeycomb", TierEU.RECIPE_ZPM, NetheriteNanoparticles,
+            catalog.registerAugmentedChain("ancient_debris", "honeycomb", TierEU.RECIPE_UV, NetheriteNanoparticles,
                 new Object[] { IntenselyBondedNetheriteNanoparticles }, new Object[] {},
                 catalog.markRecipe(BlastFurnace,
                     new Object[] { NetheriteNanoparticles, TST_ItemID.create(GTBees.combs.getStackForType(CombType.NETHERITE, 1)) },

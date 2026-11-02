@@ -39,12 +39,12 @@ public final class BottledChaosRadoxRecipes {
         var polymerization = catalog.markRecipe(LargeChemicalReactor, RadoxGas, RadoxPolymerMolten, 2);
 
         // Each fraction has an independent tag; display order follows fractionation before fraction processing.
-        catalog.registerChain("super_light_radox", 1, TierEU.RECIPE_UHV, SuperLightRadox,
+        catalog.registerChain("super_light_radox", 1, TierEU.RECIPE_UEV, SuperLightRadox,
             new Object[] { RadoxPolymerMolten }, new Object[] {}, recoveredGas, polymerization);
 
         // Main line: xenoxene -> coke -> raw Radox distillation -> xenoxene recovery.
         // Cancel the recovered xenoxene against the input; retain every fraction and native coproduct.
-        catalog.registerChain("xenoxene", 1, TierEU.RECIPE_UHV, Xenoxene,
+        catalog.registerChain("xenoxene", 1, TierEU.RECIPE_UEV, Xenoxene,
             new Object[] { SuperHeavyRadox, HeavyRadox, LightRadox, SuperLightRadox },
             new Object[] { SuperHeavyRadox, HeavyRadox, LightRadox, SuperLightRadox, Mutagen },
             catalog.markRecipe(IndustrialCokeOven, Xenoxene, RawRadox, 24),
@@ -55,18 +55,18 @@ public final class BottledChaosRadoxRecipes {
             .setDisplayOutputs(SuperHeavyRadox, HeavyRadox, LightRadox, SuperLightRadox);
 
         // Superheavy fraction: centrifuge -> heavy -> light -> closed return -> polymer.
-        catalog.registerChain("super_heavy_radox", 1, TierEU.RECIPE_UHV, SuperHeavyRadox,
+        catalog.registerChain("super_heavy_radox", 1, TierEU.RECIPE_UEV, SuperHeavyRadox,
             new Object[] { RadoxPolymerMolten }, new Object[] {},
             catalog.markRecipe(CentrifugeNonCell, SuperHeavyRadox, HeavyRadox, -1),
             heavyCracking, lightCracking, recoveredGas, polymerization);
 
         // Heavy fraction: heavy -> light -> closed return -> polymer.
-        catalog.registerChain("heavy_radox", 1, TierEU.RECIPE_UHV, HeavyRadox,
+        catalog.registerChain("heavy_radox", 1, TierEU.RECIPE_UEV, HeavyRadox,
             new Object[] { RadoxPolymerMolten }, new Object[] {},
             heavyCracking, lightCracking, recoveredGas, polymerization);
 
         // Light fraction: light -> closed return -> polymer.
-        catalog.registerChain("light_radox", 1, TierEU.RECIPE_UHV, LightRadox,
+        catalog.registerChain("light_radox", 1, TierEU.RECIPE_UEV, LightRadox,
             new Object[] { RadoxPolymerMolten }, new Object[] {}, lightCracking, recoveredGas, polymerization);
 
         catalog.setExistingEntriesKeyOutputs("xenoxene",
