@@ -21,6 +21,7 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.ModItem;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.recipes.RecipeMaterialUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
@@ -130,12 +131,12 @@ public final class BottledChaosRecipeResources {
             new TagDefinition("xenoxene", true, "radox", BottledChaosRecipePage.RADOX),
             new TagDefinition("purified_water_7", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
             new TagDefinition("purified_water_8", true, "purified_water", BottledChaosRecipePage.PURIFIED_WATER),
-            new TagDefinition("crystal_cycle", true, "crystal_cycle", BottledChaosRecipePage.DEFAULT),
-            new TagDefinition("cerium_lutetium_garnet", true, "cerium_lutetium_garnet", BottledChaosRecipePage.DEFAULT),
-            new TagDefinition("tesseract", true, "tesseract", BottledChaosRecipePage.DEFAULT),
-            new TagDefinition("eternity", HAS_ETERNITY, "eternity", BottledChaosRecipePage.DEFAULT),
+            new TagDefinition("crystal_cycle", Config.BottledChaosCycleRecipes, "crystal_cycle", BottledChaosRecipePage.DEFAULT),
+            new TagDefinition("cerium_lutetium_garnet", Config.BottledChaosCycleRecipes, "cerium_lutetium_garnet", BottledChaosRecipePage.DEFAULT),
+            new TagDefinition("tesseract", Config.BottledChaosCycleRecipes, "tesseract", BottledChaosRecipePage.DEFAULT),
+            new TagDefinition("eternity", HAS_ETERNITY && Config.BottledChaosCycleRecipes, "eternity", BottledChaosRecipePage.DEFAULT),
             new TagDefinition("magmatter", true, "magmatter", BottledChaosRecipePage.DEFAULT),
-            new TagDefinition("phonon_medium", true, "phonon_medium", BottledChaosRecipePage.DEFAULT),
+            new TagDefinition("phonon_medium", Config.BottledChaosCycleRecipes, "phonon_medium", BottledChaosRecipePage.DEFAULT),
             new TagDefinition("quark_gluon_plasma", true, "quark_gluon_plasma", BottledChaosRecipePage.DEFAULT)
         };
         // spotless:on
@@ -336,12 +337,14 @@ public final class BottledChaosRecipeResources {
             register("xenoxene", Xenoxene, RawRadox);
             register("purified_water_7", recipeItemId(Materials.Grade7PurifiedWater.getCells(1)), recipeItemId(Materials.Grade7PurifiedWater.getCells(1)));
             register("purified_water_8", recipeItemId(Materials.Grade8PurifiedWater.getCells(1)), recipeItemId(Materials.Grade8PurifiedWater.getCells(1)));
-            register("crystal_cycle", RawCrystalChip, RawCrystalChip);
-            register("cerium_lutetium_garnet", CeriumLutetiumAluminiumOxygenBlendDust, ExquisiteCeriumLutetiumAluminiumGarnet);
-            register("tesseract", Materials.ExcitedDTRC.getFluid(1).getFluid(), recipeItemId(ItemList.Tesseract.get(1)));
-            if (CredentialModel.HAS_ETERNITY) register("eternity", EternalSingularity, EternityMolten);
+            if (Config.BottledChaosCycleRecipes) {
+                register("crystal_cycle", RawCrystalChip, RawCrystalChip);
+                register("cerium_lutetium_garnet", CeriumLutetiumAluminiumOxygenBlendDust, ExquisiteCeriumLutetiumAluminiumGarnet);
+                register("tesseract", Materials.ExcitedDTRC.getFluid(1).getFluid(), recipeItemId(ItemList.Tesseract.get(1)));
+                if (CredentialModel.HAS_ETERNITY) register("eternity", EternalSingularity, EternityMolten);
+                register("phonon_medium", MagMatterRound, PhononMedium);
+            }
             register("magmatter", recipeItemId(Materials.MagMatter.getDust(1)), recipeItemId(Materials.MagMatter.getDust(1)));
-            register("phonon_medium", MagMatterRound, PhononMedium);
             register("quark_gluon_plasma", recipeItemId(Materials.QuarkGluonPlasma.getCells(1)), recipeItemId(Materials.QuarkGluonPlasma.getCells(1)));
             // spotless:on
         }

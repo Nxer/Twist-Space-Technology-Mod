@@ -466,6 +466,8 @@ public class Config {
 
     // region Modularized Machine Stuffs
     public static boolean BottledChaosEasySkip = false;
+    public static boolean BottledChaosCycleRecipes = false;
+    public static boolean BottledChaosOneStep = false;
     public static int BottledChaosChainedProcessingSeconds = 20;
     public static int BottledChaosMinimumOverclockSeconds = 5;
     public static boolean EnableModularizedMachineSystem = true;
@@ -682,6 +684,8 @@ public class Config {
 
         // region Bottled Chaos
         BottledChaosEasySkip = configuration.getBoolean("EasySkip", BottledChaos, BottledChaosEasySkip, "Enable the original single-marker credential injection recipes in addition to progression recipes.");
+        BottledChaosCycleRecipes = configuration.getBoolean("CycleRecipes", BottledChaos, BottledChaosCycleRecipes, "Enable the main-page cycle-elimination recipes. Magmatter and quark-gluon plasma are always available.");
+        BottledChaosOneStep = configuration.getBoolean("OneStep", BottledChaos, BottledChaosOneStep, "Fully expand the three tesseract recipes instead of only cancelling the transcendent-metal loop. Requires CycleRecipes.");
         BottledChaosChainedProcessingSeconds = configuration.getInt("BottledChaosChainedProcessingSeconds", BottledChaos, BottledChaosChainedProcessingSeconds, 10, 30, "Chained processing time budget in seconds for wired mode.");
         BottledChaosMinimumOverclockSeconds = configuration.getInt("BottledChaosMinimumOverclockSeconds", BottledChaos, BottledChaosMinimumOverclockSeconds, 2, 6, "Minimum overclock target in seconds; also the fixed wireless processing time.");
         // endregion

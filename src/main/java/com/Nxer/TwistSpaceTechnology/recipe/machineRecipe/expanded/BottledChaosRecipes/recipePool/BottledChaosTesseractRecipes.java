@@ -9,6 +9,7 @@ import java.util.function.Function;
 
 import net.minecraft.item.ItemStack;
 
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.Entry;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosSourceResolver;
@@ -60,8 +61,9 @@ public final class BottledChaosTesseractRecipes {
                 : catalog
                     .registerAlternativeChain("tesseract", power[tier], catalyst, new Object[] { tesseract }, step);
             entry.hideInputMarker();
+            if (tier > 0) entry.includeSynthesisStep(rod, recycling);
+            if (!Config.BottledChaosOneStep) continue;
             if (tier > 0) {
-                entry.includeSynthesisStep(rod, recycling);
                 includeBlastProduct(
                     catalog,
                     entry,

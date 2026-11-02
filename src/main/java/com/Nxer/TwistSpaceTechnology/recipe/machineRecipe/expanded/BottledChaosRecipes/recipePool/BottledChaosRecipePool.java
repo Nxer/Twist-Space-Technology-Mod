@@ -46,6 +46,7 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.SulfuricAcid;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog;
 
 import gregtech.api.enums.ItemList;
@@ -72,9 +73,11 @@ public final class BottledChaosRecipePool {
         BottledChaosKevlarRecipes.registerRecipeChains(catalog);
         BottledChaosRadoxRecipes.registerRecipeChains(catalog);
         BottledChaosBiologicalRecipes.registerRecipeChains(catalog);
-        registerCrystalCycles(catalog);
-        BottledChaosTesseractRecipes.registerRecipeChains(catalog);
-        BottledChaosAdvancedMaterialRecipes.registerRecipeChains(catalog);
+        if (Config.BottledChaosCycleRecipes) {
+            registerCrystalCycles(catalog);
+            BottledChaosTesseractRecipes.registerRecipeChains(catalog);
+            BottledChaosAdvancedMaterialRecipes.registerRecipeChains(catalog);
+        }
         BottledChaosExoticMatterRecipes.registerRecipeChains(catalog);
         BottledChaosIndiumRecipes.registerCombRecipeChains(catalog);
         BottledChaosPlatinumRecipes.registerCombRecipeChains(catalog);
