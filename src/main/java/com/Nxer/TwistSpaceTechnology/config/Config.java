@@ -465,6 +465,7 @@ public class Config {
     // endregion
 
     // region Modularized Machine Stuffs
+    public static boolean BottledChaosEasySkip = false;
     public static int BottledChaosChainedProcessingSeconds = 20;
     public static int BottledChaosMinimumOverclockSeconds = 5;
     public static boolean EnableModularizedMachineSystem = true;
@@ -680,6 +681,7 @@ public class Config {
         // endregion
 
         // region Bottled Chaos
+        BottledChaosEasySkip = configuration.getBoolean("EasySkip", BottledChaos, BottledChaosEasySkip, "Enable the original single-marker credential injection recipes in addition to progression recipes.");
         BottledChaosChainedProcessingSeconds = configuration.getInt("BottledChaosChainedProcessingSeconds", BottledChaos, BottledChaosChainedProcessingSeconds, 10, 30, "Chained processing time budget in seconds for wired mode.");
         BottledChaosMinimumOverclockSeconds = configuration.getInt("BottledChaosMinimumOverclockSeconds", BottledChaos, BottledChaosMinimumOverclockSeconds, 2, 6, "Minimum overclock target in seconds; also the fixed wireless processing time.");
         // endregion

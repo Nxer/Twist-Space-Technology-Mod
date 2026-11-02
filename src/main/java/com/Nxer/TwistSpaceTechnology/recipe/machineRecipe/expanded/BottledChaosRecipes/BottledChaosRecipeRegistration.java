@@ -17,6 +17,7 @@ public final class BottledChaosRecipeRegistration {
 
     public static void registerRecipes() {
         registerBaseRecipes();
+        BottledChaosCredentialRecipes.registerRecipes();
         BottledChaosFakeRecipes.registerRecipes();
         BottledChaosFakeRecipes.registerCredentialRecipes();
         BottledChaosRecipePool.registerCraftingRecipes();

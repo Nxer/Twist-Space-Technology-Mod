@@ -5,11 +5,13 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosCredential;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosRecipeMetadata;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.CredentialModel;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.CredentialRoutes;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
@@ -182,7 +184,35 @@ public final class BottledChaosFakeRecipes {
             TwistSpaceTechnology.LOG.error("Could not register Bottled Chaos credential splitting sample.", exception);
         }
 
-        for (int index : CredentialModel.displayOrder()) {
+        for (var injection : BottledChaosCredentialRecipes.recipes()) {
+            int index = injection.tagIndex();
+            int weight = ItemBottledChaosCredential.getRequiredWeight(1L << index);
+            int meta = 0;
+            while (meta <= ItemBottledChaosCredential.MAX_META && (1L << (2 * meta)) < weight) meta++;
+            var ingredients = injection.ingredients();
+            ItemStack[] materials = ingredients.mInputs;
+            Object[] inputs = new Object[materials.length + 1];
+            inputs[0] = ItemBottledChaosCredential.createEmptyFrame(meta);
+            for (int slot = 0; slot < materials.length; slot++) {
+                int oreId = ingredients.mOreDictIds[slot];
+                inputs[slot + 1] = oreId >= 0
+                    ? new Object[] { OreDictionary.getOreName(oreId), materials[slot].stackSize }
+                    : materials[slot].copy();
+            }
+            var display = GTValues.RA.stdBuilder()
+                .itemInputs(inputs)
+                .itemOutputs(ItemBottledChaosCredential.createCredential(meta, 1L << index, weight))
+                .nbtSensitive()
+                .duration(1)
+                .eut(0)
+                .fake()
+                .buildWithAlt()
+                .orElseThrow(() -> new IllegalStateException("Invalid credential injection display for " + index));
+            GTCMRecipe.BottledChaosCredentialRecipes.add(display);
+            registered++;
+        }
+
+        if (Config.BottledChaosEasySkip) for (int index : CredentialModel.displayOrder()) {
             try {
                 var route = CredentialRoutes.get(index);
                 if (route == null) throw new IllegalStateException("missing credential route " + index);

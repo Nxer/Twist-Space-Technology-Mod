@@ -8,6 +8,8 @@ import net.minecraft.item.ItemStack;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosCredential;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosMachineModule;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructurePackaging;
+import com.Nxer.TwistSpaceTechnology.config.Config;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosCredentialRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.CredentialModel;
 import com.cleanroommc.modularui.utils.item.ItemStackHandler;
@@ -201,6 +203,8 @@ public final class BottledChaosCrafting {
         if (targetRouteMask != 0 && !ItemBottledChaosCredential.isBound(target)) {
             return Result.failure("tst.bottledchaos.gui.credential_injection.invalid_source");
         }
+        Result injection = BottledChaosCredentialRecipes.inject(inventory, target);
+        if (injection != null) return injection;
         if (targetRouteMask == 0) occupiedWeight = 0;
         boolean hasMarker = false;
         boolean hasCredential = false;
@@ -220,7 +224,8 @@ public final class BottledChaosCrafting {
                 }
                 hasCredential = true;
             } else {
-                sourceMask = BottledChaosRecipeResources.getRouteMaskForMarker(source);
+                sourceMask = Config.BottledChaosEasySkip ? BottledChaosRecipeResources.getRouteMaskForMarker(source)
+                    : 0;
                 sourceWeight = 0;
                 if (sourceMask == 0 || targetRouteMask != 0 || hasCredential) {
                     return Result.failure("tst.bottledchaos.gui.credential_injection.invalid_source");
