@@ -83,6 +83,7 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.Mo
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.cleanroommc.modularui.utils.item.ItemStackHandler;
@@ -207,52 +208,44 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     // #zh_CN 无凭证
 
     // #tr tst.bottledchaos.tooltip.machine_type
-    // # Production Chain Processor
-    // #zh_CN 生产链处理器
+    // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Production Chain Processor
+    // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}生产链处理器
 
     // #tr tst.bottledchaos.tooltip.info.01
     // # Runs multiple processing chains with independent progress.
     // #zh_CN 以独立进度同时运行多条生产链.
 
     // #tr tst.bottledchaos.tooltip.info.02
-    // # Shared power is drained once per tick; insufficient power pauses every processing group.
-    // #zh_CN 每tick统一扣除总耗电; 电力不足时全部加工组暂停.
+    // # In wired mode, insufficient power pauses all processing groups.
+    // #zh_CN 有线模式电力不足时, 全部加工组暂停.
 
     // #tr tst.bottledchaos.tooltip.wireless
-    // # At UXV, omitting energy hatches enables wireless power. Each group prepays its overclocked energy and runs for the configured minimum overclock time.
-    // #zh_CN UXV等级未安装能源仓时启用无线模式. 每组预付超频后的总电量, 按配置的最低超频时间运行.
+    // # At UXV, omitting energy hatches enables wireless mode: each group prepays its energy and runs for the minimum overclock time.
+    // #zh_CN UXV等级无能源仓时启用无线模式: 每组预付总电量, 按最低超频时间运行.
 
     // #tr tst.bottledchaos.wireless_mode
     // # Wireless mode
     // #zh_CN 无线模式
 
-    // #tr tst.bottledchaos.structure.body
-    // # The main body uses the blocks shown in the structure projection.
-    // #zh_CN 主体使用结构投影中显示的方块.
-
     // #tr tst.bottledchaos.structure.capacity_columns
-    // # Each capacity region provides 1 with non-capacity blocks (including air), or 4/16/64/256/1024 with 64 same-tier capacity blocks.
-    // #zh_CN 每个容量区全为非容量方块(含空气)时提供1容量; 完整安装64个同级容量方块时提供4/16/64/256/1024容量.
+    // # Fill each region with same-tier capacity blocks to increase capacity; regions can be upgraded independently.
+    // #zh_CN 完整安装同级容量方块可提升容量, 各容量区独立升级.
 
     // #tr tst.bottledchaos.structure.voltage_upgrades
-    // # Matching field and energy generators limit recipes to UHV, UEV, UIV, UMV, or UXV/MAX.
-    // #zh_CN 同级力场与能量发生器分别限制配方为UHV, UEV, UIV, UMV或UXV/MAX.
+    // # Upgrade field and energy generators to raise the recipe voltage limit; both must be the same tier.
+    // #zh_CN 升级力场与能量发生器以提高配方电压上限, 两者须同级.
 
     // #tr tst.bottledchaos.structure.upgrade_glass
-    // # Upgraded controller glass and immediate capacity-column glass must match the generator voltage.
-    // #zh_CN 升级后的主轴玻璃及紧贴容量柱的玻璃必须与发生器电压一致.
+    // # After generator upgrades, shaft and capacity-column enclosure glass must match the generator voltage.
+    // #zh_CN 发生器升级后, 主轴及容量柱贴面玻璃须匹配其电压等级.
 
     // #tr tst.bottledchaos.structure.processing_groups
-    // # Starts with 1 processing group and 6 structure module slots. Each parallel controller tier adds 2 groups and 6 slots, up to T7: 15 groups and 48 slots. Excess modules are dropped at the controller after a downgrade.
-    // #zh_CN 基础支持1个加工组和6个结构模组槽位. 并行控制器每级增加2个加工组和6个槽位, T7封顶: 15个加工组和48个槽位. 降级后超限模组在主机位置弹出.
+    // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}Parallel Controller Module - Increase processing groups and structure module slots
+    // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}并行控制器模块 - 增加加工组数量与结构模组槽位
 
     // #tr tst.bottledchaos.structure.shared_inputs
-    // # Input buses and hatches in the central chamber are shared by every installed processing group.
-    // #zh_CN 中心仓室中的输入总线和输入仓由所有已安装加工组共享.
-
-    // #tr tst.bottledchaos.structure.parameter_modules
-    // # Install at most one parallel module; speed, power, and overclock modules affect final processing.
-    // #zh_CN 最多安装一个并行模块; 速度, 耗电和超频模块作用于最终加工.
+    // # Central inputs are shared by all groups; dedicated inputs serve only their corresponding group.
+    // #zh_CN 中心输入由全部加工组共享, 专用输入仅供对应加工组使用.
 
     // a marks the immediate capacity enclosures and controller-shaft glass; A remains outer glass.
     private static final String[][] SHAPE = {
@@ -2851,22 +2844,50 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         if (tooltip == null) {
-            tooltip = new MultiblockTooltipBuilder()
+            // spotless:off
+            tooltip = new TSTMultiblockTooltipBuilder()
                 .addMachineType(TSTUtils.tr("tst.bottledchaos.tooltip.machine_type"))
+                // #tr tst.bottledchaos.tooltip.controller
+                // # Controller block for Bottled Chaos
+                // #zh_CN 瓶中混沌的控制方块
+                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.controller"))
+                // #tr tst.bottledchaos.tooltip.flavor
+                // # {\AQUA}Countless processes, one bottle.
+                // #zh_CN {\AQUA}万千工序, 尽在瓶中.
+                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.flavor"))
+                // #tr tst.bottledchaos.tooltip.modules
+                // # Structure modules supply machine capabilities; credentials authorize processing chains.
+                // #zh_CN 结构模组提供机器性能, 凭证授权加工路线.
+                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.modules"))
                 .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.01"))
                 .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.02"))
                 .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.wireless"))
-                .addSeparator()
-                .beginStructureBlock(29, 41, 29, false)
-                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.body"))
+                .beginStructureBlock(SHAPE)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription01)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription02)
+                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.processing_groups"))
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.SpeedControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.PowerConsumptionControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.OverclockControllerDescription)
+                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.multiple_parallel_controllers"))
+                .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
                 .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.capacity_columns"))
-                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.capacity_channel"))
                 .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.voltage_upgrades"))
                 .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.upgrade_glass"))
-                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.processing_groups"))
                 .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.shared_inputs"))
-                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.parameter_modules"))
-                .toolTipFinisher(TSTSharedLocalization.General.ModName);
+                .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
+                .addOtherStructurePart(TSTSharedLocalization.ModularizedMachine.ModularHatch,
+                    TSTSharedLocalization.Structure.getBlueprintWithDot(1), 1)
+                .addOtherStructurePart(TSTUtils.tr("tst.bottledchaos.credential_hatch.name"),
+                    TSTSharedLocalization.Structure.getBlueprintWithDot(2), 2)
+                .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1, 3, 4, 5)
+                .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1, 3, 4, 5)
+                .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1, 5)
+                .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1, 5)
+                .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1, 5)
+                .addStructureHint(TSTSharedLocalization.ModularizedMachine.ModularHatchKey, 1)
+                .toolTipFinisher();
+            // spotless:on
         }
         return tooltip;
     }
