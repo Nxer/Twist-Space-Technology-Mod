@@ -12,6 +12,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_ACTIV
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_GLOW;
 import static gregtech.api.structure.error.StructureErrorRegistry.TOO_TALL;
 import static gregtech.api.util.GTUtility.filterValidMTEs;
+import static gregtech.api.util.GTUtility.validMTEList;
 import static gregtech.api.util.GlassTier.getGlassBlockTier;
 import static net.minecraft.util.StatCollector.translateToLocal;
 
@@ -48,12 +49,16 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEBasicHull;
+import gregtech.api.metatileentity.implementations.MTEHatch;
+import gregtech.api.metatileentity.implementations.MTEHatchDynamo;
 import gregtech.api.recipe.check.CheckRecipeResult;
-import gregtech.api.recipe.check.SimpleCheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTUtility.FluidId;
 import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.api.util.shutdown.ShutDownReasonRegistry;
+import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti;
 
 @SkipGenerateDescription
 public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
@@ -335,7 +340,45 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
             }
         }
 
-        return SimpleCheckRecipeResult.ofSuccess("running fine");
+        return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    @Override
+    public boolean onRunningTick(ItemStack aStack) {
+
+        if (this.lEUt < 0) {
+            if (!drainEnergyInput(getActualEnergyUsage())) {
+                stopMachine(ShutDownReasonRegistry.POWER_LOSS);
+                return false;
+            }
+        }
+
+        for (MTEHatchDynamo hatch : validMTEList(mDynamoHatches)) {
+            long euToInject = hatch.maxEUOutput() * hatch.maxAmperesOut();
+
+            if (hatch.getEUVar() + euToInject > hatch.maxEUStore()) continue;
+
+            long withInefficiency = euToInject + Math.max(euToInject / 24576, hatch.maxAmperesOut());
+
+            if (drainEnergyInput(withInefficiency)) {
+                hatch.setEUVar(hatch.getEUVar() + euToInject);
+            }
+        }
+
+        for (MTEHatch mteHatch : validMTEList(mExoticDynamoHatches)) {
+            MTEHatchDynamoMulti hatch = (MTEHatchDynamoMulti) mteHatch;
+            long euToInject = hatch.maxEUOutput() * hatch.maxAmperesOut();
+
+            if (hatch.getEUVar() + euToInject > hatch.maxEUStore()) continue;
+
+            long withInefficiency = euToInject + Math.max(euToInject / 24576, hatch.maxAmperesOut());
+
+            if (drainEnergyInput(withInefficiency)) {
+                hatch.setEUVar(hatch.getEUVar() + euToInject);
+            }
+        }
+
+        return true;
     }
 
     @Override
