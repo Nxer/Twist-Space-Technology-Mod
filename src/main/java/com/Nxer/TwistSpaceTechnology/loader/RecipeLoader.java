@@ -11,6 +11,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.CosmicProcessorCirc
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.LapotronChipRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.SingleBlockRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.SingleItemRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.BottledChaosCraftingRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.GTCMMachineRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.ModularHatchesRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.SingleMachineRecipes;
@@ -84,6 +85,7 @@ public class RecipeLoader {
         // Item Recipes
         SingleItemRecipes.loadRecipes();
         SingleBlockRecipes.loadRecipes();
+        BottledChaosCraftingRecipes.loadRecipes();
         CosmicProcessorCircuitRecipes.loadRecipes();
         LapotronChipRecipes.loadRecipes();
 

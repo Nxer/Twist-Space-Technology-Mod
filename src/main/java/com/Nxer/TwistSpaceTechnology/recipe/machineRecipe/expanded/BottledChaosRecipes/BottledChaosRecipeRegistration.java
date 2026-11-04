@@ -20,7 +20,6 @@ public final class BottledChaosRecipeRegistration {
         BottledChaosCredentialRecipes.registerRecipes();
         BottledChaosFakeRecipes.registerRecipes();
         BottledChaosFakeRecipes.registerCredentialRecipes();
-        BottledChaosRecipePool.registerCraftingRecipes();
         BottledChaosStructureRecipes.registerRecipes();
     }
 

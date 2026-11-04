@@ -45,15 +45,12 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.SulfurTrioxideGas;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.SulfuricAcid;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog;
 
-import gregtech.api.enums.ItemList;
 import gregtech.api.enums.TierEU;
-import gregtech.api.util.GTModHandler;
 
-/** Actual processing and crafting declarations; display recipes are registered separately. */
+/** Actual processing declarations; display recipes are registered separately. */
 public final class BottledChaosRecipePool {
 
     public static void registerRecipeChains(BottledChaosRecipeCatalog catalog) {
@@ -144,11 +141,5 @@ public final class BottledChaosRecipePool {
         vacuum.includeSynthesisStep(FluidExtractor, CeriumLutetiumAluminiumOxygenBlendMolten,
             CeriumLutetiumAluminiumOxygenBlendDust, -1);
         // spotless:on
-    }
-
-    public static void registerCraftingRecipes() {
-        GTModHandler.addShapelessCraftingRecipe(
-            GTCMItemList.BottledChaosMachineModule.get(1),
-            new Object[] { ItemList.Tool_DataStick.get(1) });
     }
 }
