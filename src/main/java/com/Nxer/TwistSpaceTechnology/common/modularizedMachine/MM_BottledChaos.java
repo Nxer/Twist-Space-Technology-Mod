@@ -851,7 +851,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                     && ItemBottledChaosCredential.isBound(installedCredentials[slot])
                         ? ItemBottledChaosCredential
                             .getRequiredWeight(ItemBottledChaosCredential.getRouteMask(installedCredentials[slot]))
-                            * (activeConcentratedPower ? Integer.bitCount(getInputPeerMask(slot)) + 1 : 1)
+                            * (Integer.bitCount(getInputPeerMask(slot)) + 1)
                         : 0;
                 powerWeights[slot] = credentialCosts[slot] > 0 && (!threads[slot].isBusy() || matchingCredentials[slot])
                     ? ItemBottledChaosCredential.getCapacity(installedCredentials[slot])
