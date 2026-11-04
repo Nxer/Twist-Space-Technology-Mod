@@ -118,7 +118,7 @@ public final class BottledChaosKevlarRecipes {
     public static void registerRecipeChains(BottledChaosRecipeCatalog catalog) {
         // spotless:off
         // Finishing: retain all precursors as inputs; combine both polymer syntheses through the final plate.
-        var kevlar = catalog.registerChain("kevlar", 1, TierEU.RECIPE_UV, ParaphenylenediamineDust,
+        var kevlar = catalog.registerChain("kevlar", 64, TierEU.RECIPE_UV, ParaphenylenediamineDust,
             new Object[] { KevlarPlate }, new Object[] {},
             catalog.markRecipe(LargeChemicalReactor, new Object[] { ParaphenylenediamineDust, TerephthaloylChlorideDust }, LiquidCrystalKevlar, 1),
             catalog.markRecipe(FluidSolidifier, LiquidCrystalKevlar, KevlarFiber, -1),

@@ -177,7 +177,7 @@ public final class BottledChaosNaquadahFuelRecipes {
                 Math.max(neutralization.mEUt, Math.max(centrifugation.mEUt, distillation.mEUt))));
         // spotless:off
         // Main trunks: preserve the exact native balance, including asphalt, gas and antimony recovery.
-        catalog.registerChain(PREPARATION_TAG, 1, Math.max(TierEU.RECIPE_UEV, Math.max(naquadria.mEUt, processingVoltage)), NaquadriaDust,
+        catalog.registerChain(PREPARATION_TAG, 48, Math.max(TierEU.RECIPE_UEV, Math.max(naquadria.mEUt, processingVoltage)), NaquadriaDust,
             new Object[] { heavy, light, unstable },
             catalog.markPreparedRecipe(BlastFurnace, NaquadriaDust, heavy,
                 prepareSourceRecipe(BlastFurnace, naquadria)
@@ -284,14 +284,14 @@ public final class BottledChaosNaquadahFuelRecipes {
             MaterialsElements.STANDALONE.CHRONOMATIC_GLASS.getFluidStack(6_480));
         // spotless:off
         // Main trunks: preserve native quantities and coils; higher native voltages remain above the UEV floor.
-        catalog.registerChain("naquadah_fuel_3", 1, Math.max(TierEU.RECIPE_UEV, regularIII.mEUt), unstable,
+        catalog.registerChain("naquadah_fuel_3", 32, Math.max(TierEU.RECIPE_UEV, regularIII.mEUt), unstable,
             new Object[] { fuelIII },
             catalog.markRecipe(refinery, new Object[] { unstable, recipeItemId(WerkstoffLoader.Tiberium.get(OrePrefixes.dust, 1)) }, fuelIII, -1));
         catalog.registerAlternativeChain("naquadah_fuel_3", Math.max(TierEU.RECIPE_UEV, advancedIII.mEUt), unstable,
             new Object[] { fuelIII },
             catalog.markRecipe(refinery, new Object[] { unstable, recipeItemId(MaterialsElements.STANDALONE.CHRONOMATIC_GLASS.getDust(1)) }, fuelIII, -1));
 
-        catalog.registerChain(FUEL_TAG, 1, Math.max(TierEU.RECIPE_UEV, regularIV.mEUt), fuelIII,
+        catalog.registerChain(FUEL_TAG, 128, Math.max(TierEU.RECIPE_UEV, regularIV.mEUt), fuelIII,
             new Object[] { fuel },
             catalog.markRecipe(refinery, new Object[] { fuelIII, recipeItemId(Materials.NetherStar.getDust(1)) }, fuel, -1));
         catalog.registerAlternativeChain(FUEL_TAG, Math.max(TierEU.RECIPE_UEV, advancedIV.mEUt), fuelIII,
@@ -347,7 +347,7 @@ public final class BottledChaosNaquadahFuelRecipes {
             catalog.markRecipe(FluidSolidifier, moltenCatalyst, catalystIngot, -1),
             catalog.markRecipe(Macerator, catalystIngot, catalystDust, -1));
 
-        var regularFuelV = catalog.registerChain("naquadah_fuel_5", 1, Math.max(TierEU.RECIPE_UEV, regularV.mEUt), fuel,
+        var regularFuelV = catalog.registerChain("naquadah_fuel_5", 256, Math.max(TierEU.RECIPE_UEV, regularV.mEUt), fuel,
             new Object[] { fuelV },
             catalog.markRecipe(refinery, new Object[] { fuel, infinityDust }, fuelV, -1));
         regularFuelV.includeSynthesisStep(infinityDust, infinitySolidification);
@@ -357,7 +357,7 @@ public final class BottledChaosNaquadahFuelRecipes {
             catalog.markRecipe(refinery, new Object[] { fuel, recipeItemId(Materials.TranscendentMetal.getDust(1)) }, fuelV, -1));
         advancedFuelV.includeSynthesisStep(catalystDust, catalystSolidification);
 
-        catalog.registerChain("naquadah_fuel_6", 1, Math.max(TierEU.RECIPE_UEV, regularVI.mEUt), fuelV,
+        catalog.registerChain("naquadah_fuel_6", 560, Math.max(TierEU.RECIPE_UEV, regularVI.mEUt), fuelV,
             new Object[] { fuelVI },
             catalog.markRecipe(refinery, new Object[] { fuelV, recipeItemId(MaterialsElements.STANDALONE.ASTRAL_TITANIUM.getDust(1)) }, fuelVI, -1));
         catalog.registerAlternativeChain("naquadah_fuel_6", Math.max(TierEU.RECIPE_UEV, advancedVI.mEUt), fuelV,

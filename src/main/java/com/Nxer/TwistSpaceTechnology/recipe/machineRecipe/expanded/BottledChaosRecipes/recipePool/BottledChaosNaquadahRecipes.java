@@ -85,7 +85,7 @@ public final class BottledChaosNaquadahRecipes {
             catalog.markRecipe(Macerator, NaquadriaIngot, NaquadriaDust, -1));
 
         // 2. Ordinary naquadah: stop at enriched sludge; its downstream products belong to other tags.
-        catalog.registerChain("naquadah", 1, TierEU.RECIPE_UHV, NaquadahOxideMixtureDust,
+        catalog.registerChain("naquadah", 16, TierEU.RECIPE_UHV, NaquadahOxideMixtureDust,
             new Object[] { NaquadahDust, ConcentratedEnrichedNaquadahSludgeDust },
             new Object[] { ConcentratedEnrichedNaquadahSludgeDust },
             catalog.markRecipe(BlastFurnace, NaquadahOxideMixtureDust, LowQualityNaquadahEmulsion, 1),
@@ -96,7 +96,7 @@ public final class BottledChaosNaquadahRecipes {
             catalog.markRecipe(LargeChemicalReactor, NaquadahDioxideDust, NaquadahDust, -1));
 
         // 3. Enriched naquadah: refine its sludge, but leave low-quality naquadria sulfate for its own tag.
-        catalog.registerChain("enriched_naquadah", 1, TierEU.RECIPE_UHV, EnrichedNaquadahOxideMixtureDust,
+        catalog.registerChain("enriched_naquadah", 48, TierEU.RECIPE_UHV, EnrichedNaquadahOxideMixtureDust,
             new Object[] { EnrichedNaquadahDust, NaquadahOxideMixtureDust, LowQualityNaquadriaSulfateDust },
             new Object[] { NaquadahOxideMixtureDust, LowQualityNaquadriaSulfateDust },
             catalog.markRecipe(LargeChemicalReactor, EnrichedNaquadahOxideMixtureDust, EnrichedNaquadahRichSolution, -1),
@@ -104,7 +104,7 @@ public final class BottledChaosNaquadahRecipes {
             enrichedSludgeRefining);
 
         // 4. Naquadria loop: activate first, recover low-quality sulfate and cancel the returned rich solution.
-        catalog.registerChain("naquadria", 1, TierEU.RECIPE_UHV, NaquadriaOxideMixtureDust,
+        catalog.registerChain("naquadria", 64, TierEU.RECIPE_UHV, NaquadriaOxideMixtureDust,
             new Object[] { NaquadriaDust, EnrichedNaquadahOxideMixtureDust },
             new Object[] { EnrichedNaquadahOxideMixtureDust },
             catalog.markRecipe(NeutronActivator, NaquadriaRichSolution, NaquadriaSulfateDust, -1),

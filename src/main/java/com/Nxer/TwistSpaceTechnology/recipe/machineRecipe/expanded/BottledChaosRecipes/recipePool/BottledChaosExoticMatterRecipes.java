@@ -107,7 +107,7 @@ public final class BottledChaosExoticMatterRecipes {
             (int) TierEU.RECIPE_MAX,
             0);
         // spotless:off
-        var quarkGluonPlasma = catalog.registerChain("quark_gluon_plasma", 1, TierEU.RECIPE_MAX, candidateRoot(solids, IronDust),
+        var quarkGluonPlasma = catalog.registerChain("quark_gluon_plasma", 640, TierEU.RECIPE_MAX, candidateRoot(solids, IronDust),
             new Object[] { product }, new Object[] {},
             catalog.markPreparedRecipe(TecTechRecipeMaps.godforgeExoticMatterRecipes, plasmaInputs[0].getFluid(), product,
                 prepareSourceRecipe(TecTechRecipeMaps.godforgeExoticMatterRecipes, exotic)));
@@ -150,7 +150,7 @@ public final class BottledChaosExoticMatterRecipes {
             (int) TierEU.RECIPE_MAX,
             0);
         // spotless:off
-        var magmatter = catalog.registerChain("magmatter", 1, TierEU.RECIPE_MAX, candidateRoot(solids, CosmicNeutroniumDust),
+        var magmatter = catalog.registerChain("magmatter", 1024, TierEU.RECIPE_MAX, candidateRoot(solids, CosmicNeutroniumDust),
             new Object[] { product }, new Object[] {},
             catalog.markPreparedRecipe(TecTechRecipeMaps.godforgeExoticMatterRecipes, plasmaInputs[0].getFluid(), product,
                 prepareSourceRecipe(TecTechRecipeMaps.godforgeExoticMatterRecipes, exotic)));

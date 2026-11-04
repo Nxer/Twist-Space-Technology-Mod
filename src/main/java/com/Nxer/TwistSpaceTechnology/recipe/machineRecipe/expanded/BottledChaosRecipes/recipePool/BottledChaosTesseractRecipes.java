@@ -57,7 +57,7 @@ public final class BottledChaosTesseractRecipes {
                 tesseract,
                 -1);
             var entry = tier == 0
-                ? catalog.registerChain("tesseract", 1, power[tier], catalyst, new Object[] { tesseract }, step)
+                ? catalog.registerChain("tesseract", 256, power[tier], catalyst, new Object[] { tesseract }, step)
                 : catalog
                     .registerAlternativeChain("tesseract", power[tier], catalyst, new Object[] { tesseract }, step);
             entry.hideInputMarker();

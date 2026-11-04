@@ -30,7 +30,7 @@ public final class BottledChaosAdvancedMaterialRecipes {
         var crystalSolution = catalog.markRecipeSequence(Autoclave, MagMatterRound, PhononCrystalSolution,
             catalog.markRecipe(Autoclave, MagMatterRound, PhononicSeedCrystal, -1),
             catalog.markRecipe(BlastFurnace, new Object[] { PhononicSeedCrystal, EternityDust }, PhononCrystalSolution, 2));
-        catalog.registerChain("phonon_medium", 1, TierEU.RECIPE_UXV, MagMatterRound,
+        catalog.registerChain("phonon_medium", 1024, TierEU.RECIPE_UXV, MagMatterRound,
             new Object[] { PhononMedium },
             crystalSolution,
             catalog.markRecipe(AlloyBlastSmelter, PhononCrystalSolution, PhononMedium, 5)).hideInputMarker();
@@ -40,7 +40,7 @@ public final class BottledChaosAdvancedMaterialRecipes {
         if (!Mods.EternalSingularity.isModLoaded()) return;
         Objects.requireNonNull(EternalSingularity, "eternal singularity");
         Objects.requireNonNull(ChronicSingularity, "chronic singularity");
-        catalog.registerChain("eternity", 1, TierEU.RECIPE_UMV, EternalSingularity,
+        catalog.registerChain("eternity", 512, TierEU.RECIPE_UMV, EternalSingularity,
             new Object[] { EternityMolten },
             catalog.markRecipe(ArcFurnace, EternalSingularity, ChronicSingularity, -1),
             catalog.markRecipe(QuantumForceTransformer, ChronicSingularity, EternityMolten, -1));

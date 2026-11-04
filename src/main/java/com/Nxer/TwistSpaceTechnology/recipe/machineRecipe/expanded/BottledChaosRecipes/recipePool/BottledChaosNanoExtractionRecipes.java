@@ -81,7 +81,7 @@ public final class BottledChaosNanoExtractionRecipes {
             var ore = i == 0
                 ? catalog.registerChain(
                     "nano_extraction",
-                    1,
+                    48,
                     TierEU.RECIPE_UHV,
                     feed,
                     new Object[] { concentrate, molten },

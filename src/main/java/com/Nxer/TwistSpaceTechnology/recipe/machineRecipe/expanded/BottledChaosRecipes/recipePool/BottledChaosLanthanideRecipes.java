@@ -160,7 +160,7 @@ public final class BottledChaosLanthanideRecipes {
         StepRef[] unboostedBastnasiteSamarium = bastnasiteSamariumSteps.clone();
         unboostedBastnasiteSamarium[0] = catalog.markRecipe(LargeChemicalReactor, SamaricRareEarthConcentrateDust, FluorinatedSamaricConcentrateDust, 1);
         // The final entry is primary; alternatives are ordered from mineral preparation to finishing.
-        var bastnasiteSamarium = catalog.registerChain("bastnasite", 1, TierEU.RECIPE_UV, SamaricRareEarthConcentrateDust,
+        var bastnasiteSamarium = catalog.registerChain("bastnasite", 6, TierEU.RECIPE_UV, SamaricRareEarthConcentrateDust,
             bastnasiteSamariumTerminals, new Object[] {}, unboostedBastnasiteSamarium);
         bastnasiteSamarium.requireCircuit(1);
         catalog.registerAlternativeChain("bastnasite", TierEU.RECIPE_UV, BastnasiteDust,
@@ -216,7 +216,7 @@ public final class BottledChaosLanthanideRecipes {
         StepRef[] samariumBoostedMonazite = monaziteSamariumSteps.clone();
         samariumBoostedMonazite[3] = catalog.markRecipe(MixerNonCell,
             new Object[] { MonaziteHalogenicRareEarthMixtureDust, SamariumOreConcentrateDust }, SaturatedMonaziteRareEarthMixtureDust, -1);
-        var monaziteSamarium = catalog.registerChain("monazite", 1, TierEU.RECIPE_UV, NitricMonaziteLeachedConcentrate,
+        var monaziteSamarium = catalog.registerChain("monazite", 6, TierEU.RECIPE_UV, NitricMonaziteLeachedConcentrate,
             monaziteSamariumTerminals, new Object[] {}, monaziteSamariumSteps);
         monaziteSamarium.requireCircuit(1);
         monaziteSamarium.setDisplayOutputs(monaziteSamariumTerminals);
@@ -243,7 +243,7 @@ public final class BottledChaosLanthanideRecipes {
         };
         StepRef[] ceriumRichMixtureSteps = ceriumSteps.clone();
         ceriumRichMixtureSteps[0] = catalog.markRecipe(LargeChemicalReactor, CeriumRichMixtureDust, CeriumChlorideDust, -1);
-        catalog.registerChain("cerium", 1, TierEU.RECIPE_UV, CeriumRichMixtureDust,
+        catalog.registerChain("cerium", 2, TierEU.RECIPE_UV, CeriumRichMixtureDust,
             new Object[] { CeriumDust, MonaziteDust }, new Object[] {}, ceriumRichMixtureSteps);
         catalog.registerAlternativeChain("cerium", TierEU.RECIPE_UV, CeriumDioxideDust,
             new Object[] { CeriumDust }, new Object[] {}, ceriumSteps);
@@ -257,7 +257,7 @@ public final class BottledChaosLanthanideRecipes {
             catalog.markRecipe(LargeChemicalReactor, SamariumOxalateDust, SamariumChlorideDust, -1),
             catalog.markRecipe(MixerNonCell, new Object[] { SamariumChlorideDust, SodiumChlorideDust }, SamariumChlorideSodiumChlorideBlendDust, -1),
             catalog.markRecipe(ElectrolyzerNonCell, SamariumChlorideSodiumChlorideBlendDust, SamariumDust, 9));
-        catalog.registerChain("samarium", 1, TierEU.RECIPE_UV, SamariumOreConcentrateDust,
+        catalog.registerChain("samarium", 2, TierEU.RECIPE_UV, SamariumOreConcentrateDust,
             new Object[] { SamariumDust, CeriumDioxideDust, CeriumRichMixtureDust, LanthanumDust, NeodymiumDust, ThoriumDust, RarestEarthResidueDust },
             new Object[] { CeriumDioxideDust, CeriumRichMixtureDust },
             catalog.markRecipe(Digester, SamariumOreConcentrateDust, MuddySamariumRareEarthSolution, -1),

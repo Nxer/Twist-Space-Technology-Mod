@@ -78,9 +78,6 @@ public final class BottledChaosCredentialRecipes {
             register("ancient_debris", Stage.UV, ItemList.SiftingMachineUV.get(4), ItemList.Casing_RobustTungstenSteel.get(8), BottledChaosRecipeResources.IntenselyBondedNetheriteNanoparticles.getItemStack(64), Materials.Netherite.getPart(OrePrefixes.ring, 64));
         }
         register("isamill", Stage.ZPM, ItemList.MaceratorZPM.get(4), GregtechItemList.Casing_IsaMill_Pipe.get(8), Materials.Indium.getDust(64), Materials.Lutetium.getDust(64), cells(new FluidStack(BottledChaosRecipeResources.RedMud, 1000), 64));
-        if (CredentialModel.indexForTag("crystalline_alloy_molten") >= 0) {
-            register("crystalline_alloy_molten", Stage.UV, ItemList.Casing_Coil_NaquadahAlloy.get(8), GregtechItemList.Casing_AdvancedVacuum.get(8), ItemList.UHTResistantMesh.get(8), Materials.CrystallineAlloy.getIngots(64));
-        }
         register("prismatic_acid", Stage.UHV, ItemList.BlockExtremeCorrosionResistantCasing.get(8), ItemList.Casing_Pipe_Polybenzimidazole.get(8), GregtechItemList.SolidAcidCatalyst.get(8), cells(Materials.PrismaticAcid.getFluid(1000), 64));
 
         register("purified_water_1", Stage.ZPM, ItemList.BlockSterileWaterPlantCasing.get(8), ItemList.Casing_Pipe_Polytetrafluoroethylene.get(8), ItemList.ActivatedCarbonFilterMesh.get(8), cells(Materials.Grade1PurifiedWater.getFluid(1000), 64));
@@ -92,7 +89,7 @@ public final class BottledChaosCredentialRecipes {
         register("purified_water_7", Stage.UEV, ItemList.BlockNaquadriaReinforcedWaterPlantCasing.get(8), ItemList.GlassOmniPurposeInfinityFused.get(8), ItemList.Field_Generator_UEV.get(2), cells(Materials.Grade7PurifiedWater.getFluid(1000), 64));
         register("purified_water_8", Stage.UIV, ItemList.BlockQuarkContainmentCasing.get(8), ItemList.GlassQuarkContainment.get(8), ItemList.Quark_Catalyst_Housing.get(8), cells(Materials.Grade8PurifiedWater.getFluid(1000), 64), cells(Materials.StableBaryonicMatter.getFluid(1000), 64));
 
-        register("kevlar", Stage.UEV, ItemList.Casing_Autoclave.get(8), ItemList.Casing_Pipe_Polybenzimidazole.get(8), GregtechItemList.SolidAcidCatalyst.get(8), Materials.Polybenzimidazole.getPlates(64), Materials.Carbon.getDust(64));
+        register("kevlar", Stage.UHV, ItemList.Casing_Autoclave.get(16), ItemList.Casing_Pipe_Polybenzimidazole.get(16), GregtechItemList.SolidAcidCatalyst.get(16), Materials.Infinity.getPart(OrePrefixes.wireFine, 4), Materials.Carbon.getDust(64), Materials.Polybenzimidazole.getPlates(64));
         register("super_heavy_radox", Stage.UEV, ItemList.Casing_Coil_NaquadahAlloy.get(8), ItemList.Casing_Pipe_Polybenzimidazole.get(8), cells(Materials.RadoxSuperHeavy.getFluid(1000), 64), Materials.RadoxPolymer.getPart(OrePrefixes.plateDense, 64));
         register("heavy_radox", Stage.UEV, ItemList.Casing_Coil_NaquadahAlloy.get(8), ItemList.Casing_Pipe_Polybenzimidazole.get(8), cells(Materials.RadoxHeavy.getFluid(1000), 64), Materials.RadoxPolymer.getPart(OrePrefixes.plateDouble, 64));
         register("light_radox", Stage.UEV, ItemList.Casing_Coil_NaquadahAlloy.get(8), ItemList.Casing_Pipe_Polybenzimidazole.get(8), cells(Materials.RadoxLight.getGas(1000), 64), Materials.RadoxPolymer.getPlates(64));
@@ -104,7 +101,7 @@ public final class BottledChaosCredentialRecipes {
         register("seaweed_broth", Stage.UEV, ItemList.BlockSterileWaterPlantCasing.get(8), ItemList.Casing_Chemically_Inert.get(8), BottledChaosRecipeResources.TauCetiESeaweed.getItemStack(64), cells(new FluidStack(BottledChaosRecipeResources.SeaweedBroth, 1000), 64));
         register("tau_ceti_e_seaweed_extract", Stage.UEV, ItemList.ExtractorUHV.get(4), ItemList.BlockSterileWaterPlantCasing.get(8), ItemList.PlasmaMembrane.get(8), BottledChaosRecipeResources.TauCetiESeaweedExtract.getItemStack(64));
         register("bio_medium_sterilized", Stage.UEV, ItemList.Casing_Autoclave.get(8), ItemList.GlassUVResistant.get(8), cells(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(1000), 8), cells(Materials.BioMediumSterilized.getFluid(1000), 64));
-        register("bio_cells", Stage.UEV, ItemList.ChemicalReactorUHV.get(4), ItemList.GlassUVResistant.get(8), ItemList.Circuit_Board_Bio_Ultra.get(8), ItemList.Circuit_Wafer_Bioware.get(64), ItemList.Circuit_Chip_Biocell.get(64));
+        register("bio_cells", Stage.UEV, ItemList.ChemicalReactorUHV.get(4), ItemList.GlassUVResistant.get(8), ItemList.Circuit_Board_Bio_Ultra.get(8), ItemList.Circuit_Wafer_Bioware.get(8), ItemList.Circuit_Chip_Biocell.get(64));
 
         if (CredentialModel.indexForTag("crystal_cycle") >= 0) {
             register("crystal_cycle", Stage.LuV, ItemList.AutoclaveLuV.get(4), ItemList.Casing_Autoclave.get(8), ItemList.QuantumEye.get(8), ItemList.Circuit_Parts_RawCrystalChip.get(64));

@@ -54,7 +54,7 @@ public final class BottledChaosNetheriteRecipes {
         // spotless:off
         // Main trunk: UHV chemical bath -> brittle scrap -> ordinary nanoparticles.
         // Nether air remains a consumed execution root after the returned hot scraps cancel.
-        catalog.registerChain("ancient_debris", 1, TierEU.RECIPE_UV, NetherAir,
+        catalog.registerChain("ancient_debris", 12, TierEU.RECIPE_UV, NetherAir,
             new Object[] { NetheriteNanoparticles, NitricAcid },
             new Object[] {},
             catalog.markRecipe(ChemicalBath, new Object[] { HotNetheriteScrap, HeavyHellishMud, PoorNetherWaste }, BrittleNetheriteScrap, -1),

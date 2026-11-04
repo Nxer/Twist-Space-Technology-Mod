@@ -45,7 +45,6 @@ import net.minecraftforge.fluids.Fluid;
 
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.StepRef;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import gregtech.api.enums.Materials;
@@ -61,7 +60,7 @@ public final class BottledChaosPrismaticRecipes {
         // spotless:off
         // Shard stage: precipitation -> recovered solvent -> crystal -> gas -> acid.
         // Starting at precipitation exposes the solvent return before the missing fresh solvent is supplied.
-        catalog.registerChain("prismatic_acid", 1, TierEU.RECIPE_UHV, PrismarineShard,
+        catalog.registerChain("prismatic_acid", 64, TierEU.RECIPE_UHV, PrismarineShard,
             new Object[] { PrismaticAcid }, new Object[] {},
             catalog.markRecipe(ChemicalPlant, StrontiumHydroxideDust, PrismarinePrecipitate, -1),
             catalog.markRecipe(ChemicalBath, PrismarineContaminatedNitrobenzeneSolution, PrismarineRichNitrobenzeneSolution, 1),
@@ -90,8 +89,8 @@ public final class BottledChaosPrismaticRecipes {
             new Object[] { PrismarineShard, PrismarineContaminatedHydrogenPeroxide }, -1);
 
         // Alloy preparation: autoclave crystals -> powder -> alloy -> protected blast -> cooling -> melt.
-        // Both protective gases share the alloy tag, which may pass its melt to the independently authorized acid stage.
-        if (BottledChaosRecipeResources.CredentialModel.indexForTag("crystalline_alloy_molten") >= 0) {
+        // Both protective gases share the acid tag, including its crystalline-alloy preparation.
+        if (Mods.EnderIO.isModLoaded()) {
             for (Fluid gas : new Fluid[] { OganessonGas, XenonGas }) {
                 var steps = new StepRef[] {
                     catalog.markRecipe(Autoclave, new Object[] { DiamondGem, PulsatingIronMolten }, PulsatingCrystal, -1),
@@ -101,9 +100,7 @@ public final class BottledChaosPrismaticRecipes {
                     catalog.markRecipe(VacuumFreezer, HotCrystallineAlloyIngot, CrystallineAlloyIngot, -1),
                     catalog.markRecipe(FluidExtractor, CrystallineAlloyIngot, CrystallineAlloyMolten, -1)
                 };
-                if (gas == OganessonGas) catalog.registerChain("crystalline_alloy_molten", 1, TierEU.RECIPE_UHV, DiamondGem,
-                    new Object[] { CrystallineAlloyMolten }, new Object[] { CrystallineAlloyMolten }, steps).hideInputMarker();
-                else catalog.registerAlternativeChain("crystalline_alloy_molten", TierEU.RECIPE_UHV, DiamondGem,
+                catalog.registerAlternativeChain("prismatic_acid", TierEU.RECIPE_UHV, DiamondGem,
                     new Object[] { CrystallineAlloyMolten }, new Object[] { CrystallineAlloyMolten }, steps).hideInputMarker();
             }
             catalog.includeSynthesisPath(PulsatingIronMolten);

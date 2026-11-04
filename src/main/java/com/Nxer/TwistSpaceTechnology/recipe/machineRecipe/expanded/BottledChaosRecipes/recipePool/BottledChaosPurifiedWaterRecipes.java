@@ -46,7 +46,14 @@ public final class BottledChaosPurifiedWaterRecipes {
             RecipeMaps.purificationPlasmaHeatingRecipes, RecipeMaps.purificationUVTreatmentRecipes,
             RecipeMaps.purificationDegasifierRecipes, RecipeMaps.purificationParticleExtractionRecipes };
 
-        for (int grade = 1; grade <= waters.length; grade++) registerStage(catalog, pools[grade - 1], waters, grade);
+        registerStage(catalog, pools[0], waters, 1, 2);
+        registerStage(catalog, pools[1], waters, 2, 2);
+        registerStage(catalog, pools[2], waters, 3, 6);
+        registerStage(catalog, pools[3], waters, 4, 6);
+        registerStage(catalog, pools[4], waters, 5, 24);
+        registerStage(catalog, pools[5], waters, 6, 24);
+        registerStage(catalog, pools[6], waters, 7, 192);
+        registerStage(catalog, pools[7], waters, 8, 768);
 
         // spotless:off
         // Shared output branch: recover waste before supplementing the net aluminium and acid demand.
@@ -59,7 +66,7 @@ public final class BottledChaosPurifiedWaterRecipes {
     }
 
     private static void registerStage(BottledChaosRecipeCatalog catalog, RecipeMap<?> pool, Materials[] waters,
-        int grade) {
+        int grade, int capacityCost) {
         Materials inputWater = grade == 1 ? Materials.Water : waters[grade - 2];
         GTRecipe source = findSource(pool, inputWater, waters[grade - 1], grade);
         int successPercent = grade <= 2 ? boostedSuccessPercent(source) : 100;
@@ -141,7 +148,7 @@ public final class BottledChaosPurifiedWaterRecipes {
         // Main trunk: preserve the native stage's expected yield, special inputs and returned catalysts.
         Object[] products = data.outputs.keySet().stream()
             .filter(key -> !key.equals(FluidId.create(FlocculationWasteLiquid))).toArray();
-        var waterStage = catalog.registerChain("purified_water_" + grade, 1, source.mEUt, root,
+        var waterStage = catalog.registerChain("purified_water_" + grade, capacityCost, source.mEUt, root,
             products, new Object[] { product },
             catalog.markPreparedRecipe(stage.pool, root, product, data));
         waterStage.setPlanningTargets(product);

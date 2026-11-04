@@ -145,7 +145,7 @@ public final class BottledChaosFusionRecipes {
 
     private BottledChaosRecipeCatalog.Entry registerFusion(long voltage, Object root, Object output, StepRef... steps) {
         voltage = Math.max(TierEU.RECIPE_UEV, voltage);
-        var entry = firstFusion ? catalog.registerChain(TAG, 1, voltage, root, new Object[] { output }, steps)
+        var entry = firstFusion ? catalog.registerChain(TAG, 128, voltage, root, new Object[] { output }, steps)
             : catalog.registerAlternativeChain(TAG, voltage, root, new Object[] { output }, steps);
         firstFusion = false;
         entry.hideInputMarker();

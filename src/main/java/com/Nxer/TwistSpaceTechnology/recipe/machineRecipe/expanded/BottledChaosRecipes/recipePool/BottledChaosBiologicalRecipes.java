@@ -63,7 +63,7 @@ public final class BottledChaosBiologicalRecipes {
     public static void registerRecipeChains(BottledChaosRecipeCatalog catalog) {
         // spotless:off
         // Stem-cell finishing entry; preparation entries execute before this primary entry.
-        catalog.registerChain("stem_cells", 1, TierEU.RECIPE_UHV, GrowthMediumSterilized,
+        catalog.registerChain("stem_cells", 48, TierEU.RECIPE_UHV, GrowthMediumSterilized,
             new Object[] { StemCells }, new Object[] { StemCells, Mutagen },
             catalog.markRecipe(LargeChemicalReactor, new Object[] { UnknownCrystal, OsmiridiumDust },
                 new Object[] { StemCells, BacterialSludge }, -1),
@@ -72,7 +72,7 @@ public final class BottledChaosBiologicalRecipes {
             catalog.markRecipe(Distillery, FermentedBacterialSludge, Mutagen, 3)).setDisplayOutputs(StemCells);
 
         // Stage 1: raw materials -> mutagen growth medium -> sterile growth medium.
-        catalog.registerChain("growth_medium_sterilized", 1, TierEU.RECIPE_UHV, RawMeatDust,
+        catalog.registerChain("growth_medium_sterilized", 16, TierEU.RECIPE_UHV, RawMeatDust,
             new Object[] { GrowthMediumSterilized }, new Object[] { GrowthMediumSterilized },
             catalog.markRecipe(BacterialVat, new Object[] { RawMeatDust, Agar, Mutagen }, GrowthMediumRaw, -1),
             catalog.markRecipe(FluidHeater, GrowthMediumRaw, GrowthMediumSterilized, -1)).hideInputMarker();
@@ -89,25 +89,25 @@ public final class BottledChaosBiologicalRecipes {
         if (seaweedCircuit == 0) throw new IllegalStateException("missing Tau Ceti E seaweed crop variant");
 
         // Biological-cell finishing entry; preparation entries execute before this primary entry.
-        catalog.registerChain("bio_cells", 1, TierEU.RECIPE_UHV, BioMediumSterilized,
+        catalog.registerChain("bio_cells", 96, TierEU.RECIPE_UHV, BioMediumSterilized,
             new Object[] { BioCells }, new Object[] { Mutagen },
             catalog.markRecipe(LargeChemicalReactor, new Object[] { StemCells, CosmicNeutroniumDust },
                 new Object[] { BioCells, Mutagen }, -1)).setDisplayOutputs(BioCells);
 
         // Stage 3: stem cells and raw materials -> nutrient agar -> seaweed broth.
-        catalog.registerChain("seaweed_broth", 1, TierEU.RECIPE_UHV, StemCells,
+        catalog.registerChain("seaweed_broth", 16, TierEU.RECIPE_UHV, StemCells,
             new Object[] { SeaweedBroth }, new Object[] { SeaweedBroth },
             catalog.markRecipe(LargeChemicalReactor, new Object[] { Agar, StemCells, MeatExtract }, UnknownNutrientAgar, -1),
             catalog.markRecipe(BacterialVat, new Object[] { EnergiumDust, MytrylDust, PamSeaweed }, SeaweedBroth, -1));
 
         // Stage 4: seaweed broth -> seaweed -> seaweed extract.
-        catalog.registerChain("tau_ceti_e_seaweed_extract", 1, TierEU.RECIPE_UHV, SeaweedBroth,
+        catalog.registerChain("tau_ceti_e_seaweed_extract", 48, TierEU.RECIPE_UHV, SeaweedBroth,
             new Object[] { TauCetiESeaweedExtract }, new Object[] { TauCetiESeaweedExtract },
             catalog.markRecipe(CentrifugeNonCell, SeaweedBroth, TauCetiESeaweed, seaweedCircuit),
             catalog.markRecipe(Extractor, TauCetiESeaweed, TauCetiESeaweedExtract, -1));
 
         // Stage 5: produce the biological-cell seed from stem cells, then cancel its medium and mutagen return.
-        catalog.registerChain("bio_medium_sterilized", 1, TierEU.RECIPE_UHV, TauCetiESeaweedExtract,
+        catalog.registerChain("bio_medium_sterilized", 32, TierEU.RECIPE_UHV, TauCetiESeaweedExtract,
             new Object[] { BioMediumSterilized }, new Object[] { BioMediumSterilized },
             catalog.markRecipe(LargeChemicalReactor, new Object[] { StemCells, CosmicNeutroniumDust }, BioCells, -1),
             catalog.markRecipe(BacterialVat, new Object[] { BioCells, TauCetiESeaweedExtract, InfinityCatalystDust }, BioMediumRaw, -1),

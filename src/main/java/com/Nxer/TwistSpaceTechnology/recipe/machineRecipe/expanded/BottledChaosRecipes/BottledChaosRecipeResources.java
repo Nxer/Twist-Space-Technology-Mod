@@ -71,7 +71,6 @@ public final class BottledChaosRecipeResources {
         private static final boolean HAS_HONEYCOMBS = Mods.Forestry.isModLoaded() && GTBees.combs != null;
         private static final boolean HAS_NETHERITE = Mods.EtFuturumRequiem.isModLoaded();
         private static final boolean HAS_ETERNITY = Mods.EternalSingularity.isModLoaded();
-        private static final boolean HAS_CRYSTALLINE_ALLOY = Mods.EnderIO.isModLoaded();
         public static final String TAGS_NBT_KEY = "bottledChaosTags";
         public static final String OCCUPIED_WEIGHT_NBT_KEY = "bottledChaosOccupiedWeight";
 
@@ -117,7 +116,6 @@ public final class BottledChaosRecipeResources {
             new TagDefinition("enriched_naquadah", true, "naquadah", BottledChaosRecipePage.NAQUADAH),
             new TagDefinition("naquadria", true, "naquadah", BottledChaosRecipePage.NAQUADAH),
             new TagDefinition("nano_extraction", true, "nano_extraction", BottledChaosRecipePage.NANO_EXTRACTION),
-            new TagDefinition("crystalline_alloy_molten", HAS_CRYSTALLINE_ALLOY, "prismatic", BottledChaosRecipePage.PRISMATIC),
             new TagDefinition("prismatic_acid", true, "prismatic", BottledChaosRecipePage.PRISMATIC),
             new TagDefinition("growth_medium_sterilized", true, "biological", BottledChaosRecipePage.BIOLOGICAL),
             new TagDefinition("stem_cells", true, "biological", BottledChaosRecipePage.BIOLOGICAL),
@@ -323,7 +321,6 @@ public final class BottledChaosRecipeResources {
             register("fusion", recipeItemId(Materials.Cobalt.getDust(1)), MaterialsElements.STANDALONE.ASTRAL_TITANIUM.getPlasma());
             if (Mods.EtFuturumRequiem.isModLoaded()) register("ancient_debris", AncientDebris, NetheriteNanoparticles);
             register("isamill", MilledSphalerite, MilledSphalerite);
-            if (CredentialModel.HAS_CRYSTALLINE_ALLOY) register("crystalline_alloy_molten", CrystallineAlloyMolten, CrystallineAlloyMolten);
             register("purified_water_1", recipeItemId(Materials.Grade1PurifiedWater.getCells(1)), recipeItemId(Materials.Grade1PurifiedWater.getCells(1)));
             register("purified_water_2", recipeItemId(Materials.Grade2PurifiedWater.getCells(1)), recipeItemId(Materials.Grade2PurifiedWater.getCells(1)));
             register("prismatic_acid", PrismarineShard, PrismaticAcid);
