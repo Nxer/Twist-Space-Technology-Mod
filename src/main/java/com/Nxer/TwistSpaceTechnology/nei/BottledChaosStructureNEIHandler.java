@@ -480,42 +480,36 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
 
     @Override
     public void loadCraftingRecipes(ItemStack result) {
-        if (ItemBottledChaosMachineModule.isModule(result)) loadModule(result);
+        if (ItemBottledChaosMachineModule.isModule(result)) loadModule(result, false);
     }
 
     @Override
     public void loadUsageRecipes(ItemStack input) {
         if (GTCMItemList.BottledChaos.hasBeenSet()
             && GTUtility.areStacksEqual(input, GTCMItemList.BottledChaos.get(1), true)) arecipes.addAll(getCache());
-        else if (ItemBottledChaosMachineModule.isModule(input)) loadModule(input);
+        else if (ItemBottledChaosMachineModule.isModule(input)) loadModule(input, true);
         else for (CachedDefaultRecipe recipe : getCache()) {
             if (recipe instanceof StructureRecipe structure && structure.display.hasController(input)) {
                 arecipes.add(recipe);
-                continue;
-            }
-            for (ItemStack output : recipe.mRecipe.mOutputs) {
-                ItemStack controller = ItemBottledChaosMachineModule.controller(output);
-                if (controller != null && controller.isItemEqual(input)) {
-                    arecipes.add(recipe);
-                    break;
-                }
             }
         }
     }
 
-    private void loadModule(ItemStack module) {
+    private void loadModule(ItemStack module, boolean usage) {
         String key = ItemBottledChaosMachineModule.machineKey(module);
         for (CachedDefaultRecipe recipe : getCache()) {
-            if (key.isEmpty() || recipe instanceof StructureRecipe structure && structure.display.hasMachine(key)
-                || hasMachine(recipe.mRecipe.mInputs, key)
-                || hasMachine(recipe.mRecipe.mOutputs, key)) arecipes.add(recipe);
+            if (!usage && recipe instanceof StructureRecipe structure && structure.display.hasMachine(key)
+                || hasModule(usage ? recipe.mRecipe.mInputs : recipe.mRecipe.mOutputs, key, usage))
+                arecipes.add(recipe);
         }
     }
 
-    private static boolean hasMachine(ItemStack[] stacks, String key) {
+    private static boolean hasModule(ItemStack[] stacks, String key, boolean usage) {
         for (ItemStack stack : stacks) {
-            if (stack == null) continue;
-            if (key.equals(stack.getUnlocalizedName()) || key.equals(ItemBottledChaosMachineModule.machineKey(stack)))
+            // Filled modules share the same unloading operation, regardless of their packaged machine.
+            if (ItemBottledChaosMachineModule.isModule(stack)
+                && (key.isEmpty() || (usage ? ItemBottledChaosMachineModule.quantity(stack) > 0
+                    : key.equals(ItemBottledChaosMachineModule.machineKey(stack)))))
                 return true;
         }
         return false;

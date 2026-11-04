@@ -105,7 +105,7 @@ public final class BottledChaosNEIHandler extends GTNEIDefaultHandler {
 
     @Override
     public void loadCraftingRecipes(ItemStack result) {
-        if (!isController(result) && !loadCredential(result)) super.loadCraftingRecipes(result);
+        if (!isController(result)) super.loadCraftingRecipes(result);
     }
 
     @Override
