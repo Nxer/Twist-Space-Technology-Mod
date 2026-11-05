@@ -145,7 +145,7 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
         checkCasingMin(errors, mCasing, 10);
         checkHatchMin(errors, Dynamo, 1);
         checkHatchMax(errors, Dynamo, 8);
-        if (setDynamoTier(1, true)) {
+        if (!setDynamoTier(1, true)) {
             errors.add(hatch_tier_incompatible);
         }
     }
