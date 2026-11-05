@@ -191,7 +191,7 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
             if (hatchFluid.isFluidEqual(steamFluid) && steamFluid != null) {
                 steamFluid.amount = (int) (STEAM_PER_SEC * getDynamoAmperage());
                 if (getAllMaxDynamoBuffer() != getAllDynamoBuffer()) {
-                    if (super.depleteInput(steamFluid)) {
+                    if (super.depleteInput(steamFluid, true) && super.depleteInput(steamFluid)) {
                         super.lEUt = EU_PER_TICK * getDynamoAmperage();
                         super.mMaxProgresstime = 20;
                         super.mEfficiency = getMaxEfficiency(null);
