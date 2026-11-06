@@ -6,6 +6,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.Nxer.TwistSpaceTechnology.client.render.ArtificialStarRender;
+import com.Nxer.TwistSpaceTechnology.client.render.BECCondensateRenderer;
 import com.Nxer.TwistSpaceTechnology.client.render.BottledChaosCapacityRenderer;
 import com.Nxer.TwistSpaceTechnology.client.render.EyeOfWoodRender;
 import com.Nxer.TwistSpaceTechnology.client.render.LargeSolarBoilerRender;
@@ -68,6 +69,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
+        BECCondensateRenderer.register();
         RendereLoader.init();
         SoundLoader.init();
     }

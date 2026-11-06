@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.loader;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerRecipeCache;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBlastFurnace;
+import com.Nxer.TwistSpaceTechnology.common.material.BECCondensates;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.ShapedCraftRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.SimpleFurnaceFuelPool;
@@ -80,6 +81,8 @@ import gregtech.api.enums.Mods;
 public class RecipeLoader {
 
     public static void loadRecipes() {
+
+        BECCondensates.loadRecipes();
 
         // TODO Split GTCMMachineRecipes
         // Item Recipes
