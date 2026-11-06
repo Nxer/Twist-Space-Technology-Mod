@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ParticleTrapTimeSpaceShield;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
-import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.enums.TierEU.RECIPE_MAX;
 import static gregtech.api.enums.TierEU.RECIPE_UIV;
 import static gregtech.api.enums.TierEU.RECIPE_UMV;
@@ -113,9 +112,8 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool {
                 ItemList.Circuit_Chip_Optical.get(1),
                 GTModHandler.getModItem("eternalsingularity", "eternal_singularity", 1))
             .fluidInputs(Materials.Hydrogen.getPlasma(16000))
-            .itemOutputs(GTCMItemList.OpticalSOC.get(16), GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 1, 14))
+            .itemOutputs(GTCMItemList.OpticalSOC.get(16))
             .fluidOutputs(Materials.Helium.getPlasma(4000))
-            .outputChances(10000, 1)
             .eut(RECIPE_UMV)
             .duration(6144 * 20)
             .addTo(PhC);
@@ -127,11 +125,8 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool {
                 ItemList.Circuit_Chip_Optical.get(8),
                 GTModHandler.getModItem("eternalsingularity", "eternal_singularity", 1))
             .fluidInputs(Materials.Hydrogen.getPlasma(32000))
-            .itemOutputs(
-                GTCMItemList.OpticalSOC.get(1024),
-                GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 8, 14))
+            .itemOutputs(GTCMItemList.OpticalSOC.get(1024))
             .fluidOutputs(Materials.Helium.getPlasma(8000))
-            .outputChances(10000, 10)
             .eut(RECIPE_UMV)
             .duration(12288 * 20)
             .addTo(PhC);
@@ -143,9 +138,8 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool {
                 ItemList.Circuit_Chip_Optical.get(2),
                 GTModHandler.getModItem("eternalsingularity", "eternal_singularity", 1))
             .fluidInputs(Materials.Hydrogen.getPlasma(16000))
-            .itemOutputs(GTCMItemList.OpticalSOC.get(96), GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 1, 14))
+            .itemOutputs(GTCMItemList.OpticalSOC.get(96))
             .fluidOutputs(Materials.Helium.getPlasma(4000))
-            .outputChances(10000, 10)
             .eut(RECIPE_UMV)
             .duration(128 * 20)
             .addTo(PhC);
@@ -158,11 +152,8 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool {
                 ItemList.Circuit_Chip_Optical.get(16),
                 GTModHandler.getModItem("eternalsingularity", "eternal_singularity", 1))
             .fluidInputs(Materials.Hydrogen.getPlasma(32000))
-            .itemOutputs(
-                GTCMItemList.OpticalSOC.get(6144),
-                GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 8, 14))
+            .itemOutputs(GTCMItemList.OpticalSOC.get(6144))
             .fluidOutputs(Materials.Helium.getPlasma(8000))
-            .outputChances(10000, 1000)
             .eut(RECIPE_UMV)
             .duration(64 * 20)
             .addTo(PhC);

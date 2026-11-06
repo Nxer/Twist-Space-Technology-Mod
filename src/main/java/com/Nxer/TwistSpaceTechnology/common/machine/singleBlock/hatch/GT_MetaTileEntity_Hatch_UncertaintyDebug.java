@@ -5,6 +5,7 @@ import net.minecraft.util.EnumChatFormatting;
 
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
@@ -14,7 +15,6 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import tectech.thing.metaTileEntity.hatch.MTEHatchUncertainty;
-import tectech.util.CommonValues;
 
 @SkipGenerateDescription
 public class GT_MetaTileEntity_Hatch_UncertaintyDebug extends MTEHatchUncertainty implements TSTTooltipCredit {
@@ -36,7 +36,7 @@ public class GT_MetaTileEntity_Hatch_UncertaintyDebug extends MTEHatchUncertaint
 
     @Override
     public String[] getDescription() {
-        return new String[] { CommonValues.TEC_MARK_EM,
+        return new String[] { TSTSharedLocalization.MachineTooltip.Mark_TecTech_ElementalMatter,
             // #tr tst.common.machine.DebugUncertaintyHatch.tooltip.info.02
             // # Solve the impossible.
             // #zh_CN 解决不可能解决的问题.

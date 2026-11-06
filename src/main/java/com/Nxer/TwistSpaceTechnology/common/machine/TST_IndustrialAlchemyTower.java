@@ -333,14 +333,10 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
             @Nonnull
             @Override
             protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
-                ItemStack input1 = recipe.mInputs[0];
-                ItemStack circuit = recipe.mInputs[1];
-                String key = TCRecipeTools.toStringWithoutStackSize(input1);
-                int circuitNum = circuit.getItemDamage();
-                if (circuitNum <= 0) return CheckRecipeResultRegistry.NO_RECIPE;
-                ArrayList<TCRecipeTools.CrucibleCraftingRecipe> recipes = TCRecipeTools.CCR.get(key);
-                if (recipes.size() < circuitNum) return CheckRecipeResultRegistry.NO_RECIPE;
-                TCRecipeTools.CrucibleCraftingRecipe recipe1 = recipes.get(circuitNum - 1);
+                aspectProvider.clear();
+                aspects = null;
+                TCRecipeTools.CrucibleCraftingRecipe recipe1 = recipe.getMetadata(TCRecipeTools.CRUCIBLE_RECIPE);
+                if (recipe1 == null) return CheckRecipeResultRegistry.NO_RECIPE;
                 if (!isResearchComplete(recipe1.getResearch())) return Research_not_completed;
                 if (!(getControllerSlot() == null)) {
                     if (getControllerSlot().isItemEqual(EssentiaCell_Creative)
@@ -349,7 +345,6 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                     }
                 }
 
-                aspectProvider.clear();
                 aspects = recipe1.getInputAspects();
                 if (aspects.visSize() == 0) {
                     return CheckRecipeResultRegistry.SUCCESSFUL;

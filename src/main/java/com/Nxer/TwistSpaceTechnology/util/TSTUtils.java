@@ -7,7 +7,9 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -38,6 +40,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 import com.Nxer.TwistSpaceTechnology.common.api.IHasVariantAndTooltips;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.AbstractTstMetaBlock;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BloodyHell;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
@@ -448,6 +451,32 @@ public class TSTUtils {
 
     public static FluidStack copyAmount(FluidStack fluidStack, int amount) {
         return copyAmount(amount, fluidStack);
+    }
+
+    /**
+     * Merge stacks with the same item, metadata and NBT, preserving the order of their first occurrence.
+     * Null entries are skipped, and the returned stacks are copies. Zero amounts are retained and amounts greater
+     * than 64 are not split. Callers must keep each merged amount within the integer range.
+     *
+     * @param itemStacks the non-null array of stacks to merge
+     * @return a new array containing the merged stack copies
+     */
+    public static @NotNull ItemStack[] mergeSameItem(@NotNull ItemStack[] itemStacks) {
+        Map<TST_ItemID, ItemStack> itemMap = new LinkedHashMap<>();
+
+        for (ItemStack aStack : itemStacks) {
+            if (aStack == null) continue;
+            TST_ItemID key = TST_ItemID.create(aStack);
+            ItemStack mergedStack = itemMap.get(key);
+            if (mergedStack == null) {
+                itemMap.put(key, aStack.copy());
+            } else {
+                mergedStack.stackSize += aStack.stackSize;
+            }
+        }
+
+        return itemMap.values()
+            .toArray(new ItemStack[0]);
     }
 
     public static ItemStack[] remove0Stack(ItemStack... stacks) {

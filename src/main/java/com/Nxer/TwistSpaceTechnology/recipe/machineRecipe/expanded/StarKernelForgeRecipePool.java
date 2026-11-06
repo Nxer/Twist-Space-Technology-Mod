@@ -172,6 +172,18 @@ public class StarKernelForgeRecipePool {
             new FluidStack(MaterialsElements.getInstance().RUTHENIUM.getPlasma(), 144),
             2_013_265_912);
 
+        // Californium
+        addRecipe(
+            WerkstoffLoader.Californium.getMolten(1000),
+            new FluidStack(MaterialsElements.getInstance().CALIFORNIUM.getPlasma(), 1000),
+            2_013_265_912);
+
+        // Osmium
+        addRecipe(Materials.Osmium.getMolten(1000), Materials.Osmium.getPlasma(1000), 2_013_265_912);
+
+        // Naquadah
+        addRecipe(Materials.Naquadah.getMolten(1000), Materials.Naquadah.getPlasma(1000), 2_013_265_912);
+
     }
 
 }

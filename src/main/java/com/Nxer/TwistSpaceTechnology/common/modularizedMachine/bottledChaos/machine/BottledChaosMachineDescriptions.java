@@ -281,7 +281,7 @@ public final class BottledChaosMachineDescriptions {
                     eu = number(foundry.euEffAdj);
                     time = number(1d / (foundry.speedModifierAdj * quantitySpeed));
                     oc = clock(4, foundry.ocFactorBase + foundry.ocFactorAdditive);
-                    restrictions = base == null && !foundry.UIVRecipesEnabled ? tierName(VoltageIndex.UEV) : "";
+                    restrictions = base == null && !foundry.moduleOnlyRecipesEnabled ? tierName(VoltageIndex.UEV) : "";
                     special = text(
                         "foundry_configuration",
                         shape + 1,

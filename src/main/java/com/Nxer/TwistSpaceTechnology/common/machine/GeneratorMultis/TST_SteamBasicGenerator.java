@@ -145,7 +145,7 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
         checkCasingMin(errors, mCasing, 10);
         checkHatchMin(errors, Dynamo, 1);
         checkHatchMax(errors, Dynamo, 8);
-        if (setDynamoTier(1, true)) {
+        if (!setDynamoTier(1, true)) {
             errors.add(hatch_tier_incompatible);
         }
     }
@@ -191,7 +191,7 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
             if (hatchFluid.isFluidEqual(steamFluid) && steamFluid != null) {
                 steamFluid.amount = (int) (STEAM_PER_SEC * getDynamoAmperage());
                 if (getAllMaxDynamoBuffer() != getAllDynamoBuffer()) {
-                    if (super.depleteInput(steamFluid)) {
+                    if (super.depleteInput(steamFluid, true) && super.depleteInput(steamFluid)) {
                         super.lEUt = EU_PER_TICK * getDynamoAmperage();
                         super.mMaxProgresstime = 20;
                         super.mEfficiency = getMaxEfficiency(null);

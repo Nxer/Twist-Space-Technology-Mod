@@ -694,7 +694,7 @@ public final class BottledChaosStructureCatalog {
             32,
             32,
             false,
-            items(fusionEnergyHatch(fusion.energyHatchTier())),
+            items(fusionEnergyHatch(fusion.tier())),
             new ItemStack(fusion.getCasingBlock(), 32, fusion.getCasingMeta()));
         groups = moveMixedPhotonUpgrades(supported, parts, requirements, groups);
         if (parts.size() <= 1) throw new IllegalArgumentException("No structure materials");

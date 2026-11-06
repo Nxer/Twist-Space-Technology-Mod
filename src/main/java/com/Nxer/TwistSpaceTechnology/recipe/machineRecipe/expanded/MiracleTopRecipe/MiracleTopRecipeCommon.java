@@ -6,6 +6,7 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Miracl
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipe.MiracleTopRecipeInitialization.specialMaterialCantAutoModify;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipe.MiracleTopRecipeInitialization.superConductorMaterialList;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipe.MiracleTopRecipeInitialization.targetModifyOreDict;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.mergeSameItem;
 import static gregtech.api.util.GTRecipeBuilder.INGOTS;
 import static gregtech.api.util.GTUtility.copyAmount;
 import static gregtech.api.util.GTUtility.copyAmountUnsafe;
@@ -269,27 +270,6 @@ public final class MiracleTopRecipeCommon {
         }
 
         return mergedList.toArray(new FluidStack[0]);
-    }
-
-    // Combine equal items with the same Meta and NBT, then add their amounts.
-    static ItemStack[] mergeSameItem(ItemStack[] itemStacks) {
-
-        Map<TST_ItemID, ItemStack> itemMap = new LinkedHashMap<>();
-
-        for (ItemStack aStack : itemStacks) {
-            if (aStack == null) continue;
-            TST_ItemID key = TST_ItemID.create(aStack);
-            ItemStack mergedStack = itemMap.get(key);
-            if (mergedStack == null) {
-                itemMap.put(key, aStack.copy());
-            } else {
-                mergedStack.stackSize += aStack.stackSize;
-            }
-        }
-
-        ArrayList<ItemStack> mergedList = new ArrayList<>(itemMap.values());
-
-        return mergedList.toArray(new ItemStack[0]);
     }
 
     // Clear queued MT recipes before scanning recipe maps.

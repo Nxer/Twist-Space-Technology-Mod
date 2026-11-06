@@ -11,6 +11,7 @@ import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infus
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeEcoSphereExecutionProtocol5;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeEcoSphereExecutionProtocol6;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeEcoSphereExecutionProtocol7;
+import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeEcoSphereExecutionProtocol7Singularity;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeEcoSphereExecutionProtocol8;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeEcoSphereExecutionProtocol9;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeEcoSphereInputInterface;
@@ -616,6 +617,7 @@ public class TCResearches {
                     .setPages(
                         new ResearchPage(TSTUtils.tr("tc.research_text.ECO_SPHERE_EXECUTION_PROTOCOL_7.1")),
                         new ResearchPage(infusionRecipeEcoSphereExecutionProtocol7),
+                        new ResearchPage(infusionRecipeEcoSphereExecutionProtocol7Singularity),
                         new ResearchPage(TSTUtils.tr("tc.research_text.ECO_SPHERE_EXECUTION_PROTOCOL_7.3")),
                         new ResearchPage(TSTUtils.tr("tc.research_text.ECO_SPHERE_EXECUTION_PROTOCOL_7.4")),
                         new ResearchPage(TSTUtils.tr("tc.research_text.ECO_SPHERE_EXECUTION_PROTOCOL_7.5")),

@@ -27,7 +27,6 @@ import com.github.bsideup.jabel.Desugar;
 import bartworks.API.recipe.BartWorksRecipeMaps;
 import goodgenerator.blocks.tileEntity.MTEPreciseAssembler;
 import goodgenerator.blocks.tileEntity.base.MTELargeFusionComputer;
-import goodgenerator.blocks.tileEntity.base.MTELargeFusionComputerPP;
 import goodgenerator.loader.Loaders;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.GTValues;
@@ -43,6 +42,7 @@ import gregtech.api.metatileentity.implementations.MTEBasicMachine;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.util.AdvancedFusionOverclockDescriber;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.GlassTier;
 import gregtech.common.blocks.BlockCyclotronCoils;
@@ -313,7 +313,7 @@ public final class BottledChaosMachineParameters {
                     tier = fusion.tier();
                     value.parallel = (long) fusion.getMaxPara() * fusion.extraPara(fusionThreshold);
                     value.maximumSourcePower = GTValues.V[tier] * fusion.getMaxPara() * fusion.extraPara(100);
-                    advanced = fusion instanceof MTELargeFusionComputerPP;
+                    advanced = fusion.getOverclockDescriber() instanceof AdvancedFusionOverclockDescriber;
                 } else {
                     tier = ((MTEFusionComputer) original).tier();
                     value.maximumSourcePower = GTValues.V[tier];
@@ -624,7 +624,7 @@ public final class BottledChaosMachineParameters {
                     foundry.euEffAdj,
                     1d / foundry.speedModifierAdj);
                 value.timeDivisor = foundry.ocFactorBase + foundry.ocFactorAdditive;
-                value.maximumRecipeTier = foundry.UIVRecipesEnabled ? -1 : VoltageIndex.UEV;
+                value.maximumRecipeTier = foundry.moduleOnlyRecipesEnabled ? -1 : VoltageIndex.UEV;
                 int additional = 0;
                 if (foundry.hypercoolerPresent) {
                     Materials coolant = contains(fluids, Materials.SuperCoolant.getFluid(1)) ? Materials.SuperCoolant

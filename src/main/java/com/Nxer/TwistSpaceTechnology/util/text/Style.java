@@ -53,7 +53,6 @@ public final class Style {
      * tooltips.add(
      *     Style.INFUSION.apply("Arcane text")
      *         .get());
-     * GTAuthors.buildAuthorsWithFormatSupplier(Style.INFUSION.apply(ID.NXER.getMinecraftId()));
      * registerTooltipCredits(ID.NXER.withStyle(Style.INFUSION));
      * registerTooltipCredits(ID.NXER.withStyle(Style.of(EnumChatFormatting.LIGHT_PURPLE)));
      * </pre>
