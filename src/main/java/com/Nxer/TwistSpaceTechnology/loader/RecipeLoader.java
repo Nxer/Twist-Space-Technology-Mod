@@ -9,9 +9,11 @@ import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.ShapedCraftRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.SimpleFurnaceFuelPool;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.CardiganRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.CosmicProcessorCircuitRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.EnergySustainmentMatrixRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.LapotronChipRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.SingleBlockRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.SingleItemRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.StabilisationFieldGeneratorRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.BottledChaosCraftingRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.GTCMMachineRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.ModularHatchesRecipes;
@@ -91,6 +93,8 @@ public class RecipeLoader {
         BottledChaosCraftingRecipes.loadRecipes();
         CosmicProcessorCircuitRecipes.loadRecipes();
         LapotronChipRecipes.loadRecipes();
+        StabilisationFieldGeneratorRecipes.loadRecipes();
+        EnergySustainmentMatrixRecipes.loadRecipes();
 
         // Machine Recipes
         SingleMachineRecipes.loadRecipes();
