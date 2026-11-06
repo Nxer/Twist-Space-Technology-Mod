@@ -144,6 +144,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
     @Override
     public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         casingCount = 0;
+        coreTier = -1;
         if (!checkPiece("main", 1, 1, 0, errors)) return;
         checkCasingMin(errors, casingCount, 6);
         if (!mExoticEnergyHatches.isEmpty()) {
