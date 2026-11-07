@@ -133,6 +133,7 @@ public class MaterialsTST implements IMaterialHandler {
     public static Materials AxonisAlloy;
     public static Materials Axonium;
     public static Materials Dubnium;
+    public static Materials EntangledConcentratedUUMatter;
 
     @Override
     public void onMaterialsInit() {
@@ -251,6 +252,19 @@ public class MaterialsTST implements IMaterialHandler {
                 .constructMaterial()
                 .setProcessingMaterialTierEU(TierEU.RECIPE_LV),
             offsetID + 3);
+
+        // #tr Material.entangledconcentrateduumatter
+        // # Entangled Concentrated UU-Matter Condensate
+        // #zh_CN 纠缠浓缩UU物质凝聚态
+        EntangledConcentratedUUMatter = withMetaItemSubID(
+            new MaterialBuilder().setName("EntangledConcentratedUUMatter")
+                .setDefaultLocalName("Entangled Concentrated UU-Matter Condensate")
+                .setIconSet(TextureSet.SET_FLUID)
+                .setColor(Dyes._NULL)
+                .setARGB(0x005A0080)
+                .addCell()
+                .constructMaterial(),
+            offsetID + 4);
 
         OrePrefixes.nanite.mGeneratedItems.add(Materials.CosmicNeutronium);
         OrePrefixes.nanite.mGeneratedItems.add(MaterialsTST.Axonium);

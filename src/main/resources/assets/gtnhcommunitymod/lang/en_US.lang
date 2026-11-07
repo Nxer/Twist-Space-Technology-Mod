@@ -32,7 +32,6 @@ GT5U.gui.text.shutdown_reason.SimpleShutDownReasons.NoAnnihilationConstrainerInp
 GT5U.gui.text.shutdown_reason.SimpleShutDownReasons.NoCorrectFluidInput=No Correct Fluid Input
 GT5U.gui.text.shutdown_reason.SimpleShutDownReasons.NoEnoughCriticalPhotonInput=No Enough Critical Photon Input
 GT5U.gui.text.shutdown_reason.SimpleShutDownReasons.NoSpaceTimeMaintenanceFluidInput=No Space Time Maintenance Fluid Input
-gt.cell.tst.entangled_concentrated_uu_matter.name=Entangled Concentrated UU-Matter Condensate Cell
 gt.circuitcomponent.bolt.processed.infinity=Packaged Infinity Bolt
 gt.circuitcomponent.processed.chipopticalsoc=Resonant Gravitational Constraint Optical Quantum Crystal
 item.tst.combatrework.swordWooden.name=Wooden Sword
@@ -358,6 +357,7 @@ Material.chrono-dimensionallyannihilativeentropicfluid=Chrono-Dimensionally Anni
 Material.chrono-dimensionallyannihilativeentropicfluid.ChemicalFormula=Endless Entropy
 Material.concentrateduu-matter=Concentrated UU-Matter
 Material.dubnium=Dubnium
+Material.entangledconcentrateduumatter=Entangled Concentrated UU-Matter Condensate
 Material.entropyreductionprocess=Entropy Reduction Process
 Material.eventhorizondiffusers=Event Horizon Diffusers
 Material.highlyenergeticdimensionalentropicfluid=Highly Energetic Dimensional Entropic Fluid

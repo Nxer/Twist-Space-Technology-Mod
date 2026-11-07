@@ -14,9 +14,10 @@ import net.minecraftforge.fluids.FluidStack;
 
 import gregtech.api.enums.FluidState;
 import gregtech.api.enums.GTValues;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
 import gregtech.api.enums.TierEU;
 import gregtech.api.fluid.GTFluidFactory;
-import gregtech.common.items.GTItemCell;
 import tectech.recipe.TecTechRecipeMaps;
 
 /** Additional fluids supplied through the native BEC generator and network. */
@@ -31,17 +32,16 @@ public final class BECCondensates {
     // # Entangled Concentrated UU-Matter Condensate
     // #zh_CN 纠缠浓缩UU物质凝聚态
 
-    // #tr gt.cell.tst.entangled_concentrated_uu_matter.name
-    // # Entangled Concentrated UU-Matter Condensate Cell
-    // #zh_CN 纠缠浓缩UU物质凝聚态单元
     public static final Condensate ConcentratedUUMatter = register(
         "tst.entangled_concentrated_uu_matter",
+        () -> MaterialsTST.EntangledConcentratedUUMatter,
         () -> MaterialPool.ConcentratedUUMatter.getFluidOrGas(1000),
         800,
         TierEU.RECIPE_UMV);
 
     /** Declare types before GT initializes controller parameters; resolve source fluids later in postInit. */
-    public static Condensate register(String registryName, Supplier<FluidStack> source, int duration, long eut) {
+    public static Condensate register(String registryName, Supplier<Materials> material, Supplier<FluidStack> source,
+        int duration, long eut) {
         if (registrationClosed)
             throw new IllegalStateException("Declare BEC condensates before controller initialization");
         if (duration <= 0 || eut <= 0) throw new IllegalArgumentException("BEC duration and EU/t must be positive");
@@ -52,6 +52,7 @@ public final class BECCondensates {
         }
         Condensate type = new Condensate(
             Objects.requireNonNull(registryName),
+            Objects.requireNonNull(material),
             Objects.requireNonNull(source),
             duration,
             eut);
@@ -91,6 +92,7 @@ public final class BECCondensates {
                 throw new IllegalStateException("BEC fluid name is already registered: " + type.registryName);
             }
             int color = source.getColor();
+            Materials material = Objects.requireNonNull(type.material.get());
             type.fluid = GTFluidFactory.builder(type.registryName)
                 .withColorRGBA(
                     new short[] { (short) (color >> 16 & 255), (short) (color >> 8 & 255), (short) (color & 255), 0 })
@@ -98,8 +100,9 @@ public final class BECCondensates {
                 .withIconsFrom(source)
                 .withStateAndTemperature(FluidState.GAS, 0)
                 .buildAndRegister()
+                .configureMaterials(material)
+                .registerBContainers(material.getCells(1), ItemList.Cell_Empty.get(1))
                 .asFluid();
-            new GTItemCell(type.registryName, "entangled_condensate", type.fluid);
             BY_FLUID.put(source, type);
             BY_FLUID.put(type.fluid, type);
         }
@@ -119,14 +122,17 @@ public final class BECCondensates {
     public static final class Condensate {
 
         private final String registryName;
+        private final Supplier<Materials> material;
         private final Supplier<FluidStack> source;
         private final int duration;
         private final long eut;
         private FluidStack sourceStack;
         private Fluid fluid;
 
-        private Condensate(String registryName, Supplier<FluidStack> source, int duration, long eut) {
+        private Condensate(String registryName, Supplier<Materials> material, Supplier<FluidStack> source, int duration,
+            long eut) {
             this.registryName = registryName;
+            this.material = material;
             this.source = source;
             this.duration = duration;
             this.eut = eut;

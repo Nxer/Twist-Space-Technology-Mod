@@ -32,7 +32,6 @@ GT5U.gui.text.shutdown_reason.SimpleShutDownReasons.NoAnnihilationConstrainerInp
 GT5U.gui.text.shutdown_reason.SimpleShutDownReasons.NoCorrectFluidInput=没有正确的流体输入
 GT5U.gui.text.shutdown_reason.SimpleShutDownReasons.NoEnoughCriticalPhotonInput=没有足够临界光子输入
 GT5U.gui.text.shutdown_reason.SimpleShutDownReasons.NoSpaceTimeMaintenanceFluidInput=没有时空维护流体输入
-gt.cell.tst.entangled_concentrated_uu_matter.name=纠缠浓缩UU物质凝聚态单元
 gt.circuitcomponent.bolt.processed.infinity=盒装无尽螺栓
 gt.circuitcomponent.processed.chipopticalsoc=谐振引力约束光量子晶体
 item.tst.combatrework.swordWooden.name=木剑
@@ -358,6 +357,7 @@ Material.chrono-dimensionallyannihilativeentropicfluid=时空湮灭维度熵流�
 Material.chrono-dimensionallyannihilativeentropicfluid.ChemicalFormula=熵增
 Material.concentrateduu-matter=浓缩UU物质
 Material.dubnium=钅杜
+Material.entangledconcentrateduumatter=纠缠浓缩UU物质凝聚态
 Material.entropyreductionprocess=Entropy Reduction Process
 Material.eventhorizondiffusers=Event Horizon Diffusers
 Material.highlyenergeticdimensionalentropicfluid=高能维度熵流体
