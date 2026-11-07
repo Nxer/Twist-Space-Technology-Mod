@@ -20,7 +20,7 @@ public final class TST_BottledChaosCredentialFrontend extends TST_GeneralFronten
         super(
             uiPropertiesBuilder.progressBarPos(new Pos2d(112, 17)),
             neiPropertiesBuilder.unificateOutput(false),
-            new Pos2d(151, 45));
+            new Pos2d(112, 45));
     }
 
     @Override
@@ -43,7 +43,7 @@ public final class TST_BottledChaosCredentialFrontend extends TST_GeneralFronten
     @Override
     public @NotNull List<Pos2d> getItemOutputPositions(int itemOutputCount) {
         List<Pos2d> positions = new ArrayList<>(itemOutputCount);
-        for (int index = 0; index < itemOutputCount; index++) positions.add(new Pos2d(140, 17 + index * 18));
+        for (int index = 0; index < itemOutputCount; index++) positions.add(new Pos2d(140, 8 + index * 18));
         return positions;
     }
 
