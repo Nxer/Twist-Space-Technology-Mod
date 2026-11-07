@@ -45,13 +45,13 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMapBackend;
 import gregtech.api.recipe.RecipeMapBuilder;
 import gregtech.api.recipe.maps.AssemblyLineFrontend;
-import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.nei.formatter.HeatingCoilSpecialValueFormatter;
 import gregtech.nei.formatter.SimpleSpecialValueFormatter;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import gtnhlanth.common.register.BotWerkstoffMaterialPool;
+import gtnhlanth.common.register.LanthItemList;
 
 public class GTCMRecipe {
 
@@ -399,7 +399,7 @@ public class GTCMRecipe {
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
         builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
-            .setDisplayStack(GTOreDictUnificator.get(OrePrefixes.cellMolten, Materials.Praseodymium, 1)));
+            .setDisplayStack(LanthItemList.DIGESTER.copy()));
 
     // #tr tst.bottledchaos.recipe.category.naquadah.name
     // # Naquadah Processing
@@ -489,7 +489,7 @@ public class GTCMRecipe {
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
         builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
-            .setDisplayStack(GTOreDictUnificator.get(OrePrefixes.cellMolten, Materials.RadoxPolymer, 1)));
+            .setDisplayStack(Materials.RadoxPolymer.getPlates(1)));
 
     // #tr tst.bottledchaos.recipe.category.biological.name
     // # Biological Processing
