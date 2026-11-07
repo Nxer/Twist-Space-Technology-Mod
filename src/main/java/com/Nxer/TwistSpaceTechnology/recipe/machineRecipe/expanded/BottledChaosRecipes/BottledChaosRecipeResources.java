@@ -901,7 +901,7 @@ public final class BottledChaosRecipeResources {
     public static final Fluid Ethylanthrahydroquinone = fluid(new FluidStack(GTPPFluids.Ethylanthrahydroquinone, 1));
     public static final Fluid Anthracene = fluid(new FluidStack(GTPPFluids.Anthracene, 1));
     public static final Fluid DistilledWater = fluid(GTModHandler.getDistilledWater(1));
-    public static final Fluid LiquidNitrogen = fluid(Materials.LiquidNitrogen.getGas(1));
+    public static final Fluid LiquidNitrogen = fluid(Materials.LiquidNitrogen.getFluid(1));
     public static final Fluid HafniumTetrachlorideSolution = fluid(WerkstoffMaterialPool.HafniumTetrachlorideSolution.getFluidOrGas(1));
     public static final Fluid ZirconiumTetrachlorideSolution = fluid(WerkstoffMaterialPool.ZirconiumTetrachlorideSolution.getFluidOrGas(1));
 
