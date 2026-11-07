@@ -4,6 +4,7 @@ import goodgenerator.util.CharExchanger;
 import gregtech.api.enums.Dyes;
 import gregtech.api.enums.Element;
 import gregtech.api.enums.MaterialBuilder;
+import gregtech.api.enums.MaterialIconRegistry.IconType;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.SubTag;
@@ -22,12 +23,117 @@ public class MaterialsTST implements IMaterialHandler {
     static final int offsetID = 260;
     // ID form 2242 ~ 2298 is available
 
+    // Full-colour overlays keep the material's original fluid/fallback tint intact.
+    private static final TextureSet AXONIUM_TEXTURES = TextureSet.SET_SHINY.withCustomTextures(
+        "tst_axonium",
+        IconType.INGOT,
+        IconType.INGOT_HOT,
+        IconType.NUGGET,
+        IconType.DUST,
+        IconType.DUST_SMALL,
+        IconType.DUST_TINY,
+        IconType.PLATE,
+        IconType.PLATE_DOUBLE,
+        IconType.PLATE_TRIPLE,
+        IconType.PLATE_QUADRUPLE,
+        IconType.PLATE_QUINTUPLE,
+        IconType.PLATE_DENSE,
+        IconType.PLATE_SUPERDENSE,
+        IconType.FOIL,
+        IconType.STICK,
+        IconType.STICK_LONG,
+        IconType.BOLT,
+        IconType.SCREW,
+        IconType.RING,
+        IconType.ROUND,
+        IconType.GEAR_GT,
+        IconType.GEAR_GT_SMALL,
+        IconType.ROTOR,
+        IconType.SPRING,
+        IconType.SPRING_SMALL,
+        IconType.WIRE_FINE,
+        IconType.TURBINE_BLADE,
+        IconType.CASING_SMALL,
+        IconType.NANITES,
+        IconType.TOOL_HEAD_HAMMER,
+        IconType.TOOL_HEAD_MALLET,
+        IconType.TOOL_HEAD_FILE,
+        IconType.TOOL_HEAD_SAW,
+        IconType.TOOL_HEAD_DRILL,
+        IconType.TOOL_HEAD_CHAINSAW,
+        IconType.TOOL_HEAD_WRENCH,
+        IconType.TOOL_HEAD_SCREWDRIVER,
+        IconType.TOOL_HEAD_BUZZSAW,
+        IconType.TOOL_HEAD_SOLDERING,
+        IconType.BLOCK1,
+        IconType.BLOCK2,
+        IconType.BLOCK3,
+        IconType.BLOCK4,
+        IconType.BLOCK5,
+        IconType.BLOCK6,
+        IconType.SHEETMETAL);
+
+    private static final TextureSet AXONIS_ALLOY_TEXTURES = TextureSet.SET_SHINY.withCustomTextures(
+        "tst_axonis",
+        IconType.INGOT,
+        IconType.INGOT_HOT,
+        IconType.NUGGET,
+        IconType.DUST,
+        IconType.DUST_SMALL,
+        IconType.DUST_TINY,
+        IconType.PLATE,
+        IconType.PLATE_DOUBLE,
+        IconType.PLATE_TRIPLE,
+        IconType.PLATE_QUADRUPLE,
+        IconType.PLATE_QUINTUPLE,
+        IconType.PLATE_DENSE,
+        IconType.PLATE_SUPERDENSE,
+        IconType.FOIL,
+        IconType.STICK,
+        IconType.STICK_LONG,
+        IconType.BOLT,
+        IconType.SCREW,
+        IconType.RING,
+        IconType.ROUND,
+        IconType.GEAR_GT,
+        IconType.GEAR_GT_SMALL,
+        IconType.ROTOR,
+        IconType.SPRING,
+        IconType.SPRING_SMALL,
+        IconType.WIRE_FINE,
+        IconType.TURBINE_BLADE,
+        IconType.CASING_SMALL,
+        IconType.TOOL_HEAD_HAMMER,
+        IconType.TOOL_HEAD_MALLET,
+        IconType.TOOL_HEAD_FILE,
+        IconType.TOOL_HEAD_SAW,
+        IconType.TOOL_HEAD_DRILL,
+        IconType.TOOL_HEAD_CHAINSAW,
+        IconType.TOOL_HEAD_WRENCH,
+        IconType.TOOL_HEAD_SCREWDRIVER,
+        IconType.TOOL_HEAD_BUZZSAW,
+        IconType.TOOL_HEAD_SOLDERING,
+        IconType.BLOCK1,
+        IconType.BLOCK2,
+        IconType.BLOCK3,
+        IconType.BLOCK4,
+        IconType.BLOCK5,
+        IconType.BLOCK6,
+        IconType.SHEETMETAL);
+
+    static {
+        // Only item/block icons are custom; keep GT's automatic fluid and plasma generation.
+        AXONIUM_TEXTURES.is_custom = false;
+        AXONIS_ALLOY_TEXTURES.is_custom = false;
+    }
+
     private static boolean registered = false;
 
     public static Materials NeutroniumAlloy;
     public static Materials AxonisAlloy;
     public static Materials Axonium;
     public static Materials Dubnium;
+    public static Materials EntangledConcentratedUUMatter;
 
     @Override
     public void onMaterialsInit() {
@@ -68,7 +174,7 @@ public class MaterialsTST implements IMaterialHandler {
             new MaterialBuilder().setName("AxonisAlloy")
                 .setDefaultLocalName("Axonis Alloy")
                 .setChemicalFormula("۞₅(Hy⚶)₃⸎₂(IcMa)TbSh" + CharExchanger.shifter(9191))
-                .setIconSet(TextureSet.SET_SHINY)
+                .setIconSet(AXONIS_ALLOY_TEXTURES)
                 .setColor(Dyes._NULL)
                 .setARGB(0x00C54324)
                 .setTool(98304000, 18, 96.0F)
@@ -96,7 +202,7 @@ public class MaterialsTST implements IMaterialHandler {
             new MaterialBuilder().setName("Axonium")
                 .setDefaultLocalName("Axonium")
                 .setChemicalFormula("A☀")
-                .setIconSet(TextureSet.SET_SHINY)
+                .setIconSet(AXONIUM_TEXTURES)
                 .setColor(Dyes._NULL)
                 .setARGB(0x00F32D1B)
                 .setTool(1048576000, 24, 480.0F)
@@ -146,6 +252,19 @@ public class MaterialsTST implements IMaterialHandler {
                 .constructMaterial()
                 .setProcessingMaterialTierEU(TierEU.RECIPE_LV),
             offsetID + 3);
+
+        // #tr Material.entangledconcentrateduumatter
+        // # Entangled Concentrated UU-Matter Condensate
+        // #zh_CN 纠缠浓缩UU物质凝聚态
+        EntangledConcentratedUUMatter = withMetaItemSubID(
+            new MaterialBuilder().setName("EntangledConcentratedUUMatter")
+                .setDefaultLocalName("Entangled Concentrated UU-Matter Condensate")
+                .setIconSet(TextureSet.SET_FLUID)
+                .setColor(Dyes._NULL)
+                .setARGB(0x005A0080)
+                .addCell()
+                .constructMaterial(),
+            offsetID + 4);
 
         OrePrefixes.nanite.mGeneratedItems.add(Materials.CosmicNeutronium);
         OrePrefixes.nanite.mGeneratedItems.add(MaterialsTST.Axonium);

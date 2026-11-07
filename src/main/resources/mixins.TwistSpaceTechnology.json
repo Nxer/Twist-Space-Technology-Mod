@@ -3,13 +3,19 @@
   "minVersion": "0.8.5-GTNH",
   "package": "com.Nxer.TwistSpaceTechnology.mixin",
   "target": "@env(DEFAULT)",
+  "refmap": "mixins.TwistSpaceTechnology.refmap.json",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "CircuitComponentMixin",
+    "GTFluidMixin",
     "HookMaterials_Mixin",
     "IC2_InternalName_Adder_Mixin",
-    "MixinContainerPatternTermEncode"
+    "MixinContainerPatternTermEncode",
+    "MTEBECDiodeMixin"
   ],
-  "client": [],
+  "client": [
+    "FluidDisplayStackRendererMixin",
+    "NEIFluidRendererAccessor"
+  ],
   "server": []
 }

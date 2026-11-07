@@ -16,9 +16,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import org.lwjgl.input.Keyboard;
-
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.machine.UI.NumericTextFieldWidget;
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
@@ -36,7 +35,6 @@ import com.gtnewhorizons.modularui.common.widget.ButtonWidget;
 import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
 import com.gtnewhorizons.modularui.common.widget.SlotWidget;
 import com.gtnewhorizons.modularui.common.widget.TextWidget;
-import com.gtnewhorizons.modularui.common.widget.textfield.TextFieldWidget;
 
 import gregtech.GTMod;
 import gregtech.api.gui.modularui.GTUITextures;
@@ -481,28 +479,7 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch
                 .setPos(8, 21)
                 .setSize(80, 14)
                 .setEnabled(widget -> machineMode == 3))
-            .widget(new TextFieldWidget() {
-
-                @Override
-                public boolean onKeyPressed(char character, int keyCode) {
-                    if (character == Character.MIN_VALUE) {
-                        character = switch (keyCode) {
-                            case Keyboard.KEY_NUMPAD0 -> '0';
-                            case Keyboard.KEY_NUMPAD1 -> '1';
-                            case Keyboard.KEY_NUMPAD2 -> '2';
-                            case Keyboard.KEY_NUMPAD3 -> '3';
-                            case Keyboard.KEY_NUMPAD4 -> '4';
-                            case Keyboard.KEY_NUMPAD5 -> '5';
-                            case Keyboard.KEY_NUMPAD6 -> '6';
-                            case Keyboard.KEY_NUMPAD7 -> '7';
-                            case Keyboard.KEY_NUMPAD8 -> '8';
-                            case Keyboard.KEY_NUMPAD9 -> '9';
-                            default -> Character.MIN_VALUE;
-                        };
-                    }
-                    return super.onKeyPressed(character, keyCode);
-                }
-            }.setSetterInt(value -> {
+            .widget(new NumericTextFieldWidget().setSetterInt(value -> {
                 if (cloningRecipeId == value) return;
                 cloningRecipeId = value;
                 onConfigurationChanged();
