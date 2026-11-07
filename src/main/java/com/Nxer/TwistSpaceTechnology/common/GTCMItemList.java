@@ -324,6 +324,7 @@ public enum GTCMItemList {
     IntegratedAssemblyMatrix,
     MegaSolarPanelFactory,
     MegaNqReactor,
+    MegaDigester,
     // endregion
 
     // region Modularized Machines
