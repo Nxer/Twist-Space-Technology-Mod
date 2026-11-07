@@ -68,7 +68,7 @@ public final class BottledChaosCraftingRecipes {
                     Materials.SuperCoolant.getFluid(32000),
                     Materials.UUMatter.getFluid(8000))
                 .itemOutputs(GTCMItemList.BottledChaos.get(1))
-                .duration(20 * 120)
+                .duration(20 * 1800)
                 .eut(TierEU.RECIPE_UV)
                 .requireMods(Mods.AppliedEnergistics2)
                 .addTo(GTRecipeConstants.AssemblyLine);
