@@ -17,7 +17,9 @@ import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.BottledChaosHatchCon
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_BottledChaos;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.material.BottledChaosMaterialCache;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTextLayout;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.drawable.text.TextRenderer;
 import com.cleanroommc.modularui.factory.PosGuiData;
@@ -43,7 +45,7 @@ import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
 @IMetaTileEntity.SkipGenerateDescription
-public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizationHatch {
+public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizationHatch implements TSTTooltipCredit {
 
     private static final String EXECUTION_ENABLED_NBT = "bottledChaosExecutionEnabled";
     private static final String INFORMATION_NBT = "bottledChaosHatchInformation";
@@ -56,18 +58,27 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
     private MM_BottledChaos controller;
     private int processingGroup = -1;
 
-    // #tr tst.bottledchaos.credential_hatch.tooltip.info.01
-    // # Holds one Bottled Chaos credential for one processing group.
-    // #zh_CN 为一个加工组容纳一个瓶中混沌凭证.
-
-    // #tr tst.bottledchaos.credential_hatch.tooltip.info.02
-    // # The parallel controller module determines how many credential hatches may be installed.
-    // #zh_CN 并行控制器模块决定可安装的凭证仓数量.
-    private static final String[] DESCRIPTION = { TSTUtils.tr("tst.bottledchaos.credential_hatch.tooltip.info.01"),
-        TSTUtils.tr("tst.bottledchaos.credential_hatch.tooltip.info.02") };
+    private static final String[] DESCRIPTION = {
+        // #tr tst.bottledchaos.credential_hatch.tooltip.info.1
+        // # Provides one Bottled Chaos processing group with a single credential slot.
+        // #zh_CN 为瓶中混沌提供一个加工组, 每仓容纳一个凭证.
+        TSTUtils.tr("tst.bottledchaos.credential_hatch.tooltip.info.1"),
+        // #tr tst.bottledchaos.credential_hatch.tooltip.info.2
+        // # The two positions below each credential hatch are dedicated inputs for its processing group.
+        // #zh_CN 凭证仓下方两格为本组专用输入位.
+        TSTUtils.tr("tst.bottledchaos.credential_hatch.tooltip.info.2"),
+        // #tr tst.bottledchaos.credential_hatch.tooltip.info.3
+        // # Intermediate products are cached here, separately from other processing groups.
+        // #zh_CN 中间产物缓存在本仓, 不与其他加工组共享.
+        TSTUtils.tr("tst.bottledchaos.credential_hatch.tooltip.info.3"),
+        // #tr tst.bottledchaos.credential_hatch.tooltip.info.4
+        // # The parallel controller module sets the credential hatch limit.
+        // #zh_CN 可安装数量由并行控制器模块决定.
+        TSTUtils.tr("tst.bottledchaos.credential_hatch.tooltip.info.4") };
 
     public TST_BottledChaosRecipeTokenHatch(int id, String name, String nameRegional, int tier) {
         super(id, name, nameRegional, tier, DESCRIPTION);
+        registerTooltipCredits(ID.GODERIUM);
     }
 
     public TST_BottledChaosRecipeTokenHatch(String name, int tier, String[] description, ITexture[][][] textures) {

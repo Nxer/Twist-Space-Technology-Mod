@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine;
 
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.one_hatch_each_module;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.OverclockController;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.ParallelController;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.PowerConsumptionController;
@@ -24,6 +25,7 @@ import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
+import static gregtech.api.structure.error.StructureErrorRegistry.ENERGY_TIER_EXCEED_GLASS;
 import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
@@ -83,6 +85,7 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.Mo
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeProcessor;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
@@ -126,6 +129,7 @@ import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.shutdown.ShutDownReason;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
+import gregtech.common.blocks.ItemMachines;
 import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
 import gregtech.common.tileentities.machines.IDualInputHatch;
 import mcp.mobius.waila.api.IWailaConfigHandler;
@@ -179,10 +183,6 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     // # Each capacity region must contain only non-capacity blocks (including air), or 64 same-tier capacity blocks.
     // #zh_CN 每个容量区必须全为非容量方块(含空气), 或完整安装64个同级容量方块.
 
-    // #tr tst.bottledchaos.structure.multiple_parallel_controllers
-    // # Install at most one parallel controller module.
-    // #zh_CN 最多只能安装一个并行控制器模块.
-
     // #tr tst.bottledchaos.structure.incomplete_processing_group
     // # Dedicated input positions require a credential hatch; both inputs are optional and accept buses or hatches.
     // #zh_CN 专用输入位需要对应的凭证仓; 两个输入位均可留空, 或安装物品输入总线或流体输入仓.
@@ -207,45 +207,9 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     // # No credential
     // #zh_CN 无凭证
 
-    // #tr tst.bottledchaos.tooltip.machine_type
-    // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Production Chain Processor
-    // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}生产链处理器
-
-    // #tr tst.bottledchaos.tooltip.info.01
-    // # Runs multiple processing chains with independent progress.
-    // #zh_CN 以独立进度同时运行多条生产链.
-
-    // #tr tst.bottledchaos.tooltip.info.02
-    // # In wired mode, insufficient power pauses all processing groups.
-    // #zh_CN 有线模式电力不足时, 全部加工组暂停.
-
-    // #tr tst.bottledchaos.tooltip.wireless
-    // # At UXV, omitting energy hatches enables wireless mode: each group prepays its energy and runs for the minimum overclock time.
-    // #zh_CN UXV等级无能源仓时启用无线模式: 每组预付总电量, 按最低超频时间运行.
-
     // #tr tst.bottledchaos.wireless_mode
     // # Wireless mode
     // #zh_CN 无线模式
-
-    // #tr tst.bottledchaos.structure.capacity_columns
-    // # Fill each region with same-tier capacity blocks to increase capacity; regions can be upgraded independently.
-    // #zh_CN 完整安装同级容量方块可提升容量, 各容量区独立升级.
-
-    // #tr tst.bottledchaos.structure.voltage_upgrades
-    // # Upgrade field and energy generators to raise the recipe voltage limit; both must be the same tier.
-    // #zh_CN 升级力场与能量发生器以提高配方电压上限, 两者须同级.
-
-    // #tr tst.bottledchaos.structure.upgrade_glass
-    // # After generator upgrades, shaft and capacity-column enclosure glass must match the generator voltage.
-    // #zh_CN 发生器升级后, 主轴及容量柱贴面玻璃须匹配其电压等级.
-
-    // #tr tst.bottledchaos.structure.processing_groups
-    // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}Parallel Controller Module - Increase processing groups and structure module slots
-    // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}并行控制器模块 - 增加加工组数量与结构模组槽位
-
-    // #tr tst.bottledchaos.structure.shared_inputs
-    // # Central inputs are shared by all groups; dedicated inputs serve only their corresponding group.
-    // #zh_CN 中心输入由全部加工组共享, 专用输入仅供对应加工组使用.
 
     // a marks the immediate capacity enclosures and controller-shaft glass; A remains outer glass.
     private static final String[][] SHAPE = {
@@ -379,6 +343,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     public MM_BottledChaos(int id, String name, String nameRegional) {
         super(id, name, nameRegional);
+        registerTooltipCredits(ID.GODERIUM);
         initializeThreads();
     }
 
@@ -524,7 +489,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     @Override
     protected boolean canMultiplyModularHatchType() {
-        return true;
+        return false;
     }
 
     @Override
@@ -614,13 +579,25 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             if (errors.isEmpty()) errors.add(StructureErrors.of("GT5U.gui.multimachine.incomplete_structure"));
             return false;
         }
-        if (generatorLevel > 0 && (minimumUpgradeGlassTier != VoltageIndex.UHV + generatorLevel
-            || maximumUpgradeGlassTier != minimumUpgradeGlassTier)) {
+        if (minimumUpgradeGlassTier < VoltageIndex.UHV + generatorLevel
+            || maximumUpgradeGlassTier != minimumUpgradeGlassTier) {
             // #tr tst.bottledchaos.structure.upgrade_glass_mismatch
-            // # Internal upgrade glass must match the generator voltage tier.
-            // #zh_CN 内部升级玻璃必须与发生器的电压等级一致.
+            // # Shaft and capacity-region glass must share a tier no lower than the machine tier.
+            // #zh_CN 主轴与容量区玻璃须同级, 且不得低于机器等级.
             errors.add(StructureErrors.of("tst.bottledchaos.structure.upgrade_glass_mismatch"));
             return false;
+        }
+        for (MTEHatch hatch : mEnergyHatches) {
+            if (hatch.mTier > minimumUpgradeGlassTier) {
+                errors.add(ENERGY_TIER_EXCEED_GLASS);
+                return false;
+            }
+        }
+        for (MTEHatch hatch : mExoticEnergyHatches) {
+            if (hatch.mTier > minimumUpgradeGlassTier) {
+                errors.add(ENERGY_TIER_EXCEED_GLASS);
+                return false;
+            }
         }
         if (!calculateCapacity()) {
             errors.add(StructureErrors.of("tst.bottledchaos.structure.invalid_capacity_region"));
@@ -628,8 +605,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         }
         Collection<IModularHatch> parallelControllers = modularHatches.get(ModularHatchTypes.PARALLEL_CONTROLLER);
         int parallelControllerCount = parallelControllers == null ? 0 : parallelControllers.size();
-        if (parallelControllerCount > 1) {
-            errors.add(StructureErrors.of("tst.bottledchaos.structure.multiple_parallel_controllers"));
+        if (!checkSingleModularHatch()) {
+            errors.add(one_hatch_each_module);
             return false;
         }
         int parallelTier = 0;
@@ -1981,7 +1958,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                     machine.minimumUpgradeGlassTier = Math.min(machine.minimumUpgradeGlassTier, tier);
                     machine.maximumUpgradeGlassTier = Math.max(machine.maximumUpgradeGlassTier, tier);
                 },
-                    // Collect all tiers; checkMachine enforces matching glass after generator upgrades.
+                    // Collect all tiers; checkMachine validates uniform glass and machine/energy hatch tier limits.
                     machine -> -1))
                 .addElement('B', Casings.SuperconductingCoilBlock.asElement())
                 .addElement('C', Casings.ContainmentFieldMachineCasing.asElement())
@@ -2066,8 +2043,18 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             // GT's withMteClass retains InputBus.matchesHatch; override the placement and skip filters explicitly.
             builder.hatchClass(TST_BottledChaosRecipeTokenHatch.class)
                 .description(() -> "tst.bottledchaos.credential_hatch.name");
+        } else {
+            // Show one bus and one fluid hatch in NEI; both positions accept either type in real worlds.
+            builder.hatchItemFilterAnd(machine -> stack -> {
+                if (!GregTechAPI.isDummyWorld(
+                    machine.getBaseMetaTileEntity()
+                        .getWorld()))
+                    return true;
+                return (kind == 1 ? MTEHatchInputBus.class : MTEHatchInput.class)
+                    .isInstance(ItemMachines.getMetaTileEntity(stack));
+            });
         }
-        return hatchElement(builder, 2 + kind);
+        return hatchElement(builder, kind == 0 ? 2 : 3);
     }
 
     public long getMaximumRecipeVoltage() {
@@ -2845,45 +2832,101 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if (tooltip == null) {
             // spotless:off
             tooltip = new TSTMultiblockTooltipBuilder()
+                // #tr tst.bottledchaos.tooltip.machine_type
+                // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Production Chain Processor
+                // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}生产链处理器
                 .addMachineType(TSTUtils.tr("tst.bottledchaos.tooltip.machine_type"))
-                // #tr tst.bottledchaos.tooltip.controller
+                // #tr tst.bottledchaos.tooltip.info.1
                 // # Controller block for Bottled Chaos
                 // #zh_CN 瓶中混沌的控制方块
-                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.controller"))
-                // #tr tst.bottledchaos.tooltip.flavor
-                // # {\AQUA}Countless processes, one bottle.
-                // #zh_CN {\AQUA}万千工序, 尽在瓶中.
-                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.flavor"))
-                // #tr tst.bottledchaos.tooltip.modules
-                // # Structure modules supply machine capabilities; credentials authorize processing chains.
-                // #zh_CN 结构模组提供机器性能, 凭证授权加工路线.
-                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.modules"))
-                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.01"))
-                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.02"))
-                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.wireless"))
+                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.1"))
+                // #tr tst.bottledchaos.tooltip.info.2
+                // # {\AQUA}{\ITALIC}Countless processes, one bottle.
+                // #zh_CN {\AQUA}{\ITALIC}万千工序, 尽在瓶中.
+                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.2"))
+                // #tr tst.bottledchaos.tooltip.info.3
+                // # {\NULL}
+                // #zh_CN {\NULL}
+                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.3"))
+                // #tr tst.bottledchaos.tooltip.info.4
+                // # Links multiple processing steps internally, automatically turning inputs into target products.
+                // #zh_CN 在内部衔接多道工序, 完成从原料到目标产物的自动加工.
+                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.4"))
+                // #tr tst.bottledchaos.tooltip.info.5
+                // # Structure modules provide the corresponding machines' recipes and capabilities.
+                // #zh_CN 结构模组提供对应机器的配方与性能.
+                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.5"))
+                // #tr tst.bottledchaos.tooltip.info.6
+                // # Credentials select processing chains; each group runs independently.
+                // #zh_CN 凭证指定加工路线, 各加工组独立运行.
+                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.6"))
+                // #tr tst.bottledchaos.tooltip.info.7
+                // # Processing pauses when power is insufficient.
+                // #zh_CN 供电不足时暂停加工.
+                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.7"))
+                // #tr tst.bottledchaos.tooltip.info.8
+                // # At machine tier UXV with no energy hatches installed, wireless mode is enabled.
+                // #zh_CN 机器达到UXV级且未安装能源仓时, 启用无线模式.
+                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.8"))
+                // #tr tst.bottledchaos.tooltip.info.9
+                // # In wireless mode, each group prepays its energy cost and runs at the minimum overclock time.
+                // #zh_CN 无线模式下, 各加工组预付电量并按最低超频时间运行.
+                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.9"))
+                // #tr tst.bottledchaos.tooltip.info.10
+                // # Capacity regions form a shared pool, allocated by the route weights of enabled groups.
+                // #zh_CN 各容量区提供全机共享容量, 按启用组的路线占用量分配.
+                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.10"))
+                // #tr tst.bottledchaos.tooltip.info.11
+                // # When identical credentials share inputs, capacity usage counts every corresponding credential hatch.
+                // #zh_CN 相同凭证共用输入时, 容量占用按对应凭证仓数量累计.
+                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.11"))
                 .beginStructureBlock(SHAPE)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription01)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription02)
-                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.processing_groups"))
+                // #tr tst.bottledchaos.tooltip.structure.1
+                // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}Parallel Controller Module - Increase processing groups and structure module slots
+                // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}并行控制器模块 - 增加加工组数量与结构模组槽位
+                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.tooltip.structure.1"))
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.SpeedControllerDescription)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.PowerConsumptionControllerDescription)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.OverclockControllerDescription)
-                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.multiple_parallel_controllers"))
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.NotMultiplyInstallSameTypeModuleAll)
                 .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
-                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.capacity_columns"))
-                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.voltage_upgrades"))
-                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.upgrade_glass"))
-                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.structure.shared_inputs"))
+                // #tr tst.bottledchaos.tooltip.structure.2
+                // # Capacity regions can be upgraded independently or left empty.
+                // #zh_CN 容量区可独立升级或留空.
+                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.tooltip.structure.2"))
+                // #tr tst.bottledchaos.tooltip.structure.3
+                // # Stabilisation Field Generators and Energy Sustainment Matrices must share a tier, which determines the machine tier.
+                // #zh_CN 稳定力场发生器与能量维持矩阵须同级, 决定机器等级.
+                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.tooltip.structure.3"))
+                // #tr tst.bottledchaos.tooltip.structure.4
+                // # Shaft and capacity-region glass must share a tier no lower than the machine tier.
+                // #zh_CN 主轴与容量区玻璃须同级, 且不得低于机器等级.
+                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.tooltip.structure.4"))
+                .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltip_GlassTierLimitEnergyHatchTier)
+                // #tr tst.bottledchaos.tooltip.structure.5
+                // # Central inputs supply every processing group.
+                // #zh_CN 中心输入供全部加工组共享.
+                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.tooltip.structure.5"))
+                // #tr tst.bottledchaos.tooltip.structure.6
+                // # The two positions below each credential hatch are dedicated inputs for its processing group.
+                // #zh_CN 凭证仓下方两格为本组专用输入位.
+                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.tooltip.structure.6"))
+                // #tr tst.bottledchaos.tooltip.structure.7
+                // # Groups with identical credentials share dedicated inputs; only one may be enabled at a time.
+                // #zh_CN 凭证完全相同的加工组共用专用输入, 同时仅可启用一组.
+                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.tooltip.structure.7"))
                 .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
                 .addOtherStructurePart(TSTSharedLocalization.ModularizedMachine.ModularHatch,
                     TSTSharedLocalization.Structure.getBlueprintWithDot(1), 1)
                 .addOtherStructurePart(TSTUtils.tr("tst.bottledchaos.credential_hatch.name"),
                     TSTSharedLocalization.Structure.getBlueprintWithDot(2), 2)
-                .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1, 3, 4, 5)
-                .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1, 3, 4, 5)
-                .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1, 5)
-                .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1, 5)
-                .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1, 5)
+                .addInputBus("", TSTSharedLocalization.Structure.getBlueprintWithDot(1, 3, 5), 1, 3, 5)
+                .addInputHatch("", TSTSharedLocalization.Structure.getBlueprintWithDot(1, 3, 5), 1, 3, 5)
+                .addOutputBus("", TSTSharedLocalization.Structure.getBlueprintWithDot(1, 5), 1, 5)
+                .addOutputHatch("", TSTSharedLocalization.Structure.getBlueprintWithDot(1, 5), 1, 5)
+                .addEnergyHatch("", TSTSharedLocalization.Structure.getBlueprintWithDot(1, 5), 1, 5)
                 .addStructureHint(TSTSharedLocalization.ModularizedMachine.ModularHatchKey, 1)
                 .toolTipFinisher();
             // spotless:on
