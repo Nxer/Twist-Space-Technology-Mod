@@ -68,6 +68,7 @@ public final class BottledChaosStructureCatalog {
     private static final List<Rule> rules = new ArrayList<>();
     private static final List<Repeat> repeats = new ArrayList<>();
     private static final Set<RecipeMap<?>> heatedPools = new HashSet<>();
+    private static volatile long revision;
 
     /** Paid configuration: one controller, exact one-set materials and fixed base coil temperature. */
     @Desugar
@@ -325,6 +326,11 @@ public final class BottledChaosStructureCatalog {
         BottledChaosComplexStructures.registerGodforge(machinePools, rules);
         TwistSpaceTechnology.LOG
             .info("Cached {} Bottled Chaos structure rules with independent upgrades.", rules.size());
+        revision++;
+    }
+
+    public static long revision() {
+        return revision;
     }
 
     public static boolean isController(ItemStack stack) {

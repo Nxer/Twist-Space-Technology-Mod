@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.item;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,13 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.mach
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructureCatalog;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructureCatalog.Rule;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructureCatalog.Structure;
+import com.github.bsideup.jabel.Desugar;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.ImmutableList;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /** One physical item owns the paid structure assets; machine quantity never uses ItemStack.stackSize. */
 public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
@@ -170,7 +178,10 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister register) {
+        // Language and resource reloads rebuild the item atlas, invalidating translated descriptions.
+        TooltipCache.reset();
         String path = TwistSpaceTechnology.RESOURCE_ROOT_ID + ":BottledChaosMachineModule/";
         itemIcon = register.registerIcon(path + "structure_module_blank");
         packedIcon = register.registerIcon(path + "structure_module_packed");
@@ -188,7 +199,13 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> lines, boolean advanced) {
+        lines.addAll(TooltipCache.get(stack));
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static void addModuleInformation(ItemStack stack, List<String> lines) {
         long quantity = quantity(stack);
         NBTTagCompound data = assembly(stack);
         ItemStack controller = controller(stack);
@@ -274,5 +291,40 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
             EnumChatFormatting.GRAY + StatCollector.translateToLocalFormatted(
                 "tst.bottledchaos.machine_module.quantity",
                 EnumChatFormatting.GOLD.toString() + quantity));
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static final class TooltipCache {
+
+        private static volatile Cache<Key, List<String>> entries = newCache();
+
+        private static Cache<Key, List<String>> newCache() {
+            return CacheBuilder.newBuilder()
+                .maximumSize(512)
+                .build();
+        }
+
+        private static void reset() {
+            // In-flight NEI searches may finish against the old cache without repopulating the new one.
+            entries = newCache();
+        }
+
+        private static List<String> get(ItemStack stack) {
+            Cache<Key, List<String>> cache = entries;
+            Key key = new Key(assembly(stack), BottledChaosStructureCatalog.revision());
+            List<String> lines = cache.getIfPresent(key);
+            if (lines == null) {
+                // Keep only a detached NBT snapshot as the key; the inventory stack can change in place.
+                ItemStack snapshot = stack.copy();
+                List<String> generated = new ArrayList<>();
+                addModuleInformation(snapshot, generated);
+                lines = ImmutableList.copyOf(generated);
+                cache.put(new Key(assembly(snapshot), key.revision()), lines);
+            }
+            return lines;
+        }
+
+        @Desugar
+        private record Key(NBTTagCompound assembly, long revision) {}
     }
 }
