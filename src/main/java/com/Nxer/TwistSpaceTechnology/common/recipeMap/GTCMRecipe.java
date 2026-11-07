@@ -335,8 +335,8 @@ public class GTCMRecipe {
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> {
             int maxMaps = BottledChaosRecipeProcessor.maxDisplaySourcePools();
-            return builder.setDisplayStack(GTCMItemList.BottledChaos.get(1))
-                .setHeight(350 + 10 * maxMaps)
+            if (GTCMItemList.BottledChaos.hasBeenSet()) builder.setDisplayStack(GTCMItemList.BottledChaos.get(1));
+            return builder.setHeight(350 + 10 * maxMaps)
                 .setMultipleWidgetsAllowed(true);
         })
         .build();
@@ -510,10 +510,11 @@ public class GTCMRecipe {
         .frontend(TST_BottledChaosCredentialFrontend::new)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiRecipeComparator((r1, r2) -> 0)
-        .neiHandlerInfo(
-            builder -> builder.setDisplayStack(GTCMItemList.BottledChaos.get(1))
-                .setHeight(64)
-                .setMultipleWidgetsAllowed(true))
+        .neiHandlerInfo(builder -> {
+            if (GTCMItemList.BottledChaos.hasBeenSet()) builder.setDisplayStack(GTCMItemList.BottledChaos.get(1));
+            return builder.setHeight(64)
+                .setMultipleWidgetsAllowed(true);
+        })
         .build();
 
     // #tr tst.bottledchaos.recipe.structure.name
@@ -529,10 +530,11 @@ public class GTCMRecipe {
             var display = recipe.getMetadata(BottledChaosStructureDisplay.DISPLAY);
             return display == null ? Integer.MAX_VALUE : display.poolOrder();
         }))
-        .neiHandlerInfo(
-            builder -> builder.setDisplayStack(GTCMItemList.BottledChaos.get(1))
-                .setHeight(TST_BottledChaosStructureFrontend.PAGE_HEIGHT)
-                .setMultipleWidgetsAllowed(true))
+        .neiHandlerInfo(builder -> {
+            if (GTCMItemList.BottledChaos.hasBeenSet()) builder.setDisplayStack(GTCMItemList.BottledChaos.get(1));
+            return builder.setHeight(TST_BottledChaosStructureFrontend.PAGE_HEIGHT)
+                .setMultipleWidgetsAllowed(true);
+        })
         .build();
 
     // #tr tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.name

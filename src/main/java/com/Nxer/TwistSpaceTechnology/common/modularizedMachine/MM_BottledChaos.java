@@ -1918,7 +1918,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             inventory.setStackInSlot(slot, null);
             while (stack.stackSize > 0) {
                 ItemStack drop = stack.copy();
-                drop.stackSize = Math.min(stack.stackSize, stack.getMaxStackSize());
+                drop.stackSize = Math.min(stack.stackSize, Math.max(1, stack.getMaxStackSize()));
                 stack.stackSize -= drop.stackSize;
                 GTUtility
                     .dropItemToBlockPos(base.getWorld(), base.getXCoord(), base.getYCoord(), base.getZCoord(), drop);
@@ -1976,7 +1976,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 .addElement('O', ofBlock(TstBlocks.MetaBlockCasing02, 4))
                 .addElement('P', ofBlock(TstBlocks.MetaBlockCasing02, 7))
                 .addElement('Q', ofBlock(TstBlocks.MetaBlockCasing02, 8))
-                .addElement('R', ofBlock(TstBlocks.MetaBlockCasing02, 9))
+                .addElement('R', ofBlock(TstBlocks.MetaBlockGlass01, 0))
                 .addElement('S', withChannel("energymatrix", generatorElement(TstBlocks.EnergySustainmentMatrix)))
                 .addElement(
                     'T',

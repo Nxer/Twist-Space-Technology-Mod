@@ -141,6 +141,7 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
     }
 
     public void setCacheLimit(long limit) {
+        if (!isValid()) return;
         materialCache.setAmountLimit(limit);
         if (getBaseMetaTileEntity().isServerSide()) markDirty();
     }

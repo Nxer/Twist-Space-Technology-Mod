@@ -39,9 +39,11 @@ public class TstBlocks {
     /**
      * UnlocalizedName: {@code MetaBlockCasing02}
      */
-    public static final TstMetaBlockGlassCasing MetaBlockCasing02 = new TstMetaBlockGlassCasing(
-        "MetaBlockCasing02",
-        (byte) 16);
+    public static final TstMetaBlockCasing MetaBlockCasing02 = new TstMetaBlockCasing("MetaBlockCasing02", (byte) 16);
+
+    public static final TstMetaBlockGlassCasing MetaBlockGlass01 = new TstMetaBlockGlassCasing(
+        "MetaBlockGlass01",
+        (byte) 32);
 
     public static final BottledChaosCapacityBlock BottledChaosCapacity = new BottledChaosCapacityBlock();
 

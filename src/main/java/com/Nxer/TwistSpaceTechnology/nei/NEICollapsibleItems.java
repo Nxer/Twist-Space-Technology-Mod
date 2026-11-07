@@ -40,7 +40,9 @@ final class NEICollapsibleItems {
         groups.put("Runes", itemFilter(TstItems.MetaItemRune));
         groups.put("FLASK", itemFilter(TstItems.MetaItemFlask));
         groups.put("Multi-use Cores", blockFilter(TstBlocks.MultiUseCore));
-        groups.put("Meta Casings", blockFilter(TstBlocks.MetaBlockCasing01, TstBlocks.MetaBlockCasing02));
+        groups.put(
+            "Meta Casings",
+            blockFilter(TstBlocks.MetaBlockCasing01, TstBlocks.MetaBlockCasing02, TstBlocks.MetaBlockGlass01));
         groups.put("Photonic Intensifiers", blockFilter(TstBlocks.PhotonControllerUpgrade));
         groups.put("Space-time Oscillators", blockFilter(TstBlocks.SpaceTimeOscillator));
         groups.put("Space-time Constraintors", blockFilter(TstBlocks.SpaceTimeConstraintor));

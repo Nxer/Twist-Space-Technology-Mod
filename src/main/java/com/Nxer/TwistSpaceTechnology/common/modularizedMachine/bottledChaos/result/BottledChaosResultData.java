@@ -25,7 +25,9 @@ public final class BottledChaosResultData {
 
     /** Read a payload written by write(); callers distinguish text-only entries with hasResult(). */
     public static CheckRecipeResult read(NBTTagCompound tag) {
-        CheckRecipeResult result = CheckRecipeResultRegistry.getSampleFromRegistry(tag.getString("resultId"))
+        String id = tag.getString("resultId");
+        if (!CheckRecipeResultRegistry.isRegistered(id)) return CheckRecipeResultRegistry.NONE;
+        CheckRecipeResult result = CheckRecipeResultRegistry.getSampleFromRegistry(id)
             .newInstance();
         result.readFromNBT(tag.getCompoundTag("result"));
         return result;

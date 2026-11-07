@@ -72,16 +72,18 @@ public final class BottledChaosPoolFailure implements CheckRecipeResult {
     public @NotNull String getDisplayString() {
         String reason;
         if (data.hasKey("fluid", 10)) {
+            FluidStack fluid = FluidStack.loadFluidStackFromNBT(data.getCompoundTag("fluid"));
             reason = StatCollector.translateToLocalFormatted(
                 "GT5U.gui.text.out_of_fluid",
-                FluidStack.loadFluidStackFromNBT(data.getCompoundTag("fluid"))
-                    .getLocalizedName(),
+                fluid == null ? StatCollector.translateToLocal("tst.bottledchaos.result.unknown_material")
+                    : fluid.getLocalizedName(),
                 formatNumber(new BigInteger(data.getString("amount"))));
         } else if (data.hasKey("item", 10)) {
+            ItemStack item = ItemStack.loadItemStackFromNBT(data.getCompoundTag("item"));
             reason = StatCollector.translateToLocalFormatted(
                 "GT5U.gui.text.recipe_result.out_of_item",
-                ItemStack.loadItemStackFromNBT(data.getCompoundTag("item"))
-                    .getDisplayName(),
+                item == null ? StatCollector.translateToLocal("tst.bottledchaos.result.unknown_material")
+                    : item.getDisplayName(),
                 formatNumber(Long.parseLong(data.getString("amount"))));
         } else if (BottledChaosResultData.hasResult(data)) {
             reason = BottledChaosResultData.read(data)
@@ -152,6 +154,10 @@ public final class BottledChaosPoolFailure implements CheckRecipeResult {
     public int hashCode() {
         return data.hashCode();
     }
+
+    // #tr tst.bottledchaos.result.unknown_material
+    // # Unknown material
+    // #zh_CN 未知材料
 
     // #tr tst.bottledchaos.parameter.glass
     // # Glass tier

@@ -8,6 +8,7 @@ import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.BlockStar;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlock01;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing02;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockGlass01;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.NuclearReactorBlock;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.PhotonControllerUpgrade;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.SpaceStationAntiGravityBlock;
@@ -44,6 +45,8 @@ public class BlockRegister {
             .registerBlock(TstBlocks.MetaBlockCasing01, TstMetaBlockItem.class, MetaBlockCasing01.unlocalizedName);
 
         GameRegistry.registerBlock(MetaBlockCasing02, TstMetaBlockItem.class, MetaBlockCasing02.unlocalizedName);
+
+        GameRegistry.registerBlock(MetaBlockGlass01, TstMetaBlockItem.class, MetaBlockGlass01.unlocalizedName);
 
         GameRegistry
             .registerBlock(PhotonControllerUpgrade, TstMetaBlockItem.class, PhotonControllerUpgrade.unlocalizedName);
@@ -349,10 +352,10 @@ public class BlockRegister {
         // #zh_CN 中子承载机械方块
         GTCMItemList.NeutroniumSupportCasing.set(MetaBlockCasing02.registerVariant(8));
 
-        // #tr tile.tst.common.MetaBlockCasing02.9.name
+        // #tr tile.tst.common.MetaBlockGlass01.0.name
         // # Energy Conduction Glass
         // #zh_CN 能量传导玻璃
-        GTCMItemList.EnergyFluxContainmentGlass.set(MetaBlockCasing02.registerGlassVariant(9));
+        GTCMItemList.EnergyFluxContainmentGlass.set(MetaBlockGlass01.registerVariant(0));
 
         // region SpaceTimeOscillator
 
