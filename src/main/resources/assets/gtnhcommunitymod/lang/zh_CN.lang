@@ -1322,6 +1322,7 @@ tst.common.machine.MegaBrickedBlastFurnace.tooltip.structure.01=§e泥土必须�
 tst.common.machine.MegaBrickedBlastFurnace.tooltip.structure.02=任意镀铜机械方块, 0-6x
 tst.common.machine.MegaDigester.name=巨型煮解池
 tst.common.machine.MegaDigester.tooltip.controller=巨型煮解池的控制方块
+tst.common.machine.MegaDigester.tooltip.flavor=§6万物溶解，群浆沸腾§7
 tst.common.machine.MegaDigester.tooltip.info.02=执行§d无损超频§7.
 tst.common.machine.MegaDigester.tooltip.info.03=初始速度为§b100%§7，每提升一级线圈等级增加§b100%§7速度.
 tst.common.machine.MegaDigester.tooltip.info.04=拥有近乎无限的并行！

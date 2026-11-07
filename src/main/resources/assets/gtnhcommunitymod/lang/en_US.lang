@@ -1322,6 +1322,7 @@ tst.common.machine.MegaBrickedBlastFurnace.tooltip.structure.01=§eDirt must be 
 tst.common.machine.MegaBrickedBlastFurnace.tooltip.structure.02=any Bronze Plated Bricks, 0-6x
 tst.common.machine.MegaDigester.name=Mega Digester
 tst.common.machine.MegaDigester.tooltip.controller=Controller block for the Mega Digester
+tst.common.machine.MegaDigester.tooltip.flavor=§6All things dissolve, all slurries boil.§7
 tst.common.machine.MegaDigester.tooltip.info.02=Performs §dPerfect Overclocking§7.
 tst.common.machine.MegaDigester.tooltip.info.03=Initial speed is §b100%§7, each coil tier adds §b100%§7 speed.
 tst.common.machine.MegaDigester.tooltip.info.04=Has near-infinite parallel!

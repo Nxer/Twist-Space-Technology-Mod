@@ -104,14 +104,15 @@ public class TST_MegaDigester extends GTCM_MultiMachineBase<TST_MegaDigester> {
                 .addElement(
                     'B',
                     buildHatchAdder(TST_MegaDigester.class)
-                        .anyOf(
-                            InputHatch,
-                            OutputHatch,
-                            InputBus,
-                            OutputBus,
-                            Maintenance,
-                            Muffler,
-                            Energy.or(ExoticEnergy))
+
+                        .atLeast(
+                            InputHatch.or(OutputHatch)
+                                .or(InputBus)
+                                .or(OutputBus)
+                                .or(Maintenance)
+                                .or(Muffler)
+                                .or(Energy)
+                                .or(ExoticEnergy))
                         .casingIndex(48)
                         .hint(1)
                         .buildAndChain(
@@ -228,7 +229,7 @@ public class TST_MegaDigester extends GTCM_MultiMachineBase<TST_MegaDigester> {
 
     @Override
     public int getPollutionPerSecond(ItemStack aStack) {
-        return 400;
+        return 0;
     }
     // endregion
 
@@ -264,6 +265,10 @@ public class TST_MegaDigester extends GTCM_MultiMachineBase<TST_MegaDigester> {
             // # Controller block for the Mega Digester
             // #zh_CN 巨型煮解池的控制方块
             .addInfo(TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.controller"))
+            // #tr tst.common.machine.MegaDigester.tooltip.flavor
+            // # §6All things dissolve, all slurries boil.§7
+            // #zh_CN §6万物溶解，群浆沸腾§7
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.flavor"))
             // #tr tst.common.machine.MegaDigester.tooltip.info.02
             // # Performs {\LIGHT_PURPLE}Perfect Overclocking{\GRAY}.
             // #zh_CN 执行§d无损超频§7.
@@ -276,8 +281,6 @@ public class TST_MegaDigester extends GTCM_MultiMachineBase<TST_MegaDigester> {
             // # Has near-infinite parallel!
             // #zh_CN 拥有近乎无限的并行！
             .addInfo(TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.info.04"))
-            .addPerfectOCInfo()
-            .addPollutionAmount(getPollutionPerSecond(null))
             .beginStructureBlock(13, 6, 13, true)
             .addController(textFrontBottom)
             .addCasing("300-370", Casings.RobustTungstenSteelMachineCasing.getLocalizedName(), false)

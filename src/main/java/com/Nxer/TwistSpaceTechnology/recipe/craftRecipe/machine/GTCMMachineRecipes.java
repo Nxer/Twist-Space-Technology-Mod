@@ -209,12 +209,14 @@ import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipeConstants;
 import gregtech.api.util.GTUtility;
+import gregtech.api.util.recipe.Scanning;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
 import gtnhintergalactic.item.ItemMiningDrones;
 import gtnhintergalactic.recipe.IGRecipeMaps;
+import gtnhlanth.common.register.LanthItemList;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
 import ic2.core.IC2;
 import ic2.core.Ic2Items;
@@ -3721,6 +3723,35 @@ public class GTCMMachineRecipes {
             20 * 1800,
             (int) RECIPE_UMV
         );
+        // endregion
+
+        // region Mega Digester
+        if (Config.Enable_MegaDigester) {
+            GTValues.RA.stdBuilder()
+                .metadata(RESEARCH_ITEM, GTUtility.copyAmount(1, LanthItemList.DIGESTER))
+                .metadata(SCANNING, new Scanning(25_600 * SECONDS, RECIPE_IV))
+                .itemInputs(
+                    GTUtility.copyAmount(64, LanthItemList.DIGESTER),
+                    tectech.thing.CustomItemList.Machine_BuckConverter_LuV.get(32),
+                    ItemList.Super_Tank_IV.get(32),
+                    ItemList.Field_Generator_LuV.get(64),
+                    ItemList.Emitter_LuV.get(64),
+                    ItemList.Sensor_LuV.get(64),
+                    ItemList.Electric_Pump_LuV.get(64),
+                    ItemList.FluidRegulator_LuV.get(64),
+                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Endium, 64),
+                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Osmium, 64),
+                    ItemList.TaHfCNanofibers.get(64),
+                    new Object[] { OrePrefixes.circuit.get(Materials.ZPM), 64 })
+                .fluidInputs(
+                    MaterialsAlloy.INDALLOY_140.getFluidStack(128_000),
+                    Materials.Osmiridium.getMolten(96_000),
+                    Materials.VanadiumGallium.getMolten(96_000))
+                .itemOutputs(GTCMItemList.MegaDigester.get(1))
+                .eut(RECIPE_LuV)
+                .duration(600 * SECONDS)
+                .addTo(AssemblyLine);
+        }
         // endregion
 
         // region MegaNqReactor
