@@ -16,6 +16,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAS
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import static gregtech.api.util.GTStructureUtility.filterByMTETier;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
+import static gregtech.api.util.GTUtility.validMTEList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.MTEHatchDynamo;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.structure.error.StructureError;
@@ -140,23 +142,48 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
         this.mCasing = 0;
 
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
-        DYNAMO_AMP = getDynamoAmperage();
+        DYNAMO_EUT = getDynamoOutputEUt();
         checkHasInputHatch(errors);
         checkCasingMin(errors, mCasing, 10);
         checkHatchMin(errors, Dynamo, 1);
         checkHatchMax(errors, Dynamo, 8);
-        if (!setDynamoTier(1, true)) {
+        if (!hasValidDynamos()) {
             errors.add(hatch_tier_incompatible);
         }
+    }
+
+    /**
+     * Either 1 to 8 LV dynamo hatches, or a single 1A MV or HV dynamo hatch.
+     */
+    private boolean hasValidDynamos() {
+        if (setDynamoTier(1, true)) return true;
+        if (mDynamoHatches.size() != 1) return false;
+        MTEHatchDynamo dynamo = mDynamoHatches.get(0);
+        int tier = dynamo.getTierForStructure();
+        return (tier == 2 || tier == 3) && dynamo.maxAmperesOut() == 1;
     }
     // endregion
 
     // region Processing Logic
-    private static final int STEAM_PER_SEC = 915;
-    private static final int EU_PER_TICK = 32;
-    private long DYNAMO_AMP = 0;
+    // 225 / 8 = 28.125 L/s of steam per EU/t, i.e. 0.711 EU per litre:
+    // one steel Large Solar Boiler (14,400 L/s) runs one HV dynamo (512 EU/t).
+    private static final long STEAM_PER_SEC_PER_EUT_NUMERATOR = 225;
+    private static final long STEAM_PER_SEC_PER_EUT_DENOMINATOR = 8;
+    private long DYNAMO_EUT = 0;
     private int mCasing = 0;
     public FluidStack steamFluid = steam;
+
+    private long getDynamoOutputEUt() {
+        long eut = 0;
+        for (MTEHatchDynamo dynamo : validMTEList(mDynamoHatches)) {
+            eut += dynamo.maxEUOutput() * dynamo.maxAmperesOut();
+        }
+        return eut;
+    }
+
+    private static long getSteamPerSecond(long eut) {
+        return eut * STEAM_PER_SEC_PER_EUT_NUMERATOR / STEAM_PER_SEC_PER_EUT_DENOMINATOR;
+    }
 
     @Override
     public UITexture[] getMachineModeIcons() {
@@ -187,12 +214,13 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
     @Override
     public CheckRecipeResult checkProcessing() {
         final ArrayList<FluidStack> storedFluids = super.getStoredFluids();
+        final long eut = getDynamoOutputEUt();
         for (FluidStack hatchFluid : storedFluids) {
             if (hatchFluid.isFluidEqual(steamFluid) && steamFluid != null) {
-                steamFluid.amount = (int) (STEAM_PER_SEC * getDynamoAmperage());
+                steamFluid.amount = (int) getSteamPerSecond(eut);
                 if (getAllMaxDynamoBuffer() != getAllDynamoBuffer()) {
                     if (super.depleteInput(steamFluid, true) && super.depleteInput(steamFluid)) {
-                        super.lEUt = EU_PER_TICK * getDynamoAmperage();
+                        super.lEUt = eut;
                         super.mMaxProgresstime = 20;
                         super.mEfficiency = getMaxEfficiency(null);
                         return CheckRecipeResultRegistry.GENERATING;
@@ -219,14 +247,14 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
                     + TSTUtils.tr("tst.common.machine.SteamBasicGenerator.gui.01")
                     + " "
                     + EnumChatFormatting.GOLD
-                    + numberFormat.format(STEAM_PER_SEC * DYNAMO_AMP)
+                    + numberFormat.format(getSteamPerSecond(DYNAMO_EUT))
                     + EnumChatFormatting.WHITE
                     // #tr tst.common.machine.SteamBasicGenerator.gui.02
                     // # /s
                     // #zh_CN /s
                     + TSTUtils.tr("tst.common.machine.SteamBasicGenerator.gui.02")
                     + EnumChatFormatting.RESET)
-                .setEnabled((STEAM_PER_SEC * DYNAMO_AMP) != 0))
+                .setEnabled(DYNAMO_EUT != 0))
             .widget(
                 new TextWidget().setStringSupplier(
                     () -> EnumChatFormatting.WHITE
@@ -236,7 +264,7 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
                         + TSTUtils.tr("tst.common.machine.SteamBasicGenerator.gui.03")
                         + " "
                         + EnumChatFormatting.GOLD
-                        + numberFormat.format(EU_PER_TICK * DYNAMO_AMP)
+                        + numberFormat.format(DYNAMO_EUT)
                         + EnumChatFormatting.WHITE
                         // #tr tst.common.machine.SteamBasicGenerator.gui.04
                         // # eu/t
@@ -244,7 +272,7 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
                         + TSTUtils.tr("tst.common.machine.SteamBasicGenerator.gui.04")
                         + EnumChatFormatting.RESET)
                     .setEnabled(widget -> getBaseMetaTileEntity().isActive()))
-            .widget(new FakeSyncWidget.LongSyncer(() -> DYNAMO_AMP, val -> DYNAMO_AMP = val));
+            .widget(new FakeSyncWidget.LongSyncer(() -> DYNAMO_EUT, val -> DYNAMO_EUT = val));
                     // spotless:on
     }
 
@@ -283,16 +311,16 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
             // #zh_CN 将蒸汽转换成EU
             .addInfo(TSTUtils.tr("tst.common.machine.SteamBasicGenerator.tooltip.info.01"))
             // #tr tst.common.machine.SteamBasicGenerator.tooltip.info.02
-            // # Base rate:§6 1L of Steam -> 0.7 EU§7
-            // #zh_CN 基础比率:§6 1L 蒸汽 -> 0.7 EU§7
+            // # Base rate:§6 1L of Steam -> 0.71 EU§7
+            // #zh_CN 基础比率:§6 1L 蒸汽 -> 0.71 EU§7
             .addInfo(TSTUtils.tr("tst.common.machine.SteamBasicGenerator.tooltip.info.02"))
             // #tr tst.common.machine.SteamBasicGenerator.tooltip.info.03
-            // # Fuel Efficiency:§c 140%§7
-            // #zh_CN 燃料效率:§c 140%§7
+            // # Fuel Efficiency:§c 142%§7
+            // #zh_CN 燃料效率:§c 142%§7
             .addInfo(TSTUtils.tr("tst.common.machine.SteamBasicGenerator.tooltip.info.03"))
             // #tr tst.common.machine.SteamBasicGenerator.tooltip.info.04
-            // # Accepts LV dynamo hatch
-            // #zh_CN 兼容普通LV仓
+            // # Accepts 1 to 8 LV dynamo hatches, or a single 1A MV or HV dynamo hatch
+            // #zh_CN 兼容1-8个LV动力仓，或1个1A的MV或HV动力仓
             .addInfo(TSTUtils.tr("tst.common.machine.SteamBasicGenerator.tooltip.info.04"))
             .beginStructureBlock(shapeMain)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
