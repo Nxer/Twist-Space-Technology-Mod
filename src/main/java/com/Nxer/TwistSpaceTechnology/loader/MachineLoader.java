@@ -811,23 +811,11 @@ public final class MachineLoader {
             .set(new TST_MegaNqReactor(19081, "NameMegaNqReactor", TSTUtils.tr("tst.common.machine.MegaNqReactor.name")));
 
         if (Config.EnableModularizedMachineSystem) {
-            // 19082 is reserved for the deferred Bottled Chaos prototype implementation.
-
             GTCMItemList.BottledChaos.set(
                 new MM_BottledChaos(
-                    19083,
+                    19082,
                     "NameBottledChaos",
                     TSTUtils.tr("tst.bottledchaos.recipe.name")));
-
-            // #tr tst.bottledchaos.credential_hatch.name
-            // # Bottled Chaos Credential Hatch
-            // #zh_CN 瓶中混沌凭证仓
-            GTCMItemList.BottledChaosRecipeTokenHatch.set(
-                new TST_BottledChaosRecipeTokenHatch(
-                    19085,
-                    "NameBottledChaosRecipeTokenHatch",
-                    TSTUtils.tr("tst.bottledchaos.credential_hatch.name"),
-                    7));
         }
 
         // endregion
@@ -1237,6 +1225,18 @@ public final class MachineLoader {
                 "NameCircuitImprintHatchT1",
                 TSTUtils.tr("tst.common.machine.CircuitImprintHatch.tier.1.name"),
                 5));
+
+        if (Config.EnableModularizedMachineSystem) {
+            // #tr tst.bottledchaos.credential_hatch.name
+            // # Bottled Chaos Credential Hatch
+            // #zh_CN 瓶中混沌凭证仓
+            GTCMItemList.BottledChaosRecipeTokenHatch.set(
+                new TST_BottledChaosRecipeTokenHatch(
+                    18790,
+                    "NameBottledChaosRecipeTokenHatch",
+                    TSTUtils.tr("tst.bottledchaos.credential_hatch.name"),
+                    7));
+        }
 
         // region Modularized Stuff
 
