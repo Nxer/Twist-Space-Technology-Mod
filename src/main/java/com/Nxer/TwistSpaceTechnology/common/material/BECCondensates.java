@@ -16,6 +16,7 @@ import gregtech.api.enums.FluidState;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.TierEU;
 import gregtech.api.fluid.GTFluidFactory;
+import gregtech.common.items.GTItemCell;
 import tectech.recipe.TecTechRecipeMaps;
 
 /** Additional fluids supplied through the native BEC generator and network. */
@@ -29,6 +30,10 @@ public final class BECCondensates {
     // #tr fluid.tst.entangled_concentrated_uu_matter
     // # Entangled Concentrated UU-Matter Condensate
     // #zh_CN 纠缠浓缩UU物质凝聚态
+
+    // #tr gt.cell.tst.entangled_concentrated_uu_matter.name
+    // # Entangled Concentrated UU-Matter Condensate Cell
+    // #zh_CN 纠缠浓缩UU物质凝聚态单元
     public static final Condensate ConcentratedUUMatter = register(
         "tst.entangled_concentrated_uu_matter",
         () -> MaterialPool.ConcentratedUUMatter.getFluidOrGas(1000),
@@ -94,6 +99,7 @@ public final class BECCondensates {
                 .withStateAndTemperature(FluidState.GAS, 0)
                 .buildAndRegister()
                 .asFluid();
+            new GTItemCell(type.registryName, "entangled_condensate", type.fluid);
             BY_FLUID.put(source, type);
             BY_FLUID.put(type.fluid, type);
         }
