@@ -161,7 +161,13 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
     @Override
     public void loadNBTData(NBTTagCompound nbt) {
         super.loadNBTData(nbt);
-        specialInputHandler.deserializeNBT(nbt.getCompoundTag(SPECIAL_INPUT_NBT));
+        NBTTagCompound specialInput = nbt.getCompoundTag(SPECIAL_INPUT_NBT);
+        if (specialInput.hasKey("Items", 9)) {
+            specialInputHandler.deserializeNBT(specialInput);
+        } else {
+            // The released single-slot bus stored an ItemStack under this same key.
+            specialInputHandler.setStackInSlot(0, GTUtility.loadItem(nbt, SPECIAL_INPUT_NBT));
+        }
         updateStorageCellState();
         updateValidGridProxySides();
         if (getProxy().getNode() != null) getProxy().getNode()
