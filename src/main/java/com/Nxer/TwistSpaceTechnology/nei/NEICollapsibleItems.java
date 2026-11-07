@@ -50,6 +50,9 @@ final class NEICollapsibleItems {
         groups.put("Material Blocks", blockFilter(TstBlocks.MetalBlock));
         groups.put("Eco-sphere Execution Protocols", itemFilter(TstItems.EcoSphereExecutionProtocol));
         groups.put("Eco-sphere Upgrades", itemFilter(TstItems.EcoSphereUpgrade));
+        groups.put("Bottled Chaos Credentials", itemFilter(TstItems.BottledChaosCredential));
+        groups.put("Bottled Chaos Structure Modules", itemFilter(TstItems.BottledChaosMachineModule));
+        groups.put("Bottled Chaos Capacity Blocks", blockFilter(TstBlocks.BottledChaosCapacity));
         groups.put("Solidifier Hatches", prefixFilter("SolidifyHatch_"));
         groups.put("Dual Input Buffers", prefixFilter("DualInputBuffer_"));
         groups.put("Dynamic Parallel Controllers", prefixFilter("DynamicParallelControllerT"));
