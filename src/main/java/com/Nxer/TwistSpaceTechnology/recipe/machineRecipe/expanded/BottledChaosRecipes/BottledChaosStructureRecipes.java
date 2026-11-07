@@ -36,7 +36,7 @@ public final class BottledChaosStructureRecipes {
                 TwistSpaceTechnology.LOG.warn("Cannot resolve structure example {}.", rule.machineKey());
                 continue;
             }
-            // Tier variants of a single-block pool share one input/output animation.
+            // Tier variants of a single-block pool share one selectable input/output page.
             String group = ItemMachines.getMetaTileEntity(rule.controller()) instanceof MTEBasicMachine
                 ? "single:" + Long.toUnsignedString(rule.poolMask())
                 : rule.machineKey();
@@ -45,7 +45,7 @@ public final class BottledChaosStructureRecipes {
         }
         for (List<Rule> machine : machines.values()) {
             var display = new BottledChaosStructureDisplay(machine);
-            if (!display.fits(TST_BottledChaosStructureFrontend.REGION_SLOTS)) {
+            if (!display.fits(TST_BottledChaosStructureFrontend.MATERIAL_SLOTS)) {
                 TwistSpaceTechnology.LOG.warn(
                     "Too many material types to display structure {}.",
                     machine.get(0)
@@ -74,7 +74,6 @@ public final class BottledChaosStructureRecipes {
                         new BottledChaosStructureDisplay(
                             new Frame(
                                 new ItemStack[] { disk.copy() },
-                                new ItemStack[0],
                                 GTCMItemList.BottledChaosMachineModule.get(1),
                                 new ItemStack[] { module.copy(), emptyDisk.copy() },
                                 0,
@@ -84,7 +83,6 @@ public final class BottledChaosStructureRecipes {
                         new BottledChaosStructureDisplay(
                             new Frame(
                                 new ItemStack[] { emptyDisk.copy() },
-                                new ItemStack[0],
                                 module.copy(),
                                 new ItemStack[] { GTCMItemList.BottledChaosMachineModule.get(1), disk.copy() },
                                 0,

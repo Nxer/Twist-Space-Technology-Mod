@@ -122,6 +122,16 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
     }
 
     @Override
+    public void drawBackground(int recipe) {
+        if (arecipes.get(recipe) instanceof StructureRecipe structure) {
+            GL11.glColor4f(1, 1, 1, 1);
+            TST_BottledChaosStructureFrontend
+                .drawBackground(structure.materialsY, getRecipeHeight(recipe), WINDOW_OFFSET);
+        }
+        super.drawBackground(recipe);
+    }
+
+    @Override
     public void drawForeground(int recipe) {
         super.drawForeground(recipe);
         if (!(arecipes.get(recipe) instanceof StructureRecipe structure)) return;
@@ -129,21 +139,18 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
             ? gui.getRecipeMousePosition(recipe)
             : new Point(-1, -1);
         var font = Minecraft.getMinecraft().fontRenderer;
-        int y = selectionY(structure);
         for (int row = 0; row < structure.sliders.size(); row++) {
             GuiSlider slider = structure.sliders.get(row);
             slider.displayString = structure.selections.get(row)
                 .text(slider.getValueInt());
             slider.drawButton(Minecraft.getMinecraft(), mouse.x, mouse.y);
-            y += SELECTION_HEIGHT;
         }
-        if (structure.mRecipe.mSpecialValue != 0) {
-            String[] notes = structure.mRecipe.getNeiDesc();
-            if (notes != null) for (String note : notes) {
-                for (String line : font.listFormattedStringToWidth(note, 156)) {
-                    font.drawString(line, 7, y, 0x404040);
-                    y += 10;
-                }
+        int y = structure.notesY();
+        String[] notes = structure.mRecipe.getNeiDesc();
+        if (notes != null) for (String note : notes) {
+            for (String line : font.listFormattedStringToWidth(note, 156)) {
+                font.drawString(line, 7, y, 0x404040);
+                y += 10;
             }
         }
     }
@@ -151,7 +158,7 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
     @Override
     public int getRecipeHeight(int recipe) {
         if (!(arecipes.get(recipe) instanceof StructureRecipe structure)) return super.getRecipeHeight(recipe);
-        int height = selectionY(structure) + structure.selections.size() * SELECTION_HEIGHT + 20;
+        int height = structure.notesY() + 10;
         String[] notes = structure.mRecipe.getNeiDesc();
         if (notes != null) for (String note : notes)
             height += Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(note, 156)
@@ -218,7 +225,7 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
             sourceCache = source;
             structureCache = isolated;
         }
-        // GT shares its cache by category. Each viewer must own its animated stacks and transfer snapshot.
+        // GT shares its cache by category. Each viewer must own its selections and transfer snapshot.
         return structureCache;
     }
 
@@ -233,11 +240,11 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
             : new StructureRecipe(recipe);
     }
 
-    /** GTRecipe.copy() drops metadata; animation needs an isolated recipe retaining its display data. */
+    /** GTRecipe.copy() drops metadata; selections need an isolated recipe retaining its display data. */
     private static GTRecipe copyDisplayRecipe(GTRecipe recipe) {
         GTRecipe copy = recipe.copy();
         return GTValues.RA.stdBuilder()
-            // Cached animation frames pad the input grid; the builder requires compact material arrays.
+            // Cached selections pad the input grid; the builder requires compact material arrays.
             .itemInputsUnsafe(
                 Arrays.stream(copy.mInputs)
                     .filter(Objects::nonNull)
@@ -262,6 +269,7 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
         private final List<GuiSlider> sliders = new ArrayList<>();
         private final Map<String, Integer> appliedChoices = new LinkedHashMap<>();
         private boolean selectionDirty = true;
+        private int materialsY;
 
         private StructureRecipe(GTRecipe recipe) {
             super(copyDisplayRecipe(recipe));
@@ -282,6 +290,10 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
             if (value == selected(row)) return;
             choices.put(selection.key(), value);
             selectionDirty = true;
+        }
+
+        private int notesY() {
+            return materialsY + WINDOW_OFFSET.y + TST_BottledChaosStructureFrontend.MATERIAL_HEIGHT + 8;
         }
 
         private void update() {
@@ -351,17 +363,19 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
                 sliders.add(slider);
                 y += SELECTION_HEIGHT;
             }
+            // Keep all 96 material slots stationary when a profile changes its available selectors.
+            materialsY = selectionY(this) - WINDOW_OFFSET.y + display.selectionRows() * SELECTION_HEIGHT + 18;
             mInputs.clear();
             mOutputs.clear();
             mRecipe.mInputs = new ItemStack[TST_BottledChaosStructureFrontend.INPUT_SLOTS];
-            addInputs(frame.fixed(), 0);
-            addInputs(frame.variable(), TST_BottledChaosStructureFrontend.REGION_SLOTS);
+            addInputs(frame.materials(), 0);
             addInputs(new ItemStack[] { frame.carrier() }, TST_BottledChaosStructureFrontend.CARRIER_SLOT);
             mRecipe.mOutputs = frame.outputs();
             mRecipe.mSpecialValue = frame.profile();
             mRecipe.setNeiDesc(
-                BottledChaosComplexStructures.notes(frame.structure())
-                    .toArray(new String[0]));
+                frame.profile() == 0 ? TST_BottledChaosStructureFrontend.diskNotes()
+                    : BottledChaosComplexStructures.notes(frame.structure())
+                        .toArray(new String[0]));
             for (int i = 0; i < frame.outputs().length; i++) {
                 Pos2d output = TST_BottledChaosStructureFrontend.OUTPUT_POSITION.add(i * 18, 0)
                     .add(WINDOW_OFFSET);
@@ -386,7 +400,7 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
 
         private void addInput(ItemStack[] alternatives, int slot) {
             mRecipe.mInputs[slot] = alternatives[0];
-            Pos2d position = TST_BottledChaosStructureFrontend.inputPosition(slot)
+            Pos2d position = TST_BottledChaosStructureFrontend.inputPosition(slot, materialsY)
                 .add(WINDOW_OFFSET);
             mInputs.add(
                 new FixedPositionedStack(

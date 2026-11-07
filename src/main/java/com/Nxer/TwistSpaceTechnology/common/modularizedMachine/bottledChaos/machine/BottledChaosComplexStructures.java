@@ -394,7 +394,7 @@ public final class BottledChaosComplexStructures {
 
     static boolean foundryFits(Rule rule, int slots) {
         for (int[] counts : foundryChoices.get(rule.profile())) {
-            Map<TST_ItemID, ItemStack> materials = new LinkedHashMap<>();
+            Map<TST_ItemID, ItemStack> materials = fixedMaterials(rule);
             addFoundryModules(materials, rule.profile(), counts);
             if (materials.size() > slots) return false;
         }

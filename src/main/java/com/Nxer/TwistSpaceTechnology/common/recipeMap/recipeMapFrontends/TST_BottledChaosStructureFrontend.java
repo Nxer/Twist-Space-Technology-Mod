@@ -10,13 +10,9 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructureDisplay;
 import com.gtnewhorizons.modularui.api.ModularUITextures;
-import com.gtnewhorizons.modularui.api.math.Alignment;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 import com.gtnewhorizons.modularui.api.math.Size;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
-import com.gtnewhorizons.modularui.common.widget.DrawableWidget;
-import com.gtnewhorizons.modularui.common.widget.SlotWidget;
-import com.gtnewhorizons.modularui.common.widget.TextWidget;
 
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
@@ -25,21 +21,25 @@ import gregtech.api.recipe.RecipeMapFrontend;
 import gregtech.nei.GTNEIDefaultHandler;
 import gregtech.nei.RecipeDisplayInfo;
 
-/** Fixed and variable materials are separate regions; one synchronized frame represents one complete structure. */
+/** Results stay above the selectors and a fixed-size material grid. */
 public final class TST_BottledChaosStructureFrontend extends RecipeMapFrontend {
 
-    public static final int REGION_SLOTS = 48;
-    public static final int CARRIER_SLOT = REGION_SLOTS * 2;
+    public static final int MATERIAL_COLUMNS = 8;
+    public static final int MATERIAL_ROWS = 12;
+    public static final int MATERIAL_SLOTS = MATERIAL_COLUMNS * MATERIAL_ROWS;
+    public static final int MATERIAL_HEIGHT = MATERIAL_ROWS * 18;
+    public static final int MATERIALS_Y = 72;
+    public static final int CARRIER_SLOT = MATERIAL_SLOTS;
     public static final int INPUT_SLOTS = CARRIER_SLOT + 1;
-    public static final int DESCRIPTION_Y = 271;
-    public static final int PAGE_HEIGHT = 400;
-    public static final Pos2d CARRIER_POSITION = new Pos2d(46, 248);
-    public static final Pos2d OUTPUT_POSITION = new Pos2d(114, 248);
+    public static final int DESCRIPTION_Y = 40;
+    public static final int PAGE_HEIGHT = MATERIALS_Y + MATERIAL_HEIGHT + 12;
+    public static final Pos2d CARRIER_POSITION = new Pos2d(46, 16);
+    public static final Pos2d OUTPUT_POSITION = new Pos2d(114, 16);
 
     public TST_BottledChaosStructureFrontend(BasicUIPropertiesBuilder ui, NEIRecipePropertiesBuilder nei) {
         super(
-            ui.progressBarPos(new Pos2d(80, 248))
-                .logoPos(new Pos2d(151, 248)),
+            ui.progressBarPos(new Pos2d(80, 16))
+                .logoPos(new Pos2d(151, 16)),
             nei.unificateOutput(false));
     }
 
@@ -48,16 +48,15 @@ public final class TST_BottledChaosStructureFrontend extends RecipeMapFrontend {
         return builder.recipeBackgroundSize(new Size(170, PAGE_HEIGHT));
     }
 
-    public static Pos2d inputPosition(int slot) {
+    public static Pos2d inputPosition(int slot, int materialsY) {
         if (slot == CARRIER_SLOT) return CARRIER_POSITION;
-        int index = slot % REGION_SLOTS;
-        return new Pos2d((slot < REGION_SLOTS ? 7 : 91) + index % 4 * 18, 24 + index / 4 * 18);
+        return new Pos2d(13 + slot % MATERIAL_COLUMNS * 18, materialsY + slot / MATERIAL_COLUMNS * 18);
     }
 
     @Override
     public @NotNull List<Pos2d> getItemInputPositions(int count) {
         List<Pos2d> result = new ArrayList<>();
-        for (int i = 0; i < count; i++) result.add(inputPosition(i));
+        for (int i = 0; i < count; i++) result.add(inputPosition(i, MATERIALS_Y));
         return result;
     }
 
@@ -70,60 +69,35 @@ public final class TST_BottledChaosStructureFrontend extends RecipeMapFrontend {
 
     @Override
     public ModularWindow.Builder createNEITemplate(GTNEIDefaultHandler.NEITemplateContext ctx) {
-        ModularWindow.Builder builder = ModularWindow.builder(neiProperties.recipeBackgroundSize)
-            .setBackground(GTUITextures.BACKGROUND_NEI_SINGLE_RECIPE);
-        for (int x : new int[] { 4, 88 }) {
-            builder.widget(
-                new DrawableWidget().setDrawable(GTUITextures.BACKGROUND_TEXT_FIELD_LIGHT_GRAY)
-                    .setPos(new Pos2d(x, 20).add(ctx.windowOffset))
-                    .setSize(78, 223));
-        }
-        // #tr tst.bottledchaos.recipe.structure.fixed_inputs
-        // # Fixed inputs
-        // #zh_CN 固定输入
-        builder.widget(
-            TextWidget.localised("tst.bottledchaos.recipe.structure.fixed_inputs")
-                .setTextAlignment(Alignment.Center)
-                .setPos(new Pos2d(4, 6).add(ctx.windowOffset))
-                .setSize(78, 12));
-        // #tr tst.bottledchaos.recipe.structure.variable_inputs
-        // # Variable inputs
-        // #zh_CN 可变输入
-        builder.widget(
-            TextWidget.localised("tst.bottledchaos.recipe.structure.variable_inputs")
-                .setTextAlignment(Alignment.Center)
-                .setPos(new Pos2d(88, 6).add(ctx.windowOffset))
-                .setSize(78, 12));
-        for (int i = 0; i < INPUT_SLOTS; i++) {
-            int slot = i;
-            builder.widget(
-                SlotWidget.phantom(ctx.itemInputsInventory, slot)
-                    .setBackground(ModularUITextures.ITEM_SLOT)
-                    .setPos(inputPosition(slot).add(ctx.windowOffset))
-                    .setSize(18, 18)
-                    .setEnabled(widget -> {
-                        var recipe = ctx.recipeSupplier.get();
-                        return recipe != null && slot < recipe.mRecipe.mInputs.length
-                            && recipe.mRecipe.mInputs[slot] != null;
-                    }));
-        }
-        for (int i = 0; i < 2; i++) {
-            int slot = i;
-            builder.widget(
-                SlotWidget.phantom(ctx.itemOutputsInventory, slot)
-                    .setBackground(ModularUITextures.ITEM_SLOT)
-                    .setPos(
-                        OUTPUT_POSITION.add(slot * 18, 0)
-                            .add(ctx.windowOffset))
-                    .setSize(18, 18)
-                    .setEnabled(widget -> {
-                        var recipe = ctx.recipeSupplier.get();
-                        return recipe != null && slot < recipe.mRecipe.mOutputs.length
-                            && recipe.mRecipe.mOutputs[slot] != null;
-                    }));
-        }
+        // The handler draws the grid from the same origin as its positioned stacks.
+        ModularWindow.Builder builder = ModularWindow.builder(neiProperties.recipeBackgroundSize);
         addProgressBar(builder, ctx);
         addGregTechLogo(builder, ctx.windowOffset);
+        return builder;
+    }
+
+    public static void drawBackground(int materialsY, int height, Pos2d offset) {
+        GTUITextures.BACKGROUND_NEI_SINGLE_RECIPE.draw(offset, new Size(170, height - offset.y), 0);
+        GTUITextures.BACKGROUND_TEXT_FIELD_LIGHT_GRAY
+            .draw(new Pos2d(10, materialsY - 3).add(offset), new Size(150, MATERIAL_HEIGHT + 6), 0);
+        for (int slot = 0; slot < INPUT_SLOTS; slot++)
+            ModularUITextures.ITEM_SLOT.draw(inputPosition(slot, materialsY).add(offset), new Size(18, 18), 0);
+        for (int slot = 0; slot < 2; slot++) ModularUITextures.ITEM_SLOT.draw(
+            OUTPUT_POSITION.add(slot * 18, 0)
+                .add(offset),
+            new Size(18, 18),
+            0);
+        // #tr tst.bottledchaos.recipe.structure.materials
+        // # Materials
+        // #zh_CN 材料
+        Minecraft.getMinecraft().fontRenderer.drawString(
+            StatCollector.translateToLocal("tst.bottledchaos.recipe.structure.materials"),
+            13 + offset.x,
+            materialsY - 14 + offset.y,
+            0x404040);
+    }
+
+    public static String[] diskNotes() {
         // #tr tst.bottledchaos.recipe.structure.disk
         // # ME disk: load / unload
         // #zh_CN ME磁盘: 加载 / 卸载
@@ -131,7 +105,8 @@ public final class TST_BottledChaosStructureFrontend extends RecipeMapFrontend {
         // #tr tst.bottledchaos.recipe.structure.capacity
         // # Unloading requires free capacity and item-type slots.
         // #zh_CN 磁盘容量或物品类型槽不足时无法卸载.
-        return builder;
+        return new String[] { StatCollector.translateToLocal("tst.bottledchaos.recipe.structure.disk"),
+            StatCollector.translateToLocal("tst.bottledchaos.recipe.structure.capacity") };
     }
 
     @Override
@@ -139,11 +114,7 @@ public final class TST_BottledChaosStructureFrontend extends RecipeMapFrontend {
         var display = info.recipe.getMetadata(BottledChaosStructureDisplay.DISPLAY);
         if (display == null) return;
         drawLines(info, poolText(display));
-        if (info.recipe.mSpecialValue == 0) {
-            drawLines(info, StatCollector.translateToLocal("tst.bottledchaos.recipe.structure.disk"));
-            drawLines(info, StatCollector.translateToLocal("tst.bottledchaos.recipe.structure.capacity"));
-        }
-        // The handler places independent selectors before the remaining structure notes.
+        // The handler places selectors above the grid and notes below it.
     }
 
     public static String poolText(BottledChaosStructureDisplay display) {

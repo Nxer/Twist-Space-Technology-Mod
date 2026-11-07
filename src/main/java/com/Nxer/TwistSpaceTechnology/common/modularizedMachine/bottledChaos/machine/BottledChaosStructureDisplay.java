@@ -34,18 +34,17 @@ public final class BottledChaosStructureDisplay {
         .create(BottledChaosStructureDisplay.class, "bottled_chaos_structure_display");
 
     private final List<Rule> rules;
-    private final Map<TST_ItemID, ItemStack> fixedMaterials;
     private final Frame staticFrame;
+    private final int selectionRows;
 
-    /** Both material regions and the output describe the same validated one-set configuration. */
+    /** Materials and outputs describe the same validated one-set configuration. */
     @Desugar
-    public record Frame(ItemStack[] fixed, ItemStack[] variable, ItemStack carrier, ItemStack[] outputs, int profile,
+    public record Frame(ItemStack[] materials, ItemStack carrier, ItemStack[] outputs, int profile,
         Structure structure) {
 
         public ItemStack[] inputs() {
-            ItemStack[] result = new ItemStack[fixed.length + variable.length + 1];
-            System.arraycopy(fixed, 0, result, 0, fixed.length);
-            System.arraycopy(variable, 0, result, fixed.length, variable.length);
+            ItemStack[] result = new ItemStack[materials.length + 1];
+            System.arraycopy(materials, 0, result, 0, materials.length);
             result[result.length - 1] = carrier;
             return result;
         }
@@ -54,26 +53,21 @@ public final class BottledChaosStructureDisplay {
     public BottledChaosStructureDisplay(List<Rule> rules) {
         this.rules = Collections.unmodifiableList(new ArrayList<>(rules));
         staticFrame = null;
-        fixedMaterials = fixedParts(rules.get(0));
-        for (Rule rule : rules) {
-            Map<TST_ItemID, ItemStack> fixed = fixedParts(rule);
-            fixedMaterials.entrySet()
-                .removeIf(
-                    entry -> !fixed.containsKey(entry.getKey())
-                        || fixed.get(entry.getKey()).stackSize != entry.getValue().stackSize);
-        }
-        // Even a baseline casing count changes when an optional hatch or upgrade replaces some of its positions.
-        fixedMaterials.entrySet()
-            .removeIf(
-                entry -> rules.stream()
-                    .anyMatch(rule -> isVariable(rule, entry.getValue())));
+        int rows = 0;
+        for (int profile = 0; profile < rules.size(); profile++)
+            rows = Math.max(rows, selections(Collections.singletonMap("profile", profile)).size());
+        selectionRows = rows;
     }
 
-    /** Disk loading and unloading use the same layout without animated structure choices. */
+    /** Disk loading and unloading use the same layout without structure choices. */
     public BottledChaosStructureDisplay(Frame frame) {
         rules = Collections.emptyList();
-        fixedMaterials = Collections.emptyMap();
         staticFrame = frame;
+        selectionRows = 0;
+    }
+
+    public int selectionRows() {
+        return selectionRows;
     }
 
     public int poolOrder() {
@@ -101,24 +95,6 @@ public final class BottledChaosStructureDisplay {
         return names.toString();
     }
 
-    /** Validate the selected upgrade combination before updating the output or exporting a pattern. */
-    public BottledChaosStructureCatalog.Structure resolve(Frame frame, ItemStack[] selected) {
-        if (rules.isEmpty()) return null;
-        Map<TST_ItemID, ItemStack> materials = new LinkedHashMap<>();
-        for (ItemStack[] region : new ItemStack[][] { frame.fixed(), selected }) for (ItemStack item : region) {
-            if (item.stackSize <= 0) continue;
-            ItemStack material = materials.get(TST_ItemID.create(item));
-            if (material == null) materials.put(TST_ItemID.create(item), item.copy());
-            else material.stackSize += item.stackSize;
-        }
-        ItemStack module = frame.outputs()[0];
-        return BottledChaosStructureCatalog.resolve(
-            ItemBottledChaosMachineModule.machineKey(module),
-            ItemBottledChaosMachineModule.profile(module),
-            materials.values()
-                .toArray(new ItemStack[0]));
-    }
-
     /** Lookup covers every controller in a grouped recipe, independently of the currently visible frame. */
     public boolean hasController(ItemStack controller) {
         for (Rule rule : rules) if (rule.controller()
@@ -132,25 +108,21 @@ public final class BottledChaosStructureDisplay {
         return false;
     }
 
-    /** Bound every animated frame before registration, including optional components absent from the baseline. */
-    public boolean fits(int regionSlots) {
-        if (staticFrame != null)
-            return staticFrame.fixed().length <= regionSlots && staticFrame.variable().length <= regionSlots;
-        if (fixedMaterials.size() > regionSlots) return false;
+    /** Bound every selectable configuration, including optional components absent from the baseline. */
+    public boolean fits(int slots) {
+        if (staticFrame != null) return staticFrame.materials().length <= slots;
         for (Rule rule : rules) {
-            if (BottledChaosComplexStructures.isFoundry(rule)
-                && !BottledChaosComplexStructures.foundryFits(rule, regionSlots - 1)) return false;
-            Set<TST_ItemID> variable = new HashSet<>();
-            for (var part : rule.parts()) {
-                if (part.group() == 0 && !fixedMaterials.containsKey(TST_ItemID.create(part.material())))
-                    variable.add(TST_ItemID.create(part.material()));
+            if (BottledChaosComplexStructures.isFoundry(rule)) {
+                if (!BottledChaosComplexStructures.foundryFits(rule, slots)) return false;
+                continue;
             }
-            int count = variable.size() + rule.groups();
+            Set<TST_ItemID> materials = new HashSet<>();
+            for (var part : rule.parts()) if (part.group() == 0) materials.add(TST_ItemID.create(part.material()));
+            int count = materials.size() + rule.groups();
             for (var requirement : rule.requirements()) {
-                if (requirement.alternatives().length > 0
-                    && !fixedMaterials.containsKey(TST_ItemID.create(requirement.alternatives()[0]))) count++;
+                if (requirement.alternatives().length > 0) count++;
             }
-            if (count > regionSlots) return false;
+            if (count > slots) return false;
         }
         return true;
     }
@@ -364,22 +336,8 @@ public final class BottledChaosStructureDisplay {
     }
 
     private Frame frame(Rule rule, Structure structure, IntUnaryOperator groupChoice) {
-        List<ItemStack> fixed = new ArrayList<>();
-        for (ItemStack material : fixedMaterials.values()) fixed.add(material.copy());
-        List<ItemStack> variable = new ArrayList<>();
-        for (ItemStack material : structure.materials()) {
-            ItemStack base = fixedMaterials.get(TST_ItemID.create(material));
-            if (base == null) variable.add(material.copy());
-            else if (BottledChaosComplexStructures.isFoundry(rule) && material.stackSize > base.stackSize) {
-                fixed.removeIf(
-                    item -> TST_ItemID.create(item)
-                        .equals(TST_ItemID.create(material)));
-                variable.add(material.copy());
-            }
-        }
         return new Frame(
-            fixed.toArray(new ItemStack[0]),
-            orderVariableMaterials(rule, groupChoice, variable),
+            orderMaterials(rule, groupChoice, structure.materials()),
             GTCMItemList.BottledChaosMachineModule.get(1),
             new ItemStack[] { ItemBottledChaosMachineModule.create(structure, 1) },
             rule.profile(),
@@ -387,11 +345,12 @@ public final class BottledChaosStructureDisplay {
     }
 
     /** Keep upgrade groups in stable slots even when a replacement has a different registry item ID. */
-    private static ItemStack[] orderVariableMaterials(Rule rule, IntUnaryOperator groupChoice,
-        List<ItemStack> variable) {
+    private static ItemStack[] orderMaterials(Rule rule, IntUnaryOperator groupChoice, ItemStack[] materials) {
         Map<TST_ItemID, ItemStack> remaining = new LinkedHashMap<>();
-        for (ItemStack material : variable) remaining.put(TST_ItemID.create(material), material);
+        for (ItemStack material : materials) remaining.put(TST_ItemID.create(material), material.copy());
         List<ItemStack> ordered = new ArrayList<>();
+        ItemStack controller = remaining.remove(TST_ItemID.create(rule.controller()));
+        if (controller != null) ordered.add(controller);
         for (int group = 1; group <= rule.groups(); group++) {
             List<BottledChaosStructureCatalog.Part> alternatives = new ArrayList<>();
             for (var part : rule.parts()) if (part.group() == group) alternatives.add(part);
@@ -422,31 +381,5 @@ public final class BottledChaosStructureDisplay {
         }
         ordered.addAll(remaining.values());
         return ordered.toArray(new ItemStack[0]);
-    }
-
-    private static Map<TST_ItemID, ItemStack> fixedParts(Rule rule) {
-        Map<TST_ItemID, ItemStack> fixed = new LinkedHashMap<>();
-        if (BottledChaosComplexStructures.isFoundry(rule)) {
-            for (var part : rule.parts()) fixed.put(
-                TST_ItemID.create(part.material()),
-                part.material()
-                    .copy());
-            return fixed;
-        }
-        for (ItemStack material : rule.example()
-            .materials()) fixed.put(TST_ItemID.create(material), material.copy());
-        return fixed;
-    }
-
-    private static boolean isVariable(Rule rule, ItemStack material) {
-        for (var part : rule.parts()) {
-            if (part.group() > 0 && TST_ItemID.create(part.material())
-                .equals(TST_ItemID.create(material))) return true;
-        }
-        for (var requirement : rule.requirements()) {
-            if ((requirement.minimum() != requirement.maximum() || requirement.alternatives().length > 1)
-                && (requirement.accepts(material) || requirement.replaces(material))) return true;
-        }
-        return false;
     }
 }
