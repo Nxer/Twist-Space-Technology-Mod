@@ -34,6 +34,10 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosR
 import com.gtnewhorizons.modularui.api.drawable.UITexture;
 
 import goodgenerator.client.GUI.GGUITextures;
+import goodgenerator.items.GGMaterial;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.recipe.RecipeCategory;
 import gregtech.api.recipe.RecipeCategorySetting;
@@ -41,10 +45,13 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMapBackend;
 import gregtech.api.recipe.RecipeMapBuilder;
 import gregtech.api.recipe.maps.AssemblyLineFrontend;
+import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.nei.formatter.HeatingCoilSpecialValueFormatter;
 import gregtech.nei.formatter.SimpleSpecialValueFormatter;
+import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
+import gtnhlanth.common.register.BotWerkstoffMaterialPool;
 
 public class GTCMRecipe {
 
@@ -341,7 +348,8 @@ public class GTCMRecipe {
         "tst.bottledchaos.recipe.category.titanium.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
-        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+        builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
+            .setDisplayStack(Materials.Rutile.getDust(1)));
 
     // #tr tst.bottledchaos.recipe.category.tungsten.name
     // # Tungsten
@@ -350,7 +358,8 @@ public class GTCMRecipe {
         "tst.bottledchaos.recipe.category.tungsten.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
-        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+        builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
+            .setDisplayStack(BotWerkstoffMaterialPool.TungstenTrioxide.get(OrePrefixes.dust, 1)));
 
     // #tr tst.bottledchaos.recipe.category.indium.name
     // # Indium
@@ -359,7 +368,8 @@ public class GTCMRecipe {
         "tst.bottledchaos.recipe.category.indium.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
-        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+        builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
+            .setDisplayStack(Materials.Indium.getDust(1)));
 
     // #tr tst.bottledchaos.recipe.category.platinum.name
     // # Platinum Group
@@ -368,7 +378,8 @@ public class GTCMRecipe {
         "tst.bottledchaos.recipe.category.platinum.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
-        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+        builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
+            .setDisplayStack(Materials.Platinum.getDust(1)));
 
     // #tr tst.bottledchaos.recipe.category.lanthanide.name
     // # Lanthanides
@@ -377,7 +388,8 @@ public class GTCMRecipe {
         "tst.bottledchaos.recipe.category.lanthanide.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
-        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+        builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
+            .setDisplayStack(Materials.Lanthanum.getDust(1)));
 
     // #tr tst.bottledchaos.recipe.category.nano_extraction.name
     // # Nano Resin Extraction
@@ -386,7 +398,8 @@ public class GTCMRecipe {
         "tst.bottledchaos.recipe.category.nano_extraction.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
-        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+        builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
+            .setDisplayStack(GTOreDictUnificator.get(OrePrefixes.cellMolten, Materials.Praseodymium, 1)));
 
     // #tr tst.bottledchaos.recipe.category.naquadah.name
     // # Naquadah Processing
@@ -395,7 +408,8 @@ public class GTCMRecipe {
         "tst.bottledchaos.recipe.category.naquadah.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
-        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+        builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
+            .setDisplayStack(Materials.Naquadria.getDust(1)));
 
     // #tr tst.bottledchaos.recipe.category.naquadah_fuel.name
     // # Naquadah Fuel
@@ -404,7 +418,8 @@ public class GTCMRecipe {
         "tst.bottledchaos.recipe.category.naquadah_fuel.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
-        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+        builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
+            .setDisplayStack(GGMaterial.extremelyUnstableNaquadah.get(OrePrefixes.dust, 1)));
 
     // #tr tst.bottledchaos.recipe.category.fusion.name
     // # Fusion
@@ -413,7 +428,8 @@ public class GTCMRecipe {
         "tst.bottledchaos.recipe.category.fusion.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
-        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+        builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
+            .setDisplayStack(ItemList.FusionComputer_LuV.get(1)));
 
     // #tr tst.bottledchaos.recipe.category.netherite.name
     // # Netherite
@@ -422,7 +438,8 @@ public class GTCMRecipe {
         "tst.bottledchaos.recipe.category.netherite.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
-        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+        builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
+            .setDisplayStack(ItemList.Intensely_Bonded_Netherite_Nanoparticles.get(1)));
 
     // #tr tst.bottledchaos.recipe.category.isamill.name
     // # IsaMill Processing
@@ -431,7 +448,8 @@ public class GTCMRecipe {
         "tst.bottledchaos.recipe.category.isamill.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
-        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+        builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
+            .setDisplayStack(GregtechItemList.Controller_IsaMill.get(1)));
 
     // #tr tst.bottledchaos.recipe.category.prismatic.name
     // # Prismatic Acid
@@ -440,7 +458,8 @@ public class GTCMRecipe {
         "tst.bottledchaos.recipe.category.prismatic.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
-        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+        builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
+            .setDisplayStack(Materials.PrismaticAcid.getCells(1)));
 
     // #tr tst.bottledchaos.recipe.category.purified_water.name
     // # Water Purification
@@ -449,7 +468,8 @@ public class GTCMRecipe {
         "tst.bottledchaos.recipe.category.purified_water.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
-        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+        builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
+            .setDisplayStack(Materials.Grade8PurifiedWater.getCells(1)));
 
     // #tr tst.bottledchaos.recipe.category.kevlar.name
     // # Kevlar
@@ -458,7 +478,8 @@ public class GTCMRecipe {
         "tst.bottledchaos.recipe.category.kevlar.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
-        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+        builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
+            .setDisplayStack(Materials.Kevlar.getPlates(1)));
 
     // #tr tst.bottledchaos.recipe.category.radox.name
     // # Radox
@@ -467,7 +488,8 @@ public class GTCMRecipe {
         "tst.bottledchaos.recipe.category.radox.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
-        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+        builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
+            .setDisplayStack(GTOreDictUnificator.get(OrePrefixes.cellMolten, Materials.RadoxPolymer, 1)));
 
     // #tr tst.bottledchaos.recipe.category.biological.name
     // # Biological Processing
@@ -476,7 +498,8 @@ public class GTCMRecipe {
         "tst.bottledchaos.recipe.category.biological.name",
         BottledChaosRecipes,
         RecipeCategorySetting::getDefault,
-        BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator);
+        builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
+            .setDisplayStack(ItemList.Circuit_Chip_Biocell.get(1)));
 
     // #tr tst.bottledchaos.recipe.credential.name
     // # Bottled Chaos - Credential Injection
