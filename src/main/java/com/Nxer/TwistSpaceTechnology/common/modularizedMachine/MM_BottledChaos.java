@@ -2046,10 +2046,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         } else {
             // Show one bus and one fluid hatch in NEI; both positions accept either type in real worlds.
             builder.hatchItemFilterAnd(machine -> stack -> {
-                if (!GregTechAPI.isDummyWorld(
-                    machine.getBaseMetaTileEntity()
-                        .getWorld()))
-                    return true;
+                // Candidate scans may use a detached controller; keep both hatch types available in that case.
+                IGregTechTileEntity base = machine.getBaseMetaTileEntity();
+                World world = base == null ? null : base.getWorld();
+                if (world == null || !GregTechAPI.isDummyWorld(world)) return true;
                 return (kind == 1 ? MTEHatchInputBus.class : MTEHatchInput.class)
                     .isInstance(ItemMachines.getMetaTileEntity(stack));
             });
