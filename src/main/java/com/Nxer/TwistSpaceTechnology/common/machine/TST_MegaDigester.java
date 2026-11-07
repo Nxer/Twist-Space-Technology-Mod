@@ -3,7 +3,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.config.Config.EnablePerfectOverclock_MegaDigester;
 import static com.Nxer.TwistSpaceTechnology.config.Config.Parallel_MegaDigester;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textFrontBottom;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Energy;
@@ -27,7 +26,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
@@ -41,7 +39,6 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.GregTechAPI;
 import gregtech.api.casing.Casings;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Textures;
@@ -79,18 +76,19 @@ public class TST_MegaDigester extends GTCM_MultiMachineBase<TST_MegaDigester> {
 
     // region Structure
     private static final String STRUCTURE_PIECE_MAIN = "mainMegaDigester";
-    private static final int horizontalOffSet = 3;
-    private static final int verticalOffSet = 3;
+    private static final int horizontalOffSet = 6;
+    private static final int verticalOffSet = 5;
     private static final int depthOffSet = 0;
     private static IStructureDefinition<TST_MegaDigester> STRUCTURE_DEFINITION = null;
 
-    // Same structure as the Lanthanides Digester.
     // spotless:off
     private final String[][] shapeMain = new String[][]{
-        { "       ", " ttttt ", " t---t ", " t---t ", " t---t ", " ttttt ", "       " },
-        { "  ttt  ", " t---t ", "t-----t", "t-----t", "t-----t", " t---t ", "  ttt  " },
-        { " tccct ", "tc---ct", "c-----c", "c-----c", "c-----c", "tc---ct", " tccct " },
-        { " tt~tt ", "thhhhht", "thsssht", "thsssht", "thsssht", "thhhhht", " ttttt " }
+        { "             ", "   BBBBBBB   ", "  BEAAAAAEB  ", " BEA     AEB ", " BA       AB ", " BA       AB ", " BA       AB ", " BA       AB ", " BA       AB ", " BEA     AEB ", "  BEAAAAAEB  ", "   BEEBBBB   ", "             " },
+        { "             ", "  BFFFFFFFB  ", " BBEDDDDDEBB ", " FED     DEF ", " FD       DF ", " FD       DF ", " FD       DF ", " FD       DF ", " FD       DF ", " FED     DEF ", " BBEDDDDDEBB ", "  BFFFFFFFB  ", "             " },
+        { "             ", "  BBBBBBBBB  ", " BBEDDDDDEBB ", " BED     DEB ", " BD       DB ", " BD       DB ", " BD       DB ", " BD       DB ", " BD       DB ", " BED     DEB ", " BBEDDDDDEBB ", "  BBBBBBBBB  ", "             " },
+        { "  BBBBBBBBB  ", " BBBBBBBBBBB ", "BBBEDDDDDEBBB", "BBED     DEBB", "BBD       DBB", "BBD       DBB", "BBD       DBB", "BBD       DBB", "BBD       DBB", "BBED     DEBB", "BBBEDDDDDEBBB", " BBBBBBBBBBB ", "  BBBBBBBBB  " },
+        { "  BGGGGGGGB  ", " BBBBBBBBBBB ", "BBBAAAAAAABBB", "GBACCCCCCCABG", "GBAHHHHHHHABG", "GBACCCCCCHABG", "GBAHHHHHHHABG", "GBAHCCCCCCABG", "GBAHHHHHHHABG", "GBACCCCCCCABG", "BBBAAAAAAABBB", " BBBBBBBBBBB ", "  BGGGGGGGB  " },
+        { "  BBBB~BBBB  ", " BBBBBBBBBBB ", "BBBBBBBBBBBBB", "BBBBBBBBBBBBB", "BBBBBBBBBBBBB", "BBBBBBBBBBBBB", "BBBBBBBBBBBBB", "BBBBBBBBBBBBB", "BBBBBBBBBBBBB", "BBBBBBBBBBBBB", "BBBBBBBBBBBBB", " BBBBBBBBBBB ", "  BBBBBBBBB  " }
     };
     // spotless:on
 
@@ -102,10 +100,11 @@ public class TST_MegaDigester extends GTCM_MultiMachineBase<TST_MegaDigester> {
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaDigester>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+                .addElement('A', Casings.HeatProofMachineCasing.asElement())
                 .addElement(
-                    't',
+                    'B',
                     buildHatchAdder(TST_MegaDigester.class)
-                        .atLeast(
+                        .anyOf(
                             InputHatch,
                             OutputHatch,
                             InputBus,
@@ -116,13 +115,18 @@ public class TST_MegaDigester extends GTCM_MultiMachineBase<TST_MegaDigester> {
                         .casingIndex(48)
                         .hint(1)
                         .buildAndChain(
-                            onElementPass(TST_MegaDigester::onCasingAdded, ofBlock(GregTechAPI.sBlockCasings4, 0))))
-                .addElement('h', ofBlock(GregTechAPI.sBlockCasings1, 11))
-                .addElement('s', ofBlock(GregTechAPI.sBlockCasings4, 1))
+                            onElementPass(
+                                TST_MegaDigester::onCasingAdded,
+                                Casings.RobustTungstenSteelMachineCasing.asElement())))
+                .addElement('C', Casings.CleanStainlessSteelMachineCasing.asElement())
                 .addElement(
-                    'c',
+                    'D',
                     GTStructureChannels.HEATING_COIL
                         .use(activeCoils(ofCoil(TST_MegaDigester::setCoilLevel, TST_MegaDigester::getCoilLevel))))
+                .addElement('E', Casings.SuperAirFilterTurbineCasing.asElement())
+                .addElement('F', Casings.SuperAirFilterVentCasing.asElement())
+                .addElement('G', Casings.IncoloyDSFluidContainmentBlock.asElement())
+                .addElement('H', Casings.ReinforcedPlasmaTurbineCasing.asElement())
                 .build();
         }
         return STRUCTURE_DEFINITION;
@@ -158,10 +162,7 @@ public class TST_MegaDigester extends GTCM_MultiMachineBase<TST_MegaDigester> {
         casingAmount = 0;
         coilLevel = HeatingCoilLevel.None;
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
-        checkCasingMin(errors, casingAmount, 40);
-        checkHasMufflerHatch(errors);
-        checkHasAnyInput(errors);
-        checkHasAnyOutput(errors);
+        checkCasingMin(errors, casingAmount, 300);
     }
 
     public HeatingCoilLevel getCoilLevel() {
@@ -259,7 +260,6 @@ public class TST_MegaDigester extends GTCM_MultiMachineBase<TST_MegaDigester> {
         // # Digester
         // #zh_CN 煮解池
         tt.addMachineType(TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.machine_type"))
-            .addMarkdown(new ResourceLocation("gregtech", "digester"))
             // #tr tst.common.machine.MegaDigester.tooltip.controller
             // # Controller block for the Mega Digester
             // #zh_CN 巨型煮解池的控制方块
@@ -278,24 +278,24 @@ public class TST_MegaDigester extends GTCM_MultiMachineBase<TST_MegaDigester> {
             .addInfo(TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.info.04"))
             .addPerfectOCInfo()
             .addPollutionAmount(getPollutionPerSecond(null))
-            .beginStructureBlock(7, 4, 7, true)
+            .beginStructureBlock(13, 6, 13, true)
             .addController(textFrontBottom)
-            .addCasing("40-54", Casings.RobustTungstenSteelMachineCasing.getLocalizedName(), false)
-            .addCasing("16", Casings.HeatProofMachineCasing.getLocalizedName(), false)
-            .addCasing("16", TSTUtils.tr("GT5U.MBTT.Tiers.Coil"), false)
-            .addCasing("9", Casings.CleanStainlessSteelMachineCasing.getLocalizedName(), false)
+            .addCasing("300-370", Casings.RobustTungstenSteelMachineCasing.getLocalizedName(), false)
+            .addCasing("52", Casings.HeatProofMachineCasing.getLocalizedName(), false)
+            .addCasing("72", TSTUtils.tr("GT5U.MBTT.Tiers.Coil"), false)
+            .addCasing("26", Casings.CleanStainlessSteelMachineCasing.getLocalizedName(), false)
+            .addCasing("34", Casings.SuperAirFilterTurbineCasing.getLocalizedName(), false)
+            .addCasing("28", Casings.SuperAirFilterVentCasing.getLocalizedName(), false)
+            .addCasing("28", Casings.IncoloyDSFluidContainmentBlock.getLocalizedName(), false)
+            .addCasing("23", Casings.ReinforcedPlasmaTurbineCasing.getLocalizedName(), false)
             // #tr tst.common.machine.MegaDigester.tooltip.structure.any_casing
             // # Any Robust Tungstensteel Casing
             // #zh_CN 任意钨钢机械方块
-            .addEnergyHatch("1+", TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.structure.any_casing"), 1)
-            .addMaintenanceHatch("1", TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.structure.any_casing"), 1)
-            .addMufflerHatch("1", TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.structure.any_casing"), 1)
-            .addInputAny("1+", TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.structure.any_casing"), 1)
-            .addOutputAny("1+", TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.structure.any_casing"), 1)
-            // #tr tst.common.machine.MegaDigester.tooltip.structure.air
-            // # Interior and top of the structure
-            // #zh_CN 结构内部与顶部
-            .addAir(TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.structure.air"))
+            .addEnergyHatch("0+", TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.structure.any_casing"), 1)
+            .addMaintenanceHatch("0+", TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.structure.any_casing"), 1)
+            .addMufflerHatch("0+", TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.structure.any_casing"), 1)
+            .addInputAny("0+", TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.structure.any_casing"), 1)
+            .addOutputAny("0+", TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.structure.any_casing"), 1)
             .addStructureInfo("")
             .addSubChannel(GTStructureChannels.HEATING_COIL)
             .toolTipFinisher();

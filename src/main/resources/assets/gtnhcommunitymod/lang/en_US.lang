@@ -1326,7 +1326,6 @@ tst.common.machine.MegaDigester.tooltip.info.02=Performs §dPerfect Overclocking
 tst.common.machine.MegaDigester.tooltip.info.03=Initial speed is §b100%§7, each coil tier adds §b100%§7 speed.
 tst.common.machine.MegaDigester.tooltip.info.04=Has near-infinite parallel!
 tst.common.machine.MegaDigester.tooltip.machine_type=Digester
-tst.common.machine.MegaDigester.tooltip.structure.air=Interior and top of the structure
 tst.common.machine.MegaDigester.tooltip.structure.any_casing=Any Robust Tungstensteel Casing
 tst.common.machine.MegaEggGenerator.name=Tower of Abstraction
 tst.common.machine.MegaEggGenerator.structure_error.infinity_egg=The number of infinite eggs exceeds the number of pieces.

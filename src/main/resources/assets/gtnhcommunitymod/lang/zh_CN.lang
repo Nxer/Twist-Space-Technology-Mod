@@ -1326,7 +1326,6 @@ tst.common.machine.MegaDigester.tooltip.info.02=执行§d无损超频§7.
 tst.common.machine.MegaDigester.tooltip.info.03=初始速度为§b100%§7，每提升一级线圈等级增加§b100%§7速度.
 tst.common.machine.MegaDigester.tooltip.info.04=拥有近乎无限的并行！
 tst.common.machine.MegaDigester.tooltip.machine_type=煮解池
-tst.common.machine.MegaDigester.tooltip.structure.air=结构内部与顶部
 tst.common.machine.MegaDigester.tooltip.structure.any_casing=任意钨钢机械方块
 tst.common.machine.MegaEggGenerator.name=抽象之塔
 tst.common.machine.MegaEggGenerator.structure_error.infinity_egg=无限之蛋数量超过了层数
