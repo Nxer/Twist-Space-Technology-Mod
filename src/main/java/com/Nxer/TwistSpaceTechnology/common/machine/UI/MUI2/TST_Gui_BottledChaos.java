@@ -90,6 +90,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
     private static final int INVENTORY_RIGHT = INVENTORY_LEFT + INVENTORY_WIDTH - 2;
     private static final int PACKAGING_LEFT = PANEL_WIDTH - INVENTORY_RIGHT;
     private static final int PACKAGING_WIDTH = PANEL_WIDTH - PACKAGING_LEFT - 8;
+    private static final int PACKAGING_HEIGHT = 84;
     private static final int LOWER_DIVIDER = (INVENTORY_RIGHT + PACKAGING_LEFT) / 2;
     private static final int MODULE_TEXT = 0xFFE5EEF1;
     private static final int MODULE_MUTED = 0xFFB9CBD3;
@@ -557,8 +558,9 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             .child(createCredentialWorkspace(manager).pos(PACKAGING_LEFT, LOWER_TOP))
             .child(
                 makeLogoWidget(manager, panel).marginTop(0)
-                    .pos(PANEL_WIDTH - 27, PANEL_HEIGHT - 27)
-                    .size(17, 17));
+                    .right(10)
+                    .bottom(10)
+                    .size(18, 18));
         if (multiblock.canBeMuffled()) main.child(
             super.createMuffleButton().right(8)
                 .top(TABS_TOP)
@@ -601,19 +603,19 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             () -> multiblock.getCredentialCrafting()
                 .status());
         manager.syncValue("bottledChaosCredentialInjectionStatus", status);
-        return new ParentWidget<>().size(PACKAGING_WIDTH, 110)
+        return new ParentWidget<>().size(PACKAGING_WIDTH, PACKAGING_HEIGHT)
             .child(
                 new ScrollingTextWidget(IKey.lang("tst.bottledchaos.gui.credential_injection")).pos(0, 3)
                     .size(PACKAGING_WIDTH, 12)
                     .shadow(false)
                     .color(skin::workspaceText))
             .child(
-                createCredentialItemArea(open, outputs).pos(0, 24)
-                    .size(PACKAGING_WIDTH, 48))
+                createCredentialItemArea(open, outputs).pos(0, 20)
+                    .size(PACKAGING_WIDTH, 50))
             .child(
                 new ScrollingTextWidget(IKey.dynamic(() -> StatCollector.translateToLocal(status.getStringValue())))
                     .pos(0, 74)
-                    .size(PACKAGING_WIDTH - 30, 9)
+                    .size(PACKAGING_WIDTH, 9)
                     .shadow(false)
                     .color(skin::workspaceMuted)
                     .setEnabledIf(
@@ -626,8 +628,8 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
     private Flow createCredentialItemArea(BooleanSupplier panelOpen, BottledChaosCraftingOutput outputs) {
         return Flow.row()
             .fullWidth()
-            .height(48)
-            .childPadding(4)
+            .height(50)
+            .childPadding(8)
             .mainAxisAlignment(Alignment.MainAxis.CENTER)
             .child(
                 createCredentialSingleSlotArea(
@@ -637,40 +639,38 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                     true,
                     panelOpen))
             .child(
-                Flow.column()
-                    .size(80, 48)
-                    .padding(2)
-                    .background(IDrawable.EMPTY)
-                    .crossAxisAlignment(Alignment.CrossAxis.CENTER)
-                    .child(
-                        new TextWidget<>(IKey.lang("tst.bottledchaos.gui.credential_injection.item_materials"))
-                            .textAlign(Alignment.Center)
-                            .color(skin::workspaceText)
-                            .shadow(false)
-                            .fullWidth()
-                            .height(8))
-                    .child(createCredentialSourceSlots(panelOpen)))
+                createCredentialColumn(
+                    "tst.bottledchaos.gui.credential_injection.item_materials",
+                    80,
+                    createCredentialSourceSlots(panelOpen)))
             .child(createCredentialOutputArea(outputs));
     }
 
-    private IWidget createCredentialOutputArea(BottledChaosCraftingOutput outputs) {
-        return Flow.column()
-            .size(42, 48)
-            .padding(3)
-            .background(IDrawable.EMPTY)
-            .mainAxisAlignment(Alignment.MainAxis.CENTER)
-            .crossAxisAlignment(Alignment.CrossAxis.CENTER)
+    private ParentWidget<?> createCredentialColumn(String labelKey, int width, IWidget slots) {
+        return new ParentWidget<>().size(width, 50)
             .child(
-                new TextWidget<>(IKey.lang("GTPP.nei.result")).textAlign(Alignment.Center)
+                new TextWidget<>(IKey.lang(labelKey)).textAlign(Alignment.Center)
                     .color(skin::workspaceText)
                     .shadow(false)
-                    .fullWidth()
-                    .height(10))
+                    .pos(0, 0)
+                    .size(width, 12))
             .child(
                 Flow.row()
-                    .size(36, 18)
-                    .child(createCredentialOutputSlot(OUTPUT_SLOT, outputs))
-                    .child(createCredentialOutputSlot(SECOND_OUTPUT_SLOT, outputs)));
+                    .pos(0, 14)
+                    .size(width, 36)
+                    .mainAxisAlignment(Alignment.MainAxis.CENTER)
+                    .crossAxisAlignment(Alignment.CrossAxis.CENTER)
+                    .child(slots));
+    }
+
+    private IWidget createCredentialOutputArea(BottledChaosCraftingOutput outputs) {
+        return createCredentialColumn(
+            "GTPP.nei.result",
+            42,
+            Flow.row()
+                .size(36, 18)
+                .child(createCredentialOutputSlot(OUTPUT_SLOT, outputs))
+                .child(createCredentialOutputSlot(SECOND_OUTPUT_SLOT, outputs)));
     }
 
     private IWidget createCredentialOutputSlot(int slot, BottledChaosCraftingOutput outputs) {
@@ -678,27 +678,17 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             .syncHandler(outputs.slot(slot, CREDENTIAL_SLOT_GROUP));
     }
 
-    private Flow createCredentialSingleSlotArea(String labelKey, int slot, String tooltipKey, boolean canPut,
+    private IWidget createCredentialSingleSlotArea(String labelKey, int slot, String tooltipKey, boolean canPut,
         BooleanSupplier panelOpen) {
-        return Flow.column()
-            .size(42, 48)
-            .padding(3)
-            .background(IDrawable.EMPTY)
-            .mainAxisAlignment(Alignment.MainAxis.CENTER)
-            .crossAxisAlignment(Alignment.CrossAxis.CENTER)
-            .child(
-                new TextWidget<>(IKey.lang(labelKey)).textAlign(Alignment.Center)
-                    .color(skin::workspaceText)
-                    .shadow(false)
-                    .fullWidth()
-                    .height(10))
-            .child(
-                new ItemSlot().size(18, 18)
-                    .slot(
-                        createConfigurationSlot(multiblock.getCredentialInjectionInventory(), slot, panelOpen)
-                            .slotGroup(CREDENTIAL_SLOT_GROUP)
-                            .accessibility(canPut, true))
-                    .tooltip(tooltip -> tooltip.addLine(IKey.lang(tooltipKey))));
+        return createCredentialColumn(
+            labelKey,
+            42,
+            new ItemSlot().size(18, 18)
+                .slot(
+                    createConfigurationSlot(multiblock.getCredentialInjectionInventory(), slot, panelOpen)
+                        .slotGroup(CREDENTIAL_SLOT_GROUP)
+                        .accessibility(canPut, true))
+                .tooltip(tooltip -> tooltip.addLine(IKey.lang(tooltipKey))));
     }
 
     private Grid createCredentialSourceSlots(BooleanSupplier panelOpen) {
