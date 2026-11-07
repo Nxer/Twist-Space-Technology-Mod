@@ -73,7 +73,16 @@ public final class BottledChaosStructureCatalog {
     /** Paid configuration: one controller, exact one-set materials and fixed base coil temperature. */
     @Desugar
     public record Structure(String machineKey, int profile, long poolMask, ItemStack controller, ItemStack[] materials,
-        long heat) {
+        long heat, long circuitParameter) {
+
+        public Structure(String machineKey, int profile, long poolMask, ItemStack controller, ItemStack[] materials,
+            long heat) {
+            this(machineKey, profile, poolMask, controller, materials, heat, BottledChaosCircuitParameter.UNSET);
+        }
+
+        public Structure withCircuitParameter(long value) {
+            return new Structure(machineKey, profile, poolMask, controller, materials, heat, value);
+        }
 
         public NBTTagList materialTag() {
             NBTTagList list = new NBTTagList();
@@ -90,6 +99,7 @@ public final class BottledChaosStructureCatalog {
         public boolean sameConfiguration(Structure other) {
             if (other == null || !machineKey.equals(other.machineKey)
                 || profile != other.profile
+                || circuitParameter != other.circuitParameter
                 || materials.length != other.materials.length) return false;
             for (int i = 0; i < materials.length; i++)
                 if (!ItemStack.areItemStacksEqual(materials[i], other.materials[i])) return false;
@@ -384,6 +394,10 @@ public final class BottledChaosStructureCatalog {
             if (rule != null) return resolve(rule, materials);
         }
         return null;
+    }
+
+    public static Structure resolve(String machineKey, int profile, ItemStack[] materials, long circuitParameter) {
+        return BottledChaosCircuitParameter.configure(resolve(machineKey, profile, materials), circuitParameter);
     }
 
     private static Structure resolve(Rule rule, ItemStack[] materials) {

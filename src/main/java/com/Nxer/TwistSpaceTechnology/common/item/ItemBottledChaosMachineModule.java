@@ -17,6 +17,7 @@ import net.minecraft.util.StatCollector;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.init.TstItems;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosCircuitParameter;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineConfiguration;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineDescriptions;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructureCatalog;
@@ -111,8 +112,11 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
     public static Structure structure(ItemStack stack) {
         NBTTagCompound data = assembly(stack);
         return data.getBoolean("display") ? null
-            : BottledChaosStructureCatalog
-                .resolve(data.getString("machine"), data.getInteger("profile"), materials(stack));
+            : BottledChaosStructureCatalog.resolve(
+                data.getString("machine"),
+                data.getInteger("profile"),
+                materials(stack),
+                BottledChaosCircuitParameter.read(data));
     }
 
     /** NEI's alternatives have no single fixed temperature and are never executable assets. */
@@ -146,6 +150,7 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
         data.setString("machine", structure.machineKey());
         data.setInteger("profile", structure.profile());
         data.setLong("heat", structure.heat());
+        BottledChaosCircuitParameter.write(data, structure.circuitParameter());
         // Keep the existing unsigned byte representation; all arithmetic and validation now use long.
         byte[] bytes = new byte[Long.BYTES];
         for (int i = bytes.length - 1; i >= 0; i--) {
@@ -215,8 +220,11 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
         long poolMask = structure == null ? 0 : structure.poolMask();
         if (display) {
             if (data.hasKey("materials")) {
-                structure = BottledChaosStructureCatalog
-                    .resolve(data.getString("machine"), data.getInteger("profile"), materials(stack));
+                structure = BottledChaosStructureCatalog.resolve(
+                    data.getString("machine"),
+                    data.getInteger("profile"),
+                    materials(stack),
+                    BottledChaosCircuitParameter.read(data));
                 if (structure != null) poolMask = structure.poolMask();
             }
             if (structure == null) for (Rule rule : BottledChaosStructureCatalog.displayRules()) if (rule.machineKey()
@@ -239,6 +247,8 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
             // #zh_CN 放入载体槽, 材料槽放ME物品磁盘即可卸载; 不支持追加或合并结构.
             lines.add(StatCollector.translateToLocal("tst.bottledchaos.machine_module.unload"));
         }
+        String parameter = BottledChaosCircuitParameter.description(structure);
+        if (parameter != null) lines.add(EnumChatFormatting.GRAY + parameter);
         if (BottledChaosStructureCatalog.isAuxiliaryController(controller)) {
             lines.add(PARAMETER_SEPARATOR);
             // #tr tst.bottledchaos.machine_module.plant_capacity

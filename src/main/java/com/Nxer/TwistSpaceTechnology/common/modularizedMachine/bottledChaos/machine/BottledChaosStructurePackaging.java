@@ -50,6 +50,10 @@ public final class BottledChaosStructurePackaging {
     // # Every material must match the exact quantity per controller; extra or mixed materials are invalid
     // #zh_CN 每种材料必须符合单台主机的准确用量, 多余材料或混合配置无效
 
+    // #tr tst.bottledchaos.gui.structure_packaging.invalid_parameter
+    // # Circuit parameter is invalid or outside this structure's supported range
+    // #zh_CN 电路参数无效或超出当前结构支持的范围
+
     // #tr tst.bottledchaos.gui.structure_packaging.packed_module
     // # Filled modules can only be unloaded; insert only one ME item disk in the material slots
     // #zh_CN 已封装模组只能卸载, 材料槽仅放一张ME物品磁盘
@@ -117,6 +121,12 @@ public final class BottledChaosStructurePackaging {
             }
             // GUI stacks and disk entries are one input per type. Reject overflow before division or any extraction.
             for (long amount : raw.values()) if (amount <= 0) return Result.failure(PREFIX + "invalid_materials");
+            long circuitParameter;
+            try {
+                circuitParameter = BottledChaosCircuitParameter.extract(raw);
+            } catch (ArithmeticException | IllegalArgumentException exception) {
+                return Result.failure(PREFIX + "invalid_parameter");
+            }
             ItemStack controller = null;
             long batches = 0;
             // Godforge is one complete host with multiple identical module controllers and paid upgrade items.
@@ -151,6 +161,13 @@ public final class BottledChaosStructurePackaging {
             }
             List<Structure> candidates = BottledChaosStructureCatalog.matches(controller, perSet);
             if (candidates.isEmpty()) return Result.failure(PREFIX + "invalid_materials");
+            List<Structure> configured = new ArrayList<>();
+            for (Structure candidate : candidates) {
+                Structure structure = BottledChaosCircuitParameter.configure(candidate, circuitParameter);
+                if (structure != null) configured.add(structure);
+            }
+            if (configured.isEmpty()) return Result.failure(PREFIX + "invalid_parameter");
+            candidates = configured;
             ItemStack[] materials = candidates.get(0)
                 .materials();
             BaseActionSource action = new BaseActionSource();

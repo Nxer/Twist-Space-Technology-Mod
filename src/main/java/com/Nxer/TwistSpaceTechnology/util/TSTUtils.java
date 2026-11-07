@@ -574,13 +574,23 @@ public class TSTUtils {
      * Sum the configuration value of every integrated circuit in the given item stacks.
      * Each stack contributes its configuration value multiplied by its stack size.
      */
-    public static int getIntegratedCircuitConfigurationSum(Iterable<ItemStack> itemStacks) {
-        int total = 0;
+    public static long getIntegratedCircuitConfigurationSum(Iterable<ItemStack> itemStacks) {
+        long total = 0;
         for (ItemStack itemStack : itemStacks) {
-            if (itemStack == null || !(itemStack.getItem() instanceof ItemIntegratedCircuit)) continue;
-            total += itemStack.getItemDamage() * itemStack.stackSize;
+            total = Math.addExact(
+                total,
+                getIntegratedCircuitConfigurationValue(itemStack, itemStack == null ? 0 : itemStack.stackSize));
         }
         return total;
+    }
+
+    /** Weighted circuit value for ordinary stacks or a long-count storage entry. */
+    public static long getIntegratedCircuitConfigurationValue(ItemStack itemStack, long amount) {
+        if (itemStack == null || !(itemStack.getItem() instanceof ItemIntegratedCircuit)) return 0;
+        int configuration = itemStack.getItemDamage();
+        if (amount <= 0 || configuration < 0 || configuration > ItemIntegratedCircuit.MAX_CIRCUIT_NUMBER)
+            throw new IllegalArgumentException("Invalid integrated circuit parameter");
+        return Math.multiplyExact((long) configuration, amount);
     }
 
     /**

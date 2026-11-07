@@ -19,6 +19,8 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.mach
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructureCatalog.Structure;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
@@ -37,17 +39,25 @@ import tectech.thing.metaTileEntity.multi.godforge.util.GodforgeMath;
 public final class BottledChaosComplexStructures {
 
     private static final Map<String, Map<Integer, GodforgeProfile>> godforgeProfiles = new LinkedHashMap<>();
+    private static final Cache<GodforgeOperatingPoint, GodforgeProfile> godforgeOperatingProfiles = CacheBuilder
+        .newBuilder()
+        .maximumSize(128)
+        .build();
     private static final Map<Integer, ItemStack[][]> foundryCosts = new LinkedHashMap<>();
     private static final Map<Integer, List<int[]>> foundryChoices = new LinkedHashMap<>();
 
-    /** Complete host, paid upgrade path and its loading-time native parameters at the selected operating point. */
+    /** Complete host, paid upgrade path and native parameters at the selected operating point. */
     @Desugar
     public record GodforgeProfile(ItemStack module, int rings, int modules, long parallel, long heat,
         long overclockHeat, double eu, double time, double overclock, double heatDiscount, int fuelFactor, long battery,
         Set<ForgeOfGodsUpgrade> upgrades, int plasmaTier, boolean multiStepPlasma, int fuelPerFiveSeconds) {}
 
+    @Desugar
+    private record GodforgeOperatingPoint(String machineKey, int profile, int fuelFactor) {}
+
     static void clear() {
         godforgeProfiles.clear();
+        godforgeOperatingProfiles.invalidateAll();
         foundryCosts.clear();
         foundryChoices.clear();
     }
@@ -200,7 +210,7 @@ public final class BottledChaosComplexStructures {
         List<Part> parts = new ArrayList<>();
         for (ItemStack item : materials.values()) parts.add(new Part(0, item));
         godforgeProfiles.computeIfAbsent(key, unused -> new LinkedHashMap<>())
-            .put(profile, nativeGodforgeProfile(module, path, modules, rings));
+            .put(profile, nativeGodforgeProfile(module, path, modules, rings, -1));
         rules.add(new Rule(key, profile, pools, tower.controller(), parts.toArray(new Part[0]), 0, new Requirement[0]));
     }
 
@@ -234,15 +244,15 @@ public final class BottledChaosComplexStructures {
         return path;
     }
 
-    private static GodforgeProfile nativeGodforgeProfile(IMetaTileEntity prototype, EnumSet<ForgeOfGodsUpgrade> path,
-        int modules, int rings) {
+    private static GodforgeProfile nativeGodforgeProfile(IMetaTileEntity prototype, Set<ForgeOfGodsUpgrade> path,
+        int modules, int rings, int fuelFactor) {
         MTEBaseModule module = (MTEBaseModule) prototype.newMetaEntity(null);
         ForgeOfGodsData data = new ForgeOfGodsData();
         for (ForgeOfGodsUpgrade upgrade : path) data.getUpgrades()
             .unlockUpgrade(upgrade);
         data.setRingAmount(rings);
         data.setSelectedFuelType(2);
-        data.setFuelConsumptionFactor(GodforgeMath.calculateMaxFuelFactor(data));
+        data.setFuelConsumptionFactor(fuelFactor < 0 ? GodforgeMath.calculateMaxFuelFactor(data) : fuelFactor);
         data.setMaxBatteryCharge(Long.MAX_VALUE);
         data.setInternalBattery(data.getMaxBatteryCharge() / 2);
         GodforgeMath.calculateMaxHeatForModules(module, data);
@@ -270,14 +280,36 @@ public final class BottledChaosComplexStructures {
             Math.toIntExact((long) Math.max(GodforgeMath.calculateFuelConsumption(data) * 5, 1)));
     }
 
-    public static GodforgeProfile godforge(Structure structure) {
+    static GodforgeProfile godforgePreset(Structure structure) {
         if (structure == null) return null;
         Map<Integer, GodforgeProfile> profiles = godforgeProfiles.get(structure.machineKey());
         return profiles == null ? null : profiles.get(structure.profile());
     }
 
+    public static GodforgeProfile godforge(Structure structure) {
+        GodforgeProfile preset = godforgePreset(structure);
+        if (preset == null || structure.circuitParameter() == BottledChaosCircuitParameter.UNSET
+            || structure.circuitParameter() == preset.fuelFactor()) return preset;
+        if (structure.circuitParameter() < 1 || structure.circuitParameter() > preset.fuelFactor()) return null;
+        GodforgeOperatingPoint key = new GodforgeOperatingPoint(
+            structure.machineKey(),
+            structure.profile(),
+            (int) structure.circuitParameter());
+        GodforgeProfile operating = godforgeOperatingProfiles.getIfPresent(key);
+        if (operating == null) {
+            operating = nativeGodforgeProfile(
+                ItemMachines.getMetaTileEntity(preset.module()),
+                preset.upgrades(),
+                preset.modules(),
+                preset.rings(),
+                key.fuelFactor());
+            godforgeOperatingProfiles.put(key, operating);
+        }
+        return operating;
+    }
+
     static ItemStack parameterController(ItemStack controller, Structure structure) {
-        GodforgeProfile preset = godforge(structure);
+        GodforgeProfile preset = godforgePreset(structure);
         return preset == null ? controller : preset.module();
     }
 
@@ -450,12 +482,18 @@ public final class BottledChaosComplexStructures {
                     "tst.bottledchaos.recipe.structure.godforge_upgrades",
                     godforgeUpgradeName(godforge)));
             // #tr tst.bottledchaos.recipe.structure.godforge_maximum_operation
-            // # Fuel: MHDCSM; factor: %s; battery: long, half-full
-            // #zh_CN 燃料: MHDCSM; 系数: %s; 电池: long, 半满
-            lines.add(
-                StatCollector.translateToLocalFormatted(
-                    "tst.bottledchaos.recipe.structure.godforge_maximum_operation",
-                    godforge.fuelFactor() == Integer.MAX_VALUE ? "int" : Integer.toString(godforge.fuelFactor())));
+            // # Fuel: MHDCSM; battery: long, half-full
+            // #zh_CN 燃料: MHDCSM; 电池: long, 半满
+            lines.add(StatCollector.translateToLocal("tst.bottledchaos.recipe.structure.godforge_maximum_operation"));
+        }
+        String parameter = BottledChaosCircuitParameter.description(structure);
+        if (parameter != null) {
+            lines.add(parameter);
+            // #tr tst.bottledchaos.parameter.preview
+            // # Preview uses the default; insert integrated circuits when packaging to set the parameter.
+            // #zh_CN 预览使用默认参数, 封装时放入编程电路设置.
+            lines.add(StatCollector.translateToLocal("tst.bottledchaos.parameter.preview"));
+            lines.add(BottledChaosCircuitParameter.instruction());
         }
         if (isFoundry(structure)) {
             // #tr tst.bottledchaos.recipe.structure.foundry_modules
