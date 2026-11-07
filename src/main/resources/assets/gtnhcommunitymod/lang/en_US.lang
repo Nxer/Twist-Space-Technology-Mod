@@ -757,7 +757,6 @@ tst.bottledchaos.gui.credential_injection.item_materials=Materials
 tst.bottledchaos.gui.credential_injection.missing_source=Missing route markers or bound credentials.
 tst.bottledchaos.gui.credential_injection.missing_target=Missing credential frame.
 tst.bottledchaos.gui.credential_injection.output_occupied=Output slots occupied.
-tst.bottledchaos.gui.credential_injection.preview=Automatic preview; configurations cycle every 2 seconds. Taking a result consumes its inputs.
 tst.bottledchaos.gui.credential_injection.ready=Ready
 tst.bottledchaos.gui.credential_injection.source=Route markers, credentials, structure materials or one ME item disk
 tst.bottledchaos.gui.credential_injection.success=Tags written.

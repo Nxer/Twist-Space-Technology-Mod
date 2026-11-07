@@ -153,12 +153,6 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
     // # Route markers, credentials, structure materials or one ME item disk
     // #zh_CN 路线标志物, 凭证, 结构材料或一张ME物品磁盘
 
-    // spotless:off
-    // #tr tst.bottledchaos.gui.credential_injection.preview
-    // # Automatic preview; configurations cycle every 2 seconds. Taking a result consumes its inputs.
-    // #zh_CN 自动预览, 配置每2秒轮换. 取出结果时扣除材料.
-    // spotless:on
-
     // #tr tst.bottledchaos.gui.credential_injection.ready
     // # Ready
     // #zh_CN 就绪
@@ -623,8 +617,10 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                     .shadow(false)
                     .color(skin::workspaceMuted)
                     .setEnabledIf(
-                        widget -> !"tst.bottledchaos.gui.credential_injection.missing_target"
-                            .equals(status.getStringValue())));
+                        widget -> !status.getStringValue()
+                            .isEmpty()
+                            && !"tst.bottledchaos.gui.credential_injection.missing_target"
+                                .equals(status.getStringValue())));
     }
 
     private Flow createCredentialItemArea(BooleanSupplier panelOpen, BottledChaosCraftingOutput outputs) {
@@ -679,8 +675,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
 
     private IWidget createCredentialOutputSlot(int slot, BottledChaosCraftingOutput outputs) {
         return new ItemSlot().size(18, 18)
-            .syncHandler(outputs.slot(slot, CREDENTIAL_SLOT_GROUP))
-            .tooltip(tooltip -> tooltip.addLine(IKey.lang("tst.bottledchaos.gui.credential_injection.preview")));
+            .syncHandler(outputs.slot(slot, CREDENTIAL_SLOT_GROUP));
     }
 
     private Flow createCredentialSingleSlotArea(String labelKey, int slot, String tooltipKey, boolean canPut,

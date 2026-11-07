@@ -757,7 +757,6 @@ tst.bottledchaos.gui.credential_injection.item_materials=材料
 tst.bottledchaos.gui.credential_injection.missing_source=缺少路线标志物或已绑定凭证.
 tst.bottledchaos.gui.credential_injection.missing_target=缺少凭证框架.
 tst.bottledchaos.gui.credential_injection.output_occupied=结果槽被占用.
-tst.bottledchaos.gui.credential_injection.preview=自动预览, 配置每2秒轮换. 取出结果时扣除材料.
 tst.bottledchaos.gui.credential_injection.ready=就绪
 tst.bottledchaos.gui.credential_injection.source=路线标志物, 凭证, 结构材料或一张ME物品磁盘
 tst.bottledchaos.gui.credential_injection.success=标签已写入.

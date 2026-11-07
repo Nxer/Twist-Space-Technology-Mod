@@ -68,7 +68,7 @@ public final class BottledChaosCrafting {
         status = result.statusKey();
         if (!result.wasSuccessful()) return null;
         preview = new Preview(revision, before, after, result.primaryOutputs());
-        status = "tst.bottledchaos.gui.credential_injection.preview";
+        status = "";
         return preview;
     }
 
