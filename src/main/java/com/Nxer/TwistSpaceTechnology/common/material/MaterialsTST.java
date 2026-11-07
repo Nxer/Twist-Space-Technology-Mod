@@ -263,6 +263,7 @@ public class MaterialsTST implements IMaterialHandler {
                 .setColor(Dyes._NULL)
                 .setARGB(0x005A0080)
                 .addCell()
+                .addGas()
                 .constructMaterial(),
             offsetID + 4);
 

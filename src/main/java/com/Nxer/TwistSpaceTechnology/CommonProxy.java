@@ -130,7 +130,7 @@ public class CommonProxy {
     public void postInit(FMLPostInitializationEvent event) {
         TST_Network.registryNetwork();
         MaterialFix.load();
-        BECCondensates.registerFluids();
+        BECCondensates.initializeFluids();
         TST_BigBroArray.registerUUForArray();
         TST_BigBroArray.getGeneratorsForArray();
         TST_BigBroArray.initializeMaterials();
