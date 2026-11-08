@@ -266,12 +266,13 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                     if (block != bw_realglas) return null;
                     return switch (meta) {
                         case 4 -> 1;
-                        case 6 -> 2;
-                        case 7 -> 3;
+                        case 5 -> 2;
+                        case 6 -> 3;
+                        case 7 -> 4;
                         default -> null;
                     };
                 },
-                    IntStream.of(4, 6, 7)
+                    IntStream.of(4, 5, 6, 7)
                         .mapToObj(meta -> Pair.of(bw_realglas, meta))
                         .collect(toList()),
                     -1,
