@@ -154,7 +154,6 @@ public class Config {
     public static int Mode_Default_IntensifyChemicalDistorter = 0;
     public static int Parallel_LCRMode_IntensifyChemicalDistorter = 1024;
     public static int Parallel_ICDMode_IntensifyChemicalDistorter = 16;
-    public static int SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter = 10;
     public static int SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter = 1;
 
     // endregion
@@ -779,10 +778,9 @@ public class Config {
         // endregion
 
         // region IntensifyChemicalDistorter
-        Mode_Default_IntensifyChemicalDistorter = configuration.getInt("Mode_Default_IntensifyChemicalDistorter", IntensifyChemicalDistorter, Mode_Default_IntensifyChemicalDistorter, 0, 1, "The default mode when deploy a machine. 0=ICD, 1=LCR. Type: int");
-        Parallel_LCRMode_IntensifyChemicalDistorter = configuration.getInt("Parallel_LCRMode_IntensifyChemicalDistorter", IntensifyChemicalDistorter, Parallel_LCRMode_IntensifyChemicalDistorter, 1, 32767, "Parallel of Intensify Chemical Distorter in Large Chemical Reactor mode. Type: int");
+        Mode_Default_IntensifyChemicalDistorter = configuration.getInt("Mode_Default_IntensifyChemicalDistorter", IntensifyChemicalDistorter, Mode_Default_IntensifyChemicalDistorter, 0, 2, "The default mode when deploy a machine. 0=ICD, 1=LCR, 2=Chemical Plant. Type: int");
+        Parallel_LCRMode_IntensifyChemicalDistorter = configuration.getInt("Parallel_LCRMode_IntensifyChemicalDistorter", IntensifyChemicalDistorter, Parallel_LCRMode_IntensifyChemicalDistorter, 1, 32767, "Parallel of Intensify Chemical Distorter in Large Chemical Reactor and Chemical Plant modes. Type: int");
         Parallel_ICDMode_IntensifyChemicalDistorter = configuration.getInt("Parallel_ICDMode_IntensifyChemicalDistorter", IntensifyChemicalDistorter, Parallel_ICDMode_IntensifyChemicalDistorter, 1, 32767, "Parallel of Intensify Chemical Distorter in Intensify Chemical Distorter mode. Type: int");
-        SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter = configuration.getInt("SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter", IntensifyChemicalDistorter, SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter, 1, 16, "Speed Multiplier of Intensify Chemical Distorter in Large Chemical Reactor mode. Type: int");
         SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter = configuration.getInt("SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter", IntensifyChemicalDistorter, SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter, 1, 16, "Speed Multiplier of Intensify Chemical Distorter in Intensify Chemical Distorter. Type: int");
         // endregion
 
