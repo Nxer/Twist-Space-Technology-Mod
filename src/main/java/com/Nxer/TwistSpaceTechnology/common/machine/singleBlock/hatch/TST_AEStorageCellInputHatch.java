@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +29,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_AEStorageCellHatchGui;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellHelper.InputSource;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellHelper.MEInputFilter;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
@@ -87,6 +90,7 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
     private int[] segmentAllocations = new int[TST_AEStorageCellHelper.MAX_TYPES];
     private final int configuredTier;
     private TST_AEStorageCellHelper.PullMode pullMode = TST_AEStorageCellHelper.PullMode.GT_SINGLE_STACK;
+    private TST_AEStorageCellHelper.PullMode recipePullMode = TST_AEStorageCellHelper.PullMode.GT_SINGLE_STACK;
     private boolean storageCellPresent;
     private boolean usingCellDuringRecipe;
     private boolean exposedInputsPrepared;
@@ -329,7 +333,8 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
     public static final class LongFluidInputs {
 
         private final List<FluidStack> ordinaryInputs;
-        private final Map<Fluid, List<FluidSource>> longInputs = new HashMap<>();
+        private final List<MTEHatchInput> inputSources;
+        private final Map<Fluid, List<FluidSource>> longInputs = new LinkedHashMap<>();
         private final Set<Fluid> fluidTypes = new LinkedHashSet<>();
         private final Map<Fluid, Long> availableAmounts = new HashMap<>();
 
@@ -342,6 +347,7 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
         }
 
         private LongFluidInputs(MTEMultiBlockBase machine, Optional<Byte> color) {
+            inputSources = machine.mInputHatches;
             List<TST_AEStorageCellInputHatch> longHatches = new ArrayList<>();
             for (MTEHatchInput hatch : GTUtility.filterValidMTEs(machine.mInputHatches)) {
                 if (!(hatch instanceof TST_AEStorageCellInputHatch longHatch)) continue;
@@ -367,10 +373,11 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
                 if (fluid != null && fluid.amount > 0 && fluid.getFluid() != null) fluidTypes.add(fluid.getFluid());
             }
             for (TST_AEStorageCellInputHatch hatch : longHatches) {
-                Set<Fluid> marked = Collections.newSetFromMap(new IdentityHashMap<>());
+                Set<GTUtility.FluidId> marked = new HashSet<>();
                 for (Slot slot : hatch.slots) {
                     FluidStack fluid = slot == null ? null : slot.config;
-                    if (fluid == null || fluid.getFluid() == null || !marked.add(fluid.getFluid())) continue;
+                    if (fluid == null || fluid.getFluid() == null || !marked.add(GTUtility.FluidId.create(fluid)))
+                        continue;
                     FluidStack config = fluid.copy();
                     config.amount = 1;
                     longInputs.computeIfAbsent(fluid.getFluid(), ignored -> new ArrayList<>())
@@ -378,6 +385,32 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
                     fluidTypes.add(fluid.getFluid());
                 }
             }
+        }
+
+        /** Keep full fluid identity (including NBT) when exporting native long sources. */
+        public List<InputSource> getSources() {
+            List<InputSource> inputs = new ArrayList<>();
+            IdentityHashMap<FluidStack, Object> owners = new IdentityHashMap<>();
+            for (MTEHatchInput hatch : GTUtility.filterValidMTEs(inputSources)) {
+                if (!(hatch instanceof MTEHatchInputME me) || hatch instanceof TST_AEStorageCellInputHatch) continue;
+                IGrid network = TST_AEStorageCellHelper.getNetwork(me.getProxy());
+                if (network == null) continue;
+                for (FluidStack stack : me.getStoredFluids()) if (stack != null) owners.put(stack, network);
+            }
+            for (FluidStack stack : ordinaryInputs)
+                inputs.add(InputSource.of(owners.getOrDefault(stack, stack), stack));
+            for (List<FluidSource> sources : longInputs.values()) {
+                for (FluidSource source : sources) {
+                    inputs.add(
+                        new InputSource(
+                            source.hatch.getTSTInputSource(),
+                            source.config,
+                            () -> simulateLong(source.hatch, source.config),
+                            amount -> extractLong(source.hatch, source.config, amount),
+                            true));
+                }
+            }
+            return InputSource.unique(inputs);
         }
 
         public List<Fluid> getFluidTypes() {
@@ -408,8 +441,11 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
                 }
             }
             // Hatches on the same ME network see the same fluid; storage cells are separate sources.
-            Set<IGrid> countedNetworks = Collections.newSetFromMap(new IdentityHashMap<>());
+            Map<GTUtility.FluidId, Set<IGrid>> countedByFluid = new HashMap<>();
             for (FluidSource source : longInputs.getOrDefault(fluid, Collections.emptyList())) {
+                Set<IGrid> countedNetworks = countedByFluid.computeIfAbsent(
+                    GTUtility.FluidId.create(source.config),
+                    ignored -> Collections.newSetFromMap(new IdentityHashMap<>()));
                 IGrid network = networkOf(source.hatch);
                 if (network != null && countedNetworks.contains(network)) continue;
                 long amount = simulateLong(source.hatch, source.config);
@@ -444,7 +480,7 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
 
         private static void filterOverlappingMEInputs(List<FluidStack> fluids, List<MTEHatchInput> inputHatches,
             List<TST_AEStorageCellInputHatch> longHatches, Optional<Byte> color) {
-            MEInputFilter<Fluid, FluidStack> filter = new MEInputFilter<>(FluidStack::getFluid);
+            MEInputFilter<GTUtility.FluidId, FluidStack> filter = new MEInputFilter<>(GTUtility.FluidId::create);
             for (MTEHatchInput hatch : GTUtility.filterValidMTEs(inputHatches)) {
                 if (!(hatch instanceof MTEHatchInputME meHatch) || hatch instanceof TST_AEStorageCellInputHatch)
                     continue;
@@ -581,6 +617,8 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
     private void prepareRecipeInputsIfNeeded() {
         if (!processingRecipe || exposedInputsPrepared || longExtractionUsed || !cachedActivity) return;
         // Special machines can pull long directly without building the GT int stacks.
+        setPullMode(recipePullMode);
+        showRecipeRemainder = false;
         exposedInputsPrepared = true;
         refreshSelectedContents(usingCellDuringRecipe);
         prepareExposedFluids();
@@ -696,7 +734,7 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
 
     @Override
     public void setTSTSegmentedInputMode() {
-        setPullMode(TST_AEStorageCellHelper.PullMode.TST_SEGMENTED);
+        recipePullMode = TST_AEStorageCellHelper.PullMode.TST_SEGMENTED;
     }
 
     @Override
@@ -807,8 +845,8 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
         processingRecipe = true;
         exposedInputsPrepared = false;
         longExtractionUsed = false;
-        setPullMode(TST_AEStorageCellHelper.PullMode.GT_SINGLE_STACK);
-        showRecipeRemainder = false;
+        // Lifecycle setup is not an input request; keep the last displayed mode and remainder until read.
+        recipePullMode = TST_AEStorageCellHelper.PullMode.GT_SINGLE_STACK;
         Arrays.fill(displayedThisRecipe, false);
         lastGuiAmountRefreshTick = Long.MIN_VALUE;
         if (!cachedActivity) {
@@ -877,7 +915,10 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
         int z) {
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
         if (!processingRecipe && !showRecipeRemainder) refreshSelectedContents(hasStorageCell());
-        tag.setLong("cacheCapacity", (long) Integer.MAX_VALUE * Config.MaxTotalIntSegments_AEStorageCellInput);
+        tag.setLong(
+            "cacheCapacity",
+            TST_AEStorageCellHelper
+                .limitPullableAmount(Long.MAX_VALUE, Config.MaxTotalIntSegments_AEStorageCellInput, pullMode));
 
         List<Integer> entries = new ArrayList<>();
         for (int i = 0; i < selectedContents.length; i++) {
@@ -1030,6 +1071,7 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
     }
 
     private void setLongInputMode() {
+        showRecipeRemainder = false;
         setPullMode(TST_AEStorageCellHelper.PullMode.LONG);
     }
 

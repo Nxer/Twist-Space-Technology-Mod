@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_AEStorageCellHatchGui;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellHelper.InputSource;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellHelper.MEInputFilter;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
@@ -78,12 +79,13 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
     private static final String SPECIAL_INPUT_NBT = "tstSpecialInput";
     private static final BaseActionSource CELL_ACTION_SOURCE = new BaseActionSource();
 
-    private final ItemStackHandler specialInputHandler = new ItemStackHandler(1) {
+    private final ItemStackHandler specialInputHandler = new ItemStackHandler(9) {
 
         @Override
         protected void onContentsChanged(int slot) {
             markDirty();
             justHadNewItems = true;
+            if (getBaseMetaTileEntity() != null) getBaseMetaTileEntity().enableTicking();
         }
     };
     private final CellItemEntry[] selectedContents = new CellItemEntry[TST_AEStorageCellHelper.MAX_TYPES];
@@ -93,13 +95,14 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
     private int[] segmentAllocations = new int[TST_AEStorageCellHelper.MAX_TYPES];
     private final int configuredTier;
     private TST_AEStorageCellHelper.PullMode pullMode = TST_AEStorageCellHelper.PullMode.GT_SINGLE_STACK;
+    private TST_AEStorageCellHelper.PullMode recipePullMode = TST_AEStorageCellHelper.PullMode.GT_SINGLE_STACK;
     private boolean storageCellPresent;
     private boolean usingCellDuringRecipe;
     private boolean exposedInputsPrepared;
     private boolean longExtractionUsed;
     private boolean suppressRecipeSegments;
     private boolean showRecipeRemainder;
-    private int specialInputAmountAtRecipeStart;
+    private final int[] specialInputAmountsAtRecipeStart = new int[specialInputHandler.getSlots()];
     private long lastGuiAmountRefreshTick = Long.MIN_VALUE;
 
     public TST_AEStorageCellInputBus(int id, String name, String nameRegional, int tier) {
@@ -158,7 +161,13 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
     @Override
     public void loadNBTData(NBTTagCompound nbt) {
         super.loadNBTData(nbt);
-        specialInputHandler.setStackInSlot(0, GTUtility.loadItem(nbt, SPECIAL_INPUT_NBT));
+        NBTTagCompound specialInput = nbt.getCompoundTag(SPECIAL_INPUT_NBT);
+        if (specialInput.hasKey("Items", 9)) {
+            specialInputHandler.deserializeNBT(specialInput);
+        } else {
+            // The released single-slot bus stored an ItemStack under this same key.
+            specialInputHandler.setStackInSlot(0, GTUtility.loadItem(nbt, SPECIAL_INPUT_NBT));
+        }
         updateStorageCellState();
         updateValidGridProxySides();
         if (getProxy().getNode() != null) getProxy().getNode()
@@ -168,7 +177,7 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
     @Override
     public void saveNBTData(NBTTagCompound nbt) {
         super.saveNBTData(nbt);
-        GTUtility.saveItem(nbt, SPECIAL_INPUT_NBT, specialInputHandler.getStackInSlot(0));
+        nbt.setTag(SPECIAL_INPUT_NBT, specialInputHandler.serializeNBT());
     }
 
     public ItemStackHandler getSpecialInputHandler() {
@@ -327,7 +336,8 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
     public static final class LongItemInputs {
 
         private final List<ItemStack> ordinaryInputs;
-        private final Map<GTUtility.ItemId, List<ItemSource>> longInputs = new HashMap<>();
+        private final List<MTEHatchInputBus> inputSources;
+        private final Map<GTUtility.ItemId, List<ItemSource>> longInputs = new LinkedHashMap<>();
         private final Map<GTUtility.ItemId, ItemStack> itemTypes = new LinkedHashMap<>();
         private final Map<GTUtility.ItemId, Long> availableAmounts = new HashMap<>();
 
@@ -340,6 +350,7 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
         }
 
         private LongItemInputs(MTEMultiBlockBase machine, Optional<Byte> color) {
+            inputSources = machine.mInputBusses;
             List<TST_AEStorageCellInputBus> longBusses = new ArrayList<>();
             for (MTEHatchInputBus bus : GTUtility.filterValidMTEs(machine.mInputBusses)) {
                 if (!(bus instanceof TST_AEStorageCellInputBus longBus)) continue;
@@ -379,6 +390,34 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
                     itemTypes.putIfAbsent(id, config);
                 }
             }
+        }
+
+        /** Export native sources without int segments; ordinary ME aliases keep their network identity. */
+        public List<InputSource> getSources() {
+            List<InputSource> inputs = new ArrayList<>();
+            IdentityHashMap<ItemStack, Object> owners = new IdentityHashMap<>();
+            for (MTEHatchInputBus bus : GTUtility.filterValidMTEs(inputSources)) {
+                if (!(bus instanceof MTEHatchInputBusME me) || bus instanceof TST_AEStorageCellInputBus) continue;
+                IGrid network = TST_AEStorageCellHelper.getNetwork(me.getProxy());
+                if (network == null) continue;
+                for (int i = 0; i < MTEHatchInputBusME.SLOT_COUNT; i++) {
+                    ItemStack stack = me.getStackInSlot(i);
+                    if (stack != null) owners.put(stack, network);
+                }
+            }
+            for (ItemStack stack : ordinaryInputs) inputs.add(InputSource.of(owners.getOrDefault(stack, stack), stack));
+            for (List<ItemSource> sources : longInputs.values()) {
+                for (ItemSource source : sources) {
+                    inputs.add(
+                        new InputSource(
+                            source.bus.getTSTInputSource(),
+                            source.config,
+                            () -> simulateLong(source.bus, source.config),
+                            amount -> extractLong(source.bus, source.config, amount),
+                            true));
+                }
+            }
+            return InputSource.unique(inputs);
         }
 
         public List<ItemStack> getItemTypes() {
@@ -595,6 +634,8 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
     private void prepareRecipeInputsIfNeeded() {
         if (!processingRecipe || exposedInputsPrepared || longExtractionUsed || !cachedActivity) return;
         // Special machines can pull long directly without building the GT int stacks.
+        setPullMode(recipePullMode);
+        showRecipeRemainder = false;
         exposedInputsPrepared = true;
         refreshSelectedContents(usingCellDuringRecipe);
         prepareExposedStacks();
@@ -602,11 +643,14 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
 
     @Override
     public int getSizeInventory() {
-        // Long-input machines still see the circuit and special input, but not GT item segments.
-        if (processingRecipe && suppressRecipeSegments) return 2;
-        // During a recipe, show item stacks and the special input instead of the cell.
+        // Long-input machines still see the circuit and manual inputs, but not GT item segments.
+        return processingRecipe ? recipeCircuitIndex() + 1 + specialInputHandler.getSlots() : super.getSizeInventory();
+    }
+
+    private int recipeCircuitIndex() {
+        if (suppressRecipeSegments) return 0;
         prepareRecipeInputsIfNeeded();
-        return processingRecipe ? exposedStacks.size() + 2 : super.getSizeInventory();
+        return exposedStacks.size();
     }
 
     @Override
@@ -618,7 +662,7 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
 
     @Override
     public void setTSTSegmentedInputMode() {
-        setPullMode(TST_AEStorageCellHelper.PullMode.TST_SEGMENTED);
+        recipePullMode = TST_AEStorageCellHelper.PullMode.TST_SEGMENTED;
     }
 
     @Override
@@ -630,29 +674,27 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
     @Override
     public ItemStack getStackInSlot(int slot) {
         if (!processingRecipe) return super.getStackInSlot(slot);
-        if (suppressRecipeSegments) {
-            if (slot == 0) return mInventory[getCircuitSlot()];
-            return slot == 1 ? specialInputHandler.getStackInSlot(0) : null;
-        }
-        prepareRecipeInputsIfNeeded();
-        if (slot >= 0 && slot < exposedStacks.size()) return exposedStacks.get(slot);
-        if (slot == exposedStacks.size()) return mInventory[getCircuitSlot()];
-        return slot == exposedStacks.size() + 1 ? specialInputHandler.getStackInSlot(0) : null;
+        int circuit = recipeCircuitIndex();
+        if (slot >= 0 && slot < circuit) return exposedStacks.get(slot);
+        if (slot == circuit) return mInventory[getCircuitSlot()];
+        int special = slot - circuit - 1;
+        return special >= 0 && special < specialInputHandler.getSlots() ? specialInputHandler.getStackInSlot(special)
+            : null;
     }
 
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack) {
         if (processingRecipe) {
-            prepareRecipeInputsIfNeeded();
-            if (slot >= 0 && slot < exposedStacks.size()) {
+            int circuit = recipeCircuitIndex();
+            if (slot >= 0 && slot < circuit) {
                 ItemStack exposed = exposedStacks.get(slot);
                 if (stack == null) exposed.stackSize = 0;
                 else if (GTUtility.areStacksEqual(exposed, stack))
                     exposed.stackSize = Math.min(exposed.stackSize, stack.stackSize);
-            } else if (slot == exposedStacks.size()) {
+            } else if (slot == circuit) {
                 super.setInventorySlotContents(getCircuitSlot(), stack);
-            } else if (slot == exposedStacks.size() + 1) {
-                specialInputHandler.setStackInSlot(0, stack);
+            } else if (slot > circuit && slot <= circuit + specialInputHandler.getSlots()) {
+                specialInputHandler.setStackInSlot(slot - circuit - 1, stack);
             }
         } else if (slot == CELL_SLOT && (stack == null || isItemCell(stack))) {
             super.setInventorySlotContents(slot, stack);
@@ -664,10 +706,12 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
     @Override
     public ItemStack decrStackSize(int slot, int amount) {
         if (!processingRecipe) return super.decrStackSize(slot, amount);
-        prepareRecipeInputsIfNeeded();
-        if (slot == exposedStacks.size()) return super.decrStackSize(getCircuitSlot(), amount);
-        if (slot == exposedStacks.size() + 1) return specialInputHandler.extractItem(0, amount, false);
-        if (slot < 0 || slot >= exposedStacks.size() || amount <= 0) return null;
+        if (amount <= 0) return null;
+        int circuit = recipeCircuitIndex();
+        if (slot == circuit) return super.decrStackSize(getCircuitSlot(), amount);
+        if (slot > circuit && slot <= circuit + specialInputHandler.getSlots())
+            return specialInputHandler.extractItem(slot - circuit - 1, amount, false);
+        if (slot < 0 || slot >= circuit) return null;
         ItemStack exposed = exposedStacks.get(slot);
         if (exposed.stackSize <= 0) return null;
         int extracted = Math.min(amount, exposed.stackSize);
@@ -722,8 +766,10 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
         ItemStack oldCell = mInventory[CELL_SLOT];
         super.updateSlots();
         if (oldCell != mInventory[CELL_SLOT]) onContentsChanged(CELL_SLOT);
-        ItemStack specialInput = specialInputHandler.getStackInSlot(0);
-        if (specialInput != null && specialInput.stackSize <= 0) specialInputHandler.setStackInSlot(0, null);
+        for (int i = 0; i < specialInputHandler.getSlots(); i++) {
+            ItemStack specialInput = specialInputHandler.getStackInSlot(i);
+            if (specialInput != null && specialInput.stackSize <= 0) specialInputHandler.setStackInSlot(i, null);
+        }
     }
 
     @Override
@@ -734,12 +780,14 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
         processingRecipe = true;
         exposedInputsPrepared = false;
         longExtractionUsed = false;
-        setPullMode(TST_AEStorageCellHelper.PullMode.GT_SINGLE_STACK);
-        showRecipeRemainder = false;
+        // Lifecycle setup is not an input request; keep the last displayed mode and remainder until read.
+        recipePullMode = TST_AEStorageCellHelper.PullMode.GT_SINGLE_STACK;
         Arrays.fill(displayedThisRecipe, false);
         lastGuiAmountRefreshTick = Long.MIN_VALUE;
-        ItemStack specialInput = specialInputHandler.getStackInSlot(0);
-        specialInputAmountAtRecipeStart = specialInput == null ? 0 : specialInput.stackSize;
+        for (int i = 0; i < specialInputHandler.getSlots(); i++) {
+            ItemStack specialInput = specialInputHandler.getStackInSlot(i);
+            specialInputAmountsAtRecipeStart[i] = specialInput == null ? 0 : specialInput.stackSize;
+        }
         if (!cachedActivity) {
             exposedStacks.clear();
             for (CellItemEntry entry : selectedContents) {
@@ -788,8 +836,10 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
             entry.finishRecipeProcessing();
         }
 
-        ItemStack specialInput = specialInputHandler.getStackInSlot(0);
-        if ((specialInput == null ? 0 : specialInput.stackSize) != specialInputAmountAtRecipeStart) markDirty();
+        for (int i = 0; i < specialInputHandler.getSlots(); i++) {
+            ItemStack specialInput = specialInputHandler.getStackInSlot(i);
+            if ((specialInput == null ? 0 : specialInput.stackSize) != specialInputAmountsAtRecipeStart[i]) markDirty();
+        }
         processingRecipe = false;
         exposedStacks.clear();
         exposedInputsPrepared = false;
@@ -808,7 +858,10 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
         int z) {
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
         if (!processingRecipe && !showRecipeRemainder) refreshSelectedContents(hasStorageCell());
-        tag.setLong("cacheCapacity", (long) Integer.MAX_VALUE * Config.MaxTotalIntSegments_AEStorageCellInput);
+        tag.setLong(
+            "cacheCapacity",
+            TST_AEStorageCellHelper
+                .limitPullableAmount(Long.MAX_VALUE, Config.MaxTotalIntSegments_AEStorageCellInput, pullMode));
 
         List<Integer> entries = new ArrayList<>();
         for (int i = 0; i < selectedContents.length; i++) {
@@ -951,6 +1004,7 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
     }
 
     private void setLongInputMode() {
+        showRecipeRemainder = false;
         setPullMode(TST_AEStorageCellHelper.PullMode.LONG);
     }
 

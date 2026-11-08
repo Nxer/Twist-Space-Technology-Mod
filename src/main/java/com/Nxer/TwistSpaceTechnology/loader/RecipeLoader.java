@@ -3,14 +3,18 @@ package com.Nxer.TwistSpaceTechnology.loader;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerRecipeCache;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBlastFurnace;
+import com.Nxer.TwistSpaceTechnology.common.material.BECCondensates;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.ShapedCraftRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.SimpleFurnaceFuelPool;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.CardiganRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.CosmicProcessorCircuitRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.EnergySustainmentMatrixRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.LapotronChipRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.SingleBlockRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.SingleItemRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.StabilisationFieldGeneratorRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.BottledChaosCraftingRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.GTCMMachineRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.ModularHatchesRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.SingleMachineRecipes;
@@ -20,6 +24,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.AssemblyLineW
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BOTRecipe.BOTRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BOTRecipe.RuneEngraverRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BloodyHellRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeRegistration;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CircuitAssemblyLineWithoutImprintRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CokingFactoryRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CrystalEssentiaRecipePool;
@@ -79,12 +84,17 @@ public class RecipeLoader {
 
     public static void loadRecipes() {
 
+        BECCondensates.loadRecipes();
+
         // TODO Split GTCMMachineRecipes
         // Item Recipes
         SingleItemRecipes.loadRecipes();
         SingleBlockRecipes.loadRecipes();
+        BottledChaosCraftingRecipes.loadRecipes();
         CosmicProcessorCircuitRecipes.loadRecipes();
         LapotronChipRecipes.loadRecipes();
+        StabilisationFieldGeneratorRecipes.loadRecipes();
+        EnergySustainmentMatrixRecipes.loadRecipes();
 
         // Machine Recipes
         SingleMachineRecipes.loadRecipes();
@@ -159,6 +169,8 @@ public class RecipeLoader {
 
         CropsMutationRecipes.loadRecipes();
 
+        BottledChaosRecipeRegistration.registerRecipes();
+
     }
 
     public static void loadRecipesPostInit() {
@@ -176,6 +188,7 @@ public class RecipeLoader {
 
         CircuitAssemblyLineWithoutImprintRecipePool.loadRecipes();
         StellarForgeRecipePool.loadOnServerStarted();
+        BottledChaosRecipeRegistration.resolveLateSources();
         TreeGrowthSimulatorWithoutToolFakeRecipe.loadRecipes();
         MiracleTopRecipePool.loadRecipes();
         if (Config.Enable_IndustrialMagicMatrix) {
