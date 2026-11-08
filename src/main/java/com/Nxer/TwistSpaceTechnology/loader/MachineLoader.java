@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.loader;
 
 import static com.Nxer.TwistSpaceTechnology.config.Config.Enable_GiantVacuumDryingFurnace;
 import static com.Nxer.TwistSpaceTechnology.config.Config.Enable_IndustrialAlchemyTower;
+import static com.Nxer.TwistSpaceTechnology.config.Config.Enable_MegaDigester;
 import static com.Nxer.TwistSpaceTechnology.config.Config.Enable_MegaStoneBreaker;
 import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelOfParallelController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultiplierOfPowerConsumptionController;
@@ -62,6 +63,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamForgeHammer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LaserMeteorMiner;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_ManufacturingCenter;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaCraftingCenter;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaDigester;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaMacerator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaSolarPanelFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaStoneBreaker;
@@ -818,6 +820,14 @@ public final class MachineLoader {
                     TSTUtils.tr("tst.bottledchaos.recipe.name")));
         }
 
+        if (Enable_MegaDigester) {
+            // #tr tst.common.machine.MegaDigester.name
+            // # Mega Digester
+            // #zh_CN 巨型煮解池
+            GTCMItemList.MegaDigester
+                .set(new TST_MegaDigester(19083, "NameMegaDigester", TSTUtils.tr("tst.common.machine.MegaDigester.name")));
+        }
+      
         // endregion
 
         // region Single block Machine

@@ -74,6 +74,7 @@ public class Config {
     public static final String LaserMeteorMiner = "LaserMeteorMiner";
     public static final String NetherInterface = "NetherInterface";
     public static final String IntegratedAssemblyMatrix = "IntegratedAssemblyMatrix";
+    public static final String MegaDigester = "MegaDigester";
     // endregion
 
     // region General
@@ -454,6 +455,12 @@ public class Config {
     public static int MaxParallel_IncompactCyclotron =256;
     // endregion
 
+    // region Mega Digester
+    public static boolean Enable_MegaDigester = true;
+    public static boolean EnablePerfectOverclock_MegaDigester = true;
+    public static int Parallel_MegaDigester = 2147483640;
+    // endregion
+
     // region Mega Stone Breaker
     public static boolean Enable_MegaStoneBreaker=true;
 
@@ -749,6 +756,12 @@ public class Config {
 
         // region MegaNqReactor
         Parallel_MegaNqReactor = configuration.getInt("Parallel_MegaNqReactor", MegaNqReactor, Parallel_MegaNqReactor, 1, Integer.MAX_VALUE, "Max parallel of Mega Naquadah Reactor. Type: int");
+        // endregion
+
+        // region Mega Digester
+        Enable_MegaDigester = configuration.getBoolean("Enable_MegaDigester", MegaDigester, Enable_MegaDigester, "Enable Mega Digester. Type: boolean");
+        EnablePerfectOverclock_MegaDigester = configuration.getBoolean("EnablePerfectOverclock_MegaDigester", MegaDigester, EnablePerfectOverclock_MegaDigester, "Enable perfect overclock of Mega Digester. Type: boolean");
+        Parallel_MegaDigester = configuration.getInt("Parallel_MegaDigester", MegaDigester, Parallel_MegaDigester, 1, Integer.MAX_VALUE, "Parallel of Mega Digester. Type: int");
         // endregion
 
         // region IndistinctTentacle
