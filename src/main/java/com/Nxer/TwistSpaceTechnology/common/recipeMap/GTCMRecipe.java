@@ -4,10 +4,12 @@ import static com.Nxer.TwistSpaceTechnology.config.Config.Debug_DisplayAdvCircui
 import static gregtech.api.enums.Mods.GTPlusPlus;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Optional;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
@@ -28,6 +30,7 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_Tre
 import com.gtnewhorizons.modularui.api.drawable.UITexture;
 
 import goodgenerator.client.GUI.GGUITextures;
+import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.recipe.RecipeCategory;
 import gregtech.api.recipe.RecipeCategorySetting;
@@ -47,7 +50,11 @@ public class GTCMRecipe {
     public static final RecipeMap<TST_RecipeMapBackend> IntensifyChemicalDistorterRecipeMap = RecipeMapBuilder
         .of("tst.common.recipe.IntensifyChemicalDistorterRecipeMap.name", TST_RecipeMapBackend::new)
         .maxIO(16, 16, 16, 16)
-        .neiSpecialInfoFormatter(HeatingCoilSpecialValueFormatter.INSTANCE)
+        .neiSpecialInfoFormatter(
+            recipeInfo -> Collections.singletonList(
+                StatCollector.translateToLocalFormatted(
+                    "GT5U.nei.heat_capacity.material",
+                    HeatingCoilLevel.getDisplayNameFromHeat(recipeInfo.recipe.mSpecialValue, false))))
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .frontend(TST_GeneralFrontend::new)
         .neiHandlerInfo(

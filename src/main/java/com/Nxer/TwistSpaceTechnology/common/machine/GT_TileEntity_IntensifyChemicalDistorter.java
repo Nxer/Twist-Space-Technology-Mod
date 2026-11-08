@@ -3,10 +3,10 @@
  */
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_IntensifyChemicalDistorter;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_ICDMode_IntensifyChemicalDistorter;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_LCRMode_IntensifyChemicalDistorter;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
@@ -64,6 +64,7 @@ import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.api.util.OverclockCalculator;
 
 // MTEEnhancedMultiBlockBase called failed to use 64A energy hatch
 // GT_TileEntity_MegaMultiBlockBase then use megaClass to success to apply 64A hatch
@@ -77,11 +78,13 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     // region Class Constructor
     public GT_TileEntity_IntensifyChemicalDistorter(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        machineMode = Mode_Default_IntensifyChemicalDistorter;
         registerTooltipCredits(ID.NXER);
     }
 
     public GT_TileEntity_IntensifyChemicalDistorter(String aName) {
         super(aName);
+        machineMode = Mode_Default_IntensifyChemicalDistorter;
     }
 
     @Override
@@ -222,22 +225,28 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     // endregion
 
     // region Processing Logic
-    private HeatingCoilLevel coilLevel;
+    private HeatingCoilLevel coilLevel = HeatingCoilLevel.None;
 
     public static final UITexture[] tMachineModeIcons = new UITexture[] {
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_CHEMBATH };
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_CHEMBATH,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT };
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        if (machineMode == 0) return GTCMRecipe.IntensifyChemicalDistorterRecipeMap;
-        return RecipeMaps.multiblockChemicalReactorRecipes;
+        return switch (machineMode) {
+            case 1 -> RecipeMaps.multiblockChemicalReactorRecipes;
+            case 2 -> RecipeMaps.chemicalPlantRecipes;
+            default -> GTCMRecipe.IntensifyChemicalDistorterRecipeMap;
+        };
     }
 
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays
-            .asList(GTCMRecipe.IntensifyChemicalDistorterRecipeMap, RecipeMaps.multiblockChemicalReactorRecipes);
+        return Arrays.asList(
+            GTCMRecipe.IntensifyChemicalDistorterRecipeMap,
+            RecipeMaps.multiblockChemicalReactorRecipes,
+            RecipeMaps.chemicalPlantRecipes);
     }
 
     @Override
@@ -245,8 +254,9 @@ public class GT_TileEntity_IntensifyChemicalDistorter
         /*
          * 0 - Intense Chemical Distorter
          * 1 - Chemical Reactor
+         * 2 - Chemical Plant
          */
-        return 2;
+        return 3;
     }
 
     @Override
@@ -263,6 +273,10 @@ public class GT_TileEntity_IntensifyChemicalDistorter
         // #tr tst.common.machine.IntensifyChemicalDistorter.mode.1
         // # Mode: Chemical Reactor
         // #zh_CN 化学反应釜模式
+
+        // #tr tst.common.machine.IntensifyChemicalDistorter.mode.2
+        // # Mode: Chemical Plant
+        // #zh_CN 化工厂模式
         return StatCollector.translateToLocal("tst.common.machine.IntensifyChemicalDistorter.mode." + machineMode);
     }
 
@@ -275,7 +289,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     @Override
     protected float getSpeedBonus() {
         return machineMode == 0 ? 1F / SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter
-            : 1F / SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter;
+            : 1F / Math.max(1, coilLevel.getTier() + 1);
     }
 
     @Override
@@ -309,8 +323,26 @@ public class GT_TileEntity_IntensifyChemicalDistorter
 
             @Override
             protected @NotNull CheckRecipeResult validateRecipe(GTRecipe recipe) {
+                if (machineMode == 2) {
+                    // Chemical plant special values are casing tiers, not heat requirements.
+                    // Native zero-size catalyst inputs remain required and do not wear at this coil tier.
+                    return coilLevel.getTier() >= HeatingCoilLevel.UMV.getTier() ? CheckRecipeResultRegistry.SUCCESSFUL
+                        : CheckRecipeResultRegistry.insufficientHeat((int) HeatingCoilLevel.UMV.getHeat());
+                }
                 return recipe.mSpecialValue <= coilLevel.getHeat() ? CheckRecipeResultRegistry.SUCCESSFUL
                     : CheckRecipeResultRegistry.insufficientHeat(recipe.mSpecialValue);
+            }
+
+            @Override
+            protected @NotNull OverclockCalculator createOverclockCalculator(GTRecipe recipe) {
+                OverclockCalculator calculator = super.createOverclockCalculator(recipe);
+                if (machineMode == 0) {
+                    // Each coil tier adds 900 K.
+                    int excessCoilTiers = (int) Math.max(0, (coilLevel.getHeat() - recipe.mSpecialValue) / 900);
+                    // Recalculate for each matched recipe, including cached recipes and mode changes.
+                    calculator.setDurationModifier(speedBoost / (1 + excessCoilTiers));
+                }
+                return calculator;
             }
 
         }.enablePerfectOverclock()
@@ -386,42 +418,45 @@ public class GT_TileEntity_IntensifyChemicalDistorter
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.machine_type
-        // # Intensify Chemical Distorter/Chemical Reactor
-        // #zh_CN 深度化学扭曲仪/化学反应釜
+        // # Intensify Chemical Distorter/Chemical Reactor/Chemical Plant
+        // #zh_CN 深度化学扭曲仪/化学反应釜/化工厂
         tt.addMachineType(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.machine_type"))
-            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.01
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.1
             // # Controller block for the Intensify Chemical Distorter
             // #zh_CN 深度化学扭曲仪的控制器方块
-            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.01"))
-            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.02
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.1"))
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.2
             // # {\AQUA}I! {\BLUE}AM! {\AQUA}THE! {\BLUE}CHEM! {\AQUA}THAT! {\BLUE}IS! {\AQUA}APPROOOOOACHING !!
             // #zh_CN {\AQUA}I! {\BLUE}AM! {\AQUA}THE! {\BLUE}CHEM! {\AQUA}THAT! {\BLUE}IS! {\AQUA}APPROOOOOACHING !!
-            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.02"))
-            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.03
-            // # The most advanced base chemical reactor.
-            // #zh_CN 最先进的基础化学反应设备
-            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.03"))
-            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.04
-            // # Use screwdriver to change mode.
-            // #zh_CN 使用螺丝刀切换模式.
-            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.04"))
-            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.05
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.2"))
+            .addInfo("")
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.3
             // # {\GOLD}Intensify Chemical Distorter mode:
             // #zh_CN {\GOLD}深度化学扭曲模式:
-            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.05"))
-            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.06
-            // # Focus on processing the most complex chemical reaction - {\AQUA}16x {\GRAY}Parallel.
-            // #zh_CN 专注于处理更复杂的化学反应 - {\AQUA}16x {\GRAY}并行
-            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.06"))
-            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.07
-            // # {\GOLD}Chemical Reactor mode:
-            // #zh_CN {\GOLD}化学反应釜模式:
-            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.07"))
-            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.08
-            // # {\AQUA}1024x {\GRAY}Parallel and {\RED}900% {\GRAY}faster than using LCR of the same voltage.
-            // #zh_CN 拥有 {\AQUA}1024x{\GRAY} 并行并且比相同电压的大型化学反应釜快 {\RED}900%{\GRAY}
-            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.08"))
-            .beginStructureBlock(shape)
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.3"))
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.4
+            // # {\AQUA}%dx {\GRAY}Parallel.
+            // #zh_CN {\AQUA}%dx {\GRAY}并行.
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.4", Parallel_ICDMode_IntensifyChemicalDistorter))
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.5
+            // # Each coil tier above the recipe requirement adds {\AQUA}100% {\GRAY}processing speed.
+            // #zh_CN 线圈每高于配方要求一级, 处理速度增加 {\AQUA}100%{\GRAY}.
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.5"))
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.6
+            // # {\GOLD}Chemical Reactor | Chemical Plant modes:
+            // #zh_CN {\GOLD}化学反应釜|化工厂模式:
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.6"))
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.7
+            // # {\AQUA}%dx {\GRAY}Parallel | Higher-tier coils increase processing speed.
+            // #zh_CN {\AQUA}%dx {\GRAY}并行 | 升级线圈可提高处理速度.
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.7", Parallel_LCRMode_IntensifyChemicalDistorter))
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.8
+            // # Infinity coils unlock Chemical Plant mode.
+            // #zh_CN 无尽线圈解锁化工厂模式.
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.8"))
+            .addSeparator()
+            .addPerfectOCInfo();
+        tt.beginStructureBlock(shape)
             .addController(TSTSharedLocalization.Structure.textFrontBottom)
             .addCasingInfoRange(TSTSharedLocalization.Structure.textCasing, 8, 26, false)
             .addInputHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
