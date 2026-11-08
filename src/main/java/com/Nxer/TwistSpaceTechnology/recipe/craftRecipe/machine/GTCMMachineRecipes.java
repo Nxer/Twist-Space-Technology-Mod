@@ -41,7 +41,6 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MegaMacerator;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MegaNqReactor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MiracleDoor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MoleculeDeconstructor;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.NetherInterface;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.OpticalSOC;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.OreProcessingFactory;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ParticleTrapTimeSpaceShield;
@@ -115,7 +114,6 @@ import static gregtech.api.enums.ItemList.ZPM6;
 import static gregtech.api.enums.Materials.RadoxPolymer;
 import static gregtech.api.enums.Mods.AE2WCT;
 import static gregtech.api.enums.Mods.AppliedEnergistics2;
-import static gregtech.api.enums.Mods.EnderIO;
 import static gregtech.api.enums.Mods.Forestry;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.enums.Mods.GoodGenerator;
@@ -218,7 +216,6 @@ import gtnhintergalactic.item.ItemMiningDrones;
 import gtnhintergalactic.recipe.IGRecipeMaps;
 import gtnhlanth.common.register.LanthItemList;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
-import ic2.core.IC2;
 import ic2.core.Ic2Items;
 import tectech.recipe.TTRecipeAdder;
 import tectech.thing.casing.TTCasingsContainer;
@@ -3585,26 +3582,26 @@ public class GTCMMachineRecipes {
 
         // region Nether Interface
 
-        // Controller
-        ItemStack teleporter = getModItem(EnderIO.ID, "blockTransceiver", 4,
-                                          getModItem(IC2.MODID, "blockMachine2", 4,
-                                                     new ItemStack(Blocks.obsidian, 64)));
-        GTValues.RA
-            .stdBuilder()
-            .itemInputs(
-                GTUtility.getIntegratedCircuit(10),
-                GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Obsidian, 16),
-                teleporter,
-
-                ItemList.Field_Generator_LuV.get(4),
-                new Object[]{OrePrefixes.circuit.get(Materials.ZPM), 16},
-                GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Netherite, 16)
-            )
-            .fluidInputs(Materials.HellishMetal.getMolten(144 * 64))
-            .itemOutputs(NetherInterface.get(1))
-            .eut(TierEU.RECIPE_LuV)
-            .duration(20 * 360)
-            .addTo(assembler);
+        // Controller (disabled)
+        // ItemStack teleporter = getModItem(gregtech.api.enums.Mods.EnderIO.ID, "blockTransceiver", 4,
+        //                                   getModItem(ic2.core.IC2.MODID, "blockMachine2", 4,
+        //                                              new ItemStack(Blocks.obsidian, 64)));
+        // GTValues.RA
+        //     .stdBuilder()
+        //     .itemInputs(
+        //         GTUtility.getIntegratedCircuit(10),
+        //         GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Obsidian, 16),
+        //         teleporter,
+        //
+        //         ItemList.Field_Generator_LuV.get(4),
+        //         new Object[]{OrePrefixes.circuit.get(Materials.ZPM), 16},
+        //         GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Netherite, 16)
+        //     )
+        //     .fluidInputs(Materials.HellishMetal.getMolten(144 * 64))
+        //     .itemOutputs(GTCMItemList.NetherInterface.get(1))
+        //     .eut(TierEU.RECIPE_LuV)
+        //     .duration(20 * 360)
+        //     .addTo(assembler);
 
         // Mechanically Enhanced Obsidian
         GTValues.RA

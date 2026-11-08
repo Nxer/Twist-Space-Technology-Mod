@@ -30,10 +30,9 @@ public final class ValueEnum {
      * <li>Default 0
      */
     public static final int Mode_Default_IntensifyChemicalDistorter = Config.Mode_Default_IntensifyChemicalDistorter < 0
-        || Config.Mode_Default_IntensifyChemicalDistorter > 1 ? 0 : Config.Mode_Default_IntensifyChemicalDistorter;
+        || Config.Mode_Default_IntensifyChemicalDistorter > 2 ? 0 : Config.Mode_Default_IntensifyChemicalDistorter;
     public static final int Parallel_LCRMode_IntensifyChemicalDistorter = Config.Parallel_LCRMode_IntensifyChemicalDistorter;
     public static final int Parallel_ICDMode_IntensifyChemicalDistorter = Config.Parallel_ICDMode_IntensifyChemicalDistorter;
-    public static final int SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter = Config.SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter;
     public static final int SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter = Config.SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter;
 
     // endregion

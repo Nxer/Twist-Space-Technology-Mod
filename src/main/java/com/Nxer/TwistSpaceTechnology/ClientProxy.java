@@ -6,8 +6,11 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.Nxer.TwistSpaceTechnology.client.render.ArtificialStarRender;
+import com.Nxer.TwistSpaceTechnology.client.render.BECCondensateRenderer;
+import com.Nxer.TwistSpaceTechnology.client.render.BottledChaosCapacityRenderer;
 import com.Nxer.TwistSpaceTechnology.client.render.EyeOfWoodRender;
 import com.Nxer.TwistSpaceTechnology.client.render.LargeSolarBoilerRender;
+import com.Nxer.TwistSpaceTechnology.client.render.MaterialFluidTextureLoader;
 import com.Nxer.TwistSpaceTechnology.client.render.TileArcaneHoleRender;
 import com.Nxer.TwistSpaceTechnology.client.sound.SoundLoader;
 import com.Nxer.TwistSpaceTechnology.command.ContainerDumpMode;
@@ -53,6 +56,8 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void init(FMLInitializationEvent event) {
         super.init(event);
+        MinecraftForge.EVENT_BUS.register(new MaterialFluidTextureLoader());
+        BottledChaosCapacityRenderer.register();
         new EyeOfWoodRender();
         new ArtificialStarRender();
         new TileArcaneHoleRender();
@@ -64,6 +69,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
+        BECCondensateRenderer.register();
         RendereLoader.init();
         SoundLoader.init();
     }

@@ -1,11 +1,14 @@
 dependencies {
     elytraModpackVersion {
         setGtnhVersion("2.9.0")
+        // Elytra v1.1.2 passes this flag as allowFromCaching, so true reuses the pinned manifest.
+        setManifestNoCache(true)
     }
 
     // GTNH mods
     implementation(gtnh("GT5-Unofficial"))
     implementation(gtnh("GTNHLib"))
+    compileOnly(gtnh("Angelica"))
     implementation(gtnh("NewHorizonsCoreMod"))
     implementation(gtnh("Hodgepodge"))
     implementation(gtnh("supersolarpanels"))
@@ -41,6 +44,9 @@ dependencies {
     // GT bee recipes need Thaumic Bases resources and Extra Bees products in the development client.
     runtimeOnlyNonPublishable(gtnh("ThaumicBases"))
     runtimeOnlyNonPublishable(gtnh("Binnie"))
+    // Genetic processing content for development recipe testing.
+    runtimeOnlyNonPublishable(gtnh("gendustry")) { transitive = false }
+    runtimeOnlyNonPublishable(gtnh("bdlib"))
     runtimeOnlyNonPublishable(rfg.deobf("curse.maven:extra-utilities-225561:2264384"))
     // Biome content for development world-generation testing.
     runtimeOnlyNonPublishable(rfg.deobf("curse.maven:BiomesOPlenty-220318:2499612"))

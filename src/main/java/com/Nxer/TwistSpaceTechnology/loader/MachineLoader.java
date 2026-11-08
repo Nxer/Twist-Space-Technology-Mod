@@ -96,11 +96,13 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellInputBus;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellInputHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BloodOrbHatch;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BottledChaosRecipeTokenHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_CircuitImprintHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_EcoSphereInputInterfaceHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_EcoSphereUpgradeInterfaceHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_ManaHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_PatternAccessHatch;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_BottledChaos;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_IndistinctTentaclePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_LargeNeutronOscillator;
@@ -810,14 +812,22 @@ public final class MachineLoader {
         GTCMItemList.MegaNqReactor
             .set(new TST_MegaNqReactor(19081, "NameMegaNqReactor", TSTUtils.tr("tst.common.machine.MegaNqReactor.name")));
 
+        if (Config.EnableModularizedMachineSystem) {
+            GTCMItemList.BottledChaos.set(
+                new MM_BottledChaos(
+                    19082,
+                    "NameBottledChaos",
+                    TSTUtils.tr("tst.bottledchaos.recipe.name")));
+        }
+
         if (Enable_MegaDigester) {
             // #tr tst.common.machine.MegaDigester.name
             // # Mega Digester
             // #zh_CN 巨型煮解池
             GTCMItemList.MegaDigester
-                .set(new TST_MegaDigester(19082, "NameMegaDigester", TSTUtils.tr("tst.common.machine.MegaDigester.name")));
+                .set(new TST_MegaDigester(19083, "NameMegaDigester", TSTUtils.tr("tst.common.machine.MegaDigester.name")));
         }
-
+      
         // endregion
 
         // region Single block Machine
@@ -1225,6 +1235,18 @@ public final class MachineLoader {
                 "NameCircuitImprintHatchT1",
                 TSTUtils.tr("tst.common.machine.CircuitImprintHatch.tier.1.name"),
                 5));
+
+        if (Config.EnableModularizedMachineSystem) {
+            // #tr tst.bottledchaos.credential_hatch.name
+            // # Bottled Chaos Credential Hatch
+            // #zh_CN 瓶中混沌凭证仓
+            GTCMItemList.BottledChaosRecipeTokenHatch.set(
+                new TST_BottledChaosRecipeTokenHatch(
+                    18790,
+                    "NameBottledChaosRecipeTokenHatch",
+                    TSTUtils.tr("tst.bottledchaos.credential_hatch.name"),
+                    7));
+        }
 
         // region Modularized Stuff
 

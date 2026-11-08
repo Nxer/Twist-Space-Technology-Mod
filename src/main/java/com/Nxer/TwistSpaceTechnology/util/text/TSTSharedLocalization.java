@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.util.text;
 
+import java.util.StringJoiner;
+
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -210,8 +212,10 @@ public class TSTSharedLocalization {
         // #zh_CN 提示方块
         public static final String textDot = TSTUtils.tr("tst.common.shared.structure.text_dot");
 
-        public static String getBlueprintWithDot(int dot) {
-            return textUseBlueprint + EnumChatFormatting.WHITE + " " + textDot + " : " + EnumChatFormatting.AQUA + dot;
+        public static String getBlueprintWithDot(int... dots) {
+            StringJoiner dotList = new StringJoiner(", ");
+            for (int dot : dots) dotList.add(Integer.toString(dot));
+            return textUseBlueprint + EnumChatFormatting.WHITE + " " + textDot + " : " + EnumChatFormatting.AQUA + dotList;
         }
 
         // #tr tst.common.shared.structure.text_space
