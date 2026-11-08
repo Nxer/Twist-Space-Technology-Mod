@@ -36,8 +36,8 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosR
 import com.gtnewhorizons.modularui.api.drawable.UITexture;
 
 import goodgenerator.client.GUI.GGUITextures;
-import gregtech.api.enums.HeatingCoilLevel;
 import goodgenerator.items.GGMaterial;
+import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
