@@ -2,7 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
-import static com.Nxer.TwistSpaceTechnology.util.RecipeMathUtils.numericalApproximation;
+import static com.Nxer.TwistSpaceTechnology.util.MathUtils.numericalApproximation;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Kelvin;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Text_SeparatingLine;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance;

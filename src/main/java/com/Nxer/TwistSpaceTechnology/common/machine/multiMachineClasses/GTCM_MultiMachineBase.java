@@ -37,6 +37,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.ITSTSegmen
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.ITSTSegmentedItemInput;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellHelper;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellHelper.SegmentedInputs;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellInputBus.LongItemInputs;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellInputHatch.LongFluidInputs;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
@@ -581,6 +583,19 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         return rList;
     }
 
+    /**
+     * Wrap GT's current item input scope, using native long storage when present.
+     * Acquire after startRecipeProcessing(); the caller retains GT's dual-inventory separation.
+     */
+    public LongItemInputs getLongItemInputs() {
+        return LongItemInputs.of(this);
+    }
+
+    /** Same quantity representation for ordinary tanks and native long fluid storage. */
+    public LongFluidInputs getLongFluidInputs() {
+        return LongFluidInputs.of(this);
+    }
+
     public ArrayList<ItemStack> getStoredInputItemsWithDualInputHatch() {
 
         if (supportsCraftingMEBuffer() && !mDualInputHatches.isEmpty()) {
@@ -866,25 +881,30 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         String dSpeed = String.format("%.3f", this.getSpeedBonus() * 100) + "%";
         String dEUMod = String.format("%.3f", this.getEuModifier() * 100) + "%";
         String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 4];
+        String[] ret = new String[origin.length + (showParallelInInfo() ? 4 : 3)];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.Parallels
+        int index = origin.length;
+        if (showParallelInInfo()) ret[index++] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.Parallels
             + ": "
             + EnumChatFormatting.GOLD
             + this.getTrueParallel();
-        ret[origin.length + 1] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.SpeedMultiplier
+        ret[index++] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.SpeedMultiplier
             + ": "
             + EnumChatFormatting.GOLD
             + dSpeed;
-        ret[origin.length + 2] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.EuModifier
+        ret[index++] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.EuModifier
             + ": "
             + EnumChatFormatting.GOLD
             + dEUMod;
-        ret[origin.length + 3] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.HighCapacityOutput
+        ret[index] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.HighCapacityOutput
             + ": "
             + EnumChatFormatting.GOLD
             + (isMEOutputEnabled() ? "On" : "Off");
         return ret;
+    }
+
+    protected boolean showParallelInInfo() {
+        return true;
     }
 
     @Override

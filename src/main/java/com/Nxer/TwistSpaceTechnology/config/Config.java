@@ -60,6 +60,7 @@ public class Config {
     public static final String IndustrialMagicMatrix = "IndustrialMagicMatrix";
     public static final String PowerChairBGM = "PowerChairBGM";
     public static final String ModularizedMachineStuffs = "ModularizedMachineStuffs";
+    public static final String BottledChaos = "BottledChaos";
     public static final String DimensionallyTranscendentMatterPlasmaForgePrototypeMK2 = "Dimensionally Transcendent Matter Plasma Forge Prototype MK2";
     public static final String LargeNeutronOscillator = "Large Neutron Oscillator";
     public static final String MicroSpaceTimeFabricatorio = "Micro SpaceTime Fabricatorio";
@@ -463,6 +464,11 @@ public class Config {
     // endregion
 
     // region Modularized Machine Stuffs
+    public static boolean BottledChaosEasySkip = false;
+    public static boolean BottledChaosCycleRecipes = false;
+    public static boolean BottledChaosOneStep = false;
+    public static int BottledChaosChainedProcessingSeconds = 20;
+    public static int BottledChaosMinimumOverclockSeconds = 5;
     public static boolean EnableModularizedMachineSystem = true;
     public static int[] ParallelOfParallelController = new int[]{8, 128, 2048, 32768, 524288, 8388608, 134217728, Integer.MAX_VALUE};
     public static int[] SpeedMultiplierOfSpeedController = new int[]{2, 4, 8, 16, 32, 64, 128, 256};
@@ -673,6 +679,14 @@ public class Config {
         ParallelOfParallelController = configuration.get(ModularizedMachineStuffs, "ParallelOfParallelController", ParallelOfParallelController, "Parallel parameters of Parallel Controller.").getIntList();
         SpeedMultiplierOfSpeedController = configuration.get(ModularizedMachineStuffs, "SpeedMultiplierOfSpeedController", SpeedMultiplierOfSpeedController, "Speed multiplier parameters of Speed Controller.").getIntList();
         PowerConsumptionMultiplierOfPowerConsumptionController = configuration.get(ModularizedMachineStuffs, "PowerConsumptionMultiplierOfPowerConsumptionController", PowerConsumptionMultiplierOfPowerConsumptionController, "Power Consumption Multiplier parameters of Power Consumption Controller").getDoubleList();
+        // endregion
+
+        // region Bottled Chaos
+        BottledChaosEasySkip = configuration.getBoolean("EasySkip", BottledChaos, BottledChaosEasySkip, "Enable the original single-marker credential injection recipes in addition to progression recipes.");
+        BottledChaosCycleRecipes = configuration.getBoolean("CycleRecipes", BottledChaos, BottledChaosCycleRecipes, "Enable the main-page cycle-elimination recipes. Magmatter and quark-gluon plasma are always available.");
+        BottledChaosOneStep = configuration.getBoolean("OneStep", BottledChaos, BottledChaosOneStep, "Fully expand the three tesseract recipes instead of only cancelling the transcendent-metal loop. Requires CycleRecipes.");
+        BottledChaosChainedProcessingSeconds = configuration.getInt("BottledChaosChainedProcessingSeconds", BottledChaos, BottledChaosChainedProcessingSeconds, 10, 30, "Chained processing time budget in seconds for wired mode.");
+        BottledChaosMinimumOverclockSeconds = configuration.getInt("BottledChaosMinimumOverclockSeconds", BottledChaos, BottledChaosMinimumOverclockSeconds, 2, 6, "Minimum overclock target in seconds; also the fixed wireless processing time.");
         // endregion
 
         // region Eye of Wood

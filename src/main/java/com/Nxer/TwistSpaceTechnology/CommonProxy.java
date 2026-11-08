@@ -19,6 +19,7 @@ import com.Nxer.TwistSpaceTechnology.common.item.ItemYamato;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerRecipeCache;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
+import com.Nxer.TwistSpaceTechnology.common.material.BECCondensates;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialFix;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeResult.ResultInsufficientTier;
 import com.Nxer.TwistSpaceTechnology.config.Config;
@@ -129,6 +130,7 @@ public class CommonProxy {
     public void postInit(FMLPostInitializationEvent event) {
         TST_Network.registryNetwork();
         MaterialFix.load();
+        BECCondensates.initializeFluids();
         TST_BigBroArray.registerUUForArray();
         TST_BigBroArray.getGeneratorsForArray();
         TST_BigBroArray.initializeMaterials();
