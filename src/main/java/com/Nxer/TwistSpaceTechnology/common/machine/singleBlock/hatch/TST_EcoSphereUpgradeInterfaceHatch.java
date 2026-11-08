@@ -43,14 +43,24 @@ import gregtech.common.tileentities.machines.ISmartInputHatch;
 public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch
     implements IAddUIWidgets, ISmartInputHatch, TSTTooltipCredit {
 
-    private static final int MAX_UPGRADE_SLOTS = 4;
+    private static final int MAX_UPGRADE_SLOTS = 9;
+
+    private static final String[] DESCRIPTION = {
+        // #tr tst.ecosphere.machine.EcoSphereUpgradeInterface.tooltip.info.1
+        // # Upgrade interface for the Eco-Sphere Simulator
+        // #zh_CN 拟似生态圈的升级接口
+        StatCollector.translateToLocal("tst.ecosphere.machine.EcoSphereUpgradeInterface.tooltip.info.1"), "",
+        // #tr tst.ecosphere.machine.EcoSphereUpgradeInterface.tooltip.info.2
+        // # Upgrading the glass adds slots; upgrading the structure doubles the gain.
+        // #zh_CN 升级玻璃增加槽位, 升级结构使增益翻倍.
+        StatCollector.translateToLocal("tst.ecosphere.machine.EcoSphereUpgradeInterface.tooltip.info.2") };
 
     private int machineMode = -1;
     private int structureTier = 1;
     private int glassTier;
 
     public TST_EcoSphereUpgradeInterfaceHatch(int id, String name, String nameRegional, int tier) {
-        super(id, name, nameRegional, tier, MAX_UPGRADE_SLOTS, new String[0]);
+        super(id, name, nameRegional, tier, MAX_UPGRADE_SLOTS, DESCRIPTION);
         registerTooltipCredits(ID.GODERIUM);
     }
 
@@ -146,7 +156,7 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch
     }
 
     private int getActiveSlots() {
-        return Math.min(Math.max(1, glassTier + (structureTier >= 2 ? 1 : 0)), MAX_UPGRADE_SLOTS);
+        return Math.min(1 + Math.min(4, glassTier) * (structureTier >= 2 ? 2 : 1), MAX_UPGRADE_SLOTS);
     }
 
     private boolean isSlotActive(int index) {
@@ -209,7 +219,7 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
         SlotWidget[] upgradeSlots = new SlotWidget[MAX_UPGRADE_SLOTS];
         for (int index = 0; index < MAX_UPGRADE_SLOTS; index++) {
-            upgradeSlots[index] = createUpgradeSlot(index, 70 + index % 2 * 18, 26 + index / 2 * 18);
+            upgradeSlots[index] = createUpgradeSlot(index, 61 + index % 3 * 18, 17 + index / 3 * 18);
         }
 
         builder.widget(new FakeSyncWidget.IntegerSyncer(() -> machineMode, value -> machineMode = value))
@@ -262,7 +272,9 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch
 
             @Override
             public boolean isItemValidPhantom(ItemStack stack) {
-                return isEnabled() && isUpgradeValid(index, stack) && super.isItemValidPhantom(stack);
+                return isEnabled() && isSlotActive(index)
+                    && isUpgradeValid(index, stack)
+                    && super.isItemValidPhantom(stack);
             }
         };
         SlotWidget widget = new SlotWidget(slot);
