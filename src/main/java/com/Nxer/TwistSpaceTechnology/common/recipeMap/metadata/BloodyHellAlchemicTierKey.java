@@ -18,9 +18,9 @@ public class BloodyHellAlchemicTierKey extends RecipeMetadataKey<Integer> {
     @Override
     public void drawInfo(RecipeDisplayInfo recipeInfo, @Nullable Object value) {
         int tier = cast(value, 1);
-        // #tr tst.common.recipe.BloodyHellRecipeMap.blood_orb_tier
+        // #tr tst.recipe.BloodyHellRecipeMap.blood_orb_tier
         // # Blood Orb Tier:
         // #zh_CN 气血宝珠等级：
-        recipeInfo.drawText(TSTUtils.tr("tst.common.recipe.BloodyHellRecipeMap.blood_orb_tier") + tier);
+        recipeInfo.drawText(TSTUtils.tr("tst.recipe.BloodyHellRecipeMap.blood_orb_tier") + tier);
     }
 }

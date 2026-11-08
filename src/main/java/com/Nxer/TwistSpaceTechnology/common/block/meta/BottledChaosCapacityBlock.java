@@ -25,13 +25,13 @@ public class BottledChaosCapacityBlock extends AbstractTstMetaBlock {
     public static final String STRUCTURE_CHANNEL = "bottledchaoscapacity";
 
     public void registerStructureChannel() {
-        // #tr tst.bottledchaos.structure.capacity_channel
+        // #tr tst.machine.BottledChaos.hint.capacity_channel
         // # Bottled Chaos Capacity: 1 = Air, 2-6 = Capacity Blocks I-V
         // #zh_CN 瓶中混沌容量区: 1 = 空气, 2-6 = 容量方块 I-V
         StructureLibAPI.registerChannelDescription(
             STRUCTURE_CHANNEL,
             TwistSpaceTechnology.MODID,
-            "tst.bottledchaos.structure.capacity_channel");
+            "tst.machine.BottledChaos.hint.capacity_channel");
         for (int tier = 0; tier < 5; tier++) {
             StructureLibAPI.registerChannelItem(
                 STRUCTURE_CHANNEL,
@@ -53,7 +53,7 @@ public class BottledChaosCapacityBlock extends AbstractTstMetaBlock {
 
     @Override
     public String getUnlocalizedName() {
-        return "tst.bottledchaos.capacity_block";
+        return "tile.tst.bottledchaos.capacity_block";
     }
 
     @Override

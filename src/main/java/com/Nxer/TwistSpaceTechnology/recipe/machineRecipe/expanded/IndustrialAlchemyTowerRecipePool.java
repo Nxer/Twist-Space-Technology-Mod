@@ -29,11 +29,10 @@ public class IndustrialAlchemyTowerRecipePool {
                 TCRecipeTools.CrucibleCraftingRecipe recipe = value.get(i);
                 ItemStack Essence = new ItemStack(itemEssence);
                 Essence.setItemDamage(1);
-                // #tr tst.common.recipe.IndustrialAlchemyTowerRecipeMap.input_aspects
+                // #tr tst.recipe.IndustrialAlchemyTowerRecipeMap.input_aspects
                 // # Recipe required Essentia
                 // #zh_CN 配方所需要素
-                Essence.setStackDisplayName(
-                    TSTUtils.tr("tst.common.recipe.IndustrialAlchemyTowerRecipeMap.input_aspects"));
+                Essence.setStackDisplayName(TSTUtils.tr("tst.recipe.IndustrialAlchemyTowerRecipeMap.input_aspects"));
                 new ItemEssence().setAspects(Essence, recipe.getInputAspects());
                 Object inputItem = recipe.getInputItem();
                 Object[] combined = new Object[] { inputItem, GTUtility.getIntegratedCircuit(i + 1) };

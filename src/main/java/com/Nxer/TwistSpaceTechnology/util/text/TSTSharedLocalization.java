@@ -20,197 +20,197 @@ public class TSTSharedLocalization {
         public static final String ModName = Tags.MODNAME;
 
         // spotless:off
-        // #tr tst.common.shared.general.machine_of_twist_space_technology
+        // #tr tst.shared.general.machine_of_twist_space_technology
         // # {\BOLD}{\BLUE}Twist {\AQUA}Space {\YELLOW}Technology{\RESET} is honored to serve you
         // #zh_CN {\BOLD}{\BLUE}Twist {\AQUA}Space {\YELLOW}Technology{\RESET} 很荣幸为您服务!
-        public static final String Machine_of_TwistSpaceTechnology = TSTUtils.tr("tst.common.shared.general.machine_of_twist_space_technology");
+        public static final String Machine_of_TwistSpaceTechnology = TSTUtils.tr("tst.shared.general.machine_of_twist_space_technology");
 
-        // #tr tst.common.shared.credit.mod_name
+        // #tr tst.shared.credit.mod_name
         // # Added by %s
         // #zh_CN 由 %s 添加
-        public static final String ModNameDesc = TSTUtils.tr("tst.common.shared.credit.mod_name");
+        public static final String ModNameDesc = TSTUtils.tr("tst.shared.credit.mod_name");
 
-        // #tr tst.common.shared.general.heat_capacity
+        // #tr tst.shared.general.heat_capacity
         // # Heat Capacity:
         // #zh_CN 热容:
-        public static final String HeatCapacity = TSTUtils.tr("tst.common.shared.general.heat_capacity");
+        public static final String HeatCapacity = TSTUtils.tr("tst.shared.general.heat_capacity");
 
-        // #tr tst.common.shared.general.fluid_capacity
+        // #tr tst.shared.general.fluid_capacity
         // # Capacity:
         // #zh_CN 容量:
-        public static final String FluidCapacity = TSTUtils.tr("tst.common.shared.general.fluid_capacity");
+        public static final String FluidCapacity = TSTUtils.tr("tst.shared.general.fluid_capacity");
 
-        // #tr tst.common.shared.general.hatch_tier
+        // #tr tst.shared.general.hatch_tier
         // # Hatch Tier:
         // #zh_CN 仓室等级:
-        public static final String HatchTier = TSTUtils.tr("tst.common.shared.general.hatch_tier");
+        public static final String HatchTier = TSTUtils.tr("tst.shared.general.hatch_tier");
 
-        // #tr tst.common.shared.general.kelvin
+        // #tr tst.shared.general.kelvin
         // # K
         // #zh_CN K
-        public static final String Kelvin = TSTUtils.tr("tst.common.shared.general.kelvin");
+        public static final String Kelvin = TSTUtils.tr("tst.shared.general.kelvin");
 
-        // #tr tst.common.shared.general.auto_separation
+        // #tr tst.shared.general.auto_separation
         // # Automatically separate inputs
         // #zh_CN 自动隔离输入
-        public static final String AutoSeparation = TSTUtils.tr("tst.common.shared.general.auto_separation");
+        public static final String AutoSeparation = TSTUtils.tr("tst.shared.general.auto_separation");
 
-        // #tr tst.common.shared.general.text_separating_line
+        // #tr tst.shared.general.text_separating_line
         // # {\GOLD}-----------------------------------------
         // #zh_CN {\GOLD}-----------------------------------------
-        public static final String Text_SeparatingLine = TSTUtils.tr("tst.common.shared.general.text_separating_line");
+        public static final String Text_SeparatingLine = TSTUtils.tr("tst.shared.general.text_separating_line");
 
-        // #tr tst.common.shared.general.word_parallel
+        // #tr tst.shared.general.word_parallel
         // # Parallel
         // #zh_CN 并行
-        public static final String Word_Parallel = TSTUtils.tr("tst.common.shared.general.word_parallel");
+        public static final String Word_Parallel = TSTUtils.tr("tst.shared.general.word_parallel");
 
-        // #tr tst.common.shared.general.word_overclock
+        // #tr tst.shared.general.word_overclock
         // # Overclock
         // #zh_CN 超频
-        public static final String Word_Overclock = TSTUtils.tr("tst.common.shared.general.word_overclock");
+        public static final String Word_Overclock = TSTUtils.tr("tst.shared.general.word_overclock");
         // spotless:on
     }
 
     public static class MachineInfo {
 
         // spotless:off
-        // #tr tst.common.shared.machine_info.speed_multiplier
+        // #tr tst.shared.machine_info.speed_multiplier
         // # Speed multiplier
         // #zh_CN 耗时倍率
-        public static final String SpeedMultiplier = TSTUtils.tr("tst.common.shared.machine_info.speed_multiplier");
+        public static final String SpeedMultiplier = TSTUtils.tr("tst.shared.machine_info.speed_multiplier");
 
-        // #tr tst.common.shared.machine_info.parallels
+        // #tr tst.shared.machine_info.parallels
         // # Parallels
         // #zh_CN 并行
-        public static final String Parallels = TSTUtils.tr("tst.common.shared.machine_info.parallels");
+        public static final String Parallels = TSTUtils.tr("tst.shared.machine_info.parallels");
 
-        // #tr tst.common.shared.machine_info.eu_modifier
+        // #tr tst.shared.machine_info.eu_modifier
         // # EU Modifier
         // #zh_CN 耗电倍率
-        public static final String EuModifier = TSTUtils.tr("tst.common.shared.machine_info.eu_modifier");
+        public static final String EuModifier = TSTUtils.tr("tst.shared.machine_info.eu_modifier");
 
-        // #tr tst.common.shared.machine_info.high_capacity_output
+        // #tr tst.shared.machine_info.high_capacity_output
         // # High-Capacity Output
         // #zh_CN 超大容量输出
-        public static final String HighCapacityOutput = TSTUtils.tr("tst.common.shared.machine_info.high_capacity_output");
+        public static final String HighCapacityOutput = TSTUtils.tr("tst.shared.machine_info.high_capacity_output");
 
-        // #tr tst.common.shared.machine_info.glass_tier
+        // #tr tst.shared.machine_info.glass_tier
         // # {\AQUA}Glass Tier
         // #zh_CN {\AQUA}玻璃等级
-        public static final String GlassTier = TSTUtils.tr("tst.common.shared.machine_info.glass_tier");
+        public static final String GlassTier = TSTUtils.tr("tst.shared.machine_info.glass_tier");
 
-        // #tr tst.common.shared.machine_info.coil_tier
+        // #tr tst.shared.machine_info.coil_tier
         // # Coil Tier
         // #zh_CN 线圈等级
-        public static final String CoilTier = TSTUtils.tr("tst.common.shared.machine_info.coil_tier");
+        public static final String CoilTier = TSTUtils.tr("tst.shared.machine_info.coil_tier");
 
-        // #tr tst.common.shared.machine_info.current_power_consumption
+        // #tr tst.shared.machine_info.current_power_consumption
         // # Current Power Consumption
         // #zh_CN 当前耗电
-        public static final String CurrentPowerConsumption = TSTUtils.tr("tst.common.shared.machine_info.current_power_consumption");
+        public static final String CurrentPowerConsumption = TSTUtils.tr("tst.shared.machine_info.current_power_consumption");
 
-        // #tr tst.common.shared.machine_info.machine_mode
+        // #tr tst.shared.machine_info.machine_mode
         // # Machine Mode
         // #zh_CN 机器模式
-        public static final String MachineMode = TSTUtils.tr("tst.common.shared.machine_info.machine_mode");
+        public static final String MachineMode = TSTUtils.tr("tst.shared.machine_info.machine_mode");
 
-        // #tr tst.common.shared.machine_info.machine_tier
+        // #tr tst.shared.machine_info.machine_tier
         // # Machine Tier
         // #zh_CN 机器等级
-        public static final String MachineTier = TSTUtils.tr("tst.common.shared.machine_info.machine_tier");
+        public static final String MachineTier = TSTUtils.tr("tst.shared.machine_info.machine_tier");
 
-        // #tr tst.common.shared.machine_info.field_generator_tier
+        // #tr tst.shared.machine_info.field_generator_tier
         // # Field Generator Tier
         // #zh_CN 力场发生器等级
-        public static final String FieldGeneratorTier = TSTUtils.tr("tst.common.shared.machine_info.field_generator_tier");
+        public static final String FieldGeneratorTier = TSTUtils.tr("tst.shared.machine_info.field_generator_tier");
 
-        // #tr tst.common.shared.machine_info.fusion_coil_tier
+        // #tr tst.shared.machine_info.fusion_coil_tier
         // # Fusion Coil Tier
         // #zh_CN 聚变线圈等级
-        public static final String FusionCoilTier = TSTUtils.tr("tst.common.shared.machine_info.fusion_coil_tier");
+        public static final String FusionCoilTier = TSTUtils.tr("tst.shared.machine_info.fusion_coil_tier");
 
-        // #tr tst.common.shared.machine_info.compact_fusion_coil_tier
+        // #tr tst.shared.machine_info.compact_fusion_coil_tier
         // # Compact Fusion Coil Tier
         // #zh_CN 压缩聚变线圈等级
-        public static final String CompactFusionCoilTier = TSTUtils.tr("tst.common.shared.machine_info.compact_fusion_coil_tier");
+        public static final String CompactFusionCoilTier = TSTUtils.tr("tst.shared.machine_info.compact_fusion_coil_tier");
 
-        // #tr tst.common.shared.machine_info.wireless_mode_enabled
+        // #tr tst.shared.machine_info.wireless_mode_enabled
         // # Wireless mode enabled
         // #zh_CN 已启用无线模式
-        public static final String Info_Wireless_mode_enabled = TSTUtils.tr("tst.common.shared.machine_info.wireless_mode_enabled");
+        public static final String Info_Wireless_mode_enabled = TSTUtils.tr("tst.shared.machine_info.wireless_mode_enabled");
         // spotless:on
 
         public static String glassTier(int glassTier) {
-            // #tr tst.common.shared.machine_info.formatted.glass_tier
+            // #tr tst.shared.machine_info.formatted.glass_tier
             // # {\AQUA}Glass Tier: {\GOLD}%s
             // #zh_CN {\AQUA}玻璃等级: {\GOLD}%s
-            return TSTUtils.tr("tst.common.shared.machine_info.formatted.glass_tier", glassTier);
+            return TSTUtils.tr("tst.shared.machine_info.formatted.glass_tier", glassTier);
         }
 
         public static String coilTier(int coilTier) {
-            // #tr tst.common.shared.machine_info.formatted.coil_tier
+            // #tr tst.shared.machine_info.formatted.coil_tier
             // # {\AQUA}Coil Tier: {\GOLD}%s
             // #zh_CN {\AQUA}线圈等级: {\GOLD}%s
-            return TSTUtils.tr("tst.common.shared.machine_info.formatted.coil_tier", coilTier);
+            return TSTUtils.tr("tst.shared.machine_info.formatted.coil_tier", coilTier);
         }
 
         public static String componentTier(int componentTier) {
-            // #tr tst.common.shared.machine_info.formatted.component_tier
+            // #tr tst.shared.machine_info.formatted.component_tier
             // # {\AQUA}Component Tier: {\GOLD}%s
             // #zh_CN {\AQUA}部件等级: {\GOLD}%s
-            return TSTUtils.tr("tst.common.shared.machine_info.formatted.component_tier", componentTier);
+            return TSTUtils.tr("tst.shared.machine_info.formatted.component_tier", componentTier);
         }
 
         public static String perfectOverclockSupport(boolean supported) {
-            // #tr tst.common.shared.machine_info.formatted.perfect_overclock_supported
+            // #tr tst.shared.machine_info.formatted.perfect_overclock_supported
             // # {\AQUA}Perfect Overclocking: {\GOLD}Supported
             // #zh_CN {\AQUA}无损超频: {\GOLD}支持
 
-            // #tr tst.common.shared.machine_info.formatted.perfect_overclock_unsupported
+            // #tr tst.shared.machine_info.formatted.perfect_overclock_unsupported
             // # {\AQUA}Perfect Overclocking: {\GOLD}Not Supported
             // #zh_CN {\AQUA}无损超频: {\GOLD}不支持
             return TSTUtils.tr(
-                supported ? "tst.common.shared.machine_info.formatted.perfect_overclock_supported"
-                    : "tst.common.shared.machine_info.formatted.perfect_overclock_unsupported");
+                supported ? "tst.shared.machine_info.formatted.perfect_overclock_supported"
+                    : "tst.shared.machine_info.formatted.perfect_overclock_unsupported");
         }
     }
 
     public static class Waila {
 
-        // #tr tst.common.shared.waila.wireless_mode
+        // #tr tst.shared.waila.wireless_mode
         // # Wireless Mode
         // #zh_CN 无线模式
-        public static final String Waila_WirelessMode = TSTUtils.tr("tst.common.shared.waila.wireless_mode");
+        public static final String Waila_WirelessMode = TSTUtils.tr("tst.shared.waila.wireless_mode");
 
-        // #tr tst.common.shared.waila.current_eu_cost
+        // #tr tst.shared.waila.current_eu_cost
         // # Current EU Cost
         // #zh_CN 当前EU消耗
-        public static final String Waila_CurrentEuCost = TSTUtils.tr("tst.common.shared.waila.current_eu_cost");
+        public static final String Waila_CurrentEuCost = TSTUtils.tr("tst.shared.waila.current_eu_cost");
     }
 
     public static class Structure {
 
         // spotless:off
-        // #tr tst.common.shared.structure.text_casing
+        // #tr tst.shared.structure.text_casing
         // # Casing
         // #zh_CN Casing
-        public static final String textCasing = TSTUtils.tr("tst.common.shared.structure.text_casing");
+        public static final String textCasing = TSTUtils.tr("tst.shared.structure.text_casing");
 
-        // #tr tst.common.shared.structure.text_use_blueprint
+        // #tr tst.shared.structure.text_use_blueprint
         // # Use {\BLUE}Blue{\AQUA}print{\RESET} to preview
         // #zh_CN 用{\BLUE}蓝{\AQUA}图{\RESET}预览
-        public static final String textUseBlueprint = TSTUtils.tr("tst.common.shared.structure.text_use_blueprint");
+        public static final String textUseBlueprint = TSTUtils.tr("tst.shared.structure.text_use_blueprint");
 
-        // #tr tst.common.shared.structure.text_colon
+        // #tr tst.shared.structure.text_colon
         // # :{\SPACE}
         // #zh_CN ：{\SPACE}
-        public static final String textColon = TSTUtils.tr("tst.common.shared.structure.text_colon");
+        public static final String textColon = TSTUtils.tr("tst.shared.structure.text_colon");
 
-        // #tr tst.common.shared.structure.text_dot
+        // #tr tst.shared.structure.text_dot
         // # Dot
         // #zh_CN 提示方块
-        public static final String textDot = TSTUtils.tr("tst.common.shared.structure.text_dot");
+        public static final String textDot = TSTUtils.tr("tst.shared.structure.text_dot");
 
         public static String getBlueprintWithDot(int... dots) {
             StringJoiner dotList = new StringJoiner(", ");
@@ -218,115 +218,115 @@ public class TSTSharedLocalization {
             return textUseBlueprint + EnumChatFormatting.WHITE + " " + textDot + " : " + EnumChatFormatting.AQUA + dotList;
         }
 
-        // #tr tst.common.shared.structure.text_space
+        // #tr tst.shared.structure.text_space
         // # {\SPACE}
         // #zh_CN {\SPACE}
-        public static final String textSpace = TSTUtils.tr("tst.common.shared.structure.text_space");
+        public static final String textSpace = TSTUtils.tr("tst.shared.structure.text_space");
 
-        // #tr tst.common.shared.structure.text_any_casing
+        // #tr tst.shared.structure.text_any_casing
         // # Any Casing
         // #zh_CN 任意机械方块
-        public static final String textAnyCasing = TSTUtils.tr("tst.common.shared.structure.text_any_casing");
+        public static final String textAnyCasing = TSTUtils.tr("tst.shared.structure.text_any_casing");
 
-        // #tr tst.common.shared.structure.text_top_center
+        // #tr tst.shared.structure.text_top_center
         // # Top center
         // #zh_CN 顶层中央
-        public static final String textTopCenter = TSTUtils.tr("tst.common.shared.structure.text_top_center");
+        public static final String textTopCenter = TSTUtils.tr("tst.shared.structure.text_top_center");
 
-        // #tr tst.common.shared.structure.text_front_center
+        // #tr tst.shared.structure.text_front_center
         // # Front center
         // #zh_CN 正面中央
-        public static final String textFrontCenter = TSTUtils.tr("tst.common.shared.structure.text_front_center");
+        public static final String textFrontCenter = TSTUtils.tr("tst.shared.structure.text_front_center");
 
-        // #tr tst.common.shared.structure.text_front_bottom
+        // #tr tst.shared.structure.text_front_bottom
         // # Front bottom
         // #zh_CN 正面底中
-        public static final String textFrontBottom = TSTUtils.tr("tst.common.shared.structure.text_front_bottom");
+        public static final String textFrontBottom = TSTUtils.tr("tst.shared.structure.text_front_bottom");
 
-        // #tr tst.common.shared.structure.text_center_of_lr_sides
+        // #tr tst.shared.structure.text_center_of_lr_sides
         // # Center area of left and right side
         // #zh_CN 左右两侧的中央区域
-        public static final String textCenterOfLRSides = TSTUtils.tr("tst.common.shared.structure.text_center_of_lr_sides");
+        public static final String textCenterOfLRSides = TSTUtils.tr("tst.shared.structure.text_center_of_lr_sides");
 
-        // #tr tst.common.shared.structure.text_center_of_ud_sides
+        // #tr tst.shared.structure.text_center_of_ud_sides
         // # Center area of up and down side
         // #zh_CN 上下侧的中央区域
-        public static final String textCenterOfUDSides = TSTUtils.tr("tst.common.shared.structure.text_center_of_ud_sides");
+        public static final String textCenterOfUDSides = TSTUtils.tr("tst.shared.structure.text_center_of_ud_sides");
 
-        // #tr tst.common.shared.structure.text_end_sides
+        // #tr tst.shared.structure.text_end_sides
         // # Machine end
         // #zh_CN 机器末端
-        public static final String textEndSides = TSTUtils.tr("tst.common.shared.structure.text_end_sides");
+        public static final String textEndSides = TSTUtils.tr("tst.shared.structure.text_end_sides");
 
-        // #tr tst.common.shared.structure.text_casing_adv_ir_plated
+        // #tr tst.shared.structure.text_casing_adv_ir_plated
         // # Advanced Iridium Plated Machine Casing
         // #zh_CN 强化镀铱机械方块
-        public static final String textCasingAdvIrPlated = TSTUtils.tr("tst.common.shared.structure.text_casing_adv_ir_plated");
+        public static final String textCasingAdvIrPlated = TSTUtils.tr("tst.shared.structure.text_casing_adv_ir_plated");
 
-        // #tr tst.common.shared.structure.text_casing_tt_0
+        // #tr tst.shared.structure.text_casing_tt_0
         // # High Power Casing
         // #zh_CN 超能机械方块
-        public static final String textCasingTT_0 = TSTUtils.tr("tst.common.shared.structure.text_casing_tt_0");
+        public static final String textCasingTT_0 = TSTUtils.tr("tst.shared.structure.text_casing_tt_0");
 
-        // #tr tst.common.shared.structure.text_around_controller
+        // #tr tst.shared.structure.text_around_controller
         // # Around the Controller
         // #zh_CN 控制器方块周围
-        public static final String textAroundController = TSTUtils.tr("tst.common.shared.structure.text_around_controller");
+        public static final String textAroundController = TSTUtils.tr("tst.shared.structure.text_around_controller");
         // spotless:on
     }
 
     public static class MachineTooltip {
 
         // spotless:off
-        // #tr tst.common.shared.machine_tooltip.more_info_checking_in_scanner
+        // #tr tst.shared.machine_tooltip.more_info_checking_in_scanner
         // # {\WHITE}Use scanner check controller block to get more information.
         // #zh_CN {\WHITE}使用三录仪查看主机获取更多信息.
-        public static final String MoreInfoCheckingInScanner = TSTUtils.tr("tst.common.shared.machine_tooltip.more_info_checking_in_scanner");
+        public static final String MoreInfoCheckingInScanner = TSTUtils.tr("tst.shared.machine_tooltip.more_info_checking_in_scanner");
 
-        // #tr tst.common.shared.machine_tooltip.tooltip_details
+        // #tr tst.shared.machine_tooltip.tooltip_details
         // # {\LIGHT_PURPLE}Details:
         // #zh_CN {\LIGHT_PURPLE}具体细节:
-        public static final String Tooltip_Details = TSTUtils.tr("tst.common.shared.machine_tooltip.tooltip_details");
+        public static final String Tooltip_Details = TSTUtils.tr("tst.shared.machine_tooltip.tooltip_details");
 
-        // #tr tst.common.shared.machine_tooltip.tooltips_join_wireless_net_without_energy_hatch
+        // #tr tst.shared.machine_tooltip.tooltips_join_wireless_net_without_energy_hatch
         // # Joining the wireless EU network when without installing an energy hatch.
         // #zh_CN 未安装能源仓时自动进入无线电力网络模式.
-        public static final String Tooltips_JoinWirelessNetWithoutEnergyHatch = TSTUtils.tr("tst.common.shared.machine_tooltip.tooltips_join_wireless_net_without_energy_hatch");
+        public static final String Tooltips_JoinWirelessNetWithoutEnergyHatch = TSTUtils.tr("tst.shared.machine_tooltip.tooltips_join_wireless_net_without_energy_hatch");
 
-        // #tr tst.common.shared.machine_tooltip.tooltip_do_not_need_maintenance
+        // #tr tst.shared.machine_tooltip.tooltip_do_not_need_maintenance
         // # Do Not Need Maintenance!
         // #zh_CN 不需要维护仓!
-        public static final String Tooltip_DoNotNeedMaintenance = TSTUtils.tr("tst.common.shared.machine_tooltip.tooltip_do_not_need_maintenance");
+        public static final String Tooltip_DoNotNeedMaintenance = TSTUtils.tr("tst.shared.machine_tooltip.tooltip_do_not_need_maintenance");
 
-        // #tr tst.common.shared.machine_tooltip.tooltip_do_not_need_energy_hatch
+        // #tr tst.shared.machine_tooltip.tooltip_do_not_need_energy_hatch
         // # Do Not Need Energy Hatch!
         // #zh_CN 不需要能源仓!
-        public static final String Tooltip_DoNotNeedEnergyHatch = TSTUtils.tr("tst.common.shared.machine_tooltip.tooltip_do_not_need_energy_hatch");
+        public static final String Tooltip_DoNotNeedEnergyHatch = TSTUtils.tr("tst.shared.machine_tooltip.tooltip_do_not_need_energy_hatch");
 
-        // #tr tst.common.shared.machine_tooltip.mark_twist_space_technology_tec_tech
+        // #tr tst.shared.machine_tooltip.mark_twist_space_technology_tec_tech
         // # {\AQUA}{\BOLD}Twist Space Technology : {\RESET}Tech
         // #zh_CN {\AQUA}{\BOLD}Twist Space Technology : {\RESET}{\BLUE}Tec{\DARK_BLUE}Tech
-        public static final String Mark_TwistSpaceTechnology_TecTech = TSTUtils.tr("tst.common.shared.machine_tooltip.mark_twist_space_technology_tec_tech");
+        public static final String Mark_TwistSpaceTechnology_TecTech = TSTUtils.tr("tst.shared.machine_tooltip.mark_twist_space_technology_tec_tech");
 
-        // #tr tst.common.shared.machine_tooltip.mark_tec_tech_elemental_matter
+        // #tr tst.shared.machine_tooltip.mark_tec_tech_elemental_matter
         // # {\BLUE}Tec{\DARK_BLUE}Tech{\BLUE}: Elemental Matter
         // #zh_CN {\BLUE}Tec{\DARK_BLUE}Tech{\BLUE}: 元素物质
-        public static final String Mark_TecTech_ElementalMatter = TSTUtils.tr("tst.common.shared.machine_tooltip.mark_tec_tech_elemental_matter");
+        public static final String Mark_TecTech_ElementalMatter = TSTUtils.tr("tst.shared.machine_tooltip.mark_tec_tech_elemental_matter");
 
-        // #tr tst.common.shared.machine_tooltip.text_screwdriver_change_mode
+        // #tr tst.shared.machine_tooltip.text_screwdriver_change_mode
         // # Use screwdriver to change mode.
         // #zh_CN 使用螺丝刀切换模式.
-        public static final String textScrewdriverChangeMode = TSTUtils.tr("tst.common.shared.machine_tooltip.text_screwdriver_change_mode");
+        public static final String textScrewdriverChangeMode = TSTUtils.tr("tst.shared.machine_tooltip.text_screwdriver_change_mode");
 
-        // #tr tst.common.shared.machine_tooltip.tooltip_glass_tier_limit_energy_hatch_tier
+        // #tr tst.shared.machine_tooltip.tooltip_glass_tier_limit_energy_hatch_tier
         // # The Glass Tier limit the Energy hatch voltage Tier.
         // #zh_CN 玻璃等级限制能源仓等级.
-        public static final String Tooltip_GlassTierLimitEnergyHatchTier = TSTUtils.tr("tst.common.shared.machine_tooltip.tooltip_glass_tier_limit_energy_hatch_tier");
+        public static final String Tooltip_GlassTierLimitEnergyHatchTier = TSTUtils.tr("tst.shared.machine_tooltip.tooltip_glass_tier_limit_energy_hatch_tier");
 
-        // #tr tst.common.shared.machine_tooltip.out_of_maintenance
+        // #tr tst.shared.machine_tooltip.out_of_maintenance
         // # {\RED}{\BOLD} OUT OF MAINTENANCE !
         // #zh_CN {\RED}{\BOLD}不再维护！
-        public static final String OutOfMaintenance = TSTUtils.tr("tst.common.shared.machine_tooltip.out_of_maintenance");
+        public static final String OutOfMaintenance = TSTUtils.tr("tst.shared.machine_tooltip.out_of_maintenance");
         // spotless:on
 
         public static String tooComplex() {
@@ -334,17 +334,17 @@ public class TSTSharedLocalization {
         }
 
         public static String temporaryController() {
-            // #tr tst.common.shared.machine_tooltip.temporary_controller
+            // #tr tst.shared.machine_tooltip.temporary_controller
             // # {\RED}Temporary controller; will be removed in the next update!
             // #zh_CN {\RED}临时控制器, 将在下个版本移除!
-            return TSTUtils.tr("tst.common.shared.machine_tooltip.temporary_controller");
+            return TSTUtils.tr("tst.shared.machine_tooltip.temporary_controller");
         }
 
         public static String replacementController() {
-            // #tr tst.common.shared.machine_tooltip.replacement_controller
+            // #tr tst.shared.machine_tooltip.replacement_controller
             // # {\RED}See NEI for the replacement controller and conversion recipes.
             // #zh_CN {\RED}请在NEI查看替代控制器及转换配方.
-            return TSTUtils.tr("tst.common.shared.machine_tooltip.replacement_controller");
+            return TSTUtils.tr("tst.shared.machine_tooltip.replacement_controller");
         }
 
     }
@@ -473,17 +473,17 @@ public class TSTSharedLocalization {
     public static class Command {
 
         public static ChatComponentTranslation invalidCommand() {
-            // #tr tst.common.shared.command.tst_command.invalid_command
+            // #tr tst.shared.command.tst_command.invalid_command
             // # {\RED}Invalid command.
             // #zh_CN 无效指令.
-            return new ChatComponentTranslation("tst.common.shared.command.tst_command.invalid_command");
+            return new ChatComponentTranslation("tst.shared.command.tst_command.invalid_command");
         }
 
         public static ChatComponentTranslation formatError() {
-            // #tr tst.common.shared.command.tst_command.input_format_error
+            // #tr tst.shared.command.tst_command.input_format_error
             // # {\RED}Input format error, please check your inputs.
             // #zh_CN 输入格式错误, 请检查你的输入参数.
-            return new ChatComponentTranslation("tst.common.shared.command.tst_command.input_format_error");
+            return new ChatComponentTranslation("tst.shared.command.tst_command.input_format_error");
         }
     }
 

@@ -280,39 +280,39 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.MegaStoneBreaker.tooltip.machine_type
+        // #tr tst.machine.MegaStoneBreaker.tooltip.machine_type
         // # Stone Breaker
         // #zh_CN 碎石机
-        tt.addMachineType(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.machine_type"))
-            // #tr tst.common.machine.MegaStoneBreaker.tooltip.controller
+        tt.addMachineType(TSTUtils.tr("tst.machine.MegaStoneBreaker.tooltip.machine_type"))
+            // #tr tst.machine.MegaStoneBreaker.tooltip.controller
             // # Controller block for the Silicon Rock Synthesizer
             // #zh_CN 硅岩制造机的控制方块
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.controller"))
-            // #tr tst.common.machine.MegaStoneBreaker.tooltip.info.01
+            .addInfo(TSTUtils.tr("tst.machine.MegaStoneBreaker.tooltip.controller"))
+            // #tr tst.machine.MegaStoneBreaker.tooltip.info.01
             // # {\WHITE}Hey, I heard you come from a sky island?
             // #zh_CN {\WHITE}嘿,听说你来自一片空岛?
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.info.01"))
-            // #tr tst.common.machine.MegaStoneBreaker.tooltip.info.02
+            .addInfo(TSTUtils.tr("tst.machine.MegaStoneBreaker.tooltip.info.01"))
+            // #tr tst.machine.MegaStoneBreaker.tooltip.info.02
             // # Basic parallel is 4, and the multiplier is equivalent to imperfect overclock
             // #zh_CN 基础并行为4, 拥有等同于有损超频的并行加成
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.info.02"))
-            // #tr tst.common.machine.MegaStoneBreaker.tooltip.info.03
+            .addInfo(TSTUtils.tr("tst.machine.MegaStoneBreaker.tooltip.info.02"))
+            // #tr tst.machine.MegaStoneBreaker.tooltip.info.03
             // # Basic increase in output by 4x, When water and lava are input from the side input hatch, Increase to 1024x of output
             // #zh_CN 基础增产4倍, 当侧面输入仓输入水和岩浆时增产1024倍
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.info.03"))
+            .addInfo(TSTUtils.tr("tst.machine.MegaStoneBreaker.tooltip.info.03"))
             .beginStructureBlock(shapeMain)
             .addController(textFrontBottom)
             .addInputBus(textUseBlueprint, 1)
             .addOutputBus(textUseBlueprint, 1)
             .addEnergyHatch(textUseBlueprint, 1)
-            // #tr tst.common.machine.MegaStoneBreaker.tooltip.structure.01
+            // #tr tst.machine.MegaStoneBreaker.tooltip.structure.01
             // # {\WHITE}Lava Hatch:{GREEN\} Left{\GRAY} side of Structure
             // #zh_CN {\WHITE}岩浆输入仓:{\GRAY}结构的{\GREEN}左{\GRAY}侧
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.structure.01"))
-            // #tr tst.common.machine.MegaStoneBreaker.tooltip.structure.02
+            .addStructureInfo(TSTUtils.tr("tst.machine.MegaStoneBreaker.tooltip.structure.01"))
+            // #tr tst.machine.MegaStoneBreaker.tooltip.structure.02
             // # {\WHITE}Water Hatch:{GREEN\} Right{\GRAY} side of Structure
             // #zh_CN {\WHITE}水输入仓:{\GRAY}结构的{\GREEN}右{\GRAY}侧
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.structure.02"))
+            .addStructureInfo(TSTUtils.tr("tst.machine.MegaStoneBreaker.tooltip.structure.02"))
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addStructureInfo(Text_SeparatingLine)
             .toolTipFinisher();

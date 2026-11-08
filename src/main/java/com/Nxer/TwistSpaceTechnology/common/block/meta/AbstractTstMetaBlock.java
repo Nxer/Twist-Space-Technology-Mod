@@ -63,7 +63,7 @@ public abstract class AbstractTstMetaBlock extends Block implements IHasVariantA
 
     @Override
     public String getUnlocalizedName() {
-        return "tile.tst.common." + localizationName;
+        return "tile.tst." + localizationName;
     }
 
     @Override

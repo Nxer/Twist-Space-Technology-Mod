@@ -64,10 +64,8 @@ public class TST_Gui_MegaNqReactor extends TST_Gui<TST_MegaNqReactor> {
                     return false;
                 })
                 .tooltipBuilder(t -> {
-                    t.addLine(
-                        IKey.lang("tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.voltage_unit_left_click"));
-                    t.addLine(
-                        IKey.lang("tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.voltage_unit_right_click"));
+                    t.addLine(IKey.lang("tst.machine.MegaNqReactor.gui.voltage_unit_left_click"));
+                    t.addLine(IKey.lang("tst.machine.MegaNqReactor.gui.voltage_unit_right_click"));
                     t.addLine(IKey.dynamic(() -> TST_MegaNqReactor.OUTPUT_UNIT_NAMES[unitSyncer.getIntValue()]));
                 })
                 .tooltipShowUpTimer(TOOLTIP_DELAY));
@@ -89,7 +87,7 @@ public class TST_Gui_MegaNqReactor extends TST_Gui<TST_MegaNqReactor> {
         // 插到终端文本最上方，避免结构错误/停机原因过长时被挤出可视区域
         IWidget outputLine = createInfoLine(
             IKey.dynamic(
-                () -> TSTUtils.tr("tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.output") + " "
+                () -> TSTUtils.tr("tst.machine.MegaNqReactor.gui.output") + " "
                     + EnumChatFormatting.GOLD
                     + formatOutput(outputSyncer.getLongValue(), unitSyncer.getIntValue())
                     + EnumChatFormatting.RESET));
@@ -106,7 +104,7 @@ public class TST_Gui_MegaNqReactor extends TST_Gui<TST_MegaNqReactor> {
                     + EnumChatFormatting.RESET));
         IWidget fuelLine = createInfoLine(
             IKey.dynamic(
-                () -> TSTUtils.tr("tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.fuel_consumption") + " "
+                () -> TSTUtils.tr("tst.machine.MegaNqReactor.gui.fuel_consumption") + " "
                     + EnumChatFormatting.GOLD
                     + fuelNameSyncer.getStringValue()
                     + " "
@@ -115,7 +113,7 @@ public class TST_Gui_MegaNqReactor extends TST_Gui<TST_MegaNqReactor> {
                     + EnumChatFormatting.RESET));
         IWidget bonusLine = createInfoLine(
             IKey.dynamic(
-                () -> TSTUtils.tr("tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.runtime_bonus") + " "
+                () -> TSTUtils.tr("tst.machine.MegaNqReactor.gui.runtime_bonus") + " "
                     + EnumChatFormatting.GOLD
                     + String.format("%.2f", bonusSyncer.getDoubleValue())
                     + "x"
@@ -146,58 +144,58 @@ public class TST_Gui_MegaNqReactor extends TST_Gui<TST_MegaNqReactor> {
         int unitIndex) {
         return "= " + formatNumber(basicOutput)
             + " EU/t ("
-            + TSTUtils.tr("tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.output_base")
+            + TSTUtils.tr("tst.machine.MegaNqReactor.gui.output_base")
             + ") * "
             + efficiency
             + "% ("
-            + TSTUtils.tr("tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.output_efficiency")
+            + TSTUtils.tr("tst.machine.MegaNqReactor.gui.output_efficiency")
             + ") * "
             + multiplier
             + " ("
-            + TSTUtils.tr("tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.output_coefficient")
+            + TSTUtils.tr("tst.machine.MegaNqReactor.gui.output_coefficient")
             + ") * "
             + parallel
             + " ("
-            + TSTUtils.tr("tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.output_parallel")
+            + TSTUtils.tr("tst.machine.MegaNqReactor.gui.output_parallel")
             + ") * "
             + String.format("%.2f", bonus)
             + "x ("
-            + TSTUtils.tr("tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.runtime_bonus")
+            + TSTUtils.tr("tst.machine.MegaNqReactor.gui.runtime_bonus")
             + ") / "
             + formatNumber(TST_MegaNqReactor.OUTPUT_UNIT_VALUES[unitIndex])
             + " EU/t";
     }
 
     // spotless:off
-    // #tr tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.output
+    // #tr tst.machine.MegaNqReactor.gui.output
     // # Output:
     // #zh_CN 发电量:
 
-    // #tr tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.output_base
+    // #tr tst.machine.MegaNqReactor.gui.output_base
     // # Base
     // #zh_CN 基础
 
-    // #tr tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.output_efficiency
+    // #tr tst.machine.MegaNqReactor.gui.output_efficiency
     // # Efficiency
     // #zh_CN 效率
 
-    // #tr tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.output_coefficient
+    // #tr tst.machine.MegaNqReactor.gui.output_coefficient
     // # Coefficient
     // #zh_CN 系数
 
-    // #tr tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.output_parallel
+    // #tr tst.machine.MegaNqReactor.gui.output_parallel
     // # Parallel
     // #zh_CN 并行
 
-    // #tr tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.fuel_consumption
+    // #tr tst.machine.MegaNqReactor.gui.fuel_consumption
     // # Fuel:
     // #zh_CN 燃料消耗:
 
-    // #tr tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.voltage_unit_left_click
+    // #tr tst.machine.MegaNqReactor.gui.voltage_unit_left_click
     // # Left Click to increase voltage unit
     // #zh_CN 左键提高电压单位
 
-    // #tr tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.voltage_unit_right_click
+    // #tr tst.machine.MegaNqReactor.gui.voltage_unit_right_click
     // # Right Click to decrease voltage unit
     // #zh_CN 右键降低电压单位
     // spotless:on

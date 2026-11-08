@@ -38,7 +38,7 @@ public class ItemHatchUpdateTool extends Item {
 
     @Override
     public String getUnlocalizedName() {
-        return "item.tst.common.hatch_update_tool";
+        return "item.tst.hatch_update_tool";
     }
 
     @Override

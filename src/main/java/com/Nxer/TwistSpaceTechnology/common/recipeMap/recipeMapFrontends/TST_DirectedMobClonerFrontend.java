@@ -59,9 +59,8 @@ public final class TST_DirectedMobClonerFrontend extends RecipeMapFrontend {
                 addFluidInputTooltip(currentTip, neiCachedRecipe.mRecipe.mFluidInputs);
             } else if (positionedStack.isInput()) {
                 currentTip.add(
-                    EnumChatFormatting.YELLOW
-                        + TSTUtils.tr("tst.ecosphere.recipe.DirectedMobClonerFakeRecipes.address_input"));
-                // #tr tst.ecosphere.recipe.DirectedMobClonerFakeRecipes.address_input
+                    EnumChatFormatting.YELLOW + TSTUtils.tr("tst.recipe.DirectedMobClonerFakeRecipes.address_input"));
+                // #tr tst.recipe.DirectedMobClonerFakeRecipes.address_input
                 // # Select this biological address in the input interface
                 // #zh_CN 在输入接口中选择此生物地址
             }
@@ -76,17 +75,15 @@ public final class TST_DirectedMobClonerFrontend extends RecipeMapFrontend {
             if (!(output instanceof GTNEIDefaultHandler.FixedPositionedStack positionedStack)) continue;
             if (guiRecipe.isMouseOver(positionedStack, 0)) {
                 if (outputIndex == 0) {
-                    currentTip.add(
-                        EnumChatFormatting.YELLOW
-                            + TSTUtils.tr("tst.ecosphere.recipe.DirectedMobClonerFakeRecipes.target"));
-                    // #tr tst.ecosphere.recipe.DirectedMobClonerFakeRecipes.target
+                    currentTip
+                        .add(EnumChatFormatting.YELLOW + TSTUtils.tr("tst.recipe.DirectedMobClonerFakeRecipes.target"));
+                    // #tr tst.recipe.DirectedMobClonerFakeRecipes.target
                     // # Cloning target
                     // #zh_CN 克隆目标
                 } else {
                     currentTip.add(
-                        EnumChatFormatting.YELLOW
-                            + TSTUtils.tr("tst.ecosphere.recipe.DirectedMobClonerFakeRecipes.first_drop"));
-                    // #tr tst.ecosphere.recipe.DirectedMobClonerFakeRecipes.first_drop
+                        EnumChatFormatting.YELLOW + TSTUtils.tr("tst.recipe.DirectedMobClonerFakeRecipes.first_drop"));
+                    // #tr tst.recipe.DirectedMobClonerFakeRecipes.first_drop
                     // # The first valid drop of this target
                     // #zh_CN 该目标的第一个有效掉落物
                 }
@@ -102,16 +99,14 @@ public final class TST_DirectedMobClonerFrontend extends RecipeMapFrontend {
         String fluidName = fluidInputs[0].getFluid()
             .getName();
         if ("blood".equals(fluidName)) {
-            currentTip.add(
-                EnumChatFormatting.YELLOW + TSTUtils.tr("tst.ecosphere.recipe.DirectedMobClonerFakeRecipes.blood"));
-            // #tr tst.ecosphere.recipe.DirectedMobClonerFakeRecipes.blood
+            currentTip.add(EnumChatFormatting.YELLOW + TSTUtils.tr("tst.recipe.DirectedMobClonerFakeRecipes.blood"));
+            // #tr tst.recipe.DirectedMobClonerFakeRecipes.blood
             // # Blood for initial reconstruction
             // #zh_CN 用于初始重构的血液
         } else if ("lifeessence".equals(fluidName)) {
-            currentTip.add(
-                EnumChatFormatting.YELLOW
-                    + TSTUtils.tr("tst.ecosphere.recipe.DirectedMobClonerFakeRecipes.life_essence"));
-            // #tr tst.ecosphere.recipe.DirectedMobClonerFakeRecipes.life_essence
+            currentTip
+                .add(EnumChatFormatting.YELLOW + TSTUtils.tr("tst.recipe.DirectedMobClonerFakeRecipes.life_essence"));
+            // #tr tst.recipe.DirectedMobClonerFakeRecipes.life_essence
             // # Life Essence for directed cloning
             // #zh_CN 用于定向克隆的生命本源
         }

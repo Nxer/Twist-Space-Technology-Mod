@@ -1250,10 +1250,10 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
             // Waila updates independently of the GUI; sync the mode before resolving its localized name.
             machineMode = tag.getInteger("modeTST");
             currentTip.add(EnumChatFormatting.YELLOW +
-            // #tr tst.common.shared.machine_info.running_mode
+            // #tr tst.shared.machine_info.running_mode
             // # Running Mode :
             // #zh_CN 运行模式 :
-                StatCollector.translateToLocal("tst.common.shared.machine_info.running_mode")
+                StatCollector.translateToLocal("tst.shared.machine_info.running_mode")
                 + " "
                 + EnumChatFormatting.WHITE
                 + getMachineModeName()

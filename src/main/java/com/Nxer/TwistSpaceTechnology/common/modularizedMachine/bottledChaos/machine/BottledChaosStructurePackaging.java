@@ -32,37 +32,37 @@ import appeng.util.item.AEItemStack;
  */
 public final class BottledChaosStructurePackaging {
 
-    private static final String PREFIX = "tst.bottledchaos.gui.structure_packaging.";
+    private static final String PREFIX = "tst.machine.BottledChaos.gui.structure_packaging.";
 
-    // #tr tst.bottledchaos.gui.structure_packaging.success
+    // #tr tst.machine.BottledChaos.gui.structure_packaging.success
     // # Structure transaction completed
     // #zh_CN 结构转移完成
 
-    // #tr tst.bottledchaos.gui.structure_packaging.invalid_structure
+    // #tr tst.machine.BottledChaos.gui.structure_packaging.invalid_structure
     // # Insert one supported controller type and its complete structure
     // #zh_CN 需要一种受支持的主机及其完整结构
 
-    // #tr tst.bottledchaos.gui.structure_packaging.missing_materials
+    // #tr tst.machine.BottledChaos.gui.structure_packaging.missing_materials
     // # Insufficient materials for one complete structure
     // #zh_CN 材料不足以封装一套完整结构
 
-    // #tr tst.bottledchaos.gui.structure_packaging.invalid_materials
+    // #tr tst.machine.BottledChaos.gui.structure_packaging.invalid_materials
     // # Every material must match the exact quantity per controller; extra or mixed materials are invalid
     // #zh_CN 每种材料必须符合单台主机的准确用量, 多余材料或混合配置无效
 
-    // #tr tst.bottledchaos.gui.structure_packaging.invalid_parameter
+    // #tr tst.machine.BottledChaos.gui.structure_packaging.invalid_parameter
     // # Circuit parameter is invalid or outside this structure's supported range
     // #zh_CN 电路参数无效或超出当前结构支持的范围
 
-    // #tr tst.bottledchaos.gui.structure_packaging.packed_module
+    // #tr tst.machine.BottledChaos.gui.structure_packaging.packed_module
     // # Filled modules can only be unloaded; insert only one ME item disk in the material slots
     // #zh_CN 已封装模组只能卸载, 材料槽仅放一张ME物品磁盘
 
-    // #tr tst.bottledchaos.gui.structure_packaging.invalid_disk
+    // #tr tst.machine.BottledChaos.gui.structure_packaging.invalid_disk
     // # ME item disk is unavailable, or more than one disk was inserted
     // #zh_CN ME物品磁盘不可用, 或放入了多张磁盘
 
-    // #tr tst.bottledchaos.gui.structure_packaging.disk_full
+    // #tr tst.machine.BottledChaos.gui.structure_packaging.disk_full
     // # Disk capacity or item-type limit is insufficient; nothing was transferred
     // #zh_CN 磁盘容量或物品类型槽不足, 本次转移未执行
 
@@ -71,7 +71,7 @@ public final class BottledChaosStructurePackaging {
         ItemStack target = inventory.getStackInSlot(CARRIER_SLOT);
         if (!ItemBottledChaosMachineModule.isModule(target)) return Result.failure(PREFIX + "invalid_structure");
         if (inventory.getStackInSlot(OUTPUT_SLOT) != null || inventory.getStackInSlot(SECOND_OUTPUT_SLOT) != null)
-            return Result.failure("tst.bottledchaos.gui.credential_injection.output_occupied");
+            return Result.failure("tst.machine.BottledChaos.gui.credential_injection.output_occupied");
 
         long quantity = ItemBottledChaosMachineModule.quantity(target);
         if (quantity < 0) return Result.failure(PREFIX + "invalid_materials");

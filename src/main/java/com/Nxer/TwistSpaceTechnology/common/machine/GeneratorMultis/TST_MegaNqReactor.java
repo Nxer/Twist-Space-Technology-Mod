@@ -755,32 +755,32 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
         super.drawTexts(screenElements, inventorySlot);
         // spotless:off
-        // #tr tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.running_time
+        // #tr tst.machine.MegaNqReactor.gui.running_time
         // # Running Time:
         // #zh_CN 持续运行时间:
         screenElements
             .widget(
                 new TextWidget()
-                    .setStringSupplier(() -> tr("tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.running_time") + formatRunTime(runTimeTicks))
+                    .setStringSupplier(() -> tr("tst.machine.MegaNqReactor.gui.running_time") + formatRunTime(runTimeTicks))
                     .setDefaultColor(COLOR_TEXT_WHITE.get())
                     .setEnabled(widget -> getErrorDisplayID() == 0))
             .widget(new FakeSyncWidget.LongSyncer(() -> runTimeTicks, val -> runTimeTicks = val))
             .widget(
                 new TextWidget()
-                    // #tr tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.runtime_bonus
+                    // #tr tst.machine.MegaNqReactor.gui.runtime_bonus
                     // # Runtime Bonus
                     // #zh_CN 持续运行奖励
                     .setStringSupplier(
-                        () -> tr("tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.runtime_bonus") + " "
+                        () -> tr("tst.machine.MegaNqReactor.gui.runtime_bonus") + " "
                             + String.format("%.2f", getRuntimeBonus()) + "x")
                     .setDefaultColor(COLOR_TEXT_WHITE.get())
                     .setEnabled(widget -> getErrorDisplayID() == 0))
             .widget(
                 new TextWidget()
-                    // #tr tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.current_output
+                    // #tr tst.machine.MegaNqReactor.gui.current_output
                     // # Current Output:
                     // #zh_CN 当前输出:
-                    .setStringSupplier(() -> tr("tst.common.machine.MegaNqReactor.gui.mega_nq_reactor.current_output") + formatNumber(lEUt) + " EU/t")
+                    .setStringSupplier(() -> tr("tst.machine.MegaNqReactor.gui.current_output") + formatNumber(lEUt) + " EU/t")
                     .setDefaultColor(COLOR_TEXT_WHITE.get())
                     .setEnabled(widget -> getErrorDisplayID() == 0))
             .widget(new FakeSyncWidget.LongSyncer(() -> lEUt, val -> lEUt = val))
@@ -880,34 +880,34 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.MegaNqReactor.tooltip.machine_type
+        // #tr tst.machine.MegaNqReactor.tooltip.machine_type
         // # Naquadah Reactor,LNR
         // #zh_CN 大型硅岩反应堆
-        tt.addMachineType(tr("tst.common.machine.MegaNqReactor.tooltip.machine_type"))
-            // #tr tst.common.machine.MegaNqReactor.tooltip.info.01
+        tt.addMachineType(tr("tst.machine.MegaNqReactor.tooltip.machine_type"))
+            // #tr tst.machine.MegaNqReactor.tooltip.info.01
             // # §aHuman resource Friendly!
             // #zh_CN §a人力友好型!
-            .addInfo(tr("tst.common.machine.MegaNqReactor.tooltip.info.01"))
-            // #tr tst.common.machine.MegaNqReactor.tooltip.info.02
+            .addInfo(tr("tst.machine.MegaNqReactor.tooltip.info.01"))
+            // #tr tst.machine.MegaNqReactor.tooltip.info.02
             // # Similar to §5LNR§7, Maximum of§b 1,000 §7parallels
             // #zh_CN 就像§5大型硅岩反应堆§7一样, 但是拥有1000并行
-            .addInfo(tr("tst.common.machine.MegaNqReactor.tooltip.info.02"))
-            // #tr tst.common.machine.MegaNqReactor.tooltip.info.03
+            .addInfo(tr("tst.machine.MegaNqReactor.tooltip.info.02"))
+            // #tr tst.machine.MegaNqReactor.tooltip.info.03
             // # §aContinuous operation increases power output
             // #zh_CN §a连续运行可提升发电量!
-            .addInfo(tr("tst.common.machine.MegaNqReactor.tooltip.info.03"))
-            // #tr tst.common.machine.MegaNqReactor.tooltip.info.04
+            .addInfo(tr("tst.machine.MegaNqReactor.tooltip.info.03"))
+            // #tr tst.machine.MegaNqReactor.tooltip.info.04
             // # Up to §52.25x§7. Max in 24h, decays when idle.
             // #zh_CN 最多 §52.25x§7, 24小时达上限, 停机时衰减.
-            .addInfo(tr("tst.common.machine.MegaNqReactor.tooltip.info.04"))
-            // #tr tst.common.machine.MegaNqReactor.tooltip.info.05
+            .addInfo(tr("tst.machine.MegaNqReactor.tooltip.info.04"))
+            // #tr tst.machine.MegaNqReactor.tooltip.info.05
             // # §bWithout a dynamo hatch, energy is output directly to the wireless EU network.§7
             // #zh_CN §b未安装动力仓时，能量将直接输出到无线EU网络§7.
-            .addInfo(tr("tst.common.machine.MegaNqReactor.tooltip.info.05"))
-            // #tr tst.common.machine.MegaNqReactor.tooltip.info.06
+            .addInfo(tr("tst.machine.MegaNqReactor.tooltip.info.05"))
+            // #tr tst.machine.MegaNqReactor.tooltip.info.06
             // # §cWith dynamo hatches, ensure sufficient capacity or the machine will shut down.§7
             // #zh_CN §c安装动力仓时请保证容量足够, 否则机器会停机§7.
-            .addInfo(tr("tst.common.machine.MegaNqReactor.tooltip.info.06"))
+            .addInfo(tr("tst.machine.MegaNqReactor.tooltip.info.06"))
             .beginStructureBlock(SHAPE_MAIN)
             .toolTipFinisher();
         // spotless:on

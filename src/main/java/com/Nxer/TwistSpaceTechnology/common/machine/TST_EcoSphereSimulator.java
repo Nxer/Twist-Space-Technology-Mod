@@ -604,32 +604,32 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
 
     @Override
     public String getMachineModeName() {
-        // #tr tst.ecosphere.machine.EcoSphereSimulator.mode.0
+        // #tr tst.machine.EcoSphereSimulator.mode.0
         // # Arboreal Genesis
         // #zh_CN 原木拟生
 
-        // #tr tst.ecosphere.machine.EcoSphereSimulator.mode.1
+        // #tr tst.machine.EcoSphereSimulator.mode.1
         // # Aquatic Simulation
         // #zh_CN 水域模拟
 
-        // #tr tst.ecosphere.machine.EcoSphereSimulator.mode.2
+        // #tr tst.machine.EcoSphereSimulator.mode.2
         // # Artificial Greenhouse
         // #zh_CN 人工温室
 
-        // #tr tst.ecosphere.machine.EcoSphereSimulator.mode.3
+        // #tr tst.machine.EcoSphereSimulator.mode.3
         // # Directed Mob Cloning
         // #zh_CN 定向克隆
 
-        // #tr tst.ecosphere.machine.EcoSphereSimulator.mode.cleaning
+        // #tr tst.machine.EcoSphereSimulator.mode.cleaning
         // # Cleaning Habitat
         // #zh_CN 栖息地清理中
 
-        // #tr tst.ecosphere.machine.EcoSphereSimulator.mode.waiting
+        // #tr tst.machine.EcoSphereSimulator.mode.waiting
         // # Awaiting Execution Protocol
         // #zh_CN 等待执行协议
-        if (cleaningRequested || cleaningRunActive) return tr("tst.ecosphere.machine.EcoSphereSimulator.mode.cleaning");
+        if (cleaningRequested || cleaningRunActive) return tr("tst.machine.EcoSphereSimulator.mode.cleaning");
         if (!executionProtocolPresent || boundMode < 0 || boundMode >= MACHINE_MODES.length) {
-            return tr("tst.ecosphere.machine.EcoSphereSimulator.mode.waiting");
+            return tr("tst.machine.EcoSphereSimulator.mode.waiting");
         }
         return MACHINE_MODES[boundMode].getDisplayName();
     }
@@ -1249,34 +1249,31 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         int extraLines = missingFluidAreaInput == null ? 4 : 5;
         String[] ret = new String[origin.length + extraLines];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        // #tr tst.ecosphere.machine.EcoSphereSimulator.gui.parallel_from_e_ut
+        // #tr tst.machine.EcoSphereSimulator.gui.parallel_from_e_ut
         // # Power-Limited Parallel
         // #zh_CN 功率并行
-        ret[origin.length] = EnumChatFormatting.AQUA
-            + tr("tst.ecosphere.machine.EcoSphereSimulator.gui.parallel_from_e_ut")
+        ret[origin.length] = EnumChatFormatting.AQUA + tr("tst.machine.EcoSphereSimulator.gui.parallel_from_e_ut")
             + " : "
             + EnumChatFormatting.GOLD
             + this.parallelFromEUt;
-        // #tr tst.ecosphere.machine.EcoSphereSimulator.gui.current_parallel
+        // #tr tst.machine.EcoSphereSimulator.gui.current_parallel
         // # Current Parallel
         // #zh_CN 当前并行
-        ret[origin.length + 1] = EnumChatFormatting.AQUA
-            + tr("tst.ecosphere.machine.EcoSphereSimulator.gui.current_parallel")
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + tr("tst.machine.EcoSphereSimulator.gui.current_parallel")
             + " : "
             + EnumChatFormatting.GOLD
             + this.currentParallel;
-        // #tr tst.ecosphere.machine.EcoSphereSimulator.gui.power_tier
+        // #tr tst.machine.EcoSphereSimulator.gui.power_tier
         // # Power Tier
         // #zh_CN 功率等级
-        ret[origin.length + 2] = EnumChatFormatting.AQUA + tr("tst.ecosphere.machine.EcoSphereSimulator.gui.power_tier")
+        ret[origin.length + 2] = EnumChatFormatting.AQUA + tr("tst.machine.EcoSphereSimulator.gui.power_tier")
             + " : "
             + EnumChatFormatting.GOLD
             + this.EuTier;
-        // #tr tst.ecosphere.machine.EcoSphereSimulator.gui.current_recipe
+        // #tr tst.machine.EcoSphereSimulator.gui.current_recipe
         // # Current Simulation
         // #zh_CN 当前模拟
-        ret[origin.length + 3] = EnumChatFormatting.AQUA
-            + tr("tst.ecosphere.machine.EcoSphereSimulator.gui.current_recipe")
+        ret[origin.length + 3] = EnumChatFormatting.AQUA + tr("tst.machine.EcoSphereSimulator.gui.current_recipe")
             + " : "
             + EnumChatFormatting.GOLD
             + getMachineModeName();
@@ -1394,73 +1391,73 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.ecosphere.machine.EcoSphereSimulator.tooltip.machine_type
+        // #tr tst.machine.EcoSphereSimulator.tooltip.machine_type
         // # Arboreal Genesis | Aquatic Simulation | Artificial Greenhouse | Directed Mob Cloning
         // #zh_CN 原木拟生 | 水域模拟 | 人工温室 | 定向克隆
-        tt.addMachineType(tr("tst.ecosphere.machine.EcoSphereSimulator.tooltip.machine_type"))
-            // #tr tst.ecosphere.machine.EcoSphereSimulator.tooltip.controller
+        tt.addMachineType(tr("tst.machine.EcoSphereSimulator.tooltip.machine_type"))
+            // #tr tst.machine.EcoSphereSimulator.tooltip.controller
             // # Controller block for the Eco-Sphere Simulator
             // #zh_CN 拟似生态圈的控制方块
-            .addInfo(tr("tst.ecosphere.machine.EcoSphereSimulator.tooltip.controller"))
-            // #tr tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.01
+            .addInfo(tr("tst.machine.EcoSphereSimulator.tooltip.controller"))
+            // #tr tst.machine.EcoSphereSimulator.tooltip.info.01
             // # {\NULL}
             // #zh_CN {\NULL}
-            .addInfo(tr("tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.01"))
-            // #tr tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.02
+            .addInfo(tr("tst.machine.EcoSphereSimulator.tooltip.info.01"))
+            // #tr tst.machine.EcoSphereSimulator.tooltip.info.02
             // # {\WHITE}Hark to the whispers of all creation......
             // #zh_CN {\WHITE}聆听万物之声......
-            .addInfo(tr("tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.02"))
-            // #tr tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.03
+            .addInfo(tr("tst.machine.EcoSphereSimulator.tooltip.info.02"))
+            // #tr tst.machine.EcoSphereSimulator.tooltip.info.03
             // # {\WHITE}Yet, save the bees, for they do buzz too loudly.
             // #zh_CN {\WHITE}等一下, 蜜蜂除外. 它实在是太吵了.
-            .addInfo(tr("tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.03"))
-            // #tr tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.04
+            .addInfo(tr("tst.machine.EcoSphereSimulator.tooltip.info.03"))
+            // #tr tst.machine.EcoSphereSimulator.tooltip.info.04
             // # {\NULL}
             // #zh_CN {\NULL}
-            .addInfo(tr("tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.04"))
-            // #tr tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.05
+            .addInfo(tr("tst.machine.EcoSphereSimulator.tooltip.info.04"))
+            // #tr tst.machine.EcoSphereSimulator.tooltip.info.05
             // # {\AQUA}The thaumaturges' latest masterpiece in the Integration of Magic and Electrical Engineering
             // #zh_CN {\AQUA}神秘使在魔电一体化领域的又一力作
-            .addInfo(tr("tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.05"))
-            // #tr tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.06
+            .addInfo(tr("tst.machine.EcoSphereSimulator.tooltip.info.05"))
+            // #tr tst.machine.EcoSphereSimulator.tooltip.info.06
             // # {\AQUA}Reproduce selected environmental and biological processes from simple materials
             // #zh_CN {\AQUA}以简单材料复现特定环境与生物过程
-            .addInfo(tr("tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.06"))
+            .addInfo(tr("tst.machine.EcoSphereSimulator.tooltip.info.06"))
             .addSeparator()
-            // #tr tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.07
+            // #tr tst.machine.EcoSphereSimulator.tooltip.info.07
             // # {\GOLD}Features a unique method of overclocking
             // #zh_CN {\GOLD}拥有独特的超频增益方式
-            .addInfo(tr("tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.07"))
-            // #tr tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.08
+            .addInfo(tr("tst.machine.EcoSphereSimulator.tooltip.info.07"))
+            // #tr tst.machine.EcoSphereSimulator.tooltip.info.08
             // # Each protocol has a fixed base cycle time
             // #zh_CN 每种协议拥有固定的基础循环时间
-            .addInfo(tr("tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.08"))
-            // #tr tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.09
+            .addInfo(tr("tst.machine.EcoSphereSimulator.tooltip.info.08"))
+            // #tr tst.machine.EcoSphereSimulator.tooltip.info.09
             // # Higher input power increases recipe parallelism nonlinearly
             // #zh_CN 更高的输入功率会非线性提高配方并行
-            .addInfo(tr("tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.09"))
-            // #tr tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.10
+            .addInfo(tr("tst.machine.EcoSphereSimulator.tooltip.info.09"))
+            // #tr tst.machine.EcoSphereSimulator.tooltip.info.10
             // # Install an execution protocol in the controller to select the simulation
             // #zh_CN 将执行协议装入主机以选择模拟内容
-            .addInfo(tr("tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.10"))
-            // #tr tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.11
+            .addInfo(tr("tst.machine.EcoSphereSimulator.tooltip.info.10"))
+            // #tr tst.machine.EcoSphereSimulator.tooltip.info.11
             // # Operating media enter through input hatches; fluid-habitat protocols reproduce them in the chamber
             // #zh_CN 运行介质由输入仓送入; 流体栖息地协议会在舱室内将其复现
-            .addInfo(tr("tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.11"))
-            // #tr tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.12
+            .addInfo(tr("tst.machine.EcoSphereSimulator.tooltip.info.11"))
+            // #tr tst.machine.EcoSphereSimulator.tooltip.info.12
             // # Requires one Eco-Sphere Input Interface and one Eco-Sphere Upgrade Interface
             // #zh_CN 必须安装一个生态圈输入接口与一个生态圈升级接口
-            .addInfo(tr("tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.12"))
+            .addInfo(tr("tst.machine.EcoSphereSimulator.tooltip.info.12"))
             .addSeparator()
-            // #tr tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.13
+            // #tr tst.machine.EcoSphereSimulator.tooltip.info.13
             // # This multiblock can only output to ME output buses/hatches
             // #zh_CN 这台多方块机器只支持ME输出总线/输出仓
-            .addInfo(tr("tst.ecosphere.machine.EcoSphereSimulator.tooltip.info.13"))
+            .addInfo(tr("tst.machine.EcoSphereSimulator.tooltip.info.13"))
             .beginStructureBlock(shape)
-            // #tr tst.ecosphere.machine.EcoSphereSimulator.tooltip.structure.01
+            // #tr tst.machine.EcoSphereSimulator.tooltip.structure.01
             // # The complete blueprint includes the animated fluid area marked as air
             // #zh_CN 完整蓝图包含以空气标注的动态流体区域
-            .addStructureInfo(tr("tst.ecosphere.machine.EcoSphereSimulator.tooltip.structure.01"))
+            .addStructureInfo(tr("tst.machine.EcoSphereSimulator.tooltip.structure.01"))
 
             // .addStructureInfo(Text_SeparatingLine)
             .addInputHatch(getBlueprintWithDot(1), 1)
@@ -1468,14 +1465,14 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
             .addInputBus(getBlueprintWithDot(1), 1)
             .addOutputBus(getBlueprintWithDot(1), 1)
             .addEnergyHatch(getBlueprintWithDot(2), 2)
-            // #tr tst.ecosphere.machine.EcoSphereSimulator.tooltip.structure.02
+            // #tr tst.machine.EcoSphereSimulator.tooltip.structure.02
             // # Eco-Sphere Input and Upgrade Interfaces
             // #zh_CN 生态圈输入接口与升级接口
-            .addOtherStructurePart(tr("tst.ecosphere.machine.EcoSphereSimulator.tooltip.structure.02"), getBlueprintWithDot(3), 3)
-            // #tr tst.ecosphere.machine.EcoSphereSimulator.tooltip.structure.03
+            .addOtherStructurePart(tr("tst.machine.EcoSphereSimulator.tooltip.structure.02"), getBlueprintWithDot(3), 3)
+            // #tr tst.machine.EcoSphereSimulator.tooltip.structure.03
             // # Animated fluid area; no blocks are required
             // #zh_CN 动态流体区域; 无需放置方块
-            .addOtherStructurePart(tr("tst.ecosphere.machine.EcoSphereSimulator.tooltip.structure.03"), getBlueprintWithDot(4), 4)
+            .addOtherStructurePart(tr("tst.machine.EcoSphereSimulator.tooltip.structure.03"), getBlueprintWithDot(4), 4)
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .toolTipFinisher();
         // spotless:on

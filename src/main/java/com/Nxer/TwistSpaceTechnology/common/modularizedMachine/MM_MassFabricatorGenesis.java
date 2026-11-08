@@ -256,21 +256,21 @@ public class MM_MassFabricatorGenesis extends ModularizedMachineSupportAllModule
         if (tooltip == null) {
             tooltip = new TSTMultiblockTooltipBuilder();
             // spotless:off
-            // #tr tst.modular.machine.MassFabricatorGenesis.tooltip.machine_type
+            // #tr tst.machine.MassFabricatorGenesis.tooltip.machine_type
             // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Neutron Activator
             // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}质量发生器
             tooltip
                 .addMachineType(
-                    TSTUtils.tr("tst.modular.machine.MassFabricatorGenesis.tooltip.machine_type"))
-                // #tr tst.modular.machine.MassFabricatorGenesis.tooltip.info.01
+                    TSTUtils.tr("tst.machine.MassFabricatorGenesis.tooltip.machine_type"))
+                // #tr tst.machine.MassFabricatorGenesis.tooltip.info.01
                 // # {\BLUE}{\ITALIC}“Even though the future seems far away, it is actually beginning right now.”
                 // #zh_CN {\BLUE}{\ITALIC}“虽然未来似乎很遥远，但其实已经开始了。”
-                .addInfo(TSTUtils.tr("tst.modular.machine.MassFabricatorGenesis.tooltip.info.01"))
+                .addInfo(TSTUtils.tr("tst.machine.MassFabricatorGenesis.tooltip.info.01"))
 
-                // #tr tst.modular.machine.MassFabricatorGenesis.tooltip.info.02
+                // #tr tst.machine.MassFabricatorGenesis.tooltip.info.02
                 // # Energy - Mass : Interface.
                 // #zh_CN 能量 - 质量 : 接口.
-                .addInfo(TSTUtils.tr("tst.modular.machine.MassFabricatorGenesis.tooltip.info.02"))
+                .addInfo(TSTUtils.tr("tst.machine.MassFabricatorGenesis.tooltip.info.02"))
                 .beginStructureBlock(SHAPE_MAIN)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription01)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription02)

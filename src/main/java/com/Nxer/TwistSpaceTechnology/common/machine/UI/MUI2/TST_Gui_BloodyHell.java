@@ -47,10 +47,10 @@ public class TST_Gui_BloodyHell extends TST_Gui<TST_BloodyHell> {
             })
             .playClickSound(true)
             .tooltipBuilder(
-                // #tr tst.common.machine.BloodyHell.gui.set_or_clear_blood
+                // #tr tst.machine.BloodyHell.gui.set_or_clear_blood
                 // # Place / Clear Blood
                 // #zh_CN 填充/清除血液
-                t -> t.addLine(StatCollector.translateToLocal("tst.common.machine.BloodyHell.gui.set_or_clear_blood")));
+                t -> t.addLine(StatCollector.translateToLocal("tst.machine.BloodyHell.gui.set_or_clear_blood")));
     }
 
     @Override

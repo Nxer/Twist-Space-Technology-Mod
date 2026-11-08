@@ -448,10 +448,10 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         final NBTTagCompound tag = accessor.getNBTData();
         if (tag.getBoolean("isActive")) {
             currentTip.add(EnumChatFormatting.AQUA +
-            // #tr tst.dyson.machine.ArtificialStar.waila.tst_artificial_star.1
+            // #tr tst.machine.ArtificialStar.waila.current_generation
             // # Current Generating:
             // #zh_CN 当前发电:
-                TSTUtils.tr("tst.dyson.machine.ArtificialStar.waila.tst_artificial_star.1")
+                TSTUtils.tr("tst.machine.ArtificialStar.waila.current_generation")
                 + " "
                 + EnumChatFormatting.GOLD
                 + String.format("%,d", tag.getLong("currentOutputEU"))
@@ -473,7 +473,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
 
             String currentEuOutputScientificFormat = scientificFormat.format(currentEuOutput);
             currentTip.add(
-                EnumChatFormatting.AQUA + TSTUtils.tr("tst.dyson.machine.ArtificialStar.waila.tst_artificial_star.1")
+                EnumChatFormatting.AQUA + TSTUtils.tr("tst.machine.ArtificialStar.waila.current_generation")
                     + " "
                     + EnumChatFormatting.GOLD
                     + currentEuOutputScientificFormat
@@ -502,45 +502,45 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         System.arraycopy(origin, 0, ret, 0, origin.length);
         ret[origin.length] = EnumChatFormatting.GOLD +
         // spotless:off
-            // #tr tst.dyson.machine.ArtificialStar.info.00
+            // #tr tst.machine.ArtificialStar.info.00
             // # Reward for continuous operation
             // #zh_CN 连续运行奖励
-            TSTUtils.tr("tst.dyson.machine.ArtificialStar.info.00")
+            TSTUtils.tr("tst.machine.ArtificialStar.info.00")
             +EnumChatFormatting.RESET+": "+EnumChatFormatting.GREEN+(rewardContinuous+100)+"%";
 
         ret[origin.length + 1] = EnumChatFormatting.GOLD+
-            // #tr tst.dyson.machine.ArtificialStar.info.01
+            // #tr tst.machine.ArtificialStar.info.01
             // # Generating Multiplier
             // #zh_CN 发电倍率
-            TSTUtils.tr("tst.dyson.machine.ArtificialStar.info.01")
+            TSTUtils.tr("tst.machine.ArtificialStar.info.01")
             +EnumChatFormatting.RESET+": "+EnumChatFormatting.GREEN+outputMultiplier;
 
         ret[origin.length + 2] = EnumChatFormatting.GOLD+
-            // #tr tst.dyson.machine.ArtificialStar.info.02
+            // #tr tst.machine.ArtificialStar.info.02
             // # Dimension Field Tier
             // #zh_CN 空间场等级
-            TSTUtils.tr("tst.dyson.machine.ArtificialStar.info.02")
+            TSTUtils.tr("tst.machine.ArtificialStar.info.02")
             +EnumChatFormatting.RESET+": "+EnumChatFormatting.YELLOW+tierDimensionField;
 
         ret[origin.length + 3] = EnumChatFormatting.GOLD+
-            // #tr tst.dyson.machine.ArtificialStar.info.03
+            // #tr tst.machine.ArtificialStar.info.03
             // # Time Field Tier
             // #zh_CN 时间场等级
-            TSTUtils.tr("tst.dyson.machine.ArtificialStar.info.03")
+            TSTUtils.tr("tst.machine.ArtificialStar.info.03")
             +EnumChatFormatting.RESET+": "+EnumChatFormatting.YELLOW+tierTimeField;
 
         ret[origin.length + 4] = EnumChatFormatting.GOLD+
-            // #tr tst.dyson.machine.ArtificialStar.info.04
+            // #tr tst.machine.ArtificialStar.info.04
             // # Stabilisation Field Tier
             // #zh_CN 稳定场等级
-            TSTUtils.tr("tst.dyson.machine.ArtificialStar.info.04")
+            TSTUtils.tr("tst.machine.ArtificialStar.info.04")
             +EnumChatFormatting.RESET+": "+EnumChatFormatting.YELLOW+tierStabilisationField;
 
         ret[origin.length + 5] = EnumChatFormatting.GOLD+
-            // #tr tst.dyson.machine.ArtificialStar.info.05
+            // #tr tst.machine.ArtificialStar.info.05
             // # Recover material chance
             // #zh_CN 回收原料几率
-            TSTUtils.tr("tst.dyson.machine.ArtificialStar.info.05")
+            TSTUtils.tr("tst.machine.ArtificialStar.info.05")
             +EnumChatFormatting.RESET+": "+EnumChatFormatting.AQUA+recoveryChance+EnumChatFormatting.RESET+"/"+EnumChatFormatting.AQUA+"1000";
             // spotless:on
         return ret;
@@ -551,17 +551,17 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         ItemStack tool) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.enableRender = (byte) ((this.enableRender + 1) % 2);
-            // #tr tst.dyson.machine.ArtificialStar.message.enable_render.0
+            // #tr tst.machine.ArtificialStar.message.enable_render.0
             // # Disable Render
             // #zh_CN 关闭特效渲染
 
-            // #tr tst.dyson.machine.ArtificialStar.message.enable_render.1
+            // #tr tst.machine.ArtificialStar.message.enable_render.1
             // # Enable Render
             // #zh_CN 开启特效渲染
             GTUtility.sendChatTrans(
                 aPlayer,
                 StatCollector
-                    .translateToLocal("tst.dyson.machine.ArtificialStar.message.enable_render." + this.enableRender));
+                    .translateToLocal("tst.machine.ArtificialStar.message.enable_render." + this.enableRender));
             if (enableRender == 0 && isRendering) {
                 destroyRenderBlock();
                 isRendering = false;
@@ -741,80 +741,80 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.dyson.machine.ArtificialStar.tooltip.machine_type
+        // #tr tst.machine.ArtificialStar.tooltip.machine_type
         // # Dyson Sphere Program: Annihilation Generator
         // #zh_CN 戴森球计划: 湮灭发电机
-        tt.addMachineType(TSTUtils.tr("tst.dyson.machine.ArtificialStar.tooltip.machine_type"))
-            // #tr tst.dyson.machine.ArtificialStar.tooltip.controller
+        tt.addMachineType(TSTUtils.tr("tst.machine.ArtificialStar.tooltip.machine_type"))
+            // #tr tst.machine.ArtificialStar.tooltip.controller
             // # Controller block for the Artificial Star
             // #zh_CN 人造恒星的控制器方块
-            .addInfo(TSTUtils.tr("tst.dyson.machine.ArtificialStar.tooltip.controller"))
-            // #tr tst.dyson.machine.ArtificialStar.tooltip.info.01
+            .addInfo(TSTUtils.tr("tst.machine.ArtificialStar.tooltip.controller"))
+            // #tr tst.machine.ArtificialStar.tooltip.info.01
             // # {\LIGHT_PURPLE}{\BOLD}All you need to do is to let the proton and antiproton beams
             // #zh_CN {\LIGHT_PURPLE}{\BOLD}你只需要让正反质子束从两端静静地穿
-            .addInfo(TSTUtils.tr("tst.dyson.machine.ArtificialStar.tooltip.info.01"))
-            // #tr tst.dyson.machine.ArtificialStar.tooltip.info.02
+            .addInfo(TSTUtils.tr("tst.machine.ArtificialStar.tooltip.info.01"))
+            // #tr tst.machine.ArtificialStar.tooltip.info.02
             // # {\LIGHT_PURPLE}{\BOLD} pass silently from both ends into the annihilation constrainer. Easy peasy!
             // #zh_CN {\LIGHT_PURPLE}{\BOLD} 过磁场进入约束球就可以了, 轻松愉快!
-            .addInfo(TSTUtils.tr("tst.dyson.machine.ArtificialStar.tooltip.info.02"))
-            // #tr tst.dyson.machine.ArtificialStar.tooltip.info.03
+            .addInfo(TSTUtils.tr("tst.machine.ArtificialStar.tooltip.info.02"))
+            // #tr tst.machine.ArtificialStar.tooltip.info.03
             // # It owes its simple shape to the elegance of the theory.
             // #zh_CN 它简单的外形归功于理论的优雅.
-            .addInfo(TSTUtils.tr("tst.dyson.machine.ArtificialStar.tooltip.info.03"))
-            // #tr tst.dyson.machine.ArtificialStar.tooltip.info.04
+            .addInfo(TSTUtils.tr("tst.machine.ArtificialStar.tooltip.info.03"))
+            // #tr tst.machine.ArtificialStar.tooltip.info.04
             // # Actual output power is affected by {\GOLD}3{\GRAY} types tiered block.
             // #zh_CN 实际产生能量受三种等级方块影响.
-            .addInfo(TSTUtils.tr("tst.dyson.machine.ArtificialStar.tooltip.info.04"))
-            // #tr tst.dyson.machine.ArtificialStar.tooltip.info.05
+            .addInfo(TSTUtils.tr("tst.machine.ArtificialStar.tooltip.info.04"))
+            // #tr tst.machine.ArtificialStar.tooltip.info.05
             // # At the same time, higher tier increase the probability of recovering materials.
             // #zh_CN 同时, 更高等级会提高回收原料的概率.
-            .addInfo(TSTUtils.tr("tst.dyson.machine.ArtificialStar.tooltip.info.05"))
-            // #tr tst.dyson.machine.ArtificialStar.tooltip.info.06
+            .addInfo(TSTUtils.tr("tst.machine.ArtificialStar.tooltip.info.05"))
+            // #tr tst.machine.ArtificialStar.tooltip.info.06
             // # Continuous operation improves power generation.
             // #zh_CN 保持连续运行也会提高能量输出.
-            .addInfo(TSTUtils.tr("tst.dyson.machine.ArtificialStar.tooltip.info.06"))
-            // #tr tst.dyson.machine.ArtificialStar.tooltip.info.07
+            .addInfo(TSTUtils.tr("tst.machine.ArtificialStar.tooltip.info.06"))
+            // #tr tst.machine.ArtificialStar.tooltip.info.07
             // # Only and must install {\GOLD}1{\GRAY} input bus.
             // #zh_CN 只允许且必须安装一个输入总线.
-            .addInfo(TSTUtils.tr("tst.dyson.machine.ArtificialStar.tooltip.info.07"))
-            // #tr tst.dyson.machine.ArtificialStar.tooltip.info.08
+            .addInfo(TSTUtils.tr("tst.machine.ArtificialStar.tooltip.info.07"))
+            // #tr tst.machine.ArtificialStar.tooltip.info.08
             // # Energy will output to Wireless EU Net directly.
             // #zh_CN 能量将直接输出到无线EU网络.
-            .addInfo(TSTUtils.tr("tst.dyson.machine.ArtificialStar.tooltip.info.08"))
-            // #tr tst.dyson.machine.ArtificialStar.tooltip.info.09
+            .addInfo(TSTUtils.tr("tst.machine.ArtificialStar.tooltip.info.08"))
+            // #tr tst.machine.ArtificialStar.tooltip.info.09
             // # Use screwdriver to enable/disable animations.
             // #zh_CN 使用螺丝刀开启/关闭动画特效.
-            .addInfo(TSTUtils.tr("tst.dyson.machine.ArtificialStar.tooltip.info.09"))
+            .addInfo(TSTUtils.tr("tst.machine.ArtificialStar.tooltip.info.09"))
             .beginStructureBlock(shapeMain)
             .addStructureInfo(Tooltip_Details)
-            // #tr tst.dyson.machine.ArtificialStar.tooltip.structure.01
+            // #tr tst.machine.ArtificialStar.tooltip.structure.01
             // # Output multiplier = tTime^0.25 * tDim^0.25 * 1.588186^(tStabilisation - 2)
             // #zh_CN 输出系数 = 时间场等级^0.25 * 空间场等级^0.25 * 1.588186^(稳定场等级 - 2)
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.ArtificialStar.tooltip.structure.01"))
-            // #tr tst.dyson.machine.ArtificialStar.tooltip.structure.02
+            .addStructureInfo(TSTUtils.tr("tst.machine.ArtificialStar.tooltip.structure.01"))
+            // #tr tst.machine.ArtificialStar.tooltip.structure.02
             // # Actual Generating EU = recipe value * output multiplier * Rewards for continuous operation
             // #zh_CN 实际输出EU = 配方数值 * 输出系数 * 连续运行奖励系数
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.ArtificialStar.tooltip.structure.02"))
-            // #tr tst.dyson.machine.ArtificialStar.tooltip.structure.03
+            .addStructureInfo(TSTUtils.tr("tst.machine.ArtificialStar.tooltip.structure.02"))
+            // #tr tst.machine.ArtificialStar.tooltip.structure.03
             // # Recovering probability = tTime * tDim * tStabilisation / 1000
             // #zh_CN 原料回收概率 = 时间场等级 * 空间场等级 * 稳定场等级 / 1000
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.ArtificialStar.tooltip.structure.03"))
-            // #tr tst.dyson.machine.ArtificialStar.tooltip.structure.04
+            .addStructureInfo(TSTUtils.tr("tst.machine.ArtificialStar.tooltip.structure.03"))
+            // #tr tst.machine.ArtificialStar.tooltip.structure.04
             // # Input fuels will be consumed at once, process 6.4s (default), and output the corresponding EU.
             // #zh_CN 输入的燃料将会一次性消耗掉, 然后运行 6.4s (默认), 并输出对应数值的 EU.
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.ArtificialStar.tooltip.structure.04"))
-            // #tr tst.dyson.machine.ArtificialStar.tooltip.structure.05
+            .addStructureInfo(TSTUtils.tr("tst.machine.ArtificialStar.tooltip.structure.04"))
+            // #tr tst.machine.ArtificialStar.tooltip.structure.05
             // # Rewards multiplier 1%% increase per run when continuous operation.
             // #zh_CN 在连续运行时, 每次运行连续运行奖励系数提高 1%% .
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.ArtificialStar.tooltip.structure.05"))
-            // #tr tst.dyson.machine.ArtificialStar.tooltip.structure.06
+            .addStructureInfo(TSTUtils.tr("tst.machine.ArtificialStar.tooltip.structure.05"))
+            // #tr tst.machine.ArtificialStar.tooltip.structure.06
             // # Maximum is 150%%, Minimum is 100%% when uncontinuous.
             // #zh_CN 连续运行奖励系数最大值 150%% , 中断后降到 100%% .
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.ArtificialStar.tooltip.structure.06"))
+            .addStructureInfo(TSTUtils.tr("tst.machine.ArtificialStar.tooltip.structure.06"))
           .addStructureInfo(EnumChatFormatting.GOLD+"-----------------------------------------")
           .addStructureInfo(DSPName + ":")
-          .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.launch.01"))
-          .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.launch.02"))
+          .addStructureInfo(TSTUtils.tr("tst.machine.DSPLauncher.tooltip.launch.01"))
+          .addStructureInfo(TSTUtils.tr("tst.machine.DSPLauncher.tooltip.launch.02"))
           .addStructureInfo(Tooltip_DSPInfo_00)
           .addStructureInfo(Tooltip_DSPInfo_01)
           .addStructureInfo(Tooltip_DSPInfo_02)

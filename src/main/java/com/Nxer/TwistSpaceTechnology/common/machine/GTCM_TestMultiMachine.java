@@ -143,7 +143,7 @@ public class GTCM_TestMultiMachine extends GTCM_MultiMachineBase<GTCM_TestMultiM
             this.mode = (this.mode + 1) % 2;
             GTUtility.sendChatTrans(
                 aPlayer,
-                StatCollector.translateToLocal("tst.common.machine.IntensifyChemicalDistorter.mode." + this.mode));
+                StatCollector.translateToLocal("tst.machine.IntensifyChemicalDistorter.mode." + this.mode));
         }
     }
 

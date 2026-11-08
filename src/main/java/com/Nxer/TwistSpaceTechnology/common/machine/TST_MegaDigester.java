@@ -259,30 +259,30 @@ public class TST_MegaDigester extends GTCM_MultiMachineBase<TST_MegaDigester> {
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.MegaDigester.tooltip.machine_type
+        // #tr tst.machine.MegaDigester.tooltip.machine_type
         // # Digester
         // #zh_CN 煮解池
-        tt.addMachineType(TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.machine_type"))
-            // #tr tst.common.machine.MegaDigester.tooltip.controller
+        tt.addMachineType(TSTUtils.tr("tst.machine.MegaDigester.tooltip.machine_type"))
+            // #tr tst.machine.MegaDigester.tooltip.controller
             // # Controller block for the Mega Digester
             // #zh_CN 巨型煮解池的控制方块
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.controller"))
-            // #tr tst.common.machine.MegaDigester.tooltip.flavor
+            .addInfo(TSTUtils.tr("tst.machine.MegaDigester.tooltip.controller"))
+            // #tr tst.machine.MegaDigester.tooltip.flavor
             // # §6All things dissolve, all slurries boil.§7
             // #zh_CN §6万物溶解，群浆沸腾§7
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.flavor"))
-            // #tr tst.common.machine.MegaDigester.tooltip.info.02
+            .addInfo(TSTUtils.tr("tst.machine.MegaDigester.tooltip.flavor"))
+            // #tr tst.machine.MegaDigester.tooltip.info.02
             // # Performs {\LIGHT_PURPLE}Perfect Overclocking{\GRAY}.
             // #zh_CN 执行§d无损超频§7.
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.info.02"))
-            // #tr tst.common.machine.MegaDigester.tooltip.info.03
+            .addInfo(TSTUtils.tr("tst.machine.MegaDigester.tooltip.info.02"))
+            // #tr tst.machine.MegaDigester.tooltip.info.03
             // # Initial speed is {\AQUA}100%{\GRAY}, each coil tier adds {\AQUA}100%{\GRAY} speed.
             // #zh_CN 初始速度为§b100%§7，每提升一级线圈等级增加§b100%§7速度.
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.info.03"))
-            // #tr tst.common.machine.MegaDigester.tooltip.info.04
+            .addInfo(TSTUtils.tr("tst.machine.MegaDigester.tooltip.info.03"))
+            // #tr tst.machine.MegaDigester.tooltip.info.04
             // # Has near-infinite parallel!
             // #zh_CN 拥有近乎无限的并行！
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.info.04"))
+            .addInfo(TSTUtils.tr("tst.machine.MegaDigester.tooltip.info.04"))
             .beginStructureBlock(13, 6, 13, true)
             .addController(textFrontBottom)
             .addCasing("300-370", Casings.RobustTungstenSteelMachineCasing.getLocalizedName(), false)
@@ -293,14 +293,14 @@ public class TST_MegaDigester extends GTCM_MultiMachineBase<TST_MegaDigester> {
             .addCasing("28", Casings.SuperAirFilterVentCasing.getLocalizedName(), false)
             .addCasing("28", Casings.IncoloyDSFluidContainmentBlock.getLocalizedName(), false)
             .addCasing("23", Casings.ReinforcedPlasmaTurbineCasing.getLocalizedName(), false)
-            // #tr tst.common.machine.MegaDigester.tooltip.structure.any_casing
+            // #tr tst.machine.MegaDigester.tooltip.structure.any_casing
             // # Any Robust Tungstensteel Casing
             // #zh_CN 任意钨钢机械方块
-            .addEnergyHatch("0+", TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.structure.any_casing"), 1)
-            .addMaintenanceHatch("0+", TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.structure.any_casing"), 1)
-            .addMufflerHatch("0+", TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.structure.any_casing"), 1)
-            .addInputAny("0+", TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.structure.any_casing"), 1)
-            .addOutputAny("0+", TSTUtils.tr("tst.common.machine.MegaDigester.tooltip.structure.any_casing"), 1)
+            .addEnergyHatch("0+", TSTUtils.tr("tst.machine.MegaDigester.tooltip.structure.any_casing"), 1)
+            .addMaintenanceHatch("0+", TSTUtils.tr("tst.machine.MegaDigester.tooltip.structure.any_casing"), 1)
+            .addMufflerHatch("0+", TSTUtils.tr("tst.machine.MegaDigester.tooltip.structure.any_casing"), 1)
+            .addInputAny("0+", TSTUtils.tr("tst.machine.MegaDigester.tooltip.structure.any_casing"), 1)
+            .addOutputAny("0+", TSTUtils.tr("tst.machine.MegaDigester.tooltip.structure.any_casing"), 1)
             .addStructureInfo("")
             .addSubChannel(GTStructureChannels.HEATING_COIL)
             .toolTipFinisher();

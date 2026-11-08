@@ -145,10 +145,10 @@ public final class BottledChaosCredentialRecipes {
             long mask = 1L << injection.tagIndex();
             int weight = ItemBottledChaosCredential.getRequiredWeight(mask);
             if (weight > ItemBottledChaosCredential.getCapacity(target)) return BottledChaosCrafting.Result
-                .failure("tst.bottledchaos.gui.credential_injection.capacity_exceeded");
+                .failure("tst.machine.BottledChaos.gui.credential_injection.capacity_exceeded");
             ItemStack result = target.copy();
-            if (!ItemBottledChaosCredential.setBinding(result, mask, weight))
-                return BottledChaosCrafting.Result.failure("tst.bottledchaos.gui.credential_injection.invalid_source");
+            if (!ItemBottledChaosCredential.setBinding(result, mask, weight)) return BottledChaosCrafting.Result
+                .failure("tst.machine.BottledChaos.gui.credential_injection.invalid_source");
             recipe.isRecipeInputEqual(true, null, materials);
             for (int slot = 0; slot < materials.length; slot++) {
                 ItemStack remaining = materials[slot];
@@ -158,7 +158,8 @@ public final class BottledChaosCredentialRecipes {
             }
             inventory.setStackInSlot(BottledChaosCrafting.CARRIER_SLOT, null);
             inventory.setStackInSlot(BottledChaosCrafting.OUTPUT_SLOT, result);
-            return BottledChaosCrafting.Result.success("tst.bottledchaos.gui.credential_injection.success", result);
+            return BottledChaosCrafting.Result
+                .success("tst.machine.BottledChaos.gui.credential_injection.success", result);
         }
         return null;
     }

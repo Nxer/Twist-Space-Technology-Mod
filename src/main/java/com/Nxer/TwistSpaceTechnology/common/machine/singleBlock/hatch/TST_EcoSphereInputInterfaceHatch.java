@@ -357,12 +357,11 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch
                     (clickData, widget) -> { if (clickData.mouseButton == 0) dropInventoryRange(0, MAX_INPUT_SLOTS); })
                     .setPlayClickSound(true)
                     .setBackground(GTUITextures.BUTTON_STANDARD, GTUITextures.OVERLAY_BUTTON_EXPORT)
-                    // #tr tst.ecosphere.machine.EcoSphereInputInterface.gui.drop_all_items
+                    // #tr tst.machine.EcoSphereInputInterface.gui.drop_all_items
                     // # Drop all stored items
                     // #zh_CN 清空所有物品
                     .addTooltip(
-                        StatCollector
-                            .translateToLocal("tst.ecosphere.machine.EcoSphereInputInterface.gui.drop_all_items"))
+                        StatCollector.translateToLocal("tst.machine.EcoSphereInputInterface.gui.drop_all_items"))
                     .setPos(7, 63)
                     .setSize(16, 16));
 
@@ -489,10 +488,10 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch
 
     private void addCloningRecipeInput(ModularWindow.Builder builder) {
         builder.widget(
-            // #tr tst.ecosphere.machine.EcoSphereInputInterface.gui.biological_address
+            // #tr tst.machine.EcoSphereInputInterface.gui.biological_address
             // # Biological Address
             // #zh_CN 生物地址
-            TextWidget.localised("tst.ecosphere.machine.EcoSphereInputInterface.gui.biological_address")
+            TextWidget.localised("tst.machine.EcoSphereInputInterface.gui.biological_address")
                 .setTextAlignment(Alignment.Center)
                 .setPos(8, 21)
                 .setSize(80, 14)
@@ -515,10 +514,10 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch
 
     private void addCloningAuxiliaryInputSlots(ModularWindow.Builder builder) {
         builder.widget(
-            // #tr tst.ecosphere.machine.EcoSphereInputInterface.gui.auxiliary_inputs
+            // #tr tst.machine.EcoSphereInputInterface.gui.auxiliary_inputs
             // # Auxiliary Inputs
             // #zh_CN 辅助输入
-            TextWidget.localised("tst.ecosphere.machine.EcoSphereInputInterface.gui.auxiliary_inputs")
+            TextWidget.localised("tst.machine.EcoSphereInputInterface.gui.auxiliary_inputs")
                 .setTextAlignment(Alignment.Center)
                 .setPos(88, 14)
                 .setSize(80, 14)

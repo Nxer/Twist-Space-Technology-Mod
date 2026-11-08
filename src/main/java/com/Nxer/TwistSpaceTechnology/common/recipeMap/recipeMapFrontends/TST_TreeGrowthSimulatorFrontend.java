@@ -81,20 +81,20 @@ public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
         GTNEIDefaultHandler.CachedDefaultRecipe neiCachedRecipe) {
         if (!(NEIClientUtils.getGuiContainer() instanceof GuiRecipe<?>guiRecipe)) return currentTip;
 
-        String[] tooltipInputs = { TSTUtils.tr("tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.logs"),
-            // #tr tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.logs
+        String[] tooltipInputs = { TSTUtils.tr("tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.logs"),
+            // #tr tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.logs
             // # Select logs in the input interface
             // #zh_CN 在输入接口中选择原木
-            TSTUtils.tr("tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.saplings"),
-            // #tr tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.saplings
+            TSTUtils.tr("tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.saplings"),
+            // #tr tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.saplings
             // # Select saplings in the input interface
             // #zh_CN 在输入接口中选择树苗
-            TSTUtils.tr("tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.leaves"),
-            // #tr tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.leaves
+            TSTUtils.tr("tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.leaves"),
+            // #tr tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.leaves
             // # Select leaves in the input interface
             // #zh_CN 在输入接口中选择树叶
-            TSTUtils.tr("tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.fruits")
-            // #tr tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.fruits
+            TSTUtils.tr("tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.fruits")
+            // #tr tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.fruits
             // # Select fruits in the input interface
             // #zh_CN 在输入接口中选择果实
         };
@@ -105,8 +105,8 @@ public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
             if (positionedStack.isFluid()) {
                 currentTip.add(
                     EnumChatFormatting.YELLOW
-                        + TSTUtils.tr("tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.medium"));
-                // #tr tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.medium
+                        + TSTUtils.tr("tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.medium"));
+                // #tr tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.medium
                 // # Operating medium for arboreal genesis
                 // #zh_CN 原木拟生所需运行介质
             } else if (positionedStack.isInput()) {
@@ -124,9 +124,9 @@ public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
                 if (neiCachedRecipe.mRecipe.mFluidInputs.length > 0
                     && neiCachedRecipe.mRecipe.mFluidInputs[0].getFluid() != FluidRegistry.WATER) {
                     currentTip.add(
-                        EnumChatFormatting.YELLOW + TSTUtils
-                            .tr("tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.any_sapling"));
-                    // #tr tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.any_sapling
+                        EnumChatFormatting.YELLOW
+                            + TSTUtils.tr("tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.any_sapling"));
+                    // #tr tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.any_sapling
                     // # Any valid sapling
                     // #zh_CN 任意有效树苗
                 }
@@ -139,8 +139,8 @@ public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
                 || !guiRecipe.isMouseOver(positionedStack, 0)) continue;
             currentTip.add(
                 EnumChatFormatting.YELLOW
-                    + TSTUtils.tr("tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.selection")
-            // #tr tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.selection
+                    + TSTUtils.tr("tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.selection")
+            // #tr tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.selection
             // # Enable this category in the input interface
             // #zh_CN 需在输入接口中启用此类别
             );

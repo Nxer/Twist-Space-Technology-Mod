@@ -520,19 +520,19 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
         ItemStack tool) {
         stopAllRendering = !stopAllRendering;
-        // #tr tst.common.machine.MeteorMiner.message.render.off
+        // #tr tst.machine.MeteorMiner.message.render.off
         // # Rendering off
         // #zh_CN 渲染特效关闭
 
-        // #tr tst.common.machine.MeteorMiner.message.render.on
+        // #tr tst.machine.MeteorMiner.message.render.on
         // # Rendering on
         // #zh_CN 渲染特效开启
         if (stopAllRendering) {
-            TSTUtils.sendMessageKeyToPlayer(aPlayer, "tst.common.machine.MeteorMiner.message.render.off");
+            TSTUtils.sendMessageKeyToPlayer(aPlayer, "tst.machine.MeteorMiner.message.render.off");
             updateLaser(false, 0);
         } else {
             // the laser comes back on the next mining cycle
-            TSTUtils.sendMessageKeyToPlayer(aPlayer, "tst.common.machine.MeteorMiner.message.render.on");
+            TSTUtils.sendMessageKeyToPlayer(aPlayer, "tst.machine.MeteorMiner.message.render.on");
         }
     }
 
@@ -1050,37 +1050,37 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         // spotless:off
-        // #tr tst.common.machine.MeteorMiner.waila.tier.0
+        // #tr tst.machine.MeteorMiner.waila.tier.0
         // # Incomplete Structure
         // #zh_CN 结构未成型
 
-        // #tr tst.common.machine.MeteorMiner.waila.tier.1
+        // #tr tst.machine.MeteorMiner.waila.tier.1
         // # Current Tier: {\WHITE}1
         // #zh_CN 当前等级: {\WHITE}1
 
-        // #tr tst.common.machine.MeteorMiner.waila.tier.2
+        // #tr tst.machine.MeteorMiner.waila.tier.2
         // # Current Tier: {\WHITE}2
         // #zh_CN 当前等级: {\WHITE}2
 
-        // #tr tst.common.machine.MeteorMiner.waila.fortune.0
+        // #tr tst.machine.MeteorMiner.waila.fortune.0
         // # Augment: {\WHITE}No Augment Applied
         // #zh_CN 增强效果: 无增强
 
-        // #tr tst.common.machine.MeteorMiner.waila.fortune.1
+        // #tr tst.machine.MeteorMiner.waila.fortune.1
         // # Augment: {\WHITE}Fortune I
         // #zh_CN 增强效果: 时运I
 
-        // #tr tst.common.machine.MeteorMiner.waila.fortune.2
+        // #tr tst.machine.MeteorMiner.waila.fortune.2
         // # Augment: {\WHITE}Fortune II
         // #zh_CN 增强效果: 时运II
 
-        // #tr tst.common.machine.MeteorMiner.waila.fortune.3
+        // #tr tst.machine.MeteorMiner.waila.fortune.3
         // # Augment: {\WHITE}Fortune III
         // #zh_CN 增强效果: 时运III
-        currentTip.add(tr("tst.common.machine.MeteorMiner.waila.tier." + tag.getInteger("tier")) + EnumChatFormatting.RESET);
+        currentTip.add(tr("tst.machine.MeteorMiner.waila.tier." + tag.getInteger("tier")) + EnumChatFormatting.RESET);
         // spotless:on
-        currentTip.add(
-            tr("tst.common.machine.MeteorMiner.waila.fortune." + tag.getInteger("fortune")) + EnumChatFormatting.RESET);
+        currentTip
+            .add(tr("tst.machine.MeteorMiner.waila.fortune." + tag.getInteger("fortune")) + EnumChatFormatting.RESET);
     }
 
     // endregion
@@ -1175,127 +1175,127 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     protected MultiblockTooltipBuilder createTooltip() {
         TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.MeteorMiner.tooltip.machine_type
+        // #tr tst.machine.MeteorMiner.tooltip.machine_type
         // # Meteor Miner
         // #zh_CN 陨星采矿机
-        tt.addMachineType(tr("tst.common.machine.MeteorMiner.tooltip.machine_type"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.info.08
+        tt.addMachineType(tr("tst.machine.MeteorMiner.tooltip.machine_type"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.08
             // # Controller Block for the Laser Meteor Miner!
             // #zh_CN 激光陨星采矿场的控制器方块！
-            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.08"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.info.09
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.08"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.09
             // # To work properly the center of the meteor has to be 48 blocks above the highest block of the multi.
             // #zh_CN 陨星的中心必须位于机器最高点上方48个方块的位置, 机器方可正常工作.
-            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.09"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.info.10
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.09"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.10
             // # The laser will mine in a radius of up to 40 blocks in each direction from the center of the meteor.
             // #zh_CN 激光将在陨星中心半径40方块内进行采矿作业.
-            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.10"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.info.11
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.10"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.11
             // # All the chunks involved must be chunkloaded.
             // #zh_CN 所涉及区块都必须保证加载.
-            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.11"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.info.12
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.11"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.12
             // # The laser will automatically set its radius based on the meteorite,
             // #zh_CN 激光将根据陨石自动设置其运行半径.
-            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.12"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.info.13
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.12"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.13
             // # if it doesn't find any it will wait for a meteor to spawn,
             // #zh_CN 没有找到陨星时机器会等待陨星生成.
-            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.13"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.info.14
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.13"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.14
             // # considering the block right above the center of the meteor (like Warded Glass).
             // #zh_CN 顾及了中心正上方的方块(比如守卫者玻璃).
-            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.14"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.info.hologram
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.14"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.hologram
             // # Use the Hologram Projector on the controller to see where the Warded Glass (center of the meteor) and the Master Ritual Stone go.
             // #zh_CN 对控制器使用全息投影仪, 可显示守卫者玻璃(陨星中心)与主仪式石的放置位置.
-            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.hologram"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.info.15
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.hologram"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.15
             // # The reset button will restart the machine without optimizing the radius.
             // #zh_CN 点击重启按钮将重启机器, 并且不进行半径适配优化.
-            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.15"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.info.16
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.15"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.16
             // # Machine need Meteor Miner Schematic put in controller slot to run.
             // #zh_CN 机器需要在控制器方块内放置陨星采矿场设计图才可运行.
-            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.16"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.info.energy_hatches
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.16"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.energy_hatches
             // # Accepts normal energy hatches or TecTech multi Amp / laser energy hatches, but not mixed.
             // #zh_CN 可使用普通能源仓, 或TecTech高电流/激光能源仓, 但不可混用.
-            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.energy_hatches"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.info.17
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.energy_hatches"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.17
             // # {\RED}{\BOLD} TIER I
             // #zh_CN {\RED}{\BOLD} 等级 I
-            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.17"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.info.18
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.17"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.18
             // # Mines one block every cycle.
             // #zh_CN 每次运行挖掘一个方块.
-            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.18"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.info.19
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.18"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.19
             // # Default Fortune is 0, it can be increased by putting in the input bus special pickaxes:
             // #zh_CN 默认没有时运效果. 输入总线内放置以下镐子可以获得时运效果:
-            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.19"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.info.20
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.19"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.20
             // # Fortune I: Pickaxe of the Core
             // #zh_CN 时运I : 炽心镐
-            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.20"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.info.21
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.20"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.21
             // # Fortune II: Bound Pickaxe
             // #zh_CN 时运II : 约束之镐
-            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.21"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.info.22
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.21"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.22
             // # Fortune III: Terra Shatterer
             // #zh_CN 时运III : 泰拉粉碎者
-            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.22"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.info.23
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.22"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.23
             // # {\RED}{\BOLD} TIER II
             // #zh_CN {\RED}{\BOLD} 等级 II
-            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.23"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.info.24
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.23"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.24
             // # Always has Fortune III
             // #zh_CN 总是时运III.
-            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.24"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.info.25
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.24"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.25
             // # Mines one row every cycle.
             // #zh_CN 每次运行挖掘一行.
-            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.25"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.info.26
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.25"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.26
             // # {\BLUE}{\BOLD}Finally some good Meteors!
             // #zh_CN {\BLUE}{\BOLD}终是好陨星! (Finally some good Meteors!)
-            .addInfo(tr("tst.common.machine.MeteorMiner.tooltip.info.26"))
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.26"))
             .beginStructureBlock(shape_T1, shape_T2)
-            // #tr tst.common.machine.MeteorMiner.tooltip.structure.01
+            // #tr tst.machine.MeteorMiner.tooltip.structure.01
             // # {\GOLD}{\BOLD}TIER I
             // #zh_CN {\GOLD}{\BOLD}等级 I
-            .addStructureInfo(tr("tst.common.machine.MeteorMiner.tooltip.structure.01"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.structure.02
+            .addStructureInfo(tr("tst.machine.MeteorMiner.tooltip.structure.01"))
+            // #tr tst.machine.MeteorMiner.tooltip.structure.02
             // # Center of the second layer above the ritual
             // #zh_CN 仪式上方第二层的中心
-            .addController(tr("tst.common.machine.MeteorMiner.tooltip.structure.02"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.structure.03
+            .addController(tr("tst.machine.MeteorMiner.tooltip.structure.02"))
+            // #tr tst.machine.MeteorMiner.tooltip.structure.03
             // # Any Structural Solar Casing around the controller
             // #zh_CN 控制器周边的太阳能塔机械方块
-            .addOutputBus(tr("tst.common.machine.MeteorMiner.tooltip.structure.03"), 1)
-            .addEnergyHatch(tr("tst.common.machine.MeteorMiner.tooltip.structure.03"), 1)
-            .addMaintenanceHatch(tr("tst.common.machine.MeteorMiner.tooltip.structure.03"), 1)
-            // #tr tst.common.machine.MeteorMiner.tooltip.structure.04
+            .addOutputBus(tr("tst.machine.MeteorMiner.tooltip.structure.03"), 1)
+            .addEnergyHatch(tr("tst.machine.MeteorMiner.tooltip.structure.03"), 1)
+            .addMaintenanceHatch(tr("tst.machine.MeteorMiner.tooltip.structure.03"), 1)
+            // #tr tst.machine.MeteorMiner.tooltip.structure.04
             // # ULV only, below the controller
             // #zh_CN 仅限ULV, 控制器下侧
-            .addInputBus(tr("tst.common.machine.MeteorMiner.tooltip.structure.04"), 2)
-            // #tr tst.common.machine.MeteorMiner.tooltip.structure.05
+            .addInputBus(tr("tst.machine.MeteorMiner.tooltip.structure.04"), 2)
+            // #tr tst.machine.MeteorMiner.tooltip.structure.05
             // # {\GOLD}{\BOLD}TIER II
             // #zh_CN {\GOLD}{\BOLD}等级 II
-            .addStructureInfo(tr("tst.common.machine.MeteorMiner.tooltip.structure.05"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.structure.06
+            .addStructureInfo(tr("tst.machine.MeteorMiner.tooltip.structure.05"))
+            // #tr tst.machine.MeteorMiner.tooltip.structure.06
             // # Highest layer of the ritual
             // #zh_CN 仪式最上层
-            .addController(tr("tst.common.machine.MeteorMiner.tooltip.structure.06"))
-            // #tr tst.common.machine.MeteorMiner.tooltip.structure.07
+            .addController(tr("tst.machine.MeteorMiner.tooltip.structure.06"))
+            // #tr tst.machine.MeteorMiner.tooltip.structure.07
             // # Any Neutronium Casing below the controller
             // #zh_CN 控制器下方的中子采矿机械方块
-            .addOutputBus(tr("tst.common.machine.MeteorMiner.tooltip.structure.07"), 3)
-            .addEnergyHatch(tr("tst.common.machine.MeteorMiner.tooltip.structure.07"), 3)
-            .addMaintenanceHatch(tr("tst.common.machine.MeteorMiner.tooltip.structure.07"), 3)
+            .addOutputBus(tr("tst.machine.MeteorMiner.tooltip.structure.07"), 3)
+            .addEnergyHatch(tr("tst.machine.MeteorMiner.tooltip.structure.07"), 3)
+            .addMaintenanceHatch(tr("tst.machine.MeteorMiner.tooltip.structure.07"), 3)
             .toolTipFinisher();
         // spotless:on
         return tt;

@@ -163,51 +163,51 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     // spotless:off
 
-    // #tr tst.bottledchaos.result.credential_changed
+    // #tr tst.machine.BottledChaos.result.credential_changed
     // # The credential for this processing group changed.
     // #zh_CN 此加工组的凭证已变更.
 
-    // #tr tst.bottledchaos.result.insufficient_power_share
+    // #tr tst.machine.BottledChaos.result.insufficient_power_share
     // # This processing group does not have enough allocated power.
     // #zh_CN 此加工组分配到的电力不足.
 
-    // #tr tst.bottledchaos.result.capacity_exceeded
+    // #tr tst.machine.BottledChaos.result.capacity_exceeded
     // # Installed credentials exceed the machine capacity.
     // #zh_CN 已安装凭证超过主机容量.
 
-    // #tr tst.bottledchaos.result.unbound
+    // #tr tst.machine.BottledChaos.result.unbound
     // # This processing group has no valid credential.
     // #zh_CN 此加工组没有有效凭证.
 
-    // #tr tst.bottledchaos.structure.invalid_capacity_region
+    // #tr tst.machine.BottledChaos.structure_error.invalid_capacity_region
     // # Each capacity region must contain only non-capacity blocks (including air), or 64 same-tier capacity blocks.
     // #zh_CN 每个容量区必须全为非容量方块(含空气), 或完整安装64个同级容量方块.
 
-    // #tr tst.bottledchaos.structure.incomplete_processing_group
+    // #tr tst.machine.BottledChaos.structure_error.incomplete_processing_group
     // # Dedicated input positions require a credential hatch; both inputs are optional and accept buses or hatches.
     // #zh_CN 专用输入位需要对应的凭证仓; 两个输入位均可留空, 或安装物品输入总线或流体输入仓.
 
-    // #tr tst.bottledchaos.capacity_usage
+    // #tr tst.machine.BottledChaos.info.capacity_usage
     // # Capacity: %s / %s
     // #zh_CN 容量: %s / %s
 
-    // #tr tst.bottledchaos.credential_hatches
+    // #tr tst.machine.BottledChaos.info.credential_hatches
     // # Credential hatches: %s / %s
     // #zh_CN 凭证仓: %s / %s
 
-    // #tr tst.bottledchaos.input_share
+    // #tr tst.machine.BottledChaos.info.input_share
     // # Power share: %s
     // #zh_CN 电力份额: %s
 
-    // #tr tst.bottledchaos.capacity_exceeded
+    // #tr tst.machine.BottledChaos.info.capacity_exceeded
     // # Capacity exceeded
     // #zh_CN 容量超限
 
-    // #tr tst.bottledchaos.unbound
+    // #tr tst.machine.BottledChaos.info.unbound
     // # No credential
     // #zh_CN 无凭证
 
-    // #tr tst.bottledchaos.wireless_mode
+    // #tr tst.machine.BottledChaos.info.wireless_mode
     // # Wireless mode
     // #zh_CN 无线模式
 
@@ -569,10 +569,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         for (int[] tierCounts : capacityTierCounts) Arrays.fill(tierCounts, 0);
         if (base.getFrontFacing().offsetY != 0 || base.getFrontFacing() == ForgeDirection.UNKNOWN
             || !getAlignmentLimits().isNewExtendedFacingValid(getExtendedFacing())) {
-            // #tr tst.bottledchaos.structure.invalid_alignment
+            // #tr tst.machine.BottledChaos.structure_error.invalid_alignment
             // # Bottled Chaos requires a horizontal facing without rotation or mirroring.
             // #zh_CN 瓶中混沌只能水平朝向, 不能旋转或镜像.
-            errors.add(StructureErrors.of("tst.bottledchaos.structure.invalid_alignment"));
+            errors.add(StructureErrors.of("tst.machine.BottledChaos.structure_error.invalid_alignment"));
             return false;
         }
         if (!checkPiece(STRUCTURE_PIECE_MAIN, HORIZONTAL_OFFSET, VERTICAL_OFFSET, DEPTH_OFFSET, errors)) {
@@ -581,10 +581,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         }
         if (minimumUpgradeGlassTier < VoltageIndex.UHV + generatorLevel
             || maximumUpgradeGlassTier != minimumUpgradeGlassTier) {
-            // #tr tst.bottledchaos.structure.upgrade_glass_mismatch
+            // #tr tst.machine.BottledChaos.structure_error.upgrade_glass_mismatch
             // # Shaft and capacity-region glass must share a tier no lower than the machine tier.
             // #zh_CN 主轴与容量区玻璃须同级, 且不得低于机器等级.
-            errors.add(StructureErrors.of("tst.bottledchaos.structure.upgrade_glass_mismatch"));
+            errors.add(StructureErrors.of("tst.machine.BottledChaos.structure_error.upgrade_glass_mismatch"));
             return false;
         }
         for (MTEHatch hatch : mEnergyHatches) {
@@ -600,7 +600,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             }
         }
         if (!calculateCapacity()) {
-            errors.add(StructureErrors.of("tst.bottledchaos.structure.invalid_capacity_region"));
+            errors.add(StructureErrors.of("tst.machine.BottledChaos.structure_error.invalid_capacity_region"));
             return false;
         }
         Collection<IModularHatch> parallelControllers = modularHatches.get(ModularHatchTypes.PARALLEL_CONTROLLER);
@@ -628,7 +628,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         for (int i = 0; i < THREAD_COUNT; i++) {
             if (credentialHatches[i] != null) installedCredentialHatches++;
             if (credentialHatches[i] == null && (threadInputs[i * 2] != null || threadInputs[i * 2 + 1] != null)) {
-                errors.add(StructureErrors.of("tst.bottledchaos.structure.incomplete_processing_group"));
+                errors.add(StructureErrors.of("tst.machine.BottledChaos.structure_error.incomplete_processing_group"));
                 return false;
             }
         }
@@ -636,7 +636,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             errors.add(
                 StructureErrors.hatchCount(
                     ErrorType.TOO_MANY,
-                    TranslatableText.lang("tst.bottledchaos.credential_hatch.name"),
+                    TranslatableText.lang("tst.machine.BottledChaosRecipeTokenHatch.name"),
                     installedCredentialHatches,
                     credentialHatchLimit));
             return false;
@@ -940,10 +940,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private CheckRecipeResult canRunThread(int slot) {
         BottledChaosThread thread = threads[slot];
         if (!validGroup(slot) || !matchingCredentials[slot]) {
-            return SimpleResultWithText.ofFailure("tst.bottledchaos.result.credential_changed");
+            return SimpleResultWithText.ofFailure("tst.machine.BottledChaos.result.credential_changed");
         }
         if (!thread.isWireless() && thread.recipeVoltage > getMaximumRecipeVoltage())
-            return SimpleResultWithText.ofFailure("tst.bottledchaos.result.recipe_voltage_limit");
+            return SimpleResultWithText.ofFailure("tst.machine.BottledChaos.result.recipe_voltage_limit");
         if ((poolMask & thread.requiredPools) != thread.requiredPools) {
             return BottledChaosProcessingLogic.missingPools(thread.requiredPools, poolMask, true);
         }
@@ -951,7 +951,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if (isWirelessMode()) return CheckRecipeResultRegistry.insufficientPower(thread.eut);
         if (thread.eut > inputPower) return CheckRecipeResultRegistry.insufficientPower(thread.eut);
         if (!isWaitingForPowerRound(slot) && thread.eut > powerBudgets[slot]) {
-            return SimpleResultWithText.ofFailure("tst.bottledchaos.result.insufficient_power_share");
+            return SimpleResultWithText.ofFailure("tst.machine.BottledChaos.result.insufficient_power_share");
         }
         return CheckRecipeResultRegistry.SUCCESSFUL;
     }
@@ -962,7 +962,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if (!getBaseMetaTileEntity().isAllowedToWork()) return CheckRecipeResultRegistry.NO_RECIPE;
         refreshAllocation();
         refreshPowerRound();
-        if (overCapacity) return SimpleResultWithText.ofFailure("tst.bottledchaos.result.capacity_exceeded");
+        if (overCapacity) return SimpleResultWithText.ofFailure("tst.machine.BottledChaos.result.capacity_exceeded");
         // Finished jobs retry delivery only in runMachine; recipe searches reuse their last result.
         for (int slot = 0; slot < THREAD_COUNT; slot++) {
             CheckRecipeResult result = threads[slot].result();
@@ -1130,10 +1130,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     private CheckRecipeResult startThread(int slot) {
         if (!validGroup(slot)) return SimpleResultWithText.ofFailure("GT5U.gui.multimachine.incomplete_structure");
         if (!ItemBottledChaosCredential.isBound(installedCredentials[slot])) {
-            return SimpleResultWithText.ofFailure("tst.bottledchaos.result.unbound");
+            return SimpleResultWithText.ofFailure("tst.machine.BottledChaos.result.unbound");
         }
         if (!isWirelessMode() && powerBudgets[slot] <= 0)
-            return SimpleResultWithText.ofFailure("tst.bottledchaos.result.insufficient_power_share");
+            return SimpleResultWithText.ofFailure("tst.machine.BottledChaos.result.insufficient_power_share");
 
         InputTransaction inputs = new InputTransaction(false, false);
         CheckRecipeResult result = withGroupInputs(slot, () -> {
@@ -1316,7 +1316,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         CheckRecipeResult result = logic.process();
         if (!result.wasSuccessful()) return result;
         if (!isWirelessMode() && (logic.getCalculatedEut() < 0 || logic.getCalculatedEut() > budget)) {
-            return SimpleResultWithText.ofFailure("tst.bottledchaos.result.insufficient_power_share");
+            return SimpleResultWithText.ofFailure("tst.machine.BottledChaos.result.insufficient_power_share");
         }
         List<BottledChaosUpkeep.Demand> active = new ArrayList<>();
         List<BottledChaosUpkeep.Demand> starting = new ArrayList<>(logic.getUpkeep());
@@ -1344,10 +1344,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 owner,
                 logic.getWirelessCost()
                     .negate())) {
-                // #tr tst.bottledchaos.result.insufficient_wireless_energy
+                // #tr tst.machine.BottledChaos.result.insufficient_wireless_energy
                 // # Insufficient wireless energy.
                 // #zh_CN 无线电网电量不足.
-                return SimpleResultWithText.ofFailure("tst.bottledchaos.result.insufficient_wireless_energy");
+                return SimpleResultWithText.ofFailure("tst.machine.BottledChaos.result.insufficient_wireless_energy");
             }
         }
         if (!inputs.probeOnly) {
@@ -1404,7 +1404,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
             .getTotalWorldTime() + 60;
         if (hatch.getMaterialCache()
             .isEmpty()) {
-            cacheExportResult = SimpleResultWithText.ofSuccess("tst.bottledchaos.gui.cache_empty");
+            cacheExportResult = SimpleResultWithText.ofSuccess("tst.machine.BottledChaos.gui.cache_empty");
             return;
         }
         BottledChaosOutputBuffer.Transaction check = BottledChaosOutputBuffer.Transaction.forCacheExportCheck(this);
@@ -1421,10 +1421,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         hatch.getMaterialCache()
             .clearMaterials();
         hatch.markDirty();
-        // #tr tst.bottledchaos.gui.cache_exported
+        // #tr tst.machine.BottledChaos.gui.cache_exported
         // # Complete.
         // #zh_CN 完成.
-        cacheExportResult = SimpleResultWithText.ofSuccess("tst.bottledchaos.gui.cache_exported");
+        cacheExportResult = SimpleResultWithText.ofSuccess("tst.machine.BottledChaos.gui.cache_exported");
         markDirty();
     }
 
@@ -1639,7 +1639,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         lEUt = 0;
         if (overCapacity) {
             mMaxProgresstime = mProgresstime = 0;
-            setCheckRecipeResult(SimpleResultWithText.ofFailure("tst.bottledchaos.result.capacity_exceeded"));
+            setCheckRecipeResult(SimpleResultWithText.ofFailure("tst.machine.BottledChaos.result.capacity_exceeded"));
             return;
         }
         if (!base.isAllowedToWork() && mMaxProgresstime <= 0) return;
@@ -2025,7 +2025,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                     .filter(Objects::nonNull)
                     .count())
                 .withMteClass(TST_BottledChaosRecipeTokenHatch.class)
-                .withDisplayName(StatCollector.translateToLocal("tst.bottledchaos.credential_hatch.name"));
+                .withDisplayName(StatCollector.translateToLocal("tst.machine.BottledChaosRecipeTokenHatch.name"));
         } else {
             element = InputBus.or(InputHatch)
                 .<MM_BottledChaos>withCount(machine -> {
@@ -2042,7 +2042,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if (kind == 0) {
             // GT's withMteClass retains InputBus.matchesHatch; override the placement and skip filters explicitly.
             builder.hatchClass(TST_BottledChaosRecipeTokenHatch.class)
-                .description(() -> "tst.bottledchaos.credential_hatch.name");
+                .description(() -> "tst.machine.BottledChaosRecipeTokenHatch.name");
         } else {
             // Show one bus and one fluid hatch in NEI; both positions accept either type in real worlds.
             builder.hatchItemFilterAnd(machine -> stack -> {
@@ -2243,11 +2243,12 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     @SideOnly(Side.CLIENT)
     public static String getCredentialHatchBoundInputs(int peers) {
-        // #tr tst.bottledchaos.credential_hatch.bound_inputs
+        // #tr tst.machine.BottledChaosRecipeTokenHatch.gui.bound_inputs
         // # Bound to %s
         // #zh_CN 与%s绑定
-        return StatCollector
-            .translateToLocalFormatted("tst.bottledchaos.credential_hatch.bound_inputs", formatProcessingGroups(peers));
+        return StatCollector.translateToLocalFormatted(
+            "tst.machine.BottledChaosRecipeTokenHatch.gui.bound_inputs",
+            formatProcessingGroups(peers));
     }
 
     @SideOnly(Side.CLIENT)
@@ -2278,19 +2279,19 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         }
         int duration = data.getInteger("duration");
         if (!data.getBoolean("connected")) {
-            // #tr tst.bottledchaos.credential_hatch.disconnected
+            // #tr tst.machine.BottledChaosRecipeTokenHatch.info.disconnected
             // # Not connected to a formed Bottled Chaos controller.
             // #zh_CN 未连接到成型的瓶中混沌主机.
             currentTip.add(
                 EnumChatFormatting.YELLOW
-                    + StatCollector.translateToLocal("tst.bottledchaos.credential_hatch.disconnected"));
+                    + StatCollector.translateToLocal("tst.machine.BottledChaosRecipeTokenHatch.info.disconnected"));
             if (!showCache) return;
         } else {
             String blockedRoute = getBlockedRouteText(data);
             if (!blockedRoute.isEmpty()) currentTip.add(blockedRoute);
             BigInteger eut = processingGroupPower(data);
             byte energyTier = (byte) data.getLong("energyTier");
-            // #tr tst.bottledchaos.credential_hatch.power_share
+            // #tr tst.machine.BottledChaosRecipeTokenHatch.gui.power_share
             // # Power share: %s%%
             // #zh_CN 电力份额: %s%%
             currentTip.add(
@@ -2309,7 +2310,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                     + " | "
                     + EnumChatFormatting.AQUA
                     + StatCollector.translateToLocalFormatted(
-                        "tst.bottledchaos.credential_hatch.power_share",
+                        "tst.machine.BottledChaosRecipeTokenHatch.gui.power_share",
                         String.format(Locale.ROOT, "%.2f", data.getDouble("powerRatio") * 100)));
             if (duration > 0) {
                 currentTip.add(GTWaila.getMachineProgressString(duration, data.getInteger("progress")));
@@ -2317,29 +2318,29 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         }
         NBTTagCompound outputs = showCache ? data.getCompoundTag("cache") : data.getCompoundTag("outputs");
         if (showCache) {
-            // #tr tst.bottledchaos.credential_hatch.cached_materials
+            // #tr tst.machine.BottledChaosRecipeTokenHatch.gui.cached_materials
             // # Cached materials (%s types):
             // #zh_CN 缓存材料(%s种):
             currentTip.add(
                 EnumChatFormatting.GOLD + StatCollector.translateToLocalFormatted(
-                    "tst.bottledchaos.credential_hatch.cached_materials",
+                    "tst.machine.BottledChaosRecipeTokenHatch.gui.cached_materials",
                     formatNumber(outputs.getInteger("total"))));
             currentTip.addAll(getMaterialSummaryLines(outputs, true));
         } else {
             appendMaterialSummary(currentTip, getProcessingGroupOutputTitle(data), outputs);
-            // #tr tst.bottledchaos.intermediate_outputs
+            // #tr tst.machine.BottledChaos.info.intermediate_outputs
             // # Intermediate products:
             // #zh_CN 中间产物:
             appendMaterialSummary(
                 currentTip,
-                StatCollector.translateToLocal("tst.bottledchaos.intermediate_outputs"),
+                StatCollector.translateToLocal("tst.machine.BottledChaos.info.intermediate_outputs"),
                 outputs.getCompoundTag("intermediates"));
-            // #tr tst.bottledchaos.byproducts
+            // #tr tst.machine.BottledChaos.info.byproducts
             // # Byproducts:
             // #zh_CN 副产物:
             appendMaterialSummary(
                 currentTip,
-                StatCollector.translateToLocal("tst.bottledchaos.byproducts"),
+                StatCollector.translateToLocal("tst.machine.BottledChaos.info.byproducts"),
                 outputs.getCompoundTag("byproducts"));
         }
     }
@@ -2461,7 +2462,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     public String getPassiveInputText() {
         if (getBaseMetaTileEntity() == null || !getBaseMetaTileEntity().isActive())
-            return StatCollector.translateToLocal("tst.bottledchaos.gui.no_passive_inputs");
+            return StatCollector.translateToLocal("tst.machine.BottledChaos.gui.no_passive_inputs");
         StringJoiner text = new StringJoiner("\n");
         text.add(structureUpkeep.activeFluidText());
         java.util.Map<com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID, java.math.BigInteger> items = new java.util.LinkedHashMap<>();
@@ -2474,13 +2475,14 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         items.forEach(
             (item, amount) -> text.add(
                 StatCollector.translateToLocalFormatted(
-                    "tst.bottledchaos.gui.per_round",
+                    "tst.machine.BottledChaos.gui.per_round",
                     item.getItemStack(1)
                         .getDisplayName(),
                     formatNumber(amount))));
         String result = text.toString()
             .trim();
-        return result.isEmpty() ? StatCollector.translateToLocal("tst.bottledchaos.gui.no_passive_inputs") : result;
+        return result.isEmpty() ? StatCollector.translateToLocal("tst.machine.BottledChaos.gui.no_passive_inputs")
+            : result;
     }
 
     public NBTTagCompound getBottledChaosStatusSummary() {
@@ -2501,8 +2503,10 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         IGregTechTileEntity base = getBaseMetaTileEntity();
         if (!mMachine) BottledChaosResultData
             .addGrouped(entries, SimpleResultWithText.ofFailure("GT5U.gui.multimachine.incomplete_structure"), 0);
-        if (overCapacity) BottledChaosResultData
-            .addGrouped(entries, SimpleResultWithText.ofFailure("tst.bottledchaos.result.capacity_exceeded"), 0);
+        if (overCapacity) BottledChaosResultData.addGrouped(
+            entries,
+            SimpleResultWithText.ofFailure("tst.machine.BottledChaos.result.capacity_exceeded"),
+            0);
         if (shouldCheckMaintenance() && getRepairStatus() < getIdealStatus()) {
             NBTTagCompound entry = new NBTTagCompound();
             entry.setString("key", "GT5U.turbine.maintenance.true");
@@ -2520,7 +2524,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 if (!validGroup(slot)) {
                     result = SimpleResultWithText.ofFailure("GT5U.gui.multimachine.incomplete_structure");
                 } else if (!ItemBottledChaosCredential.isBound(hatch.getAuthorizationStack())) {
-                    result = SimpleResultWithText.ofFailure("tst.bottledchaos.result.unbound");
+                    result = SimpleResultWithText.ofFailure("tst.machine.BottledChaos.result.unbound");
                 } else if (threads[slot].isBusy()) {
                     result = canRunThread(slot);
                     if (result.wasSuccessful()) {
@@ -2599,8 +2603,8 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         IWailaConfigHandler config) {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         NBTTagCompound tag = accessor.getNBTData();
-        if (tag.getBoolean("bottledChaosWireless"))
-            currentTip.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tst.bottledchaos.wireless_mode"));
+        if (tag.getBoolean("bottledChaosWireless")) currentTip.add(
+            EnumChatFormatting.AQUA + StatCollector.translateToLocal("tst.machine.BottledChaos.info.wireless_mode"));
         currentTip.remove(
             GTWaila.getMachineProgressString(
                 tag.getBoolean("isActive"),
@@ -2609,12 +2613,12 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
                 tag.getInteger("progress")));
         currentTip.add(
             EnumChatFormatting.WHITE + StatCollector.translateToLocalFormatted(
-                "tst.bottledchaos.capacity_usage",
+                "tst.machine.BottledChaos.info.capacity_usage",
                 tag.getInteger(WAILA_USED_CAPACITY),
                 tag.getInteger(WAILA_CAPACITY)));
         currentTip.add(
             EnumChatFormatting.WHITE + StatCollector.translateToLocalFormatted(
-                "tst.bottledchaos.credential_hatches",
+                "tst.machine.BottledChaos.info.credential_hatches",
                 tag.getInteger(WAILA_CREDENTIAL_HATCHES),
                 tag.getInteger(WAILA_CREDENTIAL_HATCH_LIMIT)));
         if (tag.getBoolean("bottledChaosOverCapacity")) {
@@ -2630,11 +2634,12 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         shown.sort(Integer::compare);
         for (int index : shown) currentTip.addAll(getProcessingGroupLines(tag, index));
         if (groups.size() > shown.size()) currentTip.add(
-            // #tr tst.bottledchaos.more_processing_groups
+            // #tr tst.machine.BottledChaos.waila.more_processing_groups
             // # And %d More Processing Groups...
             // #zh_CN 并且还有 %d 个加工组...
-            StatCollector
-                .translateToLocalFormatted("tst.bottledchaos.more_processing_groups", groups.size() - shown.size()));
+            StatCollector.translateToLocalFormatted(
+                "tst.machine.BottledChaos.waila.more_processing_groups",
+                groups.size() - shown.size()));
     }
 
     public static int getProcessingGroupCount(NBTTagCompound summary) {
@@ -2666,7 +2671,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         String separator = EnumChatFormatting.WHITE + (waila ? SpecialChars.TAB : " | ");
         String share = waila
             ? SpecialChars.ALIGNRIGHT + EnumChatFormatting.AQUA
-                + StatCollector.translateToLocalFormatted("tst.bottledchaos.input_share", "")
+                + StatCollector.translateToLocalFormatted("tst.machine.BottledChaos.info.input_share", "")
                 + SpecialChars.TAB
                 + EnumChatFormatting.AQUA
                 + getProcessingGroupShareValue(job)
@@ -2696,7 +2701,7 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
     @SideOnly(Side.CLIENT)
     public static String getProcessingGroupShareText(NBTTagCompound summary, NBTTagCompound job) {
         return EnumChatFormatting.AQUA + StatCollector
-            .translateToLocalFormatted("tst.bottledchaos.input_share", getProcessingGroupShareValue(job));
+            .translateToLocalFormatted("tst.machine.BottledChaos.info.input_share", getProcessingGroupShareValue(job));
     }
 
     @SideOnly(Side.CLIENT)
@@ -2745,14 +2750,14 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     @SideOnly(Side.CLIENT)
     public static String getBlockedRouteText(NBTTagCompound job) {
-        // #tr tst.bottledchaos.partial_route_blocked
+        // #tr tst.machine.BottledChaos.info.partial_route_blocked
         // # Some routes blocked: %s
         // #zh_CN 部分路线受阻: %s
         return job.hasKey("blockedRoute", 10)
             ? EnumChatFormatting.YELLOW
                 + StatCollector
                     .translateToLocalFormatted(
-                        "tst.bottledchaos.partial_route_blocked",
+                        "tst.machine.BottledChaos.info.partial_route_blocked",
                         BottledChaosResultData.read(job.getCompoundTag("blockedRoute"))
                             .getDisplayString())
             : "";
@@ -2760,12 +2765,12 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
 
     @SideOnly(Side.CLIENT)
     public static String getProcessingGroupOutputTitle(NBTTagCompound job) {
-        // #tr tst.bottledchaos.pending_outputs
+        // #tr tst.machine.BottledChaos.info.pending_outputs
         // # Pending outputs:
         // #zh_CN 待输出:
         return StatCollector.translateToLocal(
             job.getInteger("duration") > 0 && job.getInteger("progress") >= job.getInteger("duration")
-                ? "tst.bottledchaos.pending_outputs"
+                ? "tst.machine.BottledChaos.info.pending_outputs"
                 : "GT5U.waila.producing");
     }
 
@@ -2832,95 +2837,95 @@ public class MM_BottledChaos extends ModularizedMachineSupportAllModuleBase<MM_B
         if (tooltip == null) {
             // spotless:off
             tooltip = new TSTMultiblockTooltipBuilder()
-                // #tr tst.bottledchaos.tooltip.machine_type
+                // #tr tst.machine.BottledChaos.tooltip.machine_type
                 // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Production Chain Processor
                 // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}生产链处理器
-                .addMachineType(TSTUtils.tr("tst.bottledchaos.tooltip.machine_type"))
-                // #tr tst.bottledchaos.tooltip.info.1
+                .addMachineType(TSTUtils.tr("tst.machine.BottledChaos.tooltip.machine_type"))
+                // #tr tst.machine.BottledChaos.tooltip.info.1
                 // # Controller block for Bottled Chaos
                 // #zh_CN 瓶中混沌的控制方块
-                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.1"))
-                // #tr tst.bottledchaos.tooltip.info.2
+                .addInfo(TSTUtils.tr("tst.machine.BottledChaos.tooltip.info.1"))
+                // #tr tst.machine.BottledChaos.tooltip.info.2
                 // # {\AQUA}{\ITALIC}Countless processes, one bottle.
                 // #zh_CN {\AQUA}{\ITALIC}万千工序, 尽在瓶中.
-                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.2"))
-                // #tr tst.bottledchaos.tooltip.info.3
+                .addInfo(TSTUtils.tr("tst.machine.BottledChaos.tooltip.info.2"))
+                // #tr tst.machine.BottledChaos.tooltip.info.3
                 // # {\NULL}
                 // #zh_CN {\NULL}
-                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.3"))
-                // #tr tst.bottledchaos.tooltip.info.4
+                .addInfo(TSTUtils.tr("tst.machine.BottledChaos.tooltip.info.3"))
+                // #tr tst.machine.BottledChaos.tooltip.info.4
                 // # Links multiple processing steps internally, automatically turning inputs into target products.
                 // #zh_CN 在内部衔接多道工序, 完成从原料到目标产物的自动加工.
-                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.4"))
-                // #tr tst.bottledchaos.tooltip.info.5
+                .addInfo(TSTUtils.tr("tst.machine.BottledChaos.tooltip.info.4"))
+                // #tr tst.machine.BottledChaos.tooltip.info.5
                 // # Structure modules provide the corresponding machines' recipes and capabilities.
                 // #zh_CN 结构模组提供对应机器的配方与性能.
-                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.5"))
-                // #tr tst.bottledchaos.tooltip.info.6
+                .addInfo(TSTUtils.tr("tst.machine.BottledChaos.tooltip.info.5"))
+                // #tr tst.machine.BottledChaos.tooltip.info.6
                 // # Credentials select processing chains; each group runs independently.
                 // #zh_CN 凭证指定加工路线, 各加工组独立运行.
-                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.6"))
-                // #tr tst.bottledchaos.tooltip.info.7
+                .addInfo(TSTUtils.tr("tst.machine.BottledChaos.tooltip.info.6"))
+                // #tr tst.machine.BottledChaos.tooltip.info.7
                 // # Processing pauses when power is insufficient.
                 // #zh_CN 供电不足时暂停加工.
-                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.7"))
-                // #tr tst.bottledchaos.tooltip.info.8
+                .addInfo(TSTUtils.tr("tst.machine.BottledChaos.tooltip.info.7"))
+                // #tr tst.machine.BottledChaos.tooltip.info.8
                 // # At machine tier UXV with no energy hatches installed, wireless mode is enabled.
                 // #zh_CN 机器达到UXV级且未安装能源仓时, 启用无线模式.
-                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.8"))
-                // #tr tst.bottledchaos.tooltip.info.9
+                .addInfo(TSTUtils.tr("tst.machine.BottledChaos.tooltip.info.8"))
+                // #tr tst.machine.BottledChaos.tooltip.info.9
                 // # In wireless mode, each group prepays its energy cost and runs at the minimum overclock time.
                 // #zh_CN 无线模式下, 各加工组预付电量并按最低超频时间运行.
-                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.9"))
-                // #tr tst.bottledchaos.tooltip.info.10
+                .addInfo(TSTUtils.tr("tst.machine.BottledChaos.tooltip.info.9"))
+                // #tr tst.machine.BottledChaos.tooltip.info.10
                 // # Capacity regions form a shared pool, allocated by the route weights of enabled groups.
                 // #zh_CN 各容量区提供全机共享容量, 按启用组的路线占用量分配.
-                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.10"))
-                // #tr tst.bottledchaos.tooltip.info.11
+                .addInfo(TSTUtils.tr("tst.machine.BottledChaos.tooltip.info.10"))
+                // #tr tst.machine.BottledChaos.tooltip.info.11
                 // # When identical credentials share inputs, capacity usage counts every corresponding credential hatch.
                 // #zh_CN 相同凭证共用输入时, 容量占用按对应凭证仓数量累计.
-                .addInfo(TSTUtils.tr("tst.bottledchaos.tooltip.info.11"))
+                .addInfo(TSTUtils.tr("tst.machine.BottledChaos.tooltip.info.11"))
                 .beginStructureBlock(SHAPE)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription01)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription02)
-                // #tr tst.bottledchaos.tooltip.structure.1
+                // #tr tst.machine.BottledChaos.tooltip.structure.1
                 // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}Parallel Controller Module - Increase processing groups and structure module slots
                 // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}并行控制器模块 - 增加加工组数量与结构模组槽位
-                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.tooltip.structure.1"))
+                .addStructureInfo(TSTUtils.tr("tst.machine.BottledChaos.tooltip.structure.1"))
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.SpeedControllerDescription)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.PowerConsumptionControllerDescription)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.OverclockControllerDescription)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.NotMultiplyInstallSameTypeModuleAll)
                 .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
-                // #tr tst.bottledchaos.tooltip.structure.2
+                // #tr tst.machine.BottledChaos.tooltip.structure.2
                 // # Capacity regions can be upgraded independently or left empty.
                 // #zh_CN 容量区可独立升级或留空.
-                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.tooltip.structure.2"))
-                // #tr tst.bottledchaos.tooltip.structure.3
+                .addStructureInfo(TSTUtils.tr("tst.machine.BottledChaos.tooltip.structure.2"))
+                // #tr tst.machine.BottledChaos.tooltip.structure.3
                 // # Stabilisation Field Generators and Energy Sustainment Matrices must share a tier, which determines the machine tier.
                 // #zh_CN 稳定力场发生器与能量维持矩阵须同级, 决定机器等级.
-                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.tooltip.structure.3"))
-                // #tr tst.bottledchaos.tooltip.structure.4
+                .addStructureInfo(TSTUtils.tr("tst.machine.BottledChaos.tooltip.structure.3"))
+                // #tr tst.machine.BottledChaos.tooltip.structure.4
                 // # Shaft and capacity-region glass must share a tier no lower than the machine tier.
                 // #zh_CN 主轴与容量区玻璃须同级, 且不得低于机器等级.
-                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.tooltip.structure.4"))
+                .addStructureInfo(TSTUtils.tr("tst.machine.BottledChaos.tooltip.structure.4"))
                 .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltip_GlassTierLimitEnergyHatchTier)
-                // #tr tst.bottledchaos.tooltip.structure.5
+                // #tr tst.machine.BottledChaos.tooltip.structure.5
                 // # Central inputs supply every processing group.
                 // #zh_CN 中心输入供全部加工组共享.
-                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.tooltip.structure.5"))
-                // #tr tst.bottledchaos.tooltip.structure.6
+                .addStructureInfo(TSTUtils.tr("tst.machine.BottledChaos.tooltip.structure.5"))
+                // #tr tst.machine.BottledChaos.tooltip.structure.6
                 // # The two positions below each credential hatch are dedicated inputs for its processing group.
                 // #zh_CN 凭证仓下方两格为本组专用输入位.
-                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.tooltip.structure.6"))
-                // #tr tst.bottledchaos.tooltip.structure.7
+                .addStructureInfo(TSTUtils.tr("tst.machine.BottledChaos.tooltip.structure.6"))
+                // #tr tst.machine.BottledChaos.tooltip.structure.7
                 // # Groups with identical credentials share dedicated inputs; only one may be enabled at a time.
                 // #zh_CN 凭证完全相同的加工组共用专用输入, 同时仅可启用一组.
-                .addStructureInfo(TSTUtils.tr("tst.bottledchaos.tooltip.structure.7"))
+                .addStructureInfo(TSTUtils.tr("tst.machine.BottledChaos.tooltip.structure.7"))
                 .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
                 .addOtherStructurePart(TSTSharedLocalization.ModularizedMachine.ModularHatch,
                     TSTSharedLocalization.Structure.getBlueprintWithDot(1), 1)
-                .addOtherStructurePart(TSTUtils.tr("tst.bottledchaos.credential_hatch.name"),
+                .addOtherStructurePart(TSTUtils.tr("tst.machine.BottledChaosRecipeTokenHatch.name"),
                     TSTSharedLocalization.Structure.getBlueprintWithDot(2), 2)
                 .addInputBus("", TSTSharedLocalization.Structure.getBlueprintWithDot(1, 3, 5), 1, 3, 5)
                 .addInputHatch("", TSTSharedLocalization.Structure.getBlueprintWithDot(1, 3, 5), 1, 3, 5)

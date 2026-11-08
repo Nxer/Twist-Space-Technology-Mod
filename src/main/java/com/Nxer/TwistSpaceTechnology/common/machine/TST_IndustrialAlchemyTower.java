@@ -586,119 +586,119 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.machine_type
+        // #tr tst.machine.IndustrialAlchemyTower.tooltip.machine_type
         // # Alchemy Tower
         // #zh_CN 炼金塔
-        tt.addMachineType(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.machine_type"))
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.controller
+        tt.addMachineType(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.machine_type"))
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.controller
             // # Controller block for the Industrial Alchemy Tower
             // #zh_CN 工业炼金塔的控制器方块
-            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.controller"))
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.info.01
+            .addInfo(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.controller"))
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.info.01
             // # Gurgling
             // #zh_CN 咕噜咕噜
-            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.info.01"))
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.info.02
+            .addInfo(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.info.01"))
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.info.02
             // # Please use the Infusion Supplier to supply Essence!
             // #zh_CN 请使用注魔供应器供给源质！
-            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.info.02"))
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.info.03
+            .addInfo(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.info.02"))
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.info.03
             // # Parallelism depends on the level of the structure block.
             // #zh_CN 并行取决于结构方块的等级。
-            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.info.03"))
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.info.04
+            .addInfo(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.info.03"))
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.info.04
             // # Do an 4/2 overclock.Turn on lossless overclocking after reaching the maximum acceleration rate.
             // #zh_CN 进行4/2超频。达到最高加速倍率后开启无损超频.
-            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.info.04"))
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.info.05
+            .addInfo(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.info.04"))
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.info.05
             // # Use Charged Nodes to get acceleration rewards,
             // #zh_CN §b使用充能节点以获得加速奖励§7，
-            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.info.05"))
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.info.06
+            .addInfo(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.info.05"))
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.info.06
             // # No acceleration when there are no charging nodes.
             // #zh_CN 无充能节点时不加速。
-            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.info.06"))
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.info.07
+            .addInfo(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.info.06"))
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.info.07
             // # When the number of nodes is less than 4, each charging node increases acceleration by 10%%,
             // #zh_CN 当节点数量小于4时每有一个充能节点就加速10%%，
-            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.info.07"))
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.info.08
+            .addInfo(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.info.07"))
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.info.08
             // # When the number of nodes is 4, calculate the nodes with the highest rates of air, fire, entropy, and order.
             // #zh_CN 当节点数量为4时，计算含有风、火、混沌、秩序率最高的节点，
-            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.info.08"))
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.info.09
+            .addInfo(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.info.08"))
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.info.09
             // # Use the essence quantity of the node with the highest rate of each essence for subsequent calculations.
             // #zh_CN 将含该要素率最多的节点的该要素量参与后续的计算。
-            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.info.09"))
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.info.10
+            .addInfo(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.info.09"))
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.info.10
             // # min=min(fire,air,entropy,order,10);max=max(fire,air,entropy,order,10);
             // #zh_CN {\SPACE}{\AQUA}min=min(fire,air,entropy,order,10);max=max(fire,air,entropy,order,10);
-            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.info.10"))
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.info.11
+            .addInfo(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.info.10"))
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.info.11
             // # Basic speed bonus equals 1/11.4514 + (0.7-1/11.4514)*(1-exp(min-10)).
             // #zh_CN 基础加速倍率为{\SPACE}{\AQUA}baseSpeedBonus=1/11.4514 + (0.7-1/11.4514)*(1-exp(min-10))
-            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.info.11"))
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.info.12
+            .addInfo(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.info.11"))
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.info.12
             // # If there is too much disparity in the quantity of the above essence, there will be a penalty mechanism.
             // #zh_CN 如果上述的要素量差距过大会有惩罚机制。
-            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.info.12"))
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.info.13
+            .addInfo(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.info.12"))
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.info.13
             // # Punishment speed bonus equals (0.7-baseSpeedBonus)*(max-min)/max
             // #zh_CN 惩罚倍率为{\SPACE}{\AQUA}punishSpeedBonus=(0.7-baseSpeedBonus)*(max-min)/max;
-            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.info.13"))
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.info.14
+            .addInfo(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.info.13"))
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.info.14
             // # Final speed bonus equals the sum of the two.
             // #zh_CN 最终倍率为二者相加。
-            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.info.14"))
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.info.15
+            .addInfo(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.info.14"))
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.info.15
             // # Putting EssentiaCell_Creative in the controller GUI doesn't cost essentia, but if it's a hero's proof,maybe a little bit of an incredible change...
             // #zh_CN 在控制器GUI放入魔导源质元件则无需消耗源质，但如果是某位英雄的证明或许会发生一点不可思议的变化...
-            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.info.15"))
+            .addInfo(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.info.15"))
             .addSeparator()
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.info.16
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.info.16
             // # You can use the {\BLUE} channel:{\YELLOW}chisel{\GRAY} to automatically convert chisel blocks when building, and you can see nei to preview the available blocks
             // #zh_CN 可以使用{\BLUE}信道:{\YELLOW}chisel{\GRAY}进行搭建时自动转换凿子方块，可以查看nei进行预览可用方块
-            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.info.16"))
+            .addInfo(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.info.16"))
             .beginStructureBlock(shape)
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.info.17
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.info.17
             // # Infusion Provider
             // #zh_CN 注魔供应器
 
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.structure.01
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.structure.01
             // # §bAny magic mechanical block
             // #zh_CN §b任意魔法机械方块
             .addOtherStructurePart(
-                TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.info.17"),
-                TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.structure.01"))
-            .addInputBus(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.structure.01"))
-            .addOutputBus(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.structure.01"))
-            .addEnergyHatch(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.structure.01"))
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.structure.02
+                TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.info.17"),
+                TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.structure.01"))
+            .addInputBus(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.structure.01"))
+            .addOutputBus(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.structure.01"))
+            .addEnergyHatch(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.structure.01"))
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.structure.02
             // # Travel anchor
             // #zh_CN 旅行锚
             .addOtherStructurePart(
-                TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.structure.02"),
-                TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.structure.01"))
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.info.18
+                TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.structure.02"),
+                TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.structure.01"))
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.info.18
             // # Essentia diffusion unit
             // #zh_CN 源质扩散单元
 
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.structure.03
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.structure.03
             // # Each level provides tier^5 parallel
             // #zh_CN §b每级提供tier^5的并行
             .addOtherStructurePart(
-                TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.info.18"),
-                TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.structure.03"))
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.info.19
+                TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.info.18"),
+                TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.structure.03"))
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.info.19
             // # §l§dArcane Empty Space
             // #zh_CN §l§d奥术裂隙
 
-            // #tr tst.common.machine.IndustrialAlchemyTower.tooltip.structure.04
+            // #tr tst.machine.IndustrialAlchemyTower.tooltip.structure.04
             // # Replaceable warded glass on both sides of the machine
             // #zh_CN 可替换机器两侧守卫者玻璃
             .addOtherStructurePart(
-                TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.info.19"),
-                TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.structure.04"))
+                TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.info.19"),
+                TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.structure.04"))
             .toolTipFinisher();
         // spotless:on
         return tt;

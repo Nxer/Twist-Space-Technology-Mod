@@ -288,7 +288,7 @@ public class MM_IndistinctTentaclePrototypeMK2
 
     @Override
     public String getMachineModeName() {
-        return StatCollector.translateToLocal("tst.common.machine.IndistinctTentacle.mode." + machineMode);
+        return StatCollector.translateToLocal("tst.machine.IndistinctTentacle.mode." + machineMode);
     }
 
     @Override
@@ -387,7 +387,7 @@ public class MM_IndistinctTentaclePrototypeMK2
         if (maxProgressingTime > 0) {
             currentTip.add(
                 // #zh_CN 总耗时
-                TSTUtils.tr("tst.modular.machine.PerfectExecutionCore.waila.perfect_execution_core.1") + " : "
+                TSTUtils.tr("tst.modular.shared.waila.total_progressing_time") + " : "
                     + maxProgressingTime
                     + " tick ("
                     + (maxProgressingTime / 20)
@@ -395,7 +395,7 @@ public class MM_IndistinctTentaclePrototypeMK2
             int progressedTime = tag.getInteger("progressedTime");
             currentTip.add(
                 // #zh_CN 已执行时间
-                TSTUtils.tr("tst.modular.machine.ExecutionCore.waila.execution_core.2") + " : "
+                TSTUtils.tr("tst.modular.shared.waila.progressed_time") + " : "
                     + progressedTime
                     + " tick ("
                     + (progressedTime / 20)
@@ -403,12 +403,12 @@ public class MM_IndistinctTentaclePrototypeMK2
             String costEU = tag.getString("costEU");
             if (costEU != null && !costEU.isEmpty()) {
                 // spotless:off
-                // #tr tst.modular.machine.IndistinctTentaclePrototypeMK2.waila.perfect_execution_core.this_execution_core
+                // #tr tst.machine.IndistinctTentaclePrototypeMK2.waila.execution_core
                 // # This Execution Core
                 // #zh_CN 此执行核心
                 currentTip.add(
-                    EnumChatFormatting.AQUA + TSTUtils.tr("tst.modular.machine.IndistinctTentaclePrototypeMK2.waila.perfect_execution_core.this_execution_core")
-                        + TSTUtils.tr("tst.common.machine.BallLightning.waila.tst_miracle_door.1")
+                    EnumChatFormatting.AQUA + TSTUtils.tr("tst.machine.IndistinctTentaclePrototypeMK2.waila.execution_core")
+                        + TSTUtils.tr("tst.shared.waila.current_eu_consumption")
                         + EnumChatFormatting.RESET
                         + ": "
                         + EnumChatFormatting.GOLD
@@ -420,7 +420,7 @@ public class MM_IndistinctTentaclePrototypeMK2
 
         } else {
             // 空闲
-            currentTip.add(TSTUtils.tr("tst.modular.machine.ExecutionCore.waila.execution_core.is_idle"));
+            currentTip.add(TSTUtils.tr("tst.modular.shared.waila.execution_core_idle"));
         }
 
     }
@@ -479,26 +479,26 @@ public class MM_IndistinctTentaclePrototypeMK2
         if (tooltip == null) {
             tooltip = new TSTMultiblockTooltipBuilder();
             // spotless:off
-            // #tr tst.modular.machine.IndistinctTentaclePrototypeMK2.tooltip.machine_type
+            // #tr tst.machine.IndistinctTentaclePrototypeMK2.tooltip.machine_type
             // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Assembly Line | Component Assembly Line | Assembler | Precise Assembler
             // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}巨型装配线 | 部件装配线 | 组装机 | 精密组装机
             tooltip
                 .addMachineType(
-                    TSTUtils.tr("tst.modular.machine.IndistinctTentaclePrototypeMK2.tooltip.machine_type"))
-                // #tr tst.modular.machine.IndistinctTentaclePrototypeMK2.tooltip.info.01
+                    TSTUtils.tr("tst.machine.IndistinctTentaclePrototypeMK2.tooltip.machine_type"))
+                // #tr tst.machine.IndistinctTentaclePrototypeMK2.tooltip.info.01
                 // # {\GOLD}{\BOLD}{\ITALIC}There is no evil, only ignorance.
                 // #zh_CN {\GOLD}{\BOLD}{\ITALIC}只有无知， 没有不满。
-                .addInfo(TSTUtils.tr("tst.modular.machine.IndistinctTentaclePrototypeMK2.tooltip.info.01"))
+                .addInfo(TSTUtils.tr("tst.machine.IndistinctTentaclePrototypeMK2.tooltip.info.01"))
 
-                // #tr tst.modular.machine.IndistinctTentaclePrototypeMK2.tooltip.info.02
+                // #tr tst.machine.IndistinctTentaclePrototypeMK2.tooltip.info.02
                 // # The advanced version of {\DARK_GRAY}{\BOLD}Indistinct Tentacle{\RESET}{\GRAY}.
                 // #zh_CN {\DARK_GRAY}{\BOLD}不可视之触{\RESET}{\GRAY}的升级版.
-                .addInfo(TSTUtils.tr("tst.modular.machine.IndistinctTentaclePrototypeMK2.tooltip.info.02"))
+                .addInfo(TSTUtils.tr("tst.machine.IndistinctTentaclePrototypeMK2.tooltip.info.02"))
 
-                // #tr tst.modular.machine.IndistinctTentaclePrototypeMK2.tooltip.info.03
+                // #tr tst.machine.IndistinctTentaclePrototypeMK2.tooltip.info.03
                 // # Directly use the energy from the wireless EU network, no energy hatch required.
                 // #zh_CN 直接使用无线EU网络中的能量, 无需能源仓.
-                .addInfo(TSTUtils.tr("tst.modular.machine.IndistinctTentaclePrototypeMK2.tooltip.info.03"))
+                .addInfo(TSTUtils.tr("tst.machine.IndistinctTentaclePrototypeMK2.tooltip.info.03"))
                 .addInfo(TSTSharedLocalization.ModularizedMachine.InstallingModuleNearControllerImproveMachine)
                 .beginStructureBlock(SHAPE_MAIN)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription01)
@@ -507,10 +507,10 @@ public class MM_IndistinctTentaclePrototypeMK2
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.PowerConsumptionControllerDescription)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ExecutionCoreDescription)
 
-                // #tr tst.modular.machine.IndistinctTentaclePrototypeMK2.tooltip.structure.01
+                // #tr tst.machine.IndistinctTentaclePrototypeMK2.tooltip.structure.01
                 // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}Only {\RED}Perfect Execution Core Module {\GRAY}can be installed.
                 // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}只可安装 {\RED}完美执行核心模块.
-                .addStructureInfo(TSTUtils.tr("tst.modular.machine.IndistinctTentaclePrototypeMK2.tooltip.structure.01"))
+                .addStructureInfo(TSTUtils.tr("tst.machine.IndistinctTentaclePrototypeMK2.tooltip.structure.01"))
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.NotMultiplyInstallSameTypeModule)
                 .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
 
