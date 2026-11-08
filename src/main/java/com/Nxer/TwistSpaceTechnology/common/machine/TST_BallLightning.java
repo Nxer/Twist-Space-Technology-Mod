@@ -424,22 +424,22 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
 
     @Override
     public String getMachineModeName() {
-        // #tr tst.common.machine.BallLightning.mode.0
+        // #tr tst.machine.BallLightning.mode.0
         // # Electric Arc Furnace
         // #zh_CN 电弧炉
 
-        // #tr tst.common.machine.BallLightning.mode.1
+        // #tr tst.machine.BallLightning.mode.1
         // # Electric Arc Furnace (Old Plasma Arc Furnace)
         // #zh_CN 电弧炉 (旧等离子电弧炉)
 
-        // #tr tst.common.machine.BallLightning.mode.2
+        // #tr tst.machine.BallLightning.mode.2
         // # Fusion Reactor
         // #zh_CN 聚变反应堆
 
-        // #tr tst.common.machine.BallLightning.mode.3
+        // #tr tst.machine.BallLightning.mode.3
         // # Star Kernel Generator
         // #zh_CN 星核发生器
-        return StatCollector.translateToLocal("tst.common.machine.BallLightning.mode." + machineMode);
+        return StatCollector.translateToLocal("tst.machine.BallLightning.mode." + machineMode);
     }
 
     @Override
@@ -635,10 +635,10 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         ItemStack tool) {
         if (getBaseMetaTileEntity().isServerSide() && mMachineTier != 0) {
             if (!checkStructure(true, getBaseMetaTileEntity())) {
-                // #tr tst.common.machine.BallLightning.mode.incomplete_structure
+                // #tr tst.machine.BallLightning.mode.incomplete_structure
                 // # INCOMPLETE STRUCTURE!
                 // #zh_CN 结构不完整!
-                GTUtility.sendChatTrans(aPlayer, "tst.common.machine.BallLightning.mode.incomplete_structure");
+                GTUtility.sendChatTrans(aPlayer, "tst.machine.BallLightning.mode.incomplete_structure");
                 return;
             }
         }
@@ -699,10 +699,10 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         if (tag.getInteger("modeTST") == 2) {
             currentTip.add(
                 // spotless:off
-                // #tr tst.common.machine.BallLightning.waila.tst_ball_lightning.1
+                // #tr tst.machine.BallLightning.waila.max_fusion_eu_cost
                 // # Max Fusion Eu Cost
                 // #zh_CN 聚变功耗上限
-                (EnumChatFormatting.AQUA + TSTUtils.tr("tst.common.machine.BallLightning.waila.tst_ball_lightning.1")
+                (EnumChatFormatting.AQUA + TSTUtils.tr("tst.machine.BallLightning.waila.max_fusion_eu_cost")
                     + EnumChatFormatting.RESET
                     + ": "
                     + EnumChatFormatting.GOLD
@@ -711,15 +711,15 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                     + " EU/t"));
         }
         if (tag.getBoolean("isWirelessMode")) {
-            // #tr tst.common.machine.BallLightning.waila.tst_indistinct_tentacle.1
+            // #tr tst.machine.BallLightning.waila.wireless_mode
             // # Wireless Mode
             // #zh_CN 无线模式
-            currentTip.add(EnumChatFormatting.LIGHT_PURPLE + TSTUtils.tr("tst.common.machine.BallLightning.waila.tst_indistinct_tentacle.1"));
+            currentTip.add(EnumChatFormatting.LIGHT_PURPLE + TSTUtils.tr("tst.machine.BallLightning.waila.wireless_mode"));
             currentTip.add(
-                // #tr tst.common.machine.BallLightning.waila.tst_miracle_door.1
+                // #tr tst.shared.waila.current_eu_consumption
                 // # Current EU cost
                 // #zh_CN 当前EU消耗
-                EnumChatFormatting.AQUA + TSTUtils.tr("tst.common.machine.BallLightning.waila.tst_miracle_door.1")
+                EnumChatFormatting.AQUA + TSTUtils.tr("tst.shared.waila.current_eu_consumption")
                     + EnumChatFormatting.RESET
                     + ": "
                     + EnumChatFormatting.GOLD
@@ -729,10 +729,10 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
 
             if (1 != tag.getInteger("EuCostMultiplier")) {
                 currentTip.add("" + EnumChatFormatting.BLUE + EnumChatFormatting.BOLD
-                // #tr tst.common.machine.BallLightning.waila.tst_ball_lightning.2
+                // #tr tst.machine.BallLightning.waila.extra_eu_cost_multiplier
                 // # Extra EU cost multiplier
                 // #zh_CN 额外EU消耗倍率
-                    + TSTUtils.tr("tst.common.machine.BallLightning.waila.tst_ball_lightning.2")
+                    + TSTUtils.tr("tst.machine.BallLightning.waila.extra_eu_cost_multiplier")
                     + EnumChatFormatting.RESET
                     + ": "
                     + EnumChatFormatting.GOLD
@@ -849,204 +849,204 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.BallLightning.tooltip.machine_type
+        // #tr tst.machine.BallLightning.tooltip.machine_type
         // # (Plasma / Electric) Arc Furnace / Fusion Reactor / Star Kernel Generator
         // #zh_CN 电弧炉 | 等离子电弧炉 | 聚变反应堆 | 星核发生器
-        tt.addMachineType(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.machine_type"))
-            // #tr tst.common.machine.BallLightning.tooltip.controller
+        tt.addMachineType(TSTUtils.tr("tst.machine.BallLightning.tooltip.machine_type"))
+            // #tr tst.machine.BallLightning.tooltip.controller
             // # Controller block for the Ball Lightning
             // #zh_CN 球状闪电的的控制方块
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.controller"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.01
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.controller"))
+            // #tr tst.machine.BallLightning.tooltip.info.01
             // # {\SPACE}
             // #zh_CN {\SPACE}
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.01"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.02
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.01"))
+            // #tr tst.machine.BallLightning.tooltip.info.02
             // # {\ITALIC} " I closed my eyes and opened them again. "
             // #zh_CN {\ITALIC} " 我闭上眼睛又睁开. "
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.02"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.03
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.02"))
+            // #tr tst.machine.BallLightning.tooltip.info.03
             // # {\ITALIC} " The rose didn't reappear, "
             // #zh_CN {\ITALIC} " 玫瑰没有再出现, "
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.03"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.04
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.03"))
+            // #tr tst.machine.BallLightning.tooltip.info.04
             // # {\ITALIC} " but I knew it was there,"
             // #zh_CN {\ITALIC} " 但我知道它就在那里, "
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.04"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.05
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.04"))
+            // #tr tst.machine.BallLightning.tooltip.info.05
             // # {\ITALIC} " nestled in the amethyst vase."
             // #zh_CN {\ITALIC} " 就插在紫水晶花瓶上. "
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.05"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.06
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.05"))
+            // #tr tst.machine.BallLightning.tooltip.info.06
             // # {\SPACE}
             // #zh_CN {\SPACE}
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.06"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.07
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.06"))
+            // #tr tst.machine.BallLightning.tooltip.info.07
             // # {\ITALIC}{\WHITE}The most elemental and ultimate utilization of energy.
             // #zh_CN {\ITALIC}{\WHITE}对能源最基础也是最终极的运用.
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.07"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.08
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.07"))
+            // #tr tst.machine.BallLightning.tooltip.info.08
             // # The structure requires at least Infinity Coil.
             // #zh_CN 至少需要无尽线圈才可成型
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.08"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.09
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.08"))
+            // #tr tst.machine.BallLightning.tooltip.info.09
             // # Comprises four machine levels, Tier3 and Tier4 each unlocking a next mode.
             // #zh_CN 机器拥有4个等级, 3级4级依次解锁聚变模式和星核发生器模式,
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.09"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.10
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.09"))
+            // #tr tst.machine.BallLightning.tooltip.info.10
             // # With each machine tier upgrade, the lower-tier modes benefit from a 4x speed multiplier.
             // #zh_CN 每升级一次机器等级, 更低级的机器模式获得4倍速.
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.10"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.11
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.10"))
+            // #tr tst.machine.BallLightning.tooltip.info.11
             // # {\GOLD}=== Machine Tier ===
             // #zh_CN {\GOLD}=== 机器等级 ===
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.11"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.12
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.11"))
+            // #tr tst.machine.BallLightning.tooltip.info.12
             // # The base structure is Tier 1
             // #zh_CN 基础结构为等级1
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.12"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.13
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.12"))
+            // #tr tst.machine.BallLightning.tooltip.info.13
             // # Gravitational Lens in the control slot unlocks Tier 2
             // #zh_CN 在主机内放入引力透镜解锁等级2
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.13"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.14
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.13"))
+            // #tr tst.machine.BallLightning.tooltip.info.14
             // # Upgrade Chip in the control slot and utilizing Tier 2 structure unlocks Tier 3
             // #zh_CN 在主机内放入升级芯片且使用2级结构解锁等级3
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.14"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.15
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.14"))
+            // #tr tst.machine.BallLightning.tooltip.info.15
             // # Utilizing Advanced High Power Coil and then utilizing Teleportation Casing replacing Dimensional Bridge unlock Tier 4
             // #zh_CN 使用进阶高能线圈, 并使用传输机械方块替换维度桥接方块解锁等级4
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.15"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.16
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.15"))
+            // #tr tst.machine.BallLightning.tooltip.info.16
             // # {\GOLD}=== Machine Mode ===
             // #zh_CN {\GOLD}=== 机器模式 ===
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.16"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.17
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.16"))
+            // #tr tst.machine.BallLightning.tooltip.info.17
             // # {\YELLOW} (Plasma / Electric) Arc Furnace
             // #zh_CN {\YELLOW} 电弧炉 | 等离子电弧炉
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.17"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.18
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.17"))
+            // #tr tst.machine.BallLightning.tooltip.info.18
             // # Parallel number = 2 ^ (Compact Fusion Coil Tier * (Coil Tier - 10))
             // #zh_CN 并行数 = 2 ^ (聚变线圈等级 * (线圈等级 - 10))
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.18"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.19
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.18"))
+            // #tr tst.machine.BallLightning.tooltip.info.19
             // # Tiers above Crude Stabilisation Field Generator block enables perfect overclocks
             // #zh_CN 粗制稳定力场发生器等级+ 解锁无损超频
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.19"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.20
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.19"))
+            // #tr tst.machine.BallLightning.tooltip.info.20
             // # {\YELLOW} Fusion Reactor
             // #zh_CN {\YELLOW} 聚变反应堆
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.20"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.21
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.20"))
+            // #tr tst.machine.BallLightning.tooltip.info.21
             // # The maximum Eu consumption is limited at 4 ^ (Compact Fusion Coil Tier - 2) * 1.8 ^ (Field Generator Tier - 1) MAX/t
             // #zh_CN 最高运行功耗为 4 ^ (聚变线圈等级 - 2) * 1.8 ^ (力场发生器等级 - 1) A MAX
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.21"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.22
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.21"))
+            // #tr tst.machine.BallLightning.tooltip.info.22
             // # 65536x parallel | Perfect overclocks
             // #zh_CN 65536 并行, 无损超频
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.22"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.23
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.22"))
+            // #tr tst.machine.BallLightning.tooltip.info.23
             // # The max recipe tier is limited by the Compact Fusion Coil Tier
             // #zh_CN 聚变线圈等级决定配方等级
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.23"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.24
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.23"))
+            // #tr tst.machine.BallLightning.tooltip.info.24
             // # {\YELLOW} Star Kernel Generator
             // #zh_CN {\YELLOW} 星核发生器
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.24"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.25
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.24"))
+            // #tr tst.machine.BallLightning.tooltip.info.25
             // # Almost infinite parallel | Upgrade the Field Generator for faster speeds
             // #zh_CN 几乎无限的并行, 升级力场发生器以获得更高的速度
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.25"))
-            // #tr tst.common.machine.BallLightning.tooltip.info.26
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.25"))
+            // #tr tst.machine.BallLightning.tooltip.info.26
             // # Eu Modifier = 1 - 9.9%% * (Field Generator Tier - 1)
             // #zh_CN 每升级一次力场发生器, 降低9.9%%功耗
-            .addInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.info.26"))
+            .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.26"))
             .beginStructureBlock(shapeMK1, shapeMK2)
-            // #tr tst.common.machine.BallLightning.tooltip.structure.01
+            // #tr tst.machine.BallLightning.tooltip.structure.01
             // # {\LIGHT_PURPLE}Wireless Mode :
             // #zh_CN {\LIGHT_PURPLE}无线模式 :
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.structure.01"))
-            // #tr tst.common.machine.BallLightning.tooltip.structure.02
+            .addStructureInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.structure.01"))
+            // #tr tst.machine.BallLightning.tooltip.structure.02
             // # Joining the wireless EU network when machine tier is 4 AND when no energy hatch is installed
             // #zh_CN 机器等级为4且未安装能源仓时进入无线模式
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.structure.02"))
-            // #tr tst.common.machine.BallLightning.tooltip.structure.03
+            .addStructureInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.structure.02"))
+            // #tr tst.machine.BallLightning.tooltip.structure.03
             // # The Progressing Time will be fixed at 3.2s, and EU cost increase to {\RED}64{\GRAY}x
             // #zh_CN 处理时间固定为3.2s, 同时耗能提高到{\RED}64{\GRAY}倍
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.structure.03"))
-            // #tr tst.common.machine.BallLightning.tooltip.structure.04
+            .addStructureInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.structure.03"))
+            // #tr tst.machine.BallLightning.tooltip.structure.04
             // # Put More Upgrade Chip into the controller block to decrease processing time interval and increase Eu Cost
             // #zh_CN 在控制器方块内安装更多升级芯片以减少处理时间间隔, 同时耗能也会增加
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.structure.04"))
-            // #tr tst.common.machine.BallLightning.tooltip.structure.05
+            .addStructureInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.structure.04"))
+            // #tr tst.machine.BallLightning.tooltip.structure.05
             // #  Actual processing time = default / Upgrade Chip Stack Size
             // #zh_CN 实际处理时间 = 默认耗时 / 升级芯片数量
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.structure.05"))
-            // #tr tst.common.machine.BallLightning.tooltip.structure.06
+            .addStructureInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.structure.05"))
+            // #tr tst.machine.BallLightning.tooltip.structure.06
             // # Actual EU cost = recipe value * Upgrade Chip Stack Size ^ 2 * 64
             // #zh_CN 实际消耗EU = 默认耗能 * 升级芯片数量 ^ 2 * 64
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.structure.06"))
+            .addStructureInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.structure.06"))
             .addStructureInfo(Text_SeparatingLine)
-            // #tr tst.common.machine.BallLightning.tooltip.structure.07
+            // #tr tst.machine.BallLightning.tooltip.structure.07
             // # {\BLUE}Base Multi (Tier{\DARK_PURPLE}1{\BLUE}):
             // #zh_CN {\BLUE}基础结构({\DARK_PURPLE}1{\BLUE}级):
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.structure.07"))
-            // #tr tst.common.machine.BallLightning.tooltip.structure.08
+            .addStructureInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.structure.07"))
+            // #tr tst.machine.BallLightning.tooltip.structure.08
             // # {\GOLD}NEI {\GRAY}preview for details
             // #zh_CN {\GRAY}详见{\GOLD}NEI{\GRAY}预览
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.structure.08"))
-            // #tr tst.common.machine.BallLightning.tooltip.structure.09
+            .addStructureInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.structure.08"))
+            // #tr tst.machine.BallLightning.tooltip.structure.09
             // # {\BLUE}Tier §52 {\BLUE}(Adds To §51{\BLUE}):
             // #zh_CN {\DARK_PURPLE}2{\BLUE}级(在{\DARK_PURPLE}1{\BLUE}级基础上添加):
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.structure.09"))
-            // #tr tst.common.machine.BallLightning.tooltip.structure.10
+            .addStructureInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.structure.09"))
+            // #tr tst.machine.BallLightning.tooltip.structure.10
             // # {\GOLD}818 {\GRAY}xBorosilicate Glass
             // #zh_CN {\GOLD}818 {\GRAY}x硼玻璃
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.structure.10"))
-            // #tr tst.common.machine.BallLightning.tooltip.structure.11
+            .addStructureInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.structure.10"))
+            // #tr tst.machine.BallLightning.tooltip.structure.11
             // # {\GOLD}4144 {\GRAY}xCompact Fusion Coil
             // #zh_CN {\GOLD}4144 {\GRAY}x压缩聚变线圈方块
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.structure.11"))
-            // #tr tst.common.machine.BallLightning.tooltip.structure.12
+            .addStructureInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.structure.11"))
+            // #tr tst.machine.BallLightning.tooltip.structure.12
             // # {\GOLD}1047 {\GRAY}xEuropium Reinforced Radiation Proof Machine Casing
             // #zh_CN {\GOLD}1047 {\GRAY}x铕强化防辐射机械方块
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.structure.12"))
-            // #tr tst.common.machine.BallLightning.tooltip.structure.13
+            .addStructureInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.structure.12"))
+            // #tr tst.machine.BallLightning.tooltip.structure.13
             // # {\GOLD}4631 {\GRAY}xHigh Power Radiation Proof Casing
             // #zh_CN {\GOLD}4631 {\GRAY}x高能防辐射机械方块
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.structure.13"))
-            // #tr tst.common.machine.BallLightning.tooltip.structure.14
+            .addStructureInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.structure.13"))
+            // #tr tst.machine.BallLightning.tooltip.structure.14
             // # {\GOLD}133 {\GRAY}xIntergral Framework V
             // #zh_CN {\GOLD}133 {\GRAY}x基本外壳V
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.structure.14"))
-            // #tr tst.common.machine.BallLightning.tooltip.structure.15
+            .addStructureInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.structure.14"))
+            // #tr tst.machine.BallLightning.tooltip.structure.15
             // # {\GOLD}1616 {\GRAY}xDyson Swarm Energy Receiver Dish Block
             // #zh_CN {\GOLD}1616 {\GRAY}x戴森球能量接收天线方块
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.structure.15"))
-            // #tr tst.common.machine.BallLightning.tooltip.structure.16
+            .addStructureInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.structure.15"))
+            // #tr tst.machine.BallLightning.tooltip.structure.16
             // # {\GOLD}481 {\GRAY}xDyson Swarm Control Center Toroid Casing
             // #zh_CN {\GOLD}481 {\GRAY}x戴森球控制中心环形机械方块
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.structure.16"))
-            // #tr tst.common.machine.BallLightning.tooltip.structure.17
+            .addStructureInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.structure.16"))
+            // #tr tst.machine.BallLightning.tooltip.structure.17
             // # {\GOLD}156 {\GRAY}xDyson Swarm Energy Receiver Base Casing
             // #zh_CN {\GOLD}156 {\GRAY}x戴森球能量接收基座机械方块
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.structure.17"))
-            // #tr tst.common.machine.BallLightning.tooltip.structure.18
+            .addStructureInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.structure.17"))
+            // #tr tst.machine.BallLightning.tooltip.structure.18
             // # {\GOLD}66 {\GRAY}xDyson Swarm Control Center Base Casing
             // #zh_CN {\GOLD}66 {\GRAY}x戴森球控制中心基座机械方块
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.structure.18"))
-            // #tr tst.common.machine.BallLightning.tooltip.structure.19
+            .addStructureInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.structure.18"))
+            // #tr tst.machine.BallLightning.tooltip.structure.19
             // # {\GOLD}162 {\GRAY}xTeleportation Casing (T4) or Dimensional Bridge (T3)
             // #zh_CN {\GOLD}162 {\GRAY}x传输机械方块(T4)或维度桥接方块(T3)
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.structure.19"))
-            // #tr tst.common.machine.BallLightning.tooltip.structure.20
+            .addStructureInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.structure.19"))
+            // #tr tst.machine.BallLightning.tooltip.structure.20
             // # {\GOLD}360 {\GRAY}xSuperconductor Base UIV Frame Box
             // #zh_CN {\GOLD}360 {\GRAY}xUIV超导粗胚框架
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.structure.20"))
-            // #tr tst.common.machine.BallLightning.tooltip.structure.21
+            .addStructureInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.structure.20"))
+            // #tr tst.machine.BallLightning.tooltip.structure.21
             // # {\GOLD}538 {\GRAY}xNeutronium Frame Box
             // #zh_CN {\GOLD}538 {\GRAY}x中子框架
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.BallLightning.tooltip.structure.21"))
+            .addStructureInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.structure.21"))
             .addStructureInfo(Text_SeparatingLine)
             .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance)
             .toolTipFinisher();

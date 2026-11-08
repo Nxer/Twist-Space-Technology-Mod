@@ -150,36 +150,34 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
 
         // UU Matter
         ItemStack LogSymbol = new ItemStack(Blocks.log, 1, 0);
-        LogSymbol.setStackDisplayName(
-            TSTUtils.tr("tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.random_logs"
-            // #tr tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.random_logs
-            // # Random logs
-            // #zh_CN 随机原木
-            ));
+        LogSymbol.setStackDisplayName(TSTUtils.tr("tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.random_logs"
+        // #tr tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.random_logs
+        // # Random logs
+        // #zh_CN 随机原木
+        ));
         addEnchantmentLight(LogSymbol);
         ItemStack SaplingSymbol = new ItemStack(Blocks.sapling, 1, 0);
-        SaplingSymbol.setStackDisplayName(
-            TSTUtils.tr("tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.random_saplings"
-            // #tr tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.random_saplings
+        SaplingSymbol
+            .setStackDisplayName(TSTUtils.tr("tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.random_saplings"
+            // #tr tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.random_saplings
             // # Random saplings
             // #zh_CN 随机树苗
             ));
         addEnchantmentLight(SaplingSymbol);
         ItemStack LeavesSymbol = new ItemStack(Blocks.leaves, 1, 0);
-        LeavesSymbol.setStackDisplayName(
-            TSTUtils.tr("tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.random_leaves"
-            // #tr tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.random_leaves
+        LeavesSymbol
+            .setStackDisplayName(TSTUtils.tr("tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.random_leaves"
+            // #tr tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.random_leaves
             // # Random leaves
             // #zh_CN 随机树叶
             ));
         addEnchantmentLight(LeavesSymbol);
         ItemStack FruitSymbol = new ItemStack(Items.apple, 1, 0);
-        FruitSymbol.setStackDisplayName(
-            TSTUtils.tr("tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.random_fruits"
-            // #tr tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.random_fruits
-            // # Random fruits
-            // #zh_CN 随机果实
-            ));
+        FruitSymbol.setStackDisplayName(TSTUtils.tr("tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.random_fruits"
+        // #tr tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.random_fruits
+        // # Random fruits
+        // #zh_CN 随机果实
+        ));
         addEnchantmentLight(FruitSymbol);
 
         if (UU_MATTER_STACK != null) addFakeRecipe(

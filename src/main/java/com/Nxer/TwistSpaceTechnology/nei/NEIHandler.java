@@ -22,39 +22,39 @@ public class NEIHandler {
         API.addRecipeCatalyst(GTCMItemList.HephaestusAtelier.get(1), "smelting");
         API.addRecipeCatalyst(
             GTCMItemList.EcoSphereExecutionProtocol1.get(1),
-            "tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.name",
+            "tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.name",
             -10);
         API.addRecipeCatalyst(
             GTCMItemList.EcoSphereExecutionProtocol2.get(1),
-            "tst.ecosphere.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.name",
+            "tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes.name",
             -10);
         API.addRecipeCatalyst(
             GTCMItemList.EcoSphereExecutionProtocol3.get(1),
-            "tst.ecosphere.recipe.AquaticZoneSimulatorFakeRecipes.name",
+            "tst.recipe.AquaticZoneSimulatorFakeRecipes.name",
             -10);
         API.addRecipeCatalyst(
             GTCMItemList.EcoSphereExecutionProtocol4.get(1),
-            "tst.ecosphere.recipe.AquaticZoneSimulatorFakeRecipes.name",
+            "tst.recipe.AquaticZoneSimulatorFakeRecipes.name",
             -10);
         API.addRecipeCatalyst(
             GTCMItemList.EcoSphereExecutionProtocol5.get(1),
-            "tst.ecosphere.recipe.ArtificialGreenHouseFakeRecipes.name",
+            "tst.recipe.ArtificialGreenHouseFakeRecipes.name",
             -10);
         API.addRecipeCatalyst(
             GTCMItemList.EcoSphereExecutionProtocol6.get(1),
-            "tst.ecosphere.recipe.ArtificialGreenHouseFakeRecipes.name",
+            "tst.recipe.ArtificialGreenHouseFakeRecipes.name",
             -10);
         API.addRecipeCatalyst(
             GTCMItemList.EcoSphereExecutionProtocol7.get(1),
-            "tst.ecosphere.recipe.DirectedMobClonerFakeRecipes.name",
+            "tst.recipe.DirectedMobClonerFakeRecipes.name",
             -10);
         API.addRecipeCatalyst(
             GTCMItemList.EcoSphereExecutionProtocol8.get(1),
-            "tst.ecosphere.recipe.DirectedMobClonerFakeRecipes.name",
+            "tst.recipe.DirectedMobClonerFakeRecipes.name",
             -10);
         API.addRecipeCatalyst(
             GTCMItemList.EcoSphereExecutionProtocol9.get(1),
-            "tst.ecosphere.recipe.DirectedMobClonerFakeRecipes.name",
+            "tst.recipe.DirectedMobClonerFakeRecipes.name",
             -10);
     }
 

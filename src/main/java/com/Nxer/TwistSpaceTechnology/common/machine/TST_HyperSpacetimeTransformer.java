@@ -350,11 +350,11 @@ public class TST_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<TST_Hyp
         if (maxRecipeEUt <= 0) return info;
         String[] upgraded = Arrays.copyOf(info, info.length + 2);
         upgraded[info.length] = TSTSharedLocalization.MachineInfo.perfectOverclockSupport(isEnablePerfectOverclock());
-        // #tr tst.common.machine.HyperSpacetimeTransformer.info.max_recipe_tier
+        // #tr tst.machine.HyperSpacetimeTransformer.info.max_recipe_tier
         // # {\AQUA}Maximum Supported Recipe Tier: {\GOLD}%s
         // #zh_CN {\AQUA}最高支持配方等级: {\GOLD}%s
         upgraded[info.length + 1] = TSTUtils.tr(
-            "tst.common.machine.HyperSpacetimeTransformer.info.max_recipe_tier",
+            "tst.machine.HyperSpacetimeTransformer.info.max_recipe_tier",
             GTValues.VN[GTUtility.getTier(maxRecipeEUt)]);
         return upgraded;
     }
@@ -385,36 +385,36 @@ public class TST_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<TST_Hyp
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.HyperSpacetimeTransformer.tooltip.machine_type
+        // #tr tst.machine.HyperSpacetimeTransformer.tooltip.machine_type
         // # {\AQUA}Hyper Spacetime Transformer
         // #zh_CN {\AQUA}时空转换仪
-        tt.addMachineType(TSTUtils.tr("tst.common.machine.HyperSpacetimeTransformer.tooltip.machine_type"))
-            // #tr tst.common.machine.HyperSpacetimeTransformer.tooltip.info.01
+        tt.addMachineType(TSTUtils.tr("tst.machine.HyperSpacetimeTransformer.tooltip.machine_type"))
+            // #tr tst.machine.HyperSpacetimeTransformer.tooltip.info.01
             // # To change the material itself in a higher dimension.
             // #zh_CN 于更高维度改变物质本身.
-            .addInfo(TSTUtils.tr("tst.common.machine.HyperSpacetimeTransformer.tooltip.info.01"))
+            .addInfo(TSTUtils.tr("tst.machine.HyperSpacetimeTransformer.tooltip.info.01"))
             .addInfo(" ")
-            // #tr tst.common.machine.HyperSpacetimeTransformer.tooltip.info.02
+            // #tr tst.machine.HyperSpacetimeTransformer.tooltip.info.02
             // # Maximum parallel: {\GOLD}256{\GRAY}. Upgrade the fusion coils to improve {\GOLD}processing speed{\GRAY}.
             // #zh_CN 最大并行: {\GOLD}256{\GRAY}. 升级聚变线圈可提高{\GOLD}运行速度{\GRAY}.
-            .addInfo(TSTUtils.tr("tst.common.machine.HyperSpacetimeTransformer.tooltip.info.02"))
-            // #tr tst.common.machine.HyperSpacetimeTransformer.tooltip.info.03
+            .addInfo(TSTUtils.tr("tst.machine.HyperSpacetimeTransformer.tooltip.info.02"))
+            // #tr tst.machine.HyperSpacetimeTransformer.tooltip.info.03
             // # Energy Sustainment Matrix tier limits the {\GOLD}voltage tier of supported recipes{\GRAY}.
             // #zh_CN 能量维持矩阵等级限制可执行配方的{\GOLD}电压等级{\GRAY}.
-            .addInfo(TSTUtils.tr("tst.common.machine.HyperSpacetimeTransformer.tooltip.info.03"))
-            // #tr tst.common.machine.HyperSpacetimeTransformer.tooltip.info.04
+            .addInfo(TSTUtils.tr("tst.machine.HyperSpacetimeTransformer.tooltip.info.03"))
+            // #tr tst.machine.HyperSpacetimeTransformer.tooltip.info.04
             // # Upgrade the central cooling casings to unlock {\GOLD}perfect overclocking{\GRAY}.
             // #zh_CN 升级中央区域的冷却方块, 解锁{\GOLD}无损超频{\GRAY}.
-            .addInfo(TSTUtils.tr("tst.common.machine.HyperSpacetimeTransformer.tooltip.info.04"))
+            .addInfo(TSTUtils.tr("tst.machine.HyperSpacetimeTransformer.tooltip.info.04"))
             .beginStructureBlock(shape)
-            // #tr tst.common.machine.HyperSpacetimeTransformer.tooltip.controller
+            // #tr tst.machine.HyperSpacetimeTransformer.tooltip.controller
             // # Front center of the base. Use the blueprint for the exact position.
             // #zh_CN 底座正面中央, 具体位置参见蓝图.
-            .addController(TSTUtils.tr("tst.common.machine.HyperSpacetimeTransformer.tooltip.controller"))
-            // #tr tst.common.machine.HyperSpacetimeTransformer.tooltip.structure.01
+            .addController(TSTUtils.tr("tst.machine.HyperSpacetimeTransformer.tooltip.controller"))
+            // #tr tst.machine.HyperSpacetimeTransformer.tooltip.structure.01
             // # Exterior cooling casings are fixed Cryogenic Cooling Casings and do not affect upgrades.
             // #zh_CN 外部冷却方块固定使用低温冷却机械方块, 不参与升级判定.
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.HyperSpacetimeTransformer.tooltip.structure.01"))
+            .addStructureInfo(TSTUtils.tr("tst.machine.HyperSpacetimeTransformer.tooltip.structure.01"))
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)

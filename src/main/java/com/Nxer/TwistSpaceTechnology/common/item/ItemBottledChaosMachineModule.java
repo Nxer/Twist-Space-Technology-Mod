@@ -42,17 +42,17 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
 
     private IIcon packedIcon;
 
-    // #tr tst.bottledchaos.machine_module.0.name
+    // #tr item.tst.bottledchaos.machine_module.0.name
     // # Bottled Chaos Machine Structure Module
     // #zh_CN 瓶中混沌机器结构模组
     public ItemBottledChaosMachineModule() {
-        super("BottledChaosMachineModule", "bottled_chaos.machine_module");
+        super("BottledChaosMachineModule", "bottledchaos.machine_module");
         setMaxStackSize(1);
     }
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        return StatCollector.translateToLocal("tst.bottledchaos.machine_module.0.name");
+        return StatCollector.translateToLocal("item.tst.bottledchaos.machine_module.0.name");
     }
 
     public static boolean isModule(ItemStack stack) {
@@ -235,33 +235,34 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
                 }
         }
         if (!display && quantity <= 0) {
-            // #tr tst.bottledchaos.machine_module.empty
+            // #tr item.tst.bottledchaos.machine_module.info.empty
             // # Place an empty module in the carrier slot to package a structure.
             // #zh_CN 空模组放入载体槽后可封装结构.
-            lines.add(StatCollector.translateToLocal("tst.bottledchaos.machine_module.empty"));
+            lines.add(StatCollector.translateToLocal("item.tst.bottledchaos.machine_module.info.empty"));
             return;
         }
         if (!display) {
-            // #tr tst.bottledchaos.machine_module.unload
+            // #tr item.tst.bottledchaos.machine_module.info.unload
             // # Unload with an ME item disk in the controller workbench. Cannot add or merge structures.
             // #zh_CN 放入载体槽, 材料槽放ME物品磁盘即可卸载; 不支持追加或合并结构.
-            lines.add(StatCollector.translateToLocal("tst.bottledchaos.machine_module.unload"));
+            lines.add(StatCollector.translateToLocal("item.tst.bottledchaos.machine_module.info.unload"));
         }
         String parameter = BottledChaosCircuitParameter.description(structure);
         if (parameter != null) lines.add(EnumChatFormatting.GRAY + parameter);
         if (BottledChaosStructureCatalog.isAuxiliaryController(controller)) {
             lines.add(PARAMETER_SEPARATOR);
-            // #tr tst.bottledchaos.machine_module.plant_capacity
+            // #tr item.tst.bottledchaos.machine_module.info.plant_capacity
             // # Each purification unit's quantity is limited by this plant; no processing parameters
             // #zh_CN 限制每台净化水机器的堆叠组数, 不参与配方折算
-            if (display) lines.add(StatCollector.translateToLocal("tst.bottledchaos.machine_module.plant_capacity"));
+            if (display)
+                lines.add(StatCollector.translateToLocal("item.tst.bottledchaos.machine_module.info.plant_capacity"));
             else {
-                // #tr tst.bottledchaos.machine_module.plant_quantity
+                // #tr item.tst.bottledchaos.machine_module.info.plant_quantity
                 // # Structure quantity limit per purification unit: %s
                 // #zh_CN 每台净化水机器的结构数量上限: %s
                 lines.add(
                     EnumChatFormatting.GRAY + StatCollector.translateToLocalFormatted(
-                        "tst.bottledchaos.machine_module.plant_quantity",
+                        "item.tst.bottledchaos.machine_module.info.plant_quantity",
                         EnumChatFormatting.GOLD.toString() + quantity));
             }
             return;
@@ -284,22 +285,22 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
         }
         for (var group : parameterGroups.entrySet()) {
             lines.add(PARAMETER_SEPARATOR);
-            // #tr tst.bottledchaos.machine_module.pool
+            // #tr item.tst.bottledchaos.machine_module.info.pool
             // # Recipe pool: %s
             // #zh_CN 配方池: %s
             lines.add(
                 EnumChatFormatting.AQUA + StatCollector.translateToLocalFormatted(
-                    "tst.bottledchaos.machine_module.pool",
+                    "item.tst.bottledchaos.machine_module.info.pool",
                     EnumChatFormatting.WHITE.toString() + group.getValue()));
             lines.addAll(group.getKey());
         }
         if (display) return;
-        // #tr tst.bottledchaos.machine_module.quantity
+        // #tr item.tst.bottledchaos.machine_module.info.quantity
         // # Structure quantity: x%s
         // #zh_CN 结构数量: x%s
         lines.add(
             EnumChatFormatting.GRAY + StatCollector.translateToLocalFormatted(
-                "tst.bottledchaos.machine_module.quantity",
+                "item.tst.bottledchaos.machine_module.info.quantity",
                 EnumChatFormatting.GOLD.toString() + quantity));
     }
 

@@ -32,11 +32,11 @@ public final class BottledChaosCircuitParameter {
     public static Definition definition(Structure structure) {
         var godforge = BottledChaosComplexStructures.godforgePreset(structure);
         if (godforge != null) {
-            // #tr tst.bottledchaos.parameter.fuel_factor
+            // #tr tst.bottledchaos.shared.parameter.fuel_factor
             // # Fuel factor
             // #zh_CN 燃料系数
             return new Definition(
-                "tst.bottledchaos.parameter.fuel_factor",
+                "tst.bottledchaos.shared.parameter.fuel_factor",
                 1,
                 godforge.fuelFactor(),
                 godforge.fuelFactor());
@@ -82,11 +82,11 @@ public final class BottledChaosCircuitParameter {
     public static String description(Structure structure) {
         Definition definition = definition(structure);
         if (definition == null) return null;
-        // #tr tst.bottledchaos.parameter.value
+        // #tr tst.bottledchaos.shared.parameter.value
         // # %s: %s (%s-%s)
         // #zh_CN %s: %s (%s-%s)
         return StatCollector.translateToLocalFormatted(
-            "tst.bottledchaos.parameter.value",
+            "tst.bottledchaos.shared.parameter.value",
             StatCollector.translateToLocal(definition.name()),
             structure.circuitParameter() == UNSET ? definition.defaultValue() : structure.circuitParameter(),
             definition.minimum(),
@@ -94,9 +94,9 @@ public final class BottledChaosCircuitParameter {
     }
 
     public static String instruction() {
-        // #tr tst.bottledchaos.parameter.circuits
+        // #tr tst.bottledchaos.shared.parameter.circuits
         // # Sum circuit number x count; one setting per batch, circuits are not consumed.
         // #zh_CN 编程电路编号 x 数量求和; 整批共用, 电路不消耗.
-        return StatCollector.translateToLocal("tst.bottledchaos.parameter.circuits");
+        return StatCollector.translateToLocal("tst.bottledchaos.shared.parameter.circuits");
     }
 }

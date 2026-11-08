@@ -26,7 +26,7 @@ public class TstBlocks {
     /**
      * UnlocalizedName: {@code MetaBlock01}
      */
-    // #tr tile.tst.common.MetaBlock01.name
+    // #tr tile.tst.MetaBlock01.name
     // # MetaBlock01
     // #zh_CN MetaBlock01
     public static final TstMetaBlock MetaBlock01 = new TstMetaBlock("MetaBlock01");

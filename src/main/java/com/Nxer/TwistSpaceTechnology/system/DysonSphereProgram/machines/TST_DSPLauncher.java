@@ -476,20 +476,20 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
                 + (amountOfSailsBeforeVoid * -1));
         }
         ret.add(space
-            // #tr tst.dyson.machine.DSPLauncher.info.01
+            // #tr tst.machine.DSPLauncher.info.01
             // # Overload time:
             // #zh_CN 剩余过载时间:
             + EnumChatFormatting.GOLD
-            + TSTUtils.tr("tst.dyson.machine.DSPLauncher.info.01")
+            + TSTUtils.tr("tst.machine.DSPLauncher.info.01")
             + EnumChatFormatting.RESET + " "
             + (overloadTime / 20)
             + "s");
         ret.add(space
-            // #tr tst.dyson.machine.DSPLauncher.info.02
+            // #tr tst.machine.DSPLauncher.info.02
             // # Speed Up:
             // #zh_CN 速度倍率:
             + EnumChatFormatting.GOLD
-            + tr("tst.dyson.machine.DSPLauncher.info.02")
+            + tr("tst.machine.DSPLauncher.info.02")
             + EnumChatFormatting.RESET + " "
             + (calculateOverloadSpeedUp()));
             // spotless:on
@@ -575,70 +575,70 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.dyson.machine.DSPLauncher.tooltip.machine_type
+        // #tr tst.machine.DSPLauncher.tooltip.machine_type
         // # Dyson Sphere Program: Launch Site
         // #zh_CN 戴森球计划: 垂直发射井
-        tt.addMachineType(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.machine_type"))
-            // #tr tst.dyson.machine.DSPLauncher.tooltip.info.01
+        tt.addMachineType(TSTUtils.tr("tst.machine.DSPLauncher.tooltip.machine_type"))
+            // #tr tst.machine.DSPLauncher.tooltip.info.01
             // # Controller block for the Dyson Sphere Module Launch Site
             // #zh_CN 戴森球模块发射场的控制器方块
-            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.info.01"))
-            // #tr tst.dyson.machine.DSPLauncher.tooltip.info.02
+            .addInfo(TSTUtils.tr("tst.machine.DSPLauncher.tooltip.info.01"))
+            // #tr tst.machine.DSPLauncher.tooltip.info.02
             // # {\BLUE}"Low altitude flight..."
             // #zh_CN {\BLUE}"低空飞行 ..."
-            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.info.02"))
-            // #tr tst.dyson.machine.DSPLauncher.tooltip.info.03
+            .addInfo(TSTUtils.tr("tst.machine.DSPLauncher.tooltip.info.02"))
+            // #tr tst.machine.DSPLauncher.tooltip.info.03
             // # Launching Dyson Sphere components into Dyson Sphere orbit to form a Dyson Sphere.
             // #zh_CN 发射装载有戴森球组件的小型运载火箭到戴森球轨道上组建戴森球.
-            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.info.03"))
-            // #tr tst.dyson.machine.DSPLauncher.tooltip.info.04
+            .addInfo(TSTUtils.tr("tst.machine.DSPLauncher.tooltip.info.03"))
+            // #tr tst.machine.DSPLauncher.tooltip.info.04
             // # No overclock and no extra parallel.
             // #zh_CN 不会超频且没有额外并行.
-            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.info.04"))
-            // #tr tst.dyson.machine.DSPLauncher.tooltip.info.05
+            .addInfo(TSTUtils.tr("tst.machine.DSPLauncher.tooltip.info.04"))
+            // #tr tst.machine.DSPLauncher.tooltip.info.05
             // # Higher tier of Elevator motor Module means faster launching.
             // #zh_CN 更高级的加速轨道可以减少发射耗时.
-            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.info.05"))
-            // #tr tst.dyson.machine.DSPLauncher.tooltip.info.06
+            .addInfo(TSTUtils.tr("tst.machine.DSPLauncher.tooltip.info.05"))
+            // #tr tst.machine.DSPLauncher.tooltip.info.06
             // # Inputting Space Warper will enable overlord mode. Reduce launch intervals.
             // #zh_CN 输入空间翘曲器可以进入过载模式. 减少发射时间间隔.
-            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.info.06"))
-            // #tr tst.dyson.machine.DSPLauncher.tooltip.info.07
+            .addInfo(TSTUtils.tr("tst.machine.DSPLauncher.tooltip.info.06"))
+            // #tr tst.machine.DSPLauncher.tooltip.info.07
             // # Joining the wireless EU network when without installing an energy hatch.
             // #zh_CN 未安装能源仓时自动进入无线电力网络模式.
-            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.info.07"))
+            .addInfo(TSTUtils.tr("tst.machine.DSPLauncher.tooltip.info.07"))
             .beginStructureBlock(shapeMain)
             .addStructureInfo(Tooltip_Details)
-            // #tr tst.dyson.machine.DSPLauncher.tooltip.structure.01
+            // #tr tst.machine.DSPLauncher.tooltip.structure.01
             // # Final progress time = recipe time / ( module tier * overload mode parameter )
             // #zh_CN 最终处理时间 = 配方时间 /( 加速轨道等级 * 过载模式参数 )
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.structure.01"))
-            // #tr tst.dyson.machine.DSPLauncher.tooltip.structure.02
+            .addStructureInfo(TSTUtils.tr("tst.machine.DSPLauncher.tooltip.structure.01"))
+            // #tr tst.machine.DSPLauncher.tooltip.structure.02
             // # Overload Parameter = t ^ [ 1 / (1000*900/t + 5) ] ; t = Overload Time (second)
             // #zh_CN 过载模式参数 = t ^ [ 1 / (1000*900/t + 5) ] ; t = 过载模式时间 (秒)
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.structure.02"))
-            // #tr tst.dyson.machine.DSPLauncher.tooltip.structure.03
+            .addStructureInfo(TSTUtils.tr("tst.machine.DSPLauncher.tooltip.structure.02"))
+            // #tr tst.machine.DSPLauncher.tooltip.structure.03
             // # Every Space Warper will provide (default) 15 minutes of overload mode.
             // #zh_CN 每个空间翘曲器提供(默认)15分钟的过载模式.
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.structure.03"))
-            // #tr tst.dyson.machine.DSPLauncher.tooltip.structure.04
+            .addStructureInfo(TSTUtils.tr("tst.machine.DSPLauncher.tooltip.structure.03"))
+            // #tr tst.machine.DSPLauncher.tooltip.structure.04
             // # Input Space Warper will be consumed immediately.
             // #zh_CN 输入的空间翘曲器会立刻被消耗.
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.structure.04"))
-            // #tr tst.dyson.machine.DSPLauncher.tooltip.structure.05
+            .addStructureInfo(TSTUtils.tr("tst.machine.DSPLauncher.tooltip.structure.04"))
+            // #tr tst.machine.DSPLauncher.tooltip.structure.05
             // # Converted to remaining time of overload mode.
             // #zh_CN 转换成剩余的过载模式时间.
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.structure.05"))
+            .addStructureInfo(TSTUtils.tr("tst.machine.DSPLauncher.tooltip.structure.05"))
             .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
             .addStructureInfo(DSPName + ":")
-            // #tr tst.dyson.machine.DSPLauncher.tooltip.launch.01
+            // #tr tst.machine.DSPLauncher.tooltip.launch.01
             // # Launching Solar Sail increase Solar Sail amount of current Galaxy's Dyson Sphere.
             // #zh_CN 发射太阳帆增加当前星系戴森球的太阳帆数量.
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.launch.01"))
-            // #tr tst.dyson.machine.DSPLauncher.tooltip.launch.02
+            .addStructureInfo(TSTUtils.tr("tst.machine.DSPLauncher.tooltip.launch.01"))
+            // #tr tst.machine.DSPLauncher.tooltip.launch.02
             // # Launching Small Launch Vehicle increase Node amount of current Galaxy's Dyson Sphere.
             // #zh_CN 发射小型运载火箭增加当前星系戴森球的节点数量.
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.launch.02"))
+            .addStructureInfo(TSTUtils.tr("tst.machine.DSPLauncher.tooltip.launch.02"))
             .addStructureInfo(Tooltip_DSPInfo_00)
             .addStructureInfo(Tooltip_DSPInfo_01)
             .addStructureInfo(Tooltip_DSPInfo_02)

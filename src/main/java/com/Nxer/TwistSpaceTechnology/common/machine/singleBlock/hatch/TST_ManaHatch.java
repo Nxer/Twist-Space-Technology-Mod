@@ -120,16 +120,16 @@ public class TST_ManaHatch extends MTEHatchInput implements TSTTooltipCredit {
         ItemStack aTool) {
         super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ, aTool);
         isLiquidizerMode = !isLiquidizerMode;
-        // #tr tst.common.machine.ManaHatch.mode.0
+        // #tr tst.machine.ManaHatch.mode.0
         // # Mode: Liquidizer
         // #zh_CN Liquidizer Mode
 
-        // #tr tst.common.machine.ManaHatch.mode.1
+        // #tr tst.machine.ManaHatch.mode.1
         // # Mode: Magicalizer
         // #zh_CN Magicalizer Mode
         GTUtility.sendChatTrans(
             aPlayer,
-            StatCollector.translateToLocal("tst.common.machine.ManaHatch.mode." + (isLiquidizerMode ? 0 : 1)));
+            StatCollector.translateToLocal("tst.machine.ManaHatch.mode." + (isLiquidizerMode ? 0 : 1)));
     }
 
     @Override
@@ -148,20 +148,20 @@ public class TST_ManaHatch extends MTEHatchInput implements TSTTooltipCredit {
     public String[] getCustomTooltip() {
         List<String> aTooltip = new ArrayList<>();
 
-        // #tr tst.common.machine.ManaHatch.tooltip.info.01
+        // #tr tst.machine.ManaHatch.tooltip.info.01
         // # Mana transform hatch
         // #zh_CN 魔力转换阀
-        aTooltip.add(TSTUtils.tr("tst.common.machine.ManaHatch.tooltip.info.01"));
+        aTooltip.add(TSTUtils.tr("tst.machine.ManaHatch.tooltip.info.01"));
 
-        // #tr tst.common.machine.ManaHatch.tooltip.info.02
+        // #tr tst.machine.ManaHatch.tooltip.info.02
         // # Transform mana up to 10000 mana or 1000L every second
         // #zh_CN 每秒至多转换1000L液态魔力/10000mana.
-        aTooltip.add(TSTUtils.tr("tst.common.machine.ManaHatch.tooltip.info.02"));
+        aTooltip.add(TSTUtils.tr("tst.machine.ManaHatch.tooltip.info.02"));
 
-        // #tr tst.common.machine.ManaHatch.tooltip.info.03
+        // #tr tst.machine.ManaHatch.tooltip.info.03
         // # Need to facing at a mana pool to work.
         // #zh_CN 需要正面朝向魔力池来工作.
-        aTooltip.add(TSTUtils.tr("tst.common.machine.ManaHatch.tooltip.info.03"));
+        aTooltip.add(TSTUtils.tr("tst.machine.ManaHatch.tooltip.info.03"));
 
         aTooltip.add(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode);
 

@@ -37,7 +37,7 @@ public class TstItems {
 
     public static final ItemBottledChaosMachineModule BottledChaosMachineModule = new ItemBottledChaosMachineModule();
 
-    // #tr item.tst.common.proof_of_heroes.name
+    // #tr item.tst.proof_of_heroes.name
     // # 英雄の証
     // #zh_CN 英雄の証
     public static final Item ProofOfHeroes = new ItemProofOfHeroes(
@@ -45,7 +45,7 @@ public class TstItems {
         EnumRarity.common,
         TstCreativeTabs.TabGeneral).setTextureName("gtnhcommunitymod:ProofOfHeroes");
 
-    // #tr item.tst.common.proof_of_gods.name
+    // #tr item.tst.proof_of_gods.name
     // # Twist Token
     // #zh_CN Twist Token
     public static final Item ProofOfGods = new ItemProofOfHeroes(
@@ -59,7 +59,7 @@ public class TstItems {
     // public static final Item PowerChair = new ItemPowerChair(TstCreativeTabs.TabGeneral)
     // .setTextureName("gtnhcommunitymod:PowerChair");
 
-    // #tr item.tst.common.hatch_update_tool.name
+    // #tr item.tst.hatch_update_tool.name
     // # Hatch Update Tool
     // #zh_CN 仓室升级工具
     public static final Item HatchUpdateTool = new ItemHatchUpdateTool("HatchUpdateTool", TstCreativeTabs.TabGeneral)
@@ -75,7 +75,7 @@ public class TstItems {
 
     public static final Item ActualPattern = new ItemActualPattern();
 
-    // #tr item.tst.common.infinity_distilled_water_storage_cell.name
+    // #tr item.tst.infinity_distilled_water_storage_cell.name
     // # ME Infinity Distilled Water Fluid Storage Cell
     // #zh_CN ME无限蒸馏水流体存储元件
     public static final Item InfinityDistilledWaterStorageCell = new ItemInfinityDistilledWaterStorageCell();

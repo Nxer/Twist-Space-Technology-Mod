@@ -47,12 +47,11 @@ public abstract class PowerConsumptionControllerBase extends ModularHatchBase {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         currentTip.add(
-            // #tr tst.modular.machine.PowerConsumptionControllerBase.waila.power_consumption_controller_base.1
+            // #tr tst.machine.PowerConsumptionControllerBase.waila.power_consumption_multiplier
             // # Power Consumption Multiplier
             // #zh_CN 耗能倍率
             EnumChatFormatting.AQUA
-                + TSTUtils
-                    .tr("tst.modular.machine.PowerConsumptionControllerBase.waila.power_consumption_controller_base.1")
+                + TSTUtils.tr("tst.machine.PowerConsumptionControllerBase.waila.power_consumption_multiplier")
                 + EnumChatFormatting.RESET
                 + ": "
                 + EnumChatFormatting.GOLD

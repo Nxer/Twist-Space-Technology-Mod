@@ -241,35 +241,35 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
             new TextWidget().setStringSupplier(
                 () -> EnumChatFormatting.WHITE
                     // spotless:off
-                    // #tr tst.common.machine.SteamBasicGenerator.gui.01
+                    // #tr tst.machine.SteamBasicGenerator.gui.steam_consumption
                     // # Steam consumption:
                     // #zh_CN 蒸汽消耗 :
-                    + TSTUtils.tr("tst.common.machine.SteamBasicGenerator.gui.01")
+                    + TSTUtils.tr("tst.machine.SteamBasicGenerator.gui.steam_consumption")
                     + " "
                     + EnumChatFormatting.GOLD
                     + numberFormat.format(getSteamPerSecond(DYNAMO_EUT))
                     + EnumChatFormatting.WHITE
-                    // #tr tst.common.machine.SteamBasicGenerator.gui.02
+                    // #tr tst.shared.unit.per_second
                     // # /s
                     // #zh_CN /s
-                    + TSTUtils.tr("tst.common.machine.SteamBasicGenerator.gui.02")
+                    + TSTUtils.tr("tst.shared.unit.per_second")
                     + EnumChatFormatting.RESET)
                 .setEnabled(DYNAMO_EUT != 0))
             .widget(
                 new TextWidget().setStringSupplier(
                     () -> EnumChatFormatting.WHITE
-                        // #tr tst.common.machine.SteamBasicGenerator.gui.03
+                        // #tr tst.machine.SteamBasicGenerator.gui.current_generation
                         // # Currently generates:
                         // #zh_CN 当前发电 :
-                        + TSTUtils.tr("tst.common.machine.SteamBasicGenerator.gui.03")
+                        + TSTUtils.tr("tst.machine.SteamBasicGenerator.gui.current_generation")
                         + " "
                         + EnumChatFormatting.GOLD
                         + numberFormat.format(DYNAMO_EUT)
                         + EnumChatFormatting.WHITE
-                        // #tr tst.common.machine.SteamBasicGenerator.gui.04
+                        // #tr tst.machine.SteamBasicGenerator.gui.eu_per_tick_unit
                         // # eu/t
                         // #zh_CN eu/t
-                        + TSTUtils.tr("tst.common.machine.SteamBasicGenerator.gui.04")
+                        + TSTUtils.tr("tst.machine.SteamBasicGenerator.gui.eu_per_tick_unit")
                         + EnumChatFormatting.RESET)
                     .setEnabled(widget -> getBaseMetaTileEntity().isActive()))
             .widget(new FakeSyncWidget.LongSyncer(() -> DYNAMO_EUT, val -> DYNAMO_EUT = val));
@@ -302,26 +302,26 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.SteamBasicGenerator.tooltip.machine_type
+        // #tr tst.machine.SteamBasicGenerator.tooltip.machine_type
         // # Steam generator
         // #zh_CN 蒸汽发电机
-        tt.addMachineType(TSTUtils.tr("tst.common.machine.SteamBasicGenerator.tooltip.machine_type"))
-            // #tr tst.common.machine.SteamBasicGenerator.tooltip.info.01
+        tt.addMachineType(TSTUtils.tr("tst.machine.SteamBasicGenerator.tooltip.machine_type"))
+            // #tr tst.machine.SteamBasicGenerator.tooltip.info.01
             // # Converts steam into EU
             // #zh_CN 将蒸汽转换成EU
-            .addInfo(TSTUtils.tr("tst.common.machine.SteamBasicGenerator.tooltip.info.01"))
-            // #tr tst.common.machine.SteamBasicGenerator.tooltip.info.02
+            .addInfo(TSTUtils.tr("tst.machine.SteamBasicGenerator.tooltip.info.01"))
+            // #tr tst.machine.SteamBasicGenerator.tooltip.info.02
             // # Base rate:§6 1L of Steam -> 0.71 EU§7
             // #zh_CN 基础比率:§6 1L 蒸汽 -> 0.71 EU§7
-            .addInfo(TSTUtils.tr("tst.common.machine.SteamBasicGenerator.tooltip.info.02"))
-            // #tr tst.common.machine.SteamBasicGenerator.tooltip.info.03
+            .addInfo(TSTUtils.tr("tst.machine.SteamBasicGenerator.tooltip.info.02"))
+            // #tr tst.machine.SteamBasicGenerator.tooltip.info.03
             // # Fuel Efficiency:§c 142%§7
             // #zh_CN 燃料效率:§c 142%§7
-            .addInfo(TSTUtils.tr("tst.common.machine.SteamBasicGenerator.tooltip.info.03"))
-            // #tr tst.common.machine.SteamBasicGenerator.tooltip.info.04
+            .addInfo(TSTUtils.tr("tst.machine.SteamBasicGenerator.tooltip.info.03"))
+            // #tr tst.machine.SteamBasicGenerator.tooltip.info.04
             // # Accepts 1 to 8 LV dynamo hatches, or a single 1A MV or HV dynamo hatch
             // #zh_CN 兼容1-8个LV动力仓，或1个1A的MV或HV动力仓
-            .addInfo(TSTUtils.tr("tst.common.machine.SteamBasicGenerator.tooltip.info.04"))
+            .addInfo(TSTUtils.tr("tst.machine.SteamBasicGenerator.tooltip.info.04"))
             .beginStructureBlock(shapeMain)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addDynamoHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)

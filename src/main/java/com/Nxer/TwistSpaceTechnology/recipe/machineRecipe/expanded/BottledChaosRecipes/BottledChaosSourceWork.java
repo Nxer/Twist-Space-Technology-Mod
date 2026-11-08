@@ -212,14 +212,14 @@ final class BottledChaosSourceWork {
                     bestDuration = cost;
                 }
             }
-            // #tr tst.bottledchaos.result.ingot_mold
+            // #tr tst.machine.BottledChaos.result.ingot_mold
             // # Packaged White Dwarf Ingot Mold required.
             // #zh_CN 需要封装白矮星锭模具.
             if (source == null) source = BottledChaosSourceParameters.Evaluation.rejected(
                 com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.result.BottledChaosPoolFailure.of(
                     key.map().unlocalizedName,
                     com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText
-                        .ofFailure("tst.bottledchaos.result.ingot_mold")));
+                        .ofFailure("tst.machine.BottledChaos.result.ingot_mold")));
             if (!source.successful())
                 return new Selection(0, 0, sources, new LinkedHashMap<>(), null, null, source.failure());
             duration = BottledChaosRecipeSupport.addDuration(duration, bestDuration * scale, 1);

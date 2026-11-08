@@ -17,7 +17,7 @@ public class ItemInfinityDistilledWaterStorageCell extends ItemInfinityWaterStor
 
     @Override
     public String getUnlocalizedName() {
-        return "item.tst.common.infinity_distilled_water_storage_cell";
+        return "item.tst.infinity_distilled_water_storage_cell";
     }
 
     @Override

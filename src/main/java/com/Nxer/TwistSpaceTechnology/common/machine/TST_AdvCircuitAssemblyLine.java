@@ -352,49 +352,49 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.AdvCircuitAssemblyLine.tooltip.machine_type
+        // #tr tst.machine.AdvCircuitAssemblyLine.tooltip.machine_type
         // # Circuit Assembly Line
         // #zh_CN 电路装配线
-        tt.addMachineType(TSTUtils.tr("tst.common.machine.AdvCircuitAssemblyLine.tooltip.machine_type"))
-            // #tr tst.common.machine.AdvCircuitAssemblyLine.tooltip.controller
+        tt.addMachineType(TSTUtils.tr("tst.machine.AdvCircuitAssemblyLine.tooltip.machine_type"))
+            // #tr tst.machine.AdvCircuitAssemblyLine.tooltip.controller
             // # Controller block for the Advanced Circuit Assembly Line
             // #zh_CN 进阶电路装配线的控制方块
-            .addInfo(TSTUtils.tr("tst.common.machine.AdvCircuitAssemblyLine.tooltip.controller"))
-            // #tr tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.01
+            .addInfo(TSTUtils.tr("tst.machine.AdvCircuitAssemblyLine.tooltip.controller"))
+            // #tr tst.machine.AdvCircuitAssemblyLine.tooltip.info.01
             // # {\AQUA}Crystal Circuit Ti Super OC Crafting not D version
             // #zh_CN {\AQUA}晶体电路板Ti Super OC Crafting not D version
-            .addInfo(TSTUtils.tr("tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.01"))
-            // #tr tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.02
+            .addInfo(TSTUtils.tr("tst.machine.AdvCircuitAssemblyLine.tooltip.info.01"))
+            // #tr tst.machine.AdvCircuitAssemblyLine.tooltip.info.02
             // # Circuit assembly line with 64 times overclocking
             // #zh_CN 拥有64倍超频上限的电路装配线
-            .addInfo(TSTUtils.tr("tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.02"))
-            // #tr tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.03
+            .addInfo(TSTUtils.tr("tst.machine.AdvCircuitAssemblyLine.tooltip.info.02"))
+            // #tr tst.machine.AdvCircuitAssemblyLine.tooltip.info.03
             // # Allows installation of one energy hatch with max 64 amp limitation
             // #zh_CN 允许安装一个能源仓, 最高64A电流
-            .addInfo(TSTUtils.tr("tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.03"))
-            // #tr tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.04
+            .addInfo(TSTUtils.tr("tst.machine.AdvCircuitAssemblyLine.tooltip.info.03"))
+            // #tr tst.machine.AdvCircuitAssemblyLine.tooltip.info.04
             // # Allows installation of crafting input buffer
             // #zh_CN 允许使用样板输入总成
-            .addInfo(TSTUtils.tr("tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.04"))
-            // #tr tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.05
+            .addInfo(TSTUtils.tr("tst.machine.AdvCircuitAssemblyLine.tooltip.info.04"))
+            // #tr tst.machine.AdvCircuitAssemblyLine.tooltip.info.05
             // # Install imprint circuit hatch for more recipe support (more than one hatch is not allowed)
             // #zh_CN 安装压印电路仓以获得更多配方支持 (只允许安装一个压印电路仓)
-            .addInfo(TSTUtils.tr("tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.05"))
+            .addInfo(TSTUtils.tr("tst.machine.AdvCircuitAssemblyLine.tooltip.info.05"))
             .beginStructureBlock(shapeMain)
             .addEnergyHatch(textUseBlueprint, 2)
             .addInputBus(textUseBlueprint, 1)
             .addInputHatch(textUseBlueprint, 1)
             .addOutputBus(textEndSides, 1)
-            // #tr tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.06
+            // #tr tst.machine.AdvCircuitAssemblyLine.tooltip.info.06
             // # Imprint circuit hatch
             // #zh_CN 压印电路仓
 
-            // #tr tst.common.machine.AdvCircuitAssemblyLine.tooltip.structure.01
+            // #tr tst.machine.AdvCircuitAssemblyLine.tooltip.structure.01
             // # Grate machine casing next to the controller
             // #zh_CN 主机旁的格栅机械方块
             .addOtherStructurePart(
-                TSTUtils.tr("tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.06"),
-                TSTUtils.tr("tst.common.machine.AdvCircuitAssemblyLine.tooltip.structure.01"),
+                TSTUtils.tr("tst.machine.AdvCircuitAssemblyLine.tooltip.info.06"),
+                TSTUtils.tr("tst.machine.AdvCircuitAssemblyLine.tooltip.structure.01"),
                 3)
             .addStructureInfo(Text_SeparatingLine)
             .toolTipFinisher();

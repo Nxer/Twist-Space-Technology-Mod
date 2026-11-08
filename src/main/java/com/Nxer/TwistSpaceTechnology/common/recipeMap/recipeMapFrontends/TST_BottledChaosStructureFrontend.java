@@ -118,7 +118,8 @@ public final class TST_BottledChaosStructureFrontend extends RecipeMapFrontend {
     }
 
     public static String poolText(BottledChaosStructureDisplay display) {
-        return StatCollector.translateToLocalFormatted("tst.bottledchaos.machine_module.pool", display.poolNames());
+        return StatCollector
+            .translateToLocalFormatted("item.tst.bottledchaos.machine_module.info.pool", display.poolNames());
     }
 
     private static void drawLines(RecipeDisplayInfo info, String text) {

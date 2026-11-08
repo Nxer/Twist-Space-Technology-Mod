@@ -212,14 +212,14 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
 
     @Override
     public String getMachineModeName() {
-        // #tr tst.common.machine.MegaBrickedBlastFurnace.mode.0
+        // #tr tst.machine.MegaBrickedBlastFurnace.mode.0
         // # Steelmaking
         // #zh_CN 炼钢模式
 
-        // #tr tst.common.machine.MegaBrickedBlastFurnace.mode.1
+        // #tr tst.machine.MegaBrickedBlastFurnace.mode.1
         // # Primitive Blast Furnace
         // #zh_CN 原始高炉模式
-        return StatCollector.translateToLocal("tst.common.machine.MegaBrickedBlastFurnace.mode." + machineMode);
+        return StatCollector.translateToLocal("tst.machine.MegaBrickedBlastFurnace.mode." + machineMode);
     }
 
     @Override
@@ -616,66 +616,66 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.MegaBrickedBlastFurnace.tooltip.machine_type
+        // #tr tst.machine.MegaBrickedBlastFurnace.tooltip.machine_type
         // # Blast Furnace
         // #zh_CN 高炉
-        tt.addMachineType(TSTUtils.tr("tst.common.machine.MegaBrickedBlastFurnace.tooltip.machine_type"))
-            // #tr tst.common.machine.MegaBrickedBlastFurnace.tooltip.controller
+        tt.addMachineType(TSTUtils.tr("tst.machine.MegaBrickedBlastFurnace.tooltip.machine_type"))
+            // #tr tst.machine.MegaBrickedBlastFurnace.tooltip.controller
             // # Controller block for the Mega Bricked Blast Furnace
             // #zh_CN 巨型砖高炉的控制器方块
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaBrickedBlastFurnace.tooltip.controller"))
-            // #tr tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.01
+            .addInfo(TSTUtils.tr("tst.machine.MegaBrickedBlastFurnace.tooltip.controller"))
+            // #tr tst.machine.MegaBrickedBlastFurnace.tooltip.info.01
             // # {\WHITE}Who could ever imagine the power of the Steam Age?
             // #zh_CN {\WHITE}谁能想象出蒸汽时代之伟力?
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.01"))
-            // #tr tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.02
+            .addInfo(TSTUtils.tr("tst.machine.MegaBrickedBlastFurnace.tooltip.info.01"))
+            // #tr tst.machine.MegaBrickedBlastFurnace.tooltip.info.02
             // # consume iron/wrought iron ingots and coke coals (blocks) to produce steel (and ash byproduct)
             // #zh_CN 消耗铁/锻铁锭与焦煤/焦煤块炼钢(与灰烬副产物).
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.02"))
-            // #tr tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.03
+            .addInfo(TSTUtils.tr("tst.machine.MegaBrickedBlastFurnace.tooltip.info.02"))
+            // #tr tst.machine.MegaBrickedBlastFurnace.tooltip.info.03
             // # Default recipe time is {\GOLD}240s{\GRAY}. More wrought iron and coal input will reduce process time.
             // #zh_CN 初始配方时间为{\GOLD}240s{\GRAY}. 输入更多锻铁与焦煤以减少处理时间.
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.03"))
-            // #tr tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.04
+            .addInfo(TSTUtils.tr("tst.machine.MegaBrickedBlastFurnace.tooltip.info.03"))
+            // #tr tst.machine.MegaBrickedBlastFurnace.tooltip.info.04
             // # actual progress time = default x parallels /((1 + 4 x Ratio of wrought iron input) x sqrt(Coke coal input))
             // #zh_CN 实际处理时间 = 初始值 x 并行 / ((1 + 4 x 输入锻铁比例) x sqrt(输入焦煤))
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.04"))
-            // #tr tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.05
+            .addInfo(TSTUtils.tr("tst.machine.MegaBrickedBlastFurnace.tooltip.info.04"))
+            // #tr tst.machine.MegaBrickedBlastFurnace.tooltip.info.05
             // # process {\RED}50%{\GRAY} of (wrought) iron input and consume all coke coal input at once.
             // #zh_CN 一次性消耗输入的(锻)铁锭的{\RED}50%{\GRAY}与输入的全部焦煤.
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.05"))
-            // #tr tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.06
+            .addInfo(TSTUtils.tr("tst.machine.MegaBrickedBlastFurnace.tooltip.info.05"))
+            // #tr tst.machine.MegaBrickedBlastFurnace.tooltip.info.06
             // # minimum coke coal requirement:2 x (wrought) iron processed
             // #zh_CN 焦煤的最低需求量: 2 x 处理的(锻)铁锭的量
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.06"))
-            // #tr tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.07
+            .addInfo(TSTUtils.tr("tst.machine.MegaBrickedBlastFurnace.tooltip.info.06"))
+            // #tr tst.machine.MegaBrickedBlastFurnace.tooltip.info.07
             // # Takes {\RED}8{\GRAY} hours of continuous run time to achieve maximum efficiency.
             // #zh_CN 需要连续运行{\RED}8{\GRAY}小时来达到最大效率.
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.07"))
-            // #tr tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.08
+            .addInfo(TSTUtils.tr("tst.machine.MegaBrickedBlastFurnace.tooltip.info.07"))
+            // #tr tst.machine.MegaBrickedBlastFurnace.tooltip.info.08
             // # This improve coal efficiency by up to {\RED}800%{\GRAY}. Reduce minimum coal requirement and calculate in actual progress time.
             // #zh_CN 最多可使焦煤的使用效率提高至{\RED}800%{\GRAY},降低焦煤最低需求量并计入处理时间计算
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.08"))
-            // #tr tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.09
+            .addInfo(TSTUtils.tr("tst.machine.MegaBrickedBlastFurnace.tooltip.info.08"))
+            // #tr tst.machine.MegaBrickedBlastFurnace.tooltip.info.09
             // # {\YELLOW}It is recommended not to force yourself to build it until you have enough resources.
             // #zh_CN {\YELLOW}建议在你有充足的资源之前不要强迫自己建造它!
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.09"))
-            // #tr tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.10
+            .addInfo(TSTUtils.tr("tst.machine.MegaBrickedBlastFurnace.tooltip.info.09"))
+            // #tr tst.machine.MegaBrickedBlastFurnace.tooltip.info.10
             // # {\AQUA}Use the GUI mode button or a screwdriver to switch to primitive mode and process primitive blast furnace recipes, without wrought iron acceleration
             // #zh_CN 切换到原始高炉模式可处理原始高炉配方, 不再通过锻铁加速.
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaBrickedBlastFurnace.tooltip.info.10"))
+            .addInfo(TSTUtils.tr("tst.machine.MegaBrickedBlastFurnace.tooltip.info.10"))
             .addPollutionAmount(getPollutionPerSecond(null))
-            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.tooltip.info.16"))
+            .addInfo(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.info.16"))
             .beginStructureBlock(structure_string)
-            // #tr tst.common.machine.MegaBrickedBlastFurnace.tooltip.structure.01
+            // #tr tst.machine.MegaBrickedBlastFurnace.tooltip.structure.01
             // # {\YELLOW}Dirt must be Horizontal dirt in Chisel Mod!
             // #zh_CN {\YELLOW}泥土必须为Chisel模组中的水平花纹泥土!
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.MegaBrickedBlastFurnace.tooltip.structure.01"))
-            // #tr tst.common.machine.MegaBrickedBlastFurnace.tooltip.structure.02
+            .addStructureInfo(TSTUtils.tr("tst.machine.MegaBrickedBlastFurnace.tooltip.structure.01"))
+            // #tr tst.machine.MegaBrickedBlastFurnace.tooltip.structure.02
             // # any Bronze Plated Bricks, 0-6x
             // #zh_CN 任意镀铜机械方块, 0-6x
-            .addInputBus(TSTUtils.tr("tst.common.machine.MegaBrickedBlastFurnace.tooltip.structure.02"), 1)
-            .addOutputBus(TSTUtils.tr("tst.common.machine.MegaBrickedBlastFurnace.tooltip.structure.02"), 1)
+            .addInputBus(TSTUtils.tr("tst.machine.MegaBrickedBlastFurnace.tooltip.structure.02"), 1)
+            .addOutputBus(TSTUtils.tr("tst.machine.MegaBrickedBlastFurnace.tooltip.structure.02"), 1)
             .toolTipFinisher();
         // spotless:on
         return tt;

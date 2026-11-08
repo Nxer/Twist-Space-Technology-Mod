@@ -79,17 +79,15 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
             if (!(input instanceof GTNEIDefaultHandler.FixedPositionedStack positionedStack)
                 || !guiRecipe.isMouseOver(positionedStack, 0)) continue;
             if (positionedStack.isFluid()) {
-                currentTip.add(
-                    EnumChatFormatting.YELLOW
-                        + TSTUtils.tr("tst.ecosphere.recipe.AquaticZoneSimulatorFakeRecipes.medium"));
-                // #tr tst.ecosphere.recipe.AquaticZoneSimulatorFakeRecipes.medium
+                currentTip
+                    .add(EnumChatFormatting.YELLOW + TSTUtils.tr("tst.recipe.AquaticZoneSimulatorFakeRecipes.medium"));
+                // #tr tst.recipe.AquaticZoneSimulatorFakeRecipes.medium
                 // # Operating medium for aquatic simulation
                 // #zh_CN 水域模拟所需运行介质
             } else {
-                currentTip.add(
-                    EnumChatFormatting.YELLOW
-                        + TSTUtils.tr("tst.ecosphere.recipe.AquaticZoneSimulatorFakeRecipes.focus"));
-                // #tr tst.ecosphere.recipe.AquaticZoneSimulatorFakeRecipes.focus
+                currentTip
+                    .add(EnumChatFormatting.YELLOW + TSTUtils.tr("tst.recipe.AquaticZoneSimulatorFakeRecipes.focus"));
+                // #tr tst.recipe.AquaticZoneSimulatorFakeRecipes.focus
                 // # Register in the input interface to focus this output
                 // #zh_CN 在输入接口中登记以定向此产物
             }
@@ -99,9 +97,8 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
         for (var output : neiCachedRecipe.mOutputs) {
             if (!(output instanceof GTNEIDefaultHandler.FixedPositionedStack positionedStack)
                 || !guiRecipe.isMouseOver(positionedStack, 0)) continue;
-            currentTip.add(
-                EnumChatFormatting.YELLOW + TSTUtils.tr("tst.ecosphere.recipe.AquaticZoneSimulatorFakeRecipes.weight")
-            // #tr tst.ecosphere.recipe.AquaticZoneSimulatorFakeRecipes.weight
+            currentTip.add(EnumChatFormatting.YELLOW + TSTUtils.tr("tst.recipe.AquaticZoneSimulatorFakeRecipes.weight")
+            // #tr tst.recipe.AquaticZoneSimulatorFakeRecipes.weight
             // # Displayed stack size represents base output weight
             // #zh_CN 显示堆叠数代表基础产出权重
             );

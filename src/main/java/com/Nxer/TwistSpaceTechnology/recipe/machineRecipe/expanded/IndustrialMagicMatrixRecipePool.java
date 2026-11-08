@@ -126,10 +126,10 @@ public class IndustrialMagicMatrixRecipePool {
 
             ItemStack Essence = new ItemStack(itemEssence);
             Essence.setItemDamage(1);
-            // #tr tst.common.recipe.IndustrialMagicMatrixRecipeMap.input_aspects
+            // #tr tst.recipe.IndustrialMagicMatrixRecipeMap.input_aspects
             // # Recipe required Essentia
             // #zh_CN 配方所需源质
-            Essence.setStackDisplayName(TSTUtils.tr("tst.common.recipe.IndustrialMagicMatrixRecipeMap.input_aspects"));
+            Essence.setStackDisplayName(TSTUtils.tr("tst.recipe.IndustrialMagicMatrixRecipeMap.input_aspects"));
             setAspects(Essence, Recipe.getInputAspects());
 
             GTValues.RA.stdBuilder()

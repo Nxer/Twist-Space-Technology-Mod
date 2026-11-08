@@ -694,90 +694,90 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.TSTcleanroom.tooltip.machine_type
+        // #tr tst.machine.TSTcleanroom.tooltip.machine_type
         // # Cleanroom
         // #zh_CN 超净间
-        tt.addMachineType(translateToLocal("tst.common.machine.TSTcleanroom.tooltip.machine_type"));
-        // #tr tst.common.machine.TSTcleanroom.tooltip.info.01
+        tt.addMachineType(translateToLocal("tst.machine.TSTcleanroom.tooltip.machine_type"));
+        // #tr tst.machine.TSTcleanroom.tooltip.info.01
         // # Controller block for the Cleanroom
         // #zh_CN TST超净间的控制器方块
-        tt.addInfo(translateToLocal("tst.common.machine.TSTcleanroom.tooltip.info.01"));
-        // #tr tst.common.machine.TSTcleanroom.tooltip.info.02
+        tt.addInfo(translateToLocal("tst.machine.TSTcleanroom.tooltip.info.01"));
+        // #tr tst.machine.TSTcleanroom.tooltip.info.02
         // # Consumes §640 EU/t§7 when first turned on
         // #zh_CN 初次启动功率: §640EU/t§7
-        tt.addInfo(translateToLocal("tst.common.machine.TSTcleanroom.tooltip.info.02"));
-        // #tr tst.common.machine.TSTcleanroom.tooltip.info.03
+        tt.addInfo(translateToLocal("tst.machine.TSTcleanroom.tooltip.info.02"));
+        // #tr tst.machine.TSTcleanroom.tooltip.info.03
         // # and §64 EU/t§7 once at §c100%§7 efficiency
         // #zh_CN §c100%§7洁净度稳定运行功率: §64EU/t§7
-        tt.addInfo(translateToLocal("tst.common.machine.TSTcleanroom.tooltip.info.03"));
-        // #tr tst.common.machine.TSTcleanroom.tooltip.info.04
+        tt.addInfo(translateToLocal("tst.machine.TSTcleanroom.tooltip.info.03"));
+        // #tr tst.machine.TSTcleanroom.tooltip.info.04
         // # If you use an LV energy hatch, it will actually accept §62A§7 instead of just §61A§7.
         // #zh_CN 如果你使用一个LV能源仓供电, 它将接受§62A§7电流
-        tt.addInfo(translateToLocal("tst.common.machine.TSTcleanroom.tooltip.info.04"));
-        // #tr tst.common.machine.TSTcleanroom.tooltip.info.05
+        tt.addInfo(translateToLocal("tst.machine.TSTcleanroom.tooltip.info.04"));
+        // #tr tst.machine.TSTcleanroom.tooltip.info.05
         // # MV+ energy hatches just accept 1A as usual. For HV+ the cleanroom will overclock and gain efficiency faster.
         // #zh_CN MV能源仓使用1A电流, 使用HV以上能源仓, TST超净间将会超频, 更快地提升洁净度.
-        tt.addInfo(translateToLocal("tst.common.machine.TSTcleanroom.tooltip.info.05"));
-        // #tr tst.common.machine.TSTcleanroom.tooltip.info.06
+        tt.addInfo(translateToLocal("tst.machine.TSTcleanroom.tooltip.info.05"));
+        // #tr tst.machine.TSTcleanroom.tooltip.info.06
         // # always clean，can be use as laser nodes，max §664*64*64§7
         // #zh_CN 任何情况不会掉落洁净度, 可以作为有源变压器使用, 最大§664*64*64§7, 属于超净间的输入仓/总线的流体/物品会按一定顺序输出到输出仓/总线, 如果有me输出仓/总线, 则会统一输出到此内部.
-        tt.addInfo(translateToLocal("tst.common.machine.TSTcleanroom.tooltip.info.06"));
-        // #tr tst.common.machine.TSTcleanroom.tooltip.info.07
+        tt.addInfo(translateToLocal("tst.machine.TSTcleanroom.tooltip.info.06"));
+        // #tr tst.machine.TSTcleanroom.tooltip.info.07
         // # Machines that cause pollution aren't allowed to be put in.
         // #zh_CN 不可放入会产生污染的机器
-        tt.addInfo(translateToLocal("tst.common.machine.TSTcleanroom.tooltip.info.07"));
-        // #tr tst.common.machine.TSTcleanroom.tooltip.info.08
+        tt.addInfo(translateToLocal("tst.machine.TSTcleanroom.tooltip.info.07"));
+        // #tr tst.machine.TSTcleanroom.tooltip.info.08
         // # §4§lWATCH OUT! DO NOT DESTROY STRUCTURE BLOCK WHEN MACHINE IS WORKING!
         // #zh_CN §4§o§l小心, 不要在开机状态下破坏结构!
-        tt.addInfo(translateToLocal("tst.common.machine.TSTcleanroom.tooltip.info.08"));
-        // #tr tst.common.machine.TSTcleanroom.tooltip.info.09
+        tt.addInfo(translateToLocal("tst.machine.TSTcleanroom.tooltip.info.08"));
+        // #tr tst.machine.TSTcleanroom.tooltip.info.09
         // # §6§lBuffered by TST
         // #zh_CN §6§lBuffered by TST
-        tt.addInfo(translateToLocal("tst.common.machine.TSTcleanroom.tooltip.info.09"));
+        tt.addInfo(translateToLocal("tst.machine.TSTcleanroom.tooltip.info.09"));
         tt.beginVariableStructureBlock(3, MAX_WIDTH, 4, MAX_HEIGHT, 3, MAX_WIDTH, true);
-        // #tr tst.common.machine.TSTcleanroom.tooltip.structure.01
+        // #tr tst.machine.TSTcleanroom.tooltip.structure.01
         // # Top center
         // #zh_CN 顶部中央
-        tt.addController(translateToLocal("tst.common.machine.TSTcleanroom.tooltip.structure.01"));
-        // #tr tst.common.machine.TSTcleanroom.tooltip.structure.02
+        tt.addController(translateToLocal("tst.machine.TSTcleanroom.tooltip.structure.01"));
+        // #tr tst.machine.TSTcleanroom.tooltip.structure.02
         // # Plascrete
         // #zh_CN 塑料混凝土
-        tt.addCasingInfoRange(translateToLocal("tst.common.machine.TSTcleanroom.tooltip.structure.02"), 20, 19592, false);
-        // #tr tst.common.machine.TSTcleanroom.tooltip.structure.03
+        tt.addCasingInfoRange(translateToLocal("tst.machine.TSTcleanroom.tooltip.structure.02"), 20, 19592, false);
+        // #tr tst.machine.TSTcleanroom.tooltip.structure.03
         // # Up to %d%% of plascrete blocks can be replaced by other valid blocks
         // #zh_CN 最多%d%%的塑料混凝土可被其他有效方块替代
         tt.addStructureInfo(
-            String.format(translateToLocal("tst.common.machine.TSTcleanroom.tooltip.structure.03"), maxReplacementPercentage));
-        // #tr tst.common.machine.TSTcleanroom.tooltip.structure.04
+            String.format(translateToLocal("tst.machine.TSTcleanroom.tooltip.structure.03"), maxReplacementPercentage));
+        // #tr tst.machine.TSTcleanroom.tooltip.structure.04
         // # Any EV+ tier glass is allowed
         // #zh_CN 允许使用任何EV及以上等级的玻璃
-        tt.addStructureInfo(translateToLocal("tst.common.machine.TSTcleanroom.tooltip.structure.04"));
-        // #tr tst.common.machine.TSTcleanroom.tooltip.structure.05
+        tt.addStructureInfo(translateToLocal("tst.machine.TSTcleanroom.tooltip.structure.04"));
+        // #tr tst.machine.TSTcleanroom.tooltip.structure.05
         // # See config for additional allowed blocks
         // #zh_CN 其他允许方块详见配置文件
-        tt.addStructureInfo(translateToLocal("tst.common.machine.TSTcleanroom.tooltip.structure.05"));
-        // #tr tst.common.machine.TSTcleanroom.tooltip.structure.06
+        tt.addStructureInfo(translateToLocal("tst.machine.TSTcleanroom.tooltip.structure.05"));
+        // #tr tst.machine.TSTcleanroom.tooltip.structure.06
         // # Filter Machine Casing
         // #zh_CN 过滤机械外壳
 
-        // #tr tst.common.machine.TSTcleanroom.tooltip.structure.07
+        // #tr tst.machine.TSTcleanroom.tooltip.structure.07
         // # Top besides controller and edges
         // #zh_CN 顶层除控制器和边缘外的位置
         tt.addOtherStructurePart(
-            translateToLocal("tst.common.machine.TSTcleanroom.tooltip.structure.06"),
-            translateToLocal("tst.common.machine.TSTcleanroom.tooltip.structure.07"));
-        // #tr tst.common.machine.TSTcleanroom.tooltip.structure.08
+            translateToLocal("tst.machine.TSTcleanroom.tooltip.structure.06"),
+            translateToLocal("tst.machine.TSTcleanroom.tooltip.structure.07"));
+        // #tr tst.machine.TSTcleanroom.tooltip.structure.08
         // # Any casing except top layer
         // #zh_CN 除顶层外的任意外壳位置
-        tt.addEnergyHatch(translateToLocal("tst.common.machine.TSTcleanroom.tooltip.structure.08"));
-        // #tr tst.common.machine.TSTcleanroom.tooltip.structure.09
+        tt.addEnergyHatch(translateToLocal("tst.machine.TSTcleanroom.tooltip.structure.08"));
+        // #tr tst.machine.TSTcleanroom.tooltip.structure.09
         // # Reinforced Doors (keep closed or efficiency will reduce)
         // #zh_CN 防爆门(保持关闭, 否则会降低洁净度)
-        tt.addStructureInfo(translateToLocal("tst.common.machine.TSTcleanroom.tooltip.structure.09"));
-        // #tr tst.common.machine.TSTcleanroom.tooltip.structure.10
+        tt.addStructureInfo(translateToLocal("tst.machine.TSTcleanroom.tooltip.structure.09"));
+        // #tr tst.machine.TSTcleanroom.tooltip.structure.10
         // # Machine Hulls and Diodes for Item & Energy transfer through walls
         // #zh_CN 机器外壳和二极管可用于穿墙传输物品与能量
-        tt.addStructureInfo(translateToLocal("tst.common.machine.TSTcleanroom.tooltip.structure.10"));
+        tt.addStructureInfo(translateToLocal("tst.machine.TSTcleanroom.tooltip.structure.10"));
         tt.toolTipFinisher();
         // spotless:on
         return tt;

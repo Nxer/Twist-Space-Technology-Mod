@@ -449,10 +449,10 @@ public final class BottledChaosComplexStructures {
             branches.add(StatCollector.translateToLocal("tst.bottledchaos.recipe.structure.godforge_heat"));
         if (profile.upgrades()
             .contains(ForgeOfGodsUpgrade.TCT))
-            branches.add(StatCollector.translateToLocal("tst.common.shared.general.word_parallel"));
+            branches.add(StatCollector.translateToLocal("tst.shared.general.word_parallel"));
         if (profile.upgrades()
             .contains(ForgeOfGodsUpgrade.GGEBE))
-            branches.add(StatCollector.translateToLocal("tst.common.shared.general.word_overclock"));
+            branches.add(StatCollector.translateToLocal("tst.shared.general.word_overclock"));
         return branches.toString();
     }
 
@@ -489,10 +489,10 @@ public final class BottledChaosComplexStructures {
         String parameter = BottledChaosCircuitParameter.description(structure);
         if (parameter != null) {
             lines.add(parameter);
-            // #tr tst.bottledchaos.parameter.preview
+            // #tr tst.bottledchaos.shared.parameter.preview
             // # Preview uses the default; insert integrated circuits when packaging to set the parameter.
             // #zh_CN 预览使用默认参数, 封装时放入编程电路设置.
-            lines.add(StatCollector.translateToLocal("tst.bottledchaos.parameter.preview"));
+            lines.add(StatCollector.translateToLocal("tst.bottledchaos.shared.parameter.preview"));
             lines.add(BottledChaosCircuitParameter.instruction());
         }
         if (isFoundry(structure)) {

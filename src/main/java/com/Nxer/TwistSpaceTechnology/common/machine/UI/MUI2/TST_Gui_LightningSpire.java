@@ -113,13 +113,13 @@ public class TST_Gui_LightningSpire extends TST_Gui<GTCM_LightningSpire> {
         return new ToggleButton().value(enableLightningButtonSyncer)
             .overlay(POWER_PANEL_ICON)
             .tooltipBuilder(t -> {
-                t.addLine(IKey.lang("tst.gui.button.enable_lightning"));
+                t.addLine(IKey.lang("tst.machine.LightningSpire.gui.enable_lightning"));
                 t.addLine(
                     IKey.lang(
                         enableLightningButtonSyncer.getValue() ? BUTTON_FEATURE_ENABLED_TOOLTIP
                             : BUTTON_FEATURE_DISABLED_TOOLTIP));
             });
-        // #tr tst.gui.button.enable_lightning
+        // #tr tst.machine.LightningSpire.gui.enable_lightning
         // # Lightning animation switch
         // #zh_CN 闪电动画特效开关
     }
@@ -127,8 +127,8 @@ public class TST_Gui_LightningSpire extends TST_Gui<GTCM_LightningSpire> {
     protected IWidget createOutputtingRodsButton(PanelSyncManager syncManager) {
         return new ToggleButton().value(syncManager.findSyncHandler("outputtingRodsButton", BooleanSyncValue.class))
             .overlay(GTGuiTextures.OVERLAY_BUTTON_INPUT_FROM_OUTPUT_SIDE)
-            .tooltipBuilder(t -> { t.addLine(IKey.lang("tst.gui.button.outputting_rods")); });
-        // #tr tst.gui.button.outputting_rods
+            .tooltipBuilder(t -> { t.addLine(IKey.lang("tst.machine.LightningSpire.gui.outputting_rods")); });
+        // #tr tst.machine.LightningSpire.gui.outputting_rods
         // # Output all the Lightning Rods stored in machine
         // #zh_CN 输出机器内全部避雷针
     }
@@ -137,12 +137,12 @@ public class TST_Gui_LightningSpire extends TST_Gui<GTCM_LightningSpire> {
     protected ListWidget<IWidget, ?> createTerminalTextWidget(PanelSyncManager syncManager, ModularPanel parent) {
 
         IntSyncValue getRodsSyncValue = syncManager.findSyncHandler("getRods", IntSyncValue.class);
-        // #tr TST_Gui_LightningSpire.LightningRodAmount
+        // #tr tst.machine.LightningSpire.gui.lightning_rod_amount
         // # Lightning Rod :
         // #zh_CN 避雷针数量:
         return super.createTerminalTextWidget(syncManager, parent)
             .child(
-                IKey.lang("TST_Gui_LightningSpire.LightningRodAmount")
+                IKey.lang("tst.machine.LightningSpire.gui.lightning_rod_amount")
                     .color(Color.WHITE.main)
                     .asWidget()
                     .textAlign(Alignment.CenterLeft)

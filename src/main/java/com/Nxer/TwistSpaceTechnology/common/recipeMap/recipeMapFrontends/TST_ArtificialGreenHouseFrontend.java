@@ -76,10 +76,9 @@ public final class TST_ArtificialGreenHouseFrontend extends RecipeMapFrontend {
             if (!(input instanceof GTNEIDefaultHandler.FixedPositionedStack positionedStack)
                 || !guiRecipe.isMouseOver(positionedStack, 0)) continue;
             if (positionedStack.isFluid()) {
-                currentTip.add(
-                    EnumChatFormatting.YELLOW
-                        + TSTUtils.tr("tst.ecosphere.recipe.ArtificialGreenHouseFakeRecipes.medium"));
-                // #tr tst.ecosphere.recipe.ArtificialGreenHouseFakeRecipes.medium
+                currentTip
+                    .add(EnumChatFormatting.YELLOW + TSTUtils.tr("tst.recipe.ArtificialGreenHouseFakeRecipes.medium"));
+                // #tr tst.recipe.ArtificialGreenHouseFakeRecipes.medium
                 // # Operating medium for greenhouse cultivation
                 // #zh_CN 温室培育所需运行介质
             } else {
@@ -93,9 +92,8 @@ public final class TST_ArtificialGreenHouseFrontend extends RecipeMapFrontend {
         for (var output : neiCachedRecipe.mOutputs) {
             if (!(output instanceof GTNEIDefaultHandler.FixedPositionedStack positionedStack)
                 || !guiRecipe.isMouseOver(positionedStack, 0)) continue;
-            currentTip.add(
-                EnumChatFormatting.YELLOW + TSTUtils.tr("tst.ecosphere.recipe.ArtificialGreenHouseFakeRecipes.yield"));
-            // #tr tst.ecosphere.recipe.ArtificialGreenHouseFakeRecipes.yield
+            currentTip.add(EnumChatFormatting.YELLOW + TSTUtils.tr("tst.recipe.ArtificialGreenHouseFakeRecipes.yield"));
+            // #tr tst.recipe.ArtificialGreenHouseFakeRecipes.yield
             // # Displayed stack size and chance represent base yield
             // #zh_CN 显示堆叠数与概率代表基础产量
             return currentTip;

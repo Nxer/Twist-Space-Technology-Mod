@@ -41,11 +41,11 @@ public final class BottledChaosMachineDescriptions {
         var source = new BottledChaosMachineParameters.InstalledSource(controller, structure);
         var machine = BottledChaosSupportedMachine.find(source.original);
         if (machine == null) return lines;
-        // #tr tst.bottledchaos.machine_module.replaces_chain
+        // #tr item.tst.bottledchaos.machine_module.info.replaces_chain
         // # Replaces: %s
         // #zh_CN 可替代: %s
 
-        // #tr tst.bottledchaos.machine_module.mold_finishing
+        // #tr item.tst.bottledchaos.machine_module.info.mold_finishing
         // # White Dwarf Ingot Mold adds ingot routes while retaining molten routes.
         // #zh_CN 白矮星锭模具新增直出锭路线, 同时保留熔融路线.
         for (var rule : machine.replacements()) {
@@ -98,7 +98,7 @@ public final class BottledChaosMachineDescriptions {
                     EnumChatFormatting.AQUA + clock(runtime.getDouble("power"), runtime.getDouble("divisor"))));
         }
         List<String> lines = describe(controller, structure, pool, quantitySpeedExponent, true, runtime);
-        // #tr tst.bottledchaos.machine_module.source_machine
+        // #tr item.tst.bottledchaos.machine_module.info.source_machine
         // # Source machine: %s
         // #zh_CN 来源机器: %s
         if (controller != null) lines.add(0, text("source_machine", controller.getDisplayName()));
@@ -130,7 +130,7 @@ public final class BottledChaosMachineDescriptions {
             BottledChaosSourceRequirements.NONE);
         Profile base = evaluation.profile();
         String unavailable = evaluation.failure() == null
-            ? StatCollector.translateToLocal("tst.bottledchaos.result.invalid_source_configuration")
+            ? StatCollector.translateToLocal("tst.machine.BottledChaos.result.invalid_source_configuration")
             : evaluation.failure()
                 .getDisplayString();
         // Recipe-dependent profiles are described symbolically below; unavailable modes have no numeric parameters.
@@ -140,29 +140,29 @@ public final class BottledChaosMachineDescriptions {
         }
         if (machine == Machine.STELLAR_FORGE || machine == Machine.HEAT_CONVECTOR) {
             if (machine == Machine.STELLAR_FORGE) {
-                // #tr tst.bottledchaos.machine_module.energy_duration
+                // #tr item.tst.bottledchaos.machine_module.info.energy_duration
                 // # Duration is normalized from total recipe energy.
                 // #zh_CN 按配方总能耗折算耗时.
                 String forgeEU = runtime != null && runtime.getBoolean("numeric") ? number(runtime.getDouble("eu"))
                     : base == null ? "-" : number(base.euMultiplier());
                 lines.add(text("eu", forgeEU));
                 lines.add(text("energy_duration"));
-                // #tr tst.bottledchaos.machine_module.critical_photon
+                // #tr item.tst.bottledchaos.machine_module.info.critical_photon
                 // # Critical Photon: 1 per packaged machine per round.
                 // #zh_CN 临界光子: 每台封装机器每轮1个.
                 if (runtime == null) lines.add(text("critical_photon"));
                 else {
-                    // #tr tst.bottledchaos.machine_module.energy_duration_scaled
+                    // #tr item.tst.bottledchaos.machine_module.info.energy_duration_scaled
                     // # Duration: total recipe energy x%s / recipe voltage / %s.
                     // #zh_CN 耗时: 配方总能耗 x%s / 配方电压 / %s.
                     lines.set(1, text("energy_duration_scaled", forgeEU, 1 + Math.max(0, quantitySpeedExponent)));
-                    // #tr tst.bottledchaos.machine_module.photon_demand
+                    // #tr item.tst.bottledchaos.machine_module.info.photon_demand
                     // # Critical Photons per round: %s
                     // #zh_CN 每轮临界光子: %s
                     lines.add(text("photon_demand", runtime.getLong("quantity")));
                 }
             } else {
-                // #tr tst.bottledchaos.machine_module.free_cooling
+                // #tr item.tst.bottledchaos.machine_module.info.free_cooling
                 // # Plasma cooling: 0 EU, 0 ticks of processing work.
                 // #zh_CN 等离子冷却: 0 EU, 0 tick处理耗时.
                 lines.add(text("free_cooling"));
@@ -338,7 +338,7 @@ public final class BottledChaosMachineDescriptions {
             }
             default -> {}
         }
-        // #tr tst.bottledchaos.machine_module.master_oc
+        // #tr item.tst.bottledchaos.machine_module.info.master_oc
         // # Host overclock parameters
         // #zh_CN 主机超频参数
         if (source.inheritsMasterOverclock) oc = text("master_oc");
@@ -357,22 +357,22 @@ public final class BottledChaosMachineDescriptions {
             if (machine != Machine.INDISTINCT) oc = clock(runtime.getDouble("power"), runtime.getDouble("divisor"));
             if (machine == Machine.BLAST_FURNACE) special = text("thermal_oc");
         }
-        // #tr tst.bottledchaos.machine_module.parallel
+        // #tr item.tst.bottledchaos.machine_module.info.parallel
         // # Duration normalization basis: %s
         // #zh_CN 耗时折算基数: %s
         lines.add(EnumChatFormatting.GRAY + text("parallel", EnumChatFormatting.GOLD + parallel));
-        // #tr tst.bottledchaos.machine_module.eu
+        // #tr item.tst.bottledchaos.machine_module.info.eu
         // # Power multiplier: x%s
         // #zh_CN 耗电倍率: x%s
         lines.add(EnumChatFormatting.GRAY + text("eu", EnumChatFormatting.YELLOW + eu));
-        // #tr tst.bottledchaos.machine_module.time
+        // #tr item.tst.bottledchaos.machine_module.info.time
         // # Duration multiplier: x%s
         // #zh_CN 耗时倍率: x%s
         if (variableTime && quantitySpeed != 1)
             time = time.startsWith("1/") ? number(1 / quantitySpeed) + time.substring(1)
                 : number(1 / quantitySpeed) + " x (" + time + ")";
         lines.add(EnumChatFormatting.GRAY + text("time", EnumChatFormatting.GREEN + time));
-        // #tr tst.bottledchaos.machine_module.oc
+        // #tr item.tst.bottledchaos.machine_module.info.oc
         // # Per overclock: %s
         // #zh_CN 每档超频: %s
         if (machine == Machine.INDISTINCT) {
@@ -380,12 +380,12 @@ public final class BottledChaosMachineDescriptions {
                 && runtime.hasKey("sourceOverclock") ? OverclockType.getFromID(runtime.getInteger("sourceOverclock"))
                     : OverclockType.NONE;
             lines.add(EnumChatFormatting.GRAY + text("oc", ""));
-            // #tr tst.bottledchaos.machine_module.oc_below_tier
+            // #tr item.tst.bottledchaos.machine_module.info.oc_below_tier
             // # Recipe <= %s: %s
             // #zh_CN 配方<=%s: %s
             lines.add(
                 EnumChatFormatting.GRAY + text("oc_below_tier", tierName(u.component), clock(4, 4, sourceOverclock)));
-            // #tr tst.bottledchaos.machine_module.oc_above_tier
+            // #tr item.tst.bottledchaos.machine_module.info.oc_above_tier
             // # Recipe > %s: %s
             // #zh_CN 配方>%s: %s
             lines.add(
@@ -396,7 +396,7 @@ public final class BottledChaosMachineDescriptions {
             restrictions = append(restrictions, text("recipe_voltage_limit", tierName(voltageLimit)));
         if (machine == Machine.BIO_VAT || machine == Machine.BIOSPHERE && pool != RecipeMaps.brewingRecipes
             && pool != RecipeMaps.fermentingRecipes) {
-            // #tr tst.bottledchaos.machine_module.recipe_glass_limit
+            // #tr item.tst.bottledchaos.machine_module.info.recipe_glass_limit
             // # Maximum culture recipe glass requirement: %s
             // #zh_CN 培养配方所需玻璃等级最高: %s
             restrictions = append(restrictions, text("recipe_glass_limit", tierName(u.glass)));
@@ -419,7 +419,7 @@ public final class BottledChaosMachineDescriptions {
                 lines.add(EnumChatFormatting.YELLOW + text("heat_limit", EnumChatFormatting.WHITE + limit));
             lines.add(StatCollector.translateToLocalFormatted("GT5U.multiblock.heat", heat));
         }
-        // #tr tst.bottledchaos.machine_module.limits
+        // #tr item.tst.bottledchaos.machine_module.info.limits
         // # Recipe limits: %s
         // #zh_CN 配方限制: %s
         if (!compact || !restrictions.isEmpty()) lines.add(
@@ -473,7 +473,7 @@ public final class BottledChaosMachineDescriptions {
     }
 
     static String text(String suffix, Object... args) {
-        String key = "tst.bottledchaos.machine_module." + suffix;
+        String key = "item.tst.bottledchaos.machine_module.info." + suffix;
         return args.length == 0 ? StatCollector.translateToLocal(key)
             : StatCollector.translateToLocalFormatted(key, args);
     }
@@ -497,11 +497,11 @@ public final class BottledChaosMachineDescriptions {
 
     private static String clock(double power, double divisor) {
         if (power == 1 && divisor == 1) return StatCollector.translateToLocal("GT5U.gui.text.nil");
-        // #tr tst.bottledchaos.machine_module.clock_fixed_duration
+        // #tr item.tst.bottledchaos.machine_module.info.clock_fixed_duration
         // # Power x%s, duration unchanged
         // #zh_CN 耗电 x%s, 耗时不变
         if (divisor == 1) return text("clock_fixed_duration", number(power));
-        // #tr tst.bottledchaos.machine_module.clock
+        // #tr item.tst.bottledchaos.machine_module.info.clock
         // # Power x%s, duration /%s
         // #zh_CN 耗电 x%s, 耗时/%s
         return text("clock", number(power), number(divisor));
@@ -511,183 +511,183 @@ public final class BottledChaosMachineDescriptions {
         return tier >= 0 && tier < GTValues.VN.length ? GTValues.VN[tier] : "-";
     }
 
-    // #tr tst.bottledchaos.machine_module.godforge_configuration
+    // #tr item.tst.bottledchaos.machine_module.info.godforge_configuration
     // # Rings: %s; upgrade configuration: %s; bonuses included
     // #zh_CN 环数: %s; 升级配置: %s; 包含增益
 
-    // #tr tst.bottledchaos.machine_module.foundry_configuration
+    // #tr item.tst.bottledchaos.machine_module.info.foundry_configuration
     // # Modules: %s; upgrade configuration: %s; bonuses included
     // #zh_CN 模块数: %s; 升级配置: %s; 包含增益
 
-    // #tr tst.bottledchaos.machine_module.foundry_random
+    // #tr item.tst.bottledchaos.machine_module.info.foundry_random
     // # Random bonuses use expected values
     // #zh_CN 随机增益取期望值
 
-    // #tr tst.bottledchaos.machine_module.foundry_coolant
+    // #tr item.tst.bottledchaos.machine_module.info.foundry_coolant
     // # Coolant: Super Coolant 100 L/s / Space-Time 50 L/s%s
     // #zh_CN 冷却液: 超级冷却液100 L/s / 时空50 L/s%s
 
-    // #tr tst.bottledchaos.machine_module.foundry_eternity
+    // #tr item.tst.bottledchaos.machine_module.info.foundry_eternity
     // # Eternity 25 L/s
     // #zh_CN 永恒25 L/s
 
-    // #tr tst.bottledchaos.machine_module.recipe_tier
+    // #tr item.tst.bottledchaos.machine_module.info.recipe_tier
     // # recipe tier
     // #zh_CN 配方等级
 
-    // #tr tst.bottledchaos.machine_module.culture
+    // #tr item.tst.bottledchaos.machine_module.info.culture
     // # Matching culture and sufficient glass tier are required
     // #zh_CN 需要匹配的培养物及足够的玻璃等级
 
-    // #tr tst.bottledchaos.machine_module.automatic_culture
+    // #tr item.tst.bottledchaos.machine_module.info.automatic_culture
     // # Automatic culture mode
     // #zh_CN 自动培养模式
 
-    // #tr tst.bottledchaos.machine_module.radiation
+    // #tr item.tst.bottledchaos.machine_module.info.radiation
     // # Ignores radiation requirements
     // #zh_CN 忽略辐射要求
 
-    // #tr tst.bottledchaos.machine_module.dish_count
+    // #tr item.tst.bottledchaos.machine_module.info.dish_count
     // # Matching culture dish count
     // #zh_CN 匹配培养皿数量
 
-    // #tr tst.bottledchaos.machine_module.culture_time
+    // #tr item.tst.bottledchaos.machine_module.info.culture_time
     // # 1/[1.6 + 0.6 x (glass tier - required glass tier)]
     // #zh_CN 1/[1.6 + 0.6 x (玻璃等级 - 所需玻璃等级)]
 
-    // #tr tst.bottledchaos.machine_module.electrode
+    // #tr item.tst.bottledchaos.machine_module.info.electrode
     // # Ignores electrode startup and durability consumption
     // #zh_CN 忽略电极启动及耐久消耗
 
-    // #tr tst.bottledchaos.machine_module.master
+    // #tr item.tst.bottledchaos.machine_module.info.master
     // # Module duration and power bonuses stack with the main controller's bonuses
     // #zh_CN 模组耗时和耗电增益与主机增益叠加
 
-    // #tr tst.bottledchaos.machine_module.master_parallel
+    // #tr item.tst.bottledchaos.machine_module.info.master_parallel
     // # Main controller duration normalization basis
     // #zh_CN 主机耗时折算基数
 
-    // #tr tst.bottledchaos.machine_module.master_eu
+    // #tr item.tst.bottledchaos.machine_module.info.master_eu
     // # Main controller power multiplier
     // #zh_CN 主机耗电倍率
 
-    // #tr tst.bottledchaos.machine_module.master_time
+    // #tr item.tst.bottledchaos.machine_module.info.master_time
     // # Main controller duration multiplier
     // #zh_CN 主机耗时倍率
 
-    // #tr tst.bottledchaos.machine_module.thermal_eu
+    // #tr item.tst.bottledchaos.machine_module.info.thermal_eu
     // # %s^floor(excess furnace temperature/900K)
     // #zh_CN %s^floor(炉温差/900K)
 
-    // #tr tst.bottledchaos.machine_module.voltage_heat
+    // #tr item.tst.bottledchaos.machine_module.info.voltage_heat
     // # Coil furnace temperature %s K + 100 x max(T - 2, 0) K; one perfect OC per 1800 K excess furnace temperature
     // #zh_CN 线圈炉温%s K + 100 x max(T - 2, 0) K; 每1800 K炉温差增加一档无损超频
 
-    // #tr tst.bottledchaos.machine_module.thermal_oc
+    // #tr item.tst.bottledchaos.machine_module.info.thermal_oc
     // # Excess heat = heat - recipe heat; one perfect overclock for every 1800K above the recipe requirement
     // #zh_CN 炉温差 = 炉温 - 配方所需炉温; 炉温每高出配方要求1800K, 增加一档无损超频
 
-    // #tr tst.bottledchaos.machine_module.heat_limit
+    // #tr item.tst.bottledchaos.machine_module.info.heat_limit
     // # Recipe heat limit: %sK
     // #zh_CN 配方炉温限制: %sK
 
-    // #tr tst.bottledchaos.machine_module.casing_limit
+    // #tr item.tst.bottledchaos.machine_module.info.casing_limit
     // # Maximum required casing tier: %s
     // #zh_CN 最高配方所需机壳等级: %s
 
-    // #tr tst.bottledchaos.machine_module.compression_limit
+    // #tr item.tst.bottledchaos.machine_module.info.compression_limit
     // # Maximum required compression tier: %s
     // #zh_CN 最高配方所需压缩等级: %s
 
-    // #tr tst.bottledchaos.machine_module.recipe_voltage_limit
+    // #tr item.tst.bottledchaos.machine_module.info.recipe_voltage_limit
     // # Maximum recipe voltage tier: %s
     // #zh_CN 最高配方电压等级: %s
 
-    // #tr tst.bottledchaos.machine_module.input_voltage_limit
+    // #tr item.tst.bottledchaos.machine_module.info.input_voltage_limit
     // # Main controller input voltage
     // #zh_CN 主机输入电压
 
-    // #tr tst.bottledchaos.machine_module.host_tiers
+    // #tr item.tst.bottledchaos.machine_module.info.host_tiers
     // # T = main controller voltage tier; P = main controller available power tier
     // #zh_CN T = 主机电压等级; P = 主机可用功率等级
 
-    // #tr tst.bottledchaos.machine_module.oc_limit
+    // #tr item.tst.bottledchaos.machine_module.info.oc_limit
     // # Maximum overclock stages: %s
     // #zh_CN 最多超频档数: %s
 
-    // #tr tst.bottledchaos.machine_module.laser_oc_limit
+    // #tr item.tst.bottledchaos.machine_module.info.laser_oc_limit
     // # Overclock voltage limit: %s
     // #zh_CN 超频电压上限: %s
 
-    // #tr tst.bottledchaos.machine_module.fusion_oc_limit
+    // #tr item.tst.bottledchaos.machine_module.info.fusion_oc_limit
     // # Overclock stages depend on the recipe's fusion tier
     // #zh_CN 超频档数受配方聚变等级限制
 
-    // #tr tst.bottledchaos.machine_module.macerator_time
+    // #tr item.tst.bottledchaos.machine_module.info.macerator_time
     // # Recipes below %s: %s; others: %s
     // #zh_CN 配方<%s: %s; 其他: %s
 
-    // #tr tst.bottledchaos.machine_module.catalyst
+    // #tr item.tst.bottledchaos.machine_module.info.catalyst
     // # Matching catalyst and sufficient crafting structure tier are required
     // #zh_CN 需要匹配的催化剂及足够的制造结构等级
 
-    // #tr tst.bottledchaos.machine_module.quantum_tiers
+    // #tr item.tst.bottledchaos.machine_module.info.quantum_tiers
     // # Crafting tier: %s; focusing tier: %s
     // #zh_CN 制造等级: %s; 聚焦等级: %s
 
-    // #tr tst.bottledchaos.machine_module.catalyst_count
+    // #tr item.tst.bottledchaos.machine_module.info.catalyst_count
     // # Matching catalyst count
     // #zh_CN 匹配催化剂数量
 
-    // #tr tst.bottledchaos.machine_module.rotor
+    // #tr item.tst.bottledchaos.machine_module.info.rotor
     // # Packaged mixed rotors; protection fluid is requested during operation
     // #zh_CN 已封装混用转子; 运行时请求保护流体
 
-    // #tr tst.bottledchaos.machine_module.rotor_parallel
+    // #tr item.tst.bottledchaos.machine_module.info.rotor_parallel
     // # %s; propulsion fluid: %s
     // #zh_CN %s; 推进液: %s
 
-    // #tr tst.bottledchaos.machine_module.rotor_heavy
+    // #tr item.tst.bottledchaos.machine_module.info.rotor_heavy
     // # Heavy mode: %s
     // #zh_CN 重模式: %s
 
-    // #tr tst.bottledchaos.machine_module.rotor_eu
+    // #tr item.tst.bottledchaos.machine_module.info.rotor_eu
     // # 0.7; heavy recipes: 11.2
     // #zh_CN 0.7; 重模式配方: 11.2
 
-    // #tr tst.bottledchaos.machine_module.rotor_time
+    // #tr item.tst.bottledchaos.machine_module.info.rotor_time
     // # Non-heavy recipes at least 3 tiers below input voltage: %s; others: %s
     // #zh_CN 非重模式配方比输入电压低至少3级: %s; 其他: %s
 
-    // #tr tst.bottledchaos.machine_module.rotor_limits
+    // #tr item.tst.bottledchaos.machine_module.info.rotor_limits
     // # Heavy mode: T3+ and propulsion fluid
     // #zh_CN 重模式: T3+结构及推进液
 
-    // #tr tst.bottledchaos.machine_module.rotor_oc
+    // #tr item.tst.bottledchaos.machine_module.info.rotor_oc
     // # One additional source overclock
     // #zh_CN 原配方额外超频: 1
 
-    // #tr tst.bottledchaos.machine_module.rotor_upkeep
+    // #tr item.tst.bottledchaos.machine_module.info.rotor_upkeep
     // # Protection fluid: max(1, recipe tier) x 10 L/s; kerosene or supplied propulsion fluid
     // #zh_CN 保护流体: max(1, 配方等级) x 10 L/s; 煤油或输入的推进液
 
-    // #tr tst.bottledchaos.machine_module.purification
+    // #tr item.tst.bottledchaos.machine_module.info.purification
     // # Purification unit quantity must not exceed main plant quantity
     // #zh_CN 净化水机器堆叠组数不能超过主净化厂堆叠组数
 
-    // #tr tst.bottledchaos.machine_module.neutron
+    // #tr item.tst.bottledchaos.machine_module.info.neutron
     // # Source duration is at least 1 tick before quantity speed is applied
     // #zh_CN 数量增速前的原配方耗时最低为1 tick
 
-    // #tr tst.bottledchaos.machine_module.neutron_layers
+    // #tr item.tst.bottledchaos.machine_module.info.neutron_layers
     // # Layers: %s
     // #zh_CN 层数: %s
 
-    // #tr tst.bottledchaos.machine_module.upkeep
+    // #tr item.tst.bottledchaos.machine_module.info.upkeep
     // # %s: %s L/s per complete structure
     // #zh_CN %s: 每组完整结构%s L/s
 
-    // #tr tst.bottledchaos.machine_module.perfect_stages
+    // #tr item.tst.bottledchaos.machine_module.info.perfect_stages
     // # %s perfect overclock stages
     // #zh_CN %s档无损超频
 }

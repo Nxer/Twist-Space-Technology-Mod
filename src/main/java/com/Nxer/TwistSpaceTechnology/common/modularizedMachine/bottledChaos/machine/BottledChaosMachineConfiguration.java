@@ -221,24 +221,25 @@ public final class BottledChaosMachineConfiguration {
 
     public static String poolName(String key) {
         if (key.equals(PURIFICATION_PLANT_KEY)) {
-            // #tr tst.bottledchaos.machine_module.purification_plant
+            // #tr item.tst.bottledchaos.machine_module.info.purification_plant
             // # Main Water Purification Plant
             // #zh_CN 主净化厂
-            return StatCollector.translateToLocal("tst.bottledchaos.machine_module.purification_plant");
+            return StatCollector.translateToLocal("item.tst.bottledchaos.machine_module.info.purification_plant");
         }
         if (key.equals(GTCMRecipe.NeutronActivatorWithEURecipeMap.unlocalizedName)
             || key.equals("gg.recipe.neutron_activator")) {
-            // #tr tst.bottledchaos.machine_module.neutron_pool
+            // #tr item.tst.bottledchaos.machine_module.info.neutron_pool
             // # Neutron Activator
             // #zh_CN 中子活化器
-            return StatCollector.translateToLocal("tst.bottledchaos.machine_module.neutron_pool");
+            return StatCollector.translateToLocal("item.tst.bottledchaos.machine_module.info.neutron_pool");
         }
         String name = StatCollector.translateToLocal(key);
         if (key.startsWith("gt.recipe.purificationplant")) {
-            // #tr tst.bottledchaos.machine_module.purification_pool
+            // #tr item.tst.bottledchaos.machine_module.info.purification_pool
             // # Purified Water-%s
             // #zh_CN 净化水-%s
-            return StatCollector.translateToLocalFormatted("tst.bottledchaos.machine_module.purification_pool", name);
+            return StatCollector
+                .translateToLocalFormatted("item.tst.bottledchaos.machine_module.info.purification_pool", name);
         }
         return name.replaceFirst("^(大型|工业|巨型|Large |Industrial |Mega )", "");
     }
@@ -569,14 +570,15 @@ public final class BottledChaosMachineConfiguration {
                 .evaluate(installed.sources[installation], map, recipeVoltage, context, requirements);
             var profile = result.profile();
             if (profile == null) {
-                // #tr tst.bottledchaos.result.invalid_source_configuration
+                // #tr tst.machine.BottledChaos.result.invalid_source_configuration
                 // # Source structure configuration is not valid for this recipe pool.
                 // #zh_CN 来源结构配置不适用于此配方池.
                 return Evaluation.rejected(
                     result.failure() != null ? result.failure()
                         : BottledChaosPoolFailure.of(
                             poolKey(slot),
-                            SimpleResultWithText.ofFailure("tst.bottledchaos.result.invalid_source_configuration")));
+                            SimpleResultWithText
+                                .ofFailure("tst.machine.BottledChaos.result.invalid_source_configuration")));
             }
             long requiredVoltage = requirements.requiredSourceVoltage() > 0 ? requirements.requiredSourceVoltage()
                 : recipeVoltage;
