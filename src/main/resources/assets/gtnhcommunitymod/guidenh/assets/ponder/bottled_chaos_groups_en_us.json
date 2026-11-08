@@ -1,0 +1,260 @@
+{
+  "totalTime": 700,
+  "keyframes": [
+    {
+      "time": 0,
+      "label": "One hatch, one group",
+      "annotations": [
+        {
+          "type": "box",
+          "minX": 0,
+          "minY": 2,
+          "minZ": 0,
+          "maxX": 1,
+          "maxY": 3,
+          "maxZ": 1,
+          "color": "0xFF56DDEA",
+          "lineWidth": 2,
+          "alwaysOnTop": true
+        },
+        {
+          "type": "box",
+          "minX": 4,
+          "minY": 2,
+          "minZ": 0,
+          "maxX": 5,
+          "maxY": 3,
+          "maxZ": 1,
+          "color": "0xFFFFCD58",
+          "lineWidth": 2,
+          "alwaysOnTop": true
+        },
+        {
+          "type": "text",
+          "text": "Credentials select routes. Structure modules supply machine capabilities.",
+          "independent": true,
+          "yOffset": 79,
+          "maxWidth": 300,
+          "color": "0xFF56DDEA",
+          "backgroundAlpha": 220
+        }
+      ],
+      "camera": {
+        "rotX": 24,
+        "rotY": 180,
+        "rotZ": 0,
+        "zoom": 3.2,
+        "offY": 18
+      }
+    },
+    {
+      "time": 140,
+      "label": "Dedicated inputs",
+      "annotations": [
+        {
+          "type": "box",
+          "minX": 0,
+          "minY": 0,
+          "minZ": 0,
+          "maxX": 1,
+          "maxY": 2,
+          "maxZ": 1,
+          "color": "0xFF56DDEA",
+          "lineWidth": 2,
+          "alwaysOnTop": true
+        },
+        {
+          "type": "box",
+          "minX": 4,
+          "minY": 0,
+          "minZ": 0,
+          "maxX": 5,
+          "maxY": 2,
+          "maxZ": 1,
+          "color": "0xFFFFCD58",
+          "lineWidth": 2,
+          "alwaysOnTop": true
+        },
+        {
+          "type": "line",
+          "fromX": 0.5,
+          "fromY": 0.5,
+          "fromZ": -0.2,
+          "toX": 0.5,
+          "toY": 2.4,
+          "toZ": -0.2,
+          "color": "0xFF56DDEA",
+          "arrow": "end",
+          "lineWidth": 2,
+          "alwaysOnTop": true
+        },
+        {
+          "type": "line",
+          "fromX": 4.5,
+          "fromY": 0.5,
+          "fromZ": -0.2,
+          "toX": 4.5,
+          "toY": 2.4,
+          "toZ": -0.2,
+          "color": "0xFFFFCD58",
+          "arrow": "end",
+          "lineWidth": 2,
+          "alwaysOnTop": true
+        },
+        {
+          "type": "text",
+          "text": "Both positions accept an input bus or hatch. Fill unused positions with casing.",
+          "independent": true,
+          "yOffset": 79,
+          "maxWidth": 300,
+          "color": "0xFF56DDEA",
+          "backgroundAlpha": 220
+        }
+      ]
+    },
+    {
+      "time": 280,
+      "label": "Shared supplies",
+      "annotations": [
+        {
+          "type": "box",
+          "minX": 1,
+          "minY": 0,
+          "minZ": 3,
+          "maxX": 3,
+          "maxY": 1,
+          "maxZ": 4,
+          "color": "0xFF92DD79",
+          "lineWidth": 2,
+          "alwaysOnTop": true
+        },
+        {
+          "type": "line",
+          "fromX": 1.5,
+          "fromY": 1.2,
+          "fromZ": 3.5,
+          "toX": 0.5,
+          "toY": 2.5,
+          "toZ": 0.5,
+          "color": "0xFF92DD79",
+          "arrow": "end",
+          "lineWidth": 2,
+          "alwaysOnTop": true
+        },
+        {
+          "type": "line",
+          "fromX": 2.5,
+          "fromY": 1.2,
+          "fromZ": 3.5,
+          "toX": 4.5,
+          "toY": 2.5,
+          "toZ": 0.5,
+          "color": "0xFF92DD79",
+          "arrow": "end",
+          "lineWidth": 2,
+          "alwaysOnTop": true
+        },
+        {
+          "type": "text",
+          "text": "Central inputs supply common materials to every group.",
+          "independent": true,
+          "yOffset": 79,
+          "maxWidth": 300,
+          "color": "0xFF56DDEA",
+          "backgroundAlpha": 220
+        }
+      ]
+    },
+    {
+      "time": 420,
+      "label": "Local buffers",
+      "annotations": [
+        {
+          "type": "box",
+          "minX": 0,
+          "minY": 2,
+          "minZ": 0,
+          "maxX": 1,
+          "maxY": 3,
+          "maxZ": 1,
+          "color": "0xFF56DDEA",
+          "lineWidth": 2,
+          "alwaysOnTop": true
+        },
+        {
+          "type": "box",
+          "minX": 4,
+          "minY": 2,
+          "minZ": 0,
+          "maxX": 5,
+          "maxY": 3,
+          "maxZ": 1,
+          "color": "0xFFFFCD58",
+          "lineWidth": 2,
+          "alwaysOnTop": true
+        },
+        {
+          "type": "text",
+          "text": "Intermediates stay in their own credential hatch, separate from other groups.",
+          "independent": true,
+          "yOffset": 79,
+          "maxWidth": 300,
+          "color": "0xFF56DDEA",
+          "backgroundAlpha": 220
+        }
+      ]
+    },
+    {
+      "time": 560,
+      "label": "Identical credentials",
+      "annotations": [
+        {
+          "type": "box",
+          "minX": 0,
+          "minY": 0,
+          "minZ": 0,
+          "maxX": 1,
+          "maxY": 3,
+          "maxZ": 1,
+          "color": "0xFF56DDEA",
+          "lineWidth": 2,
+          "alwaysOnTop": true
+        },
+        {
+          "type": "box",
+          "minX": 4,
+          "minY": 0,
+          "minZ": 0,
+          "maxX": 5,
+          "maxY": 3,
+          "maxZ": 1,
+          "color": "0xFF56DDEA",
+          "lineWidth": 2,
+          "alwaysOnTop": true
+        },
+        {
+          "type": "line",
+          "fromX": 4.5,
+          "fromY": 2.6,
+          "fromZ": -0.2,
+          "toX": 0.5,
+          "toY": 2.6,
+          "toZ": -0.2,
+          "color": "0xFF56DDEA",
+          "arrow": "end",
+          "lineWidth": 2,
+          "alwaysOnTop": true
+        },
+        {
+          "type": "text",
+          "text": "Exactly identical credentials pool dedicated inputs. Only one group runs.",
+          "independent": true,
+          "yOffset": 79,
+          "maxWidth": 300,
+          "color": "0xFF56DDEA",
+          "backgroundAlpha": 220
+        }
+      ]
+    }
+  ]
+}
