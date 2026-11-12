@@ -786,17 +786,17 @@ public class GTCMMachineRecipes {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(11),
-                GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Steel, 1),
-                ItemList.Field_Generator_LuV.get(4),
-                new Object[]{OrePrefixes.circuit.get(Materials.ZPM), 8},
+                GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.DamascusSteel, 1),
+                ItemList.Field_Generator_LuV.get(2),
+                new Object[]{OrePrefixes.circuit.get(Materials.LuV), 4},
                 GTOreDictUnificator.get(OrePrefixes.cableGt01, Materials.Naquadah, 4),
-                GTOreDictUnificator.get(OrePrefixes.plate, Materials.Steel, 8))
-            .fluidInputs(Materials.NaquadahAlloy.getMolten(144 * 4))
+                GTOreDictUnificator.get(OrePrefixes.plate, Materials.NaquadahAlloy, 3))
+            .fluidInputs(Materials.PrismaticNaquadah.getMolten(144 * 2))
             .itemOutputs(getModItem("gregtech", "gt.blockcasings2", 1, 8))
 
 
             .eut(RECIPE_ZPM)
-            .duration(20 * 30)
+            .duration(20 * 8)
             .addTo(assembler);
 
         // endregion
@@ -3327,25 +3327,23 @@ public class GTCMMachineRecipes {
             800_000,
             4,
             new Object[]{
-                GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Neutronium, 2),
-                ItemList.neutroniumHeatCapacitor.get(1),
-                ItemList.Neutron_Reflector.get(64),
-                ItemList.UHTResistantMesh.get(24),
+                GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Neutronium, 1),
+                ItemList.Neutron_Reflector.get(12),
+                ItemList.UHTResistantMesh.get(6),
+                ItemRefer.Advanced_Radiation_Protection_Plate.get(2),
 
-                ItemRefer.Advanced_Radiation_Protection_Plate.get(36),
                 ItemList.Electric_Piston_ZPM.get(4),
                 ItemList.Field_Generator_ZPM.get(2),
-                GTOreDictUnificator.get(OrePrefixes.ring, Materials.CosmicNeutronium, 24),
-
-                GTOreDictUnificator.get(OrePrefixes.screw, Materials.Bedrockium, 12)
+                GTOreDictUnificator.get(OrePrefixes.screw, Materials.Bedrockium, 6)
             },
             new FluidStack[]{
                 MaterialsAlloy.INDALLOY_140.getFluidStack(144 * 8),
-                GGMaterial.preciousMetalAlloy.getMolten(144 * 16),
+                GGMaterial.preciousMetalAlloy.getMolten(144 * 8),
+                Materials.CosmicNeutronium.getMolten(144 * 2),
                 Materials.SuperCoolant.getFluid(1000 * 8),
             },
             GTCMItemList.ReinforcedIridiumAlloyCasing.get(1),
-            20 * 15,
+            20 * 5,
             (int) RECIPE_UV
         );
 
