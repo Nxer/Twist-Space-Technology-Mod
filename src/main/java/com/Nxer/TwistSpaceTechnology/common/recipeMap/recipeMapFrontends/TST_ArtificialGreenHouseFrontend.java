@@ -16,13 +16,12 @@ import codechicken.nei.NEIClientUtils;
 import codechicken.nei.recipe.GuiRecipe;
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
 import gregtech.api.recipe.NEIRecipePropertiesBuilder;
-import gregtech.api.recipe.RecipeMapFrontend;
 import gregtech.common.gui.modularui.UIHelper;
 import gregtech.nei.GTNEIDefaultHandler;
 import gregtech.nei.RecipeDisplayInfo;
 import gregtech.nei.formatter.INEISpecialInfoFormatter;
 
-public final class TST_ArtificialGreenHouseFrontend extends RecipeMapFrontend {
+public final class TST_ArtificialGreenHouseFrontend extends TST_RecipeMapFrontend {
 
     private static final int SLOT_SIZE = 18;
     private static final int INPUT_X = 45;

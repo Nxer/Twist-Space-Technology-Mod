@@ -35,6 +35,7 @@ public class NEI_Config implements IConfigureNEI {
 
         hide(TstBlocks.BlockLargeSolarBoilerRender);
         NEICollapsibleItems.load();
+        EssentiaNEIHandler.register();
         BottledChaosNEIHandler.register();
         BottledChaosStructureNEIHandler.register();
 
