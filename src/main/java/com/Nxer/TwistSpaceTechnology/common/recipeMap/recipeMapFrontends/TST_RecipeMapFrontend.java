@@ -1,15 +1,17 @@
 package com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+
+import cpw.mods.fml.common.ModContainer;
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
 import gregtech.api.recipe.NEIRecipePropertiesBuilder;
 import gregtech.api.recipe.RecipeMapFrontend;
 import gregtech.nei.RecipeDisplayInfo;
 
-/** Keep full recipe-owner names within TST's NEI pages, using GT's captured owner information. */
+/** Use TST's short name in recipe-owner information while retaining GT's single-line layout. */
 public class TST_RecipeMapFrontend extends RecipeMapFrontend {
 
     public TST_RecipeMapFrontend(BasicUIPropertiesBuilder ui, NEIRecipePropertiesBuilder nei) {
@@ -26,12 +28,9 @@ public class TST_RecipeMapFrontend extends RecipeMapFrontend {
         for (int i = 0; i < recipeInfo.recipe.owners.size(); i++) {
             String key = recipeInfo.recipe.owners.size() == 1 ? "GT5U.recipes.recipe_by"
                 : i == 0 ? "GT5U.recipes.recipe_by.original" : "GT5U.recipes.recipe_by.modified";
-            String text = EnumChatFormatting.ITALIC + StatCollector.translateToLocalFormatted(
-                key,
-                recipeInfo.recipe.owners.get(i)
-                    .getName());
-            recipeInfo
-                .drawTextMultipleLines(Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(text, 160));
+            ModContainer owner = recipeInfo.recipe.owners.get(i);
+            String name = TwistSpaceTechnology.MODID.equals(owner.getModId()) ? "TST" : owner.getName();
+            recipeInfo.drawText(EnumChatFormatting.ITALIC + StatCollector.translateToLocalFormatted(key, name));
         }
     }
 }
