@@ -346,6 +346,7 @@ public enum GTCMItemList {
     LargeNeutronOscillator,
     IndistinctTentaclePrototypeMK2,
     BottledChaos,
+    BottledChaosEarlyAccess,
 
     // endregion
 

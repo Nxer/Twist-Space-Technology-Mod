@@ -9,10 +9,9 @@ import com.gtnewhorizons.modularui.api.math.Size;
 
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
 import gregtech.api.recipe.NEIRecipePropertiesBuilder;
-import gregtech.api.recipe.RecipeMapFrontend;
 import gregtech.common.gui.modularui.UIHelper;
 
-public class TST_GeneralFrontend extends RecipeMapFrontend {
+public class TST_GeneralFrontend extends TST_RecipeMapFrontend {
 
     private static final int xDirMaxCount = 4;
     private static final int yOrigin = 8;

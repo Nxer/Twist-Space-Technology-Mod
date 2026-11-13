@@ -12,11 +12,10 @@ import com.gtnewhorizons.modularui.api.math.Pos2d;
 
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
 import gregtech.api.recipe.NEIRecipePropertiesBuilder;
-import gregtech.api.recipe.RecipeMapFrontend;
 import gregtech.api.util.GTUtility;
 import gregtech.nei.GTNEIDefaultHandler;
 
-public class TST_StellarForgeFrontend extends RecipeMapFrontend {
+public class TST_StellarForgeFrontend extends TST_RecipeMapFrontend {
 
     public TST_StellarForgeFrontend(BasicUIPropertiesBuilder uiPropertiesBuilder,
         NEIRecipePropertiesBuilder neiPropertiesBuilder) {

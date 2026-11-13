@@ -19,15 +19,19 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.A
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.DSP_Receiver_SpecialValueFormatter;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_AquaticZoneSimulatorFronted;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_ArtificialGreenHouseFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_AssemblyLineFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_BottledChaosCredentialFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_BottledChaosExpandedFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_BottledChaosStructureFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_DirectedMobClonerFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_IndustrialAlchemyTowerFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_IndustrialMagicMatrixFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_MiracleTopFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_RapidCoolingDownFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_RapidHeatExchangeFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_RecipeMapFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_SkypiercerTowerFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StellarForgeFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StrangeMatterAggregatorFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_SuperWaterPurifierFrontend;
@@ -47,7 +51,6 @@ import gregtech.api.recipe.RecipeCategorySetting;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMapBackend;
 import gregtech.api.recipe.RecipeMapBuilder;
-import gregtech.api.recipe.maps.AssemblyLineFrontend;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.nei.formatter.HeatingCoilSpecialValueFormatter;
@@ -119,6 +122,7 @@ public class GTCMRecipe {
     // #zh_CN 量子逆变
     public static final RecipeMap<RecipeMapBackend> QuantumInversionRecipeMap = RecipeMapBuilder
         .of("tst.recipe.QuantumInversionRecipeMap.name")
+        .frontend(TST_RecipeMapFrontend::new)
         .maxIO(4, 4, 2, 2)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleTop.get(1)))
@@ -141,6 +145,7 @@ public class GTCMRecipe {
     // #zh_CN 戴森球模块发射
     public static final RecipeMap<RecipeMapBackend> DSP_LauncherRecipeMap = RecipeMapBuilder
         .of("tst.recipe.DSP_LauncherRecipeMap.name")
+        .frontend(TST_RecipeMapFrontend::new)
         .maxIO(1, 1, 1, 0)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .build();
@@ -150,6 +155,7 @@ public class GTCMRecipe {
     // #zh_CN 戴森球射线接收
     public static final RecipeMap<RecipeMapBackend> DSP_ReceiverRecipeMap = RecipeMapBuilder
         .of("tst.recipe.DSP_ReceiverRecipeMap.name")
+        .frontend(TST_RecipeMapFrontend::new)
         .maxIO(0, 1, 0, 0)
         .neiSpecialInfoFormatter(DSP_Receiver_SpecialValueFormatter.INSTANCE)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
@@ -161,6 +167,7 @@ public class GTCMRecipe {
     // #zh_CN 魔力灌注
     public static final RecipeMap<RecipeMapBackend> ElvenWorkshopRecipeMap = RecipeMapBuilder
         .of("tst.recipe.ElvenWorkshopRecipeMap.name")
+        .frontend(TST_RecipeMapFrontend::new)
         .maxIO(4, 4, 1, 0)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.ElvenWorkshop.get(1)))
@@ -171,6 +178,7 @@ public class GTCMRecipe {
     // #zh_CN 符文雕刻
     public static final RecipeMap<RecipeMapBackend> RuneEngraverRecipeMap = RecipeMapBuilder
         .of("tst.recipe.RuneEngraverRecipeMap.name")
+        .frontend(TST_RecipeMapFrontend::new)
         .maxIO(6, 1, 1, 0)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.ElvenWorkshop.get(1)))
@@ -181,6 +189,7 @@ public class GTCMRecipe {
     // #zh_CN 人造恒星
     public static final RecipeMap<RecipeMapBackend> ArtificialStarGeneratingRecipeMap = RecipeMapBuilder
         .of("tst.recipe.ArtificialStarGeneratingRecipeMap.name")
+        .frontend(TST_RecipeMapFrontend::new)
         .maxIO(1, 1, 0, 0)
         .neiSpecialInfoFormatter(ArtificialStar_SpecialValueFormatter.INSTANCE)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
@@ -203,6 +212,7 @@ public class GTCMRecipe {
     // #zh_CN 集成矿物处理
     public static final RecipeMap<RecipeMapBackend> OreProcessingVisualRecipeMap = RecipeMapBuilder
         .of("tst.recipe.OreProcessingVisualRecipeMap.name")
+        .frontend(TST_RecipeMapFrontend::new)
         .maxIO(1, 9, 1, 0)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.OreProcessingFactory.get(1)))
@@ -213,6 +223,7 @@ public class GTCMRecipe {
     // #zh_CN 工业炼焦
     public static final RecipeMap<RecipeMapBackend> CokingFactoryRecipeMap = RecipeMapBuilder
         .of("tst.recipe.CokingFactoryRecipeMap.name")
+        .frontend(TST_RecipeMapFrontend::new)
         .maxIO(2, 2, 1, 1)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .build();
@@ -264,7 +275,7 @@ public class GTCMRecipe {
         .neiTransferRect(124, 8, 18, 72)
         .neiTransferRect(142, 26, 18, 18)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.IndistinctTentacle.get(1)))
-        .frontend(AssemblyLineFrontend::new)
+        .frontend(TST_AssemblyLineFrontend::new)
         .build();
 
     // #tr tst.recipe.TombOfTheDragonRecipeMap.name
@@ -272,6 +283,7 @@ public class GTCMRecipe {
     // #zh_CN 巨型装配线
     public static final RecipeMap<TST_RecipeMapBackend> TombOfTheDragonRecipeMap = RecipeMapBuilder
         .of("tst.recipe.TombOfTheDragonRecipeMap.name", TST_RecipeMapBackend::new)
+        .frontend(TST_RecipeMapFrontend::new)
         .maxIO(1, 1, 1, 1)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleDoor.get(1)))
@@ -298,7 +310,7 @@ public class GTCMRecipe {
         .of("tst.recipe.IndustrialMagicMatrixRecipeMap.name")
         .maxIO(25, 1, 0, 0)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.IndustrialMagicMatrix.get(1)))
-        .neiTransferRect(100, 45, 18, 72)
+        .neiTransferRect(73, 10, 28, 30)
         .useSpecialSlot()
         .frontend(TST_IndustrialMagicMatrixFrontend::new)
         .build();
@@ -308,6 +320,7 @@ public class GTCMRecipe {
     // #zh_CN 中子振荡器 - 电力版中子活化器
     public static final RecipeMap<TST_RecipeMapBackend> NeutronActivatorWithEURecipeMap = RecipeMapBuilder
         .of("tst.recipe.NeutronActivatorWithEURecipeMap.name", TST_RecipeMapBackend::new)
+        .frontend(TST_RecipeMapFrontend::new)
         .maxIO(9, 9, 1, 1)
         .dontUseProgressBar()
         .addSpecialTexture(73, 22, 31, 21, GGUITextures.PICTURE_NEUTRON_ACTIVATOR)
@@ -318,6 +331,7 @@ public class GTCMRecipe {
     // #zh_CN 质量发生器: 创世纪
     public static final RecipeMap<TST_RecipeMapBackend> MassFabricatorGenesisRecipeMap = RecipeMapBuilder
         .of("tst.recipe.MassFabricatorGenesisRecipeMap.name", TST_RecipeMapBackend::new)
+        .frontend(TST_RecipeMapFrontend::new)
         .maxIO(1, 0, 0, 1)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MassFabricatorGenesis.get(1)))
@@ -611,6 +625,7 @@ public class GTCMRecipe {
     // #zh_CN 微型时空发生器
     public static final RecipeMap<TST_RecipeMapBackend> MicroSpaceTimeFabricatorioRecipeMap = RecipeMapBuilder
         .of("tst.recipe.MicroSpaceTimeFabricatorioRecipeMap.name", TST_RecipeMapBackend::new)
+        .frontend(TST_RecipeMapFrontend::new)
         .maxIO(6, 2, 3, 1)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MicroSpaceTimeFabricatorio.get(1)))
         .build();
@@ -623,6 +638,7 @@ public class GTCMRecipe {
     // #zh_CN 血狱祭坛
     public static final RecipeMap<TST_RecipeMapBackend> BloodyHellRecipeMap = RecipeMapBuilder
         .of("tst.recipe.BloodyHellRecipeMap.name", TST_RecipeMapBackend::new)
+        .frontend(TST_RecipeMapFrontend::new)
         .maxIO(6, 1, 1, 0)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.BloodyHell.get(1)))
         .neiRecipeComparator((r1, r2) -> {
@@ -646,6 +662,7 @@ public class GTCMRecipe {
     @Deprecated
     public static final RecipeMap<TST_RecipeMapBackend> BloodyHellAlchemicRecipeMap = RecipeMapBuilder
         .of("tst.recipe.BloodyHellAlchemicRecipeMap.name", TST_RecipeMapBackend::new)
+        .frontend(TST_RecipeMapFrontend::new)
         .maxIO(6, 1, 1, 0)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.BloodyHell.get(1)))
         .build();
@@ -656,6 +673,7 @@ public class GTCMRecipe {
     @Deprecated
     public static final RecipeMap<TST_RecipeMapBackend> BloodyHellBindingRecipeMap = RecipeMapBuilder
         .of("tst.recipe.BloodyHellBindingRecipeMap.name", TST_RecipeMapBackend::new)
+        .frontend(TST_RecipeMapFrontend::new)
         .maxIO(2, 1, 1, 0)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.BloodyHell.get(1)))
         .slotOverlays(
@@ -667,7 +685,8 @@ public class GTCMRecipe {
     // #zh_CN 巨型碎石机
     public static final RecipeMap<TST_RecipeMapBackend> MegaStoneBreakerRecipeMap = RecipeMapBuilder
         .of("tst.recipe.MegaStoneBreakerRecipeMap.name", TST_RecipeMapBackend::new)
-        .maxIO(3, 3, 0, 0)
+        .frontend(TST_RecipeMapFrontend::new)
+        .maxIO(3, 1, 0, 0)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaStoneBreaker.get(1)))
         .build();
 
@@ -692,6 +711,8 @@ public class GTCMRecipe {
         .maxIO(2, 1, 0, 0)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.IndustrialAlchemyTower.get(1)))
         .useSpecialSlot()
+        .frontend(TST_IndustrialAlchemyTowerFrontend::new)
+        .neiTransferRect(68, 31, 24, 24)
         .build();
 
     // #tr tst.recipe.AdvCircuitAssemblyLineRecipeMap.name
@@ -699,12 +720,14 @@ public class GTCMRecipe {
     // #zh_CN 进阶电路装配线(运行时实际配方池)
     public static final RecipeMap<RecipeMapBackend> AdvCircuitAssemblyLineRecipeMap = Debug_DisplayAdvCircuitAssemblyLineCurrentRecipe
         ? RecipeMapBuilder.of("tst.recipe.AdvCircuitAssemblyLineRecipeMap.name")
+            .frontend(TST_RecipeMapFrontend::new)
             .maxIO(6, 1, 1, 0)
             .minInputs(1, 1)
             .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.AdvCircuitAssemblyLine.get(1)))
             .progressBar(GTUITextures.PROGRESSBAR_CIRCUIT_ASSEMBLER)
             .build()
         : RecipeMapBuilder.of("tst.recipe.AdvCircuitAssemblyLineRecipeMap.name")
+            .frontend(TST_RecipeMapFrontend::new)
             .maxIO(6, 1, 1, 0)
             .minInputs(1, 1)
             .disableRegisterNEI()
@@ -740,6 +763,7 @@ public class GTCMRecipe {
     // #zh_CN 纳米核心
     public static final RecipeMap<TST_RecipeMapBackend> DeployedNanoCoreRecipeMap = RecipeMapBuilder
         .of("tst.recipe.DeployedNanoCoreRecipeMap.name", TST_RecipeMapBackend::new)
+        .frontend(TST_RecipeMapFrontend::new)
         .maxIO(6, 2, 3, 0)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.DeployedNanoCore.get(1)))
         .progressBar(GTUITextures.PROGRESSBAR_ASSEMBLE)
@@ -750,6 +774,7 @@ public class GTCMRecipe {
     // #zh_CN 地狱接口
     public static final RecipeMap<TST_RecipeMapBackend> NetherInterfaceVisualRecipeMap = RecipeMapBuilder
         .of("tst.recipe.NetherInterfaceVisualRecipeMap.name", TST_RecipeMapBackend::new)
+        .frontend(TST_RecipeMapFrontend::new)
         .maxIO(0, 6, 1, 2)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.NetherInterface.get(1)))
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
@@ -773,6 +798,8 @@ public class GTCMRecipe {
         .of("tst.recipe.SkypiercerTowerRecipeMap.name", TST_RecipeMapBackend::new)
         .maxIO(2, 1, 0, 0)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.SkypiercerTower.get(1)))
+        .frontend(TST_SkypiercerTowerFrontend::new)
+        .neiTransferRect(101, 30, 16, 24)
         .build();
 
     // #tr tst.recipe.MegaSolarPanelFactoryRecipeMap.name

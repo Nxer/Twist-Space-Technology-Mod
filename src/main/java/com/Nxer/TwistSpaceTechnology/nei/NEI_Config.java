@@ -16,6 +16,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosR
 import codechicken.nei.NEIClientConfig;
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
+import cpw.mods.fml.common.Loader;
 
 public class NEI_Config implements IConfigureNEI {
 
@@ -35,8 +36,10 @@ public class NEI_Config implements IConfigureNEI {
 
         hide(TstBlocks.BlockLargeSolarBoilerRender);
         NEICollapsibleItems.load();
+        EssentiaNEIHandler.register();
         BottledChaosNEIHandler.register();
         BottledChaosStructureNEIHandler.register();
+        if (Loader.isModLoaded("blockrenderer6343")) BottledChaosPrototypePreview.register();
 
         // NEI loads its ordering file before loading plugins; these entries only change the in-memory order.
         List<String> pages = new ArrayList<>();
