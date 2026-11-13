@@ -20,6 +20,10 @@ Bottled Chaos connects processing steps internally, turning raw inputs into a ta
 
 Drag to rotate and scroll to zoom. Use the layer slider to look inside and the structure channels to change the preview. See [structure and capacity](structure.md) for construction rules.
 
+## Technical validation
+
+To try production-chain integration early, permanently convert the controller into a [Recipe Chain Validation Prototype](prototype.md).
+
 ## Your first route
 
 1. Choose a target route in NEI. Check its credential and the machines it needs.

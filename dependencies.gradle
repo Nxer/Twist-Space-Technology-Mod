@@ -9,6 +9,8 @@ dependencies {
     implementation(gtnh("GT5-Unofficial"))
     implementation(gtnh("GTNHLib"))
     compileOnly(gtnh("Angelica"))
+    // Tooltip title integration when ChromaticTooltips is present.
+    compileOnly(gtnh("ChromaticTooltips").replace("com.github.GTNewHorizons:", "com.github.slprime:")) { transitive = false }
     implementation(gtnh("NewHorizonsCoreMod"))
     implementation(gtnh("Hodgepodge"))
     implementation(gtnh("supersolarpanels"))
@@ -41,6 +43,8 @@ dependencies {
     // Development tools for multiblock construction and structure debugging.
     runtimeOnlyNonPublishable(gtnh("BetterBuildersWands"))
     runtimeOnlyNonPublishable(gtnh("BlockRenderer6343")) { transitive = false }
+    // NBT-aware structure previews for controllers with more than one layout.
+    compileOnly(gtnh("BlockRenderer6343")) { transitive = false }
     // GT bee recipes need Thaumic Bases resources and Extra Bees products in the development client.
     runtimeOnlyNonPublishable(gtnh("ThaumicBases"))
     runtimeOnlyNonPublishable(gtnh("Binnie"))
