@@ -1,7 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.nei;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.inventory.Container;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.opengl.GL11;
@@ -11,7 +9,6 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_EssentiaFrontend;
 
 import codechicken.nei.api.API;
-import codechicken.nei.api.IOverlayHandler;
 import codechicken.nei.event.NEIConfigsLoadedEvent;
 import codechicken.nei.recipe.GuiCraftingRecipe;
 import codechicken.nei.recipe.GuiUsageRecipe;
@@ -38,7 +35,6 @@ public final class EssentiaNEIHandler extends GTNEIDefaultHandler {
         register(GTCMItemList.IndustrialMagicMatrix, GTCMRecipe.IndustrialMagicMatrixRecipeMap);
         register(GTCMItemList.IndustrialAlchemyTower, GTCMRecipe.IndustrialAlchemyTowerRecipeMap);
         register(GTCMItemList.SkypiercerTower, GTCMRecipe.SkypiercerTowerRecipeMap);
-        register(GTCMItemList.PrimordialDisjunctus, GTCMRecipe.PrimordialDisjunctusVisualRecipeMap);
     }
 
     private static void register(GTCMItemList controller, RecipeMap<?> map) {
@@ -90,15 +86,5 @@ public final class EssentiaNEIHandler extends GTNEIDefaultHandler {
     @Override
     protected int getDescriptionYOffset() {
         return essentiaFrontend.getContentHeight(templateContext.recipeSupplier.get().mRecipe);
-    }
-
-    @Override
-    public boolean hasOverlay(GuiContainer gui, Container container, int recipe) {
-        return essentiaFrontend.allowsPatternTransfer() && super.hasOverlay(gui, container, recipe);
-    }
-
-    @Override
-    public IOverlayHandler getOverlayHandler(GuiContainer gui, int recipe) {
-        return essentiaFrontend.allowsPatternTransfer() ? super.getOverlayHandler(gui, recipe) : null;
     }
 }

@@ -137,9 +137,5 @@ public abstract class TST_EssentiaFrontend extends TST_RecipeMapFrontend {
         return getAspectsY(recipe) + rows * 20 + 4;
     }
 
-    public boolean allowsPatternTransfer() {
-        return true;
-    }
-
     public abstract void drawNEIBackground(GTRecipe recipe);
 }
