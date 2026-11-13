@@ -24,7 +24,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosMachineModule;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_BottledChaos;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineConfiguration;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineDescriptions;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.result.BottledChaosResultData;
@@ -73,7 +73,7 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.common.gui.modularui.adapter.CheckRecipeResultAdapter;
 import gregtech.common.modularui2.factory.GTBaseGuiBuilder;
 
-public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
+public class TST_Gui_BottledChaos<T extends BottledChaosMachineBase<T>> extends TST_Gui<T> {
 
     private static final String CREDENTIAL_SLOT_GROUP = "bottledChaosCredentialCrafting";
     private static final int PANEL_WIDTH = 448;
@@ -218,7 +218,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
     // #zh_CN 按运行加工组的凭证容量分配功率.
     // spotless:on
 
-    public TST_Gui_BottledChaos(MM_BottledChaos multiblock) {
+    public TST_Gui_BottledChaos(T multiblock) {
         super(multiblock);
     }
 
@@ -328,7 +328,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                 .setEnabledIf(widget -> !CheckRecipeResultRegistry.NONE.equals(cacheExport.getValue())));
         GenericSyncValue<NBTTagCompound, ?> groups = syncManager
             .findSyncHandler("bottledChaosProcessingGroups", GenericSyncValue.class);
-        for (int i = 0; i < MM_BottledChaos.THREAD_COUNT; i++) {
+        for (int i = 0; i < multiblock.getProcessingGroupLimit(); i++) {
             int index = i;
             terminal.child(new Flow(GuiAxis.Y) {
 
@@ -345,29 +345,31 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                 .childPadding(2)
                 .marginTop(6)
                 .marginBottom(4)
-                .setEnabledIf(widget -> index < MM_BottledChaos.getProcessingGroupCount(groups.getValue()))
+                .setEnabledIf(widget -> index < BottledChaosMachineBase.getProcessingGroupCount(groups.getValue()))
                 .child(groupHeader(groups::getValue, index))
                 .child(
                     IKey.dynamic(
-                        () -> MM_BottledChaos
-                            .getBlockedRouteText(MM_BottledChaos.getProcessingGroupData(groups.getValue(), index)))
+                        () -> BottledChaosMachineBase.getBlockedRouteText(
+                            BottledChaosMachineBase.getProcessingGroupData(groups.getValue(), index)))
                         .asWidget()
                         .fullWidth()
                         .textAlign(Alignment.TopLeft)
                         .shadow(false)
                         .setEnabledIf(
-                            widget -> MM_BottledChaos.getProcessingGroupData(groups.getValue(), index)
+                            widget -> BottledChaosMachineBase.getProcessingGroupData(groups.getValue(), index)
                                 .hasKey("blockedRoute", 10)))
                 .child(
                     new ParentWidget<>().fullWidth()
                         .height(11)
                         .background(skin.progress(() -> {
-                            NBTTagCompound job = MM_BottledChaos.getProcessingGroupData(groups.getValue(), index);
+                            NBTTagCompound job = BottledChaosMachineBase
+                                .getProcessingGroupData(groups.getValue(), index);
                             return job.getInteger("progress") / (double) Math.max(1, job.getInteger("duration"));
                         }))
                         .disableHoverBackground()
                         .child(IKey.dynamic(() -> {
-                            NBTTagCompound job = MM_BottledChaos.getProcessingGroupData(groups.getValue(), index);
+                            NBTTagCompound job = BottledChaosMachineBase
+                                .getProcessingGroupData(groups.getValue(), index);
                             return job.getInteger("duration") < 20
                                 ? StatCollector.translateToLocalFormatted(
                                     "GT5U.waila.machine.progress_tick",
@@ -385,7 +387,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                             .color(MODULE_TEXT)
                             .shadow(false))
                         .setEnabledIf(
-                            widget -> MM_BottledChaos.getProcessingGroupData(groups.getValue(), index)
+                            widget -> BottledChaosMachineBase.getProcessingGroupData(groups.getValue(), index)
                                 .getInteger("duration") > 0))
                 .child(
                     new ParentWidget<>().fullWidth()
@@ -393,7 +395,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                         .background(new DynamicDrawable(() -> groupOutput(groups.getValue(), index)))
                         .disableHoverBackground()
                         .setEnabledIf(
-                            widget -> MM_BottledChaos.getProcessingGroupData(groups.getValue(), index)
+                            widget -> BottledChaosMachineBase.getProcessingGroupData(groups.getValue(), index)
                                 .getCompoundTag("outputs")
                                 .getTagList("entries", 10)
                                 .tagCount() > 0)));
@@ -402,23 +404,23 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
     }
 
     private static ParentWidget<?> groupHeader(Supplier<NBTTagCompound> summary, int index) {
-        Supplier<NBTTagCompound> job = () -> MM_BottledChaos.getProcessingGroupData(summary.get(), index);
+        Supplier<NBTTagCompound> job = () -> BottledChaosMachineBase.getProcessingGroupData(summary.get(), index);
         List<Supplier<String>> columns = Arrays.asList(
             () -> EnumChatFormatting.WHITE + "#"
                 + job.get()
                     .getInteger("slot"),
-            () -> EnumChatFormatting.WHITE + MM_BottledChaos.localizeKeyList(
+            () -> EnumChatFormatting.WHITE + BottledChaosMachineBase.localizeKeyList(
                 job.get()
                     .getString("family")),
             () -> EnumChatFormatting.AQUA
                 + StatCollector.translateToLocalFormatted("tst.machine.BottledChaos.info.input_share", ""),
-            () -> EnumChatFormatting.AQUA + MM_BottledChaos.getProcessingGroupShareValue(job.get()),
-            () -> MM_BottledChaos.getProcessingGroupPowerText(job.get()),
-            () -> MM_BottledChaos.getProcessingGroupVoltageText(job.get()),
-            () -> MM_BottledChaos.getStatusColor(
+            () -> EnumChatFormatting.AQUA + BottledChaosMachineBase.getProcessingGroupShareValue(job.get()),
+            () -> BottledChaosMachineBase.getProcessingGroupPowerText(job.get()),
+            () -> BottledChaosMachineBase.getProcessingGroupVoltageText(job.get()),
+            () -> BottledChaosMachineBase.getStatusColor(
                 job.get()
                     .getString("status"))
-                + MM_BottledChaos.getWailaStatusText(job.get()));
+                + BottledChaosMachineBase.getWailaStatusText(job.get()));
         // Left-align IDs at the # anchor; keep names in a separate fixed column.
         // Reserve the same columns in every row, including paused groups without current power use.
         // The label ends at a fixed colon anchor; percentages grow rightward in their own column.
@@ -449,11 +451,11 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
 
     @SideOnly(Side.CLIENT)
     private static RichText groupOutput(NBTTagCompound summary, int index) {
-        NBTTagCompound job = MM_BottledChaos.getProcessingGroupData(summary, index);
+        NBTTagCompound job = BottledChaosMachineBase.getProcessingGroupData(summary, index);
         NBTTagCompound outputs = job.getCompoundTag("outputs");
         NBTTagList entries = outputs.getTagList("entries", 10);
         var font = TextRenderer.getFontRenderer();
-        String title = EnumChatFormatting.WHITE + MM_BottledChaos.getProcessingGroupOutputTitle(job) + " ";
+        String title = EnumChatFormatting.WHITE + BottledChaosMachineBase.getProcessingGroupOutputTitle(job) + " ";
         RichText line = new RichText().alignment(Alignment.CenterLeft)
             .textColor(0xFFFFFFFF)
             .textShadow(false)
@@ -480,7 +482,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
                     icon.asIcon()
                         .size(12))
                 .add(" ");
-            String text = MM_BottledChaos.formatGroupOutput(item, fluid, entry);
+            String text = BottledChaosMachineBase.formatGroupOutput(item, fluid, entry);
             boolean more = i + 1 < entries.tagCount() || outputs.getInteger("total") > entries.tagCount();
             // Reserve an ellipsis for subsequent outputs, measuring icons as well as text.
             if (font.getStringWidth(text) + (more ? font.getStringWidth("...") : 0) > remaining) {
@@ -503,7 +505,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
         NBTTagList entries = summary.getTagList("entries", 10);
         for (int i = 0; i < entries.tagCount(); i++) {
             NBTTagCompound entry = entries.getCompoundTagAt(i);
-            String slots = MM_BottledChaos.formatProcessingGroups(entry.getInteger("slots"));
+            String slots = BottledChaosMachineBase.formatProcessingGroups(entry.getInteger("slots"));
             lines.add(
                 (summary.getBoolean("errors") ? EnumChatFormatting.RED
                     : "gt.interact.desc.mb.running".equals(entry.getString("key")) ? EnumChatFormatting.GOLD
@@ -921,12 +923,12 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
     private static final class ModuleDetails extends ListWidget<IWidget, ModuleDetails> {
 
         private static final float TEXT_SCALE = 1f;
-        private final ModuleBrowser browser;
+        private final TST_Gui_BottledChaos<?>.ModuleBrowser browser;
         private int slot = -2;
         private final int width;
         private String text = "";
 
-        private ModuleDetails(ModuleBrowser browser, int width) {
+        private ModuleDetails(TST_Gui_BottledChaos<?>.ModuleBrowser browser, int width) {
             this.browser = browser;
             this.width = width;
             crossAxisAlignment(Alignment.CrossAxis.START);
@@ -1274,7 +1276,7 @@ public class TST_Gui_BottledChaos extends TST_Gui<MM_BottledChaos> {
             return mask == 0 ? StatCollector.translateToLocal("tst.machine.BottledChaos.gui.pool_unused")
                 : StatCollector.translateToLocalFormatted(
                     "tst.machine.BottledChaos.gui.pool_users",
-                    MM_BottledChaos.formatProcessingGroups(mask));
+                    BottledChaosMachineBase.formatProcessingGroups(mask));
         }
 
         private String rowName(int row) {

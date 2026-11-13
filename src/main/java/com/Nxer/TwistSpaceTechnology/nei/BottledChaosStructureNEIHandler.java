@@ -18,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosMachineModule;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosComplexStructures;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructureDisplay;
@@ -46,7 +45,6 @@ import gregtech.api.enums.GTValues;
 import gregtech.api.recipe.RecipeCategory;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTRecipe;
-import gregtech.api.util.GTUtility;
 import gregtech.nei.GTNEIDefaultHandler;
 
 /** Material blocks remain visible but cannot reverse-query packaging examples. */
@@ -499,8 +497,7 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
 
     @Override
     public void loadUsageRecipes(ItemStack input) {
-        if (GTCMItemList.BottledChaos.hasBeenSet()
-            && GTUtility.areStacksEqual(input, GTCMItemList.BottledChaos.get(1), true)) arecipes.addAll(getCache());
+        if (BottledChaosNEIHandler.isController(input)) arecipes.addAll(getCache());
         else if (ItemBottledChaosMachineModule.isModule(input)) loadModule(input, true);
         else for (CachedDefaultRecipe recipe : getCache()) {
             if (recipe instanceof StructureRecipe structure && structure.display.hasController(input)) {
