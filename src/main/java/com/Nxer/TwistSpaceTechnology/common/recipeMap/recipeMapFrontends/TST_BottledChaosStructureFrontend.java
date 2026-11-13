@@ -17,12 +17,11 @@ import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
 import gregtech.api.recipe.NEIRecipePropertiesBuilder;
-import gregtech.api.recipe.RecipeMapFrontend;
 import gregtech.nei.GTNEIDefaultHandler;
 import gregtech.nei.RecipeDisplayInfo;
 
 /** Results stay above the selectors and a fixed-size material grid. */
-public final class TST_BottledChaosStructureFrontend extends RecipeMapFrontend {
+public final class TST_BottledChaosStructureFrontend extends TST_RecipeMapFrontend {
 
     public static final int MATERIAL_COLUMNS = 8;
     public static final int MATERIAL_ROWS = 12;
