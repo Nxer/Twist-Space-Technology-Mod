@@ -60,7 +60,7 @@ public final class BottledChaosPrismaticRecipes {
         // spotless:off
         // Shard stage: precipitation -> recovered solvent -> crystal -> gas -> acid.
         // Starting at precipitation exposes the solvent return before the missing fresh solvent is supplied.
-        catalog.registerChain("prismatic_acid", 64, TierEU.RECIPE_UHV, PrismarineShard,
+        catalog.registerChain("prismatic_acid", 32, TierEU.RECIPE_UHV, PrismarineShard,
             new Object[] { PrismaticAcid }, new Object[] {},
             catalog.markRecipe(ChemicalPlant, StrontiumHydroxideDust, PrismarinePrecipitate, -1),
             catalog.markRecipe(ChemicalBath, PrismarineContaminatedNitrobenzeneSolution, PrismarineRichNitrobenzeneSolution, 1),
