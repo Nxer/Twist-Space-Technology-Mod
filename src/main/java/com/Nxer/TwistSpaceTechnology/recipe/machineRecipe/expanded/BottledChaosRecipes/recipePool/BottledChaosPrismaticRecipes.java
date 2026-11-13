@@ -6,6 +6,7 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.DiamondGem;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.HotCrystallineAlloyIngot;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.HydrogenGas;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.HydrogenPeroxide;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.Nitrobenzene;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.OganessonGas;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.OxygenGas;
@@ -62,7 +63,7 @@ public final class BottledChaosPrismaticRecipes {
         // Starting at precipitation exposes the solvent return before the missing fresh solvent is supplied.
         catalog.registerChain("prismatic_acid", 32, TierEU.RECIPE_UHV, PrismarineShard,
             new Object[] { PrismaticAcid }, new Object[] {},
-            catalog.markRecipe(ChemicalPlant, StrontiumHydroxideDust, PrismarinePrecipitate, -1),
+            catalog.markRecipe(ChemicalPlant, new Object[] { StrontiumHydroxideDust, PrismarineRichNitrobenzeneSolution }, PrismarinePrecipitate, -1),
             catalog.markRecipe(ChemicalBath, PrismarineContaminatedNitrobenzeneSolution, PrismarineRichNitrobenzeneSolution, 1),
             catalog.markRecipe(LaserEngraver, PrismarinePrecipitate, PrismaticCrystal, -1),
             catalog.markRecipe(VacuumFurnace, PrismaticCrystal, PrismaticGas, -1),
@@ -84,9 +85,15 @@ public final class BottledChaosPrismaticRecipes {
         // Input branches: supplement extraction, then reuse the contaminated peroxide in looped leaching.
         catalog.includeSynthesisStep(ChemicalBath, PrismarineRichNitrobenzeneSolution,
             new Object[] { PrismarineSolution, Nitrobenzene }, 1);
-        // Preserve the source loop's net contaminated peroxide output after reuse.
         catalog.includeSynthesisStep(DissolutionTank, PrismarineSolution,
             new Object[] { PrismarineShard, PrismarineContaminatedHydrogenPeroxide }, -1);
+        // Reuse the leaching return, then purify the remainder before synthesizing fresh peroxide.
+        catalog.registerReagentRecycling(ChemicalPlant,
+            PrismarineContaminatedHydrogenPeroxide, HydrogenPeroxide, -1);
+        // Finish the recovered precipitate through the same native crystal, gas and acid steps.
+        catalog.includeDecompositionStep(LaserEngraver, PrismarinePrecipitate, PrismaticCrystal, -1);
+        catalog.includeDecompositionStep(VacuumFurnace, PrismaticCrystal, PrismaticGas, -1);
+        catalog.includeDecompositionStep(VacuumFreezer, PrismaticGas, PrismaticAcid, -1);
 
         // Alloy preparation: autoclave crystals -> powder -> alloy -> protected blast -> cooling -> melt.
         // Both protective gases share the acid tag, including its crystalline-alloy preparation.
