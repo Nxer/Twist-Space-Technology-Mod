@@ -401,7 +401,7 @@ public final class BottledChaosMachineDescriptions {
             // #zh_CN 培养配方所需玻璃等级最高: %s
             restrictions = append(restrictions, text("recipe_glass_limit", tierName(u.glass)));
         }
-        if (base != null && base.casingTier() >= 0)
+        if (base != null && base.casingTier() >= 0 && base.casingTier() < Integer.MAX_VALUE)
             restrictions = append(restrictions, text("casing_limit", base.casingTier()));
         if (base != null && pool == RecipeMaps.compressorRecipes
             && base.compressionTier() >= 0

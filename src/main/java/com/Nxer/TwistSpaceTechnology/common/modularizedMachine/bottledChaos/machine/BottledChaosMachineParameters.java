@@ -371,8 +371,13 @@ public final class BottledChaosMachineParameters {
                 value.timeDivisor = 4;
             }
             case CHEMICAL_DISTORTER -> {
-                if (pool != RecipeMaps.multiblockChemicalReactorRecipes) return Evaluation.INVALID;
-                value.set(1024, 1, 0.1);
+                if (c < 0) return Evaluation.INVALID;
+                if (pool == RecipeMaps.chemicalPlantRecipes) {
+                    if (c < HeatingCoilLevel.UMV.getTier())
+                        return reject(pool, "heat", value.heat, HeatingCoilLevel.UMV.getHeat());
+                    value.casingTier = Integer.MAX_VALUE;
+                } else if (pool != RecipeMaps.multiblockChemicalReactorRecipes) return Evaluation.INVALID;
+                value.set(ValueEnum.Parallel_LCRMode_IntensifyChemicalDistorter, 1, 1d / Math.max(1, c + 1));
                 value.timeDivisor = 4;
             }
             case BENDING -> value.set(6L * t, 1, 1d / 6);
