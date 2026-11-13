@@ -47,6 +47,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MicroSpaceTim
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipe.MiracleTopRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.NeutronActivatorWithEURecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.PreciseHighEnergyPhotonicQuantumMasterRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.PrimordialDisjunctusRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.RapidHeatExchangeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StarKernelForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarForgeRecipePool;
@@ -156,6 +157,9 @@ public class RecipeLoader {
         SimpleFurnaceFuelPool.loadRecipes();
         TCResearches.register();
         CrystalEssentiaRecipePool.loadRecipes();
+        if (Config.Enable_PrimordialDisjunctus) {
+            PrimordialDisjunctusRecipePool.loadRecipes();
+        }
         MegaSolarPanelFactoryRecipePool.loadRecipes();
 
         StaticMiscs.init();

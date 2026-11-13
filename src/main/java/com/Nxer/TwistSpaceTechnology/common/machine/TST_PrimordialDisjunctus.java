@@ -33,6 +33,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.Style;
@@ -55,6 +56,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescri
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatchMuffler;
 import gregtech.api.objects.XSTR;
+import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
@@ -90,6 +92,11 @@ public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_Primordi
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
 
         return new TST_PrimordialDisjunctus(this.mName);
+    }
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return GTCMRecipe.PrimordialDisjunctusVisualRecipeMap;
     }
     // endregion
 

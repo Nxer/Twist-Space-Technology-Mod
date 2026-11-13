@@ -17,6 +17,7 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.Bott
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructureDisplay;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.ArtificialStar_SpecialValueFormatter;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.DSP_Receiver_SpecialValueFormatter;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.PrimordialDisjunctusCycleKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_AquaticZoneSimulatorFronted;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_ArtificialGreenHouseFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_AssemblyLineFrontend;
@@ -25,11 +26,14 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_Bot
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_BottledChaosStructureFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_DirectedMobClonerFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_IndustrialAlchemyTowerFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_IndustrialMagicMatrixFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_MiracleTopFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_PrimordialDisjunctusFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_RapidCoolingDownFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_RapidHeatExchangeFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_RecipeMapFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_SkypiercerTowerFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StellarForgeFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StrangeMatterAggregatorFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_SuperWaterPurifierFrontend;
@@ -308,7 +312,7 @@ public class GTCMRecipe {
         .of("tst.recipe.IndustrialMagicMatrixRecipeMap.name")
         .maxIO(25, 1, 0, 0)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.IndustrialMagicMatrix.get(1)))
-        .neiTransferRect(100, 45, 18, 72)
+        .neiTransferRect(73, 10, 28, 30)
         .useSpecialSlot()
         .frontend(TST_IndustrialMagicMatrixFrontend::new)
         .build();
@@ -709,6 +713,8 @@ public class GTCMRecipe {
         .maxIO(2, 1, 0, 0)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.IndustrialAlchemyTower.get(1)))
         .useSpecialSlot()
+        .frontend(TST_IndustrialAlchemyTowerFrontend::new)
+        .neiTransferRect(68, 31, 24, 24)
         .build();
 
     // #tr tst.recipe.AdvCircuitAssemblyLineRecipeMap.name
@@ -794,6 +800,22 @@ public class GTCMRecipe {
         .of("tst.recipe.SkypiercerTowerRecipeMap.name", TST_RecipeMapBackend::new)
         .maxIO(2, 1, 0, 0)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.SkypiercerTower.get(1)))
+        .frontend(TST_SkypiercerTowerFrontend::new)
+        .neiTransferRect(101, 30, 16, 24)
+        .build();
+
+    // #tr tst.recipe.PrimordialDisjunctusVisualRecipeMap.name
+    // # Primordial Disjunctus
+    // #zh_CN 初源解离机
+    public static final RecipeMap<RecipeMapBackend> PrimordialDisjunctusVisualRecipeMap = RecipeMapBuilder
+        .of("tst.recipe.PrimordialDisjunctusVisualRecipeMap.name")
+        .maxIO(1, 6, 0, 0)
+        .frontend(TST_PrimordialDisjunctusFrontend::new)
+        .neiRecipeComparator(
+            Comparator.comparingInt(
+                recipe -> recipe.getMetadata(PrimordialDisjunctusCycleKey.INSTANCE)
+                    .displayOrder()))
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.PrimordialDisjunctus.get(1)))
         .build();
 
     // #tr tst.recipe.MegaSolarPanelFactoryRecipeMap.name
