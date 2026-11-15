@@ -59,6 +59,7 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
 
     private List<CachedDefaultRecipe> sourceCache;
     private List<CachedDefaultRecipe> structureCache;
+    private boolean controllerQuery;
 
     public BottledChaosStructureNEIHandler() {
         this(GTCMRecipe.BottledChaosStructureRecipes.getDefaultRecipeCategory());
@@ -497,13 +498,18 @@ public final class BottledChaosStructureNEIHandler extends GTNEIDefaultHandler {
 
     @Override
     public void loadUsageRecipes(ItemStack input) {
-        if (BottledChaosNEIHandler.isController(input)) arecipes.addAll(getCache());
+        controllerQuery = BottledChaosNEIHandler.isController(input);
+        if (controllerQuery) arecipes.addAll(getCache());
         else if (ItemBottledChaosMachineModule.isModule(input)) loadModule(input, true);
         else for (CachedDefaultRecipe recipe : getCache()) {
             if (recipe instanceof StructureRecipe structure && structure.display.hasController(input)) {
                 arecipes.add(recipe);
             }
         }
+    }
+
+    boolean isControllerQuery() {
+        return controllerQuery;
     }
 
     private void loadModule(ItemStack module, boolean usage) {
