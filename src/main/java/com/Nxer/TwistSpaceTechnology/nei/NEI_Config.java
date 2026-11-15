@@ -42,8 +42,8 @@ public class NEI_Config implements IConfigureNEI {
         if (Loader.isModLoaded("blockrenderer6343")) BottledChaosPrototypePreview.register();
 
         // NEI loads its ordering file before loading plugins; these entries only change the in-memory order.
+        // Only order TST pages; external handlers retain their configured priorities.
         List<String> pages = new ArrayList<>();
-        pages.add("blockrenderer6343.integration.gregtech.GTNEIMultiblockHandler");
         pages.add(GTCMRecipe.BottledChaosCredentialRecipes.unlocalizedName);
         pages.add(GTCMRecipe.BottledChaosStructureRecipes.unlocalizedName);
         for (int tag : CredentialModel.displayOrder()) {
@@ -54,7 +54,7 @@ public class NEI_Config implements IConfigureNEI {
         }
         pages.add(GTCMRecipe.BottledChaosRecipes.unlocalizedName);
         for (int index = 0; index < pages.size(); index++) {
-            NEIClientConfig.handlerOrdering.put(pages.get(index), -1000 + index);
+            NEIClientConfig.handlerOrdering.put(pages.get(index), -999 + index);
         }
     }
 
