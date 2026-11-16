@@ -1,11 +1,14 @@
 package com.Nxer.TwistSpaceTechnology.nei;
 
+import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import net.minecraft.item.ItemStack;
 
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_BottledChaos;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosPrototypeStructure;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
@@ -16,8 +19,12 @@ import blockrenderer6343.client.utils.ConstructableData;
 import blockrenderer6343.integration.gregtech.GTConstructableScan;
 import blockrenderer6343.integration.gregtech.GTGuiMultiblockHandler;
 import blockrenderer6343.integration.gregtech.GTNEIMultiblockHandler;
+import codechicken.nei.NEIClientConfig;
 import codechicken.nei.recipe.GuiCraftingRecipe;
 import codechicken.nei.recipe.GuiUsageRecipe;
+import codechicken.nei.recipe.ICraftingHandler;
+import codechicken.nei.recipe.IUsageHandler;
+import codechicken.nei.recipe.RecipeCatalysts;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -27,14 +34,15 @@ import gregtech.api.util.GTUtility;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 import it.unimi.dsi.fastutil.objects.ObjectSets;
 
-/** Preserve the queried controller's NBT without changing the other GT recipe handlers. */
+/** Customize only Bottled Chaos controllers; other queries keep BlockRenderer's native handler and GUI. */
 public final class BottledChaosPrototypePreview extends GTNEIMultiblockHandler {
 
-    private static final GTGuiMultiblockHandler GUI_HANDLER = new PrototypeGuiHandler();
     private static MM_BottledChaos preview;
+    private static WeakReference<BottledChaosPrototypePreview> materialOwner = new WeakReference<>(null);
+    private List<ItemStack> previewIngredients = Collections.emptyList();
 
     public BottledChaosPrototypePreview() {
-        guiHandler = GUI_HANDLER;
+        guiHandler = new PrototypeGuiHandler();
         guiHandler.setOnIngredientChanged(this::resetPositionedIngredients);
         guiHandler.setOnCandidateChanged(this::setResults);
     }
@@ -53,6 +61,7 @@ public final class BottledChaosPrototypePreview extends GTNEIMultiblockHandler {
 
     @Override
     public String getHandlerId() {
+        // Reuse native layout/order fallback, but keep the subclass overlay ID for its own material cache.
         return GTNEIMultiblockHandler.class.getName();
     }
 
@@ -60,6 +69,24 @@ public final class BottledChaosPrototypePreview extends GTNEIMultiblockHandler {
     protected ObjectSet<IConstructable> tryLoadingMultiblocks(ItemStack candidate) {
         if (!MM_BottledChaos.isPrototype(candidate)) return super.tryLoadingMultiblocks(candidate);
         return ObjectSets.singleton(getPrototypePreview(candidate));
+    }
+
+    @Override
+    public void resetPositionedIngredients(List<ItemStack> ingredients) {
+        previewIngredients = ingredients.stream()
+            .map(ItemStack::copy)
+            .collect(Collectors.toList());
+        super.resetPositionedIngredients(ingredients);
+    }
+
+    @Override
+    public void drawBackground(int recipe) {
+        super.drawBackground(recipe);
+        // NEI stores materials by overlay ID. Restore this query's list when returning through history.
+        if (materialOwner.get() != this) {
+            RecipeCatalysts.putRecipeCatalysts(getOverlayIdentifier(), previewIngredients);
+            materialOwner = new WeakReference<>(this);
+        }
     }
 
     private static synchronized MM_BottledChaos getPrototypePreview(ItemStack candidate) {
@@ -134,6 +161,56 @@ public final class BottledChaosPrototypePreview extends GTNEIMultiblockHandler {
         }
     }
 
+    /** Keep the native registration slot, but intercept only an explicit Bottled Chaos controller query. */
+    private static final class PrototypeQueryHandler extends GTNEIMultiblockHandler {
+
+        private final GTNEIMultiblockHandler nativeHandler;
+
+        private PrototypeQueryHandler(GTNEIMultiblockHandler nativeHandler) {
+            this.nativeHandler = nativeHandler;
+        }
+
+        private GTNEIMultiblockHandler handlerFor(String id, Object[] arguments) {
+            if ("item".equals(id) && arguments.length > 0
+                && arguments[0] instanceof ItemStack stack
+                && GTCMItemList.BottledChaos.hasBeenSet()
+                && GTUtility.areStacksEqual(stack, GTCMItemList.BottledChaos.get(1), true)) {
+                return new BottledChaosPrototypePreview();
+            }
+            return nativeHandler;
+        }
+
+        @Override
+        public ICraftingHandler getRecipeHandler(String outputId, Object... results) {
+            return handlerFor(outputId, results).getRecipeHandler(outputId, results);
+        }
+
+        @Override
+        public IUsageHandler getUsageHandler(String inputId, Object... ingredients) {
+            return handlerFor(inputId, ingredients).getUsageHandler(inputId, ingredients);
+        }
+
+        @Override
+        public IUsageHandler getUsageAndCatalystHandler(String inputId, Object... ingredients) {
+            return handlerFor(inputId, ingredients).getUsageAndCatalystHandler(inputId, ingredients);
+        }
+
+        @Override
+        public TemplateRecipeHandler newInstance() {
+            return nativeHandler.newInstance();
+        }
+
+        @Override
+        public String getHandlerId() {
+            return nativeHandler.getHandlerId();
+        }
+
+        @Override
+        public String getOverlayIdentifier() {
+            return nativeHandler.getOverlayIdentifier();
+        }
+    }
+
     public static final class Registration {
 
         private boolean craftingInstalled;
@@ -141,11 +218,14 @@ public final class BottledChaosPrototypePreview extends GTNEIMultiblockHandler {
 
         @SubscribeEvent
         public void onClientTick(ClientTickEvent event) {
+            if (!NEIClientConfig.isLoaded()) return;
             if (!craftingInstalled) {
                 for (int i = 0; i < GuiCraftingRecipe.craftinghandlers.size(); i++) {
                     if (GuiCraftingRecipe.craftinghandlers.get(i)
                         .getClass() == GTNEIMultiblockHandler.class) {
-                        GuiCraftingRecipe.craftinghandlers.set(i, new BottledChaosPrototypePreview());
+                        GTNEIMultiblockHandler nativeHandler = (GTNEIMultiblockHandler) GuiCraftingRecipe.craftinghandlers
+                            .get(i);
+                        GuiCraftingRecipe.craftinghandlers.set(i, new PrototypeQueryHandler(nativeHandler));
                         craftingInstalled = true;
                     }
                 }
@@ -154,7 +234,9 @@ public final class BottledChaosPrototypePreview extends GTNEIMultiblockHandler {
                 for (int i = 0; i < GuiUsageRecipe.usagehandlers.size(); i++) {
                     if (GuiUsageRecipe.usagehandlers.get(i)
                         .getClass() == GTNEIMultiblockHandler.class) {
-                        GuiUsageRecipe.usagehandlers.set(i, new BottledChaosPrototypePreview());
+                        GTNEIMultiblockHandler nativeHandler = (GTNEIMultiblockHandler) GuiUsageRecipe.usagehandlers
+                            .get(i);
+                        GuiUsageRecipe.usagehandlers.set(i, new PrototypeQueryHandler(nativeHandler));
                         usageInstalled = true;
                     }
                 }
