@@ -295,9 +295,10 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
             for (int i = 0; i < truncatedItemOutputs.length; i++) {
                 ItemStack output = truncatedItemOutputs[i];
                 if (output == null) continue;
-                long successes = calculateIntegralChancedOutputMultiplier(
-                    (int) (recipe.getOutputChance(i) * chanceMultiplier),
-                    currentParallel);
+                int chance = (int) (recipe.getOutputChance(i) * chanceMultiplier);
+                // Keep the guaranteed portion out of GT's int multiplication.
+                long successes = (long) Math.floorDiv(chance, 10000) * currentParallel
+                    + calculateIntegralChancedOutputMultiplier(chance % 10000, currentParallel);
                 long amount = Math.multiplyExact(successes, output.stackSize);
                 if (amount <= 0) continue;
                 if (isMEOutputEnabled()) {
