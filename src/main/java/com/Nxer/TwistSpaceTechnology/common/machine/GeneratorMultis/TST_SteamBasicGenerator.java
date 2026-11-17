@@ -144,7 +144,7 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
         DYNAMO_EUT = getDynamoOutputEUt();
         checkHasInputHatch(errors);
-        checkCasingMin(errors, mCasing, 10);
+        checkCasingMin(errors, mCasing, 2);
         checkHatchMin(errors, Dynamo, 1);
         checkHatchMax(errors, Dynamo, 8);
         if (!hasValidDynamos()) {
