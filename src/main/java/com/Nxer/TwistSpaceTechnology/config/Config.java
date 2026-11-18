@@ -6,6 +6,7 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 
 import java.io.File;
 import java.math.BigInteger;
+import java.util.regex.Pattern;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
@@ -15,6 +16,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 
 // spotless:off
 public class Config {
+    private static final Pattern TEST_BUILD_MARKER = Pattern.compile("(?:^|[.+_-])(?:test|dirty)(?:$|[.+_-])", Pattern.CASE_INSENSITIVE);
+
     // region Regions enum
     public static final String VERSION = "00_Version";
     public static final String GENERAL = "General";
@@ -592,8 +595,19 @@ public class Config {
     public static boolean Debug_DisplayAdvCircuitAssemblyLineCurrentRecipe = false;
     // endregion
 
+    static boolean resetTestBuildConfiguration(Configuration configuration, String version) {
+        if (version == null || !TEST_BUILD_MARKER.matcher(version).find()) return false;
+        for (String category : configuration.getCategoryNames()) {
+            if (configuration.hasCategory(category)) configuration.removeCategory(configuration.getCategory(category));
+        }
+        return true;
+    }
+
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
+        if (resetTestBuildConfiguration(configuration, TwistSpaceTechnology.VERSION)) {
+            TwistSpaceTechnology.LOG.info("Regenerating TST configuration from defaults for test build {}", TwistSpaceTechnology.VERSION);
+        }
 
         // region Version
         configuration.get(VERSION, "CurrentVersion", TwistSpaceTechnology.VERSION, "Current Twist Space Technology version.")
