@@ -14,6 +14,7 @@ import com.Nxer.TwistSpaceTechnology.client.render.ItemRenderers.EyeOfWoodRender
 import com.Nxer.TwistSpaceTechnology.client.render.ItemRenderers.PowerChairRenderer;
 import com.Nxer.TwistSpaceTechnology.client.render.ItemRenderers.YamatoRenderer;
 import com.Nxer.TwistSpaceTechnology.client.render.MeteorMinerRenderer;
+import com.Nxer.TwistSpaceTechnology.client.render.StarContainmentRenderer;
 import com.Nxer.TwistSpaceTechnology.client.render.TileEntityRenderer;
 import com.Nxer.TwistSpaceTechnology.common.init.TstItems;
 
@@ -48,5 +49,6 @@ public class RendereLoader {
     public static void registerTileEntityRenderers() {
         new TileEntityRenderer(PowerChairModel, new ResourceLocation("gtnhcommunitymod", "model/PowerChair.png"));
         new MeteorMinerRenderer();
+        new StarContainmentRenderer();
     }
 }
