@@ -215,6 +215,7 @@ public enum GTCMItemList {
 
     MeteorMinerSchematic1,
     MeteorMinerSchematic2,
+    MeteorMinerSchematic3,
 
     // endregion
 
@@ -339,6 +340,27 @@ public enum GTCMItemList {
     MegaSolarPanelFactory,
     MegaNqReactor,
     MegaDigester,
+    StarThatNeverWas,
+    AstralAlloyBand,
+    CondensedStarCore,
+    InactiveMineralSeedPowder,
+    ActiveMineralSeedPowder,
+    MineralSeedCore,
+    BloodInfusedMiningDroneLV,
+    BloodInfusedMiningDroneMV,
+    BloodInfusedMiningDroneHV,
+    BloodInfusedMiningDroneEV,
+    BloodInfusedMiningDroneIV,
+    BloodInfusedMiningDroneLuV,
+    BloodInfusedMiningDroneZPM,
+    BloodInfusedMiningDroneUV,
+    BloodInfusedMiningDroneUHV,
+    BloodInfusedMiningDroneUEV,
+    BloodInfusedMiningDroneUIV,
+    BloodInfusedMiningDroneUMV,
+    BloodInfusedMiningDroneUXV,
+    BloodInfusedMiningDroneMAX,
+    IchoriumInlaidStone,
     // endregion
 
     // region Modularized Machines

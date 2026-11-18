@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.init;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.ActualPattern;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.BloodInfusedMiningDrone;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.BottledChaosCredential;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.BottledChaosMachineModule;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.EcoSphereExecutionProtocol;
@@ -36,7 +37,7 @@ public class ItemRegister {
         Item[] itemsToReg = { MetaItem01, EcoSphereExecutionProtocol, EcoSphereUpgrade, ProofOfHeroes, ProofOfGods,
             MultiStructuresLinkTool, MetaItemRune, MetaItemIzumik, Yamato, ActualPattern, MetaItemNamedCircuit,
             MetaItemFlask, InfinityDistilledWaterStorageCell, BottledChaosCredential, BottledChaosMachineModule,
-            LifeEssenceSingularity, };
+            LifeEssenceSingularity, BloodInfusedMiningDrone, };
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.unlocalizedName);
@@ -45,6 +46,34 @@ public class ItemRegister {
     }
 
     public static void registryItemContainers() {
+
+        GTCMItemList.BloodInfusedMiningDroneLV.set(BloodInfusedMiningDrone.registerVariant(0));
+
+        GTCMItemList.BloodInfusedMiningDroneMV.set(BloodInfusedMiningDrone.registerVariant(1));
+
+        GTCMItemList.BloodInfusedMiningDroneHV.set(BloodInfusedMiningDrone.registerVariant(2));
+
+        GTCMItemList.BloodInfusedMiningDroneEV.set(BloodInfusedMiningDrone.registerVariant(3));
+
+        GTCMItemList.BloodInfusedMiningDroneIV.set(BloodInfusedMiningDrone.registerVariant(4));
+
+        GTCMItemList.BloodInfusedMiningDroneLuV.set(BloodInfusedMiningDrone.registerVariant(5));
+
+        GTCMItemList.BloodInfusedMiningDroneZPM.set(BloodInfusedMiningDrone.registerVariant(6));
+
+        GTCMItemList.BloodInfusedMiningDroneUV.set(BloodInfusedMiningDrone.registerVariant(7));
+
+        GTCMItemList.BloodInfusedMiningDroneUHV.set(BloodInfusedMiningDrone.registerVariant(8));
+
+        GTCMItemList.BloodInfusedMiningDroneUEV.set(BloodInfusedMiningDrone.registerVariant(9));
+
+        GTCMItemList.BloodInfusedMiningDroneUIV.set(BloodInfusedMiningDrone.registerVariant(10));
+
+        GTCMItemList.BloodInfusedMiningDroneUMV.set(BloodInfusedMiningDrone.registerVariant(11));
+
+        GTCMItemList.BloodInfusedMiningDroneUXV.set(BloodInfusedMiningDrone.registerVariant(12));
+
+        GTCMItemList.BloodInfusedMiningDroneMAX.set(BloodInfusedMiningDrone.registerVariant(13));
 
         GTCMItemList.BottledChaosMachineModule.set(BottledChaosMachineModule.registerVariant(0));
         GTCMItemList.BottledChaosCredentialFrame0.set(BottledChaosCredential.registerVariant(0));
@@ -457,6 +486,14 @@ public class ItemRegister {
                 // # Schematic needed to enable the Tier 2 Meteor Miner.
                 // #zh_CN 启用T2激光陨星采矿场所需的设计图.
                 new String[]{tr("item.tst.MetaItem01.46.tooltip")}));
+
+        GTCMItemList.MeteorMinerSchematic3.set(MetaItem01.registerVariant(47));
+
+        GTCMItemList.InactiveMineralSeedPowder.set(MetaItem01.registerVariant(48));
+
+        GTCMItemList.ActiveMineralSeedPowder.set(MetaItem01.registerVariant(49));
+
+        GTCMItemList.MineralSeedCore.set(MetaItem01.registerVariant(50));
 
         if (Config.activateMegaSpaceStation) {
             // #tr item.tst.MetaItem01.176.name
