@@ -47,32 +47,74 @@ public class ItemRegister {
 
     public static void registryItemContainers() {
 
+        // #tr item.tst.BloodInfusedMiningDrone.0.name
+        // # Blood-Infused Mining Drone (LV)
+        // #zh_CN 浸血采矿无人机 (LV)
         GTCMItemList.BloodInfusedMiningDroneLV.set(BloodInfusedMiningDrone.registerVariant(0));
 
+        // #tr item.tst.BloodInfusedMiningDrone.1.name
+        // # Blood-Infused Mining Drone (MV)
+        // #zh_CN 浸血采矿无人机 (MV)
         GTCMItemList.BloodInfusedMiningDroneMV.set(BloodInfusedMiningDrone.registerVariant(1));
 
+        // #tr item.tst.BloodInfusedMiningDrone.2.name
+        // # Blood-Infused Mining Drone (HV)
+        // #zh_CN 浸血采矿无人机 (HV)
         GTCMItemList.BloodInfusedMiningDroneHV.set(BloodInfusedMiningDrone.registerVariant(2));
 
+        // #tr item.tst.BloodInfusedMiningDrone.3.name
+        // # Blood-Infused Mining Drone (EV)
+        // #zh_CN 浸血采矿无人机 (EV)
         GTCMItemList.BloodInfusedMiningDroneEV.set(BloodInfusedMiningDrone.registerVariant(3));
 
+        // #tr item.tst.BloodInfusedMiningDrone.4.name
+        // # Blood-Infused Mining Drone (IV)
+        // #zh_CN 浸血采矿无人机 (IV)
         GTCMItemList.BloodInfusedMiningDroneIV.set(BloodInfusedMiningDrone.registerVariant(4));
 
+        // #tr item.tst.BloodInfusedMiningDrone.5.name
+        // # Blood-Infused Mining Drone (LuV)
+        // #zh_CN 浸血采矿无人机 (LuV)
         GTCMItemList.BloodInfusedMiningDroneLuV.set(BloodInfusedMiningDrone.registerVariant(5));
 
+        // #tr item.tst.BloodInfusedMiningDrone.6.name
+        // # Blood-Infused Mining Drone (ZPM)
+        // #zh_CN 浸血采矿无人机 (ZPM)
         GTCMItemList.BloodInfusedMiningDroneZPM.set(BloodInfusedMiningDrone.registerVariant(6));
 
+        // #tr item.tst.BloodInfusedMiningDrone.7.name
+        // # Blood-Infused Mining Drone (UV)
+        // #zh_CN 浸血采矿无人机 (UV)
         GTCMItemList.BloodInfusedMiningDroneUV.set(BloodInfusedMiningDrone.registerVariant(7));
 
+        // #tr item.tst.BloodInfusedMiningDrone.8.name
+        // # Blood-Infused Mining Drone (UHV)
+        // #zh_CN 浸血采矿无人机 (UHV)
         GTCMItemList.BloodInfusedMiningDroneUHV.set(BloodInfusedMiningDrone.registerVariant(8));
 
+        // #tr item.tst.BloodInfusedMiningDrone.9.name
+        // # Blood-Infused Mining Drone (UEV)
+        // #zh_CN 浸血采矿无人机 (UEV)
         GTCMItemList.BloodInfusedMiningDroneUEV.set(BloodInfusedMiningDrone.registerVariant(9));
 
+        // #tr item.tst.BloodInfusedMiningDrone.10.name
+        // # Blood-Infused Mining Drone (UIV)
+        // #zh_CN 浸血采矿无人机 (UIV)
         GTCMItemList.BloodInfusedMiningDroneUIV.set(BloodInfusedMiningDrone.registerVariant(10));
 
+        // #tr item.tst.BloodInfusedMiningDrone.11.name
+        // # Blood-Infused Mining Drone (UMV)
+        // #zh_CN 浸血采矿无人机 (UMV)
         GTCMItemList.BloodInfusedMiningDroneUMV.set(BloodInfusedMiningDrone.registerVariant(11));
 
+        // #tr item.tst.BloodInfusedMiningDrone.12.name
+        // # Blood-Infused Mining Drone (UXV)
+        // #zh_CN 浸血采矿无人机 (UXV)
         GTCMItemList.BloodInfusedMiningDroneUXV.set(BloodInfusedMiningDrone.registerVariant(12));
 
+        // #tr item.tst.BloodInfusedMiningDrone.13.name
+        // # Blood-Infused Mining Drone (MAX)
+        // #zh_CN 浸血采矿无人机 (MAX)
         GTCMItemList.BloodInfusedMiningDroneMAX.set(BloodInfusedMiningDrone.registerVariant(13));
 
         GTCMItemList.BottledChaosMachineModule.set(BottledChaosMachineModule.registerVariant(0));
@@ -487,12 +529,29 @@ public class ItemRegister {
                 // #zh_CN 启用T2激光陨星采矿场所需的设计图.
                 new String[]{tr("item.tst.MetaItem01.46.tooltip")}));
 
-        GTCMItemList.MeteorMinerSchematic3.set(MetaItem01.registerVariant(47));
+        // #tr item.tst.MetaItem01.47.name
+        // # Meteor Miner Tier 3 Schematic
+        // #zh_CN 陨星采矿场T3设计图
 
+        // #tr item.tst.MetaItem01.47.tooltip
+        // # Fortune IV. Mines one complete horizontal layer per cycle.
+        // #zh_CN 时运 IV. 每次运行挖掘一整层.
+        GTCMItemList.MeteorMinerSchematic3.set(MetaItem01.registerVariantWithTooltips(
+            47, new String[]{tr("item.tst.MetaItem01.47.tooltip")}));
+
+        // #tr item.tst.MetaItem01.48.name
+        // # Inactive Mineral Seed Powder
+        // #zh_CN 失活矿母粉
         GTCMItemList.InactiveMineralSeedPowder.set(MetaItem01.registerVariant(48));
 
+        // #tr item.tst.MetaItem01.49.name
+        // # Active Mineral Seed Powder
+        // #zh_CN 活性矿母粉
         GTCMItemList.ActiveMineralSeedPowder.set(MetaItem01.registerVariant(49));
 
+        // #tr item.tst.MetaItem01.50.name
+        // # Mineral Seed Core
+        // #zh_CN 矿母种核
         GTCMItemList.MineralSeedCore.set(MetaItem01.registerVariant(50));
 
         if (Config.activateMegaSpaceStation) {

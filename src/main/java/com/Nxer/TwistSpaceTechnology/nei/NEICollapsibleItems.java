@@ -42,7 +42,11 @@ final class NEICollapsibleItems {
         groups.put("Multi-use Cores", blockFilter(TstBlocks.MultiUseCore));
         groups.put(
             "Meta Casings",
-            blockFilter(TstBlocks.MetaBlockCasing01, TstBlocks.MetaBlockCasing02, TstBlocks.MetaBlockGlass01));
+            blockFilter(
+                TstBlocks.MetaBlockCasing01,
+                TstBlocks.MetaBlockCasing02,
+                TstBlocks.MetaBlockGlass01,
+                TstBlocks.MetaBlockGlow01));
         groups.put("Photonic Intensifiers", blockFilter(TstBlocks.PhotonControllerUpgrade));
         groups.put("Space-time Oscillators", blockFilter(TstBlocks.SpaceTimeOscillator));
         groups.put("Space-time Constraintors", blockFilter(TstBlocks.SpaceTimeConstraintor));
@@ -55,6 +59,8 @@ final class NEICollapsibleItems {
         groups.put("Bottled Chaos Credentials", itemFilter(TstItems.BottledChaosCredential));
         groups.put("Bottled Chaos Structure Modules", itemFilter(TstItems.BottledChaosMachineModule));
         groups.put("Bottled Chaos Capacity Blocks", blockFilter(TstBlocks.BottledChaosCapacity));
+        groups.put("Meteor Miner Schematics", prefixFilter("MeteorMinerSchematic"));
+        groups.put("Blood-Infused Mining Drones", itemFilter(TstItems.BloodInfusedMiningDrone));
         groups.put("Solidifier Hatches", prefixFilter("SolidifyHatch_"));
         groups.put("Dual Input Buffers", prefixFilter("DualInputBuffer_"));
         groups.put("Dynamic Parallel Controllers", prefixFilter("DynamicParallelControllerT"));

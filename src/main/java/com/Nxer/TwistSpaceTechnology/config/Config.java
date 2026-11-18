@@ -554,7 +554,9 @@ public class Config {
 
     // region Laser Meteor Miner
     public static boolean Enable_LaserMeteorMiner = true;
-    public static int StandardRecipeDuration_Second_LaserMeteorMiner = 10;
+    public static int StandardRecipeDuration_Second_LaserMeteorMiner = 2;
+    public static double OverclockPowerMultiplier_LaserMeteorMiner = 4;
+    public static double OverclockTimeDivisor_LaserMeteorMiner = Math.sqrt(2);
     //endregion
 
     // region Skypiercer Tower
@@ -660,6 +662,10 @@ public class Config {
         // region LaserMeteorMiner
         Enable_LaserMeteorMiner = configuration.getBoolean("Enable_LaserMeteorMiner", LaserMeteorMiner, Enable_LaserMeteorMiner, "Enable Laser Meteor Miner.");
         StandardRecipeDuration_Second_LaserMeteorMiner = configuration.getInt("StandardRecipeDuration_Second_LaserMeteorMiner", LaserMeteorMiner, StandardRecipeDuration_Second_LaserMeteorMiner, 1, 64, "Standard recipe time of Laser Meteor Miner, unit second. Type: int");
+        OverclockPowerMultiplier_LaserMeteorMiner = configuration.get(LaserMeteorMiner, "OverclockPowerMultiplier_LaserMeteorMiner", OverclockPowerMultiplier_LaserMeteorMiner, "EU/t multiplier per overclock, shared by the Laser Meteor Miner and The Star That Never Was. Must be greater than 1.", 1.0001, 64).getDouble();
+        OverclockTimeDivisor_LaserMeteorMiner = configuration.get(LaserMeteorMiner, "OverclockTimeDivisor_LaserMeteorMiner", OverclockTimeDivisor_LaserMeteorMiner, "Duration divisor per overclock, shared by the Laser Meteor Miner and The Star That Never Was. Must be greater than 1.", 1.0001, 64).getDouble();
+        if (!Double.isFinite(OverclockPowerMultiplier_LaserMeteorMiner) || OverclockPowerMultiplier_LaserMeteorMiner <= 1) OverclockPowerMultiplier_LaserMeteorMiner = 4;
+        if (!Double.isFinite(OverclockTimeDivisor_LaserMeteorMiner) || OverclockTimeDivisor_LaserMeteorMiner <= 1) OverclockTimeDivisor_LaserMeteorMiner = Math.sqrt(2);
         // endregion
 
         // region SwelegfyrBlastFurnace

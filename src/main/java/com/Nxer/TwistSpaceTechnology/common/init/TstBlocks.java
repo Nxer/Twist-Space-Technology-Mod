@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.init;
 import net.minecraft.block.Block;
 
 import com.Nxer.TwistSpaceTechnology.common.block.BlockArcaneHole;
+import com.Nxer.TwistSpaceTechnology.common.block.BlockCondensedStarCore;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockEssentiaDiscretizer;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockEyeOfWoodRender;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockLargeSolarBoilerRender;
@@ -16,6 +17,7 @@ import com.Nxer.TwistSpaceTechnology.common.block.meta.TstMetaBlock;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.casing.PhotonControllerUpgradeCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.casing.TstMetaBlockCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.casing.TstMetaBlockGlassCasing;
+import com.Nxer.TwistSpaceTechnology.common.block.meta.casing.TstMetaBlockGlowCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.casing.TstMetaBlockStructureCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.multiuse.BlockMultiUseCore;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.spaceStation.SpaceStationAntiGravityCasing;
@@ -31,6 +33,8 @@ public class TstBlocks {
     // #zh_CN MetaBlock01
     public static final TstMetaBlock MetaBlock01 = new TstMetaBlock("MetaBlock01");
 
+    public static final BlockCondensedStarCore CondensedStarCore = new BlockCondensedStarCore();
+
     /**
      * UnlocalizedName: {@code MetaBlockCasing01}
      */
@@ -44,6 +48,10 @@ public class TstBlocks {
     public static final TstMetaBlockGlassCasing MetaBlockGlass01 = new TstMetaBlockGlassCasing(
         "MetaBlockGlass01",
         (byte) 32);
+
+    public static final TstMetaBlockGlowCasing MetaBlockGlow01 = new TstMetaBlockGlowCasing(
+        "MetaBlockGlow01",
+        (byte) 48);
 
     public static final BottledChaosCapacityBlock BottledChaosCapacity = new BottledChaosCapacityBlock();
 

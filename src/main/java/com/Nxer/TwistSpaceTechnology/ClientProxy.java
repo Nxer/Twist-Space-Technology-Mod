@@ -11,10 +11,12 @@ import com.Nxer.TwistSpaceTechnology.client.render.BottledChaosCapacityRenderer;
 import com.Nxer.TwistSpaceTechnology.client.render.EyeOfWoodRender;
 import com.Nxer.TwistSpaceTechnology.client.render.LargeSolarBoilerRender;
 import com.Nxer.TwistSpaceTechnology.client.render.MaterialFluidTextureLoader;
+import com.Nxer.TwistSpaceTechnology.client.render.MetaGlowCasingRenderer;
 import com.Nxer.TwistSpaceTechnology.client.render.TileArcaneHoleRender;
 import com.Nxer.TwistSpaceTechnology.client.sound.SoundLoader;
 import com.Nxer.TwistSpaceTechnology.command.ContainerDumpMode;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
+import com.Nxer.TwistSpaceTechnology.common.machine.starthatneverwas.StarMeteorField;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 import com.Nxer.TwistSpaceTechnology.loader.NEIConfigLoader;
 import com.Nxer.TwistSpaceTechnology.loader.RendereLoader;
@@ -23,6 +25,7 @@ import com.Nxer.TwistSpaceTechnology.network.packet.ContainerDumpTargetPacket;
 import com.Nxer.TwistSpaceTechnology.system.ItemCooldown.CooldownEventHandler;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
@@ -58,6 +61,7 @@ public class ClientProxy extends CommonProxy {
         super.init(event);
         MinecraftForge.EVENT_BUS.register(new MaterialFluidTextureLoader());
         BottledChaosCapacityRenderer.register();
+        MetaGlowCasingRenderer.register();
         new EyeOfWoodRender();
         new ArtificialStarRender();
         new TileArcaneHoleRender();
@@ -72,6 +76,12 @@ public class ClientProxy extends CommonProxy {
         BECCondensateRenderer.register();
         RendereLoader.init();
         SoundLoader.init();
+    }
+
+    @Override
+    public void complete(FMLLoadCompleteEvent event) {
+        super.complete(event);
+        StarMeteorField.preloadGeometry();
     }
 
 }

@@ -9,6 +9,7 @@ import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlock01;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing02;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockGlass01;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockGlow01;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.NuclearReactorBlock;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.PhotonControllerUpgrade;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.SpaceStationAntiGravityBlock;
@@ -24,6 +25,7 @@ import com.Nxer.TwistSpaceTechnology.common.tile.TileEyeOfWoodRender;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileLargeSolarBoilerRender;
 import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileStar;
+import com.Nxer.TwistSpaceTechnology.common.tile.TileStarContainment;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
@@ -41,12 +43,17 @@ public class BlockRegister {
 
         GameRegistry.registerBlock(MetaBlock01, TstMetaBlockItem.class, MetaBlock01.unlocalizedName);
 
+        GameRegistry.registerBlock(TstBlocks.CondensedStarCore, TstMetaBlockItem.class, TstBlocks.CondensedStarCore.unlocalizedName);
+        GameRegistry.registerTileEntity(TileStarContainment.class, "TSTStarContainment");
+
         GameRegistry
             .registerBlock(TstBlocks.MetaBlockCasing01, TstMetaBlockItem.class, MetaBlockCasing01.unlocalizedName);
 
         GameRegistry.registerBlock(MetaBlockCasing02, TstMetaBlockItem.class, MetaBlockCasing02.unlocalizedName);
 
         GameRegistry.registerBlock(MetaBlockGlass01, TstMetaBlockItem.class, MetaBlockGlass01.unlocalizedName);
+
+        GameRegistry.registerBlock(MetaBlockGlow01, TstMetaBlockItem.class, MetaBlockGlow01.unlocalizedName);
 
         GameRegistry
             .registerBlock(PhotonControllerUpgrade, TstMetaBlockItem.class, PhotonControllerUpgrade.unlocalizedName);
@@ -106,6 +113,11 @@ public class BlockRegister {
     }
 
     public static void registryBlockContainers() {
+
+        // #tr tile.tst.condensed_star_core.0.name
+        // # Condensed Star Core
+        // #zh_CN 凝缩星核
+        GTCMItemList.CondensedStarCore.set(TstBlocks.CondensedStarCore.registerVariant(0));
 
         // #tr tile.tst.MetaBlock01.0.name
         // # Test Block
@@ -352,10 +364,20 @@ public class BlockRegister {
         // #zh_CN 中子承载机械方块
         GTCMItemList.NeutroniumSupportCasing.set(MetaBlockCasing02.registerVariant(8));
 
+        // #tr tile.tst.MetaBlockCasing02.9.name
+        // # Astral Alloy Band
+        // #zh_CN 星域合金箍
+        GTCMItemList.AstralAlloyBand.set(MetaBlockCasing02.registerVariantWithTopTexture(9));
+
         // #tr tile.tst.MetaBlockGlass01.0.name
         // # Energy Conduction Glass
         // #zh_CN 能量传导玻璃
         GTCMItemList.EnergyFluxContainmentGlass.set(MetaBlockGlass01.registerVariant(0));
+
+        // #tr tile.tst.MetaBlockGlow01.0.name
+        // # Ichorium Inlaid Arcane Stone
+        // #zh_CN 灵宝镶嵌奥术石
+        GTCMItemList.IchoriumInlaidStone.set(MetaBlockGlow01.registerVariantWithGlow(0));
 
         // region SpaceTimeOscillator
 

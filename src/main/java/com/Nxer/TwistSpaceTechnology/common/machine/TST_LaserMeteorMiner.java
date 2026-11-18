@@ -3,13 +3,20 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.LaserBeaconRender;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.mixed_energy_hatches;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_block_structure_issue;
+import static com.Nxer.TwistSpaceTechnology.config.Config.OverclockPowerMultiplier_LaserMeteorMiner;
+import static com.Nxer.TwistSpaceTechnology.config.Config.OverclockTimeDivisor_LaserMeteorMiner;
 import static com.Nxer.TwistSpaceTechnology.config.Config.StandardRecipeDuration_Second_LaserMeteorMiner;
 import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.tr;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.lazy;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockUnlocalizedName;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.HatchElement.*;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.Maintenance;
+import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.TierEU.RECIPE_MV;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
@@ -40,9 +47,13 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.entity.TileEntityLaserBeacon;
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_LaserMeteorMiner;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
+import com.Nxer.TwistSpaceTechnology.common.machine.starthatneverwas.StarControllerFrame;
+import com.Nxer.TwistSpaceTechnology.common.machine.starthatneverwas.StarStructure;
+import com.Nxer.TwistSpaceTechnology.common.tile.TileStarContainment;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
@@ -69,12 +80,14 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.MTEExtendedPowerMultiBlockBase;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
 import gregtech.api.objects.ItemData;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.structure.error.ErrorType;
 import gregtech.api.structure.error.StructureError;
@@ -108,8 +121,9 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new TST_LaserMeteorMiner(this.mName);
+        return new TST_LaserMeteorMiner(mName);
     }
+
     // endregion
 
     // region Structure
@@ -118,10 +132,14 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     protected static final int verticalOffSet_T1 = 13;
     protected static final int depthOffSet_T1 = 7;
     private static final String STRUCTURE_PIECE_TIER2 = "tier2";
+    private static final String STRUCTURE_PIECE_TIER3 = "tier3";
     protected static final int horizontalOffSet_T2 = 9;
     protected static final int verticalOffSet_T2 = 15;
     protected static final int depthOffSet_T2 = 3;
     private static IStructureDefinition<TST_LaserMeteorMiner> STRUCTURE_DEFINITION;
+    private final StarControllerFrame controllerFrame = new StarControllerFrame(false);
+    private static final int STAR_CONTROLLER_LINKED = 4;
+    private boolean starControllerLinked;
 
     // spotless:off
     protected static final String[][] shape_T1 = new String[][]{
@@ -170,6 +188,31 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
         {"         X         ","        X X        ","                   ","                   ","                   ","                   ","                   ","                   "," X               X ","X                 X"," X               X ","                   ","                   ","                   ","                   ","                   ","                   ","        X X        ","         X         "},
         {"         X         ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","X                 X","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","         X         "}
     };
+
+    protected static final String[][] shape_T3 = new String[][]{
+        {"                   ", "                   ", "                   ", "                   ", "                   ", "                   ", "                   ", "                   ", "                   ", "         Z         ", "                   ", "                   ", "                   ", "                   ", "                   ", "                   ", "                   ", "                   ", "                   "},
+        {"                   ", "                   ", "                   ", "        MMM        ", "      MMMMMMM      ", "     MQM   MQM     ", "    MM       MM    ", "    MM       MM    ", "   MM         MM   ", "   MQ    B    QM   ", "   MM         MM   ", "    MM       MM    ", "    MM       MM    ", "     MQM   MQM     ", "      MMMMMMM      ", "        MMM        ", "                   ", "                   ", "                   "},
+        {"                   ", "                   ", "                   ", "        EEE        ", "      ESEEESE      ", "     ESSEEESSE     ", "    EEE     EEE    ", "    EE       EE    ", "   ESE       ESE   ", "   ESE   B   ESE   ", "   ESE       ESE   ", "    EE       EE    ", "    EEE     EEE    ", "     ESSEEESSE     ", "      ESEEESE      ", "        EEE        ", "                   ", "                   ", "                   "},
+        {"                   ", "                   ", "                   ", "                   ", "         E         ", "      ESEEESE      ", "     EESE ESEE     ", "     EE     EE     ", "     EE  E  EE     ", "    ES  EBE  SE    ", "     EE  E  EE     ", "     EE     EE     ", "     EESE ESEE     ", "      ESEEESE      ", "         E         ", "                   ", "                   ", "                   ", "                   "},
+        {"                   ", "                   ", "                   ", "                   ", "                   ", "         M         ", "       MMMMM       ", "      ME   EM      ", "      M  E  M      ", "     MM EBE MM     ", "      M  E  M      ", "      ME   EM      ", "       MMMMM       ", "         M         ", "                   ", "                   ", "                   ", "                   ", "                   "},
+        {"                   ", "                   ", "                   ", "                   ", "                   ", "                   ", "      EEE EEE      ", "      ENE ENE      ", "      EEEEEEE      ", "        EBE        ", "      EEEEEEE      ", "      ENE ENE      ", "      EEE EEE      ", "                   ", "                   ", "                   ", "                   ", "                   ", "                   "},
+        {"                   ", "                   ", "                   ", "                   ", "                   ", "                   ", "      EME EME      ", "      MNEEENM      ", "      EEEPEEE      ", "       EPBPE       ", "      EEEPEEE      ", "      MNEEENM      ", "      EME EME      ", "                   ", "                   ", "                   ", "                   ", "                   ", "                   "},
+        {"                   ", "                   ", "                   ", "                   ", "                   ", "                   ", "      ERE ERE      ", "      RREEERR      ", "      EEEPEEE      ", "       EPBPE       ", "      EEEPEEE      ", "      RREEERR      ", "      ERE ERE      ", "                   ", "                   ", "                   ", "                   ", "                   ", "                   "},
+        {"                   ", "                   ", "                   ", "                   ", "                   ", "                   ", "      ERE ERE      ", "      RNEEENR      ", "      EEPPPEE      ", "       EPBPE       ", "      EEPPPEE      ", "      RNEEENR      ", "      ERE ERE      ", "                   ", "                   ", "                   ", "                   ", "                   ", "                   "},
+        {"                   ", "                   ", "                   ", "                   ", "                   ", "      ERE ERE      ", "      RREEERR      ", "      RNEEENR      ", "      EEP PEE      ", "      EE B EE      ", "      EEP PEE      ", "      RNEEENR      ", "      RREEERR      ", "      ERE ERE      ", "                   ", "                   ", "                   ", "                   ", "                   "},
+        {"                   ", "                   ", "                   ", "                   ", "                   ", "     EMME EMME     ", "     MMUEEEUMM     ", "     EEEHEHEEE     ", "       HP PH       ", "      EE B EE      ", "       HP PH       ", "     EEEHEHEEE     ", "     MMUEEEUMM     ", "     EMME EMME     ", "                   ", "                   ", "                   ", "                   ", "                   "},
+        {"                   ", "                   ", "                   ", "                   ", "                   ", "     EEE   EEE     ", "     ENUHEHUNE     ", "     EEH P HEE     ", "      H P P H      ", "      EP B PE      ", "      H P P H      ", "     EEH P HEE     ", "     ENUHEHUNE     ", "     EEE   EEE     ", "                   ", "                   ", "                   ", "                   ", "                   "},
+        {"                   ", "                   ", "                   ", "                   ", "         N         ", "     EEENENEEE     ", "     ENUOEOUNE     ", "     EEENPNEEE     ", "     NOEE EEON     ", "    NEEP B PEEN    ", "     NOEE EEON     ", "     EEENPNEEE     ", "     ENUOEOUNE     ", "     EEENENEEE     ", "         N         ", "                   ", "                   ", "                   ", "                   "},
+        {"                   ", "                   ", "                   ", "                   ", "         U         ", "     UUUUUUUUU     ", "     UNEO OENU     ", "     UEE P EEU     ", "     UO     OU     ", "    UU P B P UU    ", "     UO     OU     ", "     UEE P EEU     ", "     UNEO OENU     ", "     UUUUUUUUU     ", "         U         ", "                   ", "                   ", "                   ", "                   "},
+        {"                   ", "                   ", "                   ", "                   ", "       UUUUU       ", "      UUUUUUU      ", "     UUEO OEUU     ", "     UUE   EUU     ", "    UUO     OUU    ", "    UU       UU    ", "    UUO     OUU    ", "     UUE   EUU     ", "     UUEO OEUU     ", "      UUUUUUU      ", "        UUU        ", "                   ", "                   ", "                   ", "                   "},
+        {"                   ", "                   ", "                   ", "        U~U        ", "      UUUUUUU      ", "     ENUEEEUNE     ", "    ENUEFFFEUNE    ", "    NUUF   FUUN    ", "   UNUF     FUNU   ", "   UUUF     FUUU   ", "   UNUF     FUNU   ", "    NUUF   FUUN    ", "    ENUEFFFEUNE    ", "     ENUEEEUNE     ", "      ENNUNNE      ", "        UUU        ", "                   ", "                   ", "                   "},
+        {"                   ", "                   ", "         U         ", "       UU UU       ", "       UUUUU       ", "      NUUUUUN      ", "     N       N     ", "    NU       UN    ", "   UUU       UUU   ", "  VUUU       UUUV  ", "   UUU       UUU   ", "    NU       UN    ", "     N       N     ", "      NUUUUUN      ", "       NUUUN       ", "        UUU        ", "         V         ", "                   ", "                   "},
+        {"                   ", "        EVE        ", "      UFVUVFU      ", "     EGGGUGGGE     ", "    EGGUEEEUGGE    ", "   EGG EEEEE GGE   ", "  EGG         GGE  ", "  EGE         EGE  ", "  VGE         EGV  ", " VEEE         EEEV ", "  VGE         EGV  ", "  EGE         EGE  ", "  EGG         GGE  ", "   EGG       GGE   ", "    EGGEEEEEGGE    ", "     EGGGUGGGE     ", "      EEVUVEE      ", "         V         ", "                   "},
+        {"         V         ", "        VEV        ", "       VUUUV       ", "      NUUEUUN      ", "       UEEEU       ", "       UEEEU       ", "   N           N   ", "  VE           EV  ", " VEE           EEV ", "VEEE           EEEV", " VEE           EEV ", "  VE           EV  ", "   N           N   ", "                   ", "                   ", "      NUUEUUN      ", "       VUUUV       ", "        VEV        ", "         V         "},
+        {"         V         ", "        VEV        ", "       VEEEV       ", "      EEEEEEE      ", "                   ", "                   ", "   E           E   ", "  VE           EV  ", " VEE           EEV ", "VEEE           EEEV", " VEE           EEV ", "  VE           EV  ", "   E           E   ", "                   ", "                   ", "      EEEEEEE      ", "       VEEEV       ", "        VEV        ", "         V         "},
+        {"         V         ", "        VEV        ", "       EEEEE       ", "      EEEEEEE      ", "                   ", "                   ", "   E           E   ", "  EE           EE  ", " VEE           EEV ", "VEEE           EEEV", " VEE           EEV ", "  EE           EE  ", "   E           E   ", "                   ", "                   ", "      EEEEEEE      ", "       EEEEE       ", "        VEV        ", "         V         "},
+        {"         V         ", "        EEE        ", "                   ", "                   ", "                   ", "                   ", "                   ", "                   ", " E               E ", "VE               EV", " E               E ", "                   ", "                   ", "                   ", "                   ", "                   ", "                   ", "        EEE        ", "         V         "}
+    };
     // spotless:on
 
     @Override
@@ -178,6 +221,7 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
             STRUCTURE_DEFINITION = StructureDefinition.<TST_LaserMeteorMiner>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape_T1))
                 .addShape(STRUCTURE_PIECE_TIER2, transpose(shape_T2))
+                .addShape(STRUCTURE_PIECE_TIER3, transpose(shape_T3))
                 .addElement('A', ofAnyGlass())
                 .addElement('B', ofBlock(GregTechAPI.sBlockCasings1, 15)) // Superconducting Coil
                 .addElement('C', ofBlock(GregTechAPI.sBlockCasings4, 7)) // Fusion Coil Block
@@ -190,6 +234,20 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
                 .addElement('J', ofFrame(Materials.StainlessSteel))
                 .addElement('K', ofBlock(ModBlocks.blockSpecialMultiCasings, 6)) // Structural Solar Casings
                 .addElement('L', ofBlock(ModBlocks.blockSpecialMultiCasings, 8)) // Thermally Insulated Casing
+                .addElement('M', ofBlock(TstBlocks.MetaBlockCasing02, 2)) // Iridium-Reinforced Neutronium Casing
+                .addElement('N', ofBlock(TstBlocks.MetaBlockCasing02, 8)) // Neutronium Support Casing
+                .addElement('O', ofBlockUnlocalizedName("bartworks", "BW_TieredGlass", 6, false))
+                .addElement('P', ofBlockUnlocalizedName("GoodGenerator", "compactFusionCoil", 2, false))
+                .addElement('Q', ofBlockUnlocalizedName("Automagy", "blockTranslucent", 0, false))
+                .addElement('R', ofBlockUnlocalizedName("dreamcraft", "BloodyIchorium", 0, false))
+                .addElement('S', ofBlockUnlocalizedName("dreamcraft", "BloodyThaumium", 0, false))
+                .addElement('U', StarStructure.controllerCasing())
+                .addElement(
+                    'V',
+                    buildHatchAdder(TST_LaserMeteorMiner.class).atLeast(OutputBus, Energy.or(ExoticEnergy), Maintenance)
+                        .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(8))
+                        .hint(4)
+                        .buildAndChain(ofBlock(TstBlocks.MetaBlockCasing02, 8)))
                 .addElement(
                     'W',
                     buildHatchAdder(TST_LaserMeteorMiner.class).atLeast(OutputBus, Energy.or(ExoticEnergy), Maintenance)
@@ -231,9 +289,12 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
+        if (GregTechAPI.isDummyWorld(getBaseMetaTileEntity().getWorld())) {
+            multiTier = Math.max(1, Math.min(3, stackSize.stackSize));
+        }
         if (stackSize.stackSize > 1) {
             buildPiece(
-                STRUCTURE_PIECE_TIER2,
+                stackSize.stackSize >= 3 ? STRUCTURE_PIECE_TIER3 : STRUCTURE_PIECE_TIER2,
                 stackSize,
                 hintsOnly,
                 horizontalOffSet_T2,
@@ -249,7 +310,7 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
                 depthOffSet_T1);
         }
         // Only for the hologram projector's hints: not part of the structure, of auto-build or of the NEI preview
-        if (hintsOnly) hintRitualLayout(stackSize.stackSize > 1 ? 2 : 1);
+        if (hintsOnly) hintRitualLayout(Math.min(3, stackSize.stackSize));
     }
 
     @Override
@@ -267,7 +328,7 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
                 false,
                 true)
             : survivalBuildPiece(
-                STRUCTURE_PIECE_TIER2,
+                stackSize.stackSize >= 3 ? STRUCTURE_PIECE_TIER3 : STRUCTURE_PIECE_TIER2,
                 stackSize,
                 horizontalOffSet_T2,
                 verticalOffSet_T2,
@@ -288,9 +349,16 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
             errors.clear();
             if (checkPiece(STRUCTURE_PIECE_TIER2, horizontalOffSet_T2, verticalOffSet_T2, depthOffSet_T2, errors)) {
                 multiTier = 2;
-            } else return;
+            } else {
+                clearHatches();
+                errors.clear();
+                if (!checkPiece(STRUCTURE_PIECE_TIER3, horizontalOffSet_T2, verticalOffSet_T2, depthOffSet_T2, errors))
+                    return;
+                multiTier = 3;
+            }
         }
 
+        setStartCoords();
         if (!findLaserRenderer()) {
             errors.add(special_block_structure_issue);
             return;
@@ -303,7 +371,8 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     /**
      * At least one energy hatch: any number of normal ones, or TecTech multi Amp / laser ones, but not mixed.
      */
-    private void checkEnergyHatches(List<StructureError> errors) {
+    protected void checkEnergyHatches(List<StructureError> errors) {
+        if (hasStarStructureContext() && multiTier == structureStarTier) return;
         if (mEnergyHatches.isEmpty() && mExoticEnergyHatches.isEmpty()) {
             errors.add(StructureErrors.hatchCount(ErrorType.TOO_FEW, Energy, 0, 1));
         } else if (!mEnergyHatches.isEmpty() && !mExoticEnergyHatches.isEmpty()) {
@@ -315,6 +384,7 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     // region Processing Logic
     private static final int distanceFromMeteor = 48;
     private static final int MAX_RADIUS = 40;
+    private static final int METEOR_POLL_INTERVAL_TICKS = 200;
     /** Max air blocks the tier 1 drill skips in a single cycle, to avoid lag spikes. */
     private static final int MAX_AIR_CHECKS_PER_CYCLE = 4096;
     protected TileEntityLaserBeacon renderer;
@@ -327,8 +397,18 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     private boolean isWaiting = false;
     private boolean isResetting = false;
     private final List<ItemStack> res = new ArrayList<>();
-    private int multiTier = 0;
-    private boolean stopAllRendering = false;
+    private final MiningOverclockLogic miningOverclock = new MiningOverclockLogic();
+    protected int multiTier = 0;
+    protected boolean stopAllRendering = false;
+
+    /** Native output cycles must finish before another mode may use the controller. */
+    protected final boolean canYieldWorldMining() {
+        return mMaxProgresstime <= 0 && res.isEmpty() && (mOutputItems == null || mOutputItems.length == 0);
+    }
+
+    protected final boolean canSelectMiningMode() {
+        return (hasFinished || !isStartInitialized) && canYieldWorldMining();
+    }
 
     /** Window of the stats shown in the GUI: 5 seconds. */
     private static final int RECENT_WINDOW_TICKS = 5 * 20;
@@ -385,8 +465,28 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     }
 
     @Override
+    protected void runMachine(IGregTechTileEntity base, long tick) {
+        if (!starMode) tryLinkToStarHost();
+        if (!isMiningUnit()) {
+            super.runMachine(base, tick);
+            return;
+        }
+        lEUt = 0;
+        boolean active = linkedStar != null && isLinkedToStar(linkedStar) && linkedStar.isStarMinerRunning();
+        mMaxProgresstime = active ? Math.max(1, linkedStar.starMinerCycleDuration()) : 0;
+        mProgresstime = active ? linkedStar.starMinerCycleProgress() : 0;
+        setCheckRecipeResult(miningUnitResult());
+    }
+
+    @Override
+    public @NotNull CheckRecipeResult checkProcessing() {
+        if (!starMode) tryLinkToStarHost();
+        if (isMiningUnit()) return SimpleCheckRecipeResult.ofFailure("star_linked");
+        return checkWorldMining();
+    }
+
     @NotNull
-    public CheckRecipeResult checkProcessing() {
+    private CheckRecipeResult checkWorldMining() {
         if (this.multiTier != this.getMultiTier(mInventory[1])) {
             // spotless:off
             // #tr GT5U.gui.text.recipe_result.missing_schematic
@@ -471,9 +571,10 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
      * @param mining whether the miner is mining; the laser is shown only if the screwdriver didn't turn rendering off
      * @param range  length of the laser, used only while it is shown
      */
-    private void updateLaser(boolean mining, double range) {
+    protected void updateLaser(boolean mining, double range) {
         if (renderer == null) return;
-        boolean shouldRender = mining && !stopAllRendering;
+        // Linked effects belong to the star receiver, even after removal of the miner or its beacon.
+        boolean shouldRender = !isMiningUnit() && mining && !stopAllRendering;
         if (renderer.getShouldRender() != shouldRender) renderer.setShouldRender(shouldRender);
         if (shouldRender && renderer.getRange() != range) renderer.setRange(range);
     }
@@ -500,14 +601,14 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
         return SimpleCheckRecipeResult.ofFailure("meteor_area_not_loaded");
     }
 
-    private boolean findLaserRenderer() {
-        this.setStartCoords();
+    protected boolean findLaserRenderer() {
+        ChunkCoordinates center = getMeteorCenter(multiTier);
 
         if (getBaseMetaTileEntity().getWorld()
             .getTileEntity(
-                xStart,
+                center.posX,
                 getBaseMetaTileEntity().getYCoord() + (this.multiTier == 1 ? 10 : 15),
-                zStart) instanceof TileEntityLaserBeacon laser) {
+                center.posZ) instanceof TileEntityLaserBeacon laser) {
             renderer = laser;
             renderer.setRotationFields(ExtendedFacing.of(getDirection(), getRotation(), getFlip()));
             renderer.setColors(1, 0, 0);
@@ -519,6 +620,28 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     @Override
     public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
         ItemStack tool) {
+        if (aPlayer.isSneaking()) {
+            if (automaticStarLink) {
+                resolveStarHost();
+                if (automaticStarLink) return;
+            }
+            if (linkedStar != null && isLinkedToStar(linkedStar)) return;
+            if (!starMode && !canSelectMiningMode()) return;
+            starMode = !starMode;
+            linkedStar = null;
+            updateLaser(false, 0);
+            markDirty();
+            // #tr tst.star.miner.mode.world
+            // # Meteor miner: world mining mode
+            // #zh_CN 坠星矿机: 世界开采模式
+
+            // #tr tst.star.miner.mode.link
+            // # Meteor miner: extraction unit mode
+            // #zh_CN 坠星矿机: 开采单元模式
+            GTUtility
+                .sendChatToPlayer(aPlayer, tr(starMode ? "tst.star.miner.mode.link" : "tst.star.miner.mode.world"));
+            return;
+        }
         stopAllRendering = !stopAllRendering;
         // #tr tst.machine.MeteorMiner.message.render.off
         // # Rendering off
@@ -536,32 +659,21 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
         }
     }
 
-    private int getMultiTier(ItemStack inventory) {
+    protected int getMultiTier(ItemStack inventory) {
         if (inventory == null || inventory.stackSize < 1) return 0;
-        return GTCMItemList.MeteorMinerSchematic2.equal(inventory) ? 2
-            : GTCMItemList.MeteorMinerSchematic1.equal(inventory) ? 1 : 0;
-    }
-
-    protected int getXDrill() {
-        return xDrill;
-    }
-
-    protected int getYDrill() {
-        return yDrill;
-    }
-
-    protected int getZDrill() {
-        return zDrill;
+        return GTCMItemList.MeteorMinerSchematic3.equal(inventory) ? 3
+            : GTCMItemList.MeteorMinerSchematic2.equal(inventory) ? 2
+                : GTCMItemList.MeteorMinerSchematic1.equal(inventory) ? 1 : 0;
     }
 
     private int getLaserToEndHeight() {
         return (this.multiTier == 1 ? 3 : 0);
     }
 
-    private void setFortuneTier() {
+    protected void setFortuneTier() {
         this.fortuneTier = 0;
-        if (this.multiTier == 2) {
-            this.fortuneTier = 3;
+        if (this.multiTier >= 2) {
+            this.fortuneTier = 4;
             return;
         }
         if (!mInputBusses.isEmpty()) {
@@ -593,6 +705,7 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     }
 
     public void startReset() {
+        if (isMiningUnit()) return;
         this.isResetting = true;
         stopMachine(ShutDownReasonRegistry.NONE);
         enableWorking();
@@ -602,6 +715,7 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
         switch (tier) {
             case 1 -> this.mineSingleBlock();
             case 2 -> this.mineRow();
+            case 3 -> this.mineLayer();
             default -> throw new IllegalArgumentException("Invalid Multiblock Tier");
         }
     }
@@ -642,6 +756,26 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
             } else opposite++;
         }
         this.moveToNextColumn();
+    }
+
+    /** One horizontal slice per native cycle, with at most (2 * MAX_RADIUS + 1)^2 block visits. */
+    private void mineLayer() {
+        World world = getBaseMetaTileEntity().getWorld();
+        // The same spherical centre-line assumption as T1/T2, bounded to the remaining height.
+        while (yDrill <= yStart + currentRadius && world.isAirBlock(xStart, yDrill, zStart)) yDrill++;
+        if (yDrill > yStart + currentRadius) {
+            hasFinished = true;
+            return;
+        }
+        for (int x = xStart - currentRadius; x <= xStart + currentRadius; x++) {
+            for (int z = zStart - currentRadius; z <= zStart + currentRadius; z++) {
+                if (!world.isAirBlock(x, yDrill, z)) mineBlock(x, yDrill, z);
+            }
+        }
+        yDrill++;
+        xDrill = xStart - currentRadius;
+        zDrill = zStart - currentRadius;
+        if (yDrill > yStart + currentRadius) hasFinished = true;
     }
 
     private void mineBlock(int currentX, int currentY, int currentZ) {
@@ -772,7 +906,7 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
      * Center of the meteor for the given tier: right above the laser beacon, {@code distanceFromMeteor} blocks above
      * the highest block of the multi. This is where players put the Warded Glass that stops the meteor.
      */
-    private ChunkCoordinates getMeteorCenter(int tier) {
+    protected ChunkCoordinates getMeteorCenter(int tier) {
         final IGregTechTileEntity base = getBaseMetaTileEntity();
         final int backDistance = tier == 1 ? 2 : 6;
         int x = base.getXCoord();
@@ -858,21 +992,63 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
         currentRadius -= delta;
     }
 
+    /** Receives the inherited power settings, including the single-hatch and debug-energy rules. */
+    public static final class MiningOverclockLogic extends ProcessingLogic {
+
+        public OverclockCalculator calculate() {
+            return calculateMiningOverclock(availableVoltage, availableAmperage, amperageOC);
+        }
+    }
+
+    /** Shared configurable OC, rounded up to whole ticks and capped at the first one-tick cycle. */
+    public static OverclockCalculator calculateMiningOverclock(long voltage, long amperage, boolean amperageOC) {
+        int duration = StandardRecipeDuration_Second_LaserMeteorMiner * 20;
+        double powerMultiplier = OverclockPowerMultiplier_LaserMeteorMiner;
+        double timeDivisor = OverclockTimeDivisor_LaserMeteorMiner;
+        long overclockVoltage = voltage / 16;
+        double availablePower = (double) overclockVoltage * (amperageOC ? amperage : Math.min(amperage, 1));
+        int maxOverclocks = 0;
+        while (maxOverclocks < Long.SIZE && miningDurationTicks(duration, maxOverclocks, timeDivisor) > 1
+            && RECIPE_MV * Math.pow(powerMultiplier, maxOverclocks + 1) <= availablePower) maxOverclocks++;
+        return new OverclockCalculator() {
+
+            @Override
+            protected void calculateOverclock() {
+                super.calculateOverclock();
+                calculatedDuration = miningDurationTicks(duration, overclocks, timeDivisor);
+            }
+        }.setEUt(overclockVoltage)
+            .setAmperage(amperage)
+            .setRecipeEUt(RECIPE_MV)
+            .setDuration(duration)
+            .setAmperageOC(amperageOC)
+            .setEUtIncreasePerOC(powerMultiplier)
+            .setDurationDecreasePerOC(timeDivisor)
+            .setMaxOverclocks(maxOverclocks)
+            .calculate();
+    }
+
+    private static int miningDurationTicks(int baseTicks, int overclocks, double timeDivisor) {
+        // Pair OCs into exact powers of two before rounding, without any fractional-tick state.
+        double ticks;
+        if (timeDivisor == Math.sqrt(2)) {
+            ticks = Math.scalb((double) baseTicks, -(overclocks / 2));
+            if ((overclocks & 1) != 0) ticks /= Math.sqrt(2);
+        } else {
+            ticks = baseTicks / Math.pow(timeDivisor, overclocks);
+        }
+        return Math.max(1, (int) Math.ceil(ticks));
+    }
+
     protected void setElectricityStats() {
         this.mOutputItems = new ItemStack[0];
 
         this.mEfficiency = 10000;
         this.mEfficiencyIncrease = 10000;
 
-        OverclockCalculator calculator = new OverclockCalculator().setEUt(getAverageInputVoltage())
-            .setAmperage(getMaxInputAmps())
-            .setRecipeEUt(RECIPE_MV)
-            .setDuration(StandardRecipeDuration_Second_LaserMeteorMiner * 20)
-            .setAmperageOC(!mExoticEnergyHatches.isEmpty() || mEnergyHatches.size() != 1)
-            .enablePerfectOC();
-        calculator.calculate();
-        this.mMaxProgresstime = (isWaiting) ? 20 * StandardRecipeDuration_Second_LaserMeteorMiner
-            : calculator.getDuration();
+        setProcessingLogicPower(miningOverclock);
+        OverclockCalculator calculator = miningOverclock.calculate();
+        this.mMaxProgresstime = isWaiting ? METEOR_POLL_INTERVAL_TICKS : calculator.getDuration();
         this.lEUt = isWaiting ? 0 : -calculator.getConsumption();
     }
 
@@ -885,11 +1061,6 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
         return false;
     }
 
-    @Override
-    protected @NotNull MTEMultiBlockBaseGui<?> getGui() {
-        return new TST_Gui_LaserMeteorMiner(this);
-    }
-
     /**
      * The GUI shows the outputs of the last seconds instead of the outputs and progress of the single (short) cycle.
      */
@@ -899,6 +1070,11 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     }
 
     // region GUI stats (server side, read by TST_Gui_LaserMeteorMiner's sync values)
+
+    @Override
+    protected @NotNull MTEMultiBlockBaseGui<?> getGui() {
+        return new TST_Gui_LaserMeteorMiner(this);
+    }
 
     private void recordCycle() {
         final long now = getWorldTime();
@@ -917,13 +1093,14 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
         }
     }
 
-    private long getWorldTime() {
+    protected long getWorldTime() {
         return getBaseMetaTileEntity().getWorld()
             .getTotalWorldTime();
     }
 
     public boolean isMining() {
-        return getBaseMetaTileEntity().isActive() && isStartInitialized && !hasFinished && !isWaiting;
+        return isMiningUnit() ? linkedStar != null && isLinkedToStar(linkedStar) && linkedStar.isStarMinerRunning()
+            : getBaseMetaTileEntity().isActive() && isStartInitialized && !hasFinished && !isWaiting;
     }
 
     public int getCurrentRadius() {
@@ -934,18 +1111,24 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
         return fortuneTier;
     }
 
+    public int getMiningTier() {
+        return multiTier;
+    }
+
     /**
      * Mining cycles needed for the meteor, a sphere of the given radius around its center, from the given drill
      * position (relative to the center) to the end. The drill scans y, then x, then (tier 1 only) z, each from
      * {@code -radius} to {@code radius + 1}. Tier 1 mines one block per cycle and tier 2 one row per cycle, while empty
-     * space is skipped within a cycle, so it costs nothing.
+     * space is skipped within a cycle, so it costs nothing. Tier 3 counts one cycle per horizontal layer.
      */
-    static long sphereWork(int radius, int tier, int dxFrom, int dyFrom, int dzFrom) {
-        final long radiusSquared = (long) radius * radius;
+    protected static long sphereWork(int radius, int tier, int dxFrom, int dyFrom, int dzFrom) {
+        if (tier == 3) return Math.max(0, radius - Math.max(-radius, dyFrom) + 1L);
+        // Blood Magic uses (radius + 0.5)^2; integer coordinates give this inclusive limit.
+        final long radiusLimit = (long) radius * (radius + 1);
         long work = 0;
         for (int dy = dyFrom; dy <= radius + 1; dy++) {
             for (int dx = dy == dyFrom ? dxFrom : -radius; dx <= radius + 1; dx++) {
-                final long left = radiusSquared - (long) dx * dx - (long) dy * dy;
+                final long left = radiusLimit - (long) dx * dx - (long) dy * dy;
                 if (left < 0) continue; // the row misses the sphere
                 if (tier != 1) {
                     work++;
@@ -1077,10 +1260,239 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
         // #tr tst.machine.MeteorMiner.waila.fortune.3
         // # Augment: {\WHITE}Fortune III
         // #zh_CN 增强效果: 时运III
+
+        // #tr tst.machine.MeteorMiner.waila.fortune.4
+        // # Augment: {\WHITE}Fortune IV
+        // #zh_CN 增强效果: 时运IV
         currentTip.add(tr("tst.machine.MeteorMiner.waila.tier." + tag.getInteger("tier")) + EnumChatFormatting.RESET);
         // spotless:on
         currentTip
             .add(tr("tst.machine.MeteorMiner.waila.fortune." + tag.getInteger("fortune")) + EnumChatFormatting.RESET);
+    }
+
+    // endregion
+
+    // region Star Mining Unit
+    private boolean starMode;
+    private boolean automaticStarLink;
+    private int starHostX, starHostY, starHostZ;
+    private TST_StarThatNeverWas linkedStar;
+    private long starLeaseUntil;
+    private double starBeamRange;
+    private TST_StarThatNeverWas structureStar;
+    private int structureStarTier;
+    private long structureStarLeaseUntil;
+
+    /** Claim a complete miner between native output cycles, with its beacon below the host's receiver. */
+    public boolean claimStar(TST_StarThatNeverWas host) {
+        var base = getBaseMetaTileEntity();
+        if (base == null || !isValid()) return false;
+        var hostBase = host.getBaseMetaTileEntity();
+        if (hostBase == null || !host.isValid() || !host.mMachine) return false;
+        if (automaticStarLink && (starHostX != hostBase.getXCoord() || starHostY != hostBase.getYCoord()
+            || starHostZ != hostBase.getZCoord())) return false;
+        if (linkedStar != null && linkedStar != host && isLinkedToStar(linkedStar)) return false;
+        if (!automaticStarLink && !canYieldWorldMining()) return false;
+        int mountedTier = 0;
+        for (int tier = 2; tier >= 1; tier--) {
+            if (host.tileAt(0, StarStructure.MINER_FLOOR_Y + (tier == 2 ? 7 : 6), tier == 2 ? 6 : 2) == base) {
+                mountedTier = tier == 2 && (multiTier == 3 || getMultiTier(mInventory[1]) == 3) ? 3 : tier;
+                break;
+            }
+        }
+        if (mountedTier == 0) return false;
+        TileEntity receiver = host.tileAt(0, StarStructure.RECEIVER_Y, 0);
+        if (!(receiver instanceof TileStarContainment)) return false;
+        ChunkCoordinates center = getMeteorCenter(mountedTier);
+        int laserY = base.getYCoord() + (mountedTier == 1 ? 10 : 15);
+        if (center.posX != receiver.xCoord || center.posZ != receiver.zCoord || receiver.yCoord <= laserY) return false;
+        // Establish the mounted structure context before requiring formation. Native geometry and the laser beacon
+        // are still checked; only the host supplies the otherwise independent energy/maintenance infrastructure.
+        if (structureStar != host || structureStarTier != mountedTier) {
+            structureStar = host;
+            structureStarTier = mountedTier;
+            onStructureChange();
+            mUpdate = 1;
+        }
+        structureStarLeaseUntil = base.getWorld()
+            .getTotalWorldTime() + 60;
+        if (!mMachine || multiTier != mountedTier || multiTier != getMultiTier(mInventory[1])) return false;
+        if (!automaticStarLink) {
+            starMode = true;
+            automaticStarLink = true;
+            starHostX = hostBase.getXCoord();
+            starHostY = hostBase.getYCoord();
+            starHostZ = hostBase.getZCoord();
+            mMaxProgresstime = mProgresstime = 0;
+            lEUt = 0;
+            markDirty();
+        }
+        linkedStar = host;
+        starLeaseUntil = base.getWorld()
+            .getTotalWorldTime() + 60;
+        // Only a validated mounted miner follows this host; a paused link retains its owner and structure lease.
+        if (base.isAllowedToWork() != hostBase.isAllowedToWork()) {
+            if (hostBase.isAllowedToWork()) base.enableWorking();
+            else base.disableWorking();
+        }
+        starBeamRange = receiver.yCoord - laserY + 0.5;
+        setFortuneTier();
+        if (renderer == null || renderer.isInvalid()) findLaserRenderer();
+        updateLaser(false, 0);
+        return true;
+    }
+
+    private boolean hasStarStructureContext() {
+        var base = getBaseMetaTileEntity();
+        if (structureStar == null || base == null || !structureStar.isValid() || !structureStar.mMachine) return false;
+        var hostBase = structureStar.getBaseMetaTileEntity();
+        World world = base.getWorld();
+        return hostBase != null && hostBase.getWorld() == world
+            && world.blockExists(hostBase.getXCoord(), hostBase.getYCoord(), hostBase.getZCoord())
+            && world.getTotalWorldTime() <= structureStarLeaseUntil;
+    }
+
+    @Override
+    public int getRepairStatus() {
+        return hasStarStructureContext() && multiTier == structureStarTier ? getIdealStatus() : super.getRepairStatus();
+    }
+
+    public boolean isLinkedToStar(TST_StarThatNeverWas host) {
+        return hasStarLink(host) && getBaseMetaTileEntity().isAllowedToWork();
+    }
+
+    /** A validated claim survives the work switch, including the connected panel's red-light state. */
+    public boolean hasStarLink(TST_StarThatNeverWas host) {
+        var base = getBaseMetaTileEntity();
+        return host != null && starMode
+            && linkedStar == host
+            && isValid()
+            && mMachine
+            && base != null
+            && base.getWorld()
+                .blockExists(starHostX, starHostY, starHostZ)
+            && base.getWorld()
+                .getTotalWorldTime() <= starLeaseUntil
+            && host.isValid()
+            && host.mMachine;
+    }
+
+    public double getStarBeamDepth() {
+        return Math.max(0, starBeamRange - .5);
+    }
+
+    public void releaseStar(TST_StarThatNeverWas host) {
+        if (linkedStar != host) return;
+        clearAutomaticStarLink();
+    }
+
+    private void clearAutomaticStarLink() {
+        starMode = automaticStarLink = false;
+        linkedStar = null;
+        clearStarStructureContext();
+        starLeaseUntil = 0;
+        mMaxProgresstime = mProgresstime = 0;
+        lEUt = 0;
+        updateLaser(false, 0);
+        // Returning to world mining must be an explicit player decision, never a side effect of removing the host.
+        getBaseMetaTileEntity().disableWorking();
+        getBaseMetaTileEntity().setActive(false);
+        setCheckRecipeResult(CheckRecipeResultRegistry.NONE);
+        markDirty();
+        scheduleRecipeCheckImmediate();
+    }
+
+    private void clearStarStructureContext() {
+        structureStar = null;
+        structureStarTier = 0;
+        structureStarLeaseUntil = 0;
+        onStructureChange();
+        mUpdate = 1;
+    }
+
+    /** Probe one known controller position before native mining; never scan or force-load nearby chunks. */
+    private void tryLinkToStarHost() {
+        var base = getBaseMetaTileEntity();
+        if (starMode || base == null
+            || !mMachine
+            || !base.isAllowedToWork()
+            || multiTier < 1
+            || multiTier > 3
+            || mMaxProgresstime > 0) return;
+        ChunkCoordinates center = getMeteorCenter(multiTier);
+        ForgeDirection back = getExtendedFacing().getRelativeBackInWorld();
+        int x = center.posX - back.offsetX * StarStructure.CONTROLLER_Z;
+        int y = base.getYCoord() + StarStructure.CONTROLLER_Y - StarStructure.MINER_FLOOR_Y - (multiTier >= 2 ? 7 : 6);
+        int z = center.posZ - back.offsetZ * StarStructure.CONTROLLER_Z;
+        World world = base.getWorld();
+        if (!world.blockExists(x, y, z)) return;
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile instanceof IGregTechTileEntity hostBase
+            && hostBase.getMetaTileEntity() instanceof TST_StarThatNeverWas host
+            && host.tileAt(0, StarStructure.MINER_FLOOR_Y + (multiTier >= 2 ? 7 : 6), multiTier >= 2 ? 6 : 2) == base)
+            claimStar(host);
+    }
+
+    /** An unloaded owner is unresolved, never permission to start digging the world. */
+    private void resolveStarHost() {
+        if (!automaticStarLink) return;
+        World world = getBaseMetaTileEntity().getWorld();
+        if (!world.blockExists(starHostX, starHostY, starHostZ)) return;
+        TileEntity tile = world.getTileEntity(starHostX, starHostY, starHostZ);
+        if (tile instanceof IGregTechTileEntity base && base.getMetaTileEntity() instanceof TST_StarThatNeverWas host
+            && host.isValid()
+            && (host.mMachine || host.getmStartUpCheck() >= 0)) {
+            linkedStar = host;
+            return;
+        }
+        clearAutomaticStarLink();
+    }
+
+    @Override
+    public boolean needsClientTick() {
+        return true;
+    }
+
+    @Override
+    public void onPostTick(IGregTechTileEntity base, long tick) {
+        controllerFrame.update(base);
+        if (base.isServerSide() && structureStar != null && !hasStarStructureContext()) {
+            if (automaticStarLink && !base.getWorld()
+                .blockExists(starHostX, starHostY, starHostZ)) {
+                // Keep the saved owner while its chunk is unavailable, but revoke the temporary infrastructure.
+                clearStarStructureContext();
+                base.disableWorking();
+                mMaxProgresstime = mProgresstime = 0;
+                lEUt = 0;
+                updateLaser(false, 0);
+            } else clearAutomaticStarLink();
+        }
+        if (base.isServerSide() && automaticStarLink && tick % 20 == 0) resolveStarHost();
+        super.onPostTick(base, tick);
+        // Do not alter the native tool flags: they must retain their original state when the unit is detached.
+        if (base.isServerSide() && hasStarStructureContext()) setErrorDisplayID(getErrorDisplayID() & ~63);
+        if (base.isServerSide() && starMode) {
+            base.setActive(linkedStar != null && isLinkedToStar(linkedStar) && linkedStar.isStarMinerRunning());
+            if (linkedStar == null || !isLinkedToStar(linkedStar)) updateLaser(false, 0);
+        }
+    }
+
+    public boolean isMiningUnit() {
+        return starMode || hasStarStructureContext();
+    }
+
+    private CheckRecipeResult miningUnitResult() {
+        if (hasStarStructureContext() && multiTier != getMultiTier(mInventory[1])) {
+            return SimpleCheckRecipeResult.ofFailure("missing_schematic");
+        }
+        // #tr GT5U.gui.text.recipe_result.star_linked
+        // # Standing by
+        // #zh_CN 待命
+
+        // #tr GT5U.gui.text.recipe_result.star_mining
+        // # Extracting
+        // #zh_CN 开采中
+        return SimpleCheckRecipeResult.ofSuccess(isMining() ? "star_mining" : "star_linked");
     }
 
     // endregion
@@ -1111,6 +1523,12 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
             outputsTag.appendTag(tag);
         }
         aNBT.setTag("meteorOutputs", outputsTag);
+
+        aNBT.setBoolean("starLinkMode", starMode);
+        aNBT.setBoolean("automaticStarLink", automaticStarLink);
+        aNBT.setInteger("starHostX", starHostX);
+        aNBT.setInteger("starHostY", starHostY);
+        aNBT.setInteger("starHostZ", starHostZ);
     }
 
     @Override
@@ -1136,11 +1554,34 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
             ItemStack stack = ItemStack.loadItemStackFromNBT(tag);
             if (stack != null) meteorOutputs.add(new MinedAmount(stack, tag.getLong("amount")));
         }
+
+        starMode = aNBT.getBoolean("starLinkMode");
+        automaticStarLink = aNBT.getBoolean("automaticStarLink");
+        if (automaticStarLink) starMode = true;
+        starHostX = aNBT.getInteger("starHostX");
+        starHostY = aNBT.getInteger("starHostY");
+        starHostZ = aNBT.getInteger("starHostZ");
     }
 
     // endregion
 
     // region Textures
+    @Override
+    public byte getUpdateData() {
+        return (byte) (multiTier & 3
+            | (controllerFrame.hasLinkedNeighbour(getBaseMetaTileEntity()) ? STAR_CONTROLLER_LINKED : 0));
+    }
+
+    @Override
+    public void onValueUpdate(byte value) {
+        multiTier = value & 3;
+        starControllerLinked = (value & STAR_CONTROLLER_LINKED) != 0;
+    }
+
+    public boolean isStarControllerLinked() {
+        return starControllerLinked;
+    }
+
     public static IIconContainer OVERLAY_FRONT_METEOR_MINER = Textures.BlockIcons
         .custom("gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER");
 
@@ -1156,11 +1597,17 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
         int colorIndex, boolean aActive, boolean redstoneLevel) {
+        int casingIndex = multiTier >= 3 ? StarStructure.casingTextureIndex()
+            : multiTier == 2 ? ((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(3)
+                : TAE.getIndexFromPage(3, 9);
+        ITexture casing = Textures.BlockIcons.getCasingTextureForId(casingIndex);
+        ITexture[] connected = controllerFrame.getTexture(side, aFacing, casing);
+        if (connected != null) return connected;
         return TSTControllerTextures.getTexture(
             side,
             aFacing,
             aActive,
-            Textures.BlockIcons.getCasingTextureForId(TAE.getIndexFromPage(0, 8)),
+            casing,
             OVERLAY_FRONT_METEOR_MINER,
             OVERLAY_FRONT_METEOR_MINER_GLOW,
             OVERLAY_FRONT_METEOR_MINER_ACTIVE,
@@ -1252,18 +1699,27 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
             // #zh_CN {\RED}{\BOLD} 等级 II
             .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.23"))
             // #tr tst.machine.MeteorMiner.tooltip.info.24
-            // # Always has Fortune III
-            // #zh_CN 总是时运III.
+            // # Always has Fortune IV
+            // #zh_CN 总是时运IV.
             .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.24"))
             // #tr tst.machine.MeteorMiner.tooltip.info.25
             // # Mines one row every cycle.
             // #zh_CN 每次运行挖掘一行.
             .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.25"))
             // #tr tst.machine.MeteorMiner.tooltip.info.26
+            // # {\RED}{\BOLD} TIER III
+            // #zh_CN {\RED}{\BOLD} 等级 III
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.26"))
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.24"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.27
+            // # Mines one complete horizontal layer every cycle.
+            // #zh_CN 每次运行挖掘一整层.
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.27"))
+            // #tr tst.machine.MeteorMiner.tooltip.info.28
             // # {\BLUE}{\BOLD}Finally some good Meteors!
             // #zh_CN {\BLUE}{\BOLD}终是好陨星! (Finally some good Meteors!)
-            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.26"))
-            .beginStructureBlock(shape_T1, shape_T2)
+            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.28"))
+            .beginStructureBlock(shape_T1, shape_T2, shape_T3)
             // #tr tst.machine.MeteorMiner.tooltip.structure.01
             // # {\GOLD}{\BOLD}TIER I
             // #zh_CN {\GOLD}{\BOLD}等级 I
@@ -1296,6 +1752,16 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
             .addOutputBus(tr("tst.machine.MeteorMiner.tooltip.structure.07"), 3)
             .addEnergyHatch(tr("tst.machine.MeteorMiner.tooltip.structure.07"), 3)
             .addMaintenanceHatch(tr("tst.machine.MeteorMiner.tooltip.structure.07"), 3)
+            // #tr tst.machine.MeteorMiner.tooltip.structure.08
+            // # {\GOLD}{\BOLD}TIER III
+            // #zh_CN {\GOLD}{\BOLD}等级 III
+            .addStructureInfo(tr("tst.machine.MeteorMiner.tooltip.structure.08"))
+            // #tr tst.machine.MeteorMiner.tooltip.structure.09
+            // # Lower Neutronium Support Casings
+            // #zh_CN 下部的中子承载机械方块
+            .addOutputBus(tr("tst.machine.MeteorMiner.tooltip.structure.09"), 4)
+            .addEnergyHatch(tr("tst.machine.MeteorMiner.tooltip.structure.09"), 4)
+            .addMaintenanceHatch(tr("tst.machine.MeteorMiner.tooltip.structure.09"), 4)
             .toolTipFinisher();
         // spotless:on
         return tt;
