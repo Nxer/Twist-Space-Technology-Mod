@@ -77,13 +77,13 @@ public final class BottledChaosMachineDescriptions {
     }
 
     public static List<String> describe(ItemStack controller, Structure structure, RecipeMap<?> pool,
-        int quantitySpeedExponent, boolean compact) {
-        return describe(controller, structure, pool, quantitySpeedExponent, compact, null);
+        long quantityMultiplier, boolean compact) {
+        return describe(controller, structure, pool, quantityMultiplier, compact, null);
     }
 
     /** The GUI receives numeric host-dependent values from the server, while translating locally. */
     public static List<String> describeForGui(ItemStack controller, Structure structure, RecipeMap<?> pool,
-        int quantitySpeedExponent, NBTTagCompound runtime) {
+        long quantityMultiplier, NBTTagCompound runtime) {
         if (runtime.getBoolean("debug")) {
             return Arrays.asList(
                 EnumChatFormatting.GRAY
@@ -91,13 +91,12 @@ public final class BottledChaosMachineDescriptions {
                 EnumChatFormatting.GRAY + text("eu", EnumChatFormatting.YELLOW + number(runtime.getDouble("eu"))),
                 EnumChatFormatting.GRAY + text(
                     "time",
-                    EnumChatFormatting.GREEN
-                        + number(runtime.getDouble("time") / (1d + Math.max(0, quantitySpeedExponent)))),
+                    EnumChatFormatting.GREEN + number(runtime.getDouble("time") / Math.max(1L, quantityMultiplier))),
                 EnumChatFormatting.GRAY + text(
                     "oc",
                     EnumChatFormatting.AQUA + clock(runtime.getDouble("power"), runtime.getDouble("divisor"))));
         }
-        List<String> lines = describe(controller, structure, pool, quantitySpeedExponent, true, runtime);
+        List<String> lines = describe(controller, structure, pool, quantityMultiplier, true, runtime);
         // #tr item.tst.bottledchaos.machine_module.info.source_machine
         // # Source machine: %s
         // #zh_CN 来源机器: %s
@@ -107,7 +106,7 @@ public final class BottledChaosMachineDescriptions {
     }
 
     private static List<String> describe(ItemStack controller, Structure structure, RecipeMap<?> pool,
-        int quantitySpeedExponent, boolean compact, NBTTagCompound runtime) {
+        long quantityMultiplier, boolean compact, NBTTagCompound runtime) {
         List<String> lines = new ArrayList<>();
         if (controller == null || pool == null) return lines;
         var source = new BottledChaosMachineParameters.InstalledSource(controller, structure);
@@ -155,7 +154,7 @@ public final class BottledChaosMachineDescriptions {
                     // #tr item.tst.bottledchaos.machine_module.info.energy_duration_scaled
                     // # Duration: total recipe energy x%s / recipe voltage / %s.
                     // #zh_CN 耗时: 配方总能耗 x%s / 配方电压 / %s.
-                    lines.set(1, text("energy_duration_scaled", forgeEU, 1 + Math.max(0, quantitySpeedExponent)));
+                    lines.set(1, text("energy_duration_scaled", forgeEU, Math.max(1L, quantityMultiplier)));
                     // #tr item.tst.bottledchaos.machine_module.info.photon_demand
                     // # Critical Photons per round: %s
                     // #zh_CN 每轮临界光子: %s
@@ -170,7 +169,7 @@ public final class BottledChaosMachineDescriptions {
             return lines;
         }
         double quantitySpeed = runtime != null && runtime.hasKey("speed") ? runtime.getDouble("speed")
-            : (1d + Math.max(0, quantitySpeedExponent)) / source.poolSpeedDivisor();
+            : (double) Math.max(1L, quantityMultiplier) / source.poolSpeedDivisor();
         String parallel = base == null ? "-" : number(base.parallel());
         String eu = base == null ? "-" : number(base.euMultiplier());
         String time = base == null ? "-" : number(base.timeMultiplier() / quantitySpeed);

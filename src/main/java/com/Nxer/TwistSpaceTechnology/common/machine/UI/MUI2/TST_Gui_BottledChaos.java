@@ -1346,7 +1346,7 @@ public class TST_Gui_BottledChaos<T extends BottledChaosMachineBase<T>> extends 
                             structure.controller(),
                             structure,
                             BottledChaosMachineConfiguration.pool(data.getInteger("sourcePool")),
-                            ItemBottledChaosMachineModule.quantitySpeedExponent(quantity(slot)),
+                            ItemBottledChaosMachineModule.quantitySpeed(quantity(slot)),
                             data);
                         description = String.join("\n", lines);
                     }
@@ -1357,7 +1357,7 @@ public class TST_Gui_BottledChaos<T extends BottledChaosMachineBase<T>> extends 
                             stack,
                             null,
                             BottledChaosMachineConfiguration.pool(slot),
-                            ItemBottledChaosMachineModule.quantitySpeedExponent(quantity(slot)),
+                            ItemBottledChaosMachineModule.quantitySpeed(quantity(slot)),
                             data));
                 }
             }

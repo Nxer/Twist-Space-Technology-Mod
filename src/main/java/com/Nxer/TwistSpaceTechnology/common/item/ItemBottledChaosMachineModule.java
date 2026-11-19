@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.item;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -20,6 +21,7 @@ import com.Nxer.TwistSpaceTechnology.common.init.TstItems;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosCircuitParameter;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineConfiguration;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineDescriptions;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosModuleStacking;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructureCatalog;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructureCatalog.Rule;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructureCatalog.Structure;
@@ -101,12 +103,10 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
         return quantity;
     }
 
-    public static int quantitySpeedExponent(long quantity) {
-        return quantity <= 0 ? 0 : (63 - Long.numberOfLeadingZeros(quantity)) / 3;
-    }
-
-    public static int quantitySpeed(long quantity) {
-        return 1 + quantitySpeedExponent(quantity);
+    /** Cumulative costs 1 + 2 + ... + 8; every further speed tier costs another eight structures. */
+    public static long quantitySpeed(long quantity) {
+        return BottledChaosModuleStacking.speed(BigInteger.valueOf(Math.max(1, quantity)))
+            .longValueExact();
     }
 
     public static Structure structure(ItemStack stack) {
@@ -278,7 +278,7 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
                         controller,
                         structure,
                         BottledChaosMachineConfiguration.pool(slot),
-                        quantitySpeedExponent(quantity),
+                        quantitySpeed(quantity),
                         !display),
                     parameters -> new StringJoiner(", "))
                 .add(BottledChaosMachineConfiguration.poolName(slot));
