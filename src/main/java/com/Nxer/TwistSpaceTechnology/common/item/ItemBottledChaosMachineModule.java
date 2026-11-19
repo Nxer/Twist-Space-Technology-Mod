@@ -19,6 +19,8 @@ import net.minecraft.util.StatCollector;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.init.TstItems;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosCircuitParameter;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosComplexStructures;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosGodforgeConfiguration;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineConfiguration;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineDescriptions;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosModuleStacking;
@@ -32,6 +34,7 @@ import com.google.common.collect.ImmutableList;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import tectech.thing.CustomItemList;
 
 /** One physical item owns the paid structure assets; machine quantity never uses ItemStack.stackSize. */
 public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
@@ -249,6 +252,29 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
         }
         String parameter = BottledChaosCircuitParameter.description(structure);
         if (parameter != null) lines.add(EnumChatFormatting.GRAY + parameter);
+        if (BottledChaosComplexStructures.isSeparateGodforgeHost(structure)
+            || BottledChaosComplexStructures.isSeparateGodforgeModule(structure)) {
+            List<String> description = BottledChaosGodforgeConfiguration.describe(structure, null);
+            if (display && BottledChaosComplexStructures.isSeparateGodforgeModule(structure)) {
+                // #tr item.tst.bottledchaos.machine_module.info.godforge_requirement
+                // # Requires a suitably upgraded %s; total modules must fit its capacity.
+                // #zh_CN 需要对应升级的%s; 模块总数不能超过主机容量.
+                description.add(
+                    StatCollector.translateToLocalFormatted(
+                        "item.tst.bottledchaos.machine_module.info.godforge_requirement",
+                        CustomItemList.Machine_Multi_ForgeOfGods.get(1)
+                            .getDisplayName()));
+            }
+            if (!description.isEmpty()) {
+                lines.add(PARAMETER_SEPARATOR);
+                lines.addAll(description);
+            }
+            if (!display) lines.add(
+                EnumChatFormatting.GRAY + StatCollector.translateToLocalFormatted(
+                    "item.tst.bottledchaos.machine_module.info.quantity",
+                    EnumChatFormatting.GOLD.toString() + quantity));
+            return;
+        }
         if (BottledChaosStructureCatalog.isAuxiliaryController(controller)) {
             lines.add(PARAMETER_SEPARATOR);
             // #tr item.tst.bottledchaos.machine_module.info.plant_capacity

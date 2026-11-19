@@ -2259,7 +2259,7 @@ public abstract class BottledChaosMachineBase<T extends BottledChaosMachineBase<
                     : BottledChaosRecipeProcessor.displayPoolMask(
                         ItemBottledChaosCredential.getRouteMask(installedCredentials[slot]),
                         parameters);
-                required = BottledChaosMachineConfiguration.withDependencies(required);
+                required = machineConfiguration.withInstalledDependencies(required);
                 for (int pool = 0; pool < BottledChaosMachineConfiguration.poolCount(); pool++) {
                     if ((required & (1L << pool)) == 0) continue;
                     int display = BottledChaosMachineConfiguration.displayPoolSlot(pool);

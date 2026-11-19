@@ -278,6 +278,7 @@ public enum BottledChaosSupportedMachine {
     }
 
     long poolMask(IMetaTileEntity machine) {
+        if (this == MTEFORGE_OF_GODS) return BottledChaosMachineConfiguration.godforgeHostMask();
         if (structureKind == StructureKind.PURIFICATION_PLANT)
             return BottledChaosMachineConfiguration.purificationPlantMask();
         long mask = 0;

@@ -76,7 +76,32 @@ public final class BottledChaosMachineParameters {
         double powerMultiplier, int maximumRecipeTier, long heat, int glassTier, FluidStack[] upkeep,
         int maximumOverclocks, int perfectOverclocks, int casingTier, int compressionTier, double minimumSourceDuration,
         boolean heavyCentrifuge, int plasmaTier, boolean multiStepPlasma, int startupReserveSeconds,
-        long maximumSourcePower, int upkeepPeriodSeconds) {}
+        long maximumSourcePower, int upkeepPeriodSeconds) {
+
+        Profile withParallel(long value) {
+            return new Profile(
+                value,
+                euMultiplier,
+                timeMultiplier,
+                timeDivisor,
+                powerMultiplier,
+                maximumRecipeTier,
+                heat,
+                glassTier,
+                upkeep,
+                maximumOverclocks,
+                perfectOverclocks,
+                casingTier,
+                compressionTier,
+                minimumSourceDuration,
+                heavyCentrifuge,
+                plasmaTier,
+                multiStepPlasma,
+                startupReserveSeconds,
+                maximumSourcePower,
+                upkeepPeriodSeconds);
+        }
+    }
 
     /** One case per machine, with mode-specific pools handled explicitly below. */
     enum Machine {
@@ -199,6 +224,11 @@ public final class BottledChaosMachineParameters {
         final boolean inheritsMasterOverclock;
 
         InstalledSource(ItemStack controller, Structure structure) {
+            this(controller, structure, null);
+        }
+
+        InstalledSource(ItemStack controller, Structure structure,
+            BottledChaosComplexStructures.GodforgeProfile bound) {
             this.structure = structure;
             debug = GTCMItemList.TestItem0.equal(controller);
             controller = BottledChaosComplexStructures.parameterController(controller, structure);
@@ -213,14 +243,15 @@ public final class BottledChaosMachineParameters {
             pools = BottledChaosSupportedMachine.recipeMaps(original);
             machine = original == null ? null : Machine.find(original);
             upgrades = new Upgrades(structure == null ? new ItemStack[0] : structure.materials());
-            godforge = BottledChaosComplexStructures.godforge(structure);
+            godforge = bound == null ? BottledChaosComplexStructures.godforge(structure) : bound;
             foundry = machine == Machine.FOUNDRY ? BottledChaosComplexStructures.foundry(structure) : null;
             fourHeliocasts = foundry != null && BottledChaosComplexStructures.fourHeliocasts(structure);
         }
 
         int poolSpeedDivisor() {
             if (original instanceof com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.WirelessEnergyMultiMachineBase
-                || godforge != null) return 1;
+                || godforge != null
+                || BottledChaosComplexStructures.isSeparateGodforgeModule(structure)) return 1;
             return Math.max(
                 1,
                 (int) pools.stream()

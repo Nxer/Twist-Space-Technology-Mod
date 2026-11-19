@@ -84,6 +84,9 @@ public final class BottledChaosMachineDescriptions {
     /** The GUI receives numeric host-dependent values from the server, while translating locally. */
     public static List<String> describeForGui(ItemStack controller, Structure structure, RecipeMap<?> pool,
         long quantityMultiplier, NBTTagCompound runtime) {
+        if (BottledChaosComplexStructures.isSeparateGodforgeHost(structure)
+            || BottledChaosComplexStructures.isSeparateGodforgeModule(structure))
+            return BottledChaosGodforgeConfiguration.describe(structure, runtime);
         if (runtime.getBoolean("debug")) {
             return Arrays.asList(
                 EnumChatFormatting.GRAY
