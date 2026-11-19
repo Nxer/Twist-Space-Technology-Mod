@@ -5,6 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledCha
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineBase.threadElement;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static gregtech.api.enums.HatchElement.Energy;
@@ -273,7 +274,9 @@ public final class BottledChaosStandardStructure extends BottledChaosStructure {
                 .addElement('I', Casings.IronFence.asElement())
                 .addElement('J', ofFrame(Materials.Neutronium))
                 .addElement('K', ofFrame(Materials.NaquadahAlloy))
-                .addElement('L', ofBlock(GregTechAPI.sBlockCasingsDyson, 9))
+                .addElement(
+                    'L',
+                    ofChain(ofBlock(TstBlocks.MetaBlockCasing01, 14), ofBlock(GregTechAPI.sBlockCasingsDyson, 9)))
                 .addElement('M', ofBlock(TstBlocks.MetaBlockCasing01, 1))
                 .addElement('N', ofBlock(TstBlocks.MetaBlockCasing02, 2))
                 .addElement('O', ofBlock(TstBlocks.MetaBlockCasing02, 4))
