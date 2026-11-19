@@ -49,72 +49,72 @@ public class ItemRegister {
 
         // #tr item.tst.BloodInfusedMiningDrone.0.name
         // # Blood-Infused Mining Drone (LV)
-        // #zh_CN 浸血采矿无人机 (LV)
+        // #zh_CN 浸血的采矿无人机 (LV)
         GTCMItemList.BloodInfusedMiningDroneLV.set(BloodInfusedMiningDrone.registerVariant(0));
 
         // #tr item.tst.BloodInfusedMiningDrone.1.name
         // # Blood-Infused Mining Drone (MV)
-        // #zh_CN 浸血采矿无人机 (MV)
+        // #zh_CN 浸血的采矿无人机 (MV)
         GTCMItemList.BloodInfusedMiningDroneMV.set(BloodInfusedMiningDrone.registerVariant(1));
 
         // #tr item.tst.BloodInfusedMiningDrone.2.name
         // # Blood-Infused Mining Drone (HV)
-        // #zh_CN 浸血采矿无人机 (HV)
+        // #zh_CN 浸血的采矿无人机 (HV)
         GTCMItemList.BloodInfusedMiningDroneHV.set(BloodInfusedMiningDrone.registerVariant(2));
 
         // #tr item.tst.BloodInfusedMiningDrone.3.name
         // # Blood-Infused Mining Drone (EV)
-        // #zh_CN 浸血采矿无人机 (EV)
+        // #zh_CN 浸血的采矿无人机 (EV)
         GTCMItemList.BloodInfusedMiningDroneEV.set(BloodInfusedMiningDrone.registerVariant(3));
 
         // #tr item.tst.BloodInfusedMiningDrone.4.name
         // # Blood-Infused Mining Drone (IV)
-        // #zh_CN 浸血采矿无人机 (IV)
+        // #zh_CN 浸血的采矿无人机 (IV)
         GTCMItemList.BloodInfusedMiningDroneIV.set(BloodInfusedMiningDrone.registerVariant(4));
 
         // #tr item.tst.BloodInfusedMiningDrone.5.name
         // # Blood-Infused Mining Drone (LuV)
-        // #zh_CN 浸血采矿无人机 (LuV)
+        // #zh_CN 浸血的采矿无人机 (LuV)
         GTCMItemList.BloodInfusedMiningDroneLuV.set(BloodInfusedMiningDrone.registerVariant(5));
 
         // #tr item.tst.BloodInfusedMiningDrone.6.name
         // # Blood-Infused Mining Drone (ZPM)
-        // #zh_CN 浸血采矿无人机 (ZPM)
+        // #zh_CN 浸血的采矿无人机 (ZPM)
         GTCMItemList.BloodInfusedMiningDroneZPM.set(BloodInfusedMiningDrone.registerVariant(6));
 
         // #tr item.tst.BloodInfusedMiningDrone.7.name
         // # Blood-Infused Mining Drone (UV)
-        // #zh_CN 浸血采矿无人机 (UV)
+        // #zh_CN 浸血的采矿无人机 (UV)
         GTCMItemList.BloodInfusedMiningDroneUV.set(BloodInfusedMiningDrone.registerVariant(7));
 
         // #tr item.tst.BloodInfusedMiningDrone.8.name
         // # Blood-Infused Mining Drone (UHV)
-        // #zh_CN 浸血采矿无人机 (UHV)
+        // #zh_CN 浸血的采矿无人机 (UHV)
         GTCMItemList.BloodInfusedMiningDroneUHV.set(BloodInfusedMiningDrone.registerVariant(8));
 
         // #tr item.tst.BloodInfusedMiningDrone.9.name
         // # Blood-Infused Mining Drone (UEV)
-        // #zh_CN 浸血采矿无人机 (UEV)
+        // #zh_CN 浸血的采矿无人机 (UEV)
         GTCMItemList.BloodInfusedMiningDroneUEV.set(BloodInfusedMiningDrone.registerVariant(9));
 
         // #tr item.tst.BloodInfusedMiningDrone.10.name
         // # Blood-Infused Mining Drone (UIV)
-        // #zh_CN 浸血采矿无人机 (UIV)
+        // #zh_CN 浸血的采矿无人机 (UIV)
         GTCMItemList.BloodInfusedMiningDroneUIV.set(BloodInfusedMiningDrone.registerVariant(10));
 
         // #tr item.tst.BloodInfusedMiningDrone.11.name
         // # Blood-Infused Mining Drone (UMV)
-        // #zh_CN 浸血采矿无人机 (UMV)
+        // #zh_CN 浸血的采矿无人机 (UMV)
         GTCMItemList.BloodInfusedMiningDroneUMV.set(BloodInfusedMiningDrone.registerVariant(11));
 
         // #tr item.tst.BloodInfusedMiningDrone.12.name
         // # Blood-Infused Mining Drone (UXV)
-        // #zh_CN 浸血采矿无人机 (UXV)
+        // #zh_CN 浸血的采矿无人机 (UXV)
         GTCMItemList.BloodInfusedMiningDroneUXV.set(BloodInfusedMiningDrone.registerVariant(12));
 
         // #tr item.tst.BloodInfusedMiningDrone.13.name
         // # Blood-Infused Mining Drone (MAX)
-        // #zh_CN 浸血采矿无人机 (MAX)
+        // #zh_CN 浸血的采矿无人机 (MAX)
         GTCMItemList.BloodInfusedMiningDroneMAX.set(BloodInfusedMiningDrone.registerVariant(13));
 
         GTCMItemList.BottledChaosMachineModule.set(BottledChaosMachineModule.registerVariant(0));
