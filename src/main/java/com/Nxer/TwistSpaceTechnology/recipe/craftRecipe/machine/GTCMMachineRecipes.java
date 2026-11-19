@@ -3516,27 +3516,6 @@ public class GTCMMachineRecipes {
                 .duration(20 * 300)
                 .addTo(assemblyLine);
 
-            // T3 schematic: retain the UV stage and upgrade the existing mining control system.
-            GTValues.RA.stdBuilder()
-                .metadata(RESEARCH_ITEM, GTCMItemList.MeteorMinerSchematic2.get(1))
-                .metadata(SCANNING, scanningLV(2 * HOURS))
-                .itemInputs(
-                    GTCMItemList.MeteorMinerSchematic2.get(1),
-                    getModItem(Mods.BloodMagic.ID, "bloodMagicBaseItems", 16, 28),
-                    getModItem(Mods.BloodMagic.ID, "bloodMagicBaseItems", 16, 29),
-                    getModItem(Mods.NewHorizonsCoreMod.ID, "BloodyIchorium", 16),
-
-                    ItemList.Emitter_UV.get(4),
-                    ItemList.Sensor_UV.get(4),
-                    new Object[]{OrePrefixes.circuit.get(Materials.UV), 8},
-                    HighEnergyFlowCircuit.get(4)
-                )
-                .fluidInputs(new FluidStack(solderIndAlloy, 144 * 32))
-                .itemOutputs(GTCMItemList.MeteorMinerSchematic3.get(1))
-                .eut(RECIPE_UV)
-                .duration(20 * 300)
-                .addTo(assemblyLine);
-
         }
 
         // endregion
