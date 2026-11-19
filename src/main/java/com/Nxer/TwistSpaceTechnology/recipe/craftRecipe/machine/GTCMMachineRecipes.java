@@ -3526,10 +3526,10 @@ public class GTCMMachineRecipes {
                     getModItem(Mods.BloodMagic.ID, "bloodMagicBaseItems", 16, 29),
                     ItemList.Emitter_UV.get(4),
 
-                    ItemRefer.HiC_T4.get(8),
-                    HighEnergyFlowCircuit.get(4),
                     ItemList.Sensor_UV.get(4),
-                    GregtechItemList.Laser_Lens_WoodsGlass.get(4)
+                    GregtechItemList.Laser_Lens_WoodsGlass.get(4),
+                    ItemRefer.HiC_T4.get(8),
+                    HighEnergyFlowCircuit.get(4)
                 )
                 .fluidInputs(new FluidStack(solderIndAlloy, 144 * 32))
                 .itemOutputs(GTCMItemList.MeteorMinerSchematic3.get(1))
