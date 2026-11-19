@@ -3461,24 +3461,6 @@ public class GTCMMachineRecipes {
         // region Laser Meteor Miner
         if (Config.Enable_LaserMeteorMiner) {
 
-            // Laser Meteor Miner
-            GTValues.RA
-                .stdBuilder()
-                .itemInputs(
-                    GTUtility.getIntegratedCircuit(10),
-                    getModItem(Mods.BloodMagic.ID, "masterStone", 1, new ItemStack(Blocks.stone)),
-                    ItemList.OreDrill3.get(4),
-                    getModItem(Mods.BloodMagic.ID, "bloodMagicBaseItems", 12, 28, new ItemStack(Items.diamond)),
-                    getModItem(Mods.BloodMagic.ID, "bloodMagicBaseItems", 12, 29, new ItemStack(Items.gold_ingot)),
-                    ItemList.Sensor_LuV.get(3),
-                    ItemRefer.HiC_T2.get(8),
-                    GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.TungstenSteel, 18)
-                )
-                .itemOutputs(GTCMItemList.MeteorMiner.get(1))
-                .eut(RECIPE_LuV)
-                .duration(20 * 180)
-                .addTo(assembler);
-
             // laser beacon
             GTValues.RA
                 .stdBuilder()

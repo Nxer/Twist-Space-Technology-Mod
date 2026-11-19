@@ -5,6 +5,10 @@ import static com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.ModItem.ge
 import static com.Nxer.TwistSpaceTechnology.common.api.ThaumcraftRecipeHandler.addInfusionCraftingRecipeAspectNotNull;
 import static com.Nxer.TwistSpaceTechnology.common.api.ThaumcraftRecipeHandler.getAspect;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCBasic.EVOLUTION;
+import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCResearches.CONDENSED_STAR_CORE_RESEARCH;
+import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCResearches.METEOR_MINER_RESEARCH;
+import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCResearches.MINERAL_SEED_RESEARCH;
+import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCResearches.STAR_THAT_NEVER_WAS_RESEARCH;
 import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.newItemStackWithNBT;
 import static com.glodblock.github.loader.ItemAndBlockHolder.INTERFACE;
 import static fox.spiteful.avaritia.compat.thaumcraft.Lucrum.ULTRA_DEATH;
@@ -12,7 +16,10 @@ import static goodgenerator.loader.Loaders.huiCircuit;
 import static gregtech.api.enums.ItemList.Automation_ChestBuffer_IV;
 import static gregtech.api.enums.ItemList.Machine_IV_Assembler;
 import static gregtech.api.enums.ItemList.TreeGrowSimulator;
+import static gregtech.api.enums.TCAspects.ASTRUM;
 import static gregtech.api.enums.TCAspects.ELECTRUM;
+import static gregtech.api.enums.TCAspects.NEBRISUM;
+import static gregtech.api.enums.TCAspects.PRIMORDIUM;
 import static gregtech.api.enums.TCAspects.RADIO;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_AlloyBlastSmelter;
 import static kubatech.api.enums.ItemList.ExtremeEntityCrusher;
@@ -33,6 +40,7 @@ import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.dreammaster.item.NHItemList;
 import com.gtnewhorizon.cropsnh.api.CropsNHItemList;
 
+import appeng.items.materials.MaterialType;
 import emt.init.EMTItems;
 import fox.spiteful.avaritia.items.LudicrousItems;
 import goodgenerator.util.ItemRefer;
@@ -54,6 +62,7 @@ import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.config.ConfigItems;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.item.ModItems;
+import vazkii.botania.common.item.block.ItemBlockSpecialFlower;
 
 public class TCRecipePool {
 
@@ -91,6 +100,12 @@ public class TCRecipePool {
     public static InfusionRecipe infusionRecipeInfusionMaterialDispenser;
     public static InfusionRecipe infusionRecipeEssentiaDiscretizer;
     public static CrucibleRecipe crucibleRecipeArcaneHole;
+    public static InfusionRecipe infusionRecipeMeteorMiner;
+    public static CrucibleRecipe crucibleRecipeInactiveMineralSeed;
+    public static InfusionRecipe infusionRecipeActiveMineralSeedPowder;
+    public static CrucibleRecipe crucibleRecipeActiveMineralSeed;
+    public static InfusionRecipe infusionRecipeCondensedStarCore;
+    public static InfusionRecipe infusionRecipeStarThatNeverWas;
 
     public static void loadRecipes() {
         AuraCoreRecipes.loadRecipes();
@@ -719,6 +734,94 @@ public class TCRecipePool {
             }
         }
         //spotless:on
+
+        if (Config.Enable_LaserMeteorMiner) {
+            infusionRecipeMeteorMiner = addInfusionCraftingRecipeAspectNotNull(
+                METEOR_MINER_RESEARCH,
+                GTCMItemList.MeteorMiner.get(1),
+                5,
+                new AspectList().add(Aspect.MINE, 32)
+                    .add(Aspect.MECHANISM, 32)
+                    .add(Aspect.LIGHT, 16),
+                ItemList.OreDrill3.get(1),
+                new ItemStack[] { getModItem(Mods.BloodMagic.ID, "masterStone", 1, 0), ItemRefer.HiC_T2.get(1),
+                    ItemList.Sensor_LuV.get(1), getModItem(Mods.BloodMagic.ID, "blockCrystal", 1, 0),
+
+                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.TungstenSteel, 1),
+                    getModItem(Mods.BloodMagic.ID, "blockCrystal", 1, 0), ItemList.Emitter_LuV.get(1),
+                    ItemRefer.HiC_T2.get(1) });
+
+            crucibleRecipeInactiveMineralSeed = ThaumcraftApi.addCrucibleRecipe(
+                MINERAL_SEED_RESEARCH,
+                GTCMItemList.MineralSeedCore.get(1),
+                GTCMItemList.InactiveMineralSeedPowder.get(1),
+                new AspectList().add(Aspect.EARTH, 8)
+                    .add(Aspect.METAL, 8)
+                    .add(Aspect.CRYSTAL, 4)
+                    .add(Aspect.MINE, 4));
+            infusionRecipeActiveMineralSeedPowder = addInfusionCraftingRecipeAspectNotNull(
+                MINERAL_SEED_RESEARCH,
+                GTCMItemList.ActiveMineralSeedPowder.get(1),
+                2,
+                new AspectList().add(Aspect.LIFE, 8)
+                    .add(Aspect.MAGIC, 8)
+                    .add(Aspect.EXCHANGE, 4),
+                GTCMItemList.InactiveMineralSeedPowder.get(1),
+                new ItemStack[] { new ItemStack(ConfigBlocks.blockCosmeticSolid, 1, 4),
+                    getModItem(Mods.BloodMagic.ID, "reinforcedSlate", 1, 0),
+                    new ItemStack(ConfigBlocks.blockCosmeticSolid, 1, 4),
+                    getModItem(Mods.BloodMagic.ID, "reinforcedSlate", 1, 0) });
+            crucibleRecipeActiveMineralSeed = ThaumcraftApi.addCrucibleRecipe(
+                MINERAL_SEED_RESEARCH,
+                GTCMItemList.MineralSeedCore.get(8),
+                GTCMItemList.ActiveMineralSeedPowder.get(1),
+                new AspectList().add(Aspect.MINE, 12)
+                    .add(Aspect.GREED, 8)
+                    .add(Aspect.ELDRITCH, 8)
+                    .add(NEBRISUM.getAspect(), 4));
+
+            infusionRecipeCondensedStarCore = addInfusionCraftingRecipeAspectNotNull(
+                CONDENSED_STAR_CORE_RESEARCH,
+                GTCMItemList.CondensedStarCore.get(1),
+                8,
+                new AspectList().add(Aspect.CRYSTAL, 128)
+                    .add(Aspect.VOID, 96)
+                    .add(ASTRUM.getAspect(), 64)
+                    .add(Aspect.ORDER, 64)
+                    .add(Aspect.TRAP, 64)
+                    .add(PRIMORDIUM.getAspect(), 32),
+                new ItemStack(ConfigItems.itemEldritchObject, 1, 3),
+                new ItemStack[] { ItemList.Field_Generator_UV.get(1), ItemList.Gravistar.get(1),
+                    GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Netherite, 1),
+                    GregtechItemList.Laser_Lens_Special.get(1),
+
+                    ItemList.Field_Generator_UV.get(1), new ItemStack(ModItems.blackHoleTalisman),
+                    GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Netherite, 1),
+                    GTCMItemList.MineralSeedCore.get(1) });
+
+            infusionRecipeStarThatNeverWas = addInfusionCraftingRecipeAspectNotNull(
+                STAR_THAT_NEVER_WAS_RESEARCH,
+                GTCMItemList.StarThatNeverWas.get(1),
+                40,
+                new AspectList().add(NEBRISUM.getAspect(), 128)
+                    .add(Aspect.MINE, 128)
+                    .add(Aspect.MIND, 96)
+                    .add(Aspect.LIFE, 96)
+                    .add(Aspect.MECHANISM, 64)
+                    .add(Aspect.CRAFT, 32),
+                GTCMItemList.CondensedStarCore.get(1),
+                new ItemStack[] {
+                    newItemStackWithNBT(
+                        getModItem(Mods.BloodArsenal.ID, "compacted_mrs", 1, 0),
+                        "ritualName",
+                        "AW019FallingTower"),
+                    new ItemStack(WayofTime.alchemicalWizardry.ModItems.activationCrystal, 1, 1),
+                    ItemBlockSpecialFlower.ofType("orechid"), MaterialType.Cell128SpatialPart.stack(1),
+
+                    new ItemStack(WayofTime.alchemicalWizardry.ModItems.itemRitualDiviner, 1, 2),
+                    getModItem(Mods.Thaumcraft.ID, "FocusPortableHole", 1, 0),
+                    getModItem(Mods.BloodArsenal.ID, "sigil_of_divinity", 1, 0), NHItemList.CircuitUHV.get(1) });
+        }
     }
 
     private static ItemStack getEnchantedCapacitor() {

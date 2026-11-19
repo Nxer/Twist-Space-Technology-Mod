@@ -1,8 +1,16 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_HV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidRegistry;
+
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+
+import WayofTime.alchemicalWizardry.ModItems;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
@@ -11,6 +19,7 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTUtility;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
+import thaumcraft.common.config.ConfigItems;
 
 public class MixerRecipePool {
 
@@ -44,5 +53,30 @@ public class MixerRecipePool {
             .duration(20 * 30)
             .addTo(RecipeMaps.mixerNonCellRecipes);
 
+        // Blood Magic uses Life Shards (28) and Soul Shards (29) together to form crystal clusters.
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                new ItemStack(ModItems.baseAlchemyItems, 2, 2),
+                new ItemStack(ModItems.baseItems, 1, 28),
+                new ItemStack(ModItems.baseItems, 1, 29),
+                new ItemStack(ConfigItems.itemNugget, 1, 16))
+            .fluidInputs(FluidRegistry.getFluidStack("blood", 100))
+            .itemOutputs(GTCMItemList.InactiveMineralSeedPowder.get(1))
+            .eut(RECIPE_HV)
+            .duration(20 * 8)
+            .addTo(RecipeMaps.mixerNonCellRecipes);
+
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                new ItemStack(ModItems.baseAlchemyItems, 16, 2),
+                new ItemStack(ModItems.baseItems, 8, 28),
+                new ItemStack(ModItems.baseItems, 8, 29),
+                new ItemStack(ConfigItems.itemNugget, 8, 16),
+                Materials.InfinityCatalyst.getDust(4))
+            .fluidInputs(FluidRegistry.getFluidStack("lifeessence", 200))
+            .itemOutputs(GTCMItemList.ActiveMineralSeedPowder.get(64))
+            .eut(RECIPE_UV)
+            .duration(20 * 20)
+            .addTo(RecipeMaps.mixerNonCellRecipes);
     }
 }

@@ -59,6 +59,10 @@ public class TCResearches {
 
     private static final String TST_Path = "gtnhcommunitymod";
     private static final String ROOT_RESEARCH = "TST_WELCOME";
+    static final String METEOR_MINER_RESEARCH = "TST_METEOR_MINER";
+    static final String MINERAL_SEED_RESEARCH = "TST_MINERAL_SEED";
+    static final String CONDENSED_STAR_CORE_RESEARCH = "TST_CONDENSED_STAR_CORE";
+    static final String STAR_THAT_NEVER_WAS_RESEARCH = "TST_STAR_THAT_NEVER_WAS";
 
     private static AspectList getResearchAspects(InfusionRecipe recipe) {
         AspectList researchAspects = new AspectList();
