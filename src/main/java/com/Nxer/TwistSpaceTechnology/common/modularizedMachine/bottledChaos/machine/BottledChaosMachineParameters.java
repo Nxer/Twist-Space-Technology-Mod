@@ -105,6 +105,7 @@ public final class BottledChaosMachineParameters {
         SCAVENGER,
         VACUUM_FREEZER,
         DIGESTER,
+        MEGA_DIGESTER,
         DISSOLUTION,
         BIO_VAT,
         MEGA_ALLOY,
@@ -387,6 +388,12 @@ public final class BottledChaosMachineParameters {
             case SCAVENGER -> value.set(Integer.MAX_VALUE, 0.6, Math.pow(0.8, p));
             case DIGESTER -> {
                 value.timeDivisor = 4;
+                value.requiresHeat = true;
+            }
+            case MEGA_DIGESTER -> {
+                if (c < 0) return Evaluation.INVALID;
+                value.set(Config.Parallel_MegaDigester, 1, 1F / (c + 1));
+                value.timeDivisor = Config.EnablePerfectOverclock_MegaDigester ? 4 : 2;
                 value.requiresHeat = true;
             }
             case BIO_VAT -> {}

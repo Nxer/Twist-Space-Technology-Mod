@@ -46,6 +46,7 @@ public enum BottledChaosSupportedMachine {
     TST_MANUFACTURING_CENTER("com.Nxer.TwistSpaceTechnology.common.machine.TST_ManufacturingCenter", "main", Machine.MANUFACTURING),
     TST_MIRACLE_DOOR("com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor", "mainMiracleDoor", Machine.STELLAR_FORGE),
     TST_HYPER_THERMAL_CONVECTOR("com.Nxer.TwistSpaceTechnology.common.machine.TST_HyperThermalConvector", "main", Machine.HEAT_CONVECTOR),
+    TST_MEGA_DIGESTER("com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaDigester", "mainMegaDigester", Machine.MEGA_DIGESTER),
     TST_MEGA_MACERATOR("com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaMacerator", "mainMegaMacerator", Machine.MEGA_MACERATOR),
     TST_SCAVENGER("com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger", "mainScavenger", Machine.SCAVENGER),
     TST_SWELEGFYR_BLAST_FURNACE("com.Nxer.TwistSpaceTechnology.common.machine.TST_SwelegfyrBlastFurnace", "$", Machine.SWELEGFYR),
