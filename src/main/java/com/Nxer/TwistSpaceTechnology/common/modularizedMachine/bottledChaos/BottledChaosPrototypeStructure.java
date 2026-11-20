@@ -7,6 +7,7 @@ import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.Modularize
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineBase.hatchElement;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineBase.threadElement;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static goodgenerator.loader.Loaders.compactFusionCoil;
@@ -285,7 +286,9 @@ public final class BottledChaosPrototypeStructure extends BottledChaosStructure 
                 .addElement('D', Casings.AdvancedIridiumPlatedMachineCasing.asElement())
                 .addElement('E', Casings.RadiantNaquadahAlloyCasing.asElement())
                 .addElement('F', Casings.HighPowerCasing.asElement())
-                .addElement('G', ofBlock(GregTechAPI.sBlockCasingsDyson, 9))
+                .addElement(
+                    'G',
+                    ofChain(ofBlock(TstBlocks.MetaBlockCasing01, 14), ofBlock(GregTechAPI.sBlockCasingsDyson, 9)))
                 .addElement('H', ofBlock(TstBlocks.MetaBlockCasing02, 2))
                 .addElement(
                     'I',

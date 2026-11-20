@@ -2874,21 +2874,19 @@ public class GTCMMachineRecipes {
             .duration(20 * 12)
             .addTo(assembler);
 
-            // Casing Stone Brick Advanced
+        // Load-Bearing Concrete Casing
         GTValues.RA
             .stdBuilder()
             .itemInputs(
-                GTCMItemList.ReinforcedStoneBrickCasing.get(1),
-                GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Adamantium, 1),
-                GTOreDictUnificator.get(OrePrefixes.plate, Materials.Bedrockium, 6)
+                GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Bedrockium, 1),
+                getModItem(Mods.IndustrialCraft2.ID, "itemPartCarbonMesh", 6),
+                GTOreDictUnificator.get(OrePrefixes.bolt, Materials.Neutronium, 4)
             )
-            .fluidInputs(
-                MaterialsAlloy.TRINIUM_NAQUADAH_CARBON.getFluidStack(1728)
-            )
-            .itemOutputs(GTCMItemList.ReinforcedBedrockCasing.get(1))
+            .fluidInputs(Materials.Concrete.getMolten(144 * 32))
+            .itemOutputs(GTCMItemList.LoadBearingConcreteCasing.get(1))
             .eut(RECIPE_ZPM)
-            .duration(20 * 30)
-            .addTo(assembler);
+            .duration(20 * 3)
+            .addTo(RecipeMaps.formingPressRecipes);
 
         // Casing Farm
 
