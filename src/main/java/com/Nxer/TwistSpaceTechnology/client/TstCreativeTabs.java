@@ -62,6 +62,13 @@ public class TstCreativeTabs {
         TstMachines.add(stack);
     }
 
+    public static boolean isRegisteredMachine(ItemStack stack) {
+        for (ItemStack machine : TstMachines) {
+            if (machine.isItemEqual(stack)) return true;
+        }
+        return false;
+    }
+
     // #tr itemGroup.TSTMachines
     // # TST Machines
     // #zh_CN TST 机器
