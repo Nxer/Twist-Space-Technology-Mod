@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.IntUnaryOperator;
+import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -295,8 +296,9 @@ public final class BottledChaosStructureCatalog {
                 continue;
             }
             if (!(machine instanceof MTEEnhancedMultiBlockBase<?>)) continue;
-            // Godforge combines its host and module after the ordinary structures have been collected.
-            if (supported.structureKind == BottledChaosSupportedMachine.StructureKind.GODFORGE) continue;
+            // Godforge hosts and modules have separate paid rules, registered together below.
+            if (supported.structureKind == BottledChaosSupportedMachine.StructureKind.GODFORGE
+                || supported == BottledChaosSupportedMachine.MTEFORGE_OF_GODS) continue;
             try {
                 long pools = machinePools[id];
                 if (supported.structureKind == BottledChaosSupportedMachine.StructureKind.FOUNDRY) {
@@ -351,7 +353,10 @@ public final class BottledChaosStructureCatalog {
     }
 
     public static Collection<Rule> displayRules() {
-        return Collections.unmodifiableList(rules);
+        return Collections.unmodifiableList(
+            rules.stream()
+                .filter(rule -> !BottledChaosComplexStructures.isLegacyGodforge(rule))
+                .collect(Collectors.toList()));
     }
 
     public static boolean requiresRecipeHeat(RecipeMap<?> pool) {
