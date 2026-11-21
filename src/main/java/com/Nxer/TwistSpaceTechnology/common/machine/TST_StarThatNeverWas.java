@@ -566,7 +566,7 @@ public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarTh
         }
         if (batch.progress < batch.duration && (miner == null || !miner.isLinkedToStar(this)
             || miner.getMiningTier() < batch.miningTier
-            || miner.getFortuneTier() < batch.fortune)) {
+            || miner.getFortuneTier() < TST_LaserMeteorMiner.fortuneForTier(batch.miningTier, batch.fortune))) {
             pausePaidBatch("tst.star.result.miner_missing");
             return;
         }

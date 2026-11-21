@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -671,20 +670,23 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
     }
 
     protected void setFortuneTier() {
-        this.fortuneTier = 0;
-        if (this.multiTier >= 2) {
-            this.fortuneTier = 4;
-            return;
-        }
-        if (!mInputBusses.isEmpty()) {
-            Optional<ItemStack> input = Optional.ofNullable(
+        int toolFortune = 0;
+        if (multiTier == 1 && !mInputBusses.isEmpty()) {
+            toolFortune = getFortuneTier(
                 mInputBusses.get(0)
                     .getInventoryHandler()
                     .getStackInSlot(0));
-            if (input.isPresent()) {
-                this.fortuneTier = getFortuneTier(input.get());
-            }
         }
+        fortuneTier = fortuneForTier(multiTier, toolFortune);
+    }
+
+    static int fortuneForTier(int miningTier, int toolFortune) {
+        return switch (miningTier) {
+            case 1 -> toolFortune;
+            case 2 -> 3;
+            case 3 -> 4;
+            default -> 0;
+        };
     }
 
     private static int getFortuneTier(ItemStack itemStack) {
@@ -1546,7 +1548,7 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
         isWaiting = aNBT.getBoolean("isWaiting");
         stopAllRendering = aNBT.getBoolean("stopAllRendering");
         multiTier = aNBT.getInteger("multiTier");
-        fortuneTier = aNBT.getInteger("fortuneTier");
+        fortuneTier = fortuneForTier(multiTier, aNBT.getInteger("fortuneTier"));
         meteorOutputs.clear();
         NBTTagList outputsTag = aNBT.getTagList("meteorOutputs", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < outputsTag.tagCount(); i++) {
