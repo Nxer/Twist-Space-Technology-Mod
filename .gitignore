@@ -37,3 +37,4 @@ addon.late.local.gradle
 addon.late.local.gradle.kts
 layout.json
 /buildSrc/build/
+/AI/
