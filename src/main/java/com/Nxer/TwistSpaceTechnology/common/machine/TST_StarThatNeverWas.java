@@ -333,6 +333,7 @@ public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarTh
 
     @Override
     public void onPreviewStructureComplete(@NotNull ItemStack trigger) {
+        StarStructure.finishPreviewHatches(this);
         int selected = StarStructure.selectedPreviewSection(trigger);
         if (selected != StarStructure.UPPER_PREVIEW_SECTION && selected != StarStructure.FULL_PREVIEW_SECTION) return;
         if (tileAt(0, StarStructure.RECEIVER_Y, 0) instanceof TileStarContainment receiver) {

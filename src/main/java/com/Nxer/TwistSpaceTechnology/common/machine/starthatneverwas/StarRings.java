@@ -113,7 +113,7 @@ public final class StarRings {
         ICHOR_DRACONIC(43, () -> TstBlocks.MetaBlockCasing02, 1),
         BLOODY_VOID(52, "dreamcraft", "BloodyVoid", 0);
 
-        final int id;
+        public final int id;
         final String mod, name;
         public final int meta;
         private final Supplier<Block> source;

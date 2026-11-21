@@ -37,11 +37,17 @@ import com.gtnewhorizon.structurelib.structure.AutoPlaceEnvironment;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.IStructureElement;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+import com.hfstudio.guidenh.guide.scene.level.GuidebookPreviewWorld;
 
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTechAPI;
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.common.blocks.BlockCasings8;
 import gregtech.common.blocks.ItemMachines;
@@ -50,7 +56,7 @@ import thaumcraft.common.config.ConfigBlocks;
 /** Cached occupied geometry; preview channels select complete architectural components. */
 public final class StarStructure {
 
-    public static final String CHANNEL = "tst_star_section";
+    public static final String CHANNEL = "megastructure";
     public static final int UPPER_PREVIEW_SECTION = 7;
     public static final int FULL_PREVIEW_SECTION = 8;
     // Shared front panel, directly above the tier 2/3 miner controller.
@@ -62,6 +68,7 @@ public final class StarStructure {
     private static final int ASTRAL_SILVER_FRAME = 60;
     private static final int RITUAL_STONE = 61;
     private static final int MAX_MATERIAL_ID = RITUAL_STONE;
+    private static final List<Cell> PREVIEW_HATCHES = new ArrayList<>();
     private static final List<Part> PARTS = load();
     private static IStructureDefinition<TST_StarThatNeverWas> definition;
 
@@ -73,12 +80,41 @@ public final class StarStructure {
         return ((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(StarRings.Material.RADIANT_NAQUADAH.meta);
     }
 
+    public static void finishPreviewHatches(TST_StarThatNeverWas host) {
+        // A partial preview can finish without a successful machine check to apply the casing texture.
+        for (Cell cell : PREVIEW_HATCHES) {
+            if (!(host.tileAt(cell.x, cell.y, cell.z) instanceof IGregTechTileEntity tile)
+                || !(tile.getMetaTileEntity() instanceof MTEHatch hatch)) continue;
+            boolean floor = cell.symbol == symbol(FLOOR_ENERGY_PORT);
+            ForgeDirection facing = floor ? ForgeDirection.DOWN
+                : host.getBaseMetaTileEntity()
+                    .getFrontFacing();
+            if (tile.getFrontFacing() != facing) tile.setFrontFacing(facing);
+            hatch.updateTexture(floor ? TstBlocks.MetaBlockCasing02.getTextureIndex(0) : casingTextureIndex());
+        }
+    }
+
     public static <T> IStructureElement<T> controllerCasing() {
         return ofBlock(GregTechAPI.sBlockCasings8, StarRings.Material.RADIANT_NAQUADAH.meta);
     }
 
     public static int selectedPreviewSection(ItemStack trigger) {
+        if (!ChannelDataAccessor.hasSubChannel(trigger, CHANNEL)) return 1;
         return Math.max(1, Math.min(FULL_PREVIEW_SECTION, ChannelDataAccessor.getChannelData(trigger, CHANNEL)));
+    }
+
+    public static String meOutputBusNameKey() {
+        return ItemList.Hatch_Output_Bus_ME.get(1)
+            .getUnlocalizedName() + ".name";
+    }
+
+    public static boolean isGuidebookWorld(World world) {
+        return world != null && world.isRemote && Loader.isModLoaded("guidenh") && isGuidebookPreviewWorld(world);
+    }
+
+    @Optional.Method(modid = "guidenh")
+    private static boolean isGuidebookPreviewWorld(World world) {
+        return world instanceof GuidebookPreviewWorld;
     }
 
     public static synchronized IStructureDefinition<TST_StarThatNeverWas> definition() {
@@ -99,7 +135,13 @@ public final class StarStructure {
             HatchElementBuilder.<TST_StarThatNeverWas>builder()
                 .atLeast(InputBus, InputHatch, OutputBus, Energy.or(ExoticEnergy))
                 .adder(TST_StarThatNeverWas::addGeneralHatch)
-                .description(() -> "tst.star.ports.general")
+                .descriptions(
+                    () -> Arrays.asList(
+                        InputBus.getDescriptionLangKey(),
+                        InputHatch.getDescriptionLangKey(),
+                        Energy.getDescriptionLangKey(),
+                        ExoticEnergy.getDescriptionLangKey(),
+                        meOutputBusNameKey()))
                 .hatchItemFilterAnd(host -> hatchFilter(TST_StarThatNeverWas::acceptsGeneralHatch))
                 .casingIndex(casingTextureIndex())
                 .allowOnly(ForgeDirection.NORTH)
@@ -111,7 +153,7 @@ public final class StarStructure {
                 .atLeast(Energy.or(ExoticEnergy))
                 .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(0))
                 .allowOnly(ForgeDirection.DOWN)
-                .hint(6)
+                .hint(2)
                 .buildAndChain(TstBlocks.MetaBlockCasing02, 0));
         builder.addElement(
             symbol(46),
@@ -119,7 +161,7 @@ public final class StarStructure {
                 .atLeast(InputBus)
                 .description(() -> "tst.star.ports.drone_input")
                 .adder(TST_StarThatNeverWas::addDroneInput)
-                .hint(2)
+                .hint(3)
                 .shouldReject(host -> false)
                 .hatchItemFilter(host -> hatchFilter(StarDronePorts::acceptsItemInput))
                 .shouldSkip((host, tile) -> tile != null && StarDronePorts.acceptsItemInput(tile.getMetaTileEntity()))
@@ -130,9 +172,9 @@ public final class StarStructure {
             symbol(47),
             HatchElementBuilder.<TST_StarThatNeverWas>builder()
                 .atLeast(OutputBus)
-                .description(() -> "tst.star.ports.drone_output")
+                .descriptions(() -> Arrays.asList(OutputBus.getDescriptionLangKey(), meOutputBusNameKey()))
                 .adder(TST_StarThatNeverWas::addDroneOutput)
-                .hint(3)
+                .hint(4)
                 .shouldReject(host -> false)
                 .hatchItemFilter(host -> hatchFilter(StarDronePorts::acceptsDroneOutput))
                 .shouldSkip((host, tile) -> tile != null && StarDronePorts.acceptsDroneOutput(tile.getMetaTileEntity()))
@@ -143,7 +185,6 @@ public final class StarStructure {
             symbol(49),
             HatchElementBuilder.<TST_StarThatNeverWas>builder()
                 .atLeast(InputHatch)
-                .description(() -> "tst.star.ports.fluid")
                 .adder(TST_StarThatNeverWas::addDroneFluidInput)
                 .hint(5)
                 .shouldReject(host -> false)
@@ -303,8 +344,13 @@ public final class StarStructure {
                     if (ring && StarRings.cells()
                         .get(ringIndex).material.id != material)
                         throw new IOException("Ring material does not match structure at " + x + "," + y + "," + z);
+                    Cell cell = new Cell(x, y, z, ring ? (char) (256 + material) : symbol(material));
                     sections.get(previewSection(x, y, z, ring) - 1)
-                        .add(new Cell(x, y, z, ring ? (char) (256 + material) : symbol(material)));
+                        .add(cell);
+                    if (material == 44 || material == 46
+                        || material == 47
+                        || material == 49
+                        || material == FLOOR_ENERGY_PORT) PREVIEW_HATCHES.add(cell);
                 }
                 // Storage partitions stay bounded, but a channel assembles every part of the selected component.
                 for (int section = 1; section <= UPPER_PREVIEW_SECTION; section++) {

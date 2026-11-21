@@ -5,6 +5,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.common.MinecraftForge;
 
+import com.Nxer.TwistSpaceTechnology.client.guide.StarStructureControls;
 import com.Nxer.TwistSpaceTechnology.client.render.ArtificialStarRender;
 import com.Nxer.TwistSpaceTechnology.client.render.BECCondensateRenderer;
 import com.Nxer.TwistSpaceTechnology.client.render.BottledChaosCapacityRenderer;
@@ -24,6 +25,7 @@ import com.Nxer.TwistSpaceTechnology.network.TST_Network;
 import com.Nxer.TwistSpaceTechnology.network.packet.ContainerDumpTargetPacket;
 import com.Nxer.TwistSpaceTechnology.system.ItemCooldown.CooldownEventHandler;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -54,6 +56,7 @@ public class ClientProxy extends CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
         MaterialsTST.initClient();
+        if (Loader.isModLoaded("guidenh")) StarStructureControls.register();
     }
 
     @Override

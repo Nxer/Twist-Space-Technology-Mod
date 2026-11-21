@@ -11,6 +11,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 
+import com.Nxer.TwistSpaceTechnology.common.block.BlockCondensedStarCore;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_StarThatNeverWas;
 import com.Nxer.TwistSpaceTechnology.common.machine.starthatneverwas.StarBatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.starthatneverwas.StarBatch.SurfaceMaterial;
@@ -26,6 +27,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 public final class TileStarContainment extends TileEntity {
 
     private static final int MAX_PALETTE = 1024;
+    private boolean guidePreview;
     public boolean formed, powered, running, advancing;
     public boolean miningRenderEnabled = true, meteorRenderEnabled = true, ringsVisible;
     public boolean meteorAnimationEnabled = true;
@@ -205,12 +207,18 @@ public final class TileStarContainment extends TileEntity {
 
     @Override
     public boolean shouldRenderInPass(int pass) {
-        return pass == 0 || pass == 1;
+        return pass == 0 || (pass == 1 && !isGuidePreview());
+    }
+
+    public boolean isGuidePreview() {
+        return guidePreview && StarStructure.isGuidebookWorld(worldObj)
+            && getBlockMetadata() == BlockCondensedStarCore.GUIDE_PREVIEW_META;
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
+        if (guidePreview) tag.setBoolean("tstGuideStar", true);
         writeVisual(tag);
         rings.write(tag);
         tag.setInteger("hostX", hostX);
@@ -252,6 +260,7 @@ public final class TileStarContainment extends TileEntity {
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
+        guidePreview = tag.getBoolean("tstGuideStar");
         readVisual(tag);
         rings.read(tag);
         ringRotation = rings.rotation();

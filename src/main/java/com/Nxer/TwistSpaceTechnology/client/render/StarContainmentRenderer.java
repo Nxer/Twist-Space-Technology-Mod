@@ -38,6 +38,7 @@ public final class StarContainmentRenderer extends TileEntitySpecialRenderer {
     private final DoubleBuffer clipPlane = BufferUtils.createDoubleBuffer(4);
     private long buildBudgetNanos = 2_000_000;
     private final StarRingMesh[] rings = new StarRingMesh[3];
+    private final StarGuideModel guideModel = new StarGuideModel();
     private static final double[][] RING_AXES = { StarRings.axis(0), StarRings.axis(1), StarRings.axis(2) };
 
     public StarContainmentRenderer() {
@@ -51,6 +52,10 @@ public final class StarContainmentRenderer extends TileEntitySpecialRenderer {
     @Override
     public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partial) {
         TileStarContainment star = (TileStarContainment) tile;
+        if (star.isGuidePreview()) {
+            guideModel.render(x, y, z);
+            return;
+        }
         if (!star.hasMeteor() || !star.meteorRenderEnabled) {
             StarMeteorMesh previous = surfaces.remove(star);
             if (previous != null) previous.dispose();
@@ -297,6 +302,7 @@ public final class StarContainmentRenderer extends TileEntitySpecialRenderer {
     }
 
     private void clearSurfaces() {
+        guideModel.dispose();
         if (Loader.isModLoaded("angelica")) StarRingLights.clear();
         for (StarMeteorMesh surface : surfaces.values()) surface.dispose();
         surfaces.clear();
