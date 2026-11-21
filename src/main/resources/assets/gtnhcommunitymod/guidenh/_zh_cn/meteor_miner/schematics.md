@@ -7,7 +7,7 @@ navigation:
 item_ids:
   - TwistSpaceTechnology:MetaItem01:45
   - TwistSpaceTechnology:MetaItem01:46
-  - TwistSpaceTechnology:MetaItem01:47
+  - TwistSpaceTechnology:MetaItem01:51
 ---
 
 # 矿机设计图
@@ -16,7 +16,7 @@ item_ids:
 
 <ItemImage id="TwistSpaceTechnology:MetaItem01:45" scale="2" />
 <ItemImage id="TwistSpaceTechnology:MetaItem01:46" scale="2" />
-<ItemImage id="TwistSpaceTechnology:MetaItem01:47" scale="2" />
+<ItemImage id="TwistSpaceTechnology:MetaItem01:51" scale="2" />
 
 | 设计图 | 每次开采 | 时运 |
 | --- | --- | --- |

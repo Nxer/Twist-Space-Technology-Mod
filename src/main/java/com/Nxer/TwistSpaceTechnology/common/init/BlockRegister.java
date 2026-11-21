@@ -293,15 +293,9 @@ public class BlockRegister {
                 .registerVariantWithTooltips(13, new String[] { TSTUtils.tr("tile.tst.MetaBlockCasing01.13.tooltip") }));
 
         // #tr tile.tst.MetaBlockCasing01.14.name
-        // # Reinforced Bedrock Casing
-        // #zh_CN 强化基岩机械方块
-
-        // #tr tile.tst.MetaBlockCasing01.14.tooltip
-        // # Stronger than bedrock!
-        // #zh_CN 比磐石更坚！
-        GTCMItemList.ReinforcedBedrockCasing.set(
-            MetaBlockCasing01
-                .registerVariantWithTooltips(14, new String[] { TSTUtils.tr("tile.tst.MetaBlockCasing01.14.tooltip") }));
+        // # Load-Bearing Concrete Casing
+        // #zh_CN 承重混凝土机械方块
+        GTCMItemList.LoadBearingConcreteCasing.set(MetaBlockCasing01.registerVariant(14));
 
         // #tr tile.tst.MetaBlockCasing01.15.name
         // # Swelegfyr Casing

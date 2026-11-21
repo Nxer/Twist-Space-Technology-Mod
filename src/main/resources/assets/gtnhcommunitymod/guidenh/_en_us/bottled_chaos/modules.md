@@ -33,6 +33,10 @@ Every machine in the batch shares that value. Circuits are not consumed and are 
 
 The NEI preview uses the default parameter and has no adjustable circuit copy. Check the packaged module's tooltip for its actual value and supported range.
 
+## Module stacking
+
+All structure modules share the stacking speed rule. Speeds from 1x to 8x require 1, 3, 6, 10, 15, 21, 28 and 36 structures respectively; each further +1x costs another 8 structures. See NEI for each structure's host requirements.
+
 ## Unpacking materials
 
 Return a filled module to the packaging workspace. Put only one ME item cell, with enough free capacity and type slots, in the material slots. Taking the result returns a blank module and the cell containing the construction materials.

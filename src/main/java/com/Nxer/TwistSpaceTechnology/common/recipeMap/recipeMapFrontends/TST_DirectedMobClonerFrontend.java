@@ -18,11 +18,10 @@ import codechicken.nei.NEIClientUtils;
 import codechicken.nei.recipe.GuiRecipe;
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
 import gregtech.api.recipe.NEIRecipePropertiesBuilder;
-import gregtech.api.recipe.RecipeMapFrontend;
 import gregtech.nei.GTNEIDefaultHandler;
 import gregtech.nei.RecipeDisplayInfo;
 
-public final class TST_DirectedMobClonerFrontend extends RecipeMapFrontend {
+public final class TST_DirectedMobClonerFrontend extends TST_RecipeMapFrontend {
 
     public TST_DirectedMobClonerFrontend(BasicUIPropertiesBuilder uiPropertiesBuilder,
         NEIRecipePropertiesBuilder neiPropertiesBuilder) {

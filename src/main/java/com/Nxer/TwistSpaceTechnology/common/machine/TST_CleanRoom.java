@@ -11,7 +11,6 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_ACTIV
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_GLOW;
 import static gregtech.api.structure.error.StructureErrorRegistry.TOO_TALL;
-import static gregtech.api.util.GTUtility.filterValidMTEs;
 import static gregtech.api.util.GTUtility.validMTEList;
 import static gregtech.api.util.GlassTier.getGlassBlockTier;
 import static net.minecraft.util.StatCollector.translateToLocal;
@@ -31,10 +30,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.cleanroommc.modularui.drawable.UITexture;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.gtnewhorizon.gtnhlib.capability.Capabilities;
 import com.gtnewhorizon.structurelib.StructureLibAPI;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -49,20 +47,20 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEBasicHull;
+import gregtech.api.metatileentity.implementations.MTEExtendedPowerMultiBlockBase;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.metatileentity.implementations.MTEHatchDynamo;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
-import gregtech.api.util.GTUtility.FluidId;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti;
 
 @SkipGenerateDescription
-public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
-    implements IConstructable, ISecondaryDescribable, ICleanroom {
+public class TST_CleanRoom extends MTEExtendedPowerMultiBlockBase<TST_CleanRoom>
+    implements IConstructable, ISecondaryDescribable, ICleanroom, TSTTooltipCredit {
 
     // region Class Constructor
     public TST_CleanRoom(int aID, String aName, String aNameRegional) {
@@ -113,6 +111,19 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
                 else world.setBlock(X, Y, Z, GregTechAPI.sBlockCasings3, 11, 2);
             }
         }
+    }
+
+    /**
+     * Reset all maintenance tool flags so the cleanroom never blocks on maintenance.
+     * Copied from {@code GTCM_MultiMachineBase#repairMachine()} after moving this class off that base.
+     */
+    public void repairMachine() {
+        mHardHammer = true;
+        mSoftMallet = true;
+        mScrewdriver = true;
+        mCrowbar = true;
+        mSolderingTool = true;
+        mWrench = true;
     }
 
     @Override
@@ -266,11 +277,6 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
         "tile.extrautils:etherealglass", };
 
     @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
     public int getMaxEfficiency(ItemStack aStack) {
         return 10000;
     }
@@ -299,46 +305,6 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
         // consumption.
         lEUt = -10;
         mMaxProgresstime = 20;
-
-        {
-            var a = filterValidMTEs(mInputHatches);
-            var b = filterValidMTEs(mOutputHatches);
-            var c = filterValidMTEs(mInputBusses);
-            var d = filterValidMTEs(mOutputBusses);
-            boolean item_me = true;
-            List<FluidId> fluidOutputs = new ArrayList<>();
-            for (var hatch : a) {
-                var fluid = hatch.getFluid();
-                if (fluid != null) fluidOutputs.add(FluidId.create(fluid));
-            }
-            boolean fluid_me = canDumpFluidToME(fluidOutputs);
-            if ((a.size() != b.size() && (!item_me)) || (c.size() != d.size() && (!fluid_me))) {
-                stopMachine();
-            }
-            for (int i = 0; i < c.size(); i++) {
-                for (var item : c.get(i).mInventory) {
-                    if (item != null) {
-                        if (item_me) {
-                            d.get(0)
-                                .storePartial(item);
-                        } else if (d.get(i)
-                            .storePartial(item.copy())) {
-                                item.stackSize = 0;
-                            }
-                    }
-                }
-            }
-            for (int i = 0; i < a.size(); i++) {
-                if (a.get(i)
-                    .getFluid() == null) continue;
-                a.get(i)
-                    .getFluid().amount -= b.get(i)
-                        .fill(
-                            a.get(i)
-                                .getFluid(),
-                            true);
-            }
-        }
 
         return CheckRecipeResultRegistry.SUCCESSFUL;
     }
@@ -703,37 +669,21 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
         // #zh_CN TST超净间的控制器方块
         tt.addInfo(translateToLocal("tst.machine.TSTcleanroom.tooltip.info.01"));
         // #tr tst.machine.TSTcleanroom.tooltip.info.02
-        // # Consumes §640 EU/t§7 when first turned on
-        // #zh_CN 初次启动功率: §640EU/t§7
+        // # Future Industry Company as your service
+        // #zh_CN 未来工业公司为您服务
         tt.addInfo(translateToLocal("tst.machine.TSTcleanroom.tooltip.info.02"));
         // #tr tst.machine.TSTcleanroom.tooltip.info.03
-        // # and §64 EU/t§7 once at §c100%§7 efficiency
-        // #zh_CN §c100%§7洁净度稳定运行功率: §64EU/t§7
+        // # Running on §610 EU/t§7 and still at §c100%§7 efficiency
+        // #zh_CN 始终保持§c100%§7洁净度, 固定运行功率: §610EU/t§7
         tt.addInfo(translateToLocal("tst.machine.TSTcleanroom.tooltip.info.03"));
         // #tr tst.machine.TSTcleanroom.tooltip.info.04
-        // # If you use an LV energy hatch, it will actually accept §62A§7 instead of just §61A§7.
-        // #zh_CN 如果你使用一个LV能源仓供电, 它将接受§62A§7电流
+        // # Similar to AT, energy in hatches will be transport to dynamo hatches on machine running.
+        // #zh_CN 类似有源变压器, 在运行时能源仓中的电量会被转移到动力仓
         tt.addInfo(translateToLocal("tst.machine.TSTcleanroom.tooltip.info.04"));
         // #tr tst.machine.TSTcleanroom.tooltip.info.05
-        // # MV+ energy hatches just accept 1A as usual. For HV+ the cleanroom will overclock and gain efficiency faster.
-        // #zh_CN MV能源仓使用1A电流, 使用HV以上能源仓, TST超净间将会超频, 更快地提升洁净度.
+        // # Max structure 63x63x63
+        // #zh_CN 最大结构63x63x63
         tt.addInfo(translateToLocal("tst.machine.TSTcleanroom.tooltip.info.05"));
-        // #tr tst.machine.TSTcleanroom.tooltip.info.06
-        // # always clean，can be use as laser nodes，max §664*64*64§7
-        // #zh_CN 任何情况不会掉落洁净度, 可以作为有源变压器使用, 最大§664*64*64§7, 属于超净间的输入仓/总线的流体/物品会按一定顺序输出到输出仓/总线, 如果有me输出仓/总线, 则会统一输出到此内部.
-        tt.addInfo(translateToLocal("tst.machine.TSTcleanroom.tooltip.info.06"));
-        // #tr tst.machine.TSTcleanroom.tooltip.info.07
-        // # Machines that cause pollution aren't allowed to be put in.
-        // #zh_CN 不可放入会产生污染的机器
-        tt.addInfo(translateToLocal("tst.machine.TSTcleanroom.tooltip.info.07"));
-        // #tr tst.machine.TSTcleanroom.tooltip.info.08
-        // # §4§lWATCH OUT! DO NOT DESTROY STRUCTURE BLOCK WHEN MACHINE IS WORKING!
-        // #zh_CN §4§o§l小心, 不要在开机状态下破坏结构!
-        tt.addInfo(translateToLocal("tst.machine.TSTcleanroom.tooltip.info.08"));
-        // #tr tst.machine.TSTcleanroom.tooltip.info.09
-        // # §6§lBuffered by TST
-        // #zh_CN §6§lBuffered by TST
-        tt.addInfo(translateToLocal("tst.machine.TSTcleanroom.tooltip.info.09"));
         tt.beginVariableStructureBlock(3, MAX_WIDTH, 4, MAX_HEIGHT, 3, MAX_WIDTH, true);
         // #tr tst.machine.TSTcleanroom.tooltip.structure.01
         // # Top center

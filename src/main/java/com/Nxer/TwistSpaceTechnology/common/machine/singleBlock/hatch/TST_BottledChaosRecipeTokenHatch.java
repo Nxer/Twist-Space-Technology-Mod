@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosCredential;
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.BottledChaosHatchControls;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_BottledChaos;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.material.BottledChaosMaterialCache;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
@@ -55,7 +55,7 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
 
     private boolean executionEnabled;
     private boolean clearRunningStateRequested;
-    private MM_BottledChaos controller;
+    private BottledChaosMachineBase<?> controller;
     private int processingGroup = -1;
 
     private static final String[] DESCRIPTION = {
@@ -170,25 +170,25 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
         player.inventory.markDirty();
     }
 
-    public void bindController(MM_BottledChaos controller, int slot) {
+    public void bindController(BottledChaosMachineBase<?> controller, int slot) {
         this.controller = controller;
         processingGroup = slot;
     }
 
-    public void unbindController(MM_BottledChaos controller) {
+    public void unbindController(BottledChaosMachineBase<?> controller) {
         if (this.controller != controller) return;
         this.controller = null;
         processingGroup = -1;
     }
 
     public NBTTagCompound getInformation(boolean details) {
-        return MM_BottledChaos.getCredentialHatchInformation(this, controller, processingGroup, details);
+        return BottledChaosMachineBase.getCredentialHatchInformation(this, controller, processingGroup, details);
     }
 
     @SideOnly(Side.CLIENT)
     private static String getFittedHatchDisplayText(NBTTagCompound data) {
         return TSTTextLayout.ellipsize(
-            MM_BottledChaos.getCredentialHatchTitle(data),
+            BottledChaosMachineBase.getCredentialHatchTitle(data),
             140,
             TextRenderer.getFontRenderer()::getStringWidth);
     }
@@ -217,7 +217,7 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
     public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
         IWailaConfigHandler config) {
         super.getWailaBody(itemStack, currentTip, accessor, config);
-        MM_BottledChaos.appendCredentialHatchWaila(
+        BottledChaosMachineBase.appendCredentialHatchWaila(
             currentTip,
             accessor.getNBTData()
                 .getCompoundTag(INFORMATION_NBT),
@@ -299,7 +299,7 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
                         tooltip -> tooltip.addLine(
                             information.getValue() != null && information.getValue()
                                 .getBoolean("connected")
-                                    ? MM_BottledChaos.getCredentialHatchTitle(information.getValue())
+                                    ? BottledChaosMachineBase.getCredentialHatchTitle(information.getValue())
                                     : StatCollector.translateToLocal(
                                         "tst.machine.BottledChaosRecipeTokenHatch.info.disconnected")))
                     .tooltipAutoUpdate(true)

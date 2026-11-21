@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.item;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -18,8 +19,11 @@ import net.minecraft.util.StatCollector;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.init.TstItems;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosCircuitParameter;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosComplexStructures;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosGodforgeConfiguration;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineConfiguration;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosMachineDescriptions;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosModuleStacking;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructureCatalog;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructureCatalog.Rule;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine.BottledChaosStructureCatalog.Structure;
@@ -30,6 +34,7 @@ import com.google.common.collect.ImmutableList;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import tectech.thing.CustomItemList;
 
 /** One physical item owns the paid structure assets; machine quantity never uses ItemStack.stackSize. */
 public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
@@ -101,12 +106,10 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
         return quantity;
     }
 
-    public static int quantitySpeedExponent(long quantity) {
-        return quantity <= 0 ? 0 : (63 - Long.numberOfLeadingZeros(quantity)) / 3;
-    }
-
-    public static int quantitySpeed(long quantity) {
-        return 1 + quantitySpeedExponent(quantity);
+    /** Cumulative costs 1 + 2 + ... + 8; every further speed tier costs another eight structures. */
+    public static long quantitySpeed(long quantity) {
+        return BottledChaosModuleStacking.speed(BigInteger.valueOf(Math.max(1, quantity)))
+            .longValueExact();
     }
 
     public static Structure structure(ItemStack stack) {
@@ -249,6 +252,29 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
         }
         String parameter = BottledChaosCircuitParameter.description(structure);
         if (parameter != null) lines.add(EnumChatFormatting.GRAY + parameter);
+        if (BottledChaosComplexStructures.isSeparateGodforgeHost(structure)
+            || BottledChaosComplexStructures.isSeparateGodforgeModule(structure)) {
+            List<String> description = BottledChaosGodforgeConfiguration.describe(structure, null);
+            if (display && BottledChaosComplexStructures.isSeparateGodforgeModule(structure)) {
+                // #tr item.tst.bottledchaos.machine_module.info.godforge_requirement
+                // # Requires a suitably upgraded %s; total modules must fit its capacity.
+                // #zh_CN 需要对应升级的%s; 模块总数不能超过主机容量.
+                description.add(
+                    StatCollector.translateToLocalFormatted(
+                        "item.tst.bottledchaos.machine_module.info.godforge_requirement",
+                        CustomItemList.Machine_Multi_ForgeOfGods.get(1)
+                            .getDisplayName()));
+            }
+            if (!description.isEmpty()) {
+                lines.add(PARAMETER_SEPARATOR);
+                lines.addAll(description);
+            }
+            if (!display) lines.add(
+                EnumChatFormatting.GRAY + StatCollector.translateToLocalFormatted(
+                    "item.tst.bottledchaos.machine_module.info.quantity",
+                    EnumChatFormatting.GOLD.toString() + quantity));
+            return;
+        }
         if (BottledChaosStructureCatalog.isAuxiliaryController(controller)) {
             lines.add(PARAMETER_SEPARATOR);
             // #tr item.tst.bottledchaos.machine_module.info.plant_capacity
@@ -278,7 +304,7 @@ public final class ItemBottledChaosMachineModule extends AbstractTstMetaItem {
                         controller,
                         structure,
                         BottledChaosMachineConfiguration.pool(slot),
-                        quantitySpeedExponent(quantity),
+                        quantitySpeed(quantity),
                         !display),
                     parameters -> new StringJoiner(", "))
                 .add(BottledChaosMachineConfiguration.poolName(slot));

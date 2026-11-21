@@ -124,7 +124,7 @@ public final class BottledChaosNEIHandler extends GTNEIDefaultHandler {
         return super.getUsageAndCatalystHandler(inputId, ingredients);
     }
 
-    private static boolean isController(ItemStack stack) {
+    static boolean isController(ItemStack stack) {
         return GTCMItemList.BottledChaos.hasBeenSet()
             && GTUtility.areStacksEqual(stack, GTCMItemList.BottledChaos.get(1), true);
     }

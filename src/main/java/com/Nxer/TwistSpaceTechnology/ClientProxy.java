@@ -5,6 +5,8 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.common.MinecraftForge;
 
+import com.Nxer.TwistSpaceTechnology.client.BottledChaosTooltipHandler;
+import com.Nxer.TwistSpaceTechnology.client.GuideNHTooltipHandler;
 import com.Nxer.TwistSpaceTechnology.client.guide.StarStructureControls;
 import com.Nxer.TwistSpaceTechnology.client.render.ArtificialStarRender;
 import com.Nxer.TwistSpaceTechnology.client.render.BECCondensateRenderer;
@@ -24,6 +26,7 @@ import com.Nxer.TwistSpaceTechnology.loader.RendereLoader;
 import com.Nxer.TwistSpaceTechnology.network.TST_Network;
 import com.Nxer.TwistSpaceTechnology.network.packet.ContainerDumpTargetPacket;
 import com.Nxer.TwistSpaceTechnology.system.ItemCooldown.CooldownEventHandler;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipKeyHint;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -62,6 +65,12 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void init(FMLInitializationEvent event) {
         super.init(event);
+        if (TSTTooltipKeyHint.isChromaticLoaded()) {
+            MinecraftForge.EVENT_BUS.register(new BottledChaosTooltipHandler());
+        }
+        if (Loader.isModLoaded("guidenh")) {
+            MinecraftForge.EVENT_BUS.register(new GuideNHTooltipHandler());
+        }
         MinecraftForge.EVENT_BUS.register(new MaterialFluidTextureLoader());
         BottledChaosCapacityRenderer.register();
         MetaGlowCasingRenderer.register();

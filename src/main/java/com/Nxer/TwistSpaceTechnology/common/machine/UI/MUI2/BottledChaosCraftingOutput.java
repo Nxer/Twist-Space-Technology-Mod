@@ -10,9 +10,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_BottledChaos;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosCrafting.Preview;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineBase;
 import com.cleanroommc.modularui.network.NetworkUtils;
 import com.cleanroommc.modularui.screen.ModularContainer;
 import com.cleanroommc.modularui.utils.item.ItemStackHandler;
@@ -24,7 +24,7 @@ public final class BottledChaosCraftingOutput {
 
     private static final int SELECT_RESULT = 2;
     private static final int SYNC_REVISION = 3;
-    private final MM_BottledChaos machine;
+    private final BottledChaosMachineBase<?> machine;
     private final BooleanSupplier panelOpen;
     private final ItemStackHandler display = new ItemStackHandler(2);
     private Preview selected;
@@ -32,7 +32,7 @@ public final class BottledChaosCraftingOutput {
     private long selectionExpires;
     private long clientRevision = -1;
 
-    public BottledChaosCraftingOutput(MM_BottledChaos machine, BooleanSupplier panelOpen) {
+    public BottledChaosCraftingOutput(BottledChaosMachineBase<?> machine, BooleanSupplier panelOpen) {
         this.machine = machine;
         this.panelOpen = panelOpen;
     }

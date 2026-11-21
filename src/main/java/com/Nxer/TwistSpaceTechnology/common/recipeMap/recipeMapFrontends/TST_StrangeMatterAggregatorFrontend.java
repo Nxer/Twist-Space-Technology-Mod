@@ -9,11 +9,10 @@ import com.gtnewhorizons.modularui.api.math.Pos2d;
 
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
 import gregtech.api.recipe.NEIRecipePropertiesBuilder;
-import gregtech.api.recipe.RecipeMapFrontend;
 import gregtech.api.util.GTUtility;
 import gregtech.nei.RecipeDisplayInfo;
 
-public class TST_StrangeMatterAggregatorFrontend extends RecipeMapFrontend {
+public class TST_StrangeMatterAggregatorFrontend extends TST_RecipeMapFrontend {
 
     public TST_StrangeMatterAggregatorFrontend(BasicUIPropertiesBuilder uiPropertiesBuilder,
         NEIRecipePropertiesBuilder neiPropertiesBuilder) {

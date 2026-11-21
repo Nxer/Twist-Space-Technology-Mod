@@ -12,7 +12,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BottledChaosRecipeTokenHatch;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_BottledChaos;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.processing.BottledChaosStatus;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTextLayout;
 import com.cleanroommc.modularui.api.drawable.IKey;
@@ -67,12 +67,12 @@ final class BottledChaosHatchPage {
                 .getCompoundTagAt(slot);
     }
 
-    static ParentWidget<?> create(MM_BottledChaos machine, ModularPanel parent, PanelSyncManager manager,
+    static ParentWidget<?> create(BottledChaosMachineBase<?> machine, ModularPanel parent, PanelSyncManager manager,
         BooleanSupplier open, BottledChaosGuiSkin skin) {
         int[] selectedSlot = { 0 };
         IntSyncValue selected = new IntSyncValue(
             () -> selectedSlot[0],
-            value -> selectedSlot[0] = Math.max(0, Math.min(MM_BottledChaos.THREAD_COUNT - 1, value))).allowC2S();
+            value -> selectedSlot[0] = Math.max(0, Math.min(machine.getProcessingGroupLimit() - 1, value))).allowC2S();
         manager.syncValue("bottledChaosSelectedHatch", selected);
         boolean[] receivedSummary = { false };
         GenericSyncValue<NBTTagCompound, ?> summary = GenericSyncValue.builder(NBTTagCompound.class)
@@ -85,7 +85,7 @@ final class BottledChaosHatchPage {
         int[] hoveredSlot = { -1 };
         IntSyncValue hovered = new IntSyncValue(
             () -> hoveredSlot[0],
-            value -> hoveredSlot[0] = value >= 0 && value < MM_BottledChaos.THREAD_COUNT ? value : -1).allowC2S();
+            value -> hoveredSlot[0] = value >= 0 && value < machine.getProcessingGroupLimit() ? value : -1).allowC2S();
         manager.syncValue("bottledChaosHoveredCache", hovered);
         GenericSyncValue<NBTTagCompound, ?> details = GenericSyncValue.builder(NBTTagCompound.class)
             .getter(
@@ -100,7 +100,7 @@ final class BottledChaosHatchPage {
             ? machine.getManagedCredentialHatch(selected.getIntValue())
             : null;
         ParentWidget<?> page = new ParentWidget<>().size(432, 183);
-        for (int slot = 0; slot < MM_BottledChaos.THREAD_COUNT; slot++) {
+        for (int slot = 0; slot < machine.getProcessingGroupLimit(); slot++) {
             int index = slot;
             Supplier<NBTTagCompound> data = () -> hatch(summary.getValue(), index);
             Runnable select = () -> selected.setIntValue(index, true, true);
@@ -183,7 +183,7 @@ final class BottledChaosHatchPage {
         }
         page.child(label(() -> fit(family(current.get()), 268), 268).pos(7, 146));
         page.child(label(() -> {
-            String share = MM_BottledChaos.getProcessingGroupShareValue(current.get());
+            String share = BottledChaosMachineBase.getProcessingGroupShareValue(current.get());
             int peers = current.get()
                 .getInteger("boundSlots");
             return fit(
@@ -193,7 +193,7 @@ final class BottledChaosHatchPage {
                         : EnumChatFormatting.GRAY + " | "
                             + StatCollector.translateToLocalFormatted(
                                 "tst.machine.BottledChaosRecipeTokenHatch.gui.bound_inputs",
-                                MM_BottledChaos.formatProcessingGroups(peers))),
+                                BottledChaosMachineBase.formatProcessingGroups(peers))),
                 418);
         }, 418).pos(7, 161)
             .setEnabledIf(
@@ -233,7 +233,7 @@ final class BottledChaosHatchPage {
     }
 
     private static String family(NBTTagCompound data) {
-        return MM_BottledChaos.localizeKeyList(
+        return BottledChaosMachineBase.localizeKeyList(
             data.getBoolean("installed") ? data.getString("family") : "tst.machine.BottledChaos.gui.module_missing");
     }
 
@@ -247,7 +247,7 @@ final class BottledChaosHatchPage {
         List<String> lines = new ArrayList<>();
         lines.add(StatCollector.translateToLocalFormatted("tst.machine.BottledChaos.gui.cache_count", count));
         if (details != null && details.getBoolean("connected") && details.getInteger("slot") == slot + 1) {
-            lines.addAll(MM_BottledChaos.getMaterialSummaryLines(details.getCompoundTag("cache"), false));
+            lines.addAll(BottledChaosMachineBase.getMaterialSummaryLines(details.getCompoundTag("cache"), false));
         } else lines.add(StatCollector.translateToLocal("tst.machine.BottledChaos.gui.loading"));
         return lines;
     }
@@ -273,9 +273,10 @@ final class BottledChaosHatchPage {
     }
 
     private static String status(NBTTagCompound data) {
-        String blockedRoute = MM_BottledChaos.getBlockedRouteText(data);
+        String blockedRoute = BottledChaosMachineBase.getBlockedRouteText(data);
         return data.getBoolean("installed")
-            ? MM_BottledChaos.getStatusColor(data.getString("status")) + MM_BottledChaos.getWailaStatusText(data)
+            ? BottledChaosMachineBase.getStatusColor(data.getString("status"))
+                + BottledChaosMachineBase.getWailaStatusText(data)
                 + (blockedRoute.isEmpty() ? "" : "\n" + blockedRoute)
             : BottledChaosStatus.UNINSTALLED.textColor()
                 + StatCollector.translateToLocal(BottledChaosStatus.UNINSTALLED.key());

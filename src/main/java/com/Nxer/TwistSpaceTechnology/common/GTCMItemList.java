@@ -250,7 +250,7 @@ public enum GTCMItemList {
     DenseCyclotronOuterCasing,
     CompactCyclotronCoil,
     AsepticGreenhouseCasing,
-    ReinforcedBedrockCasing,
+    LoadBearingConcreteCasing,
     SwelegfyrCasing,
     BloodyCasing1,
     BloodyCasing2,
@@ -368,6 +368,7 @@ public enum GTCMItemList {
     LargeNeutronOscillator,
     IndistinctTentaclePrototypeMK2,
     BottledChaos,
+    BottledChaosEarlyAccess,
 
     // endregion
 
