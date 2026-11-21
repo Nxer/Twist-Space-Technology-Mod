@@ -48,6 +48,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosR
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.StepRef;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.TierEU;
@@ -69,16 +70,18 @@ public final class BottledChaosPrismaticRecipes {
             catalog.markRecipe(VacuumFurnace, PrismaticCrystal, PrismaticGas, -1),
             catalog.markRecipe(VacuumFreezer, PrismaticGas, PrismaticAcid, -1));
 
-        // Independent shard supply; the honeycomb source replaces quartz and doubles the native yield.
+        // Both shard routes grow dim prismarine first. The comb boosts the engraving yield.
+        var dimPrismarine = TST_ItemID.create(ItemList.Dim_Prismarine.get(1));
+        var growDimPrismarine = catalog.markRecipe(Autoclave,
+            new Object[] { RedAlgaeBiomass, TST_ItemID.create(Materials.CertusQuartz.getDust(1)) }, dimPrismarine, -1);
         catalog.registerAlternativeChain("prismatic_acid", TierEU.RECIPE_UHV, RedAlgaeBiomass,
             new Object[] { PrismarineShard }, new Object[] { PrismarineShard },
-            catalog.markRecipe(Autoclave,
-                new Object[] { RedAlgaeBiomass, TST_ItemID.create(Materials.CertusQuartz.getDust(1)) }, PrismarineShard, -1));
+            growDimPrismarine, catalog.markRecipe(LaserEngraver, dimPrismarine, PrismarineShard, 1));
         if (Mods.Forestry.isModLoaded() && GTBees.combs != null) {
             catalog.registerAugmentedChain("prismatic_acid", "honeycomb", TierEU.RECIPE_UHV, RedAlgaeBiomass,
                 new Object[] { PrismarineShard }, new Object[] { PrismarineShard },
-                catalog.markRecipe(Autoclave,
-                    new Object[] { RedAlgaeBiomass, TST_ItemID.create(GTBees.combs.getStackForType(CombType.PRISMATIC, 1)) }, PrismarineShard, -1));
+                growDimPrismarine, catalog.markRecipe(LaserEngraver,
+                    new Object[] { dimPrismarine, TST_ItemID.create(GTBees.combs.getStackForType(CombType.PRISMATIC, 1)) }, PrismarineShard, -1));
         }
         catalog.orderDisplayRecipes("prismatic", DiamondGem, RedAlgaeBiomass, PrismarineShard);
 

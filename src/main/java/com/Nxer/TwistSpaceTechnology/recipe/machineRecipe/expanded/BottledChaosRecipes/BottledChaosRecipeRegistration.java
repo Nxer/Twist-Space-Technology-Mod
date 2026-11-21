@@ -17,6 +17,7 @@ public final class BottledChaosRecipeRegistration {
 
     public static void registerRecipes() {
         registerBaseRecipes();
+        if (!BottledChaosRecipeProcessor.isReady()) return;
         BottledChaosCredentialRecipes.registerRecipes();
         BottledChaosFakeRecipes.registerRecipes();
         BottledChaosFakeRecipes.registerCredentialRecipes();
@@ -48,6 +49,6 @@ public final class BottledChaosRecipeRegistration {
 
     /** Called after StellarForgeRecipePool has built its native recipes; base-cache readiness is independent. */
     public static void resolveLateSources() {
-        BottledChaosProcessAlternatives.resolve();
+        if (BottledChaosRecipeProcessor.isReady()) BottledChaosProcessAlternatives.resolve();
     }
 }
