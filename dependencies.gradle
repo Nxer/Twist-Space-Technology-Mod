@@ -1,6 +1,6 @@
 dependencies {
     elytraModpackVersion {
-        setGtnhVersion("2.9.0")
+        setGtnhVersion("2.9.1")
         // Elytra v1.1.2 passes this flag as allowFromCaching, so true reuses the pinned manifest.
         setManifestNoCache(true)
     }
