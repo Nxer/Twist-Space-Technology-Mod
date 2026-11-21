@@ -10,17 +10,16 @@ minecraft {
     extraRunJvmArguments.add("-Xms8G")
 }
 
-// Align GTNH transitive mod dependencies with the same manifest used by dependencies.gradle.
-def modpackVersions = elytraModpackVersion.getModVersions()
+// Align transitive dependencies with the selected GTNH modpack manifest.
 configurations.configureEach {
-    resolutionStrategy.eachDependency { dependency ->
-        if (dependency.requested.group == "com.github.GTNewHorizons") {
-            def version = modpackVersions[dependency.requested.name]
-            if (version != null) {
-                dependency.useVersion(version)
-            }
-        }
+    resolutionStrategy {
+        force gtnhB("Applied-Energistics-2-Unofficial")
+        force gtnhB("ThaumicBoots")
     }
+}
+
+String gtnhB(String name) {
+    return project.elytraModpackVersion.gtnh(name)
 }
 
 test {
