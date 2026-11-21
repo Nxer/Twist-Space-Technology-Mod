@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.function.LongPredicate;
+import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -15,6 +18,7 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.ModItem;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellHelper.InputSource;
+import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.github.bsideup.jabel.Desugar;
 
 import WayofTime.alchemicalWizardry.api.alchemy.energy.Reagent;
@@ -28,41 +32,54 @@ import WayofTime.alchemicalWizardry.common.summoning.meteor.MeteorRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Mods;
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.util.GTUtility;
 
 public final class StarRecipePlanner {
 
     public StarBatch batch;
-    public StarInputPlan inputs;
-    private long availableHelium;
-    public String failure = "no_recipe";
+    public final StarInputPlan inputs;
+    private final Meteor meteor;
+    private final ItemStack focus;
 
-    public boolean plan(List<InputSource> itemSources, List<InputSource> fluidSources, List<ItemStack> physicalDrones,
-        InputSource fuel, int fortune, int miningTier, int referenceTicks, long miningEut, long availablePower,
-        long seed) {
-        if (miningTier < 1 || miningTier > 3) return fail("miner_missing");
-        inputs = new StarInputPlan(itemSources, fluidSources);
-        List<ItemStack> items = inputs.itemTypes();
-        availableHelium = fuel == null ? 0 : fuel.amount;
-        ItemStack focus = null;
-        Meteor meteor = null;
-        for (ItemStack stack : items) {
+    private StarRecipePlanner(StarInputPlan inputs, Meteor meteor, ItemStack focus) {
+        this.inputs = inputs;
+        this.meteor = meteor;
+        this.focus = focus;
+    }
+
+    @Nullable
+    public static StarRecipePlanner match(List<InputSource> itemSources, List<InputSource> fluidSources) {
+        StarInputPlan inputs = new StarInputPlan(itemSources, fluidSources);
+        for (ItemStack stack : inputs.itemTypes()) {
             if (stack == null || stack.stackSize <= 0) continue;
             int id = MeteorRegistry.getMeteorIDForItem(stack);
-            if (id < 0) continue;
-            focus = stack;
-            meteor = MeteorRegistry.meteorList.get(id);
-            break;
+            if (id >= 0) {
+                Meteor meteor = MeteorRegistry.meteorList.get(id);
+                if (meteor != null) return new StarRecipePlanner(inputs, meteor, stack);
+            }
         }
-        if (meteor == null) return false;
-        if (meteor.radius < 1 || meteor.radius > StarMath.MAX_RADIUS) return fail("star_radius");
-        // Power is fixed independently of parallel. Reject an impossible native recipe before filling the fleet.
-        if (miningEut < 1 || availablePower < Math.max(GTValues.VP[StarMath.recipeTier(meteor.radius)], miningEut))
-            return fail("star_power");
-        if (!Mods.ExtraUtilities.isModLoaded()) return fail("star_stone");
+        return null;
+    }
+
+    public CheckRecipeResult checkPower(long miningEut, long availablePower) {
+        if (meteor.radius < 1 || meteor.radius > StarMath.MAX_RADIUS)
+            return SimpleResultWithText.ofFailure("tst.star.result.star_radius");
+        long requiredPower = Math.max(GTValues.VP[StarMath.recipeTier(meteor.radius)], miningEut);
+        if (miningEut < 1 || availablePower < requiredPower)
+            return CheckRecipeResultRegistry.insufficientPower(requiredPower);
+        return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    public CheckRecipeResult plan(StarDronePorts ports, int fortune, int miningTier, int referenceTicks, long miningEut,
+        long availablePower, long seed) {
+        if (miningTier < 1 || miningTier > 3) return SimpleResultWithText.ofFailure("tst.star.result.miner_tier");
+        if (!Mods.ExtraUtilities.isModLoaded()) return CheckRecipeResultRegistry.NO_RECIPE;
         ItemStack octuple = ModItem.getModItem(Mods.ExtraUtilities.ID, "cobblestone_compressed", 1, 7);
         if (octuple == null
             || octuple.getItem() != GameRegistry.findItem(Mods.ExtraUtilities.ID, "cobblestone_compressed"))
-            return fail("star_stone");
+            return CheckRecipeResultRegistry.NO_RECIPE;
         ItemStack expansion = GTCMItemList.MineralSeedCore.get(1);
         FluidStack lifeEssence = FluidRegistry.getFluidStack("lifeessence", 1);
 
@@ -70,6 +87,7 @@ public final class StarRecipePlanner {
         batch.fortune = fortune;
         batch.miningTier = miningTier;
         batch.seed = seed;
+        List<ItemStack> physicalDrones = ports.drones();
         int droneTier = 0;
         for (ItemStack stack : physicalDrones) {
             droneTier = Math.max(droneTier, StarDroneFleet.effectiveTier(stack));
@@ -81,7 +99,8 @@ public final class StarRecipePlanner {
             if (tier == 0) continue;
             int count = stack.stackSize;
             if (tier == droneTier) {
-                if (count > StarMath.MAX_DRONES - batch.drones) return fail("star_drone_limit");
+                if (count > StarMath.MAX_DRONES - batch.drones)
+                    return SimpleResultWithText.ofFailure("tst.star.result.star_drone_limit");
                 batch.drones += count;
                 if (!StarDroneFleet.isInfused(stack)) ordinary += count;
             } else if (!StarDroneFleet.isInfused(stack)) idleOrdinary += count;
@@ -89,24 +108,26 @@ public final class StarRecipePlanner {
         }
         batch.fleet.initialize(droneTier, ordinary, batch.drones - ordinary, idleOrdinary);
         long parallelLimit = StarMath.droneParallel(droneTier, batch.drones);
-        MeteorInputs recipe = new MeteorInputs(meteor, focus, expansion, octuple, lifeEssence);
-        if (!selectSizeAndParallel(recipe, referenceTicks, availablePower, parallelLimit)) return false;
+        InputSource fuel = ports.fuelSource();
+        MeteorInputs recipe = new MeteorInputs(meteor, focus, expansion, octuple, lifeEssence, ports, fuel);
+        CheckRecipeResult size = selectSizeAndParallel(recipe, referenceTicks, availablePower, parallelLimit);
+        if (!size.wasSuccessful()) return size;
         int radius = batch.radius;
         // Reserve only the chosen batch; no candidate trial changes the reservation ledger or inventories.
         batch.formationTicks = StarMeteorFormation.duration(radius);
         batch.beamWarmupTicks = StarBeamSequence.FIELD_CONNECTION;
         batch.duration = StarMath.batchDuration(radius, batch.miningTier, referenceTicks, batch.parallel);
         batch.fleet.paidHelium = batch.fleet.fuelForMiningTicks(batch.miningDuration());
-        if (!inputs.reserveFrom(fuel, batch.fleet.paidHelium)) return fail("drone_fuel");
+        if (!inputs.reserveFrom(fuel, batch.fleet.paidHelium)) return recipe.missingFuel(batch.fleet.paidHelium);
         ItemStackLong[] solids = recipe.solidCosts(radius, batch.parallel);
-        for (int i = 0; i < solids.length; i++) {
-            if (!inputs.item(solids[i].itemStack(), solids[i].stackSize())) return fail(solidFailure(i));
+        for (ItemStackLong solid : solids) {
+            if (!inputs.item(solid.itemStack(), solid.stackSize())) return missingItem(solid.itemStack(), 0, solids);
         }
         batch.lifeEssence = recipe.lifeEssenceCost(radius, batch.parallel);
-        if (!inputs.fluid(lifeEssence, batch.lifeEssence)) return fail("star_lp");
+        if (!inputs.fluid(lifeEssence, batch.lifeEssence)) return recipe.missingEssence(batch.lifeEssence);
 
         Map<Reagent, ItemStack> reagentItems = new LinkedHashMap<>();
-        for (ItemStack stack : items) {
+        for (ItemStack stack : inputs.itemTypes()) {
             if (stack == null || stack.stackSize <= 0) continue;
             ReagentStack reagent = ReagentRegistry.getReagentStackForItem(stack);
             if (reagent != null && reagent.amount >= 1000 && inputs.available(stack) >= batch.parallel) {
@@ -114,11 +135,17 @@ public final class StarRecipePlanner {
             }
         }
         List<Reagent> reagents = new ArrayList<>();
+        if (meteor.ores == null || meteor.filler == null)
+            return SimpleResultWithText.ofFailure("tst.star.result.invalid_meteor");
         List<MeteorComponent> components = new ArrayList<>(meteor.ores);
         components.addAll(meteor.filler);
         for (Reagent reagent : reagentItems.keySet()) {
             MeteorReagent effect = MeteorReagentRegistry.reagents.get(reagent);
             if (effect != null && effect.filler != null) components.addAll(effect.filler);
+        }
+        for (MeteorComponent component : components) {
+            if (component == null || component.getRequiredReagents() == null)
+                return SimpleResultWithText.ofFailure("tst.star.result.invalid_meteor");
         }
         for (Map.Entry<Reagent, ItemStack> entry : reagentItems.entrySet()) {
             Reagent reagent = entry.getKey();
@@ -132,14 +159,16 @@ public final class StarRecipePlanner {
             }
             // Do not charge obsolete radius-only or explosion-only powders in this virtual meteor.
             if (!affectsOutput) continue;
-            if (!inputs.item(entry.getValue(), batch.parallel)) return fail("star_catalyst");
+            if (!inputs.item(entry.getValue(), batch.parallel))
+                return missingItem(entry.getValue(), batch.parallel, solids);
             reagents.add(reagent);
         }
 
         // Physical drone stacks are held last, after all potentially short network extractions.
         for (ItemStack stack : physicalDrones) {
             if (StarDroneFleet.effectiveTier(stack) != 0
-                && !inputs.reserveFrom(InputSource.of(stack, stack), stack.stackSize)) return fail("input_changed");
+                && !inputs.reserveFrom(InputSource.of(stack, stack), stack.stackSize))
+                return SimpleResultWithText.ofFailure("tst.star.result.input_changed");
         }
         batch.formationEut = availablePower;
         batch.eut = miningEut;
@@ -153,12 +182,12 @@ public final class StarRecipePlanner {
             random,
             false);
         addComponents(Meteor.getNewFillerList(meteor.filler, reagents), filler, 0, random, true);
-        return true;
+        return CheckRecipeResultRegistry.SUCCESSFUL;
     }
 
     @Desugar
     private record MeteorInputs(Meteor meteor, ItemStack focus, ItemStack expansion, ItemStack stone,
-        FluidStack essence) {
+        FluidStack essence, StarDronePorts ports, InputSource fuel) {
 
         ItemStackLong[] solidCosts(int radius, long parallel) {
             return new ItemStackLong[] { new ItemStackLong(focus, parallel),
@@ -171,32 +200,45 @@ public final class StarRecipePlanner {
         long lifeEssenceCost(int radius, long parallel) {
             return StarMath.lifeEssence(meteor.cost, meteor.radius, radius, parallel);
         }
+
+        CheckRecipeResult missingEssence(long required) {
+            if (essence == null) return CheckRecipeResultRegistry.INTERNAL_ERROR;
+            return SimpleResultWithText.outOfFluid(essence, required);
+        }
+
+        CheckRecipeResult missingFuel(long required) {
+            return ports.hasFuelHatch() ? StarDronePorts.missingFuel(required) : CheckRecipeResultRegistry.NO_RECIPE;
+        }
     }
 
-    private static String solidFailure(int index) {
-        return switch (index) {
-            case 0 -> "star_focus";
-            case 1 -> "star_catalyst";
-            case 2 -> "star_stone";
-            default -> throw new IllegalArgumentException("Unknown meteor ingredient");
-        };
+    private static CheckRecipeResult missingItem(ItemStack item, long additional, ItemStackLong[] solids) {
+        if (item == null) return CheckRecipeResultRegistry.INTERNAL_ERROR;
+        GTUtility.ItemId type = GTUtility.ItemId.create(item);
+        long required = additional;
+        for (ItemStackLong solid : solids) {
+            if (solid.stackSize() > 0 && solid.itemStack() != null
+                && type.equals(GTUtility.ItemId.create(solid.itemStack())))
+                required = Math.addExact(required, solid.stackSize());
+        }
+        return SimpleResultWithText.outOfItem(item, required);
     }
 
     /** Maximize native-radius parallel first, then grow without sacrificing that parallel. */
-    private boolean selectSizeAndParallel(MeteorInputs recipe, int referenceTicks, long availablePower,
+    private CheckRecipeResult selectSizeAndParallel(MeteorInputs recipe, int referenceTicks, long availablePower,
         long parallelLimit) {
         int nativeRadius = recipe.meteor.radius;
-        String missing = limitingResource(recipe, referenceTicks, availablePower, nativeRadius, 1);
-        if (missing != null) return fail(missing);
+        Supplier<CheckRecipeResult> missing = limitingResource(recipe, referenceTicks, nativeRadius, 1);
+        if (missing != null) return missing.get();
         batch.parallel = largestFeasible(
             1,
             Math.min(parallelLimit, inputs.available(recipe.focus)),
-            parallel -> limitingResource(recipe, referenceTicks, availablePower, nativeRadius, parallel) == null);
+            parallel -> limitingResource(recipe, referenceTicks, nativeRadius, parallel) == null);
         batch.radius = (int) largestFeasible(
             nativeRadius,
             StarMath.MAX_RADIUS,
-            radius -> limitingResource(recipe, referenceTicks, availablePower, (int) radius, batch.parallel) == null);
-        return true;
+            radius -> availablePower >= GTValues.VP[StarMath.recipeTier((int) radius)]
+                && limitingResource(recipe, referenceTicks, (int) radius, batch.parallel) == null);
+        return CheckRecipeResultRegistry.SUCCESSFUL;
     }
 
     private static long largestFeasible(long low, long high, LongPredicate feasible) {
@@ -208,19 +250,23 @@ public final class StarRecipePlanner {
         return low;
     }
 
-    private String limitingResource(MeteorInputs recipe, int referenceTicks, long availablePower, int radius,
+    // Only the minimum batch reports a shortage. Larger trials can fall back without formatting a player message.
+    @Nullable
+    private Supplier<CheckRecipeResult> limitingResource(MeteorInputs recipe, int referenceTicks, int radius,
         long parallel) {
-        if (availablePower < GTValues.VP[StarMath.recipeTier(radius)]) return "star_power";
         try {
-            int missing = inputs.firstMissingItem(recipe.solidCosts(radius, parallel));
-            if (missing >= 0) return solidFailure(missing);
-            if (inputs.available(recipe.essence) < recipe.lifeEssenceCost(radius, parallel)) return "star_lp";
+            ItemStackLong[] solids = recipe.solidCosts(radius, parallel);
+            int missing = inputs.firstMissingItem(solids);
+            if (missing >= 0) return () -> missingItem(solids[missing].itemStack(), 0, solids);
+            long essence = recipe.lifeEssenceCost(radius, parallel);
+            if (inputs.available(recipe.essence) < essence) return () -> recipe.missingEssence(essence);
             int duration = StarMath.batchDuration(radius, batch.miningTier, referenceTicks, parallel);
             int miningTicks = duration - StarMeteorFormation.duration(radius) - StarBeamSequence.FIELD_CONNECTION;
-            if (batch.fleet.fuelForMiningTicks(miningTicks) > availableHelium) return "drone_fuel";
+            long helium = batch.fleet.fuelForMiningTicks(miningTicks);
+            if (helium > (recipe.fuel == null ? 0 : recipe.fuel.amount)) return () -> recipe.missingFuel(helium);
             return null;
         } catch (ArithmeticException overflow) {
-            return "numeric_limit";
+            return () -> SimpleResultWithText.ofFailure("tst.star.result.numeric_limit");
         }
     }
 
@@ -228,7 +274,10 @@ public final class StarRecipePlanner {
         boolean filler) {
         if (fraction <= 0) return;
         long total = 0;
-        for (MeteorComponent component : components) total = Math.addExact(total, Math.max(0, component.getWeight()));
+        for (MeteorComponent component : components) {
+            if (component == null) throw new IllegalArgumentException("Missing meteor component");
+            total = Math.addExact(total, Math.max(0, component.getWeight()));
+        }
         if (total == 0) throw new IllegalArgumentException("Meteor has no positive component weights");
         long blocks = Math.multiplyExact(StarMath.volume(batch.radius), batch.parallel);
         for (MeteorComponent component : components) {
@@ -244,12 +293,6 @@ public final class StarRecipePlanner {
         }
     }
 
-    private boolean fail(String reason) {
-        failure = reason;
-        batch = null;
-        return false;
-    }
-
     // #tr tst.star.result.star_radius
     // # Meteor radius is outside the current test range.
     // #zh_CN 陨星半径超出当前测试范围.
@@ -258,33 +301,9 @@ public final class StarRecipePlanner {
     // # This meteor batch exceeds the supported resource or duration range.
     // #zh_CN 本批陨星的耗材, 产出或耗时超出可处理的数值范围.
 
-    // #tr tst.star.result.star_catalyst
-    // # Not enough meteor catalysts.
-    // #zh_CN 陨星催化剂不足。
-
-    // #tr tst.star.result.star_focus
-    // # Not enough meteor focus items for the selected parallel.
-    // #zh_CN 陨星标志物不足以启动当前并行。
-
-    // #tr tst.star.result.mining_source
-    // # Install a meteor miner or supply mining drones.
-    // #zh_CN 需要安装坠星矿机或提供采矿无人机。
-
     // #tr tst.star.result.star_drone_limit
     // # At most 4096 drones of the highest grade can participate.
     // #zh_CN 最高等级的参与无人机不能超过 4096 架。
-
-    // #tr tst.star.result.star_stone
-    // # Not enough octuple compressed cobblestone for this meteor batch.
-    // #zh_CN 八重压缩圆石不足以生成本批陨星.
-
-    // #tr tst.star.result.star_lp
-    // # Not enough Life Essence for this meteor size.
-    // #zh_CN 生命本源不足以生成此尺寸的陨星。
-
-    // #tr tst.star.result.star_power
-    // # Insufficient input power for this meteor size.
-    // #zh_CN 输入功率不足以处理此尺寸的陨星。
 
     // #tr tst.star.result.invalid_meteor
     // # Invalid or unavailable Blood Magic meteor recipe.
@@ -295,6 +314,10 @@ public final class StarRecipePlanner {
     // #zh_CN 仪式启动时输入发生变化。
 
     // #tr tst.star.result.miner_missing
-    // # Restore the linked meteor miner's mining and Fortune tiers to resume the paid ritual.
-    // #zh_CN 请恢复联动坠星矿机的采掘与时运等级，以继续已扣料的仪式。
+    // # Meteor miner not ready
+    // #zh_CN 坠星矿机未就绪
+
+    // #tr tst.star.result.miner_tier
+    // # Meteor miner tier mismatch
+    // #zh_CN 坠星矿机等级不符
 }

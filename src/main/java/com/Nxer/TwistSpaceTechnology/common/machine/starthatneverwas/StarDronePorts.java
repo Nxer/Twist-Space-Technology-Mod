@@ -12,6 +12,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.ITSTSegmentedItemInput;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellHelper.InputSource;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellInputHatch.LongFluidInputs;
+import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 
 import ggfab.mte.MTELinkedInputBus;
 import gregtech.api.enums.Materials;
@@ -20,6 +21,8 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatchInput;
 import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
 import gregtech.api.metatileentity.implementations.MTEHatchOutputBus;
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.ItemEjectionHelper;
 import gregtech.common.tileentities.machines.IRecipeProcessingAwareHatch;
@@ -39,9 +42,18 @@ public final class StarDronePorts {
         output = null;
     }
 
-    public int installedMask() {
-        return (input != null && input.isValid() ? 1 : 0) | (output != null && output.isValid() ? 2 : 0)
-            | (fluid != null && fluid.isValid() ? 8 : 0);
+    public boolean hasReturnBus() {
+        return output != null && output.isValid();
+    }
+
+    public boolean hasFuelHatch() {
+        return fluid != null && fluid.isValid();
+    }
+
+    public static CheckRecipeResult missingFuel(long required) {
+        FluidStack helium = Materials.Helium.getPlasma(1);
+        if (helium == null) return CheckRecipeResultRegistry.INTERNAL_ERROR;
+        return SimpleResultWithText.outOfFluid(helium, required);
     }
 
     public static boolean acceptsItemInput(IMetaTileEntity hatch) {
@@ -93,7 +105,7 @@ public final class StarDronePorts {
     public InputSource fuelSource() {
         FluidStack helium = Materials.Helium.getPlasma(1);
         if (helium == null) return null;
-        InputSource tank = fluid == null || !fluid.isValid() ? null : LongFluidInputs.fromHatch(fluid, helium);
+        InputSource tank = hasFuelHatch() ? LongFluidInputs.fromHatch(fluid, helium) : null;
         if (tank == null && heldHelium == 0) return null;
         // Any confirmed draw belongs to this controller until GT accepts the entire startup.
         return new InputSource(
@@ -120,7 +132,7 @@ public final class StarDronePorts {
 
     public boolean canReturn(List<ItemStackLong> returns) {
         if (returns.isEmpty()) return true;
-        if (output == null || !output.isValid()) return false;
+        if (!hasReturnBus()) return false;
         if (output instanceof MTEHatchOutputBusME me) {
             var transaction = TSTMEOutputTransaction.forItems(me, true, true);
             return returns.stream()
@@ -132,7 +144,7 @@ public final class StarDronePorts {
     }
 
     public void deliver(List<ItemStackLong> returns) {
-        if (returns.isEmpty() || output == null || !output.isValid()) return;
+        if (returns.isEmpty() || !hasReturnBus()) return;
         StarBatch.deliverItems(returns, entry -> {
             long accepted;
             if (output instanceof MTEHatchOutputBusME me) {

@@ -33,7 +33,7 @@ Both modes give the same total yield and planned duration for a given batch. A m
 
 ## Pause or abort
 
-Switch off the controller to pause a paid batch, then switch it on to resume. If you have dismantled the miner, restore the link with at least the mining tier and Fortune the batch started with.
+Switch off the controller to pause a paid batch, then switch it on to resume. When replacing the miner, link one of the same or higher tier. A tier 1 miner must also meet the batch's original Fortune level.
 
 **Abort current task** sends the fleet to the [hub return bus](drones.md). You keep the ore already delivered, and the remaining yield is lost. The batch consumed its inputs and helium plasma at startup. Leave room in the return bus or network for the fleet. The next batch can start once all drones are back.
 

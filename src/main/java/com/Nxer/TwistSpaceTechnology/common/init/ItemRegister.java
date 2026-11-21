@@ -511,33 +511,45 @@ public class ItemRegister {
         // #tr item.tst.MetaItem01.45.name
         // # Meteor Miner Tier 1 Schematic
         // #zh_CN 陨星采矿场T1设计图
-        GTCMItemList.MeteorMinerSchematic1.set(MetaItem01.registerVariantWithTooltips(
-            45,
+        GTCMItemList.MeteorMinerSchematic1.set(MetaItem01.registerVariantWithTooltips(45, new String[]{
             // #tr item.tst.MetaItem01.45.tooltip
-            // # Schematic needed to enable the Tier 1 Meteor Miner.
-            // #zh_CN 启用T1激光陨星采矿场所需的设计图.
-            new String[]{tr("item.tst.MetaItem01.45.tooltip")}));
+            // # No Fortune by default. Mines one block per cycle.
+            // #zh_CN 默认无时运. 每次运行挖掘一个方块.
+            tr("item.tst.MetaItem01.45.tooltip"),
+            // #tr item.tst.MetaItem01.45.tooltip.1
+            // # Place a pickaxe in the ULV input bus to apply Fortune.
+            // #zh_CN 将镐放入 ULV 输入总线可获得对应时运.
+            tr("item.tst.MetaItem01.45.tooltip.1"),
+            // #tr item.tst.MetaItem01.45.tooltip.2
+            // # Pickaxe of the Core - Fortune I
+            // #zh_CN 炽心镐 - 时运 I
+            tr("item.tst.MetaItem01.45.tooltip.2"),
+            // #tr item.tst.MetaItem01.45.tooltip.3
+            // # Bound Pickaxe - Fortune II
+            // #zh_CN 约束之镐 - 时运 II
+            tr("item.tst.MetaItem01.45.tooltip.3"),
+            // #tr item.tst.MetaItem01.45.tooltip.4
+            // # Terra Shatterer - Fortune III
+            // #zh_CN 泰拉粉碎者 - 时运 III
+            tr("item.tst.MetaItem01.45.tooltip.4")}));
 
         // #tr item.tst.MetaItem01.46.name
         // # Meteor Miner Tier 2 Schematic
         // #zh_CN 陨星采矿场T2设计图
-        GTCMItemList.MeteorMinerSchematic2.set(
-            MetaItem01.registerVariantWithTooltips(
-                46,
-                // #tr item.tst.MetaItem01.46.tooltip
-                // # Schematic needed to enable the Tier 2 Meteor Miner.
-                // #zh_CN 启用T2激光陨星采矿场所需的设计图.
-                new String[]{tr("item.tst.MetaItem01.46.tooltip")}));
+        GTCMItemList.MeteorMinerSchematic2.set(MetaItem01.registerVariantWithTooltips(46, new String[]{
+            // #tr item.tst.MetaItem01.46.tooltip
+            // # Fortune III. Mines one row per cycle.
+            // #zh_CN 时运 III. 每次运行挖掘一行.
+            tr("item.tst.MetaItem01.46.tooltip")}));
 
         // #tr item.tst.MetaItem01.47.name
         // # Meteor Miner Tier 3 Schematic
         // #zh_CN 陨星采矿场T3设计图
-
-        // #tr item.tst.MetaItem01.47.tooltip
-        // # Fortune IV. Mines one complete horizontal layer per cycle.
-        // #zh_CN 时运 IV. 每次运行挖掘一整层.
-        GTCMItemList.MeteorMinerSchematic3.set(MetaItem01.registerVariantWithTooltips(
-            47, new String[]{tr("item.tst.MetaItem01.47.tooltip")}));
+        GTCMItemList.MeteorMinerSchematic3.set(MetaItem01.registerVariantWithTooltips(47, new String[]{
+            // #tr item.tst.MetaItem01.47.tooltip
+            // # Fortune IV. Mines one complete horizontal layer per cycle.
+            // #zh_CN 时运 IV. 每次运行挖掘一整层.
+            tr("item.tst.MetaItem01.47.tooltip")}));
 
         // #tr item.tst.MetaItem01.48.name
         // # Inactive Mineral Seed Powder

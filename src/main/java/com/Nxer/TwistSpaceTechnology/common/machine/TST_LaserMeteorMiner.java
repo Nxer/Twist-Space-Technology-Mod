@@ -1665,58 +1665,13 @@ public class TST_LaserMeteorMiner extends MTEExtendedPowerMultiBlockBase<TST_Las
             // #zh_CN 点击重启按钮将重启机器, 并且不进行半径适配优化.
             .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.15"))
             // #tr tst.machine.MeteorMiner.tooltip.info.16
-            // # Machine need Meteor Miner Schematic put in controller slot to run.
-            // #zh_CN 机器需要在控制器方块内放置陨星采矿场设计图才可运行.
+            // # Insert the matching schematic in the controller slot. See the schematic for details.
+            // #zh_CN 将对应等级的设计图放入控制器槽. 详细信息见图纸.
             .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.16"))
             // #tr tst.machine.MeteorMiner.tooltip.info.energy_hatches
             // # Accepts normal energy hatches or TecTech multi Amp / laser energy hatches, but not mixed.
             // #zh_CN 可使用普通能源仓, 或TecTech高电流/激光能源仓, 但不可混用.
             .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.energy_hatches"))
-            // #tr tst.machine.MeteorMiner.tooltip.info.17
-            // # {\RED}{\BOLD} TIER I
-            // #zh_CN {\RED}{\BOLD} 等级 I
-            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.17"))
-            // #tr tst.machine.MeteorMiner.tooltip.info.18
-            // # Mines one block every cycle.
-            // #zh_CN 每次运行挖掘一个方块.
-            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.18"))
-            // #tr tst.machine.MeteorMiner.tooltip.info.19
-            // # Default Fortune is 0, it can be increased by putting in the input bus special pickaxes:
-            // #zh_CN 默认没有时运效果. 输入总线内放置以下镐子可以获得时运效果:
-            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.19"))
-            // #tr tst.machine.MeteorMiner.tooltip.info.20
-            // # Fortune I: Pickaxe of the Core
-            // #zh_CN 时运I : 炽心镐
-            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.20"))
-            // #tr tst.machine.MeteorMiner.tooltip.info.21
-            // # Fortune II: Bound Pickaxe
-            // #zh_CN 时运II : 约束之镐
-            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.21"))
-            // #tr tst.machine.MeteorMiner.tooltip.info.22
-            // # Fortune III: Terra Shatterer
-            // #zh_CN 时运III : 泰拉粉碎者
-            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.22"))
-            // #tr tst.machine.MeteorMiner.tooltip.info.23
-            // # {\RED}{\BOLD} TIER II
-            // #zh_CN {\RED}{\BOLD} 等级 II
-            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.23"))
-            // #tr tst.machine.MeteorMiner.tooltip.info.24
-            // # Always has Fortune IV
-            // #zh_CN 总是时运IV.
-            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.24"))
-            // #tr tst.machine.MeteorMiner.tooltip.info.25
-            // # Mines one row every cycle.
-            // #zh_CN 每次运行挖掘一行.
-            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.25"))
-            // #tr tst.machine.MeteorMiner.tooltip.info.26
-            // # {\RED}{\BOLD} TIER III
-            // #zh_CN {\RED}{\BOLD} 等级 III
-            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.26"))
-            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.24"))
-            // #tr tst.machine.MeteorMiner.tooltip.info.27
-            // # Mines one complete horizontal layer every cycle.
-            // #zh_CN 每次运行挖掘一整层.
-            .addInfo(tr("tst.machine.MeteorMiner.tooltip.info.27"))
             // #tr tst.machine.MeteorMiner.tooltip.info.28
             // # {\BLUE}{\BOLD}Finally some good Meteors!
             // #zh_CN {\BLUE}{\BOLD}终是好陨星! (Finally some good Meteors!)

@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.tr;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.getBlueprintWithDot;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +34,7 @@ import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 
+import gregtech.api.enums.HatchElement;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.INEIPreviewModifier;
 import gregtech.api.interfaces.ITexture;
@@ -45,8 +47,6 @@ import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.structure.error.StructureError;
-import gregtech.api.structure.error.StructureErrors;
-import gregtech.api.structure.error.TranslatableText;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
@@ -90,8 +90,8 @@ public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarTh
         machineMode = StarBatch.MODE_BATCH;
         setMEOutput(true);
         // #tr tst.star.preview.channel
-        // # 1: Miner well; 2-5: Inner ring quarters; 6: Outer ring; 7: Upper rings/supports; 8: Full (slow).
-        // #zh_CN 1: 中央矿井; 2-5: 主体及中圈四分区; 6: 最外圈; 7: 上方环体及装饰; 8: 完整结构(开销较高). 材料统计对应所选部分.
+        // # Megastructure (0-1 shaft, 2-5 body and middle ring, 6 outer ring, 7 upper rings and supports, 8 full).
+        // #zh_CN Megastructure (0-1 中央矿井, 2-5 主体与中圈, 6 外圈, 7 上部环体与支撑, 8 整机).
         StructureLibAPI
             .registerChannelDescription(StarStructure.CHANNEL, "TwistSpaceTechnology", "tst.star.preview.channel");
     }
@@ -170,7 +170,8 @@ public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarTh
     public int getStarPhase() {
         if (!abortedDroneReturns.isEmpty()) return 5;
         if (batch == null) return 0;
-        if (batch.progress >= batch.duration || batch.isStaged() && !batch.outputs.isEmpty()) return 4;
+        if (batch.progress >= batch.duration) return batch.outputs.isEmpty() && !batch.droneReturns.isEmpty() ? 5 : 4;
+        if (batch.isStaged() && !batch.outputs.isEmpty()) return 4;
         if (batch.progress < batch.formationTicks) return 1;
         if (batch.progress < batch.miningStartTick()) return 2;
         return 3;
@@ -280,45 +281,6 @@ public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarTh
         dronePorts.clear();
     }
 
-    /** Four ordinary services followed by the dedicated drone ports; also used by the GUI. */
-    public int getStarPortMask() {
-        return (mInputBusses.isEmpty() ? 0 : 1) | (mInputHatches.isEmpty() ? 0 : 2)
-            | (mEnergyHatches.isEmpty() && mExoticEnergyHatches.isEmpty() ? 0 : 4)
-            | (mOutputBusses.stream()
-                .anyMatch(bus -> bus instanceof MTEHatchOutputBusME) ? 8 : 0)
-            | (dronePorts.installedMask() << 4);
-    }
-
-    @Override
-    public String[] getStructureDescription(ItemStack trigger) {
-        // #tr tst.star.ports.controller
-        // # Controller: shared front panel, directly above the tier 2/3 miner controller.
-        // #zh_CN 主机: 与矿机共用前面板, 位于二/三级矿机主机正上方 1 格.
-
-        // #tr tst.star.ports.general
-        // # 1: General panel ports accept item inputs, fluid inputs, energy hatches or ME ore outputs.
-        // #zh_CN 1: 面板通用仓位可安装物品输入总线, 流体输入仓, 能源仓或矿石 ME 输出总线.
-
-        // #tr tst.star.ports.drone_input
-        // # 2: Drone input bus, lower left on the floating hub front. Requires a physical inventory.
-        // #zh_CN 2: 无人机输入总线位于悬浮中枢正面下排左侧, 需要实体库存.
-
-        // #tr tst.star.ports.drone_output
-        // # 3: Drone return bus, lower center on the floating hub front. Accepts a standard or ME output bus.
-        // #zh_CN 3: 无人机返还总线位于悬浮中枢正面下排中央, 可使用普通或 ME 输出总线.
-
-        // #tr tst.star.ports.fluid
-        // # 5: Helium plasma input, lower right on the floating hub front. Supports ME and storage-cell fluid inputs.
-        // #zh_CN 5: 氦等离子输入仓位于悬浮中枢正面下排右侧, 支持 ME 和存储元件输入.
-
-        // #tr tst.star.ports.optional
-        // # Unused panel and hub ports take Radiant Naquadah Alloy Casings. Floor energy ports take Gore Casings.
-        // #zh_CN 面板和悬浮中枢的空位使用放射硅岩合金机械方块. 井底能源仓位使用凝血机械方块.
-        return new String[] { tr("tst.star.preview.channel"), tr("tst.star.ports.controller"),
-            tr("tst.star.ports.general"), tr("tst.star.ports.drone_input"), tr("tst.star.ports.drone_output"),
-            tr("tst.star.ports.fluid"), tr("tst.star.ports.optional") };
-    }
-
     @Override
     protected IAlignmentLimits getInitialAlignmentLimits() {
         return (d, r, f) -> d.offsetY == 0 && r.isNotRotated()
@@ -381,54 +343,15 @@ public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarTh
     public void checkMachine(IGregTechTileEntity base, ItemStack stack, List<StructureError> errors) {
         ringReceiver = tileAt(0, StarStructure.RECEIVER_Y, 0) instanceof TileStarContainment receiver ? receiver : null;
         repairMachine();
-        for (int i = 0; i < StarStructure.parts()
-            .size(); i++) {
-            var part = StarStructure.parts()
-                .get(i);
-            if (!checkPiece(part.name, part.a, part.b, part.c, errors)) {
-                // #tr tst.star.structure.section
-                // # First failing preview section: %s / %s. Repair the highlighted block, then check again.
-                // #zh_CN 首个未通过的预览分区: %s / %s. 修复标记位置后继续检查.
-                errors.add(
-                    StructureErrors.of(
-                        "tst.star.structure.section",
-                        TranslatableText.literal(i + 1),
-                        TranslatableText.literal(
-                            StarStructure.parts()
-                                .size())));
-                return;
-            }
+        for (var part : StarStructure.parts()) {
+            if (!checkPiece(part.name, part.a, part.b, part.c, errors)) return;
         }
         // During development, missing services do not block formation/rendering. Check them before paying for a batch.
     }
 
-    private CheckRecipeResult checkGeneralPorts() {
-        // #tr tst.star.result.input_bus_missing
-        // # Missing recipe item input bus: install one at a marker 1 position beside the controller.
-        // #zh_CN 缺少配方物品输入总线: 请安装在主机左右的 1 号通用仓位.
-
-        // #tr tst.star.result.input_hatch_missing
-        // # Missing Life Essence input hatch: install one at a marker 1 position beside the controller.
-        // #zh_CN 缺少生命本源输入仓: 请安装在主机左右的 1 号通用仓位.
-
-        // #tr tst.star.result.energy_missing
-        // # Missing power input: install an energy hatch at panel marker 1 or floor marker 6.
-        // #zh_CN 缺少供电仓: 请安装在面板 1 号仓位或井底 6 号仓位.
-
-        // #tr tst.star.result.ore_output_missing
-        // # Missing ME ore output bus: install one at a marker 1 position. The dedicated drone return bus is separate.
-        // #zh_CN 缺少矿石 ME 输出总线: 请安装在 1 号通用仓位. 专用无人机返还总线不承担矿石输出.
-        int installed = getStarPortMask();
-        if ((installed & 1) == 0) return SimpleResultWithText.ofFailure("tst.star.result.input_bus_missing");
-        if ((installed & 2) == 0) return SimpleResultWithText.ofFailure("tst.star.result.input_hatch_missing");
-        if ((installed & 4) == 0) return SimpleResultWithText.ofFailure("tst.star.result.energy_missing");
-        if ((installed & 8) == 0) return SimpleResultWithText.ofFailure("tst.star.result.ore_output_missing");
-        return CheckRecipeResultRegistry.SUCCESSFUL;
-    }
-
     @Override
     public @NotNull CheckRecipeResult checkProcessing() {
-        if (!abortedDroneReturns.isEmpty()) return SimpleResultWithText.ofFailure("tst.star.result.drone_output_full");
+        if (!abortedDroneReturns.isEmpty()) return CheckRecipeResultRegistry.ITEM_OUTPUT_FULL;
         if (batch != null) return CheckRecipeResultRegistry.SUCCESSFUL;
         pending = null;
         long clock = getBaseMetaTileEntity().getWorld()
@@ -439,56 +362,50 @@ public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarTh
             // #zh_CN 陨星生成间隔中
             return SimpleResultWithText.ofFailure("tst.star.result.meteor_interval");
         }
-        CheckRecipeResult ports = checkGeneralPorts();
-        if (!ports.wasSuccessful()) return ports;
-        if (!field.isOpen(clock)) {
-            // #tr tst.star.result.field_forming
-            // # Containment field forming
-            // #zh_CN 隔离场展开中
-            return SimpleResultWithText.ofFailure("tst.star.result.field_forming");
-        }
-        updateMiner();
-        if (miner == null || !miner.isLinkedToStar(this)) {
-            return SimpleResultWithText.ofFailure("tst.star.result.miner_missing");
-        }
-        int fortune = miner.getFortuneTier();
-        setProcessingLogicPower(miningOverclock);
-        OverclockCalculator reference = miningOverclock.calculate();
-        StarRecipePlanner plan = new StarRecipePlanner();
+        if (mInputBusses.isEmpty() || mInputHatches.isEmpty()
+            || mOutputBusses.stream()
+                .noneMatch(bus -> bus instanceof MTEHatchOutputBusME))
+            return CheckRecipeResultRegistry.NO_RECIPE;
+        StarRecipePlanner plan;
         try {
-            if (!plan.plan(
-                getLongItemInputs().getSources(),
-                getLongFluidInputs().getSources(),
-                dronePorts.drones(),
-                dronePorts.fuelSource(),
-                fortune,
+            plan = StarRecipePlanner.match(getLongItemInputs().getSources(), getLongFluidInputs().getSources());
+            if (plan == null) return CheckRecipeResultRegistry.NO_RECIPE;
+            long availablePower = getMaxInputEu();
+            setProcessingLogicPower(miningOverclock);
+            OverclockCalculator reference = miningOverclock.calculate();
+            long miningEut = reference.getConsumption();
+            CheckRecipeResult power = plan.checkPower(miningEut, availablePower);
+            if (!power.wasSuccessful()) return power;
+            if (!field.isOpen(clock)) {
+                // #tr tst.star.result.field_forming
+                // # Containment field forming
+                // #zh_CN 隔离场展开中
+                return SimpleResultWithText.ofFailure("tst.star.result.field_forming");
+            }
+            updateMiner();
+            if (miner == null || !miner.isLinkedToStar(this)) {
+                return SimpleResultWithText.ofFailure("tst.star.result.miner_missing");
+            }
+            CheckRecipeResult planned = plan.plan(
+                dronePorts,
+                miner.getFortuneTier(),
                 miner.getMiningTier(),
                 Math.max(1, reference.getDuration()),
-                reference.getConsumption(),
-                getMaxInputEu(),
-                nextSeed)) {
-                if (plan.failure.equals("drone_fuel")) return droneFuelFailure();
-                return plan.failure.equals("no_recipe") ? CheckRecipeResultRegistry.NO_RECIPE
-                    : SimpleResultWithText.ofFailure("tst.star.result." + plan.failure);
-            }
+                miningEut,
+                availablePower,
+                nextSeed);
+            if (!planned.wasSuccessful()) return planned;
             plan.batch.configureMode(machineMode);
         } catch (ArithmeticException overflow) {
             return SimpleResultWithText.ofFailure("tst.star.result.numeric_limit");
         } catch (IllegalArgumentException invalid) {
             return SimpleResultWithText.ofFailure("tst.star.result.invalid_meteor");
         }
-        // #tr tst.star.result.drone_output_missing
-        // # Install a standard or ME drone return bus at marker 3 on the floating hub.
-        // #zh_CN 在悬浮中枢的 3 号位安装普通或 ME 输出总线以返还无人机.
-        if (!plan.batch.droneReturns.isEmpty() && (dronePorts.installedMask() & 2) == 0)
-            return SimpleResultWithText.ofFailure("tst.star.result.drone_output_missing");
+        if (!plan.batch.droneReturns.isEmpty() && !dronePorts.hasReturnBus())
+            return CheckRecipeResultRegistry.NO_RECIPE;
         CheckRecipeResult capacity = checkMEOutputCapacity(plan.batch.initialOutputs(), Collections.emptyList());
         if (!capacity.wasSuccessful()) return capacity;
-        // #tr tst.star.result.drone_output_full
-        // # The dedicated drone output bus cannot hold all returning drones.
-        // #zh_CN 专用无人机输出总线无法容纳本批返还的无人机.
-        if (!dronePorts.canReturn(plan.batch.droneReturns))
-            return SimpleResultWithText.ofFailure("tst.star.result.drone_output_full");
+        if (!dronePorts.canReturn(plan.batch.droneReturns)) return CheckRecipeResultRegistry.ITEM_OUTPUT_FULL;
         if (!plan.inputs.commit()) {
             updateSlots();
             dronePorts.markInputsDirty();
@@ -525,19 +442,6 @@ public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarTh
         }
     }
 
-    private CheckRecipeResult droneFuelFailure() {
-        // #tr tst.star.result.drone_fuel_missing
-        // # Install a helium plasma input hatch at marker 5 on the floating hub.
-        // #zh_CN 缺少无人机燃料仓: 在悬浮中枢的 5 号位安装氦等离子输入仓.
-
-        // #tr tst.star.result.drone_fuel
-        // # Insufficient helium plasma to start this batch.
-        // #zh_CN 启动本批采掘所需的氦等离子不足.
-        return SimpleResultWithText.ofFailure(
-            (dronePorts.installedMask() & 8) == 0 ? "tst.star.result.drone_fuel_missing"
-                : "tst.star.result.drone_fuel");
-    }
-
     @Override
     protected void runMachine(IGregTechTileEntity base, long tick) {
         running = advancing = false;
@@ -558,17 +462,23 @@ public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarTh
             batch.interrupted = false;
             markDirty();
         }
-        if (batch.progress < batch.duration && !field.isOpen(
-            base.getWorld()
-                .getTotalWorldTime())) {
-            pausePaidBatch("tst.star.result.field_forming");
-            return;
-        }
-        if (batch.progress < batch.duration && (miner == null || !miner.isLinkedToStar(this)
-            || miner.getMiningTier() < batch.miningTier
-            || miner.getFortuneTier() < TST_LaserMeteorMiner.fortuneForTier(batch.miningTier, batch.fortune))) {
-            pausePaidBatch("tst.star.result.miner_missing");
-            return;
+        if (batch.progress < batch.duration) {
+            if (!field.isOpen(
+                base.getWorld()
+                    .getTotalWorldTime())) {
+                pausePaidBatch("tst.star.result.field_forming");
+                return;
+            }
+            if (miner == null || !miner.isLinkedToStar(this)) {
+                pausePaidBatch("tst.star.result.miner_missing");
+                return;
+            }
+            // Paid batches keep their original yield when the miner's fixed Fortune changes.
+            int requiredFortune = TST_LaserMeteorMiner.fortuneForTier(batch.miningTier, batch.fortune);
+            if (miner.getMiningTier() < batch.miningTier || miner.getFortuneTier() < requiredFortune) {
+                pausePaidBatch("tst.star.result.miner_tier");
+                return;
+            }
         }
         if (batch.legacyUnpaidMiningTicks > 0) {
             lEUt = 0;
@@ -583,7 +493,7 @@ public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarTh
             var fuel = dronePorts.fuelSource();
             if (due > 0 && (fuel == null || fuel.amount < due || fuel.extract.applyAsLong(due) != due)) {
                 markDirty();
-                setCheckRecipeResult(droneFuelFailure());
+                setCheckRecipeResult(StarDronePorts.missingFuel(due));
                 return;
             }
             dronePorts.heldHelium -= due;
@@ -666,9 +576,7 @@ public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarTh
                 scheduleRecipeCheckImmediate();
                 setCheckRecipeResult(CheckRecipeResultRegistry.SUCCESSFUL);
             } else {
-                setCheckRecipeResult(
-                    batch.droneReturns.isEmpty() ? CheckRecipeResultRegistry.ITEM_OUTPUT_FULL
-                        : SimpleResultWithText.ofFailure("tst.star.result.drone_output_full"));
+                setCheckRecipeResult(CheckRecipeResultRegistry.ITEM_OUTPUT_FULL);
             }
         }
         if (batch != null) {
@@ -711,7 +619,7 @@ public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarTh
         if (mMachine) dronePorts.deliver(abortedDroneReturns);
         setCheckRecipeResult(
             abortedDroneReturns.isEmpty() ? CheckRecipeResultRegistry.NONE
-                : SimpleResultWithText.ofFailure("tst.star.result.drone_output_full"));
+                : CheckRecipeResultRegistry.ITEM_OUTPUT_FULL);
         markDirty();
     }
 
@@ -1125,23 +1033,29 @@ public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarTh
         // #tr tst.star.subtitle
         // # A Mineable Lie
         // #zh_CN 一个可开采的谎言
-        // Intentionally omit the standard finisher and detailed structure text until the design is settled.
-        return new TSTMultiblockTooltipBuilder() {
+        TSTMultiblockTooltipBuilder tooltip = new TSTMultiblockTooltipBuilder() {
 
             @Override
             public String[] getInformation() {
                 return new String[] { tr("tst.common.machine.StarThatNeverWas.name"), tr("tst.star.subtitle") };
             }
-
-            @Override
-            public String[] getStructureInformation() {
-                return new String[0];
-            }
-
-            @Override
-            public String[] getStructureHint() {
-                return new String[0];
-            }
         };
+        tooltip.addStructureHint("tst.star.preview.channel")
+            // #tr tst.star.ports.controller
+            // # Controller directly above the T2/T3 miner controller
+            // #zh_CN 主机位于二/三级矿机控制器上方一格
+            .addStructureHint("tst.star.ports.controller")
+            .addInputBus("", getBlueprintWithDot(1), 1)
+            .addInputHatch("", getBlueprintWithDot(1, 5), 1, 5)
+            .addEnergyHatch("", getBlueprintWithDot(1, 2), 1, 2)
+            .addOtherStructurePart(HatchElement.ExoticEnergy.getDisplayName(), getBlueprintWithDot(1, 2), 1, 2)
+            .addOtherStructurePart(tr(StarStructure.meOutputBusNameKey()), getBlueprintWithDot(1, 4), 1, 4)
+            // #tr tst.star.ports.drone_input
+            // # Input Bus (physical inventory)
+            // #zh_CN 输入总线 (实体库存)
+            .addOtherStructurePart(tr("tst.star.ports.drone_input"), getBlueprintWithDot(3), 3)
+            .addOutputBus("", getBlueprintWithDot(4), 4)
+            .toolTipFinisher();
+        return tooltip;
     }
 }
