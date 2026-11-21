@@ -42,8 +42,10 @@ public final class BottledChaosRecipeRegistration {
             BottledChaosRecipeProcessor.installCache(compiled);
             TwistSpaceTechnology.LOG.info("Bottled Chaos resolved {} processing steps.", compiled.resolvedStepCount());
         } catch (RuntimeException exception) {
-            TwistSpaceTechnology.LOG
-                .error("Bottled Chaos recipe resolution failed; processing routes are disabled.", exception);
+            TwistSpaceTechnology.LOG.error(
+                "Bottled Chaos recipe resolution failed: " + exception.getMessage()
+                    + ". Processing routes are disabled.",
+                exception);
         }
     }
 
