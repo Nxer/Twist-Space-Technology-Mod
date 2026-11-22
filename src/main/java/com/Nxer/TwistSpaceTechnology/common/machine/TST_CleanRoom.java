@@ -126,6 +126,20 @@ public class TST_CleanRoom extends MTEExtendedPowerMultiBlockBase<TST_CleanRoom>
         mWrench = true;
     }
 
+    /**
+     * Multi-amp energy hatches and laser targets are not MTEHatchEnergy subclasses, and multi-amp
+     * dynamos / laser sources would be caught by the plain MTEHatchDynamo case in super, so the
+     * TecTech adders must run first to route these hatches into their dedicated lists
+     * (mExoticEnergyHatches / mExoticDynamoHatches).
+     */
+    @Override
+    public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex)
+            || addLaserSourceToMachineList(aTileEntity, aBaseCasingIndex)
+            || addExoticDynamoToMachineList(aTileEntity, aBaseCasingIndex)
+            || super.addToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
     @Override
     public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
