@@ -333,6 +333,13 @@ public class TSTSharedLocalization {
             return TSTUtils.tr("GT5U.MBTT.Structure.Complex");
         }
 
+        public static String oversizedStructureWarning() {
+            // #tr tst.shared.machine_tooltip.oversized_structure_warning
+            // # {\GOLD}Oversized structure. Full previews may cause client lag.
+            // #zh_CN {\GOLD}超大结构, 完整预览可能导致客户端卡顿.
+            return TSTUtils.tr("tst.shared.machine_tooltip.oversized_structure_warning");
+        }
+
         public static String temporaryController() {
             // #tr tst.shared.machine_tooltip.temporary_controller
             // # {\RED}Temporary controller; will be removed in the next update!

@@ -2657,6 +2657,7 @@ tst.shared.machine_tooltip.mark_tec_tech_elemental_matter=§9Tec§1Tech§9: 元�
 tst.shared.machine_tooltip.mark_twist_space_technology_tec_tech=§b§lTwist Space Technology : §r§9Tec§1Tech
 tst.shared.machine_tooltip.more_info_checking_in_scanner=§f使用三录仪查看主机获取更多信息.
 tst.shared.machine_tooltip.out_of_maintenance=§c§l不再维护！
+tst.shared.machine_tooltip.oversized_structure_warning=§6超大结构, 完整预览可能导致客户端卡顿.
 tst.shared.machine_tooltip.replacement_controller=§c请在NEI查看替代控制器及转换配方.
 tst.shared.machine_tooltip.slots=格
 tst.shared.machine_tooltip.temporary_controller=§c临时控制器, 将在下个版本移除!

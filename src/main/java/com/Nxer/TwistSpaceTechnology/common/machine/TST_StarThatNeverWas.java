@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.tr;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Text_SeparatingLine;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.oversizedStructureWarning;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.getBlueprintWithDot;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textUseBlueprint;
 
@@ -1147,6 +1148,7 @@ public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarTh
             .addInfo(tr("tst.machine.StarThatNeverWas.tooltip.info.7"))
             .addSeparator()
             .addInfo(tr("tst.machine.EcoSphereSimulator.tooltip.info.13"))
+            .addInfo(oversizedStructureWarning())
             .beginStructureBlock(207, 177, 207, false)
             .addController(textUseBlueprint)
             .addStructureHint("tst.star.preview.channel")

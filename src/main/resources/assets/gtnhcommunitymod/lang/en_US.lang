@@ -2657,6 +2657,7 @@ tst.shared.machine_tooltip.mark_tec_tech_elemental_matter=§9Tec§1Tech§9: Elem
 tst.shared.machine_tooltip.mark_twist_space_technology_tec_tech=§b§lTwist Space Technology : §rTech
 tst.shared.machine_tooltip.more_info_checking_in_scanner=§fUse scanner check controller block to get more information.
 tst.shared.machine_tooltip.out_of_maintenance=§c§l OUT OF MAINTENANCE !
+tst.shared.machine_tooltip.oversized_structure_warning=§6Oversized structure. Full previews may cause client lag.
 tst.shared.machine_tooltip.replacement_controller=§cSee NEI for the replacement controller and conversion recipes.
 tst.shared.machine_tooltip.slots=Slots
 tst.shared.machine_tooltip.temporary_controller=§cTemporary controller; will be removed in the next update!
