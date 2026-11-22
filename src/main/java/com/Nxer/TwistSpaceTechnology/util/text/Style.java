@@ -13,7 +13,7 @@ public final class Style {
     public static final Style MODULARIZED = new Style(Style::modularized);
     public static final Style DYSON_SPHERE = new Style(Style::dysonSphere);
     public static final Style INFUSION = new Style(Style::searchableInfusion);
-    /** Preserves the former glyph-replacement effect; intentionally unused. */
+    /** Uses literal glyph replacement for text that can be scrambled. */
     public static final Style INFUSION_LEGACY = new Style(Style::legacyInfusion);
     public static final Style RAINBOW = new Style(Style::rainbow);
 
@@ -175,7 +175,7 @@ public final class Style {
         return infusion(text, false);
     }
 
-    /** Retains the previous deterministic glyph replacement for the unused legacy style. */
+    /** Retains the previous deterministic glyph replacement. */
     private static Supplier<String> legacyInfusion(String text) {
         return infusion(text, true);
     }

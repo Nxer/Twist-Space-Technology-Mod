@@ -9,6 +9,7 @@ dependencies {
     implementation(gtnh("GT5-Unofficial"))
     implementation(gtnh("GTNHLib"))
     compileOnly(gtnh("Angelica"))
+    compileOnly(gtnh("GuideNH")) { transitive = false }
     // Tooltip title integration when ChromaticTooltips is present.
     compileOnly(gtnh("ChromaticTooltips").replace("com.github.GTNewHorizons:", "com.github.slprime:")) { transitive = false }
     implementation(gtnh("NewHorizonsCoreMod"))

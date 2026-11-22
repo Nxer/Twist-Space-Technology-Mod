@@ -3459,24 +3459,6 @@ public class GTCMMachineRecipes {
         // region Laser Meteor Miner
         if (Config.Enable_LaserMeteorMiner) {
 
-            // Laser Meteor Miner
-            GTValues.RA
-                .stdBuilder()
-                .itemInputs(
-                    GTUtility.getIntegratedCircuit(10),
-                    getModItem(Mods.BloodMagic.ID, "masterStone", 1, new ItemStack(Blocks.stone)),
-                    ItemList.OreDrill3.get(4),
-                    getModItem(Mods.BloodMagic.ID, "bloodMagicBaseItems", 12, 28, new ItemStack(Items.diamond)),
-                    getModItem(Mods.BloodMagic.ID, "bloodMagicBaseItems", 12, 29, new ItemStack(Items.gold_ingot)),
-                    ItemList.Sensor_LuV.get(3),
-                    ItemRefer.HiC_T2.get(8),
-                    GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.TungstenSteel, 18)
-                )
-                .itemOutputs(GTCMItemList.MeteorMiner.get(1))
-                .eut(RECIPE_LuV)
-                .duration(20 * 180)
-                .addTo(assembler);
-
             // laser beacon
             GTValues.RA
                 .stdBuilder()
@@ -3528,6 +3510,27 @@ public class GTCMMachineRecipes {
                     new FluidStack(solderIndAlloy, 144 * 16)
                 )
                 .itemOutputs(GTCMItemList.MeteorMinerSchematic2.get(1))
+                .eut(RECIPE_UV)
+                .duration(20 * 300)
+                .addTo(assemblyLine);
+
+            // T3 schematic
+            GTValues.RA.stdBuilder()
+                .metadata(RESEARCH_ITEM, GTCMItemList.MeteorMinerSchematic2.get(1))
+                .metadata(SCANNING, scanningLV(2 * HOURS))
+                .itemInputs(
+                    ItemMiningDrones.DroneTiers.UV.get(1),
+                    getModItem(Mods.BloodMagic.ID, "bloodMagicBaseItems", 16, 28),
+                    getModItem(Mods.BloodMagic.ID, "bloodMagicBaseItems", 16, 29),
+                    ItemList.Emitter_UV.get(4),
+
+                    ItemList.Sensor_UV.get(4),
+                    GregtechItemList.Laser_Lens_WoodsGlass.get(4),
+                    ItemRefer.HiC_T4.get(8),
+                    HighEnergyFlowCircuit.get(4)
+                )
+                .fluidInputs(new FluidStack(solderIndAlloy, 144 * 32))
+                .itemOutputs(GTCMItemList.MeteorMinerSchematic3.get(1))
                 .eut(RECIPE_UV)
                 .duration(20 * 300)
                 .addTo(assemblyLine);

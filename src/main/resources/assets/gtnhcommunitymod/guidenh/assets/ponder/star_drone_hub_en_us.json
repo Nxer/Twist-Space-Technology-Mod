@@ -1,0 +1,93 @@
+{
+  "totalTime": 270,
+  "keyframes": [
+    {
+      "time": 0,
+      "label": "3 · Drone input",
+      "camera": {
+        "rotX": 16,
+        "rotY": 167,
+        "rotZ": 0,
+        "zoom": 1.22,
+        "offY": 3
+      },
+      "annotations": [
+        {
+          "type": "box",
+          "minX": 6,
+          "minY": 3,
+          "minZ": 2,
+          "maxX": 7,
+          "maxY": 4,
+          "maxZ": 3,
+          "color": "0xFF56DDEA",
+          "lineWidth": 2,
+          "alwaysOnTop": true
+        },
+        {
+          "type": "text",
+          "text": "Load the fleet for this run here.",
+          "independent": true,
+          "yOffset": 94,
+          "maxWidth": 295,
+          "color": "0xFF56DDEA",
+          "backgroundAlpha": 220
+        }
+      ]
+    },
+    {
+      "time": 90,
+      "label": "4 · Drone return",
+      "annotations": [
+        {
+          "type": "box",
+          "minX": 5,
+          "minY": 3,
+          "minZ": 2,
+          "maxX": 6,
+          "maxY": 4,
+          "maxZ": 3,
+          "color": "0xFFFFCD58",
+          "lineWidth": 2,
+          "alwaysOnTop": true
+        },
+        {
+          "type": "text",
+          "text": "Leave room for the fleet and newly infused variants.",
+          "independent": true,
+          "yOffset": 94,
+          "maxWidth": 295,
+          "color": "0xFFFFCD58",
+          "backgroundAlpha": 220
+        }
+      ]
+    },
+    {
+      "time": 180,
+      "label": "5 · Helium plasma",
+      "annotations": [
+        {
+          "type": "box",
+          "minX": 4,
+          "minY": 3,
+          "minZ": 2,
+          "maxX": 5,
+          "maxY": 4,
+          "maxZ": 3,
+          "color": "0xFFB092EE",
+          "lineWidth": 2,
+          "alwaysOnTop": true
+        },
+        {
+          "type": "text",
+          "text": "Stock helium plasma for ordinary drones before takeoff.",
+          "independent": true,
+          "yOffset": 94,
+          "maxWidth": 295,
+          "color": "0xFFB092EE",
+          "backgroundAlpha": 220
+        }
+      ]
+    }
+  ]
+}

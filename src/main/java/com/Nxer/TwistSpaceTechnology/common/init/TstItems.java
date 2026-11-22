@@ -9,6 +9,7 @@ import com.Nxer.TwistSpaceTechnology.common.item.ItemAdder01;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemAdderFlask;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemAdderIzumik;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemAdderRune;
+import com.Nxer.TwistSpaceTechnology.common.item.ItemBloodInfusedMiningDrone;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosCredential;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosMachineModule;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemCardigan;
@@ -26,6 +27,7 @@ import com.Nxer.TwistSpaceTechnology.common.item.TSTGeneratedItem;
 public class TstItems {
 
     public static final ItemAdder01 MetaItem01 = new ItemAdder01();
+    public static final ItemBloodInfusedMiningDrone BloodInfusedMiningDrone = new ItemBloodInfusedMiningDrone();
     public static final Item LifeEssenceSingularity = new ItemLifeEssenceSingularity();
     public static final ItemEcoSphereExecutionProtocol EcoSphereExecutionProtocol = new ItemEcoSphereExecutionProtocol();
     public static final ItemEcoSphereUpgrade EcoSphereUpgrade = new ItemEcoSphereUpgrade();

@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.nei;
 
+import static gregtech.api.enums.Mods.BloodMagic;
 import static gregtech.api.enums.Mods.NotEnoughItems;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -56,6 +57,10 @@ public class NEIHandler {
             GTCMItemList.EcoSphereExecutionProtocol9.get(1),
             "tst.recipe.DirectedMobClonerFakeRecipes.name",
             -10);
+
+        if (BloodMagic.isModLoaded() && GTCMItemList.StarThatNeverWas.hasBeenSet()) {
+            API.addRecipeCatalyst(GTCMItemList.StarThatNeverWas.get(1), "alchemicalwizardry.meteor", -10);
+        }
     }
 
     private static void sendHandler(String aName, String aBlock) {

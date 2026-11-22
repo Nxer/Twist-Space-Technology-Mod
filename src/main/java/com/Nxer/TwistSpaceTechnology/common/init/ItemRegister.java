@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.init;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.ActualPattern;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.BloodInfusedMiningDrone;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.BottledChaosCredential;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.BottledChaosMachineModule;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.EcoSphereExecutionProtocol;
@@ -36,7 +37,7 @@ public class ItemRegister {
         Item[] itemsToReg = { MetaItem01, EcoSphereExecutionProtocol, EcoSphereUpgrade, ProofOfHeroes, ProofOfGods,
             MultiStructuresLinkTool, MetaItemRune, MetaItemIzumik, Yamato, ActualPattern, MetaItemNamedCircuit,
             MetaItemFlask, InfinityDistilledWaterStorageCell, BottledChaosCredential, BottledChaosMachineModule,
-            LifeEssenceSingularity, };
+            LifeEssenceSingularity, BloodInfusedMiningDrone, };
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.unlocalizedName);
@@ -45,6 +46,76 @@ public class ItemRegister {
     }
 
     public static void registryItemContainers() {
+
+        // #tr item.tst.BloodInfusedMiningDrone.0.name
+        // # Blood-Infused Mining Drone (LV)
+        // #zh_CN 浸血的采矿无人机 (LV)
+        GTCMItemList.BloodInfusedMiningDroneLV.set(BloodInfusedMiningDrone.registerVariant(0));
+
+        // #tr item.tst.BloodInfusedMiningDrone.1.name
+        // # Blood-Infused Mining Drone (MV)
+        // #zh_CN 浸血的采矿无人机 (MV)
+        GTCMItemList.BloodInfusedMiningDroneMV.set(BloodInfusedMiningDrone.registerVariant(1));
+
+        // #tr item.tst.BloodInfusedMiningDrone.2.name
+        // # Blood-Infused Mining Drone (HV)
+        // #zh_CN 浸血的采矿无人机 (HV)
+        GTCMItemList.BloodInfusedMiningDroneHV.set(BloodInfusedMiningDrone.registerVariant(2));
+
+        // #tr item.tst.BloodInfusedMiningDrone.3.name
+        // # Blood-Infused Mining Drone (EV)
+        // #zh_CN 浸血的采矿无人机 (EV)
+        GTCMItemList.BloodInfusedMiningDroneEV.set(BloodInfusedMiningDrone.registerVariant(3));
+
+        // #tr item.tst.BloodInfusedMiningDrone.4.name
+        // # Blood-Infused Mining Drone (IV)
+        // #zh_CN 浸血的采矿无人机 (IV)
+        GTCMItemList.BloodInfusedMiningDroneIV.set(BloodInfusedMiningDrone.registerVariant(4));
+
+        // #tr item.tst.BloodInfusedMiningDrone.5.name
+        // # Blood-Infused Mining Drone (LuV)
+        // #zh_CN 浸血的采矿无人机 (LuV)
+        GTCMItemList.BloodInfusedMiningDroneLuV.set(BloodInfusedMiningDrone.registerVariant(5));
+
+        // #tr item.tst.BloodInfusedMiningDrone.6.name
+        // # Blood-Infused Mining Drone (ZPM)
+        // #zh_CN 浸血的采矿无人机 (ZPM)
+        GTCMItemList.BloodInfusedMiningDroneZPM.set(BloodInfusedMiningDrone.registerVariant(6));
+
+        // #tr item.tst.BloodInfusedMiningDrone.7.name
+        // # Blood-Infused Mining Drone (UV)
+        // #zh_CN 浸血的采矿无人机 (UV)
+        GTCMItemList.BloodInfusedMiningDroneUV.set(BloodInfusedMiningDrone.registerVariant(7));
+
+        // #tr item.tst.BloodInfusedMiningDrone.8.name
+        // # Blood-Infused Mining Drone (UHV)
+        // #zh_CN 浸血的采矿无人机 (UHV)
+        GTCMItemList.BloodInfusedMiningDroneUHV.set(BloodInfusedMiningDrone.registerVariant(8));
+
+        // #tr item.tst.BloodInfusedMiningDrone.9.name
+        // # Blood-Infused Mining Drone (UEV)
+        // #zh_CN 浸血的采矿无人机 (UEV)
+        GTCMItemList.BloodInfusedMiningDroneUEV.set(BloodInfusedMiningDrone.registerVariant(9));
+
+        // #tr item.tst.BloodInfusedMiningDrone.10.name
+        // # Blood-Infused Mining Drone (UIV)
+        // #zh_CN 浸血的采矿无人机 (UIV)
+        GTCMItemList.BloodInfusedMiningDroneUIV.set(BloodInfusedMiningDrone.registerVariant(10));
+
+        // #tr item.tst.BloodInfusedMiningDrone.11.name
+        // # Blood-Infused Mining Drone (UMV)
+        // #zh_CN 浸血的采矿无人机 (UMV)
+        GTCMItemList.BloodInfusedMiningDroneUMV.set(BloodInfusedMiningDrone.registerVariant(11));
+
+        // #tr item.tst.BloodInfusedMiningDrone.12.name
+        // # Blood-Infused Mining Drone (UXV)
+        // #zh_CN 浸血的采矿无人机 (UXV)
+        GTCMItemList.BloodInfusedMiningDroneUXV.set(BloodInfusedMiningDrone.registerVariant(12));
+
+        // #tr item.tst.BloodInfusedMiningDrone.13.name
+        // # Blood-Infused Mining Drone (MAX)
+        // #zh_CN 浸血的采矿无人机 (MAX)
+        GTCMItemList.BloodInfusedMiningDroneMAX.set(BloodInfusedMiningDrone.registerVariant(13));
 
         GTCMItemList.BottledChaosMachineModule.set(BottledChaosMachineModule.registerVariant(0));
         GTCMItemList.BottledChaosCredentialFrame0.set(BottledChaosCredential.registerVariant(0));
@@ -440,37 +511,74 @@ public class ItemRegister {
         // #tr item.tst.MetaItem01.45.name
         // # Meteor Miner Tier 1 Schematic
         // #zh_CN 陨星采矿场T1设计图
-        GTCMItemList.MeteorMinerSchematic1.set(MetaItem01.registerVariantWithTooltips(
-            45,
+        GTCMItemList.MeteorMinerSchematic1.set(MetaItem01.registerVariantWithTooltips(45, new String[]{
             // #tr item.tst.MetaItem01.45.tooltip
-            // # Schematic needed to enable the Tier 1 Meteor Miner.
-            // #zh_CN 启用T1激光陨星采矿场所需的设计图.
-            new String[]{tr("item.tst.MetaItem01.45.tooltip")}));
+            // # No Fortune by default. Mines one block per cycle.
+            // #zh_CN 默认无时运. 每次运行挖掘一个方块.
+            tr("item.tst.MetaItem01.45.tooltip"),
+            // #tr item.tst.MetaItem01.45.tooltip.1
+            // # Place a pickaxe in the ULV input bus to apply Fortune.
+            // #zh_CN 将镐放入 ULV 输入总线可获得对应时运.
+            tr("item.tst.MetaItem01.45.tooltip.1"),
+            // #tr item.tst.MetaItem01.45.tooltip.2
+            // # Pickaxe of the Core - Fortune I
+            // #zh_CN 炽心镐 - 时运 I
+            tr("item.tst.MetaItem01.45.tooltip.2"),
+            // #tr item.tst.MetaItem01.45.tooltip.3
+            // # Bound Pickaxe - Fortune II
+            // #zh_CN 约束之镐 - 时运 II
+            tr("item.tst.MetaItem01.45.tooltip.3"),
+            // #tr item.tst.MetaItem01.45.tooltip.4
+            // # Terra Shatterer - Fortune III
+            // #zh_CN 泰拉粉碎者 - 时运 III
+            tr("item.tst.MetaItem01.45.tooltip.4")}));
 
         // #tr item.tst.MetaItem01.46.name
         // # Meteor Miner Tier 2 Schematic
         // #zh_CN 陨星采矿场T2设计图
-        GTCMItemList.MeteorMinerSchematic2.set(
-            MetaItem01.registerVariantWithTooltips(
-                46,
-                // #tr item.tst.MetaItem01.46.tooltip
-                // # Schematic needed to enable the Tier 2 Meteor Miner.
-                // #zh_CN 启用T2激光陨星采矿场所需的设计图.
-                new String[]{tr("item.tst.MetaItem01.46.tooltip")}));
+        GTCMItemList.MeteorMinerSchematic2.set(MetaItem01.registerVariantWithTooltips(46, new String[]{
+            // #tr item.tst.MetaItem01.46.tooltip
+            // # Fortune III. Mines one row per cycle.
+            // #zh_CN 时运 III. 每次运行挖掘一行.
+            tr("item.tst.MetaItem01.46.tooltip")}));
 
         // #tr item.tst.MetaItem01.47.name
+        // # Meteor Miner Tier 3 Schematic
+        // #zh_CN 陨星采矿场T3设计图
+        GTCMItemList.MeteorMinerSchematic3.set(MetaItem01.registerVariantWithTooltips(47, new String[]{
+            // #tr item.tst.MetaItem01.47.tooltip
+            // # Fortune IV. Mines one complete horizontal layer per cycle.
+            // #zh_CN 时运 IV. 每次运行挖掘一整层.
+            tr("item.tst.MetaItem01.47.tooltip")}));
+
+        // #tr item.tst.MetaItem01.48.name
+        // # Inactive Mineral Seed Powder
+        // #zh_CN 失活矿母粉
+        GTCMItemList.InactiveMineralSeedPowder.set(MetaItem01.registerVariant(48));
+
+        // #tr item.tst.MetaItem01.49.name
+        // # Active Mineral Seed Powder
+        // #zh_CN 活性矿母粉
+        GTCMItemList.ActiveMineralSeedPowder.set(MetaItem01.registerVariant(49));
+
+        // #tr item.tst.MetaItem01.50.name
+        // # Mineral Seed Core
+        // #zh_CN 矿母种核
+        GTCMItemList.MineralSeedCore.set(MetaItem01.registerVariant(50));
+
+        // #tr item.tst.MetaItem01.51.name
         // # Early Technical Validation Protocol
         // #zh_CN 技术验证先行协议
 
-        // #tr item.tst.MetaItem01.47.tooltip.1
+        // #tr item.tst.MetaItem01.51.tooltip.1
         // # Tired of constantly maintaining production lines, you begin searching for a solution.
         // #zh_CN 厌倦了频繁维护产线, 你开始寻找新的解决办法.
 
-        // #tr item.tst.MetaItem01.47.tooltip.2
+        // #tr item.tst.MetaItem01.51.tooltip.2
         // # Right-click a Bottled Chaos controller to permanently convert it into a Recipe Chain Validation Prototype.
         // #zh_CN 右键瓶中混沌主机, 将其永久转换为配方链验证原型机.
-        GTCMItemList.BottledChaosEarlyAccess.set(MetaItem01.registerVariantWithTooltips(47,
-            new String[]{tr("item.tst.MetaItem01.47.tooltip.1"), tr("item.tst.MetaItem01.47.tooltip.2")}));
+        GTCMItemList.BottledChaosEarlyAccess.set(MetaItem01.registerVariantWithTooltips(51,
+            new String[]{tr("item.tst.MetaItem01.51.tooltip.1"), tr("item.tst.MetaItem01.51.tooltip.2")}));
 
         if (Config.activateMegaSpaceStation) {
             // #tr item.tst.MetaItem01.176.name
