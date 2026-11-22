@@ -3,14 +3,14 @@ navigation:
   title: Recipe Chain Validation Prototype
   parent: index.md
   position: 45
-  icon: TwistSpaceTechnology:MetaItem01:47
+  icon: TwistSpaceTechnology:MetaItem01:51
 item_ids:
-  - TwistSpaceTechnology:MetaItem01:47
+  - TwistSpaceTechnology:MetaItem01:51
 ---
 
 # Recipe Chain Validation Prototype
 
-<ItemImage id="TwistSpaceTechnology:MetaItem01:47" scale="3" />
+<ItemImage id="TwistSpaceTechnology:MetaItem01:51" scale="3" />
 
 Craft an **Early Technical Validation Protocol** in an Assembler, then right-click a Bottled Chaos controller. This consumes the protocol and **permanently converts it into a prototype**.
 

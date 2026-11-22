@@ -542,14 +542,14 @@ public class ItemRegister {
             // #zh_CN 时运 III. 每次运行挖掘一行.
             tr("item.tst.MetaItem01.46.tooltip")}));
 
-        // #tr item.tst.MetaItem01.51.name
+        // #tr item.tst.MetaItem01.47.name
         // # Meteor Miner Tier 3 Schematic
         // #zh_CN 陨星采矿场T3设计图
-        GTCMItemList.MeteorMinerSchematic3.set(MetaItem01.registerVariantWithTooltips(51, new String[]{
-            // #tr item.tst.MetaItem01.51.tooltip
+        GTCMItemList.MeteorMinerSchematic3.set(MetaItem01.registerVariantWithTooltips(47, new String[]{
+            // #tr item.tst.MetaItem01.47.tooltip
             // # Fortune IV. Mines one complete horizontal layer per cycle.
             // #zh_CN 时运 IV. 每次运行挖掘一整层.
-            tr("item.tst.MetaItem01.51.tooltip")}));
+            tr("item.tst.MetaItem01.47.tooltip")}));
 
         // #tr item.tst.MetaItem01.48.name
         // # Inactive Mineral Seed Powder
@@ -566,19 +566,19 @@ public class ItemRegister {
         // #zh_CN 矿母种核
         GTCMItemList.MineralSeedCore.set(MetaItem01.registerVariant(50));
 
-        // #tr item.tst.MetaItem01.47.name
+        // #tr item.tst.MetaItem01.51.name
         // # Early Technical Validation Protocol
         // #zh_CN 技术验证先行协议
 
-        // #tr item.tst.MetaItem01.47.tooltip.1
+        // #tr item.tst.MetaItem01.51.tooltip.1
         // # Tired of constantly maintaining production lines, you begin searching for a solution.
         // #zh_CN 厌倦了频繁维护产线, 你开始寻找新的解决办法.
 
-        // #tr item.tst.MetaItem01.47.tooltip.2
+        // #tr item.tst.MetaItem01.51.tooltip.2
         // # Right-click a Bottled Chaos controller to permanently convert it into a Recipe Chain Validation Prototype.
         // #zh_CN 右键瓶中混沌主机, 将其永久转换为配方链验证原型机.
-        GTCMItemList.BottledChaosEarlyAccess.set(MetaItem01.registerVariantWithTooltips(47,
-            new String[]{tr("item.tst.MetaItem01.47.tooltip.1"), tr("item.tst.MetaItem01.47.tooltip.2")}));
+        GTCMItemList.BottledChaosEarlyAccess.set(MetaItem01.registerVariantWithTooltips(51,
+            new String[]{tr("item.tst.MetaItem01.51.tooltip.1"), tr("item.tst.MetaItem01.51.tooltip.2")}));
 
         if (Config.activateMegaSpaceStation) {
             // #tr item.tst.MetaItem01.176.name

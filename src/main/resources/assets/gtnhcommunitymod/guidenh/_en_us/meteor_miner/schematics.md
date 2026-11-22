@@ -7,7 +7,7 @@ navigation:
 item_ids:
   - TwistSpaceTechnology:MetaItem01:45
   - TwistSpaceTechnology:MetaItem01:46
-  - TwistSpaceTechnology:MetaItem01:51
+  - TwistSpaceTechnology:MetaItem01:47
 ---
 
 # Miner schematics
@@ -16,7 +16,7 @@ Put the schematic that matches the structure tier in the [miner controller](inde
 
 <ItemImage id="TwistSpaceTechnology:MetaItem01:45" scale="2" />
 <ItemImage id="TwistSpaceTechnology:MetaItem01:46" scale="2" />
-<ItemImage id="TwistSpaceTechnology:MetaItem01:51" scale="2" />
+<ItemImage id="TwistSpaceTechnology:MetaItem01:47" scale="2" />
 
 | Schematic | Mined per cycle | Fortune |
 | --- | --- | --- |
