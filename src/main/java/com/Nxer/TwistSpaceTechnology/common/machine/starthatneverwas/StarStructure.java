@@ -172,6 +172,9 @@ public final class StarStructure {
             symbol(46),
             HatchElementBuilder.<TST_StarThatNeverWas>builder()
                 .atLeast(InputBus)
+                // #tr tst.star.ports.drone_input
+                // # Input Bus (physical inventory)
+                // #zh_CN 输入总线 (实体库存)
                 .description(() -> "tst.star.ports.drone_input")
                 .adder(TST_StarThatNeverWas::addDroneInput)
                 .hint(3)

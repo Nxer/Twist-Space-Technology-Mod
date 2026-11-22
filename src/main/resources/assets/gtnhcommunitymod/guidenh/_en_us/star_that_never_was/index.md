@@ -10,16 +10,23 @@ item_ids:
 
 # The Star That Never Was
 
-**A Mineable Lie**
+A Mineable **Lie**
 
-A meteor focus selects the virtual star. The controller forms it above the shaft, the Laser Meteor Miner cuts the ore, and the controller sends it to your ME network. Build the hub as shown in the preview. You can run your first batch at one parallel.
+A meteor focus selects the virtual star. The controller forms it above the shaft, the Laser Meteor Miner cuts the ore, and the controller sends it to your ME network.
 
 <GameScene width="400" height="240" interactive={true} allowLayerSlider={true} showGrid={false}>
   <ImportStructureLib controller="gregtech:gt.blockmachines:19804" />
   <StarStructureControls />
 </GameScene>
 
-**Megastructure** opens on the central shaft. Select 8 for the whole structure.
+The preview's **Tier** corresponds to the blueprint's main channel. **Megastructure** opens on the central shaft. Select 7 for the receiver and upper structure, or 8 for the whole structure.
+
+| Main channel | Receiver glass | Structure and parallel |
+| --- | --- | --- |
+| 1 (default) | Neutronium Glass | Base structure with one parallel |
+| 2 | Infinity Glass | Requires the drone hub and all four nodes, then allows drones to increase parallel |
+
+All 37 tiered glass blocks in the receiver must match. The controller determines the tier from the blocks actually built.
 
 ## Install the miner and connect the ports
 
@@ -32,4 +39,4 @@ Choose a focus on Blood Magic's meteor page in NEI. Supply the controller with t
 
 Switch on the star controller and let the containment field open. Once linked, the miner follows the controller's work switch. Watch the display progress from star formation to laser mining. The default batch mode delivers the ore to ME when the run finishes.
 
-After the first run, adjust [ore selection, radius and delivery](mining.md), or connect the [drone hub](drones.md) to increase parallel. See the [operating formulas](formulas.md) and [worked examples](examples.md) when sizing your supplies.
+After the first run, adjust [ore selection, radius and delivery](mining.md), or upgrade to tier 2 and connect the [drone hub](drones.md) to increase parallel. See the [operating formulas](formulas.md) and [worked examples](examples.md) when sizing your supplies.

@@ -10,6 +10,13 @@ item_ids:
 
 # Drone hub
 
+## Upgrade to tier 2
+
+1. Replace all 37 Neutronium Glass blocks in the receiver with Infinity Glass.
+2. Set the blueprint's main channel to 2 and build the hub and all four floating nodes. Use Megastructure 7 to preview the upper structure.
+
+Once the tier 2 structure is formed, the controller dispatches drones through the hub to increase parallel.
+
 ## Drone dispatch and return
 
 Face the front of the floating hub. All three ports sit in the lower row and face outwards.

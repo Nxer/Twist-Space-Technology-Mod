@@ -1,11 +1,17 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.tr;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.getBlueprintWithDot;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textUseBlueprint;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
+import java.util.function.Supplier;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,6 +33,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.starthatneverwas.StarRecipeP
 import com.Nxer.TwistSpaceTechnology.common.machine.starthatneverwas.StarStructure;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileStarContainment;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.StructureLibAPI;
@@ -89,6 +97,7 @@ public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarTh
 
     public TST_StarThatNeverWas(int id, String name, String regionalName) {
         super(id, name, regionalName);
+        registerTooltipCredits(Style.INFUSION, ID.GODERIUM);
         machineMode = StarBatch.MODE_BATCH;
         setMEOutput(true);
         // #tr tst.star.preview.channel
@@ -1060,31 +1069,100 @@ public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarTh
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        // #tr tst.star.subtitle
-        // # A Mineable Lie
-        // #zh_CN 一个可开采的谎言
+        // #tr tst.machine.StarThatNeverWas.tooltip.flavor
+        // # {\WHITE}A Mineable {\BOLD}%s{\RESET}
+        // #zh_CN {\WHITE}一个可开采的{\BOLD}%s{\RESET}
+        String subtitleFormat = tr("tst.machine.StarThatNeverWas.tooltip.flavor");
+        // #tr tst.machine.StarThatNeverWas.tooltip.flavor.emphasis
+        // # Lie
+        // #zh_CN 谎言
+        String emphasis = tr("tst.machine.StarThatNeverWas.tooltip.flavor.emphasis");
+        String subtitle = String.format(subtitleFormat, emphasis);
+        long animationStart = System.nanoTime();
+        Supplier<String> animatedSubtitle = Style.of(word -> {
+            long elapsed = (System.nanoTime() - animationStart) / 1_000_000L;
+            if (elapsed % 3600L < 3200L) return subtitle;
+            Random frame = new Random(elapsed / 100L);
+            String glyphs = "@#%&?+";
+            int length = word.codePointCount(0, word.length());
+            StringBuilder scrambled = new StringBuilder(length);
+            for (int i = 0; i < length; i++) {
+                scrambled.append(glyphs.charAt(frame.nextInt(glyphs.length())));
+            }
+            return String.format(subtitleFormat, scrambled);
+        })
+            .apply(emphasis);
         TSTMultiblockTooltipBuilder tooltip = new TSTMultiblockTooltipBuilder() {
 
             @Override
             public String[] getInformation() {
-                return new String[] { tr("tst.common.machine.StarThatNeverWas.name"), tr("tst.star.subtitle") };
+                String[] lines = super.getInformation();
+                String currentSubtitle = animatedSubtitle.get();
+                if (subtitle.equals(currentSubtitle)) return lines;
+                int index = Arrays.asList(lines)
+                    .indexOf(subtitle);
+                if (index < 0) return lines;
+                lines = lines.clone();
+                lines[index] = currentSubtitle;
+                return lines;
             }
         };
-        tooltip.addStructureHint("tst.star.preview.channel")
-            // #tr tst.star.ports.controller
-            // # Controller directly above the T2/T3 miner controller
-            // #zh_CN 主机位于二/三级矿机控制器上方一格
-            .addStructureHint("tst.star.ports.controller")
-            .addInputBus("", getBlueprintWithDot(1), 1)
-            .addInputHatch("", getBlueprintWithDot(1, 5), 1, 5)
-            .addEnergyHatch("", getBlueprintWithDot(1, 2), 1, 2)
-            .addOtherStructurePart(HatchElement.ExoticEnergy.getDisplayName(), getBlueprintWithDot(1, 2), 1, 2)
-            .addOtherStructurePart(tr(StarStructure.meOutputBusNameKey()), getBlueprintWithDot(1, 4), 1, 4)
-            // #tr tst.star.ports.drone_input
-            // # Input Bus (physical inventory)
-            // #zh_CN 输入总线 (实体库存)
-            .addOtherStructurePart(tr("tst.star.ports.drone_input"), getBlueprintWithDot(3), 3)
-            .addOutputBus("", getBlueprintWithDot(4), 4)
+        // #tr tst.machine.StarThatNeverWas.tooltip.machine_type
+        // # Meteor Ritual
+        // #zh_CN 陨星仪式
+        tooltip.addMachineType(tr("tst.machine.StarThatNeverWas.tooltip.machine_type"))
+            // #tr tst.machine.StarThatNeverWas.tooltip.controller
+            // # Controller block for The Star That Never Was
+            // #zh_CN 未曾存在之星的控制方块
+            .addInfo(tr("tst.machine.StarThatNeverWas.tooltip.controller"))
+            .addInfo(subtitle)
+            .addInfo("")
+            // #tr tst.machine.StarThatNeverWas.tooltip.info.1
+            // # The meteor focus determines which virtual star the ritual forms.
+            // #zh_CN 陨星标志物决定仪式生成哪一种虚拟星体.
+            .addInfo(tr("tst.machine.StarThatNeverWas.tooltip.info.1"))
+            // #tr tst.machine.StarThatNeverWas.tooltip.info.2
+            // # The ritual consumes Octuple Compressed Cobblestone and Life Essence to form the star.
+            // #zh_CN 仪式消耗八重压缩圆石和生命本源, 在井口凝聚星体.
+            .addInfo(tr("tst.machine.StarThatNeverWas.tooltip.info.2"))
+            // #tr tst.machine.StarThatNeverWas.tooltip.info.3
+            // # Requires a linked Laser Meteor Miner to extract ore from the virtual star.
+            // #zh_CN 开采虚拟星体需要联动激光陨星采矿场.
+            .addInfo(tr("tst.machine.StarThatNeverWas.tooltip.info.3"))
+            // #tr tst.machine.StarThatNeverWas.tooltip.info.4
+            // # Mineral Seed Cores expand the radius. Base parallel is 1.
+            // #zh_CN 矿母种核可扩大开采半径. 基础并行为 1.
+            .addInfo(tr("tst.machine.StarThatNeverWas.tooltip.info.4"))
+            // #tr tst.machine.StarThatNeverWas.tooltip.info.5
+            // # Infinity Glass above the miner unlocks drone nodes for extra parallel.
+            // #zh_CN 矿机上方换用无尽玻璃, 解锁无人机接入节点以提高并行.
+            .addInfo(tr("tst.machine.StarThatNeverWas.tooltip.info.5"))
+            // #tr tst.machine.StarThatNeverWas.tooltip.info.6
+            // # The required startup power rises in tiers with the star's radius.
+            // #zh_CN 启动功率门槛随星体半径分档提高.
+            .addInfo(tr("tst.machine.StarThatNeverWas.tooltip.info.6"))
+            // #tr tst.machine.StarThatNeverWas.tooltip.info.7
+            // # Batch mode delivers ore at the end. Stepwise mode delivers after each cut.
+            // #zh_CN 整批开采结束后交付矿石, 分次开采每步交付.
+            .addInfo(tr("tst.machine.StarThatNeverWas.tooltip.info.7"))
+            .addSeparator()
+            .addInfo(tr("tst.machine.EcoSphereSimulator.tooltip.info.13"))
+            .beginStructureBlock(207, 177, 207, false)
+            .addController(textUseBlueprint)
+            .addStructureHint("tst.star.preview.channel")
+            .addOtherStructurePart(HatchElement.InputBus.getDisplayName(), getBlueprintWithDot(1), 1)
+            .addOtherStructurePart(HatchElement.InputHatch.getDisplayName(), getBlueprintWithDot(1), 1)
+            .addOtherStructurePart(HatchElement.OutputBus.getDisplayName(), getBlueprintWithDot(1), 1)
+            .addOtherStructurePart(HatchElement.Energy.getDisplayName(), getBlueprintWithDot(1, 2), 1, 2)
+            .addStructureInfo(Tooltip_DoNotNeedMaintenance)
+            .addStructureInfo(Text_SeparatingLine)
+            // #tr tst.machine.StarThatNeverWas.tooltip.structure.1
+            // # {\WHITE}Drone Hub
+            // #zh_CN {\WHITE}无人机中枢
+            .addStructureInfo(tr("tst.machine.StarThatNeverWas.tooltip.structure.1"))
+            .addOtherStructurePart(HatchElement.InputBus.getDisplayName(), getBlueprintWithDot(3), 3)
+            .addOtherStructurePart(HatchElement.OutputBus.getDisplayName(), getBlueprintWithDot(4), 4)
+            .addOtherStructurePart(HatchElement.InputHatch.getDisplayName(), getBlueprintWithDot(5), 5)
             .toolTipFinisher();
         return tooltip;
     }
