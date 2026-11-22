@@ -16,6 +16,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 
 // spotless:off
 public class Config {
+
+    public static boolean Auto_Reset_Config_Files = false;
     private static final Pattern TEST_BUILD_MARKER = Pattern.compile("(?:^|[.+_-])(?:test|dirty)(?:$|[.+_-])", Pattern.CASE_INSENSITIVE);
 
     // region Regions enum
@@ -607,7 +609,8 @@ public class Config {
 
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
-        if (resetTestBuildConfiguration(configuration, TwistSpaceTechnology.VERSION)) {
+        Auto_Reset_Config_Files = configuration.getBoolean("Auto_Reset_Config_Files", GENERAL, Auto_Reset_Config_Files, "True if you wanna auto-reset the cfg files when you are testing this mod with its test version.");
+        if (Auto_Reset_Config_Files && resetTestBuildConfiguration(configuration, TwistSpaceTechnology.VERSION)) {
             TwistSpaceTechnology.LOG.info("Regenerating TST configuration from defaults for test build {}", TwistSpaceTechnology.VERSION);
         }
 
