@@ -1150,7 +1150,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                     }
                     outputItems.add(GTCMItemList.StrangeAnnihilationFuelRod.get(remainder));
                 } else {
-                    outputItems.add(GTCMItemList.StrangeAnnihilationFuelRod.get((int) outputRodAmount));
+                    outputItems.add(GTCMItemList.StrangeAnnihilationFuelRod.get((int) strangeRod));
                 }
 
                 // output anti matter fuel rods
@@ -1162,7 +1162,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                     }
                     outputItems.add(GTCMItemList.AntimatterFuelRod.get(remainder));
                 } else {
-                    outputItems.add(GTCMItemList.AntimatterFuelRod.get((int) outputRodAmount));
+                    outputItems.add(GTCMItemList.AntimatterFuelRod.get((int) antiMatterRod));
                 }
 
             }
