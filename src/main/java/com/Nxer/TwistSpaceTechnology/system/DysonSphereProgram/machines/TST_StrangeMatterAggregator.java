@@ -908,7 +908,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     protected CheckRecipeResult setRunning() {
         if (wirelessMode) {
             lEUt = 0;
-            if (!addEUToGlobalEnergyMap(ownerUUID, (long) (getEuModifier() * totalPowerConsumption))) {
+            if (!addEUToGlobalEnergyMap(ownerUUID, (long) (-1 * getEuModifier() * totalPowerConsumption))) {
                 return CheckRecipeResultRegistry.insufficientPower((long) (getEuModifier() * totalPowerConsumption));
             }
         } else {
