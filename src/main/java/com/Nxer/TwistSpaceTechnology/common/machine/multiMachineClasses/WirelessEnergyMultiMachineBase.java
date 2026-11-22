@@ -143,6 +143,9 @@ public abstract class WirelessEnergyMultiMachineBase<T extends WirelessEnergyMul
         costingEUText = ZERO_STRING;
         prepareProcessing();
         if (!wirelessMode) return super.checkProcessing();
+        // Wireless mode draws the full EU cost from the global network upfront; any lEUt left over
+        // from a previous wired cycle must not be deducted again by onRunningTick from energy hatches.
+        lEUt = 0;
         if (isMEOutputEnabled()) clearProcessingOutputs();
 
         boolean succeeded = false;
