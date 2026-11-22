@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -116,6 +117,15 @@ public final class BottledChaosCredentialRecipes {
         }
         register("magmatter", Stage.UXV, CustomItemList.Godforge_StellarEnergySiphonCasing.get(8), Materials.MHDCSM.getPart(OrePrefixes.frameGt, 8), cells(Materials.Time.getMolten(1000), 8), cells(Materials.Space.getMolten(1000), 8), ItemList.PseudoStar.get(8), Materials.MagMatter.getDust(64));
         register("quark_gluon_plasma", Stage.UXV, new ItemStack(BlockGodforgeGlass.INSTANCE, 8), GregtechItemList.CosmicFabricManipulator.get(8), ItemList.Field_Generator_UXV.get(2), ItemList.PseudoStar.get(8), cells(Materials.QuarkGluonPlasma.getFluid(1000), 64));
+
+        register("petroleum_refining", Stage.LuV, ItemList.CasingNaquadahReinforcedDistillation.get(8), ItemList.Casing_Pipe_Polytetrafluoroethylene.get(8), cells(Materials.LightFuel.getFluid(1000), 64), cells(Materials.Gas.getGas(1000), 64));
+        register("petroleum_cracking", Stage.LuV, ItemList.Casing_StableTitanium.get(8), ItemList.Casing_Coil_Nichrome.get(8), cells(Materials.Ethylene.getGas(1000), 64), cells(Materials.Octane.getFluid(1000), 64));
+        register("diesel_blending", Stage.LuV, ItemList.Casing_Chemically_Inert.get(8), ItemList.Casing_Pipe_Polytetrafluoroethylene.get(8), cells(Materials.Diesel.getFluid(1000), 64), cells(Materials.NitroFuel.getFluid(1000), 64));
+        register("gasoline_blending", Stage.LuV, ItemList.Casing_Chemically_Inert.get(8), ItemList.Casing_Pipe_Polytetrafluoroethylene.get(8), cells(Materials.GasolineRegular.getFluid(1000), 64), cells(Materials.GasolinePremium.getFluid(1000), 64));
+        register("wood_distillation", Stage.LuV, GregtechItemList.Casing_CokeOven_Coil2.get(8), ItemList.CasingNaquadahReinforcedDistillation.get(8), cells(Materials.WoodTar.getFluid(1000), 64), cells(Materials.Methanol.getFluid(1000), 64), cells(Materials.Benzene.getFluid(1000), 64));
+        register("benzene_nitration", Stage.LuV, ItemList.Casing_Chemically_Inert.get(8), ItemList.Electric_Pump_LuV.get(2), cells(Materials.NitricAcid.getFluid(1000), 8), cells(new FluidStack(BottledChaosRecipeResources.Nitrobenzene, 1000), 64));
+        register("petrochemical_oxygenates", Stage.LuV, ItemList.ChemicalReactorLuV.get(4), ItemList.Casing_Pipe_Polytetrafluoroethylene.get(8), cells(Materials.Ethanol.getFluid(1000), 64), cells(Materials.AceticAcid.getFluid(1000), 64), cells(Materials.Acetone.getFluid(1000), 64));
+        register("ethanol_gasoline_blending", Stage.LuV, ItemList.Casing_Chemically_Inert.get(8), ItemList.Casing_Pipe_Polytetrafluoroethylene.get(8), cells(Materials.Ethanol.getFluid(1000), 8), cells(GGMaterial.ethanolGasoline.getFluidOrGas(1000), 64));
         // spotless:on
         RECIPES.sort(Comparator.comparingInt(InjectionRecipe::tagIndex));
         if (RECIPES.size() != CredentialModel.ROUTE_COUNT)
@@ -123,7 +133,10 @@ public final class BottledChaosCredentialRecipes {
     }
 
     public static List<InjectionRecipe> recipes() {
-        return Collections.unmodifiableList(RECIPES);
+        return Collections.unmodifiableList(
+            RECIPES.stream()
+                .sorted(Comparator.comparingInt(recipe -> CredentialModel.displayRank(recipe.tagIndex())))
+                .collect(Collectors.toList()));
     }
 
     /** Called on the workbench's detached preview inventory; merge/split and EasySkip remain in its normal path. */

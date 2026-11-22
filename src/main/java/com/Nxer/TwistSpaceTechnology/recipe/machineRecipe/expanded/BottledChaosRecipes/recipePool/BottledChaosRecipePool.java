@@ -70,6 +70,8 @@ public final class BottledChaosRecipePool {
         BottledChaosKevlarRecipes.registerRecipeChains(catalog);
         BottledChaosRadoxRecipes.registerRecipeChains(catalog);
         BottledChaosBiologicalRecipes.registerRecipeChains(catalog);
+        BottledChaosPetrochemicalRecipes.registerRecipeChains(catalog);
+        BottledChaosWoodChemistryRecipes.registerRecipeChains(catalog);
         if (Config.BottledChaosCycleRecipes) {
             registerCrystalCycles(catalog);
             BottledChaosTesseractRecipes.registerRecipeChains(catalog);

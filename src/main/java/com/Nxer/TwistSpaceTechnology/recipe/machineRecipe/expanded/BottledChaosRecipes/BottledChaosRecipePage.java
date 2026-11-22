@@ -26,6 +26,8 @@ public enum BottledChaosRecipePage {
     PURIFIED_WATER(() -> GTCMRecipe.BottledChaosPurifiedWaterCategory),
     KEVLAR(() -> GTCMRecipe.BottledChaosKevlarCategory),
     RADOX(() -> GTCMRecipe.BottledChaosRadoxCategory, "tst.bottledchaos.recipe.category.radox.name"),
+    PETROCHEMICAL(() -> GTCMRecipe.BottledChaosPetrochemicalCategory, "tst.bottledchaos.recipe.category.petrochemical.name"),
+    WOOD_CHEMISTRY(() -> GTCMRecipe.BottledChaosWoodChemistryCategory, "tst.bottledchaos.recipe.category.wood_chemistry.name"),
     BIOLOGICAL(() -> GTCMRecipe.BottledChaosBiologicalCategory);
     // spotless:on
 

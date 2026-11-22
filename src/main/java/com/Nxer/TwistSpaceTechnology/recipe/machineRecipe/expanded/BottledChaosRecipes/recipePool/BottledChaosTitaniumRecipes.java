@@ -39,13 +39,13 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosR
 
 import gregtech.api.enums.TierEU;
 
-/** LuV mineral processing; alternative sources and consecutive stages share one credential tag. */
+/** IV mineral processing; alternative sources and consecutive stages share one credential tag. */
 public final class BottledChaosTitaniumRecipes {
 
     public static void registerRecipeChains(BottledChaosRecipeCatalog catalog) {
         // spotless:off
         // 1. Final stage: chlorinate rutile, reduce its chloride, then cool to titanium ingots.
-        catalog.registerChain("titanium", 1, TierEU.RECIPE_LuV, RutileDust,
+        catalog.registerChain("titanium", 1, TierEU.RECIPE_IV, RutileDust,
             new Object[] { TitaniumIngot }, new Object[] {},
             catalog.markRecipe(LargeChemicalReactor, RutileDust, TitaniumTetrachloride, -1),
             catalog.markRecipe(BlastFurnace, TitaniumTetrachloride, HotTitaniumIngot, 12),
@@ -53,14 +53,14 @@ public final class BottledChaosTitaniumRecipes {
 
         // 2. Ilmenite preparation: use the native crushed-ore bath, retaining its 60% slag yield.
         // Replace only the ore input with full mineral dust before balancing the cached chain.
-        var ilmenite = catalog.registerAlternativeChain("titanium", TierEU.RECIPE_LuV, IlmeniteDust,
+        var ilmenite = catalog.registerAlternativeChain("titanium", TierEU.RECIPE_IV, IlmeniteDust,
             new Object[] { RutileDust }, new Object[] { RutileDust },
             catalog.markRecipeWithSubstitutedInput(ChemicalBath, CrushedIlmenite, IlmeniteDust, RutileDust, -1));
         ilmenite.includeDecompositionStep(CentrifugeNonCell, IlmeniteSlagDust, IronDust, -1);
         ilmenite.includeDecompositionStep(ElectrolyzerNonCell, IronIISulfateSolution, IronDust, -1);
 
         // 3. Bauxite preparation: slurry mixing, heating, precipitation and slag separation.
-        var bauxite = catalog.registerAlternativeChain("titanium", TierEU.RECIPE_LuV, BauxiteDust,
+        var bauxite = catalog.registerAlternativeChain("titanium", TierEU.RECIPE_IV, BauxiteDust,
             new Object[] { RutileDust }, new Object[] { RutileDust },
             catalog.markRecipeWithSubstitutedInput(MixerNonCell, CrushedBauxite, BauxiteDust, BauxiteSlurry, 8),
             catalog.markRecipe(FluidHeater, BauxiteSlurry, HeatedBauxiteSlurry, -1),

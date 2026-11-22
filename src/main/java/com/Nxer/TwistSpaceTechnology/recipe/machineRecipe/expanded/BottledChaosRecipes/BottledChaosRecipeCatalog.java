@@ -15,6 +15,7 @@ import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.CredentialModel;
@@ -49,7 +50,10 @@ public final class BottledChaosRecipeCatalog {
     private final Map<StepRef, Integer> roundedOutputChanceBatches = new LinkedHashMap<>();
     private final Map<Integer, Integer> substitutedChains = new LinkedHashMap<>();
     private final Map<Integer, TST_ItemID> selectorCircuits = new LinkedHashMap<>();
+    private final Map<Integer, Set<Object>> externalInputs = new LinkedHashMap<>();
     private final Set<Integer> availableInputChains = new LinkedHashSet<>();
+    private final Set<Integer> explicitLinkEntries = new LinkedHashSet<>();
+    private final Map<Integer, Map<Object, Set<Integer>>> permittedConsumers = new LinkedHashMap<>();
     private final Map<Integer, Object[]> outputMarkers = new LinkedHashMap<>();
     private final Map<Integer, Object[]> displayOutputs = new LinkedHashMap<>();
     private final Set<Object> keyOutputs = new LinkedHashSet<>();
@@ -242,6 +246,28 @@ public final class BottledChaosRecipeCatalog {
             selectorCircuits.put(index, TST_ItemID.create(GTUtility.getIntegratedCircuit(configuration)));
         }
 
+        /** Consume supplied intermediates at this stage even if other families synthesize them internally. */
+        public void useExternalInputs(Object... materials) {
+            var inputs = externalInputs.computeIfAbsent(index, ignored -> new LinkedHashSet<>());
+            for (Object material : materials) inputs.add(resourceKey(material));
+        }
+
+        /** Use only declared execution links, with unused products delivered in the same batch. */
+        public void useExplicitLinks() {
+            explicitLinkEntries.add(index);
+        }
+
+        /** Supply these products to actual inputs of the named credential's routes. */
+        public void allowSupplyTo(String consumerTag, Object... resources) {
+            int tagIndex = CredentialModel.indexForTag(consumerTag);
+            if (tagIndex < 0) throw new IllegalArgumentException("unknown consumer tag: " + consumerTag);
+            Map<Object, Set<Integer>> consumers = permittedConsumers
+                .computeIfAbsent(index, ignored -> new LinkedHashMap<>());
+            for (Object resource : resources)
+                consumers.computeIfAbsent(resourceKey(resource), ignored -> new LinkedHashSet<>())
+                    .add(tagIndex);
+        }
+
         public void useAvailableInputsOnly() {
             availableInputChains.add(index);
         }
@@ -394,6 +420,22 @@ public final class BottledChaosRecipeCatalog {
         StepRef mark = markRecipe(map, input, output, circuit);
         roundedOutputChanceBatches.put(mark, batches);
         return mark;
+    }
+
+    /** Retain native fractional dust coproducts by balancing the entire distillation into whole dusts. */
+    public StepRef markDistillation(FluidStack feed, Fluid product, int circuit) {
+        ItemStack[] selector = circuit < 0 ? new ItemStack[0]
+            : new ItemStack[] { GTUtility.getIntegratedCircuit(circuit) };
+        var tower = RecipeMaps.distillationTowerRecipes;
+        var nativeRecipe = BottledChaosSourceResolver.require(tower, selector, feed);
+        var data = BottledChaosRecipeSupport.prepareSourceRecipe(tower, nativeRecipe)
+            .withFullDustOutputs();
+        if (!data.outputs.containsKey(resourceKey(product))) throw new IllegalStateException(
+            "Missing distillation product " + product.getName()
+                + " for "
+                + feed.getFluid()
+                    .getName());
+        return markPreparedRecipe(tower, feed.getFluid(), product, data);
     }
 
     /** Prepare a fixed source recipe without registering it in any GT recipe pool. */
@@ -620,25 +662,33 @@ public final class BottledChaosRecipeCatalog {
             if (selector != null) routes[i] = routes[i].requireCatalyst(selector);
         }
         // 4. Key output identities may supply any actual input or catalyst, independently of its tag.
-        for (int entry = 0; entry < chains.size(); entry++) Collections.addAll(keyOutputs, keyOutputs(entry));
+        for (int entry = 0; entry < chains.size(); entry++)
+            if (!explicitLinkEntries.contains(entry)) Collections.addAll(keyOutputs, keyOutputs(entry));
         // Recovery feed is a chain boundary even when it is not a displayed key product.
-        for (int entry : availableInputChains) keyOutputs.add(
+        for (int entry : availableInputChains) if (!explicitLinkEntries.contains(entry)) keyOutputs.add(
             chains.get(entry)
                 .balanceRoot());
         int[] executionOrder = entryOrder();
         for (int sourcePosition = 0; sourcePosition < executionOrder.length; sourcePosition++) {
             int source = executionOrder[sourcePosition];
+            boolean explicit = explicitLinkEntries.contains(source);
+            var consumers = permittedConsumers.getOrDefault(source, Collections.emptyMap());
             for (Object key : routes[source].outputs.keySet()) {
-                if (!keyOutputs.contains(key)) continue;
+                Set<Integer> tags = consumers.getOrDefault(key, Collections.emptySet());
+                if (explicit ? tags.isEmpty() : !keyOutputs.contains(key)) continue;
                 for (int targetPosition = 0; targetPosition < executionOrder.length; targetPosition++) {
                     int target = executionOrder[targetPosition];
-                    if (source == target) continue;
+                    if (source == target || explicit != explicitLinkEntries.contains(target)) continue;
+                    if (explicit && !tags.contains(
+                        chains.get(target)
+                            .tagIndex()))
+                        continue;
                     if (routes[target].inputs.containsKey(key) || routes[target].catalysts.containsKey(key))
                         links.add(new ChainLink(source, target, key));
                 }
             }
         }
-        // 5. Reject unfinished local intermediates; a standalone route may use boundary materials directly.
+        // 5. Reject unfinished local intermediates; routes may use boundary materials directly.
         validateRouteConnections(routes);
         return routes;
     }
@@ -690,7 +740,7 @@ public final class BottledChaosRecipeCatalog {
     private RecipeData expandInputsAndOutputs(RecipeData route, Object[] protectedOutputs, boolean finalReagents,
         int entry) {
         var finalOutputs = Arrays.asList(protectedOutputs);
-        Set<Object> overridden = new LinkedHashSet<>();
+        Set<Object> overridden = new LinkedHashSet<>(externalInputs.getOrDefault(entry, Collections.emptySet()));
         for (Expansion expansion : expansions) if (expansion.entry() == entry) overridden.add(expansion.key());
         for (int pass = 0; pass < MAX_GRAPH_PASSES; pass++) {
             boolean changed = false;
@@ -813,6 +863,7 @@ public final class BottledChaosRecipeCatalog {
             }
             Set<Object> boundaries = new LinkedHashSet<>();
             boundaries.add(chain.balanceRoot());
+            boundaries.addAll(externalInputs.getOrDefault(i, Collections.emptySet()));
             Collections.addAll(boundaries, chain.protectedOutputs());
             Collections.addAll(boundaries, keyOutputs(i));
             if (chain.boundaryMaterials() != null) Collections.addAll(boundaries, chain.boundaryMaterials());
@@ -858,6 +909,7 @@ public final class BottledChaosRecipeCatalog {
                 chain.inputMultiplier(),
                 chain.requiredTagMask(),
                 availableInputChains.contains(entry),
+                explicitLinkEntries.contains(entry),
                 displayInputAlternatives.get(entry),
                 hiddenDisplayEntries.contains(entry),
                 hiddenInputMarkers.contains(entry) ? null : chain.balanceRoot(),
@@ -875,8 +927,8 @@ public final class BottledChaosRecipeCatalog {
     /** Prepared materials and route metadata; source recipes and registration instructions stay in the catalog. */
     @Desugar
     record CompiledRoute(RecipeData data, Object balanceRoot, Object[] planningTargets, long baseEUt, int tagIndex,
-        int inputMultiplier, long requiredTagMask, boolean availableInputsOnly, ItemStack[][] inputAlternatives,
-        boolean hiddenDisplay, Object lookupInput, Set<Object> displayOutputs) {}
+        int inputMultiplier, long requiredTagMask, boolean availableInputsOnly, boolean explicitLinksOnly,
+        ItemStack[][] inputAlternatives, boolean hiddenDisplay, Object lookupInput, Set<Object> displayOutputs) {}
 
     @Desugar
     record CompiledCatalog(CompiledRoute[] routes, int[] entryOrder, int[] displayOrder, ChainLink[] links,
