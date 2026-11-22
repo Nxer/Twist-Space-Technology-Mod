@@ -33,6 +33,9 @@ All 37 tiered glass blocks in the receiver must match. The controller determines
 1. Build the [Laser Meteor Miner](../meteor_miner/index.md) in the shaft and insert its matching schematic in the miner controller. Align the laser beacon directly below the receiver. For a tier 2 or 3 miner, the star controller sits one block above the miner controller.
 2. Fit an item input bus, a fluid input hatch and an **ME Output Bus** for ore at **marker 1** on the controller panel. The energy hatch fits at **marker 1** on the panel or **marker 2** on the shaft floor.
 
+> [!TIP]
+> [StructureBuilderNH](https://github.com/Goderium/StructureBuilderNH) was originally developed to build The Star That Never Was. For the full build, try its Wireless Structure Terminal, which can place blocks using materials from your inventory or ME network.
+
 ## Mine your first star
 
 Choose a focus on Blood Magic's meteor page in NEI. Supply the controller with the focus, Octuple Compressed Cobblestone and Life Essence. Start at the focus's original radius. You can add seed cores later to expand it.
