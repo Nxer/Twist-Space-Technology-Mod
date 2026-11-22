@@ -33,8 +33,13 @@ final class StarGuideModel {
     private float centerX, centerY, centerZ, extent;
     private float cameraX, cameraY, cameraZ;
     private boolean failed;
+    private boolean droneStructure;
 
-    void render(double x, double y, double z) {
+    void render(double x, double y, double z, boolean includeDrones) {
+        if (droneStructure != includeDrones) {
+            dispose();
+            droneStructure = includeDrones;
+        }
         if (failed) return;
         if (vbo == 0 && build == null) {
             StarGuideGeometry.Material[] palette;
@@ -48,7 +53,7 @@ final class StarGuideModel {
             build = CompletableFuture.supplyAsync(() -> {
                 try (InputStream in = StarGuideModel.class.getResourceAsStream(SOURCE)) {
                     if (in == null) throw new IOException("Missing " + SOURCE);
-                    return StarGuideGeometry.bake(in, palette);
+                    return StarGuideGeometry.bake(in, palette, includeDrones);
                 } catch (IOException e) {
                     throw new CompletionException(e);
                 }

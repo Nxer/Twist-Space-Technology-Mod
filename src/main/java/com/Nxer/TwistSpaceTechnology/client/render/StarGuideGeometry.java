@@ -1,5 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.client.render;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.starthatneverwas.StarStructure.DRONE_CELL_FLAG;
+import static com.Nxer.TwistSpaceTechnology.common.machine.starthatneverwas.StarStructure.NEUTRONIUM_GLASS_PREVIEW;
+import static com.Nxer.TwistSpaceTechnology.common.machine.starthatneverwas.StarStructure.TIERED_GLASS;
+
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -41,7 +45,7 @@ final class StarGuideGeometry {
         return (short) ((cells[offset] << 8) | (cells[offset + 1] & 255));
     }
 
-    static Mesh bake(InputStream compressedStructure, Material[] palette) throws IOException {
+    static Mesh bake(InputStream compressedStructure, Material[] palette, boolean includeDrones) throws IOException {
         int minX = Short.MAX_VALUE, minY = Short.MAX_VALUE, minZ = Short.MAX_VALUE;
         int maxX = Short.MIN_VALUE, maxY = Short.MIN_VALUE, maxZ = Short.MIN_VALUE;
         int total = 0;
@@ -81,7 +85,12 @@ final class StarGuideGeometry {
                 int x = coord(cells, at) - minX + 1;
                 int y = coord(cells, at + 2) - minY + 1;
                 int z = coord(cells, at + 4) - minZ + 1;
-                int material = cells[at + 6] & 255;
+                int encodedMaterial = cells[at + 6] & 255;
+                if (!includeDrones && (encodedMaterial & DRONE_CELL_FLAG) != 0) continue;
+                int material = encodedMaterial & ~DRONE_CELL_FLAG;
+                if (material == TIERED_GLASS || material == NEUTRONIUM_GLASS_PREVIEW) {
+                    material = includeDrones ? TIERED_GLASS : NEUTRONIUM_GLASS_PREVIEW;
+                }
                 if (x < 1 || y < 1
                     || z < 1
                     || x >= width - 1
@@ -98,6 +107,7 @@ final class StarGuideGeometry {
             }
         }
 
+        total = index;
         int[] neighbours = { -layer, layer, -width, width, -1, 1 };
         int regionX = (width + 31) >> 5, regionZ = (depth + 31) >> 5;
         int[] counts = new int[1 + regionX * regionZ * ((height + 31) >> 5)];

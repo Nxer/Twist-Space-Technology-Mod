@@ -1,7 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.client.guide;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.starthatneverwas.StarStructure.BASE_TIER;
 import static com.Nxer.TwistSpaceTechnology.common.machine.starthatneverwas.StarStructure.CHANNEL;
+import static com.Nxer.TwistSpaceTechnology.common.machine.starthatneverwas.StarStructure.DRONE_TIER;
 import static com.Nxer.TwistSpaceTechnology.common.machine.starthatneverwas.StarStructure.FULL_PREVIEW_SECTION;
+import static com.Nxer.TwistSpaceTechnology.common.machine.starthatneverwas.StarStructure.includesDroneStructure;
 
 import java.util.Collections;
 import java.util.Set;
@@ -93,7 +96,8 @@ public final class StarStructureControls implements SceneElementTagCompiler {
         public WorkResult tick(long deadlineNs) {
             if (!attached) {
                 attached = true;
-                scene.setStructureLibSelectionChangeListener(selection -> select(binding.getChannelValue(CHANNEL)));
+                scene.setStructureLibSelectionChangeListener(
+                    selection -> select(binding.getChannelValue(CHANNEL), selection.getMasterTier()));
             }
             // GuideNH republishes raw channel names when the optional BR scan finishes.
             scene.refreshStructureLibControlMetadata();
@@ -105,7 +109,7 @@ public final class StarStructureControls implements SceneElementTagCompiler {
             return WorkResult.DONE;
         }
 
-        private void select(int section) {
+        private void select(int section, int masterTier) {
             scene.setVisibleLayerSilently(0);
             if (section == FULL_PREVIEW_SECTION) {
                 if (!overview) {
@@ -117,6 +121,7 @@ public final class StarStructureControls implements SceneElementTagCompiler {
                 scene.clear();
                 NBTTagCompound tag = new NBTTagCompound();
                 tag.setBoolean("tstGuideStar", true);
+                tag.setBoolean("tstGuideStarDrones", includesDroneStructure(masterTier));
                 GuidebookPreviewBlockPlacer.place(
                     scene.getLevel(),
                     0,
@@ -154,7 +159,8 @@ public final class StarStructureControls implements SceneElementTagCompiler {
             String label = StringUtils.capitalize(CHANNEL);
             scene.setStructureLibSceneMetadata(
                 binding.getName(),
-                metadata.withChannelData(CHANNEL, label, FULL_PREVIEW_SECTION, section));
+                metadata.withTierData(BASE_TIER, DRONE_TIER, BASE_TIER, binding.getCurrentTier())
+                    .withChannelData(CHANNEL, label, FULL_PREVIEW_SECTION, section));
             scene.setStructureLibChannelValueSilently(binding.getName(), CHANNEL, section);
         }
 

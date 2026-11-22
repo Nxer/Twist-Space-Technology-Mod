@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine.starthatneverwas;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.lazy;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockUnlocalizedName;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofTileAdder;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withDescription;
@@ -28,6 +29,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_StarThatNeverWas;
@@ -59,6 +62,12 @@ public final class StarStructure {
     public static final String CHANNEL = "megastructure";
     public static final int UPPER_PREVIEW_SECTION = 7;
     public static final int FULL_PREVIEW_SECTION = 8;
+    public static final int BASE_TIER = 1;
+    public static final int DRONE_TIER = 2;
+    // The high bit of an encoded material marks a cell in the tier 2 drone structure.
+    public static final int DRONE_CELL_FLAG = 0x80;
+    public static final int TIERED_GLASS = 12;
+    public static final int NEUTRONIUM_GLASS_PREVIEW = 13;
     // Shared front panel, directly above the tier 2/3 miner controller.
     public static final int CONTROLLER_Y = 8;
     public static final int CONTROLLER_Z = 6;
@@ -101,6 +110,10 @@ public final class StarStructure {
     public static int selectedPreviewSection(ItemStack trigger) {
         if (!ChannelDataAccessor.hasSubChannel(trigger, CHANNEL)) return 1;
         return Math.max(1, Math.min(FULL_PREVIEW_SECTION, ChannelDataAccessor.getChannelData(trigger, CHANNEL)));
+    }
+
+    public static boolean includesDroneStructure(int masterTier) {
+        return masterTier >= DRONE_TIER;
     }
 
     public static String meOutputBusNameKey() {
@@ -211,8 +224,21 @@ public final class StarStructure {
             : external(material.mod, material.name, material.meta);
         return switch (id) {
             case 0 -> ofBlock(TstBlocks.MetaBlockCasing01, 9);
-            case 12 -> external("bartworks", "BW_TieredGlass", 7);
-            case 13 -> external("bartworks", "BW_TieredGlass", 6);
+            case TIERED_GLASS, NEUTRONIUM_GLASS_PREVIEW -> lazy(() -> {
+                var glass = GameRegistry.findBlock("bartworks", "BW_TieredGlass");
+                return ofBlocksTiered((block, meta) -> {
+                    if (block != glass) return null;
+                    return switch (meta) {
+                        case 6 -> BASE_TIER;
+                        case 7 -> DRONE_TIER;
+                        default -> null;
+                    };
+                },
+                    Arrays.asList(Pair.of(glass, 6), Pair.of(glass, 7)),
+                    0,
+                    TST_StarThatNeverWas::setGlassTier,
+                    TST_StarThatNeverWas::getGlassTier);
+            });
             case 14 -> external("chisel", "arcane", 1);
             case 16 -> ofBlock(TstBlocks.CondensedStarCore, 0);
             case 19 -> external("chisel", "arcane", 5);
@@ -328,13 +354,15 @@ public final class StarStructure {
                 if (width < 1 || height < 1 || depth < 1 || (long) width * height * depth > 2_000_000) {
                     throw new IOException("Invalid star partition bounds");
                 }
-                List<List<Cell>> sections = new ArrayList<>(UPPER_PREVIEW_SECTION);
-                for (int section = 0; section < UPPER_PREVIEW_SECTION; section++) sections.add(new ArrayList<>());
+                List<List<Cell>> sections = new ArrayList<>(UPPER_PREVIEW_SECTION * 2);
+                for (int j = 0; j < UPPER_PREVIEW_SECTION * 2; j++) sections.add(new ArrayList<>());
                 int blocks = input.readInt();
                 if (blocks < 1 || blocks > 4096) throw new IOException("Unbounded preview partition");
                 for (int n = 0; n < blocks; n++) {
                     int x = input.readShort(), y = input.readShort(), z = input.readShort();
-                    int material = input.readUnsignedByte();
+                    int encodedMaterial = input.readUnsignedByte();
+                    boolean droneStructure = (encodedMaterial & DRONE_CELL_FLAG) != 0;
+                    int material = encodedMaterial & ~DRONE_CELL_FLAG;
                     if (material > MAX_MATERIAL_ID) throw new IOException("Invalid star material");
                     if (x < minX || x > maxX || y < minY || y > maxY || z < minZ || z > maxZ) {
                         throw new IOException("Star cell outside partition bounds");
@@ -345,7 +373,8 @@ public final class StarStructure {
                         .get(ringIndex).material.id != material)
                         throw new IOException("Ring material does not match structure at " + x + "," + y + "," + z);
                     Cell cell = new Cell(x, y, z, ring ? (char) (256 + material) : symbol(material));
-                    sections.get(previewSection(x, y, z, ring) - 1)
+                    int section = previewSection(x, y, z, ring) - 1;
+                    sections.get(section + (droneStructure ? UPPER_PREVIEW_SECTION : 0))
                         .add(cell);
                     if (material == 44 || material == 46
                         || material == 47
@@ -353,9 +382,13 @@ public final class StarStructure {
                         || material == FLOOR_ENERGY_PORT) PREVIEW_HATCHES.add(cell);
                 }
                 // Storage partitions stay bounded, but a channel assembles every part of the selected component.
-                for (int section = 1; section <= UPPER_PREVIEW_SECTION; section++) {
-                    List<Cell> cells = sections.get(section - 1);
-                    if (!cells.isEmpty()) parts.add(createPart("star_" + i + "_" + section, section, cells));
+                for (int j = 0; j < sections.size(); j++) {
+                    List<Cell> cells = sections.get(j);
+                    if (cells.isEmpty()) continue;
+                    int section = j % UPPER_PREVIEW_SECTION + 1;
+                    boolean droneStructure = j >= UPPER_PREVIEW_SECTION;
+                    String name = "star_" + i + "_" + section + (droneStructure ? "_drones" : "");
+                    parts.add(createPart(name, section, droneStructure, cells));
                 }
             }
             return Collections.unmodifiableList(parts);
@@ -364,7 +397,7 @@ public final class StarStructure {
         }
     }
 
-    private static Part createPart(String name, int section, List<Cell> points) {
+    private static Part createPart(String name, int section, boolean droneStructure, List<Cell> points) {
         Cell first = points.get(0);
         int minX = first.x, minY = first.y, minZ = first.z;
         int maxX = minX, maxY = minY, maxZ = minZ;
@@ -382,7 +415,7 @@ public final class StarStructure {
         for (Cell cell : points) cells[maxZ - cell.z][maxY - cell.y][cell.x - minX] = cell.symbol;
         String[][] shape = new String[depth][height];
         for (int z = 0; z < depth; z++) for (int y = 0; y < height; y++) shape[z][y] = new String(cells[z][y]);
-        return new Part(name, section, -minX, maxY - CONTROLLER_Y, maxZ - CONTROLLER_Z, shape);
+        return new Part(name, section, -minX, maxY - CONTROLLER_Y, maxZ - CONTROLLER_Z, shape, droneStructure);
     }
 
     @Desugar
@@ -392,16 +425,18 @@ public final class StarStructure {
 
         public final String name;
         public final int a, b, c;
+        public final boolean droneStructure;
         private final int previewSection;
         private final String[][] shape;
 
-        private Part(String name, int previewSection, int a, int b, int c, String[][] shape) {
+        private Part(String name, int previewSection, int a, int b, int c, String[][] shape, boolean droneStructure) {
             this.name = name;
             this.previewSection = previewSection;
             this.a = a;
             this.b = b;
             this.c = c;
             this.shape = shape;
+            this.droneStructure = droneStructure;
         }
 
         public boolean isInPreviewSection(int selected) {

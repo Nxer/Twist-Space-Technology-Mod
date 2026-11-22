@@ -53,7 +53,7 @@ public final class StarContainmentRenderer extends TileEntitySpecialRenderer {
     public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partial) {
         TileStarContainment star = (TileStarContainment) tile;
         if (star.isGuidePreview()) {
-            guideModel.render(x, y, z);
+            guideModel.render(x, y, z, star.includesGuidePreviewDrones());
             return;
         }
         if (!star.hasMeteor() || !star.meteorRenderEnabled) {

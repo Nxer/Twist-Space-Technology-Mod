@@ -8,6 +8,7 @@ import net.minecraft.util.IIcon;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.casing.TstMetaBlockGlowCasing;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.starthatneverwas.StarRings;
+import com.Nxer.TwistSpaceTechnology.common.machine.starthatneverwas.StarStructure;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import goodgenerator.loader.Loaders;
@@ -26,8 +27,8 @@ final class StarGuidePalette {
             palette.add(material.id, material.block(), material.meta);
         }
         palette.add(0, TstBlocks.MetaBlockCasing01, 9);
-        palette.add(12, "bartworks", "BW_TieredGlass", 7);
-        palette.add(13, "bartworks", "BW_TieredGlass", 6);
+        palette.add(StarStructure.TIERED_GLASS, "bartworks", "BW_TieredGlass", 7);
+        palette.add(StarStructure.NEUTRONIUM_GLASS_PREVIEW, "bartworks", "BW_TieredGlass", 6);
         palette.add(14, "chisel", "arcane", 1);
         palette.add(16, TstBlocks.CondensedStarCore, 0);
         palette.add(19, "chisel", "arcane", 5);

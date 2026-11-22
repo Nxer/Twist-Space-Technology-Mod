@@ -28,6 +28,7 @@ public final class TileStarContainment extends TileEntity {
 
     private static final int MAX_PALETTE = 1024;
     private boolean guidePreview;
+    private boolean guidePreviewDrones;
     public boolean formed, powered, running, advancing;
     public boolean miningRenderEnabled = true, meteorRenderEnabled = true, ringsVisible;
     public boolean meteorAnimationEnabled = true;
@@ -215,10 +216,15 @@ public final class TileStarContainment extends TileEntity {
             && getBlockMetadata() == BlockCondensedStarCore.GUIDE_PREVIEW_META;
     }
 
+    public boolean includesGuidePreviewDrones() {
+        return guidePreviewDrones;
+    }
+
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         if (guidePreview) tag.setBoolean("tstGuideStar", true);
+        if (guidePreviewDrones) tag.setBoolean("tstGuideStarDrones", true);
         writeVisual(tag);
         rings.write(tag);
         tag.setInteger("hostX", hostX);
@@ -261,6 +267,7 @@ public final class TileStarContainment extends TileEntity {
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         guidePreview = tag.getBoolean("tstGuideStar");
+        guidePreviewDrones = tag.getBoolean("tstGuideStarDrones");
         readVisual(tag);
         rings.read(tag);
         ringRotation = rings.rotation();

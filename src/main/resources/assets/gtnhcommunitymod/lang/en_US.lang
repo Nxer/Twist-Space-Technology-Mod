@@ -2733,6 +2733,7 @@ tst.star.render.mining=Miner and containment sphere
 tst.star.render.rings=Ring bands
 tst.star.render.settings=Render settings
 tst.star.render.surface=Meteor style: scattered ores
+tst.star.result.drone_structure=Restore the Infinity Glass drone structure to resume this batch.
 tst.star.result.field_forming=Containment field forming
 tst.star.result.input_changed=Inputs changed while starting the ritual.
 tst.star.result.invalid_meteor=Invalid or unavailable Blood Magic meteor recipe.

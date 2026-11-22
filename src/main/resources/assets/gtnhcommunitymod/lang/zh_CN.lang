@@ -2733,6 +2733,7 @@ tst.star.render.mining=矿机与隔离球
 tst.star.render.rings=环带
 tst.star.render.settings=渲染设置
 tst.star.render.surface=陨星样式: 散布矿石
+tst.star.result.drone_structure=恢复无尽玻璃等级和无人机结构后可继续本批次.
 tst.star.result.field_forming=隔离场展开中
 tst.star.result.input_changed=仪式启动时输入发生变化。
 tst.star.result.invalid_meteor=血魔法陨星配方无效或包含未注册物品。

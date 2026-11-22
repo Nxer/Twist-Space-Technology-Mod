@@ -82,6 +82,8 @@ public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarTh
     private double beamSourceDepth;
     private boolean fieldReady;
     private final StarDronePorts dronePorts = new StarDronePorts();
+    private int glassTier;
+    private boolean droneStructureReady;
     private final StarControllerFrame controllerFrame = new StarControllerFrame(true);
     private int starControllerState;
 
@@ -275,6 +277,14 @@ public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarTh
         return dronePorts.fluid(tile, texture);
     }
 
+    public int getGlassTier() {
+        return glassTier;
+    }
+
+    public void setGlassTier(int glassTier) {
+        this.glassTier = glassTier;
+    }
+
     @Override
     public void clearHatches() {
         super.clearHatches();
@@ -308,7 +318,9 @@ public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarTh
     @Override
     public void construct(ItemStack trigger, boolean hintsOnly) {
         int selected = StarStructure.selectedPreviewSection(trigger);
+        boolean includeDrones = StarStructure.includesDroneStructure(trigger.stackSize);
         for (var part : StarStructure.parts()) {
+            if (part.droneStructure && !includeDrones) continue;
             if ((preview || hintsOnly) && !part.isInPreviewSection(selected)) continue;
             buildPiece(part.name, trigger, hintsOnly, part.a, part.b, part.c);
         }
@@ -318,8 +330,10 @@ public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarTh
     public int survivalConstruct(ItemStack trigger, int budget, ISurvivalBuildEnvironment env) {
         if (mMachine && !preview) return -1;
         int selected = StarStructure.selectedPreviewSection(trigger);
+        boolean includeDrones = StarStructure.includesDroneStructure(trigger.stackSize);
         int built = 0;
         for (var part : StarStructure.parts()) {
+            if (part.droneStructure && !includeDrones) continue;
             if (preview && !part.isInPreviewSection(selected)) continue;
             int result = survivalBuildPiece(
                 part.name,
@@ -343,8 +357,17 @@ public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarTh
     public void checkMachine(IGregTechTileEntity base, ItemStack stack, List<StructureError> errors) {
         ringReceiver = tileAt(0, StarStructure.RECEIVER_Y, 0) instanceof TileStarContainment receiver ? receiver : null;
         repairMachine();
+        glassTier = 0;
+        droneStructureReady = false;
+        dronePorts.clear();
         for (var part : StarStructure.parts()) {
-            if (!checkPiece(part.name, part.a, part.b, part.c, errors)) return;
+            if (!part.droneStructure && !checkPiece(part.name, part.a, part.b, part.c, errors)) return;
+        }
+        if (StarStructure.includesDroneStructure(glassTier)) {
+            for (var part : StarStructure.parts()) {
+                if (part.droneStructure && !checkPiece(part.name, part.a, part.b, part.c, errors)) return;
+            }
+            droneStructureReady = true;
         }
         // During development, missing services do not block formation/rendering. Check them before paying for a batch.
     }
@@ -456,6 +479,13 @@ public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarTh
             // # Paused; the paid meteor batch is retained.
             // #zh_CN 已暂停, 保留当前已扣料的陨星批次.
             pausePaidBatch("tst.star.result.paused");
+            return;
+        }
+        if (!droneStructureReady && !batch.droneReturns.isEmpty()) {
+            // #tr tst.star.result.drone_structure
+            // # Restore the Infinity Glass drone structure to resume this batch.
+            // #zh_CN 恢复无尽玻璃等级和无人机结构后可继续本批次.
+            pausePaidBatch("tst.star.result.drone_structure");
             return;
         }
         if (batch.interrupted) {
