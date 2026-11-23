@@ -362,6 +362,26 @@ public class GTCMRecipe {
         })
         .build();
 
+    // #tr tst.bottledchaos.recipe.category.petrochemical.name
+    // # Petrochemistry
+    // #zh_CN 石油化工
+    public static final RecipeCategory BottledChaosPetrochemicalCategory = new RecipeCategory(
+        "tst.bottledchaos.recipe.category.petrochemical.name",
+        BottledChaosRecipes,
+        RecipeCategorySetting::getDefault,
+        builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
+            .setDisplayStack(Materials.Oil.getCells(1)));
+
+    // #tr tst.bottledchaos.recipe.category.wood_chemistry.name
+    // # Wood Chemistry
+    // #zh_CN 木材化工
+    public static final RecipeCategory BottledChaosWoodChemistryCategory = new RecipeCategory(
+        "tst.bottledchaos.recipe.category.wood_chemistry.name",
+        BottledChaosRecipes,
+        RecipeCategorySetting::getDefault,
+        builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
+            .setDisplayStack(Materials.Charcoal.getGems(1)));
+    
     // #tr tst.bottledchaos.recipe.category.titanium.name
     // # Titanium
     // #zh_CN 钛
@@ -511,26 +531,6 @@ public class GTCMRecipe {
         RecipeCategorySetting::getDefault,
         builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
             .setDisplayStack(Materials.RadoxPolymer.getPlates(1)));
-
-    // #tr tst.bottledchaos.recipe.category.petrochemical.name
-    // # Petrochemistry
-    // #zh_CN 石油化工
-    public static final RecipeCategory BottledChaosPetrochemicalCategory = new RecipeCategory(
-        "tst.bottledchaos.recipe.category.petrochemical.name",
-        BottledChaosRecipes,
-        RecipeCategorySetting::getDefault,
-        builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
-            .setDisplayStack(Materials.Oil.getCells(1)));
-
-    // #tr tst.bottledchaos.recipe.category.wood_chemistry.name
-    // # Wood Chemistry
-    // #zh_CN 木材化工
-    public static final RecipeCategory BottledChaosWoodChemistryCategory = new RecipeCategory(
-        "tst.bottledchaos.recipe.category.wood_chemistry.name",
-        BottledChaosRecipes,
-        RecipeCategorySetting::getDefault,
-        builder -> BottledChaosRecipes.getDefaultRecipeCategory().handlerInfoCreator.apply(builder)
-            .setDisplayStack(Materials.Charcoal.getGems(1)));
 
     // #tr tst.bottledchaos.recipe.category.biological.name
     // # Biological Processing
