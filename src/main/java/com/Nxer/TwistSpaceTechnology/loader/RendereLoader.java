@@ -34,6 +34,8 @@ public class RendereLoader {
 
     public static void registerItemRenderers() {
         MinecraftForgeClient.registerItemRenderer(TstItems.LifeEssenceSingularity, new FancyHaloRenderer());
+        MinecraftForgeClient.registerItemRenderer(TstItems.DistilledWaterSingularity, new FancyHaloRenderer());
+        MinecraftForgeClient.registerItemRenderer(TstItems.AirSingularity, new FancyHaloRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockEyeOfWoodRender), new EyeOfWoodRender());
         MinecraftForgeClient.registerItemRenderer(
             com.Nxer.TwistSpaceTechnology.common.block.BlockPowerChair.ItemBlockPowerChair

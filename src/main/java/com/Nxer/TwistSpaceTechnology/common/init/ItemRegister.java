@@ -1,12 +1,16 @@
 package com.Nxer.TwistSpaceTechnology.common.init;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.ActualPattern;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.AirSingularity;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.BloodInfusedMiningDrone;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.BottledChaosCredential;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.BottledChaosMachineModule;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.DistilledWaterSingularity;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.EcoSphereExecutionProtocol;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.EcoSphereUpgrade;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.InfinityAirStorageCell;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.InfinityDistilledWaterStorageCell;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.InfinityLifeEssenceStorageCell;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.LifeEssenceSingularity;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItem01;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemFlask;
@@ -37,7 +41,8 @@ public class ItemRegister {
         Item[] itemsToReg = { MetaItem01, EcoSphereExecutionProtocol, EcoSphereUpgrade, ProofOfHeroes, ProofOfGods,
             MultiStructuresLinkTool, MetaItemRune, MetaItemIzumik, Yamato, ActualPattern, MetaItemNamedCircuit,
             MetaItemFlask, InfinityDistilledWaterStorageCell, BottledChaosCredential, BottledChaosMachineModule,
-            LifeEssenceSingularity, BloodInfusedMiningDrone, };
+            LifeEssenceSingularity, BloodInfusedMiningDrone, DistilledWaterSingularity, AirSingularity,
+            InfinityLifeEssenceStorageCell, InfinityAirStorageCell, };
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.unlocalizedName);
@@ -1249,6 +1254,8 @@ public class ItemRegister {
         GTCMItemList.Yamato.set(new ItemStack(Yamato, 1));
         GTCMItemList.ActualPattern.set(new ItemStack(ActualPattern, 1));
         GTCMItemList.LifeEssenceSingularity.set(new ItemStack(LifeEssenceSingularity, 1));
+        GTCMItemList.DistilledWaterSingularity.set(new ItemStack(DistilledWaterSingularity, 1));
+        GTCMItemList.AirSingularity.set(new ItemStack(AirSingularity, 1));
 
         // #tr item.tst.ecosphere.execution_protocol.0.name
         // # Eco-Sphere Execution Protocol: Arboreal Genesis

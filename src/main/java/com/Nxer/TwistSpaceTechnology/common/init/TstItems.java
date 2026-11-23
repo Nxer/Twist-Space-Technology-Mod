@@ -15,9 +15,9 @@ import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosMachineModule;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemCardigan;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemEcoSphereExecutionProtocol;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemEcoSphereUpgrade;
+import com.Nxer.TwistSpaceTechnology.common.item.ItemFluidSingularity;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemHatchUpdateTool;
-import com.Nxer.TwistSpaceTechnology.common.item.ItemInfinityDistilledWaterStorageCell;
-import com.Nxer.TwistSpaceTechnology.common.item.ItemLifeEssenceSingularity;
+import com.Nxer.TwistSpaceTechnology.common.item.ItemInfinityFluidStorageCell;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemMultiStructuresLinkTool;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemNamedCircuit;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemProofOfHeroes;
@@ -28,7 +28,28 @@ public class TstItems {
 
     public static final ItemAdder01 MetaItem01 = new ItemAdder01();
     public static final ItemBloodInfusedMiningDrone BloodInfusedMiningDrone = new ItemBloodInfusedMiningDrone();
-    public static final Item LifeEssenceSingularity = new ItemLifeEssenceSingularity();
+
+    // #tr item.tst.life_essence_singularity.name
+    // # Life Essence Singularity
+    // #zh_CN 生命本源奇点
+    public static final Item LifeEssenceSingularity = new ItemFluidSingularity(
+        "tst.life_essence_singularity",
+        0x800000,
+        0xC00000);
+
+    // #tr item.tst.distilled_water_singularity.name
+    // # Distilled Water Singularity
+    // #zh_CN 蒸馏水奇点
+    public static final Item DistilledWaterSingularity = new ItemFluidSingularity(
+        "tst.distilled_water_singularity",
+        0x234B9E,
+        0x6DC3F1);
+
+    // #tr item.tst.air_singularity.name
+    // # Air Singularity
+    // #zh_CN 空气奇点
+    public static final Item AirSingularity = new ItemFluidSingularity("tst.air_singularity", 0x638C83, 0xD2F6EB);
+
     public static final ItemEcoSphereExecutionProtocol EcoSphereExecutionProtocol = new ItemEcoSphereExecutionProtocol();
     public static final ItemEcoSphereUpgrade EcoSphereUpgrade = new ItemEcoSphereUpgrade();
     public static final ItemAdderRune MetaItemRune = new ItemAdderRune();
@@ -80,6 +101,25 @@ public class TstItems {
     // #tr item.tst.infinity_distilled_water_storage_cell.name
     // # ME Infinity Distilled Water Fluid Storage Cell
     // #zh_CN ME无限蒸馏水流体存储元件
-    public static final Item InfinityDistilledWaterStorageCell = new ItemInfinityDistilledWaterStorageCell();
+    public static final Item InfinityDistilledWaterStorageCell = new ItemInfinityFluidStorageCell(
+        "InfinityDistilledWaterStorageCell",
+        "item.tst.infinity_distilled_water_storage_cell",
+        "ic2distilledwater");
+
+    // #tr item.tst.infinity_life_essence_storage_cell.name
+    // # ME Infinity Life Essence Fluid Storage Cell
+    // #zh_CN ME无限生命本源流体存储元件
+    public static final Item InfinityLifeEssenceStorageCell = new ItemInfinityFluidStorageCell(
+        "InfinityLifeEssenceStorageCell",
+        "item.tst.infinity_life_essence_storage_cell",
+        "lifeessence");
+
+    // #tr item.tst.infinity_air_storage_cell.name
+    // # ME Infinity Air Fluid Storage Cell
+    // #zh_CN ME无限空气流体存储元件
+    public static final Item InfinityAirStorageCell = new ItemInfinityFluidStorageCell(
+        "InfinityAirStorageCell",
+        "item.tst.infinity_air_storage_cell",
+        "air");
 
 }
