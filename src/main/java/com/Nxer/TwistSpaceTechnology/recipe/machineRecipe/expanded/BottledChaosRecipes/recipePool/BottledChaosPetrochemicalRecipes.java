@@ -281,7 +281,14 @@ public final class BottledChaosPetrochemicalRecipes {
 
             RecipeData withToluene = data.appendBalancedRecipe(splitHeavy, FluidId.create(HEAVY));
             RecipeData withOctane = withToluene.appendBalancedRecipe(makeOctane, FluidId.create(LIGHT));
-            register(catalog, GASOLINE, 0, feed, blendFractions(data, blendRaw, NAPHTHA, GAS), RAW_GASOLINE_CIRCUIT, raw);
+            register(
+                catalog,
+                GASOLINE,
+                0,
+                feed,
+                blendFractions(data, blendRaw, NAPHTHA, GAS),
+                RAW_GASOLINE_CIRCUIT,
+                raw);
             register(
                 catalog,
                 GASOLINE,
