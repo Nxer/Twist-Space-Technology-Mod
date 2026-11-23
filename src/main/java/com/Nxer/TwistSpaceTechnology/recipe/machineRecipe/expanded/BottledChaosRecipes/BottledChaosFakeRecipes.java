@@ -144,11 +144,14 @@ public final class BottledChaosFakeRecipes {
         GTCMRecipe.BottledChaosCredentialRecipes.getBackend()
             .clearRecipes();
         int registered = 0;
+        // The NEI merge and split examples use titanium and tungsten because each fits in a capacity-1 frame.
+        long titanium = 1L << CredentialModel.indexForTag("titanium");
+        long tungsten = 1L << CredentialModel.indexForTag("tungsten");
         try {
             ItemStack frame = ItemBottledChaosCredential.createEmptyFrame(1);
-            ItemStack first = ItemBottledChaosCredential.createDisplayCredential(0, 1);
-            ItemStack second = ItemBottledChaosCredential.createDisplayCredential(0, 2);
-            ItemStack result = ItemBottledChaosCredential.createDisplayCredential(1, 3);
+            ItemStack first = ItemBottledChaosCredential.createDisplayCredential(0, titanium);
+            ItemStack second = ItemBottledChaosCredential.createDisplayCredential(0, tungsten);
+            ItemStack result = ItemBottledChaosCredential.createDisplayCredential(1, titanium | tungsten);
             if (frame == null || first == null || second == null || result == null)
                 throw new IllegalStateException("missing credential succession sample");
             registered += GTValues.RA.stdBuilder()
@@ -166,9 +169,9 @@ public final class BottledChaosFakeRecipes {
 
         try {
             ItemStack frame = ItemBottledChaosCredential.createEmptyFrame(0);
-            ItemStack source = ItemBottledChaosCredential.createDisplayCredential(1, 3);
-            ItemStack remainder = ItemBottledChaosCredential.createDisplayCredential(1, 2);
-            ItemStack transferred = ItemBottledChaosCredential.createDisplayCredential(0, 1);
+            ItemStack source = ItemBottledChaosCredential.createDisplayCredential(1, titanium | tungsten);
+            ItemStack remainder = ItemBottledChaosCredential.createDisplayCredential(1, tungsten);
+            ItemStack transferred = ItemBottledChaosCredential.createDisplayCredential(0, titanium);
             if (frame == null || source == null || remainder == null || transferred == null)
                 throw new IllegalStateException("missing credential splitting sample");
             registered += GTValues.RA.stdBuilder()

@@ -91,27 +91,27 @@ public final class BottledChaosRecipeProcessor {
         return Arrays.copyOf(result, size);
     }
 
-    /** Final products follow display order; other products reverse it within their output groups. */
+    /** Final products follow tag order; other products reverse tags while retaining each recipe's output order. */
     public static Map<Object, Integer> outputPriorities(long tagMask, boolean intermediateOnly) {
         RouteCache snapshot = cache;
         if (snapshot == null || tagMask == 0) return Collections.emptyMap();
         Map<Object, Integer> priorities = new LinkedHashMap<>();
         Map<Object, Integer> outputTags = new LinkedHashMap<>();
-        for (int entry : snapshot.displayOrder) {
+        for (int entry : snapshot.entryOrder) {
             CachedRoute route = snapshot.routes[entry];
             if (!route.isAuthorized(tagMask)) continue;
             for (Object key : snapshot.outputRoles.get(entry)
                 .keySet()) {
                 int role = intermediateOnly || snapshot.hasAuthorizedDisplayConsumer(entry, tagMask, key) ? 1 : 0;
                 priorities.merge(key, role, Math::min);
-                outputTags.putIfAbsent(key, CredentialModel.displayRank(route.definition.tagIndex()));
+                outputTags.putIfAbsent(key, route.definition.tagIndex());
             }
         }
-        for (int entry : snapshot.displayOrder) {
+        for (int entry : snapshot.entryOrder) {
             CachedRoute route = snapshot.routes[entry];
             if (route.isAuthorized(tagMask)) for (Object key : route.definition.data().outputs.keySet()) {
                 priorities.putIfAbsent(key, intermediateOnly ? 1 : 2);
-                outputTags.putIfAbsent(key, CredentialModel.displayRank(route.definition.tagIndex()));
+                outputTags.putIfAbsent(key, route.definition.tagIndex());
             }
         }
         Map<Object, Integer> ordered = new LinkedHashMap<>();
@@ -171,12 +171,8 @@ public final class BottledChaosRecipeProcessor {
             }
             for (ChainLink link : snapshot.links) {
                 if (!authorized[link.target()]) continue;
-                if (snapshot.routes[link.source()].definition.explicitLinksOnly()) {
-                    if (!authorized[link.source()]) continue;
-                } else {
-                    // Legacy paid inputs stay usable even if none of their suppliers is currently authorized.
-                    cachedInputs.add(link.key());
-                }
+                cachedInputs.add(link.key());
+                // An already-paid input stays usable even if none of its suppliers is currently authorized.
                 List<Integer> sources = incoming.get(link.target())
                     .computeIfAbsent(link.key(), ignored -> new ArrayList<>());
                 if (!authorized[link.source()]) continue;
@@ -212,14 +208,6 @@ public final class BottledChaosRecipeProcessor {
                         .contains(output)) terminals[index] = true;
                 }
             }
-        }
-
-        private int addConsumersFirst(int index, boolean[] seen, int[] order, int size) {
-            if (seen[index]) return size;
-            seen[index] = true;
-            for (int consumer : downstream.get(index)) size = addConsumersFirst(consumer, seen, order, size);
-            order[size++] = index;
-            return size;
         }
 
     }
@@ -375,14 +363,6 @@ public final class BottledChaosRecipeProcessor {
                 }
             }
             if (goalOrder == null) {
-                if (graph.orders[entry] == null && snapshot.routes[entry].definition.explicitLinksOnly()) {
-                    int[] order = new int[snapshot.routes.length];
-                    int size = graph.addConsumersFirst(entry, new boolean[order.length], order, 0);
-                    long[] complete = new long[order.length];
-                    for (int position = 0; position < size; position++) complete[order[position]] = 1;
-                    graph.orders[entry] = Arrays.copyOf(order, size);
-                    graph.completeTargets[entry] = complete;
-                }
                 if (graph.orders[entry] == null) {
                     boolean[] reachable = new boolean[snapshot.routes.length];
                     reachable[entry] = true;
@@ -689,11 +669,6 @@ public final class BottledChaosRecipeProcessor {
                 }
 
                 @Override
-                public boolean inBatchOnly(int index) {
-                    return snapshot.routes[index].definition.explicitLinksOnly();
-                }
-
-                @Override
                 public boolean automaticRecovery(int index) {
                     return ExecutionPlanner.this.automaticRecovery(index);
                 }
@@ -708,6 +683,7 @@ public final class BottledChaosRecipeProcessor {
                 Math.max(1, result.duration),
                 result.pools,
                 result.consumed,
+                result.outputs,
                 result.remaining,
                 result.produced,
                 materials.amountLimit(),
@@ -826,9 +802,7 @@ public final class BottledChaosRecipeProcessor {
                     cachedRoute.definition.lookupInput(),
                     inputAlternatives,
                     Collections.unmodifiableMap(snapshot.outputRoles.get(entryIndex)),
-                    Collections.unmodifiableSet(
-                        cachedRoute.definition.explicitLinksOnly() ? snapshot.explicitInputs.get(entryIndex)
-                            : snapshot.chainOutputs),
+                    Collections.unmodifiableSet(snapshot.chainOutputs),
                     cachedRoute.definition.baseEUt(),
                     Collections.unmodifiableList(items),
                     Collections.unmodifiableList(fluids),
@@ -887,7 +861,6 @@ public final class BottledChaosRecipeProcessor {
         final int[] displayOrder;
         final ChainLink[] links;
         final List<Map<Object, Integer>> outputRoles = new ArrayList<>();
-        final List<Set<Object>> explicitInputs = new ArrayList<>();
         final Set<Object> chainOutputs = new LinkedHashSet<>();
         final int[][] familyEntries;
         final String[] familyNames;
@@ -910,7 +883,6 @@ public final class BottledChaosRecipeProcessor {
                         .contains(key)) roles.put(key, 0);
                 }
                 outputRoles.add(roles);
-                explicitInputs.add(new LinkedHashSet<>());
                 stages[entry] = new BottledChaosChainPlanner.Stage(
                     data.inputs,
                     data.outputs,
@@ -931,12 +903,6 @@ public final class BottledChaosRecipeProcessor {
             }
             for (ChainLink link : links) {
                 Map<Object, Integer> roles = outputRoles.get(link.source());
-                if (routes[link.source()].definition.explicitLinksOnly()) {
-                    roles.put(link.key(), 1);
-                    explicitInputs.get(link.target())
-                        .add(link.key());
-                    continue;
-                }
                 if (!roles.containsKey(link.key())) continue;
                 // Presentation follows NEI families, independently of the runtime scheduling groups.
                 if (sameDisplayFamily(link.source(), link.target())) roles.put(link.key(), 1);
@@ -998,8 +964,7 @@ public final class BottledChaosRecipeProcessor {
 
         private boolean hasAuthorizedDisplayConsumer(int source, long mask, Object key) {
             for (ChainLink link : links) {
-                if (link.source() == source
-                    && (routes[source].definition.explicitLinksOnly() || sameDisplayFamily(source, link.target()))
+                if (link.source() == source && sameDisplayFamily(source, link.target())
                     && link.key()
                         .equals(key)
                     && routes[link.target()].isAuthorized(mask)) return true;
@@ -1020,6 +985,7 @@ public final class BottledChaosRecipeProcessor {
         private List<BottledChaosUpkeep.ItemDemand> roundItems;
         private final long requiredPools;
         private final Map<Object, Long> consumed;
+        private final Map<Object, Long> outputs;
         private final Map<Object, Long> remainingCache;
         private final Map<Object, Long> pendingCache;
         private final long cacheLimit;
@@ -1030,14 +996,15 @@ public final class BottledChaosRecipeProcessor {
         private BottledChaosItemInputs.Consumption itemConsumption;
 
         private PreparedPlan(String family, int entry, long baseEUt, double duration, long requiredPools,
-            Map<Object, Long> consumed, Map<Object, Long> remainingCache, Map<Object, Long> pendingCache,
-            long cacheLimit, long executions, BottledChaosChainPlanner.Result chain) {
+            Map<Object, Long> consumed, Map<Object, Long> outputs, Map<Object, Long> remainingCache,
+            Map<Object, Long> pendingCache, long cacheLimit, long executions, BottledChaosChainPlanner.Result chain) {
             this.family = family;
             this.entry = entry;
             this.baseEUt = baseEUt;
             this.duration = duration;
             this.requiredPools = requiredPools;
             this.consumed = new LinkedHashMap<>(consumed);
+            this.outputs = outputs;
             this.remainingCache = new LinkedHashMap<>(remainingCache);
             this.pendingCache = pendingCache;
             this.cacheLimit = cacheLimit;
@@ -1076,8 +1043,8 @@ public final class BottledChaosRecipeProcessor {
 
         public void prepareOutputs() {
             if (outputPlan == null) {
-                BottledChaosChainPlanner.releaseExcess(cacheLimit, remainingCache, pendingCache, chain.outputs);
-                outputPlan = createOutputPlan(chain.deliveredOutputs(), duration, executions);
+                BottledChaosChainPlanner.releaseExcess(cacheLimit, remainingCache, pendingCache, outputs);
+                outputPlan = createOutputPlan(outputs, duration, executions);
             }
         }
 

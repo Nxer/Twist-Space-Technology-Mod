@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaos
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.AceticAcid;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.Acetone;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.Benzene;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.CalciumDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.Dimethylbenzene;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.DistilledWater;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.EthyleneGas;
@@ -11,10 +12,13 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.Methanol;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.NitricAcid;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.Nitrobenzene;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.OxygenGas;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.ChemicalPlant;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.DistillationTower;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.FluidExtractor;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.IndustrialCokeOven;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.LargeChemicalReactor;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.Steam;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.SulfuricAcid;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.Water;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.recipeItemId;
@@ -27,6 +31,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.StepRef;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeSupport;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosSourceResolver;
 
@@ -62,7 +67,10 @@ public final class BottledChaosWoodChemistryRecipes {
         // spotless:off
         var woodPyrolysis = catalog.markPreparedRecipe(
             IndustrialCokeOven, logs, new Object[] { charcoal, byproducts }, pyrolysis);
-        var separateByproducts = catalog.markDistillation(byproductStack, Dimethylbenzene, 1);
+        var nativeByproductSeparation = BottledChaosSourceResolver.require(
+            DistillationTower, new ItemStack[] { GTUtility.getIntegratedCircuit(1) }, byproductStack);
+        var separateByproducts = catalog.markPreparedRecipe(DistillationTower, byproducts, Dimethylbenzene,
+            BottledChaosRecipeSupport.prepareSourceRecipe(DistillationTower, nativeByproductSeparation).withFullDustOutputs());
         var separateTar = catalog.markRecipe(DistillationTower, tar, Dimethylbenzene, 1);
         var separateVinegar = catalog.markRecipe(DistillationTower, vinegar, Methanol, 1);
         var separateGas = catalog.markRecipe(DistillationTower, woodGas, EthyleneGas, 1);
@@ -82,51 +90,108 @@ public final class BottledChaosWoodChemistryRecipes {
         Object[] vinegarMarkers = { Methanol, ethanol, AceticAcid, Acetone, methylAcetate };
         Object[] gasMarkers = { MethaneGas, EthyleneGas };
 
+        StepRef[] woodSeparation = { woodPyrolysis, separateByproducts, separateTar, separateVinegar, separateGas };
         var woodDistillation = catalog.registerChain("wood_distillation", 3, TierEU.RECIPE_HV, logs, woodProducts,
-            woodPyrolysis, separateByproducts, separateTar, separateVinegar, separateGas);
-        woodDistillation.useExplicitLinks();
+            woodSeparation);
         woodDistillation.setDisplayOutputs(Stream.of(aromaticMarkers, vinegarMarkers, gasMarkers)
             .flatMap(Arrays::stream).toArray());
         woodDistillation.setPlanningTargets(Benzene, Methanol, MethaneGas);
-        woodDistillation.allowSupplyTo("benzene_nitration", Benzene);
-        woodDistillation.allowSupplyTo("gasoline_blending", toluene, Methanol, Acetone, ethanol);
-        woodDistillation.allowSupplyTo("ethanol_gasoline_blending", Methanol, Acetone, ethanol);
-        woodDistillation.allowSupplyTo("petrochemical_oxygenates", EthyleneGas);
 
         // The standalone intermediate entries let players stop at a feedstock of their choice.
         catalog.registerAlternativeChain("wood_distillation", TierEU.RECIPE_HV, byproducts,
-            new Object[] { tar, vinegar, woodGas, Dimethylbenzene }, separateByproducts).useExplicitLinks();
+            new Object[] { tar, vinegar, woodGas, Dimethylbenzene }, separateByproducts)
+            .setDisplayOutputs(tar, vinegar, woodGas, Dimethylbenzene);
         catalog.registerAlternativeChain("wood_distillation", TierEU.RECIPE_HV, charcoal, new Object[] { tar },
-            catalog.markRecipe(FluidExtractor, charcoal, tar, -1)).useExplicitLinks();
+            catalog.markRecipe(FluidExtractor, charcoal, tar, -1)).setDisplayOutputs(tar);
 
         var woodAromatics = catalog.registerAlternativeChain(
             "wood_distillation", TierEU.RECIPE_HV, tar, tarProducts, separateTar);
-        woodAromatics.useExplicitLinks();
         woodAromatics.setDisplayOutputs(aromaticMarkers);
         woodAromatics.setPlanningTargets(Benzene, Dimethylbenzene);
-        woodAromatics.allowSupplyTo("benzene_nitration", Benzene);
-        woodAromatics.allowSupplyTo("gasoline_blending", toluene);
 
         var woodOxygenates = catalog.registerAlternativeChain(
             "wood_distillation", TierEU.RECIPE_HV, vinegar, vinegarProducts, separateVinegar);
-        woodOxygenates.useExplicitLinks();
         woodOxygenates.setDisplayOutputs(vinegarMarkers);
         woodOxygenates.setPlanningTargets(Methanol, AceticAcid, Acetone);
-        woodOxygenates.allowSupplyTo("gasoline_blending", Methanol, Acetone, ethanol);
-        woodOxygenates.allowSupplyTo("ethanol_gasoline_blending", Methanol, Acetone, ethanol);
 
         var woodGases = catalog.registerAlternativeChain(
             "wood_distillation", TierEU.RECIPE_HV, woodGas, gasProducts, separateGas);
-        woodGases.useExplicitLinks();
         woodGases.setDisplayOutputs(gasMarkers);
         woodGases.setPlanningTargets(MethaneGas, EthyleneGas);
-        woodGases.allowSupplyTo("petrochemical_oxygenates", EthyleneGas);
-        catalog.registerChain("benzene_nitration", 1, TierEU.RECIPE_HV, Benzene,
-            new Object[] { Nitrobenzene },
-            catalog.markRecipe(ChemicalPlant, new Object[] { Benzene, SulfuricAcid, NitricAcid, DistilledWater }, Nitrobenzene, 12))
-            .useExplicitLinks();
+
+        var nitration = catalog.markRecipe(ChemicalPlant,
+            new Object[] { Benzene, SulfuricAcid, NitricAcid, DistilledWater }, Nitrobenzene, 12);
+        catalog.registerChain("benzene_nitration", 1, TierEU.RECIPE_HV, Benzene, new Object[] { Nitrobenzene },
+            nitration).setDisplayOutputs(Nitrobenzene);
+        var tarNitration = catalog.registerAlternativeChain("benzene_nitration", TierEU.RECIPE_HV, tar,
+            productsAfter(tarProducts, Nitrobenzene, Benzene), separateTar, nitration);
+        tarNitration.setDisplayOutputs(Nitrobenzene);
+        tarNitration.setPlanningTargets(Nitrobenzene);
+        // Water from the vinegar fraction can be consumed by the existing distilled-water synthesis.
+        var woodNitration = catalog.registerAlternativeChain("benzene_nitration", TierEU.RECIPE_HV, logs,
+            productsAfter(woodProducts, Nitrobenzene, Benzene, Water), appendSteps(woodSeparation, nitration));
+        woodNitration.setDisplayOutputs(Nitrobenzene);
+        woodNitration.setPlanningTargets(Nitrobenzene);
+
+        var hydration = catalog.markRecipe(LargeChemicalReactor, new Object[] { EthyleneGas, Steam }, ethanol, 24);
+        var oxidation = catalog.markRecipe(LargeChemicalReactor, new Object[] { EthyleneGas, OxygenGas }, AceticAcid, 8);
+        var acetoneSynthesis = catalog.markRecipe(LargeChemicalReactor, new Object[] { AceticAcid, CalciumDust }, Acetone, 3);
+        registerEthyleneProducts(catalog, woodGas, gasProducts, new StepRef[] { separateGas }, ethanol, hydration,
+            oxidation, acetoneSynthesis);
+        registerEthyleneProducts(catalog, logs, woodProducts, woodSeparation, ethanol, hydration, oxidation,
+            acetoneSynthesis);
+        catalog.setExistingEntriesKeyOutputs("wood_distillation", ethanol, Methanol, Acetone);
         catalog.orderDisplayRecipes("wood_chemistry", logs, byproducts, charcoal, tar, vinegar, woodGas, Benzene);
         // spotless:on
+    }
+
+    private static void registerEthyleneProducts(BottledChaosRecipeCatalog catalog, Object feed, Object[] coproducts,
+        StepRef[] separation, Fluid ethanol, StepRef hydration, StepRef oxidation, StepRef acetoneSynthesis) {
+        var ethanolRoute = catalog.registerAlternativeChain(
+            "petrochemical_oxygenates",
+            TierEU.RECIPE_EV,
+            feed,
+            productsAfter(coproducts, ethanol, EthyleneGas),
+            appendSteps(separation, hydration));
+        ethanolRoute.requireCircuit(5);
+        ethanolRoute.setDisplayOutputs(ethanol);
+        ethanolRoute.setPlanningTargets(ethanol);
+
+        var aceticAcidRoute = catalog.registerAlternativeChain(
+            "petrochemical_oxygenates",
+            TierEU.RECIPE_EV,
+            feed,
+            productsAfter(coproducts, AceticAcid, EthyleneGas),
+            appendSteps(separation, oxidation));
+        aceticAcidRoute.requireCircuit(6);
+        aceticAcidRoute.setDisplayOutputs(AceticAcid);
+        aceticAcidRoute.setPlanningTargets(AceticAcid);
+
+        var acetoneRoute = catalog.registerAlternativeChain(
+            "petrochemical_oxygenates",
+            TierEU.RECIPE_EV,
+            feed,
+            productsAfter(coproducts, Acetone, EthyleneGas, AceticAcid),
+            appendSteps(separation, oxidation, acetoneSynthesis));
+        acetoneRoute.requireCircuit(7);
+        acetoneRoute.setDisplayOutputs(Acetone);
+        acetoneRoute.setPlanningTargets(Acetone);
+    }
+
+    private static Object[] productsAfter(Object[] products, Object product, Object... consumed) {
+        var consumedProducts = Arrays.asList(consumed);
+        return Stream.concat(
+            Arrays.stream(products)
+                .filter(output -> !consumedProducts.contains(output)),
+            Stream.of(product))
+            .distinct()
+            .toArray();
+    }
+
+    private static StepRef[] appendSteps(StepRef[] steps, StepRef... downstream) {
+        StepRef[] chain = Arrays.copyOf(steps, steps.length + downstream.length);
+        System.arraycopy(downstream, 0, chain, steps.length, downstream.length);
+        return chain;
     }
 
     private BottledChaosWoodChemistryRecipes() {}

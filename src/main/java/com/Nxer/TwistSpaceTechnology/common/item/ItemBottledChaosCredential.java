@@ -194,7 +194,7 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
         }
     }
 
-    /** Grouped names for compact summaries; the item tooltip lists every tag in display order. */
+    /** Grouped names for compact summaries; the item tooltip retains every tag in registration order. */
     public static String getDisplayRouteKeys(ItemStack stack) {
         return String.join(", ", CredentialModel.groupedTranslationKeys(getRouteMask(stack)));
     }

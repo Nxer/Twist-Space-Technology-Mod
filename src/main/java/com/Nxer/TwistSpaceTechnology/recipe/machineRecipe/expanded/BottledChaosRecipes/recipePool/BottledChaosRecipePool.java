@@ -50,7 +50,33 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosR
 
 import gregtech.api.enums.TierEU;
 
-/** Actual processing declarations; display recipes are registered separately. */
+/**
+ * Balance each chain at the point where players should be able to take its output.
+ *
+ * <pre>
+ * A -> B -> C        Serial          Rutile -> titanium tetrachloride -> titanium.
+ * (A or B) -> C      Alternate feeds Ilmenite or bauxite -> rutile.
+ * (A + B) -> C       Join            Woven Kevlar + polyurethane resin -> Kevlar plates.
+ * A -> (B, C)        Split           Wood -> wood tar, wood vinegar, and wood gas.
+ * A -> (B, C) -> D   Split and join  Oil -> light and heavy fuel -> diesel.
+ * A -> B -> A        Recycle         Hydrogen peroxide recovery in the prismatic acid line.
+ * </pre>
+ *
+ * Cancel intermediates consumed within the chain and keep surplus coproducts.
+ * Count shared upstream batches once. Account for the initial charge of a recycle loop separately.
+ *
+ * Set credential boundaries at independent feeds, outputs, or unlocks.
+ *
+ * <pre>
+ * Full chain          One credential for nitrobenzene from logs, wood tar, or benzene.
+ * Linked stages       One titanium credential for ore preparation and rutile processing.
+ * Stage credentials   Each grade of purified water has its own credential.
+ * Separate recipes    One IsaMill credential covers recipes for different ores.
+ * </pre>
+ *
+ * Mark only intended handoffs as key outputs. Other coproducts can be collected.
+ * Circuits select a process within the authorized routes. Routes sharing a feed keep the normal match order.
+ */
 public final class BottledChaosRecipePool {
 
     public static void registerRecipeChains(BottledChaosRecipeCatalog catalog) {
@@ -71,7 +97,6 @@ public final class BottledChaosRecipePool {
         BottledChaosRadoxRecipes.registerRecipeChains(catalog);
         BottledChaosBiologicalRecipes.registerRecipeChains(catalog);
         BottledChaosPetrochemicalRecipes.registerRecipeChains(catalog);
-        BottledChaosWoodChemistryRecipes.registerRecipeChains(catalog);
         if (Config.BottledChaosCycleRecipes) {
             registerCrystalCycles(catalog);
             BottledChaosTesseractRecipes.registerRecipeChains(catalog);

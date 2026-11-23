@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -133,10 +132,7 @@ public final class BottledChaosCredentialRecipes {
     }
 
     public static List<InjectionRecipe> recipes() {
-        return Collections.unmodifiableList(
-            RECIPES.stream()
-                .sorted(Comparator.comparingInt(recipe -> CredentialModel.displayRank(recipe.tagIndex())))
-                .collect(Collectors.toList()));
+        return Collections.unmodifiableList(RECIPES);
     }
 
     /** Called on the workbench's detached preview inventory; merge/split and EasySkip remain in its normal path. */

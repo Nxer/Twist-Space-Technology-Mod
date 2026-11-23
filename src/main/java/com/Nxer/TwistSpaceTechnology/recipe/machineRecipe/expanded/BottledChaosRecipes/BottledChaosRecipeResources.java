@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaos
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,11 +78,21 @@ public final class BottledChaosRecipeResources {
         @Desugar
         private record TagDefinition(String tag, boolean enabled, String family, BottledChaosRecipePage page) {}
 
-        // Stable route identity and runtime priority. Presentation uses DISPLAY_ORDER.
+        // Families follow their entry voltage, then progression; main-page tags stay last.
+        // This order also drives credential injection and NEI tabs. NBT stores names, not indexes.
         // Material bindings stay in CredentialRoutes and are not initialized with this metadata.
         // spotless:off
         private static final TagDefinition[] DEFINITIONS = {
-            // Early mineral and water families.
+            // HV and EV families.
+            new TagDefinition("wood_distillation", true, "wood_chemistry", BottledChaosRecipePage.WOOD_CHEMISTRY),
+            new TagDefinition("benzene_nitration", true, "wood_chemistry", BottledChaosRecipePage.WOOD_CHEMISTRY),
+            new TagDefinition("petroleum_refining", true, "petrochemical", BottledChaosRecipePage.PETROCHEMICAL),
+            new TagDefinition("petroleum_cracking", true, "petrochemical", BottledChaosRecipePage.PETROCHEMICAL),
+            new TagDefinition("diesel_blending", true, "petrochemical", BottledChaosRecipePage.PETROCHEMICAL),
+            new TagDefinition("gasoline_blending", true, "petrochemical", BottledChaosRecipePage.PETROCHEMICAL),
+            new TagDefinition("petrochemical_oxygenates", true, "petrochemical", BottledChaosRecipePage.PETROCHEMICAL),
+            new TagDefinition("ethanol_gasoline_blending", true, "petrochemical", BottledChaosRecipePage.PETROCHEMICAL),
+            // IV and LuV families.
             new TagDefinition("titanium", true, "titanium", BottledChaosRecipePage.TITANIUM),
             new TagDefinition("tungsten", true, "tungsten", BottledChaosRecipePage.TUNGSTEN),
             new TagDefinition("indium", true, "indium", BottledChaosRecipePage.INDIUM),
@@ -135,7 +144,7 @@ public final class BottledChaosRecipeResources {
             new TagDefinition("naquadah_fuel_5", true, "naquadah_fuel_5", BottledChaosRecipePage.NAQUADAH_FUEL),
             new TagDefinition("naquadah_fuel_6", true, "naquadah_fuel_6", BottledChaosRecipePage.NAQUADAH_FUEL),
             new TagDefinition("fusion", true, "fusion", BottledChaosRecipePage.FUSION),
-            // Main-page routes.
+            // Main-page routes always follow the dedicated families.
             new TagDefinition("honeycomb", HAS_HONEYCOMBS, "honeycomb", BottledChaosRecipePage.DEFAULT),
             new TagDefinition("crystal_cycle", Config.BottledChaosCycleRecipes, "crystal_cycle", BottledChaosRecipePage.DEFAULT),
             new TagDefinition("cerium_lutetium_garnet", Config.BottledChaosCycleRecipes, "cerium_lutetium_garnet", BottledChaosRecipePage.DEFAULT),
@@ -143,15 +152,7 @@ public final class BottledChaosRecipeResources {
             new TagDefinition("eternity", HAS_ETERNITY && Config.BottledChaosCycleRecipes, "eternity", BottledChaosRecipePage.DEFAULT),
             new TagDefinition("phonon_medium", Config.BottledChaosCycleRecipes, "phonon_medium", BottledChaosRecipePage.DEFAULT),
             new TagDefinition("magmatter", true, "magmatter", BottledChaosRecipePage.DEFAULT),
-            new TagDefinition("quark_gluon_plasma", true, "quark_gluon_plasma", BottledChaosRecipePage.DEFAULT),
-            new TagDefinition("petroleum_refining", true, "petrochemical", BottledChaosRecipePage.PETROCHEMICAL),
-            new TagDefinition("petroleum_cracking", true, "petrochemical", BottledChaosRecipePage.PETROCHEMICAL),
-            new TagDefinition("diesel_blending", true, "petrochemical", BottledChaosRecipePage.PETROCHEMICAL),
-            new TagDefinition("gasoline_blending", true, "petrochemical", BottledChaosRecipePage.PETROCHEMICAL),
-            new TagDefinition("wood_distillation", true, "wood_chemistry", BottledChaosRecipePage.WOOD_CHEMISTRY),
-            new TagDefinition("benzene_nitration", true, "wood_chemistry", BottledChaosRecipePage.WOOD_CHEMISTRY),
-            new TagDefinition("petrochemical_oxygenates", true, "petrochemical", BottledChaosRecipePage.PETROCHEMICAL),
-            new TagDefinition("ethanol_gasoline_blending", true, "petrochemical", BottledChaosRecipePage.PETROCHEMICAL)
+            new TagDefinition("quark_gluon_plasma", true, "quark_gluon_plasma", BottledChaosRecipePage.DEFAULT)
         };
         // spotless:on
         private static final TagDefinition[] ACTIVE = Arrays.stream(DEFINITIONS)
@@ -160,22 +161,12 @@ public final class BottledChaosRecipeResources {
         public static final int ROUTE_COUNT = ACTIVE.length;
         public static final long ALL_ROUTE_MASK = (1L << ROUTE_COUNT) - 1;
         private static final int[] DISPLAY_ORDER = IntStream.range(0, ROUTE_COUNT)
-            .boxed()
-            .sorted(Comparator.comparingInt(index -> switch (ACTIVE[index].page()) {
-            case WOOD_CHEMISTRY -> 0;
-            case PETROCHEMICAL -> 1;
-            case DEFAULT -> 3;
-            default -> 2;
-            }))
-            .mapToInt(Integer::intValue)
             .toArray();
-        private static final int[] DISPLAY_RANK = new int[ROUTE_COUNT];
         private static final Map<String, Integer> TAG_INDICES = new HashMap<>();
 
         static {
             if (ROUTE_COUNT >= Long.SIZE) throw new IllegalStateException("Too many credential tags for a route mask");
             for (int index = 0; index < ROUTE_COUNT; index++) {
-                DISPLAY_RANK[DISPLAY_ORDER[index]] = index;
                 if (TAG_INDICES.put(ACTIVE[index].tag(), index) != null)
                     throw new IllegalStateException("Duplicate credential tag: " + ACTIVE[index].tag());
             }
@@ -194,13 +185,10 @@ public final class BottledChaosRecipeResources {
             return DISPLAY_ORDER.clone();
         }
 
-        public static int displayRank(int tagIndex) {
-            return tagIndex >= 0 && tagIndex < ROUTE_COUNT ? DISPLAY_RANK[tagIndex] : Integer.MAX_VALUE;
-        }
-
         /** Honeycomb variants share their production tag's position, regardless of the authorization bit. */
         public static int displayIndex(long requiredTagMask) {
-            return displayRank(ownerTagIndex(requiredTagMask));
+            int tagIndex = ownerTagIndex(requiredTagMask);
+            return tagIndex < ROUTE_COUNT ? tagIndex : Integer.MAX_VALUE;
         }
 
         public static String tag(int index) {
@@ -235,14 +223,14 @@ public final class BottledChaosRecipeResources {
         /** One representative per NEI page; unrelated routes on the main page remain independent. */
         public static List<String> groupedTranslationKeys(long mask) {
             Map<String, Integer> lastByPage = new HashMap<>();
-            for (int index : DISPLAY_ORDER) {
+            for (int index = 0; index < ROUTE_COUNT; index++) {
                 if ((mask & (1L << index)) == 0) continue;
                 lastByPage.put(displayPage(index).groupKey(tag(index)), index);
             }
             long representatives = 0;
             for (int index : lastByPage.values()) representatives |= 1L << index;
             List<String> keys = new ArrayList<>();
-            for (int index : DISPLAY_ORDER) {
+            for (int index = 0; index < ROUTE_COUNT; index++) {
                 if ((representatives & (1L << index)) == 0) continue;
                 keys.add(displayPage(index).summaryKey(translationKey(index)));
             }

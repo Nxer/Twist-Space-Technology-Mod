@@ -93,10 +93,6 @@ final class BottledChaosChainPlanner {
 
         long retainedOutput(int stage, Object key, long amount);
 
-        default boolean inBatchOnly(int stage) {
-            return false;
-        }
-
         default boolean automaticRecovery(int stage) {
             return false;
         }
@@ -123,8 +119,6 @@ final class BottledChaosChainPlanner {
         final Map<Object, Long> external;
         final Map<Object, Long> remaining;
         final Map<Object, Long> produced;
-        // Explicit links track the producing stage so a returned fraction cannot feed an undeclared consumer.
-        final Map<Object, Map<Integer, Long>> producedInBatch = new LinkedHashMap<>();
         final Map<Object, Long> consumed;
         final Map<Object, Long> outputs;
         final long[] batches;
@@ -149,7 +143,6 @@ final class BottledChaosChainPlanner {
             external = new LinkedHashMap<>(other.external);
             remaining = new LinkedHashMap<>(other.remaining);
             produced = new LinkedHashMap<>(other.produced);
-            other.producedInBatch.forEach((key, sources) -> producedInBatch.put(key, new LinkedHashMap<>(sources)));
             consumed = new LinkedHashMap<>(other.consumed);
             outputs = new LinkedHashMap<>(other.outputs);
             batches = other.batches.clone();
@@ -196,8 +189,8 @@ final class BottledChaosChainPlanner {
             }
             limitOutputScale(
                 scale,
-                deliveredOutputs(),
-                previous == null ? Collections.emptyMap() : previous.deliveredOutputs(),
+                outputs,
+                previous == null ? Collections.emptyMap() : previous.outputs,
                 Collections.emptyMap(),
                 stages);
             limitOutputScale(
@@ -213,22 +206,6 @@ final class BottledChaosChainPlanner {
                 if (used > 0) scale.limit(base, used);
             }
             return scale;
-        }
-
-        Map<Object, Long> deliveredOutputs() {
-            if (producedInBatch.isEmpty()) return outputs;
-            Map<Object, Long> amounts = new LinkedHashMap<>(outputs);
-            producedInBatch.forEach(
-                (key, sources) -> {
-                    if (!sources.isEmpty()) amounts.merge(key, totalProduced(sources), Math::addExact);
-                });
-            return amounts;
-        }
-
-        private static long totalProduced(Map<Integer, Long> sources) {
-            long total = 0;
-            for (long amount : sources.values()) total = Math.addExact(total, amount);
-            return total;
         }
 
         private void limitOutputScale(BatchScale scale, Map<Object, Long> amounts, Map<Object, Long> previous,
@@ -300,8 +277,6 @@ final class BottledChaosChainPlanner {
         state = new Result(stages.length, external, remaining, released);
         for (int goal : goalOrder) {
             if (targets[goal] == 0) continue;
-            // Material already made for a selected downstream stage should not become a separate production goal.
-            if (skipUnavailable && conditions.inBatchOnly(goal) && state.batches[goal] >= targets[goal]) continue;
             Result before = skipUnavailable ? new Result(state) : null;
             attempts = 0;
             CheckRecipeResult result = trySupplier(goal, Math.max(0, targets[goal] - state.batches[goal]));
@@ -337,9 +312,7 @@ final class BottledChaosChainPlanner {
             if (!stage.availableInputsOnly || !conditions.automaticRecovery(index)) continue;
             long count = 0;
             for (var input : inputs(index, Math.max(state.voltage, stage.voltage)).entrySet()) {
-                long produced = conditions.inBatchOnly(index) ? batchSupply(index, input.getKey())
-                    : state.produced.getOrDefault(input.getKey(), 0L);
-                count = Math.max(count, produced / input.getValue());
+                count = Math.max(count, state.produced.getOrDefault(input.getKey(), 0L) / input.getValue());
             }
             count = suppliedInputLimit(index, Math.min(count, batchLimit - state.batches[index]));
             if (count <= 0) continue;
@@ -402,23 +375,17 @@ final class BottledChaosChainPlanner {
                 if (!result.wasSuccessful()) return result;
             }
         }
-        boolean inBatchOnly = conditions.inBatchOnly(index);
         for (var output : stage.outputs.entrySet()) {
             Object key = output.getKey();
             long amount = Math.multiplyExact(output.getValue(), count);
             long retained = conditions.retainedOutput(index, key, amount);
-            if (retained > 0 && inBatchOnly) {
-                state.producedInBatch.computeIfAbsent(key, ignored -> new LinkedHashMap<>())
-                    .merge(index, retained, Math::addExact);
-            } else if (retained > 0) {
+            if (retained > 0) {
                 Math.addExact(
                     state.remaining.getOrDefault(key, 0L),
                     Math.addExact(state.produced.getOrDefault(key, 0L), retained));
                 state.produced.merge(key, retained, Math::addExact);
             }
             if (amount > retained) state.outputs.merge(key, amount - retained, Math::addExact);
-            Map<Integer, Long> sources = state.producedInBatch.get(key);
-            if (sources != null) Math.addExact(state.outputs.getOrDefault(key, 0L), Result.totalProduced(sources));
         }
         state.batches[index] += count;
         state.pools |= conditions.pools(index, state.voltage);
@@ -497,10 +464,9 @@ final class BottledChaosChainPlanner {
                 int index = order[position];
                 Stage stage = stages[index];
                 if (stage.availableInputsOnly || stage.voltage > state.voltage) continue;
-                long stored = conditions.inBatchOnly(index) ? batchSupply(index, stage.balanceRoot)
-                    : saturatedAdd(
-                        state.remaining.getOrDefault(stage.balanceRoot, 0L),
-                        state.produced.getOrDefault(stage.balanceRoot, 0L));
+                long stored = saturatedAdd(
+                    state.remaining.getOrDefault(stage.balanceRoot, 0L),
+                    state.produced.getOrDefault(stage.balanceRoot, 0L));
                 if (stored == 0) continue;
                 Map<Object, Long> inputs = inputs(index, state.voltage);
                 long rootInput = inputs.getOrDefault(stage.balanceRoot, 0L);
@@ -578,7 +544,6 @@ final class BottledChaosChainPlanner {
 
     private long available(int consumer, Object key) {
         long amount = state.external.getOrDefault(key, 0L);
-        if (conditions.inBatchOnly(consumer)) return saturatedAdd(amount, batchSupply(consumer, key));
         if (suppliers.get(consumer)
             .containsKey(key)) {
             amount = saturatedAdd(amount, state.remaining.getOrDefault(key, 0L));
@@ -589,19 +554,11 @@ final class BottledChaosChainPlanner {
 
     private long takeInput(int consumer, Object key, long needed) {
         long taken = 0;
-        if (conditions.inBatchOnly(consumer)) {
-            Map<Integer, Long> stock = state.producedInBatch.get(key);
-            int[] sources = suppliers.get(consumer)
-                .get(key);
-            if (stock != null && sources != null) for (int source : sources) {
-                taken += take(stock, source, needed - taken);
-                if (taken == needed) break;
-            }
-        } else if (suppliers.get(consumer)
+        if (suppliers.get(consumer)
             .containsKey(key)) {
-                taken = take(state.remaining, key, needed);
-                taken += take(state.produced, key, needed - taken);
-            }
+            taken = take(state.remaining, key, needed);
+            taken += take(state.produced, key, needed - taken);
+        }
         long external = take(state.external, key, needed - taken);
         if (external != 0) {
             state.consumed.merge(key, external, Math::addExact);
@@ -610,17 +567,7 @@ final class BottledChaosChainPlanner {
         return taken + external;
     }
 
-    private long batchSupply(int consumer, Object key) {
-        Map<Integer, Long> stock = state.producedInBatch.get(key);
-        int[] sources = suppliers.get(consumer)
-            .get(key);
-        if (stock == null || sources == null) return 0;
-        long total = 0;
-        for (int source : sources) total = Math.addExact(total, stock.getOrDefault(source, 0L));
-        return total;
-    }
-
-    private static <K> long take(Map<K, Long> amounts, K key, long needed) {
+    private static long take(Map<Object, Long> amounts, Object key, long needed) {
         long stored = amounts.getOrDefault(key, 0L);
         long taken = Math.min(stored, needed);
         if (taken != 0) {
