@@ -61,6 +61,15 @@ final class NEICollapsibleItems {
         groups.put("Bottled Chaos Capacity Blocks", blockFilter(TstBlocks.BottledChaosCapacity));
         groups.put("Meteor Miner Schematics", prefixFilter("MeteorMinerSchematic"));
         groups.put("Blood-Infused Mining Drones", itemFilter(TstItems.BloodInfusedMiningDrone));
+        groups.put(
+            "Fluid Singularities",
+            itemFilter(TstItems.LifeEssenceSingularity, TstItems.DistilledWaterSingularity, TstItems.AirSingularity));
+        groups.put(
+            "Infinite Fluid Storage Cells",
+            itemFilter(
+                TstItems.InfinityDistilledWaterStorageCell,
+                TstItems.InfinityLifeEssenceStorageCell,
+                TstItems.InfinityAirStorageCell));
         groups.put("Solidifier Hatches", prefixFilter("SolidifyHatch_"));
         groups.put("Dual Input Buffers", prefixFilter("DualInputBuffer_"));
         groups.put("Dynamic Parallel Controllers", prefixFilter("DynamicParallelControllerT"));

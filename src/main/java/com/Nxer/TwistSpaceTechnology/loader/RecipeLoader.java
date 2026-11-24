@@ -10,6 +10,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.SimpleFurnaceFuelPool;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.CardiganRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.CosmicProcessorCircuitRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.EnergySustainmentMatrixRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.InfiniteFluidStorageCellRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.LapotronChipRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.SingleBlockRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.SingleItemRecipes;
@@ -90,6 +91,7 @@ public class RecipeLoader {
         // TODO Split GTCMMachineRecipes
         // Item Recipes
         SingleItemRecipes.loadRecipes();
+        InfiniteFluidStorageCellRecipes.loadRecipes();
         SingleBlockRecipes.loadRecipes();
         BottledChaosCraftingRecipes.loadRecipes();
         CosmicProcessorCircuitRecipes.loadRecipes();
