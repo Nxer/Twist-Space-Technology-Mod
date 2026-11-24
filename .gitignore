@@ -38,3 +38,4 @@ addon.late.local.gradle.kts
 layout.json
 /buildSrc/build/
 /AI/
+AGENTS.md
