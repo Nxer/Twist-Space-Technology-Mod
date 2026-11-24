@@ -9,6 +9,19 @@ body:
       value: |
         Provide a summary of the issue in the Title above.
         在标题里提供一个对问题的简短描述。
+  - type: checkboxes
+    id: existing-fix-check
+    attributes:
+      label: Check for an existing fix / 核对修复状态
+      description: |
+        Before submitting, check [pull requests](https://github.com/Nxer/Twist-Space-Technology-Mod/pulls?q=is%3Apr) (including open and merged ones), [published releases](https://github.com/Nxer/Twist-Space-Technology-Mod/releases), and changes since the latest release in the [main branch history](https://github.com/Nxer/Twist-Space-Technology-Mod/commits/main/).
+        提交前，请查看 [PR](https://github.com/Nxer/Twist-Space-Technology-Mod/pulls?q=is%3Apr)（包括开放和已合并的 PR）、[已发布版本](https://github.com/Nxer/Twist-Space-Technology-Mod/releases)以及 [main 分支](https://github.com/Nxer/Twist-Space-Technology-Mod/commits/main/)在最新发布版之后的改动。
+
+        If you used AI to prepare this report, ask it to inspect the current repository and verify whether this bug has been fixed or a fix is in progress.
+        如果你用 AI 辅助编写这份报告，请让它查看当前仓库，核实这个问题是否已修复或正在修复。
+      options:
+        - label: I checked whether a fix is already available or in progress. / 我已核对这个问题是否已有修复或正在修复。
+          required: true
   - type: textarea
     id: description
     attributes:
