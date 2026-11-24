@@ -521,6 +521,53 @@ public final class BottledChaosRecipeCatalog {
         return costs;
     }
 
+    private String routeName(int entry) {
+        var chain = chains.get(entry);
+        StringBuilder name = new StringBuilder(CredentialModel.tag(chain.tagIndex()));
+        for (int tag = 0; tag < CredentialModel.ROUTE_COUNT; tag++) {
+            if (tag != chain.tagIndex() && (chain.requiredTagMask() & (1L << tag)) != 0) name.append('+')
+                .append(CredentialModel.tag(tag));
+        }
+        return name + " [entry " + entry + "]";
+    }
+
+    /** A shared source can belong to several routes, including through nested sequences. Look up owners on failure. */
+    private List<String> stepLocations(StepRef mark) {
+        List<String> locations = new ArrayList<>();
+        for (int entry = 0; entry < chains.size(); entry++) {
+            RecipeChain chain = chains.get(entry);
+            if (chain == null) continue;
+            for (int i = chain.start(); i < chain.end(); i++) {
+                if (chainSteps.get(i) == mark) locations
+                    .add(routeName(entry) + " step " + (i - chain.start() + 1) + "/" + (chain.end() - chain.start()));
+            }
+        }
+        for (Expansion expansion : expansions) {
+            if (expansion.recipe() == mark) locations.add(
+                (expansion.entry() < 0 ? "shared reagent" : routeName(expansion.entry()))
+                    + (expansion.synthesis() ? " synthesis" : " decomposition"));
+        }
+        for (var recycling : reagentRecycling) {
+            if (recycling.recipe() == mark) locations.add("reagent recycling");
+        }
+        for (var sequence : recipeSequences) {
+            for (int i = sequence.start(); i < sequence.end(); i++) {
+                if (sequenceSteps.get(i) != mark) continue;
+                for (String owner : stepLocations(sequence.mark())) locations.add(
+                    owner + " / sequence step "
+                        + (i - sequence.start() + 1)
+                        + "/"
+                        + (sequence.end() - sequence.start()));
+            }
+        }
+        if (locations.isEmpty()) locations.add("standalone source");
+        return locations;
+    }
+
+    private String describeStep(StepRef mark) {
+        return String.join(", ", stepLocations(mark)) + ": " + mark;
+    }
+
     // Scan each selected pool once and resolve the flat marker directory.
     private void scanMarkedRecipes() {
         Set<NativeSelector> selectors = new LinkedHashSet<>();
@@ -540,7 +587,7 @@ public final class BottledChaosRecipeCatalog {
                                 originals[index],
                                 replacements[index].item(),
                                 replacements[index].multiplier()),
-                            "missing source input for substitution: " + mark);
+                            () -> "missing source input for substitution: " + mark);
                     }
                 }
                 var previous = resolved.putIfAbsent(mark, prepared);
@@ -555,8 +602,8 @@ public final class BottledChaosRecipeCatalog {
         }
         for (StepRef mark : marks) {
             if (resolved.containsKey(mark)) continue;
-            if (!mark.optional) throw new IllegalStateException("missing recipe mark " + mark);
-            TwistSpaceTechnology.LOG.warn("Bottled Chaos optional recipe is unavailable: {}", mark);
+            if (!mark.optional) throw new IllegalStateException("missing recipe mark at " + describeStep(mark));
+            TwistSpaceTechnology.LOG.warn("Bottled Chaos optional recipe is unavailable at {}", describeStep(mark));
         }
         for (RecipeSequence sequence : recipeSequences) {
             RecipeData prepared = composeMarkedSteps(
@@ -651,10 +698,10 @@ public final class BottledChaosRecipeCatalog {
     private RecipeData composeMarkedSteps(List<StepRef> steps, int start, int end, Object[] protectedOutputs) {
         Set<Object> connections = collectMarkedResources(steps, start, end);
         StepRef first = steps.get(start);
-        var result = Objects.requireNonNull(resolved.get(first), first.toString());
+        var result = Objects.requireNonNull(resolved.get(first), first::toString);
         for (int index = start + 1; index < end; index++) {
             StepRef step = steps.get(index);
-            var next = Objects.requireNonNull(resolved.get(step), step.toString());
+            var next = Objects.requireNonNull(resolved.get(step), step::toString);
             Object intermediate = null;
             for (Object key : next.inputs.keySet()) {
                 // A fraction retained by another branch may still be this step's declared connection.
@@ -834,8 +881,8 @@ public final class BottledChaosRecipeCatalog {
     /** Resolve all declarations once; runtime receives only prepared routes and their immutable directory. */
     CompiledCatalog compile() {
         validateRegisteredChains();
-        expansions.removeIf(expansion -> expansion.synthesis() && externalReagents.contains(expansion.key()));
         scanMarkedRecipes();
+        expansions.removeIf(expansion -> expansion.synthesis() && externalReagents.contains(expansion.key()));
         RecipeData[] prepared = composeRecipeChains();
         CompiledRoute[] routes = new CompiledRoute[prepared.length];
         for (int entry = 0; entry < prepared.length; entry++) {
