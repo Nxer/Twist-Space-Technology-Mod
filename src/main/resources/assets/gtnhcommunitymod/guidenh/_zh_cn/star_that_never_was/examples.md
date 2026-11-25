@@ -3,7 +3,7 @@ navigation:
   title: 计算示例
   parent: index.md
   position: 6
-  icon: gregtech:gt.blockmachines:19804
+  icon: gregtech:gt.blockmachines:19084
 ---
 
 # 计算示例

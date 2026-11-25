@@ -3,9 +3,9 @@ navigation:
   title: 未曾存在之星
   parent: /index.md
   position: 90
-  icon: gregtech:gt.blockmachines:19804
+  icon: gregtech:gt.blockmachines:19084
 item_ids:
-  - gregtech:gt.blockmachines:19804
+  - gregtech:gt.blockmachines:19084
 ---
 
 # 未曾存在之星
@@ -15,7 +15,7 @@ item_ids:
 陨星标志物决定要生成哪一种虚拟星体. 主机在井口凝聚星体, 井中的激光陨星采矿场负责开采, 矿石经主机送入 ME 网络.
 
 <GameScene width="400" height="240" interactive={true} allowLayerSlider={true} showGrid={false}>
-  <ImportStructureLib controller="gregtech:gt.blockmachines:19804" />
+  <ImportStructureLib controller="gregtech:gt.blockmachines:19084" />
   <StarStructureControls />
 </GameScene>
 

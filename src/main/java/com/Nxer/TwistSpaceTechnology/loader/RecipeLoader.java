@@ -73,6 +73,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.LanthanidesReci
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipes.CropsMutationRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.tempRecipe.ElvenWorkshopTransitionRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.tempRecipe.SoulFragmentRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.tempRecipe.StarThatNeverWasTransitionRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.tempRecipe.SwelegfyrTransitionRecipes;
 import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.logic.StaticMiscs;
 import com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipeHandler;
@@ -109,6 +110,7 @@ public class RecipeLoader {
         CardiganRecipes.loadRecipes();
         ElvenWorkshopTransitionRecipes.loadRecipes();
         SwelegfyrTransitionRecipes.loadRecipes();
+        StarThatNeverWasTransitionRecipes.loadRecipes();
         SoulFragmentRecipes.loadRecipes();
 
         // Original GTNH RecipeMap

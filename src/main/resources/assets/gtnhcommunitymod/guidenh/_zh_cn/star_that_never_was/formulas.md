@@ -3,7 +3,7 @@ navigation:
   title: 运行公式
   parent: index.md
   position: 8
-  icon: gregtech:gt.blockmachines:19804
+  icon: gregtech:gt.blockmachines:19084
 ---
 
 # 运行公式

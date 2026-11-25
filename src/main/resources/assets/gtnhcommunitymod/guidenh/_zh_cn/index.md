@@ -28,7 +28,7 @@ navigation:
 
 ## [未曾存在之星](star_that_never_was/index.md)
 
-<ItemImage id="gregtech:gt.blockmachines:19804" scale="3" />
+<ItemImage id="gregtech:gt.blockmachines:19084" scale="3" />
 
 在井中安装激光陨星采矿场, 开采仪式生成的虚拟星体, 把矿石送入 ME 网络.
 
