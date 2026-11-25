@@ -31,8 +31,7 @@ public class ItemProofOfHeroes extends Item {
 
     @Override
     public String getUnlocalizedName() {
-        return unlocalizedName.equals("ProofOfGods") ? "item.tst.common.proof_of_gods"
-            : "item.tst.common.proof_of_heroes";
+        return unlocalizedName.equals("ProofOfGods") ? "item.tst.proof_of_gods" : "item.tst.proof_of_heroes";
     }
 
     @Override
@@ -58,36 +57,36 @@ public class ItemProofOfHeroes extends Item {
         if (rarity == EnumRarity.common) {
             if (isShiftKeyDown()) {
                 toolTip.add(
-                    // #tr item.tst.common.proof_of_heroes.tooltip.02
+                    // #tr item.tst.proof_of_heroes.tooltip.02
                     // # {\LIGHT_PURPLE}The physical culmination of your journey, capable to rend gods asunder.
                     // #zh_CN {\LIGHT_PURPLE}你旅途的怨种顶点，拥有使神明笑嘻的力量.
-                    TSTUtils.tr("item.tst.common.proof_of_heroes.tooltip.02"));
+                    TSTUtils.tr("item.tst.proof_of_heroes.tooltip.02"));
             } else {
                 toolTip.add(
-                    // #tr item.tst.common.proof_of_heroes.tooltip.01
+                    // #tr item.tst.proof_of_heroes.tooltip.01
                     // # The physical culmination of your journey, capable to rend gods asunder.
                     // #zh_CN 你旅途的物理顶点，拥有使神明分崩离析的力量.
-                    TSTUtils.tr("item.tst.common.proof_of_heroes.tooltip.01"));
+                    TSTUtils.tr("item.tst.proof_of_heroes.tooltip.01"));
             }
         } else {
             if (isShiftKeyDown()) {
                 toolTip.add(
-                    // #tr item.tst.common.proof_of_gods.tooltip.02
+                    // #tr item.tst.proof_of_gods.tooltip.02
                     // # {\LIGHT_PURPLE}Go touch some grass
                     // #zh_CN {\LIGHT_PURPLE}多留意下窗外的碧水蓝天
-                    TSTUtils.tr("item.tst.common.proof_of_gods.tooltip.02"));
+                    TSTUtils.tr("item.tst.proof_of_gods.tooltip.02"));
                 toolTip.add("");
-                // #tr item.tst.common.proof_of_gods.tooltip.03
+                // #tr item.tst.proof_of_gods.tooltip.03
                 // # The first people to make a TwistToken
                 // #zh_CN 成功登顶的人们
-                toolTip.add(EnumChatFormatting.WHITE + TSTUtils.tr("item.tst.common.proof_of_gods.tooltip.03"));
+                toolTip.add(EnumChatFormatting.WHITE + TSTUtils.tr("item.tst.proof_of_gods.tooltip.03"));
                 toolTip.addAll(CraftedTokens.getAllName());
             } else {
                 toolTip.add(
-                    // #tr item.tst.common.proof_of_gods.tooltip.01
+                    // #tr item.tst.proof_of_gods.tooltip.01
                     // # Impossible final goal
                     // #zh_CN 可能，也许，最后……
-                    TSTUtils.tr("item.tst.common.proof_of_gods.tooltip.01"));
+                    TSTUtils.tr("item.tst.proof_of_gods.tooltip.01"));
 
                 toolTip.add(getShiftKeyHint());
             }

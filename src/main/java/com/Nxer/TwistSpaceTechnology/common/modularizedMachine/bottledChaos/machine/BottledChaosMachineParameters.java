@@ -76,7 +76,32 @@ public final class BottledChaosMachineParameters {
         double powerMultiplier, int maximumRecipeTier, long heat, int glassTier, FluidStack[] upkeep,
         int maximumOverclocks, int perfectOverclocks, int casingTier, int compressionTier, double minimumSourceDuration,
         boolean heavyCentrifuge, int plasmaTier, boolean multiStepPlasma, int startupReserveSeconds,
-        long maximumSourcePower, int upkeepPeriodSeconds) {}
+        long maximumSourcePower, int upkeepPeriodSeconds) {
+
+        Profile withParallel(long value) {
+            return new Profile(
+                value,
+                euMultiplier,
+                timeMultiplier,
+                timeDivisor,
+                powerMultiplier,
+                maximumRecipeTier,
+                heat,
+                glassTier,
+                upkeep,
+                maximumOverclocks,
+                perfectOverclocks,
+                casingTier,
+                compressionTier,
+                minimumSourceDuration,
+                heavyCentrifuge,
+                plasmaTier,
+                multiStepPlasma,
+                startupReserveSeconds,
+                maximumSourcePower,
+                upkeepPeriodSeconds);
+        }
+    }
 
     /** One case per machine, with mode-specific pools handled explicitly below. */
     enum Machine {
@@ -105,6 +130,7 @@ public final class BottledChaosMachineParameters {
         SCAVENGER,
         VACUUM_FREEZER,
         DIGESTER,
+        MEGA_DIGESTER,
         DISSOLUTION,
         BIO_VAT,
         MEGA_ALLOY,
@@ -198,6 +224,11 @@ public final class BottledChaosMachineParameters {
         final boolean inheritsMasterOverclock;
 
         InstalledSource(ItemStack controller, Structure structure) {
+            this(controller, structure, null);
+        }
+
+        InstalledSource(ItemStack controller, Structure structure,
+            BottledChaosComplexStructures.GodforgeProfile bound) {
             this.structure = structure;
             debug = GTCMItemList.TestItem0.equal(controller);
             controller = BottledChaosComplexStructures.parameterController(controller, structure);
@@ -212,14 +243,15 @@ public final class BottledChaosMachineParameters {
             pools = BottledChaosSupportedMachine.recipeMaps(original);
             machine = original == null ? null : Machine.find(original);
             upgrades = new Upgrades(structure == null ? new ItemStack[0] : structure.materials());
-            godforge = BottledChaosComplexStructures.godforge(structure);
+            godforge = bound == null ? BottledChaosComplexStructures.godforge(structure) : bound;
             foundry = machine == Machine.FOUNDRY ? BottledChaosComplexStructures.foundry(structure) : null;
             fourHeliocasts = foundry != null && BottledChaosComplexStructures.fourHeliocasts(structure);
         }
 
         int poolSpeedDivisor() {
             if (original instanceof com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.WirelessEnergyMultiMachineBase
-                || godforge != null) return 1;
+                || godforge != null
+                || BottledChaosComplexStructures.isSeparateGodforgeModule(structure)) return 1;
             return Math.max(
                 1,
                 (int) pools.stream()
@@ -371,8 +403,13 @@ public final class BottledChaosMachineParameters {
                 value.timeDivisor = 4;
             }
             case CHEMICAL_DISTORTER -> {
-                if (pool != RecipeMaps.multiblockChemicalReactorRecipes) return Evaluation.INVALID;
-                value.set(1024, 1, 0.1);
+                if (c < 0) return Evaluation.INVALID;
+                if (pool == RecipeMaps.chemicalPlantRecipes) {
+                    if (c < HeatingCoilLevel.UMV.getTier())
+                        return reject(pool, "heat", value.heat, HeatingCoilLevel.UMV.getHeat());
+                    value.casingTier = Integer.MAX_VALUE;
+                } else if (pool != RecipeMaps.multiblockChemicalReactorRecipes) return Evaluation.INVALID;
+                value.set(ValueEnum.Parallel_LCRMode_IntensifyChemicalDistorter, 1, 1d / Math.max(1, c + 1));
                 value.timeDivisor = 4;
             }
             case BENDING -> value.set(6L * t, 1, 1d / 6);
@@ -382,6 +419,12 @@ public final class BottledChaosMachineParameters {
             case SCAVENGER -> value.set(Integer.MAX_VALUE, 0.6, Math.pow(0.8, p));
             case DIGESTER -> {
                 value.timeDivisor = 4;
+                value.requiresHeat = true;
+            }
+            case MEGA_DIGESTER -> {
+                if (c < 0) return Evaluation.INVALID;
+                value.set(Config.Parallel_MegaDigester, 1, 1F / (c + 1));
+                value.timeDivisor = Config.EnablePerfectOverclock_MegaDigester ? 4 : 2;
                 value.requiresHeat = true;
             }
             case BIO_VAT -> {}

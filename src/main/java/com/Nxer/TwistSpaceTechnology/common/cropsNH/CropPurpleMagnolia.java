@@ -14,7 +14,7 @@ import com.gtnewhorizon.cropsnh.api.SeedShape;
 public class CropPurpleMagnolia extends TST_CropBase {
 
     public CropPurpleMagnolia() {
-        // #tr item.tst.common.PurpleMagnolia.name
+        // #tr item.tst.PurpleMagnolia.name
         // # Purple Magnolia
         // #zh_CN 紫玉兰
         super("purpleMagnolia", Color.pink, Color.white);
@@ -27,7 +27,7 @@ public class CropPurpleMagnolia extends TST_CropBase {
     @Override
     public String getUnlocalizedName() {
         // CropsNH looks up this key for the crop and analyzed seed; the crop ID remains purpleMagnolia.
-        return "item.tst.common.PurpleMagnolia.name";
+        return "item.tst.PurpleMagnolia.name";
     }
 
     @Override

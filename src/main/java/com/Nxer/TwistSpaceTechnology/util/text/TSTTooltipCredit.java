@@ -108,15 +108,15 @@ public interface TSTTooltipCredit {
         return () -> "" + EnumChatFormatting.RESET
             + EnumChatFormatting.GRAY
             + StatCollector.translateToLocalFormatted(
-                "tst.common.shared.credit.mod_name",
+                "tst.shared.credit.mod_name",
                 styledModName.get() + EnumChatFormatting.RESET + EnumChatFormatting.GRAY)
             + EnumChatFormatting.RESET;
     }
 
     static Supplier<String> buildCreditLine(Role role, ID... ids) {
-        String translationKey = (role == Role.AUTHOR ? "tst.common.shared.credit.author"
-            : role == Role.MAINTAINER ? "tst.common.shared.credit.maintainer"
-                : role == Role.STRUCTURE ? "tst.common.shared.credit.structure" : "tst.common.shared.credit.art")
+        String translationKey = (role == Role.AUTHOR ? "tst.shared.credit.author"
+            : role == Role.MAINTAINER ? "tst.shared.credit.maintainer"
+                : role == Role.STRUCTURE ? "tst.shared.credit.structure" : "tst.shared.credit.art")
             + (ids.length == 1 ? "" : "s");
         Supplier<String> creditLine = () -> role == Role.AUTHOR && ids.length == 0 ? ""
             : StatCollector.translateToLocalFormatted(
@@ -134,35 +134,35 @@ public interface TSTTooltipCredit {
             + EnumChatFormatting.RESET;
     }
 
-    // #tr tst.common.shared.credit.author
+    // #tr tst.shared.credit.author
     // # Author: %s
     // #zh_CN 作者: %s
 
-    // #tr tst.common.shared.credit.authors
+    // #tr tst.shared.credit.authors
     // # Authors: %s
     // #zh_CN 作者: %s
 
-    // #tr tst.common.shared.credit.maintainer
+    // #tr tst.shared.credit.maintainer
     // # Maintainer: %s
     // #zh_CN 维护: %s
 
-    // #tr tst.common.shared.credit.maintainers
+    // #tr tst.shared.credit.maintainers
     // # Maintainers: %s
     // #zh_CN 维护: %s
 
-    // #tr tst.common.shared.credit.structure
+    // #tr tst.shared.credit.structure
     // # Structure: %s
     // #zh_CN 结构: %s
 
-    // #tr tst.common.shared.credit.structures
+    // #tr tst.shared.credit.structures
     // # Structures: %s
     // #zh_CN 结构: %s
 
-    // #tr tst.common.shared.credit.art
+    // #tr tst.shared.credit.art
     // # Artist: %s
     // #zh_CN 美术: %s
 
-    // #tr tst.common.shared.credit.arts
+    // #tr tst.shared.credit.arts
     // # Artists: %s
     // #zh_CN 美术: %s
 }

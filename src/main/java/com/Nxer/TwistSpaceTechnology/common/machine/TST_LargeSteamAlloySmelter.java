@@ -200,18 +200,18 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.LargeSteamAlloySmelter.tooltip.machine_type
+        // #tr tst.machine.LargeSteamAlloySmelter.tooltip.machine_type
         // # Alloy Smelter
         // #zh_CN 合金炉
-        tt.addMachineType(TSTUtils.tr("tst.common.machine.LargeSteamAlloySmelter.tooltip.machine_type"))
-            // #tr tst.common.machine.LargeSteamAlloySmelter.tooltip.controller
+        tt.addMachineType(TSTUtils.tr("tst.machine.LargeSteamAlloySmelter.tooltip.machine_type"))
+            // #tr tst.machine.LargeSteamAlloySmelter.tooltip.controller
             // # Controller block for the Large Steam Alloy Smelter
             // #zh_CN 大型蒸汽合金炉的控制器方块
-            .addInfo(TSTUtils.tr("tst.common.machine.LargeSteamAlloySmelter.tooltip.controller"))
-            // #tr tst.common.machine.LargeSteamAlloySmelter.tooltip.info.01
+            .addInfo(TSTUtils.tr("tst.machine.LargeSteamAlloySmelter.tooltip.controller"))
+            // #tr tst.machine.LargeSteamAlloySmelter.tooltip.info.01
             // # Steam Tech Operational
             // #zh_CN 蒸汽科技，启动！
-            .addInfo(TSTUtils.tr("tst.common.machine.LargeSteamAlloySmelter.tooltip.info.01"))
+            .addInfo(TSTUtils.tr("tst.machine.LargeSteamAlloySmelter.tooltip.info.01"))
             .beginStructureBlock(SHAPE_MAIN)
             .addController(TSTSharedLocalization.Structure.textFrontCenter)
             .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)

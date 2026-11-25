@@ -6,6 +6,7 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.DiamondGem;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.HotCrystallineAlloyIngot;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.HydrogenGas;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.HydrogenPeroxide;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.Nitrobenzene;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.OganessonGas;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.OxygenGas;
@@ -47,6 +48,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosR
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeCatalog.StepRef;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.TierEU;
@@ -60,33 +62,41 @@ public final class BottledChaosPrismaticRecipes {
         // spotless:off
         // Shard stage: precipitation -> recovered solvent -> crystal -> gas -> acid.
         // Starting at precipitation exposes the solvent return before the missing fresh solvent is supplied.
-        catalog.registerChain("prismatic_acid", 64, TierEU.RECIPE_UHV, PrismarineShard,
+        catalog.registerChain("prismatic_acid", 32, TierEU.RECIPE_UHV, PrismarineShard,
             new Object[] { PrismaticAcid }, new Object[] {},
-            catalog.markRecipe(ChemicalPlant, StrontiumHydroxideDust, PrismarinePrecipitate, -1),
+            catalog.markRecipe(ChemicalPlant, new Object[] { StrontiumHydroxideDust, PrismarineRichNitrobenzeneSolution }, PrismarinePrecipitate, -1),
             catalog.markRecipe(ChemicalBath, PrismarineContaminatedNitrobenzeneSolution, PrismarineRichNitrobenzeneSolution, 1),
             catalog.markRecipe(LaserEngraver, PrismarinePrecipitate, PrismaticCrystal, -1),
             catalog.markRecipe(VacuumFurnace, PrismaticCrystal, PrismaticGas, -1),
             catalog.markRecipe(VacuumFreezer, PrismaticGas, PrismaticAcid, -1));
 
-        // Independent shard supply; the honeycomb source replaces quartz and doubles the native yield.
+        // Both shard routes grow dim prismarine first. The comb boosts the engraving yield.
+        var dimPrismarine = TST_ItemID.create(ItemList.Dim_Prismarine.get(1));
+        var growDimPrismarine = catalog.markRecipe(Autoclave,
+            new Object[] { RedAlgaeBiomass, TST_ItemID.create(Materials.CertusQuartz.getDust(1)) }, dimPrismarine, -1);
         catalog.registerAlternativeChain("prismatic_acid", TierEU.RECIPE_UHV, RedAlgaeBiomass,
             new Object[] { PrismarineShard }, new Object[] { PrismarineShard },
-            catalog.markRecipe(Autoclave,
-                new Object[] { RedAlgaeBiomass, TST_ItemID.create(Materials.CertusQuartz.getDust(1)) }, PrismarineShard, -1));
+            growDimPrismarine, catalog.markRecipe(LaserEngraver, dimPrismarine, PrismarineShard, 1));
         if (Mods.Forestry.isModLoaded() && GTBees.combs != null) {
             catalog.registerAugmentedChain("prismatic_acid", "honeycomb", TierEU.RECIPE_UHV, RedAlgaeBiomass,
                 new Object[] { PrismarineShard }, new Object[] { PrismarineShard },
-                catalog.markRecipe(Autoclave,
-                    new Object[] { RedAlgaeBiomass, TST_ItemID.create(GTBees.combs.getStackForType(CombType.PRISMATIC, 1)) }, PrismarineShard, -1));
+                growDimPrismarine, catalog.markRecipe(LaserEngraver,
+                    new Object[] { dimPrismarine, TST_ItemID.create(GTBees.combs.getStackForType(CombType.PRISMATIC, 1)) }, PrismarineShard, -1));
         }
         catalog.orderDisplayRecipes("prismatic", DiamondGem, RedAlgaeBiomass, PrismarineShard);
 
         // Input branches: supplement extraction, then reuse the contaminated peroxide in looped leaching.
         catalog.includeSynthesisStep(ChemicalBath, PrismarineRichNitrobenzeneSolution,
             new Object[] { PrismarineSolution, Nitrobenzene }, 1);
-        // Preserve the source loop's net contaminated peroxide output after reuse.
         catalog.includeSynthesisStep(DissolutionTank, PrismarineSolution,
             new Object[] { PrismarineShard, PrismarineContaminatedHydrogenPeroxide }, -1);
+        // Reuse the leaching return, then purify the remainder before synthesizing fresh peroxide.
+        catalog.registerReagentRecycling(ChemicalPlant,
+            PrismarineContaminatedHydrogenPeroxide, HydrogenPeroxide, -1);
+        // Finish the recovered precipitate through the same native crystal, gas and acid steps.
+        catalog.includeDecompositionStep(LaserEngraver, PrismarinePrecipitate, PrismaticCrystal, -1);
+        catalog.includeDecompositionStep(VacuumFurnace, PrismaticCrystal, PrismaticGas, -1);
+        catalog.includeDecompositionStep(VacuumFreezer, PrismaticGas, PrismaticAcid, -1);
 
         // Alloy preparation: autoclave crystals -> powder -> alloy -> protected blast -> cooling -> melt.
         // Both protective gases share the acid tag, including its crystalline-alloy preparation.

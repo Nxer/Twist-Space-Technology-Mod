@@ -10,7 +10,7 @@ public class BlockTimeBendingSpeedRune extends SpeedRune {
 
     public BlockTimeBendingSpeedRune() {
         super();
-        // #tr tile.tst.common.time_bending_speed_rune.name
+        // #tr tile.tst.time_bending_speed_rune.name
         // # Time-bending Speed Rune
         // #zh_CN 时间扭曲速度符文
         setBlockName("timeBendingSpeedRune");
@@ -19,7 +19,7 @@ public class BlockTimeBendingSpeedRune extends SpeedRune {
 
     @Override
     public String getUnlocalizedName() {
-        return "tile.tst.common.time_bending_speed_rune";
+        return "tile.tst.time_bending_speed_rune";
     }
 
     @Override

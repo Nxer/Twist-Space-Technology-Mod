@@ -17,6 +17,7 @@ public final class BottledChaosRecipeRegistration {
 
     public static void registerRecipes() {
         registerBaseRecipes();
+        if (!BottledChaosRecipeProcessor.isReady()) return;
         BottledChaosCredentialRecipes.registerRecipes();
         BottledChaosFakeRecipes.registerRecipes();
         BottledChaosFakeRecipes.registerCredentialRecipes();
@@ -41,13 +42,15 @@ public final class BottledChaosRecipeRegistration {
             BottledChaosRecipeProcessor.installCache(compiled);
             TwistSpaceTechnology.LOG.info("Bottled Chaos resolved {} processing steps.", compiled.resolvedStepCount());
         } catch (RuntimeException exception) {
-            TwistSpaceTechnology.LOG
-                .error("Bottled Chaos recipe resolution failed; processing routes are disabled.", exception);
+            TwistSpaceTechnology.LOG.error(
+                "Bottled Chaos recipe resolution failed: " + exception.getMessage()
+                    + ". Processing routes are disabled.",
+                exception);
         }
     }
 
     /** Called after StellarForgeRecipePool has built its native recipes; base-cache readiness is independent. */
     public static void resolveLateSources() {
-        BottledChaosProcessAlternatives.resolve();
+        if (BottledChaosRecipeProcessor.isReady()) BottledChaosProcessAlternatives.resolve();
     }
 }

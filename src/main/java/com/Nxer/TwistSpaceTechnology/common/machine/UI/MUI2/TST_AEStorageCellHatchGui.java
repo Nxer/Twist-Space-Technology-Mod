@@ -5,7 +5,6 @@ import static gregtech.api.modularui2.GTGuis.createPopUpPanel;
 
 import java.util.function.Predicate;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -49,37 +48,22 @@ import gregtech.common.tileentities.machines.MTEHatchInputME;
 
 public final class TST_AEStorageCellHatchGui {
 
-    private static final float SCIENTIFIC_SLOT_AMOUNT_MAX_SCALE = 0.55f;
+    private static final long SCIENTIFIC_AMOUNT_THRESHOLD = 1_000_000_000_000_000_000L;
 
     private TST_AEStorageCellHatchGui() {}
 
-    private static String formatSlotAmount(long amount, String unit, int width) {
-        String label = NumberFormat.format(amount, NumberFormat.AMOUNT_TEXT) + unit;
-        // Keep the normal scaled label for smaller amounts; show long-scale stock the same way in both slots.
-        if (amount < 1_000_000_000_000_000_000L
-            && (label.length() <= 5 || Minecraft.getMinecraft().fontRenderer.getStringWidth(label) * 0.6f <= width))
-            return label;
-        String digits = Long.toString(amount);
-        return digits.charAt(0) + "E" + (digits.length() - 1) + unit;
-    }
-
     private static void drawSlotAmount(long amount, String unit, int x, int width, int height) {
-        String label = formatSlotAmount(amount, unit, width);
-        GuiDraw.drawScaledAlignedTextInBox(
-            label,
-            x,
-            0,
-            width,
-            height,
-            Alignment.BottomRight,
-            label.length() > 2 && label.charAt(1) == 'E' ? SCIENTIFIC_SLOT_AMOUNT_MAX_SCALE : 1f);
+        // Switch notation only by magnitude; let the native slot renderer handle text size.
+        String label = amount < SCIENTIFIC_AMOUNT_THRESHOLD ? NumberFormat.format(amount, NumberFormat.AMOUNT_TEXT)
+            : (amount / SCIENTIFIC_AMOUNT_THRESHOLD) + "E18";
+        GuiDraw.drawScaledAlignedTextInBox(label + unit, x, 0, width, height, Alignment.BottomRight);
     }
 
     private static IKey getCellSlotName() {
-        // #tr tst.common.shared.ae_storage_cell_gui.cell_slot
+        // #tr tst.shared.ae_storage_cell_gui.cell_slot
         // # ME storage cell
         // #zh_CN ME存储元件
-        return IKey.lang("tst.common.shared.ae_storage_cell_gui.cell_slot");
+        return IKey.lang("tst.shared.ae_storage_cell_gui.cell_slot");
     }
 
     private static ItemSlot createCellSlot(MTEHatch machine, int slotIndex, Predicate<ItemStack> cellFilter) {
@@ -214,11 +198,11 @@ public final class TST_AEStorageCellHatchGui {
                         public void buildTooltip(ItemStack stack, RichTooltip tooltip) {
                             super.buildTooltip(stack, tooltip);
                             tooltip.addLine(
-                                // #tr tst.common.shared.ae_storage_cell_gui.available_amount
+                                // #tr tst.shared.ae_storage_cell_gui.available_amount
                                 // # Available: %s
                                 // #zh_CN 可用数量：%s
                                 IKey.lang(
-                                    "tst.common.shared.ae_storage_cell_gui.available_amount",
+                                    "tst.shared.ae_storage_cell_gui.available_amount",
                                     formatNumber(amount.getLongValue())));
                         }
                     }.slot(

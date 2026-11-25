@@ -79,7 +79,7 @@ public final class BottledChaosCredentialRecipes {
             register("ancient_debris", Stage.UV, ItemList.SiftingMachineUV.get(4), ItemList.Casing_RobustTungstenSteel.get(8), BottledChaosRecipeResources.IntenselyBondedNetheriteNanoparticles.getItemStack(64), Materials.Netherite.getPart(OrePrefixes.ring, 64));
         }
         register("isamill", Stage.ZPM, ItemList.MaceratorZPM.get(4), GregtechItemList.Casing_IsaMill_Pipe.get(8), Materials.Indium.getDust(64), Materials.Lutetium.getDust(64), cells(new FluidStack(BottledChaosRecipeResources.RedMud, 1000), 64));
-        register("prismatic_acid", Stage.UHV, ItemList.BlockExtremeCorrosionResistantCasing.get(8), ItemList.Casing_Pipe_Polybenzimidazole.get(8), GregtechItemList.SolidAcidCatalyst.get(8), cells(Materials.PrismaticAcid.getFluid(1000), 64));
+        register("prismatic_acid", Stage.UHV, ItemList.BlockExtremeCorrosionResistantCasing.get(8), ItemList.Casing_Pipe_Polybenzimidazole.get(8), GregtechItemList.SolidAcidCatalyst.get(8), filledContainer(new FluidStack(BottledChaosRecipeResources.HydrogenPeroxide, 131_072_000), ItemList.Large_Fluid_Cell_Neutronium.get(1)), cells(Materials.PrismaticAcid.getFluid(1000), 64));
 
         register("purified_water_1", Stage.ZPM, ItemList.BlockSterileWaterPlantCasing.get(8), ItemList.Casing_Pipe_Polytetrafluoroethylene.get(8), ItemList.ActivatedCarbonFilterMesh.get(8), cells(Materials.Grade1PurifiedWater.getFluid(1000), 64));
         register("purified_water_2", Stage.ZPM, ItemList.BlockHighPressureResistantCasing.get(8), ItemList.BlockOzoneCasing.get(8), cells(Materials.Ozone.getGas(1000), 8), cells(Materials.Grade2PurifiedWater.getFluid(1000), 64));
@@ -145,10 +145,10 @@ public final class BottledChaosCredentialRecipes {
             long mask = 1L << injection.tagIndex();
             int weight = ItemBottledChaosCredential.getRequiredWeight(mask);
             if (weight > ItemBottledChaosCredential.getCapacity(target)) return BottledChaosCrafting.Result
-                .failure("tst.bottledchaos.gui.credential_injection.capacity_exceeded");
+                .failure("tst.machine.BottledChaos.gui.credential_injection.capacity_exceeded");
             ItemStack result = target.copy();
-            if (!ItemBottledChaosCredential.setBinding(result, mask, weight))
-                return BottledChaosCrafting.Result.failure("tst.bottledchaos.gui.credential_injection.invalid_source");
+            if (!ItemBottledChaosCredential.setBinding(result, mask, weight)) return BottledChaosCrafting.Result
+                .failure("tst.machine.BottledChaos.gui.credential_injection.invalid_source");
             recipe.isRecipeInputEqual(true, null, materials);
             for (int slot = 0; slot < materials.length; slot++) {
                 ItemStack remaining = materials[slot];
@@ -158,7 +158,8 @@ public final class BottledChaosCredentialRecipes {
             }
             inventory.setStackInSlot(BottledChaosCrafting.CARRIER_SLOT, null);
             inventory.setStackInSlot(BottledChaosCrafting.OUTPUT_SLOT, result);
-            return BottledChaosCrafting.Result.success("tst.bottledchaos.gui.credential_injection.success", result);
+            return BottledChaosCrafting.Result
+                .success("tst.machine.BottledChaos.gui.credential_injection.success", result);
         }
         return null;
     }

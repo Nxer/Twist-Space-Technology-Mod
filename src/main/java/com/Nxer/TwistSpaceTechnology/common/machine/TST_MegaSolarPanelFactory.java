@@ -244,23 +244,21 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
         final NBTTagCompound tag = accessor.getNBTData();
         if (tag.getBoolean("batchMode")) {
             currentTip.add(
-                EnumChatFormatting.GREEN
-                    + TSTUtils.tr("tst.common.machine.MegaSolarPanelFactory.waila.tst_mega_solar_panel_factory.1"));
-            // #tr tst.common.machine.MegaSolarPanelFactory.waila.tst_mega_solar_panel_factory.1
+                EnumChatFormatting.GREEN + TSTUtils.tr("tst.machine.MegaSolarPanelFactory.waila.batch_mode_enabled"));
+            // #tr tst.machine.MegaSolarPanelFactory.waila.batch_mode_enabled
             // # {\GREEN}Batch mode is ON
             // #zh_CN {\GREEN}批处理已开启
         }
         float recipeTimeMultiplier = tag.getFloat("recipeTimeMultiplier");
         if (recipeTimeMultiplier > -1) {
             currentTip.add(
-                EnumChatFormatting.GREEN
-                    + TSTUtils.tr("tst.common.machine.MegaSolarPanelFactory.waila.tst_mega_solar_panel_factory.2")
+                EnumChatFormatting.GREEN + TSTUtils.tr("tst.machine.MegaSolarPanelFactory.waila.recipe_time_multiplier")
                     + EnumChatFormatting.GRAY
                     + "="
                     + EnumChatFormatting.GOLD
                     + formatNumber(recipeTimeMultiplier)
                     + "%");
-            // #tr tst.common.machine.MegaSolarPanelFactory.waila.tst_mega_solar_panel_factory.2
+            // #tr tst.machine.MegaSolarPanelFactory.waila.recipe_time_multiplier
             // # {\GREEN}Current Recipe Time Multiplier
             // #zh_CN {\GREEN}当前耗时倍率
         }
@@ -319,22 +317,22 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tttt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.MegaSolarPanelFactory.tooltip.machine_type
+        // #tr tst.machine.MegaSolarPanelFactory.tooltip.machine_type
         // # Solar Factory
         // #zh_CN 太阳能板制造厂
-        tttt.addMachineType(tr("tst.common.machine.MegaSolarPanelFactory.tooltip.machine_type"))
-            // #tr tst.common.machine.MegaSolarPanelFactory.tooltip.info.01
+        tttt.addMachineType(tr("tst.machine.MegaSolarPanelFactory.tooltip.machine_type"))
+            // #tr tst.machine.MegaSolarPanelFactory.tooltip.info.01
             // # {\BOLD}bigger is better!
             // #zh_CN {\BOLD}大就是好！
-            .addInfo(tr("tst.common.machine.MegaSolarPanelFactory.tooltip.info.01"))
-            // #tr tst.common.machine.MegaSolarPanelFactory.tooltip.info.02
+            .addInfo(tr("tst.machine.MegaSolarPanelFactory.tooltip.info.01"))
+            // #tr tst.machine.MegaSolarPanelFactory.tooltip.info.02
             // # {\LIGHT_PURPLE}Perfect overclocking{\GRAY}.
             // #zh_CN 执行{\LIGHT_PURPLE}无损超频{\GRAY}.
-            .addInfo(tr("tst.common.machine.MegaSolarPanelFactory.tooltip.info.02"))
-            // #tr tst.common.machine.MegaSolarPanelFactory.tooltip.info.03
+            .addInfo(tr("tst.machine.MegaSolarPanelFactory.tooltip.info.02"))
+            // #tr tst.machine.MegaSolarPanelFactory.tooltip.info.03
             // # Recipe Time Multiplier = 100% / Component Casing Tier.
             // #zh_CN 耗时倍率 = 100% / 部件装配线外壳等级.
-            .addInfo(tr("tst.common.machine.MegaSolarPanelFactory.tooltip.info.03"))
+            .addInfo(tr("tst.machine.MegaSolarPanelFactory.tooltip.info.03"))
             .beginStructureBlock(shape)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)

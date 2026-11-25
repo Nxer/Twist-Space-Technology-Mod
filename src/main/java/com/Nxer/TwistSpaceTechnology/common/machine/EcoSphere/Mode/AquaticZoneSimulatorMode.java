@@ -46,7 +46,7 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
 
     @Override
     public String getDisplayName() {
-        return StatCollector.translateToLocal("tst.ecosphere.machine.EcoSphereSimulator.mode.1");
+        return StatCollector.translateToLocal("tst.machine.EcoSphereSimulator.mode.1");
     }
 
     @Override
@@ -108,11 +108,11 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
             // #zh_CN {\AQUA}定向中
 
             StatCollector.translateToLocal("GT5U.gui.text.recipe_result.focus_on") + "\n"
-            // #tr tst.ecosphere.machine.EcoSphereSimulator.gui.focus_on
+            // #tr tst.machine.EcoSphereSimulator.gui.focus_on
             // # Target:
             // #zh_CN 目标:
                 + EnumChatFormatting.WHITE
-                + StatCollector.translateToLocal("tst.ecosphere.machine.EcoSphereSimulator.gui.focus_on")
+                + StatCollector.translateToLocal("tst.machine.EcoSphereSimulator.gui.focus_on")
                 + " "
                 + EnumChatFormatting.GOLD
                 + focusStack.getDisplayName()

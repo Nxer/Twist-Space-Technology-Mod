@@ -45,26 +45,6 @@ public class SimpleResultWithText implements CheckRecipeResult {
         this.rawText = rawText;
     }
 
-    SimpleResultWithText(boolean success, FluidStack stack, boolean persistsOnShutdown) {
-        this.success = success;
-        this.key = Objects.requireNonNull(
-            StatCollector.translateToLocalFormatted(
-                "GT5U.gui.text.recipe_result.out_of_fluid",
-                stack.getLocalizedName(),
-                formatNumber(stack.amount)));
-        this.persistsOnShutdown = persistsOnShutdown;
-    }
-
-    SimpleResultWithText(boolean success, ItemStack stack, boolean persistsOnShutdown) {
-        this.success = success;
-        this.key = Objects.requireNonNull(
-            StatCollector.translateToLocalFormatted(
-                "GT5U.gui.text.recipe_result.out_of_item",
-                stack.getDisplayName(),
-                formatNumber(stack.stackSize)));
-        this.persistsOnShutdown = persistsOnShutdown;
-    }
-
     @Override
     public @NotNull String getID() {
         return "SimpleResultWithText";
@@ -174,7 +154,16 @@ public class SimpleResultWithText implements CheckRecipeResult {
      */
     @Nonnull
     public static CheckRecipeResult outOfFluid(@Nonnull FluidStack requiredFluidStack) {
-        return new SimpleResultWithText(false, requiredFluidStack, true);
+        return outOfFluid(requiredFluidStack, requiredFluidStack.amount);
+    }
+
+    @Nonnull
+    public static CheckRecipeResult outOfFluid(@Nonnull FluidStack fluid, long requiredAmount) {
+        return ofFailurePersistOnShutdown(
+            StatCollector.translateToLocalFormatted(
+                "GT5U.gui.text.recipe_result.out_of_fluid",
+                fluid.getLocalizedName(),
+                formatNumber(requiredAmount)));
     }
 
     /**
@@ -182,7 +171,16 @@ public class SimpleResultWithText implements CheckRecipeResult {
      */
     @Nonnull
     public static CheckRecipeResult outOfItem(@Nonnull ItemStack requiredItemStack) {
-        return new SimpleResultWithText(false, requiredItemStack, true);
+        return outOfItem(requiredItemStack, requiredItemStack.stackSize);
+    }
+
+    @Nonnull
+    public static CheckRecipeResult outOfItem(@Nonnull ItemStack item, long requiredAmount) {
+        return ofFailurePersistOnShutdown(
+            StatCollector.translateToLocalFormatted(
+                "GT5U.gui.text.recipe_result.out_of_item",
+                item.getDisplayName(),
+                formatNumber(requiredAmount)));
     }
 
 }

@@ -304,11 +304,11 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         if (tag.hasKey("recipeMap")) {
-            // #tr tst.common.machine.ProcessingArray.waila.machine
+            // #tr tst.machine.ProcessingArray.waila.machine
             // # Machine
             // #zh_CN 机器类型
             currentTip.add(
-                TSTUtils.tr("tst.common.machine.ProcessingArray.waila.machine") + " : "
+                TSTUtils.tr("tst.machine.ProcessingArray.waila.machine") + " : "
                     + EnumChatFormatting.YELLOW
                     + TSTUtils.tr(tag.getString("recipeMap")));
         }
@@ -340,31 +340,31 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
     protected MultiblockTooltipBuilder createTooltip() {
         TSTMultiblockTooltipBuilder tooltips = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.ProcessingArray.tooltip.machine_type
+        // #tr tst.machine.ProcessingArray.tooltip.machine_type
         // # Processing Array
         // #zh_CN 处理阵列
-        tooltips.addMachineType(TSTUtils.tr("tst.common.machine.ProcessingArray.tooltip.machine_type"))
+        tooltips.addMachineType(TSTUtils.tr("tst.machine.ProcessingArray.tooltip.machine_type"))
             .addInfo(TSTSharedLocalization.General.Machine_of_TwistSpaceTechnology)
-            // #tr tst.common.machine.ProcessingArray.tooltip.info.01
+            // #tr tst.machine.ProcessingArray.tooltip.info.01
             // # Runs supplied machines as if placed in the world
             // #zh_CN 让其中的机器如同放置在世界中一样运行
-            .addInfo(TSTUtils.tr("tst.common.machine.ProcessingArray.tooltip.info.01"))
-            // #tr tst.common.machine.ProcessingArray.tooltip.info.02
+            .addInfo(TSTUtils.tr("tst.machine.ProcessingArray.tooltip.info.01"))
+            // #tr tst.machine.ProcessingArray.tooltip.info.02
             // # Place up to 64 singleblock GT machines into the controller
             // #zh_CN 在控制器GUI中放置至多64个GT单方块机器
-            .addInfo(TSTUtils.tr("tst.common.machine.ProcessingArray.tooltip.info.02"))
-            // #tr tst.common.machine.ProcessingArray.tooltip.info.03
+            .addInfo(TSTUtils.tr("tst.machine.ProcessingArray.tooltip.info.02"))
+            // #tr tst.machine.ProcessingArray.tooltip.info.03
             // # Note that you still need to supply power to them all
             // #zh_CN 请保证电力充足
-            .addInfo(TSTUtils.tr("tst.common.machine.ProcessingArray.tooltip.info.03"))
-            // #tr tst.common.machine.ProcessingArray.tooltip.info.04
+            .addInfo(TSTUtils.tr("tst.machine.ProcessingArray.tooltip.info.03"))
+            // #tr tst.machine.ProcessingArray.tooltip.info.04
             // # Do general overclock
             // #zh_CN 执行有损超频
-            .addInfo(TSTUtils.tr("tst.common.machine.ProcessingArray.tooltip.info.04"))
-            // #tr tst.common.machine.ProcessingArray.tooltip.info.05
+            .addInfo(TSTUtils.tr("tst.machine.ProcessingArray.tooltip.info.04"))
+            // #tr tst.machine.ProcessingArray.tooltip.info.05
             // # Centrifuge, Electrolyzer, Mixer do their multiblock machine recipe
             // #zh_CN 离心机,电解机,搅拌机执行其对应多方块机器配方
-            .addInfo(TSTUtils.tr("tst.common.machine.ProcessingArray.tooltip.info.05"))
+            .addInfo(TSTUtils.tr("tst.machine.ProcessingArray.tooltip.info.05"))
             .beginStructureBlock(true, SHAPE_MAIN)
             .addController(TSTSharedLocalization.Structure.textFrontCenter)
             .addEnergyHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)

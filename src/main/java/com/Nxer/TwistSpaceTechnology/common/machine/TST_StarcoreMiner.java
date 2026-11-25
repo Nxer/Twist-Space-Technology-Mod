@@ -513,59 +513,59 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.StarcoreMiner.tooltip.info.01
+        // #tr tst.machine.StarcoreMiner.tooltip.info.01
         // # Void Miner
         // #zh_CN 虚空采矿场
-        tt.addMachineType(TSTUtils.tr("tst.common.machine.StarcoreMiner.tooltip.info.01"))
+        tt.addMachineType(TSTUtils.tr("tst.machine.StarcoreMiner.tooltip.info.01"))
             .addInfo(" ")
-            // #tr tst.common.machine.StarcoreMiner.tooltip.info.02
+            // #tr tst.machine.StarcoreMiner.tooltip.info.02
             // # {\ITALIC} " Do you sell them ? "
             // #zh_CN {\ITALIC} " Do you sell them ? "
-            .addInfo(TSTUtils.tr("tst.common.machine.StarcoreMiner.tooltip.info.02"))
-            // #tr tst.common.machine.StarcoreMiner.tooltip.info.03
+            .addInfo(TSTUtils.tr("tst.machine.StarcoreMiner.tooltip.info.02"))
+            // #tr tst.machine.StarcoreMiner.tooltip.info.03
             // # {\ITALIC} " I'm afraid not. "
             // #zh_CN {\ITALIC} " I'm afraid not. "
-            .addInfo(TSTUtils.tr("tst.common.machine.StarcoreMiner.tooltip.info.03"))
-            // #tr tst.common.machine.StarcoreMiner.tooltip.info.04
+            .addInfo(TSTUtils.tr("tst.machine.StarcoreMiner.tooltip.info.03"))
+            // #tr tst.machine.StarcoreMiner.tooltip.info.04
             // # {\ITALIC} " But, maybe we could make a deal ? "
             // #zh_CN {\ITALIC} " But, maybe we could make a deal ? "
-            .addInfo(TSTUtils.tr("tst.common.machine.StarcoreMiner.tooltip.info.04"))
-            // #tr tst.common.machine.StarcoreMiner.tooltip.info.05
+            .addInfo(TSTUtils.tr("tst.machine.StarcoreMiner.tooltip.info.04"))
+            // #tr tst.machine.StarcoreMiner.tooltip.info.05
             // # {\SPACE}
             // #zh_CN {\SPACE}
-            .addInfo(TSTUtils.tr("tst.common.machine.StarcoreMiner.tooltip.info.05"))
-            // #tr tst.common.machine.StarcoreMiner.tooltip.info.06
+            .addInfo(TSTUtils.tr("tst.machine.StarcoreMiner.tooltip.info.05"))
+            // #tr tst.machine.StarcoreMiner.tooltip.info.06
             // # To the depths, to gather for you the deepest riches of the planet.
             // #zh_CN 直达深处, 为你采集这个星球最深层的财富.
-            .addInfo(TSTUtils.tr("tst.common.machine.StarcoreMiner.tooltip.info.06"))
-            // #tr tst.common.machine.StarcoreMiner.tooltip.info.07
+            .addInfo(TSTUtils.tr("tst.machine.StarcoreMiner.tooltip.info.06"))
+            // #tr tst.machine.StarcoreMiner.tooltip.info.07
             // # Each run produces 24 types of ore, 131072 of each type,
             // #zh_CN 每次运行产出 24 种矿石, 每种 131072个,
-            .addInfo(TSTUtils.tr("tst.common.machine.StarcoreMiner.tooltip.info.07"))
-            // #tr tst.common.machine.StarcoreMiner.tooltip.info.08
+            .addInfo(TSTUtils.tr("tst.machine.StarcoreMiner.tooltip.info.07"))
+            // #tr tst.machine.StarcoreMiner.tooltip.info.08
             // # {\SPACE}{\SPACE}and takes 6.4s, 2,013,265,920 EU/t (MAX).
             // #zh_CN {\SPACE}{\SPACE}耗时 6.4s, 耗电 2,013,265,920 EU/t (MAX).
-            .addInfo(TSTUtils.tr("tst.common.machine.StarcoreMiner.tooltip.info.08"))
-            // #tr tst.common.machine.StarcoreMiner.tooltip.info.09
+            .addInfo(TSTUtils.tr("tst.machine.StarcoreMiner.tooltip.info.08"))
+            // #tr tst.machine.StarcoreMiner.tooltip.info.09
             // # The mining access portion of the structure needs to extend at least to a height of 20 below.
             // #zh_CN 结构中采矿通道部分需要至少延伸至高度20以下.
-            .addInfo(TSTUtils.tr("tst.common.machine.StarcoreMiner.tooltip.info.09"))
-            // #tr tst.common.machine.StarcoreMiner.tooltip.info.10
+            .addInfo(TSTUtils.tr("tst.machine.StarcoreMiner.tooltip.info.09"))
+            // #tr tst.machine.StarcoreMiner.tooltip.info.10
             // # Put §b§l§oAstral Array Fabricator§7 into controller slot then machine can further increase ore production.
             // #zh_CN 控制器内放入 {\AQUA}{\BOLD}{\ITALIC}星阵{\GRAY} 可以进一步提高矿石产量.
-            .addInfo(TSTUtils.tr("tst.common.machine.StarcoreMiner.tooltip.info.10"))
-            // #tr tst.common.machine.StarcoreMiner.tooltip.info.11
+            .addInfo(TSTUtils.tr("tst.machine.StarcoreMiner.tooltip.info.10"))
+            // #tr tst.machine.StarcoreMiner.tooltip.info.11
             // # There is a serious bug in the blueprint automatic construction function of borosilicate glass,
             // #zh_CN {\RED}{\BOLD}蓝图自动搭建硼玻璃功能发现严重bug,
-//            .addInfo(TstUtils.tr("tst.common.machine.StarcoreMiner.tooltip.info.11"))
-            // #tr tst.common.machine.StarcoreMiner.tooltip.info.12
+//            .addInfo(TstUtils.tr("tst.machine.StarcoreMiner.tooltip.info.11"))
+            // #tr tst.machine.StarcoreMiner.tooltip.info.12
             // # {\RED}{\BOLD}{\SPACE}which may cause the save file to crash and become inaccessible.
             // #zh_CN {\RED}{\BOLD}{\SPACE}可能导致存档崩溃无法进入.
-//            .addInfo(TstUtils.tr("tst.common.machine.StarcoreMiner.tooltip.info.12"))
-            // #tr tst.common.machine.StarcoreMiner.tooltip.info.13
+//            .addInfo(TstUtils.tr("tst.machine.StarcoreMiner.tooltip.info.12"))
+            // #tr tst.machine.StarcoreMiner.tooltip.info.13
             // # In case of emergency, you can install ZeroPointBugFix mod for temporary fix.
             // #zh_CN {\RED}紧急情况可安装 ZeroPointBugFix mod 临时修复.
-//            .addInfo(TstUtils.tr("tst.common.machine.StarcoreMiner.tooltip.info.13"))
+//            .addInfo(TstUtils.tr("tst.machine.StarcoreMiner.tooltip.info.13"))
             .addInfo(TSTSharedLocalization.MachineTooltip.Tooltips_JoinWirelessNetWithoutEnergyHatch)
             .beginStructureBlock("31x21x(26+1xn)", false)
             .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)

@@ -1,0 +1,93 @@
+{
+  "totalTime": 270,
+  "keyframes": [
+    {
+      "time": 0,
+      "label": "3 号 · 无人机输入",
+      "camera": {
+        "rotX": 16,
+        "rotY": 167,
+        "rotZ": 0,
+        "zoom": 1.22,
+        "offY": 3
+      },
+      "annotations": [
+        {
+          "type": "box",
+          "minX": 6,
+          "minY": 3,
+          "minZ": 2,
+          "maxX": 7,
+          "maxY": 4,
+          "maxZ": 3,
+          "color": "0xFF56DDEA",
+          "lineWidth": 2,
+          "alwaysOnTop": true
+        },
+        {
+          "type": "text",
+          "text": "在这里装入本轮机群.",
+          "independent": true,
+          "yOffset": 94,
+          "maxWidth": 295,
+          "color": "0xFF56DDEA",
+          "backgroundAlpha": 220
+        }
+      ]
+    },
+    {
+      "time": 90,
+      "label": "4 号 · 无人机返还",
+      "annotations": [
+        {
+          "type": "box",
+          "minX": 5,
+          "minY": 3,
+          "minZ": 2,
+          "maxX": 6,
+          "maxY": 4,
+          "maxZ": 3,
+          "color": "0xFFFFCD58",
+          "lineWidth": 2,
+          "alwaysOnTop": true
+        },
+        {
+          "type": "text",
+          "text": "为返航机群和新浸血的机型留出空间.",
+          "independent": true,
+          "yOffset": 94,
+          "maxWidth": 295,
+          "color": "0xFFFFCD58",
+          "backgroundAlpha": 220
+        }
+      ]
+    },
+    {
+      "time": 180,
+      "label": "5 号 · 氦等离子",
+      "annotations": [
+        {
+          "type": "box",
+          "minX": 4,
+          "minY": 3,
+          "minZ": 2,
+          "maxX": 5,
+          "maxY": 4,
+          "maxZ": 3,
+          "color": "0xFFB092EE",
+          "lineWidth": 2,
+          "alwaysOnTop": true
+        },
+        {
+          "type": "text",
+          "text": "起飞前备足普通无人机所需的氦等离子.",
+          "independent": true,
+          "yOffset": 94,
+          "maxWidth": 295,
+          "color": "0xFFB092EE",
+          "backgroundAlpha": 220
+        }
+      ]
+    }
+  ]
+}

@@ -9,11 +9,10 @@ import com.gtnewhorizons.modularui.api.math.Pos2d;
 
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
 import gregtech.api.recipe.NEIRecipePropertiesBuilder;
-import gregtech.api.recipe.RecipeMapFrontend;
 import gregtech.api.util.GTUtility;
 import gregtech.nei.RecipeDisplayInfo;
 
-public class TST_StrangeMatterAggregatorFrontend extends RecipeMapFrontend {
+public class TST_StrangeMatterAggregatorFrontend extends TST_RecipeMapFrontend {
 
     public TST_StrangeMatterAggregatorFrontend(BasicUIPropertiesBuilder uiPropertiesBuilder,
         NEIRecipePropertiesBuilder neiPropertiesBuilder) {
@@ -30,11 +29,11 @@ public class TST_StrangeMatterAggregatorFrontend extends RecipeMapFrontend {
                 + " EU");
         // 1000 / (20 ticks * 5 seconds) = 10L/t. 10L/t * x EU/L = 10 * x EU/t.
         long averageUsage = 256L * recipeInfo.recipe.mEUt;
-        // #tr tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.power
+        // #tr tst.recipe.StrangeMatterAggregatorRecipeMap.power
         // # Usage
         // #zh_CN 消耗功率
         recipeInfo.drawText(
-            TSTUtils.tr("tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.power") + ": "
+            TSTUtils.tr("tst.recipe.StrangeMatterAggregatorRecipeMap.power") + ": "
                 + formatNumber(averageUsage)
                 + " EU/t"
                 + GTUtility.getTierNameWithParentheses(averageUsage));

@@ -6,6 +6,7 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 
 import java.io.File;
 import java.math.BigInteger;
+import java.util.regex.Pattern;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
@@ -15,6 +16,10 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 
 // spotless:off
 public class Config {
+
+    public static boolean Auto_Reset_Config_Files = false;
+    private static final Pattern TEST_BUILD_MARKER = Pattern.compile("(?:^|[.+_-])(?:test|dirty)(?:$|[.+_-])", Pattern.CASE_INSENSITIVE);
+
     // region Regions enum
     public static final String VERSION = "00_Version";
     public static final String GENERAL = "General";
@@ -551,7 +556,9 @@ public class Config {
 
     // region Laser Meteor Miner
     public static boolean Enable_LaserMeteorMiner = true;
-    public static int StandardRecipeDuration_Second_LaserMeteorMiner = 10;
+    public static int StandardRecipeDuration_Second_LaserMeteorMiner = 2;
+    public static double OverclockPowerMultiplier_LaserMeteorMiner = 4;
+    public static double OverclockTimeDivisor_LaserMeteorMiner = Math.sqrt(2);
     //endregion
 
     // region Skypiercer Tower
@@ -592,8 +599,20 @@ public class Config {
     public static boolean Debug_DisplayAdvCircuitAssemblyLineCurrentRecipe = false;
     // endregion
 
+    static boolean resetTestBuildConfiguration(Configuration configuration, String version) {
+        if (version == null || !TEST_BUILD_MARKER.matcher(version).find()) return false;
+        for (String category : configuration.getCategoryNames()) {
+            if (configuration.hasCategory(category)) configuration.removeCategory(configuration.getCategory(category));
+        }
+        return true;
+    }
+
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
+        Auto_Reset_Config_Files = configuration.getBoolean("Auto_Reset_Config_Files", GENERAL, Auto_Reset_Config_Files, "True if you wanna auto-reset the cfg files when you are testing this mod with its test version.");
+        if (Auto_Reset_Config_Files && resetTestBuildConfiguration(configuration, TwistSpaceTechnology.VERSION)) {
+            TwistSpaceTechnology.LOG.info("Regenerating TST configuration from defaults for test build {}", TwistSpaceTechnology.VERSION);
+        }
 
         // region Version
         configuration.get(VERSION, "CurrentVersion", TwistSpaceTechnology.VERSION, "Current Twist Space Technology version.")
@@ -646,6 +665,10 @@ public class Config {
         // region LaserMeteorMiner
         Enable_LaserMeteorMiner = configuration.getBoolean("Enable_LaserMeteorMiner", LaserMeteorMiner, Enable_LaserMeteorMiner, "Enable Laser Meteor Miner.");
         StandardRecipeDuration_Second_LaserMeteorMiner = configuration.getInt("StandardRecipeDuration_Second_LaserMeteorMiner", LaserMeteorMiner, StandardRecipeDuration_Second_LaserMeteorMiner, 1, 64, "Standard recipe time of Laser Meteor Miner, unit second. Type: int");
+        OverclockPowerMultiplier_LaserMeteorMiner = configuration.get(LaserMeteorMiner, "OverclockPowerMultiplier_LaserMeteorMiner", OverclockPowerMultiplier_LaserMeteorMiner, "EU/t multiplier per overclock, shared by the Laser Meteor Miner and The Star That Never Was. Must be greater than 1.", 1.0001, 64).getDouble();
+        OverclockTimeDivisor_LaserMeteorMiner = configuration.get(LaserMeteorMiner, "OverclockTimeDivisor_LaserMeteorMiner", OverclockTimeDivisor_LaserMeteorMiner, "Duration divisor per overclock, shared by the Laser Meteor Miner and The Star That Never Was. Must be greater than 1.", 1.0001, 64).getDouble();
+        if (!Double.isFinite(OverclockPowerMultiplier_LaserMeteorMiner) || OverclockPowerMultiplier_LaserMeteorMiner <= 1) OverclockPowerMultiplier_LaserMeteorMiner = 4;
+        if (!Double.isFinite(OverclockTimeDivisor_LaserMeteorMiner) || OverclockTimeDivisor_LaserMeteorMiner <= 1) OverclockTimeDivisor_LaserMeteorMiner = Math.sqrt(2);
         // endregion
 
         // region SwelegfyrBlastFurnace

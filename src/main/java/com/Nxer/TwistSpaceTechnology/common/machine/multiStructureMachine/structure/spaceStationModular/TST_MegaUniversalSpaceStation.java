@@ -263,38 +263,38 @@ public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureM
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.MegaUniversalSpaceStation.tooltip.machine_type
+        // #tr tst.machine.MegaUniversalSpaceStation.tooltip.machine_type
         // # space station
         // #zh_CN temp
-        tt.addMachineType(TSTUtils.tr("tst.common.machine.MegaUniversalSpaceStation.tooltip.machine_type"))
-            // #tr tst.common.machine.MegaUniversalSpaceStation.tooltip.info.01
+        tt.addMachineType(TSTUtils.tr("tst.machine.MegaUniversalSpaceStation.tooltip.machine_type"))
+            // #tr tst.machine.MegaUniversalSpaceStation.tooltip.info.01
             // # Use auto build item to build instead of build your self
             // #zh_CN temp
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaUniversalSpaceStation.tooltip.info.01"))
-            // #tr tst.common.machine.MegaUniversalSpaceStation.tooltip.info.02
+            .addInfo(TSTUtils.tr("tst.machine.MegaUniversalSpaceStation.tooltip.info.01"))
+            // #tr tst.machine.MegaUniversalSpaceStation.tooltip.info.02
             // # Auto-SpaceStation build core
             // #zh_CN temp
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaUniversalSpaceStation.tooltip.info.02"))
-            // #tr tst.common.machine.MegaUniversalSpaceStation.tooltip.info.03
+            .addInfo(TSTUtils.tr("tst.machine.MegaUniversalSpaceStation.tooltip.info.02"))
+            // #tr tst.machine.MegaUniversalSpaceStation.tooltip.info.03
             // # If your station broke, you can put fix block inside the input hatch to fix it
             // #zh_CN temp
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaUniversalSpaceStation.tooltip.info.03"))
-            // #tr tst.common.machine.MegaUniversalSpaceStation.tooltip.info.04
+            .addInfo(TSTUtils.tr("tst.machine.MegaUniversalSpaceStation.tooltip.info.03"))
+            // #tr tst.machine.MegaUniversalSpaceStation.tooltip.info.04
             // # temp
             // #zh_CN temp
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaUniversalSpaceStation.tooltip.info.04"))
-            // #tr tst.common.machine.MegaUniversalSpaceStation.tooltip.info.05
+            .addInfo(TSTUtils.tr("tst.machine.MegaUniversalSpaceStation.tooltip.info.04"))
+            // #tr tst.machine.MegaUniversalSpaceStation.tooltip.info.05
             // # temp
             // #zh_CN temp
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaUniversalSpaceStation.tooltip.info.05"))
-            // #tr tst.common.machine.MegaUniversalSpaceStation.tooltip.info.06
+            .addInfo(TSTUtils.tr("tst.machine.MegaUniversalSpaceStation.tooltip.info.05"))
+            // #tr tst.machine.MegaUniversalSpaceStation.tooltip.info.06
             // # temp
             // #zh_CN temp
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaUniversalSpaceStation.tooltip.info.06"))
-            // #tr tst.common.machine.MegaUniversalSpaceStation.tooltip.info.07
+            .addInfo(TSTUtils.tr("tst.machine.MegaUniversalSpaceStation.tooltip.info.06"))
+            // #tr tst.machine.MegaUniversalSpaceStation.tooltip.info.07
             // # temp
             // #zh_CN temp
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaUniversalSpaceStation.tooltip.info.07"))
+            .addInfo(TSTUtils.tr("tst.machine.MegaUniversalSpaceStation.tooltip.info.07"))
             .addInfo(TSTSharedLocalization.MachineTooltip.Tooltip_GlassTierLimitEnergyHatchTier)
             .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
             .beginStructureBlock(448, 256, 431, false)

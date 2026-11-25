@@ -364,14 +364,14 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
 
     @Override
     public String getMachineModeName() {
-        // #tr tst.common.machine.MiracleTop.mode.0
+        // #tr tst.machine.MiracleTop.mode.0
         // # Mode: Miracle Top (Circuit Assembler)
         // #zh_CN 电路装配模式
 
-        // #tr tst.common.machine.MiracleTop.mode.1
+        // #tr tst.machine.MiracleTop.mode.1
         // # Mode: Gravitation Inversion
         // #zh_CN 引力逆变模式
-        return StatCollector.translateToLocal("tst.common.machine.MiracleTop.mode." + machineMode);
+        return StatCollector.translateToLocal("tst.machine.MiracleTop.mode." + machineMode);
     }
 
     @Override
@@ -427,52 +427,52 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.MiracleTop.tooltip.machine_type
+        // #tr tst.machine.MiracleTop.tooltip.machine_type
         // # Circuit Assembler/Gravitation Breaker
         // #zh_CN 电路组装机/引力驱使核心
-        tt.addMachineType(TSTUtils.tr("tst.common.machine.MiracleTop.tooltip.machine_type"))
-            // #tr tst.common.machine.MiracleTop.tooltip.info.01
+        tt.addMachineType(TSTUtils.tr("tst.machine.MiracleTop.tooltip.machine_type"))
+            // #tr tst.machine.MiracleTop.tooltip.info.01
             // # Controller block for the Miracle Top.
             // #zh_CN 奇迹顶点的控制器方块.
-            .addInfo(TSTUtils.tr("tst.common.machine.MiracleTop.tooltip.info.01"))
-            // #tr tst.common.machine.MiracleTop.tooltip.info.02
+            .addInfo(TSTUtils.tr("tst.machine.MiracleTop.tooltip.info.01"))
+            // #tr tst.machine.MiracleTop.tooltip.info.02
             // # {\LIGHT_PURPLE}I never think about the future because it will come sooner or later.
             // #zh_CN {\LIGHT_PURPLE}我从不思考未来，因为未来迟早会来.
-            .addInfo(TSTUtils.tr("tst.common.machine.MiracleTop.tooltip.info.02"))
-            // #tr tst.common.machine.MiracleTop.tooltip.info.03
+            .addInfo(TSTUtils.tr("tst.machine.MiracleTop.tooltip.info.02"))
+            // #tr tst.machine.MiracleTop.tooltip.info.03
             // # For absolute precision and efficiency, please abandon traditional manufacturing methods.
             // #zh_CN 为了绝对的精准和高效，请放弃传统的制造思路.
-            .addInfo(TSTUtils.tr("tst.common.machine.MiracleTop.tooltip.info.03"))
-            // #tr tst.common.machine.MiracleTop.tooltip.info.04
+            .addInfo(TSTUtils.tr("tst.machine.MiracleTop.tooltip.info.03"))
+            // #tr tst.machine.MiracleTop.tooltip.info.04
             // # The machine consists of a ring section and a conveying section.
             // #zh_CN 整个机器由环部分和传输部分组成.
-            .addInfo(TSTUtils.tr("tst.common.machine.MiracleTop.tooltip.info.04"))
-            // #tr tst.common.machine.MiracleTop.tooltip.info.05
+            .addInfo(TSTUtils.tr("tst.machine.MiracleTop.tooltip.info.04"))
+            // #tr tst.machine.MiracleTop.tooltip.info.05
             // # The number of rings is variable:{\SPACE}{\SPACE}Maximum {\GOLD}16{\GRAY} rings, Minimum {\GOLD}2{\GRAY} rings(the first and the last).
             // #zh_CN 环的数量是可变的:{\SPACE}{\SPACE}最多{\GOLD}16{\GRAY}环, 最少{\GOLD}2{\GRAY}环(第一个环和最后一个环).
-            .addInfo(TSTUtils.tr("tst.common.machine.MiracleTop.tooltip.info.05"))
-            // #tr tst.common.machine.MiracleTop.tooltip.info.06
+            .addInfo(TSTUtils.tr("tst.machine.MiracleTop.tooltip.info.05"))
+            // #tr tst.machine.MiracleTop.tooltip.info.06
             // # Total speed multiplier is equal to {\RED}400%{\GRAY} x num of rings.
             // #zh_CN 速度倍率 = 环数 x {\RED}400%{\GRAY}.
-            .addInfo(TSTUtils.tr("tst.common.machine.MiracleTop.tooltip.info.06"))
-            // #tr tst.common.machine.MiracleTop.tooltip.info.07
+            .addInfo(TSTUtils.tr("tst.machine.MiracleTop.tooltip.info.06"))
+            // #tr tst.machine.MiracleTop.tooltip.info.07
             // # Enable Perfect overclock when num of rings >= {\GOLD}8{\GRAY}.
             // #zh_CN 环数大于等于{\RED}8{\GRAY}时开启无损超频.
-            .addInfo(TSTUtils.tr("tst.common.machine.MiracleTop.tooltip.info.07"))
-            // #tr tst.common.machine.MiracleTop.tooltip.info.08
+            .addInfo(TSTUtils.tr("tst.machine.MiracleTop.tooltip.info.07"))
+            // #tr tst.machine.MiracleTop.tooltip.info.08
             // # {\AQUA}128x{\GRAY} Parallel per Ring.
             // #zh_CN 每环 {\AQUA}128x{\GRAY} 并行.
-            .addInfo(TSTUtils.tr("tst.common.machine.MiracleTop.tooltip.info.08"))
+            .addInfo(TSTUtils.tr("tst.machine.MiracleTop.tooltip.info.08"))
             .beginStructureBlock("(3+8xn)x21x21", false)
             .addController(TSTSharedLocalization.Structure.textFrontCenter)
-            // #tr tst.common.machine.MiracleTop.tooltip.structure.01
+            // #tr tst.machine.MiracleTop.tooltip.structure.01
             // # Outermost 12 blocks on the ring (outermost 3 on each side).
             // #zh_CN 环上最外侧的12个方块(每侧最外边3个).
-            .addInputHatch(TSTUtils.tr("tst.common.machine.MiracleTop.tooltip.structure.01"), 2)
-            .addOutputHatch(TSTUtils.tr("tst.common.machine.MiracleTop.tooltip.structure.01"), 2)
-            .addInputBus(TSTUtils.tr("tst.common.machine.MiracleTop.tooltip.structure.01"), 2)
-            .addOutputBus(TSTUtils.tr("tst.common.machine.MiracleTop.tooltip.structure.01"), 2)
-            .addEnergyHatch(TSTUtils.tr("tst.common.machine.MiracleTop.tooltip.structure.01"), 2)
+            .addInputHatch(TSTUtils.tr("tst.machine.MiracleTop.tooltip.structure.01"), 2)
+            .addOutputHatch(TSTUtils.tr("tst.machine.MiracleTop.tooltip.structure.01"), 2)
+            .addInputBus(TSTUtils.tr("tst.machine.MiracleTop.tooltip.structure.01"), 2)
+            .addOutputBus(TSTUtils.tr("tst.machine.MiracleTop.tooltip.structure.01"), 2)
+            .addEnergyHatch(TSTUtils.tr("tst.machine.MiracleTop.tooltip.structure.01"), 2)
             .toolTipFinisher();
         // spotless:on
         return tt;

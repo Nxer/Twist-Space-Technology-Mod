@@ -10,6 +10,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.SimpleFurnaceFuelPool;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.CardiganRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.CosmicProcessorCircuitRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.EnergySustainmentMatrixRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.InfiniteFluidStorageCellRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.LapotronChipRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.SingleBlockRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.SingleItemRecipes;
@@ -52,6 +53,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StarKernelFor
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarMaterialSiphonRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.BeamCrafterRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.ChemicalPlantRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.ChemicalReactorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.CircuitAssemblerRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.CompressorRecipePool;
@@ -89,6 +91,7 @@ public class RecipeLoader {
         // TODO Split GTCMMachineRecipes
         // Item Recipes
         SingleItemRecipes.loadRecipes();
+        InfiniteFluidStorageCellRecipes.loadRecipes();
         SingleBlockRecipes.loadRecipes();
         BottledChaosCraftingRecipes.loadRecipes();
         CosmicProcessorCircuitRecipes.loadRecipes();
@@ -110,6 +113,7 @@ public class RecipeLoader {
 
         // Original GTNH RecipeMap
         BeamCrafterRecipePool.loadRecipes();
+        ChemicalPlantRecipePool.loadRecipes();
         ChemicalReactorRecipePool.loadRecipes();
         CircuitAssemblerRecipePool.loadRecipes();
         DistillationRecipePool.loadRecipes();

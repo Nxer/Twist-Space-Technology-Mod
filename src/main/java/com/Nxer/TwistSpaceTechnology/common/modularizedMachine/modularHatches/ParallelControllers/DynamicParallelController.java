@@ -84,10 +84,10 @@ public class DynamicParallelController extends DynamicParallelControllerBase {
     @Override
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
         builder.widget(
-            // #tr tst.modular.machine.DynamicParallelController.gui.text.01
+            // #tr tst.machine.DynamicParallelController.gui.parallel
             // # Parallel
             // #zh_CN 并行
-            TextWidget.localised("tst.modular.machine.DynamicParallelController.gui.text.01")
+            TextWidget.localised("tst.machine.DynamicParallelController.gui.parallel")
                 .setPos(49, 18)
                 .setSize(81, 14))
             .widget(
@@ -114,14 +114,14 @@ public class DynamicParallelController extends DynamicParallelControllerBase {
         if (description == null || description.length == 0) {
             description =
                 new String[] {
-                      // #tr tst.modular.machine.DynamicParallelController.tooltip.info.01
+                      // #tr tst.machine.DynamicParallelController.tooltip.info.01
                       // # Parallel controller module with adjustable parameters.
                       // #zh_CN 可调参数的并行控制器模块.
-                      TSTUtils.tr("tst.modular.machine.DynamicParallelController.tooltip.info.01"),
-                      // #tr tst.modular.machine.DynamicParallelController.tooltip.info.02
+                      TSTUtils.tr("tst.machine.DynamicParallelController.tooltip.info.01"),
+                      // #tr tst.machine.DynamicParallelController.tooltip.info.02
                       // # Provides up to
                       // #zh_CN 最多提供
-                      TSTUtils.tr("tst.modular.machine.DynamicParallelController.tooltip.info.02") + " " + getMaxParallel() + " " + TSTSharedLocalization.General.Word_Parallel + ".",
+                      TSTUtils.tr("tst.machine.DynamicParallelController.tooltip.info.02") + " " + getMaxParallel() + " " + TSTSharedLocalization.General.Word_Parallel + ".",
                 };
         }
         return description;

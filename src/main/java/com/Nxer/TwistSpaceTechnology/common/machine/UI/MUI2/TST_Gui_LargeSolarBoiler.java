@@ -32,24 +32,24 @@ public class TST_Gui_LargeSolarBoiler extends TST_Gui<TST_LargeSolarBoiler> {
         syncManager.syncValue("calcificationSyncer", calcificationSyncer);
 
         return super.createTerminalTextWidget(syncManager, parent)
-            // #tr tst.common.machine.LargeSolarBoiler.gui.02
+            // #tr tst.machine.LargeSolarBoiler.gui.heat
             // # {\WHITE}Heat: {\GOLD}%s%%{\RESET}
             // #zh_CN {\WHITE}热量: {\GOLD}%s%%{\RESET}
             .child(
                 IKey.dynamic(
                     () -> StatCollector.translateToLocalFormatted(
-                        "tst.common.machine.LargeSolarBoiler.gui.02",
+                        "tst.machine.LargeSolarBoiler.gui.heat",
                         formatNumber((int) (heatSyncer.getDoubleValue() * 100))))
                     .asWidget()
                     .marginBottom(2)
                     .fullWidth())
-            // #tr tst.common.machine.LargeSolarBoiler.gui.03
+            // #tr tst.machine.LargeSolarBoiler.gui.calcification_level
             // # {\WHITE}Calcification Level: {\GOLD}%s%%{\RESET}
             // #zh_CN {\WHITE}钙化程度: {\GOLD}%s%%{\RESET}
             .child(
                 IKey.dynamic(
                     () -> StatCollector.translateToLocalFormatted(
-                        "tst.common.machine.LargeSolarBoiler.gui.03",
+                        "tst.machine.LargeSolarBoiler.gui.calcification_level",
                         formatNumber((int) (calcificationSyncer.getDoubleValue() * 100))))
                     .asWidget()
                     .marginBottom(2)
@@ -69,10 +69,10 @@ public class TST_Gui_LargeSolarBoiler extends TST_Gui<TST_LargeSolarBoiler> {
             .overlay(GTGuiTextures.BUTTON_STANDARD, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT)
             .playClickSound(true)
             .tooltip(
-                // #tr tst.common.machine.LargeSolarBoiler.gui.01
+                // #tr tst.machine.LargeSolarBoiler.gui.clear_calcification
                 // # Press to clear the machine
                 // #zh_CN 点击以清洁机器的钙化
-                t -> t.addLine(TSTUtils.tr("tst.common.machine.LargeSolarBoiler.gui.01")));
+                t -> t.addLine(TSTUtils.tr("tst.machine.LargeSolarBoiler.gui.clear_calcification")));
 
     }
 

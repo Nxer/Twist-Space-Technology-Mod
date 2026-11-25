@@ -11,17 +11,17 @@ public enum BottledChaosStatus {
     // spotless:off
     ACTIVE("GT5U.gui.text.status.active", EnumChatFormatting.GREEN, 0xFF55DD77),
     IDLE("GT5U.waila.machine.idle", EnumChatFormatting.AQUA, 0xFF39DCEC),
-    // #tr tst.bottledchaos.paused
+    // #tr tst.machine.BottledChaos.info.paused
     // # Paused
     // #zh_CN 已暂停
-    PAUSED("tst.bottledchaos.paused", EnumChatFormatting.YELLOW, 0xFFFFD75F),
-    // #tr tst.bottledchaos.waiting_power
+    PAUSED("tst.machine.BottledChaos.info.paused", EnumChatFormatting.YELLOW, 0xFFFFD75F),
+    // #tr tst.machine.BottledChaos.info.waiting_power
     // # Waiting
     // #zh_CN 等待
-    WAITING_POWER("tst.bottledchaos.waiting_power", EnumChatFormatting.YELLOW, 0xFFFFD75F),
-    CAPACITY_EXCEEDED("tst.bottledchaos.capacity_exceeded", EnumChatFormatting.RED, 0xFFFF6262),
-    UNBOUND("tst.bottledchaos.unbound", EnumChatFormatting.RED, 0xFFFF6262),
-    UNINSTALLED("tst.bottledchaos.gui.module_missing", EnumChatFormatting.DARK_RED, 0xFF52616A),
+    WAITING_POWER("tst.machine.BottledChaos.info.waiting_power", EnumChatFormatting.YELLOW, 0xFFFFD75F),
+    CAPACITY_EXCEEDED("tst.machine.BottledChaos.info.capacity_exceeded", EnumChatFormatting.RED, 0xFFFF6262),
+    UNBOUND("tst.machine.BottledChaos.info.unbound", EnumChatFormatting.RED, 0xFFFF6262),
+    UNINSTALLED("tst.machine.BottledChaos.gui.module_missing", EnumChatFormatting.DARK_RED, 0xFF52616A),
     FAILURE(null, EnumChatFormatting.RED, 0xFFFF6262);
     // spotless:on
 

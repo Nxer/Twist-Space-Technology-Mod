@@ -201,42 +201,42 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.IncompactCyclotron.tooltip.machine_type
+        // #tr tst.machine.IncompactCyclotron.tooltip.machine_type
         // # Particle Accelerator
         // #zh_CN 粒子加速器
-        tt.addMachineType(TSTUtils.tr("tst.common.machine.IncompactCyclotron.tooltip.machine_type"))
-            // #tr tst.common.machine.IncompactCyclotron.tooltip.controller
+        tt.addMachineType(TSTUtils.tr("tst.machine.IncompactCyclotron.tooltip.machine_type"))
+            // #tr tst.machine.IncompactCyclotron.tooltip.controller
             // # Controller block for the Incompact Cyclotron
             // #zh_CN 非紧凑式回旋加速器的控制方块
-            .addInfo(TSTUtils.tr("tst.common.machine.IncompactCyclotron.tooltip.controller"))
-            // #tr tst.common.machine.IncompactCyclotron.tooltip.info.01
+            .addInfo(TSTUtils.tr("tst.machine.IncompactCyclotron.tooltip.controller"))
+            // #tr tst.machine.IncompactCyclotron.tooltip.info.01
             // # {\DARK_PURPLE}Pulsed Ultrafast Linear Synchronized Accelerator Ring
             // #zh_CN {\DARK_PURPLE}脉冲超快线性同步加速器
-            .addInfo(TSTUtils.tr("tst.common.machine.IncompactCyclotron.tooltip.info.01"))
-            // #tr tst.common.machine.IncompactCyclotron.tooltip.info.02
+            .addInfo(TSTUtils.tr("tst.machine.IncompactCyclotron.tooltip.info.01"))
+            // #tr tst.machine.IncompactCyclotron.tooltip.info.02
             // # The particles are accelerated to {\YELLOW}99%%{\GRAY} of the speed of light by the electric field!
             // #zh_CN 粒子在电场下被加速到{\YELLOW}99%%{\GRAY}光速！
-            .addInfo(TSTUtils.tr("tst.common.machine.IncompactCyclotron.tooltip.info.02"))
-            // #tr tst.common.machine.IncompactCyclotron.tooltip.info.03
+            .addInfo(TSTUtils.tr("tst.machine.IncompactCyclotron.tooltip.info.02"))
+            // #tr tst.machine.IncompactCyclotron.tooltip.info.03
             // # But you can extract the accelerated particles at any time.
             // #zh_CN 但是你随时可以取出加工的粒子
-            .addInfo(TSTUtils.tr("tst.common.machine.IncompactCyclotron.tooltip.info.03"))
-            // #tr tst.common.machine.IncompactCyclotron.tooltip.info.04
+            .addInfo(TSTUtils.tr("tst.machine.IncompactCyclotron.tooltip.info.03"))
+            // #tr tst.machine.IncompactCyclotron.tooltip.info.04
             // # "That's incredible!"
             // #zh_CN 这太神奇了！
-            .addInfo(TSTUtils.tr("tst.common.machine.IncompactCyclotron.tooltip.info.04"))
-            // #tr tst.common.machine.IncompactCyclotron.tooltip.info.05
+            .addInfo(TSTUtils.tr("tst.machine.IncompactCyclotron.tooltip.info.04"))
+            // #tr tst.machine.IncompactCyclotron.tooltip.info.05
             // # Thanks to the upgrade of technology
             // #zh_CN 得益于工艺的升级
-            .addInfo(TSTUtils.tr("tst.common.machine.IncompactCyclotron.tooltip.info.05"))
-            // #tr tst.common.machine.IncompactCyclotron.tooltip.info.06
+            .addInfo(TSTUtils.tr("tst.machine.IncompactCyclotron.tooltip.info.05"))
+            // #tr tst.machine.IncompactCyclotron.tooltip.info.06
             // # The accelerator upgraded 100%% speedup and 256 parallel
             // #zh_CN 加速器拥有了额外100%%的额外加速,以及256并行
-            .addInfo(TSTUtils.tr("tst.common.machine.IncompactCyclotron.tooltip.info.06"))
-            // #tr tst.common.machine.IncompactCyclotron.tooltip.info.07
+            .addInfo(TSTUtils.tr("tst.machine.IncompactCyclotron.tooltip.info.06"))
+            // #tr tst.machine.IncompactCyclotron.tooltip.info.07
             // # But it requires additional 60%% of power to work
             // #zh_CN 但是需要额外60%%的供电来运行
-            .addInfo(TSTUtils.tr("tst.common.machine.IncompactCyclotron.tooltip.info.07"))
+            .addInfo(TSTUtils.tr("tst.machine.IncompactCyclotron.tooltip.info.07"))
             .beginStructureBlock(shapeMain)
             .addController(textFrontCenter)
             .addInputHatch(getBlueprintWithDot(1))

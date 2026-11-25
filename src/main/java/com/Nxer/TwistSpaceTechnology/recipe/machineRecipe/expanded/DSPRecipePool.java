@@ -294,10 +294,10 @@ public class DSPRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(AntimatterFuelRod.get(1))
             .itemOutputs(StellarConstructionFrameMaterial.get(1).setStackDisplayName(
-                // #tr tst.dyson.recipe.ArtificialStarGeneratingRecipeMap.recovery_chance
+                // #tr tst.recipe.ArtificialStarGeneratingRecipeMap.recovery_chance
                 // # Chance to recover some raw materials. Probability is affected by module tier.
                 // #zh_CN 有概率回收部分材料. 概率受模块等级影响.
-                TSTUtils.tr("tst.dyson.recipe.ArtificialStarGeneratingRecipeMap.recovery_chance")))
+                TSTUtils.tr("tst.recipe.ArtificialStarGeneratingRecipeMap.recovery_chance")))
             .specialValue((int) (EUEveryAntimatterFuelRod / Integer.MAX_VALUE))
             .eut(0)
             .duration(0)
@@ -306,7 +306,7 @@ public class DSPRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(StrangeAnnihilationFuelRod.get(1))
             .itemOutputs(StellarConstructionFrameMaterial.get(1).setStackDisplayName(
-                TSTUtils.tr("tst.dyson.recipe.ArtificialStarGeneratingRecipeMap.recovery_chance")))
+                TSTUtils.tr("tst.recipe.ArtificialStarGeneratingRecipeMap.recovery_chance")))
             .specialValue((int) (EUEveryStrangeAnnihilationFuelRod / Integer.MAX_VALUE))
             .eut(0)
             .duration(0)
@@ -735,33 +735,33 @@ public class DSPRecipePool {
             GTValues.RA.stdBuilder()
                 .itemInputs(
                     // first slot is the general input , amount is set by machine internal parameters
-                    // #tr tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.first_slot
+                    // #tr tst.recipe.StrangeMatterAggregatorRecipeMap.description.first_slot
                     // # basic material, input from general input bus, actual amount is set by machine internal parameters
                     // #zh_CN 基础材料, 从通用输入总线输入, 实际数量与机器内部参数有关
                     appendToItemStackDisplayName(
                         Antimatter.get(256),
-                        "// " + TSTUtils.tr("tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.first_slot")),
+                        "// " + TSTUtils.tr("tst.recipe.StrangeMatterAggregatorRecipeMap.description.first_slot")),
                     // second slot is the right input bus input and consumption rate set by structure
-                    // #tr tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.second_slot
+                    // #tr tst.recipe.StrangeMatterAggregatorRecipeMap.description.second_slot
                     // # input from the right input bus and consumption rate set by structure
                     // #zh_CN 由右侧输入总线输入, 消耗率与结构有关
                     appendToItemStackDisplayName(
                         AnnihilationConstrainer.get(1),
-                        "// " + TSTUtils.tr("tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.second_slot")),
+                        "// " + TSTUtils.tr("tst.recipe.StrangeMatterAggregatorRecipeMap.description.second_slot")),
                     // third slot is only consume one time per process
-                    // #tr tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.third_slot
+                    // #tr tst.recipe.StrangeMatterAggregatorRecipeMap.description.third_slot
                     // # auxiliary material, input from general input bus, only consume 1 per parallel
                     // #zh_CN 辅助材料, 从通用输入总线输入, 每并行只消耗1个
                     appendToItemStackDisplayName(
                         ItemList.Tesseract.get(1),
-                        "// " + TSTUtils.tr("tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.third_slot")),
+                        "// " + TSTUtils.tr("tst.recipe.StrangeMatterAggregatorRecipeMap.description.third_slot")),
                     // fourth slot is consume same amount with output, can be saved by high tier structure
-                    // #tr tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.fourth_slot
+                    // #tr tst.recipe.StrangeMatterAggregatorRecipeMap.description.fourth_slot
                     // # auxiliary material, input from general input bus, consumed amount same as output amount, affected by structure
                     // #zh_CN 辅助材料, 从通用输入总线输入, 消耗量等于产物数量, 受结构等级影响
                     appendToItemStackDisplayName(
                         StellarConstructionFrameMaterial.get(1),
-                        "// " + TSTUtils.tr("tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.fourth_slot")))
+                        "// " + TSTUtils.tr("tst.recipe.StrangeMatterAggregatorRecipeMap.description.fourth_slot")))
                 .fluidInputs(
                     // general input , amount is set by machine internal parameters
                     Materials.Hydrogen.getPlasma(256 * 1000),
@@ -769,30 +769,30 @@ public class DSPRecipePool {
                     Materials.SpaceTime.getMolten(576))
                 .itemOutputs(
                     // first output is T1 output
-                    // #tr tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.output_1
+                    // #tr tst.recipe.StrangeMatterAggregatorRecipeMap.description.output_1
                     // # T1 production
                     // #zh_CN 1级产物
                     appendToItemStackDisplayName(
                         AntimatterFuelRod.get(1),
-                        "// " + TSTUtils.tr("tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.output_1")),
+                        "// " + TSTUtils.tr("tst.recipe.StrangeMatterAggregatorRecipeMap.description.output_1")),
                     // second output is T2 output, when input special item then turn to output this instead of T1 output
-                    // #tr tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.output_2
+                    // #tr tst.recipe.StrangeMatterAggregatorRecipeMap.description.output_2
                     // # T2 production
                     // #zh_CN 2级产物
                     appendToItemStackDisplayName(
                         StrangeAnnihilationFuelRod.get(1),
-                        "// " + TSTUtils.tr("tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.output_2")))
+                        "// " + TSTUtils.tr("tst.recipe.StrangeMatterAggregatorRecipeMap.description.output_2")))
                 .fluidOutputs(
                     // here is T1 byproduct
                     Materials.Infinity.getMolten(Config.ByproductBaseAmount_T1_StrangeMatterAggregator),
                     HYPOGEN.getFluidStack(Config.ByproductBaseAmount_T1_StrangeMatterAggregator))
-                // #tr tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.special_slot
+                // #tr tst.recipe.StrangeMatterAggregatorRecipeMap.description.special_slot
                 // # input from the right input bus, upgrades a portion of the product to T2 product, same ratio as the annihilation constrainer
                 // #zh_CN 由右侧输入总线输入, 将一部分产物升级为2级产物, 比率与湮灭约束器相同
                 .special(
                     appendToItemStackDisplayName(
                         GTCMItemList.CoreElement.get(1),
-                        "// " + TSTUtils.tr("tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.special_slot")))
+                        "// " + TSTUtils.tr("tst.recipe.StrangeMatterAggregatorRecipeMap.description.special_slot")))
                 // machine will always use a fixed power, adjusted by structure
                 .eut(RECIPE_MAX)
                 .duration(20 * 120)
@@ -804,23 +804,19 @@ public class DSPRecipePool {
                     // first slot is the general input , amount is set by machine internal parameters
                     appendToItemStackDisplayName(
                         Antimatter.get(256),
-                        "// "
-                            + TSTUtils.tr("tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.first_slot")),
+                        "// " + TSTUtils.tr("tst.recipe.StrangeMatterAggregatorRecipeMap.description.first_slot")),
                     // second slot is the right input bus input and consumption rate set by structure
                     appendToItemStackDisplayName(
                         AnnihilationConstrainer.get(1),
-                        "// "
-                            + TSTUtils.tr("tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.second_slot")),
+                        "// " + TSTUtils.tr("tst.recipe.StrangeMatterAggregatorRecipeMap.description.second_slot")),
                     // third slot is only consume one time per process
                     appendToItemStackDisplayName(
                         ItemList.Tesseract.get(1),
-                        "// "
-                            + TSTUtils.tr("tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.third_slot")),
+                        "// " + TSTUtils.tr("tst.recipe.StrangeMatterAggregatorRecipeMap.description.third_slot")),
                     // fourth slot is consume same amount with output, can be saved by high tier structure
                     appendToItemStackDisplayName(
                         StellarConstructionFrameMaterial.get(1),
-                        "// "
-                            + TSTUtils.tr("tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.fourth_slot")))
+                        "// " + TSTUtils.tr("tst.recipe.StrangeMatterAggregatorRecipeMap.description.fourth_slot")))
                 .fluidInputs(
                     // general input , amount is set by machine internal parameters
                     Materials.Hydrogen.getPlasma(256 * 1000),
@@ -830,11 +826,11 @@ public class DSPRecipePool {
                     // first output is T1 output
                     appendToItemStackDisplayName(
                         AntimatterFuelRod.get(1),
-                        "// " + TSTUtils.tr("tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.output_1")),
+                        "// " + TSTUtils.tr("tst.recipe.StrangeMatterAggregatorRecipeMap.description.output_1")),
                     // second output is T2 output, when input special item then turn to output this instead of T1 output
                     appendToItemStackDisplayName(
                         StrangeAnnihilationFuelRod.get(1),
-                        "// " + TSTUtils.tr("tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.output_2")))
+                        "// " + TSTUtils.tr("tst.recipe.StrangeMatterAggregatorRecipeMap.description.output_2")))
                 .fluidOutputs(
                     // here is T2 byproduct
                     Materials.SpaceTime.getMolten(Config.ByproductBaseAmount_T2_StrangeMatterAggregator),
@@ -842,8 +838,7 @@ public class DSPRecipePool {
                 .special(
                     appendToItemStackDisplayName(
                         GTCMItemList.CoreElement.get(1),
-                        "// " + TSTUtils
-                            .tr("tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.special_slot")))
+                        "// " + TSTUtils.tr("tst.recipe.StrangeMatterAggregatorRecipeMap.description.special_slot")))
                 // machine will always use a fixed power, adjusted by structure
                 .eut(RECIPE_MAX)
                 .duration(20 * 120)
@@ -854,18 +849,15 @@ public class DSPRecipePool {
                     // first slot is the general input , amount is set by machine internal parameters
                     appendToItemStackDisplayName(
                         Antimatter.get(256),
-                        "// "
-                            + TSTUtils.tr("tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.first_slot")),
+                        "// " + TSTUtils.tr("tst.recipe.StrangeMatterAggregatorRecipeMap.description.first_slot")),
                     // second slot is the right input bus input and consumption rate set by structure
                     appendToItemStackDisplayName(
                         AnnihilationConstrainer.get(1),
-                        "// "
-                            + TSTUtils.tr("tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.second_slot")),
+                        "// " + TSTUtils.tr("tst.recipe.StrangeMatterAggregatorRecipeMap.description.second_slot")),
                     // third slot is only consume one time per process
                     appendToItemStackDisplayName(
                         ItemList.Tesseract.get(1),
-                        "// "
-                            + TSTUtils.tr("tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.third_slot")),
+                        "// " + TSTUtils.tr("tst.recipe.StrangeMatterAggregatorRecipeMap.description.third_slot")),
                     // fourth slot is consume same amount with output, can be saved by high tier structure
                     StellarConstructionFrameMaterial.get(1))
                 .fluidInputs(
@@ -877,19 +869,18 @@ public class DSPRecipePool {
                     // first output is T1 output
                     appendToItemStackDisplayName(
                         AntimatterFuelRod.get(1),
-                        "// " + TSTUtils.tr("tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.output_1")),
+                        "// " + TSTUtils.tr("tst.recipe.StrangeMatterAggregatorRecipeMap.description.output_1")),
                     // second output is T2 output, when input special item then turn to output this instead of T1 output
                     appendToItemStackDisplayName(
                         StrangeAnnihilationFuelRod.get(1),
-                        "// " + TSTUtils.tr("tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.output_2")))
+                        "// " + TSTUtils.tr("tst.recipe.StrangeMatterAggregatorRecipeMap.description.output_2")))
                 .fluidOutputs(
                     // here is T3 byproduct
                     Materials.Universium.getMolten(Config.ByproductBaseAmount_T3_StrangeMatterAggregator))
                 .special(
                     appendToItemStackDisplayName(
                         GTCMItemList.CoreElement.get(1),
-                        "// " + TSTUtils
-                            .tr("tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.description.special_slot")))
+                        "// " + TSTUtils.tr("tst.recipe.StrangeMatterAggregatorRecipeMap.description.special_slot")))
                 // machine will always use a fixed power, adjusted by structure
                 .eut(RECIPE_MAX)
                 .duration(20 * 120)

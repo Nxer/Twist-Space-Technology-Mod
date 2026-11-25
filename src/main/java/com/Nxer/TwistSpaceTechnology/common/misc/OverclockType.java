@@ -49,14 +49,14 @@ public enum OverclockType {
     // spotless:off
     public String getDescription() {
         // 每次超频耗时除以A, 耗电乘以B
-        // #tr tst.common.shared.overclock.description.01
+        // #tr tst.shared.overclock.description.01
         // # Every overclock, Time divide by
         // #zh_CN 每次超频时, 耗时除以
 
-        // #tr tst.common.shared.overclock.description.02
+        // #tr tst.shared.overclock.description.02
         // # Power Consumption multiply by
         // #zh_CN 耗电乘以
-        return TSTUtils.tr("tst.common.shared.overclock.description.01") + " " + EnumChatFormatting.AQUA + timeReduction + EnumChatFormatting.GRAY + " , " + TSTUtils.tr("tst.common.shared.overclock.description.02") + " " + EnumChatFormatting.RED + powerIncrease + EnumChatFormatting.GRAY + " .";
+        return TSTUtils.tr("tst.shared.overclock.description.01") + " " + EnumChatFormatting.AQUA + timeReduction + EnumChatFormatting.GRAY + " , " + TSTUtils.tr("tst.shared.overclock.description.02") + " " + EnumChatFormatting.RED + powerIncrease + EnumChatFormatting.GRAY + " .";
     }
     // spotless:on
 

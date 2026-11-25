@@ -25,6 +25,8 @@ public enum GTCMItemList {
     ProofOfGods,
     MoldSingularity,
     LifeEssenceSingularity,
+    DistilledWaterSingularity,
+    AirSingularity,
     ParticleTrapTimeSpaceShield,
     LapotronShard,
     PerfectLapotronCrystal,
@@ -215,6 +217,7 @@ public enum GTCMItemList {
 
     MeteorMinerSchematic1,
     MeteorMinerSchematic2,
+    MeteorMinerSchematic3,
 
     // endregion
 
@@ -249,7 +252,7 @@ public enum GTCMItemList {
     DenseCyclotronOuterCasing,
     CompactCyclotronCoil,
     AsepticGreenhouseCasing,
-    ReinforcedBedrockCasing,
+    LoadBearingConcreteCasing,
     SwelegfyrCasing,
     BloodyCasing1,
     BloodyCasing2,
@@ -339,6 +342,27 @@ public enum GTCMItemList {
     MegaSolarPanelFactory,
     MegaNqReactor,
     MegaDigester,
+    StarThatNeverWas,
+    AstralAlloyBand,
+    CondensedStarCore,
+    InactiveMineralSeedPowder,
+    ActiveMineralSeedPowder,
+    MineralSeedCore,
+    BloodInfusedMiningDroneLV,
+    BloodInfusedMiningDroneMV,
+    BloodInfusedMiningDroneHV,
+    BloodInfusedMiningDroneEV,
+    BloodInfusedMiningDroneIV,
+    BloodInfusedMiningDroneLuV,
+    BloodInfusedMiningDroneZPM,
+    BloodInfusedMiningDroneUV,
+    BloodInfusedMiningDroneUHV,
+    BloodInfusedMiningDroneUEV,
+    BloodInfusedMiningDroneUIV,
+    BloodInfusedMiningDroneUMV,
+    BloodInfusedMiningDroneUXV,
+    BloodInfusedMiningDroneMAX,
+    IchoriumInlaidStone,
     // endregion
 
     // region Modularized Machines
@@ -346,6 +370,7 @@ public enum GTCMItemList {
     LargeNeutronOscillator,
     IndistinctTentaclePrototypeMK2,
     BottledChaos,
+    BottledChaosEarlyAccess,
 
     // endregion
 

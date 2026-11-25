@@ -16,11 +16,10 @@ public class DSP_Receiver_SpecialValueFormatter implements INEISpecialInfoFormat
     public List<String> format(RecipeDisplayInfo recipeInfo) {
         List<String> msgs = new ArrayList<>();
         msgs.add(
-            // #tr tst.dyson.recipe.DSP_ReceiverRecipeMap.special_value_prefix
+            // #tr tst.recipe.DSP_ReceiverRecipeMap.special_value_prefix
             // # Equivalence value of EU :
             // #zh_CN 等效于EU :
-            TSTUtils.tr("tst.dyson.recipe.DSP_ReceiverRecipeMap.special_value_prefix")
-                + recipeInfo.recipe.mSpecialValue);
+            TSTUtils.tr("tst.recipe.DSP_ReceiverRecipeMap.special_value_prefix") + recipeInfo.recipe.mSpecialValue);
         return msgs;
     }
 }

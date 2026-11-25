@@ -59,15 +59,15 @@ public class StaticOverclockController extends StaticOverclockControllerBase {
         if (description == null || description.length == 0) {
             description =
                 new String[]{
-                    // #tr tst.modular.machine.StaticOverclockController.tooltip.info.01
+                    // #tr tst.machine.StaticOverclockController.tooltip.info.01
                     // # The overclock controller module determines the machine overclocking efficiency.
                     // #zh_CN 决定机器超频效率的超频控制器模块.
-                    TSTUtils.tr("tst.modular.machine.StaticOverclockController.tooltip.info.01"),
+                    TSTUtils.tr("tst.machine.StaticOverclockController.tooltip.info.01"),
                     getOverclockType().getDescription(),
-                    // #tr tst.modular.machine.StaticOverclockController.tooltip.info.02
+                    // #tr tst.machine.StaticOverclockController.tooltip.info.02
                     // # Each machine can only install one overclock controller.
                     // #zh_CN 每台机器只可安装一个超频控制器.
-                    TSTUtils.tr("tst.modular.machine.StaticOverclockController.tooltip.info.02"),
+                    TSTUtils.tr("tst.machine.StaticOverclockController.tooltip.info.02"),
                 };
         }
         return description;

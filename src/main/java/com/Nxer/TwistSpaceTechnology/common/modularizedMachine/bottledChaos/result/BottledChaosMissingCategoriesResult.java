@@ -52,11 +52,12 @@ public final class BottledChaosMissingCategoriesResult implements CheckRecipeRes
                 running ? BottledChaosMachineConfiguration.sourceName(slot)
                     : BottledChaosMachineConfiguration.poolName(slot));
         }
-        // #tr tst.bottledchaos.missing_recipe_types
+        // #tr tst.machine.BottledChaos.result.missing_recipe_types
         // # Missing machines for recipe pools: %s
         // #zh_CN 缺少配方池对应的机器: %s
-        return StatCollector
-            .translateToLocalFormatted("tst.bottledchaos.missing_recipe_types", String.join(", ", names));
+        return StatCollector.translateToLocalFormatted(
+            "tst.machine.BottledChaos.result.missing_recipe_types",
+            String.join(", ", names));
     }
 
     @Override

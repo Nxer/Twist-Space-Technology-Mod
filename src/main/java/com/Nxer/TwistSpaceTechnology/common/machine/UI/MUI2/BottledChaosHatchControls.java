@@ -37,27 +37,27 @@ import gregtech.api.modularui2.GTGuis;
 /** Both GUIs use the same action order, labels, limit editor and server-side hatch operations. */
 public final class BottledChaosHatchControls {
 
-    // #tr tst.bottledchaos.credential_hatch.pause_button
+    // #tr tst.machine.BottledChaosRecipeTokenHatch.gui.pause_button
     // # Pause
     // #zh_CN 暂停
 
-    // #tr tst.bottledchaos.credential_hatch.resume_button
+    // #tr tst.machine.BottledChaosRecipeTokenHatch.gui.resume_button
     // # Resume
     // #zh_CN 恢复
 
-    // #tr tst.bottledchaos.credential_hatch.export_button
+    // #tr tst.machine.BottledChaosRecipeTokenHatch.gui.export_button
     // # Export cache
     // #zh_CN 排出缓存
 
-    // #tr tst.bottledchaos.credential_hatch.clear_button
+    // #tr tst.machine.BottledChaosRecipeTokenHatch.gui.clear_button
     // # Clear
     // #zh_CN 清空
 
-    // #tr tst.bottledchaos.credential_hatch.clear
+    // #tr tst.machine.BottledChaosRecipeTokenHatch.gui.clear
     // # Clear this processing group's current job and cached materials.
     // #zh_CN 清空此加工组的当前运行状态和缓存材料.
 
-    // #tr tst.bottledchaos.gui.export_material_cache
+    // #tr tst.machine.BottledChaos.gui.export_material_cache
     // # Export this hatch's cache to controller outputs. Blocked outputs preserve the cache.
     // #zh_CN 将本仓缓存排入主机输出. 输出空间不足时保留缓存.
 
@@ -71,21 +71,22 @@ public final class BottledChaosHatchControls {
 
         public String label(boolean enabled) {
             return switch (this) {
-                // #tr tst.bottledchaos.credential_hatch.take_button
+                // #tr tst.machine.BottledChaosRecipeTokenHatch.gui.take_button
                 // # Take
                 // #zh_CN 取出凭证
-                case TAKE -> "tst.bottledchaos.credential_hatch.take_button";
-                case EXECUTION -> "tst.bottledchaos.credential_hatch." + (enabled ? "pause_button" : "resume_button");
-                case LIMIT -> "tst.bottledchaos.credential_hatch.cache_limit";
-                case EXPORT -> "tst.bottledchaos.credential_hatch.export_button";
-                case CLEAR -> "tst.bottledchaos.credential_hatch.clear_button";
+                case TAKE -> "tst.machine.BottledChaosRecipeTokenHatch.gui.take_button";
+                case EXECUTION -> "tst.machine.BottledChaosRecipeTokenHatch.gui."
+                    + (enabled ? "pause_button" : "resume_button");
+                case LIMIT -> "tst.machine.BottledChaosRecipeTokenHatch.gui.cache_limit";
+                case EXPORT -> "tst.machine.BottledChaosRecipeTokenHatch.gui.export_button";
+                case CLEAR -> "tst.machine.BottledChaosRecipeTokenHatch.gui.clear_button";
             };
         }
 
         private String tooltip() {
             return switch (this) {
-                case EXPORT -> "tst.bottledchaos.gui.export_material_cache";
-                case CLEAR -> "tst.bottledchaos.credential_hatch.clear";
+                case EXPORT -> "tst.machine.BottledChaos.gui.export_material_cache";
+                case CLEAR -> "tst.machine.BottledChaosRecipeTokenHatch.gui.clear";
                 default -> null;
             };
         }
@@ -259,10 +260,10 @@ public final class BottledChaosHatchControls {
             .topRel(0.5f)
             .size(164, 78)
             .child(
-                // #tr tst.bottledchaos.credential_hatch.cache_limit
+                // #tr tst.machine.BottledChaosRecipeTokenHatch.gui.cache_limit
                 // # Cache limit
                 // #zh_CN 缓存上限
-                IKey.lang("tst.bottledchaos.credential_hatch.cache_limit")
+                IKey.lang("tst.machine.BottledChaosRecipeTokenHatch.gui.cache_limit")
                     .asWidget()
                     .pos(8, 18)
                     .size(148, 14))
@@ -290,14 +291,18 @@ public final class BottledChaosHatchControls {
                 .setTextAlignment(Alignment.Center)
                 .tooltipBuilder(
                     tooltip -> tooltip
-                        // #tr tst.bottledchaos.credential_hatch.cache_limit.range
+                        // #tr tst.machine.BottledChaosRecipeTokenHatch.gui.cache_limit.range
                         // # Range: %s - %s
                         // #zh_CN 范围: %s - %s
-                        .addLine(IKey.lang("tst.bottledchaos.credential_hatch.cache_limit.range", 0, Long.MAX_VALUE))
-                        // #tr tst.bottledchaos.credential_hatch.cache_limit.info
+                        .addLine(
+                            IKey.lang(
+                                "tst.machine.BottledChaosRecipeTokenHatch.gui.cache_limit.range",
+                                0,
+                                Long.MAX_VALUE))
+                        // #tr tst.machine.BottledChaosRecipeTokenHatch.gui.cache_limit.info
                         // # Each item or fluid has this limit. Excess is sent to normal outputs.
                         // #zh_CN 每种物品或流体分别使用此上限, 超出部分正常输出.
-                        .addLine(IKey.lang("tst.bottledchaos.credential_hatch.cache_limit.info")))
+                        .addLine(IKey.lang("tst.machine.BottledChaosRecipeTokenHatch.gui.cache_limit.info")))
                 .pos(8, 40)
                 .size(148, 18));
     }

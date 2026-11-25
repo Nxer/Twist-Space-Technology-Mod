@@ -470,56 +470,56 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.machine_type
+        // #tr tst.machine.GiantVacuumDryingFurnace.tooltip.machine_type
         // # Vacuum Furnace | Dehydrator
         // #zh_CN 真空干燥炉 | 化学脱水机
-        tt.addMachineType(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.machine_type"))
-            // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.01
+        tt.addMachineType(TSTUtils.tr("tst.machine.GiantVacuumDryingFurnace.tooltip.machine_type"))
+            // #tr tst.machine.GiantVacuumDryingFurnace.tooltip.info.01
             // # Controller block for the Giant Vacuum Drying Furnace
             // #zh_CN 巨型真空干燥炉的控制器方块
-            .addInfo(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.01"))
-            // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.02
+            .addInfo(TSTUtils.tr("tst.machine.GiantVacuumDryingFurnace.tooltip.info.01"))
+            // #tr tst.machine.GiantVacuumDryingFurnace.tooltip.info.02
             // # §9Harness the power of vacuum technology for industrial drying!!!
             // #zh_CN §9利用真空技术的力量进行工业干燥!!!
-            .addInfo(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.02"))
-            // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.03
+            .addInfo(TSTUtils.tr("tst.machine.GiantVacuumDryingFurnace.tooltip.info.02"))
+            // #tr tst.machine.GiantVacuumDryingFurnace.tooltip.info.03
             // # This machine consists of vacuum pump, main structure, drying tower three parts.
             // #zh_CN 该设备由真空泵、主体结构和干燥塔三部分组成
-            .addInfo(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.03"))
-            // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.04
+            .addInfo(TSTUtils.tr("tst.machine.GiantVacuumDryingFurnace.tooltip.info.03"))
+            // #tr tst.machine.GiantVacuumDryingFurnace.tooltip.info.04
             // # parallel = coil * piece * 32
             // #zh_CN 并行 = 线圈等级 * 层数 * 32
-            .addInfo(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.04"))
-            // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.05
+            .addInfo(TSTUtils.tr("tst.machine.GiantVacuumDryingFurnace.tooltip.info.04"))
+            // #tr tst.machine.GiantVacuumDryingFurnace.tooltip.info.05
             // # Every additional voltage step reduces the time to 80%% of the original and The processing speed increases by 50%% for each step of the coil
             // #zh_CN 每超出一级电压, 所需时间为原来的§c80%§7, 线圈每升高一级处理速度增加§c50%§7
-            .addInfo(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.05"))
-            // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.06
+            .addInfo(TSTUtils.tr("tst.machine.GiantVacuumDryingFurnace.tooltip.info.05"))
+            // #tr tst.machine.GiantVacuumDryingFurnace.tooltip.info.06
             // # Switch modes using a screwdriver
             // #zh_CN 由螺丝刀切换模式
-            .addInfo(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.06"))
-            // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.07
+            .addInfo(TSTUtils.tr("tst.machine.GiantVacuumDryingFurnace.tooltip.info.06"))
+            // #tr tst.machine.GiantVacuumDryingFurnace.tooltip.info.07
             // # Every additional voltage step reduces the time to 80%% of the original
             // #zh_CN 注意你的电量小伙子,巨型真空干燥塔耗能200%%
-            .addInfo(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.07"))
-            // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.08
+            .addInfo(TSTUtils.tr("tst.machine.GiantVacuumDryingFurnace.tooltip.info.07"))
+            // #tr tst.machine.GiantVacuumDryingFurnace.tooltip.info.08
             // # Would anyone really need this machine to handle space ice cream?
             // #zh_CN 真的会有人需要这台机器来处理太空冰淇淋吗？
-            .addInfo(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.08"))
+            .addInfo(TSTUtils.tr("tst.machine.GiantVacuumDryingFurnace.tooltip.info.08"))
             .beginStructureBlock("11x23x(8+7xn)", true)
             .addController(textFrontCenter)
 
-            // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.structure.01
+            // #tr tst.machine.GiantVacuumDryingFurnace.tooltip.structure.01
             // # The input and output hatches/buses must be placed in the main frame.
             // #zh_CN 输入和输出舱口必须放置在主框架内
-            .addInputHatch(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.structure.01"))
-            .addOutputHatch(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.structure.01"))
-            .addInputBus(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.structure.01"))
-            .addOutputBus(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.structure.01"))
-            // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.09
+            .addInputHatch(TSTUtils.tr("tst.machine.GiantVacuumDryingFurnace.tooltip.structure.01"))
+            .addOutputHatch(TSTUtils.tr("tst.machine.GiantVacuumDryingFurnace.tooltip.structure.01"))
+            .addInputBus(TSTUtils.tr("tst.machine.GiantVacuumDryingFurnace.tooltip.structure.01"))
+            .addOutputBus(TSTUtils.tr("tst.machine.GiantVacuumDryingFurnace.tooltip.structure.01"))
+            // #tr tst.machine.GiantVacuumDryingFurnace.tooltip.info.09
             // # Energy Hatch must be placed in the main frame.
             // #zh_CN 能量舱口必须放置在主框架内
-            .addEnergyHatch(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.09"))
+            .addEnergyHatch(TSTUtils.tr("tst.machine.GiantVacuumDryingFurnace.tooltip.info.09"))
 
             .toolTipFinisher();
         // spotless:on

@@ -1,9 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.system.Thaumcraft;
 
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCBasic.EVOLUTION;
+import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.crucibleRecipeActiveMineralSeed;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.crucibleRecipeArcaneHole;
+import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.crucibleRecipeInactiveMineralSeed;
+import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeActiveMineralSeedPowder;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeBloodHatch;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeBloodyHell;
+import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeCondensedStarCore;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeEcoSphereExecutionProtocol1;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeEcoSphereExecutionProtocol2;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeEcoSphereExecutionProtocol3;
@@ -30,8 +34,10 @@ import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infus
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeIndustrialAlchemyTower;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeIndustrialMagicMatrix;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeInfusionMaterialDispenser;
+import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeMeteorMiner;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipePrimordialDisjunctus;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeSkypiercerTower;
+import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeStarThatNeverWas;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeTimeBendingSpeedRune;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeTimeBendingSpeedRuneTimewood;
 
@@ -59,6 +65,10 @@ public class TCResearches {
 
     private static final String TST_Path = "gtnhcommunitymod";
     private static final String ROOT_RESEARCH = "TST_WELCOME";
+    static final String METEOR_MINER_RESEARCH = "TST_METEOR_MINER";
+    static final String MINERAL_SEED_RESEARCH = "TST_MINERAL_SEED";
+    static final String CONDENSED_STAR_CORE_RESEARCH = "TST_CONDENSED_STAR_CORE";
+    static final String STAR_THAT_NEVER_WAS_RESEARCH = "TST_STAR_THAT_NEVER_WAS";
 
     private static AspectList getResearchAspects(InfusionRecipe recipe) {
         AspectList researchAspects = new AspectList();
@@ -276,8 +286,8 @@ public class TCResearches {
             // #zh_CN 一处供栖息地接纳受控例外的预留连接.
 
             // #tr tc.research_text.ECO_SPHERE_UPGRADE_INTERFACE.1
-            // # {\BOLD}Purpose and Function<BR>{\RESET}The upgrade interface accepts amendments, not ordinary inputs. Four positions remain visible; unavailable ones stay locked. Reinforcing the surrounding structure and its containment materials allows the interface to sustain more amendments, though its capacity remains finite.<BR>Ordinary amendments may repeat. Specialized ones reject duplicates; incompatible ones remain stored but inactive.
-            // #zh_CN {\BOLD}用途与功能<BR>{\RESET}升级接口接纳环境修订, 而非普通输入. 四个位置始终可见, 未开放者保持锁定. 强化周边结构与承载材料可使接口容纳更多修订, 但其容量仍有极限.<BR>普通修订可重复登记. 特殊修订拒绝重复项; 不相容者保留但不生效.
+            // # {\BOLD}Purpose and Function<BR>{\RESET}The upgrade interface accepts amendments, not ordinary inputs. Nine positions remain visible; unavailable ones stay locked. Reinforcing the surrounding structure and its containment materials allows the interface to sustain more amendments, though its capacity remains finite.<BR>Ordinary amendments may repeat. Specialized ones reject duplicates; incompatible ones remain stored but inactive.
+            // #zh_CN {\BOLD}用途与功能<BR>{\RESET}升级接口接纳环境修订, 而非普通输入. 九个位置始终可见, 未开放者保持锁定. 强化周边结构与承载材料可使接口容纳更多修订, 但其容量仍有极限.<BR>普通修订可重复登记. 特殊修订拒绝重复项; 不相容者保留但不生效.
 
             // #tr tc.research_text.ECO_SPHERE_UPGRADE_INTERFACE.2
             // # <LINE>{\BOLD}Operation Record ESS-UP-01<BR>{\RESET}A registered amendment was installed before a stable cycle. The controller kept it separate from recipe inputs and applied it only after the protocol accepted the environment.<BR>Removing it restored prior behavior next cycle without cleaning or damage.<BR>Status: separation confirmed.
@@ -1439,6 +1449,120 @@ public class TCResearches {
                     .registerResearchItem();
         }
 
-    }
+        if (Config.Enable_LaserMeteorMiner) {
+            // spotless:off
+            // #tr tc.research_name.TST_METEOR_MINER
+            // # Laser Meteor Miner
+            // #zh_CN 坠星矿机
 
+            // #tr tc.research_text.TST_METEOR_MINER
+            // # The drill points skyward.
+            // #zh_CN 钻头朝上.
+
+            // #tr tc.research_text.TST_METEOR_MINER.1
+            // # A thread of iron ran through the fallen star, too fine for the point of my pick. Through the thaumometer I could follow it deep into the stone. I turned the drill rig skyward. By dawn its beam had cut a hollow where the vein had been, and the ore tray was full.<BR>I took a rubbing of the last seam. The iron has since gone into the furnace. Through the lens I can still see it in the paper.
+            // #zh_CN 坠星的断面有一线铁色, 细得容不下镐尖. 隔着魔导透镜, 我却能一路看进石头深处. 我把钻架翻转朝天, 让光束循着铁脉切进去. 天亮时矿石已接了满盘, 石壳上留下的空洞正好容得下我一只手.<BR>最后一道矿脉, 我留了张拓片. 铁早已入炉. 隔着透镜, 我还能在纸里看见它.
+            // spotless:on
+            new ResearchItem(
+                METEOR_MINER_RESEARCH,
+                "TST",
+                getResearchAspects(infusionRecipeMeteorMiner),
+                -3,
+                -4,
+                2,
+                GTCMItemList.MeteorMiner.get(1)).setParents(ROOT_RESEARCH)
+                    .setPages(
+                        new ResearchPage("tc.research_text.TST_METEOR_MINER.1"),
+                        new ResearchPage(infusionRecipeMeteorMiner))
+                    .registerResearchItem();
+
+            // spotless:off
+            // #tr tc.research_name.TST_MINERAL_SEED
+            // # Mineral Seed Core
+            // #zh_CN 矿母种核
+
+            // #tr tc.research_text.TST_MINERAL_SEED
+            // # How far can a vein grow?
+            // #zh_CN 一条矿脉能长到多远?
+
+            // #tr tc.research_text.TST_MINERAL_SEED.1
+            // # I tried the old meteor powders one at a time and took a rubbing after each fall. On one sheet an iron vein forked just as it reached the rind. Where would it go with another inch of stone?<BR>By the end of those trials I had a dark red powder quite unlike the ones I had started with. I watched it for three days. Nothing stirred in the jar, so I labelled it "inactive".
+            // #zh_CN 我把陨星仪式常用的几种粉末逐一试过, 每落一颗星, 就拓下它的断面. 有张拓片上, 铁脉到了石壳边缘才刚刚分岔. 倘若再给它一寸石头, 它会往哪儿长?<BR>从那几种旧粉末一路试下来, 我手里多了一瓶暗红的粉样. 我守了它三天, 瓶底连一道细纹都没动过. 我便在瓶签上写了"失活".
+
+            // #tr tc.research_text.TST_MINERAL_SEED.2
+            // # Another sample left a forked red mark on my thumb. I rubbed one branch away. By the time I fetched the lens it had grown back. This jar earned the label "active".<BR>Inside the first mineral seed I found the same little fork. I left the seed on the rubbing overnight. By morning the iron vein had run off the paper and another inch along the grain of my desk.
+            // #zh_CN 另一份粉样在指腹上留了道分岔的红印. 我擦掉一岔, 等取来透镜, 那一岔又长齐了. 这瓶该写"活性".<BR>头一回端详种核时, 我在里面认出了那个小岔口. 我把种核压在拓片上过夜. 次日清早, 铁脉已经长出了纸边, 顺着桌面的木纹又走了一寸.
+            // spotless:on
+            new ResearchItem(
+                MINERAL_SEED_RESEARCH,
+                "TST",
+                new AspectList().add(Aspect.EARTH, 1)
+                    .add(Aspect.CRYSTAL, 1)
+                    .add(Aspect.LIFE, 1),
+                -5,
+                -4,
+                2,
+                GTCMItemList.MineralSeedCore.get(1)).setParents(METEOR_MINER_RESEARCH)
+                    .setParentsHidden("PUREIRON")
+                    .setPages(
+                        new ResearchPage("tc.research_text.TST_MINERAL_SEED.1"),
+                        new ResearchPage("tc.research_text.TST_MINERAL_SEED.2"),
+                        new ResearchPage(crucibleRecipeInactiveMineralSeed),
+                        new ResearchPage(crucibleRecipeActiveMineralSeed),
+                        new ResearchPage(infusionRecipeActiveMineralSeedPowder))
+                    .registerResearchItem();
+
+            // spotless:off
+            // #tr tc.research_name.TST_CONDENSED_STAR_CORE
+            // # Condensed Star Core
+            // #zh_CN 凝缩星核
+
+            // #tr tc.research_text.TST_CONDENSED_STAR_CORE
+            // # Somewhere for the plumb line to point.
+            // #zh_CN 给铅锤一个落点.
+
+            // #tr tc.research_text.TST_CONDENSED_STAR_CORE.1
+            // # I laid the slices of a fallen star in order. Traced inward, two veins joined within a thumb's breadth. Could a seed be coaxed to grow that way?<BR>All evening I watched a red thread curl inward under the lens, each turn tighter than the last. When the last loop closed, I heard the core tap against the dish. I locked it in a drawer. Across the workshop, every plumb line leaned towards it.
+            // #zh_CN 我把一颗坠星逐层剖开, 将薄片依次排好. 顺着两道铁脉往里追, 不到一指宽, 它们就合在了一处. 能让种核也从外往里长一次吗?<BR>我对着透镜看了一晚. 一缕红丝缓缓往里卷, 一圈比一圈紧. 最后一圈合拢时, 我听见星核在盘底轻轻磕了一声. 我把它锁进抽屉. 隔着半间工坊, 墙上那排铅锤仍斜斜地指向它.
+            // spotless:on
+            new ResearchItem(
+                CONDENSED_STAR_CORE_RESEARCH,
+                "TST",
+                getResearchAspects(infusionRecipeCondensedStarCore),
+                -7,
+                -4,
+                3,
+                GTCMItemList.CondensedStarCore.get(1)).setParents(MINERAL_SEED_RESEARCH)
+                    .setPages(
+                        new ResearchPage("tc.research_text.TST_CONDENSED_STAR_CORE.1"),
+                        new ResearchPage(infusionRecipeCondensedStarCore))
+                    .registerResearchItem();
+
+            // spotless:off
+            // #tr tc.research_name.TST_STAR_THAT_NEVER_WAS
+            // # The Star That Never Was
+            // #zh_CN 未曾存在之星
+
+            // #tr tc.research_text.TST_STAR_THAT_NEVER_WAS
+            // # A Mineable Lie
+            // #zh_CN 一个可开采的谎言
+
+            // #tr tc.research_text.TST_STAR_THAT_NEVER_WAS.1
+            // # A falling star always shakes the dust off the rim of the shaft. This time the print of my hand was still there, and a virtual star was already turning above it. Could the Meteor Miner cut ore from a star no sky had held?<BR>When the beam struck, I heard iron hit stone. I took the ore from the ME terminal and forged a hinge for the furnace door. Each time I opened it, I heard the ore fall again.<BR>Last night I left the door shut. The ore fell. Far below, someone closed a door.
+            // #zh_CN 往常落星, 井沿的积灰总要震落一些. 这回灰里还留着我的掌印, 井口却已有一颗虚拟星体在转. 把坠星矿机对准一颗从未在天上存在过的星, 它能采出什么?<BR>光束切进矿脉, 井底一声脆响. 我从 ME 终端取出一块铁矿石, 熔了给炉门打了个新铰链. 此后每次开炉, 我都听见那块矿石又落了一次地.<BR>昨夜我没去开炉. 矿石照旧落了地. 过了一会儿, 井底有人轻轻关上了门.
+            // spotless:on
+            new ResearchItem(
+                STAR_THAT_NEVER_WAS_RESEARCH,
+                "TST",
+                getResearchAspects(infusionRecipeStarThatNeverWas),
+                -9,
+                -4,
+                5,
+                GTCMItemList.StarThatNeverWas.get(1)).setParents(CONDENSED_STAR_CORE_RESEARCH)
+                    .setPages(
+                        new ResearchPage("tc.research_text.TST_STAR_THAT_NEVER_WAS.1"),
+                        new ResearchPage(infusionRecipeStarThatNeverWas))
+                    .registerResearchItem();
+        }
+    }
 }

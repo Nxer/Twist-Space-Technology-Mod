@@ -17,15 +17,17 @@ import static gregtech.api.util.GTStructureUtility.ofFrame;
 import static gregtech.api.util.ParallelHelper.addItemsLong;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
-
-import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
@@ -57,9 +59,11 @@ import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.api.util.OverclockCalculator;
 import gregtech.api.util.ParallelHelper;
 import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
+import gtneioreplugin.plugin.item.ItemDimensionDisplay;
 
 @SkipGenerateDescription
 public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBreaker> {
@@ -186,8 +190,12 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
 
     @Override
     public int getMaxParallelRecipes() {
-        int EuTier = (int) calculateVoltageTier(getMaxInputEu());
-        return EuTier < 29 ? (int) (Math.pow(2, EuTier) * 4) : Integer.MAX_VALUE;
+        return (int) Math.min(Integer.MAX_VALUE, getStoneBreakerParallelLimit());
+    }
+
+    private long getStoneBreakerParallelLimit() {
+        int tier = (int) calculateVoltageTier(getMaxInputEu());
+        return 1L << Math.min(62, Math.max(0, tier) + 2);
     }
 
     @Override
@@ -209,32 +217,99 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
     protected ProcessingLogic createProcessingLogic() {
         return new GTCM_ProcessingLogic() {
 
+            private String selectedDimension() {
+                String selected = null;
+                for (ItemStack input : inputItems) {
+                    if (input == null || input.stackSize <= 0) continue;
+                    String dimension = ItemDimensionDisplay.getDimension(input);
+                    if (dimension == null) continue;
+                    if (selected != null && !selected.equals(dimension)) return "";
+                    selected = dimension;
+                }
+                return selected;
+            }
+
+            private boolean matchesDimension(GTRecipe recipe) {
+                String dimension = null;
+                for (ItemStack input : recipe.mInputs) {
+                    if (input == null) continue;
+                    dimension = ItemDimensionDisplay.getDimension(input);
+                    if (dimension != null) break;
+                }
+                return Objects.equals(selectedDimension(), dimension);
+            }
+
             @Nonnull
             @Override
-            protected CheckRecipeResult onRecipeStart(@Nonnull GTRecipe recipe) {
-                isOutputMultiply = drain(mWaterHatch, new FluidStack(Materials.Water.mFluid, 1000), false)
-                    && drain(mLavaHatch, new FluidStack(Materials.Lava.mFluid, 1000), false);
-                return CheckRecipeResultRegistry.SUCCESSFUL;
+            protected Stream<GTRecipe> findRecipeMatches(@Nullable RecipeMap<?> map) {
+                return super.findRecipeMatches(map).filter(this::matchesDimension);
             }
 
-            @NotNull
+            @Nonnull
+            @Override
+            protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
+                return matchesDimension(recipe) ? CheckRecipeResultRegistry.SUCCESSFUL
+                    : CheckRecipeResultRegistry.NO_RECIPE;
+            }
+
+            @Nonnull
             @Override
             protected ParallelHelper createParallelHelper(@Nonnull GTRecipe recipe) {
-                return super.createParallelHelper(recipe).setCustomItemOutputCalculation(parallel -> {
-                    ArrayList<ItemStack> outputItemList = new ArrayList<>();
-                    int OutputBonus = isOutputMultiply ? 1024 : 4;
+                isOutputMultiply = drain(mWaterHatch, new FluidStack(Materials.Water.mFluid, 1000), false)
+                    && drain(mLavaHatch, new FluidStack(Materials.Lava.mFluid, 1000), false);
+                int outputBonus = isOutputMultiply ? 1024 : 4;
+                return new StoneBreakerParallelHelper().setRecipe(recipe)
+                    .setItemInputs(inputItems)
+                    .setFluidInputs(inputFluids)
+                    .setAvailableEUt(availableVoltage * availableAmperage)
+                    .setMachine(machine, protectItems, protectFluids)
+                    .setRecipeLocked(recipeLockableMachine, isRecipeLocked)
+                    .setMaxParallel(maxParallel)
+                    .setChanceMultiplier(outputBonus)
+                    .enableBatchMode(batchSize)
+                    .setConsumption(true)
+                    .setOutputCalculation(true);
+            }
 
-                    for (ItemStack recipeItemStack : recipe.mOutputs) {
-                        if (recipeItemStack != null) addItemsLong(
-                            outputItemList,
-                            recipeItemStack,
-                            (long) parallel * recipeItemStack.stackSize * OutputBonus);
-                    }
-                    return outputItemList.toArray(new ItemStack[0]);
-                });
+            @Nonnull
+            @Override
+            protected CheckRecipeResult applyRecipe(@Nonnull GTRecipe recipe, @Nonnull ParallelHelper helper,
+                @Nonnull OverclockCalculator calculator, @Nonnull CheckRecipeResult result) {
+                CheckRecipeResult applied = super.applyRecipe(recipe, helper, calculator, result);
+                if (applied.wasSuccessful() && isMEOutputEnabled()) {
+                    setLongOutputs(((StoneBreakerParallelHelper) helper).outputs, Collections.emptyList());
+                }
+                return applied;
             }
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
+    }
 
+    private final class StoneBreakerParallelHelper extends ParallelHelper {
+
+        private final List<ItemStackLong> outputs = new ArrayList<>();
+
+        @Override
+        protected void calculateItemOutputs(ItemStack[] truncatedItemOutputs) {
+            outputs.clear();
+            ArrayList<ItemStack> stacks = new ArrayList<>();
+            for (int i = 0; i < truncatedItemOutputs.length; i++) {
+                ItemStack output = truncatedItemOutputs[i];
+                if (output == null) continue;
+                int chance = (int) (recipe.getOutputChance(i) * chanceMultiplier);
+                // Keep the guaranteed portion out of GT's int multiplication.
+                long successes = (long) Math.floorDiv(chance, 10000) * currentParallel
+                    + calculateIntegralChancedOutputMultiplier(chance % 10000, currentParallel);
+                long amount = Math.multiplyExact(successes, output.stackSize);
+                if (amount <= 0) continue;
+                if (isMEOutputEnabled()) {
+                    outputs.add(new ItemStackLong(output, amount));
+                } else {
+                    addItemsLong(stacks, output, amount);
+                }
+            }
+            itemOutputs = stacks.toArray(new ItemStack[0]);
+            fluidOutputs = new FluidStack[0];
+        }
     }
 
     @Override
@@ -280,39 +355,39 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.MegaStoneBreaker.tooltip.machine_type
+        // #tr tst.machine.MegaStoneBreaker.tooltip.machine_type
         // # Stone Breaker
         // #zh_CN 碎石机
-        tt.addMachineType(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.machine_type"))
-            // #tr tst.common.machine.MegaStoneBreaker.tooltip.controller
+        tt.addMachineType(TSTUtils.tr("tst.machine.MegaStoneBreaker.tooltip.machine_type"))
+            // #tr tst.machine.MegaStoneBreaker.tooltip.controller
             // # Controller block for the Silicon Rock Synthesizer
             // #zh_CN 硅岩制造机的控制方块
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.controller"))
-            // #tr tst.common.machine.MegaStoneBreaker.tooltip.info.01
+            .addInfo(TSTUtils.tr("tst.machine.MegaStoneBreaker.tooltip.controller"))
+            // #tr tst.machine.MegaStoneBreaker.tooltip.info.01
             // # {\WHITE}Hey, I heard you come from a sky island?
             // #zh_CN {\WHITE}嘿,听说你来自一片空岛?
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.info.01"))
-            // #tr tst.common.machine.MegaStoneBreaker.tooltip.info.02
+            .addInfo(TSTUtils.tr("tst.machine.MegaStoneBreaker.tooltip.info.01"))
+            // #tr tst.machine.MegaStoneBreaker.tooltip.info.02
             // # Basic parallel is 4, and the multiplier is equivalent to imperfect overclock
             // #zh_CN 基础并行为4, 拥有等同于有损超频的并行加成
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.info.02"))
-            // #tr tst.common.machine.MegaStoneBreaker.tooltip.info.03
+            .addInfo(TSTUtils.tr("tst.machine.MegaStoneBreaker.tooltip.info.02"))
+            // #tr tst.machine.MegaStoneBreaker.tooltip.info.03
             // # Basic increase in output by 4x, When water and lava are input from the side input hatch, Increase to 1024x of output
             // #zh_CN 基础增产4倍, 当侧面输入仓输入水和岩浆时增产1024倍
-            .addInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.info.03"))
+            .addInfo(TSTUtils.tr("tst.machine.MegaStoneBreaker.tooltip.info.03"))
             .beginStructureBlock(shapeMain)
             .addController(textFrontBottom)
             .addInputBus(textUseBlueprint, 1)
             .addOutputBus(textUseBlueprint, 1)
             .addEnergyHatch(textUseBlueprint, 1)
-            // #tr tst.common.machine.MegaStoneBreaker.tooltip.structure.01
+            // #tr tst.machine.MegaStoneBreaker.tooltip.structure.01
             // # {\WHITE}Lava Hatch:{GREEN\} Left{\GRAY} side of Structure
             // #zh_CN {\WHITE}岩浆输入仓:{\GRAY}结构的{\GREEN}左{\GRAY}侧
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.structure.01"))
-            // #tr tst.common.machine.MegaStoneBreaker.tooltip.structure.02
+            .addStructureInfo(TSTUtils.tr("tst.machine.MegaStoneBreaker.tooltip.structure.01"))
+            // #tr tst.machine.MegaStoneBreaker.tooltip.structure.02
             // # {\WHITE}Water Hatch:{GREEN\} Right{\GRAY} side of Structure
             // #zh_CN {\WHITE}水输入仓:{\GRAY}结构的{\GREEN}右{\GRAY}侧
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.structure.02"))
+            .addStructureInfo(TSTUtils.tr("tst.machine.MegaStoneBreaker.tooltip.structure.02"))
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addStructureInfo(Text_SeparatingLine)
             .toolTipFinisher();

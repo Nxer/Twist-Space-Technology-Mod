@@ -75,14 +75,14 @@ public final class BottledChaosPoolFailure implements CheckRecipeResult {
             FluidStack fluid = FluidStack.loadFluidStackFromNBT(data.getCompoundTag("fluid"));
             reason = StatCollector.translateToLocalFormatted(
                 "GT5U.gui.text.out_of_fluid",
-                fluid == null ? StatCollector.translateToLocal("tst.bottledchaos.result.unknown_material")
+                fluid == null ? StatCollector.translateToLocal("tst.machine.BottledChaos.result.unknown_material")
                     : fluid.getLocalizedName(),
                 formatNumber(new BigInteger(data.getString("amount"))));
         } else if (data.hasKey("item", 10)) {
             ItemStack item = ItemStack.loadItemStackFromNBT(data.getCompoundTag("item"));
             reason = StatCollector.translateToLocalFormatted(
                 "GT5U.gui.text.recipe_result.out_of_item",
-                item == null ? StatCollector.translateToLocal("tst.bottledchaos.result.unknown_material")
+                item == null ? StatCollector.translateToLocal("tst.machine.BottledChaos.result.unknown_material")
                     : item.getDisplayName(),
                 formatNumber(Long.parseLong(data.getString("amount"))));
         } else if (BottledChaosResultData.hasResult(data)) {
@@ -95,12 +95,12 @@ public final class BottledChaosPoolFailure implements CheckRecipeResult {
             reason = CheckRecipeResultRegistry.insufficientVoltage(data.getLong("required"))
                 .getDisplayString();
         } else {
-            // #tr tst.bottledchaos.result.parameter_limit
+            // #tr tst.machine.BottledChaos.result.parameter_limit
             // # %s insufficient: %s / %s
             // #zh_CN %s不足: %s / %s
             reason = StatCollector.translateToLocalFormatted(
-                "tst.bottledchaos.result.parameter_limit",
-                StatCollector.translateToLocal("tst.bottledchaos.parameter." + data.getString("parameter")),
+                "tst.machine.BottledChaos.result.parameter_limit",
+                StatCollector.translateToLocal("tst.bottledchaos.shared.parameter." + data.getString("parameter")),
                 formatNumber(data.getLong("available")),
                 formatNumber(data.getLong("required")));
         }
@@ -155,51 +155,51 @@ public final class BottledChaosPoolFailure implements CheckRecipeResult {
         return data.hashCode();
     }
 
-    // #tr tst.bottledchaos.result.unknown_material
+    // #tr tst.machine.BottledChaos.result.unknown_material
     // # Unknown material
     // #zh_CN 未知材料
 
-    // #tr tst.bottledchaos.parameter.glass
+    // #tr tst.bottledchaos.shared.parameter.glass
     // # Glass tier
     // #zh_CN 玻璃等级
 
-    // #tr tst.bottledchaos.parameter.casing
+    // #tr tst.bottledchaos.shared.parameter.casing
     // # Casing tier
     // #zh_CN 机械方块等级
 
-    // #tr tst.bottledchaos.parameter.compression
+    // #tr tst.bottledchaos.shared.parameter.compression
     // # Compression tier
     // #zh_CN 压缩等级
 
-    // #tr tst.bottledchaos.parameter.field
+    // #tr tst.bottledchaos.shared.parameter.field
     // # Field generator tier
     // #zh_CN 力场发生器等级
 
-    // #tr tst.bottledchaos.parameter.plasma
+    // #tr tst.bottledchaos.shared.parameter.plasma
     // # Plasma tier
     // #zh_CN 等离子等级
 
-    // #tr tst.bottledchaos.parameter.heavy_centrifuge
+    // #tr tst.bottledchaos.shared.parameter.heavy_centrifuge
     // # Heavy centrifugation capability
     // #zh_CN 重型离心能力
 
-    // #tr tst.bottledchaos.parameter.multi_step_plasma
+    // #tr tst.bottledchaos.shared.parameter.multi_step_plasma
     // # Multi-step plasma capability
     // #zh_CN 多步等离子能力
 
-    // #tr tst.bottledchaos.parameter.purification_capacity
+    // #tr tst.bottledchaos.shared.parameter.purification_capacity
     // # Main purification plant capacity
     // #zh_CN 主净化厂堆叠组数
 
-    // #tr tst.bottledchaos.parameter.culture
+    // #tr tst.bottledchaos.shared.parameter.culture
     // # Culture dishes
     // #zh_CN 培养皿
 
-    // #tr tst.bottledchaos.parameter.catalyst
+    // #tr tst.bottledchaos.shared.parameter.catalyst
     // # Catalyst
     // #zh_CN 催化剂
 
-    // #tr tst.bottledchaos.parameter.coolant
+    // #tr tst.bottledchaos.shared.parameter.coolant
     // # Coolant
     // #zh_CN 冷却液
 }

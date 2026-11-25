@@ -322,14 +322,14 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
 
     @Override
     public String getMachineModeName() {
-        // #tr tst.common.machine.MiracleDoor.mode.0
+        // #tr tst.machine.MiracleDoor.mode.0
         // # Mode: Stellar Forge : Alloy Smelter
         // #zh_CN 恒星锻炉: 合金冶炼模式
 
-        // #tr tst.common.machine.MiracleDoor.mode.1
+        // #tr tst.machine.MiracleDoor.mode.1
         // # Mode: Stellar Forge
         // #zh_CN 恒星锻炉模式
-        return StatCollector.translateToLocal("tst.common.machine.MiracleDoor.mode." + machineMode);
+        return StatCollector.translateToLocal("tst.machine.MiracleDoor.mode." + machineMode);
     }
 
     @Override
@@ -417,12 +417,12 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         if (tag.getBoolean("isActive")) {
-            // #tr tst.common.machine.MiracleDoor.waila.current_overclock_parameter
+            // #tr tst.machine.MiracleDoor.waila.current_overclock_parameter
             // # {\AQUA}Current Overclock Parameter{\RESET}: {\GOLD}%s
             // #zh_CN {\AQUA}当前额外超频系数{\RESET}: {\GOLD}%s
             currentTip.add(
                 TSTUtils.tr(
-                    "tst.common.machine.MiracleDoor.waila.current_overclock_parameter",
+                    "tst.machine.MiracleDoor.waila.current_overclock_parameter",
                     tag.getLong("overclockParameter")));
         }
     }
@@ -564,72 +564,72 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.MiracleDoor.tooltip.machine_type
+        // #tr tst.machine.MiracleDoor.tooltip.machine_type
         // # Stellar Forge | Stellar Forge : Alloy Smelter
         // #zh_CN 恒星锻炉 | 恒星锻炉:合金冶炼
-        tt.addMachineType(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.machine_type"))
-            // #tr tst.common.machine.MiracleDoor.tooltip.controller
+        tt.addMachineType(TSTUtils.tr("tst.machine.MiracleDoor.tooltip.machine_type"))
+            // #tr tst.machine.MiracleDoor.tooltip.controller
             // # Controller block for the Miracle Door
             // #zh_CN 奇迹之门的控制器方块
-            .addInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.controller"))
-            // #tr tst.common.machine.MiracleDoor.tooltip.info.01
+            .addInfo(TSTUtils.tr("tst.machine.MiracleDoor.tooltip.controller"))
+            // #tr tst.machine.MiracleDoor.tooltip.info.01
             // # {\GOLD}{\BOLD}Mere mortals can't even begin to understand the progress we've made.
             // #zh_CN {\GOLD}{\BOLD}凡夫俗子根本无法理解我们的进步.
-            .addInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.info.01"))
-            // #tr tst.common.machine.MiracleDoor.tooltip.info.02
+            .addInfo(TSTUtils.tr("tst.machine.MiracleDoor.tooltip.info.01"))
+            // #tr tst.machine.MiracleDoor.tooltip.info.02
             // # Enslaving Stellaris to work for us.
             // #zh_CN 奴役群星为我们工作.
-            .addInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.info.02"))
-            // #tr tst.common.machine.MiracleDoor.tooltip.info.03
+            .addInfo(TSTUtils.tr("tst.machine.MiracleDoor.tooltip.info.02"))
+            // #tr tst.machine.MiracleDoor.tooltip.info.03
             // # No matter how large the workload, it can be done in one time.
             // #zh_CN 无论多大的工作量, 都能一次完成.
-            .addInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.info.03"))
-            // #tr tst.common.machine.MiracleDoor.tooltip.info.04
+            .addInfo(TSTUtils.tr("tst.machine.MiracleDoor.tooltip.info.03"))
+            // #tr tst.machine.MiracleDoor.tooltip.info.04
             // # No matter how large the workload, it need one Critical Photon to start.
             // #zh_CN 无论多大的工作量, 都需要临界光子启动.
-            .addInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.info.04"))
-            // #tr tst.common.machine.MiracleDoor.tooltip.info.05
+            .addInfo(TSTUtils.tr("tst.machine.MiracleDoor.tooltip.info.04"))
+            // #tr tst.machine.MiracleDoor.tooltip.info.05
             // # Power consumption: Alloy Smelter {\RED}100%{\GRAY} | Stellar Forge {\RED}200%{\GRAY}
             // #zh_CN 能量消耗: {\RESET}合金冶炼模式 {\RED}{\BOLD}100% {\GRAY}| {\RESET}恒星锻炉模式 {\RED}{\BOLD}200%
-            .addInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.info.05"))
-            // #tr tst.common.machine.MiracleDoor.tooltip.info.06
+            .addInfo(TSTUtils.tr("tst.machine.MiracleDoor.tooltip.info.05"))
+            // #tr tst.machine.MiracleDoor.tooltip.info.06
             // # Directly get EU from the Wireless EU Net.
             // #zh_CN 直接从无线EU网络获取能量.
-            .addInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.info.06"))
-            // #tr tst.common.machine.MiracleDoor.tooltip.info.07
+            .addInfo(TSTUtils.tr("tst.machine.MiracleDoor.tooltip.info.06"))
+            // #tr tst.machine.MiracleDoor.tooltip.info.07
             // # Warning! If trying to start machine when Wireless EU Net has not enough EU,
             // #zh_CN 警告! 如果尝试在网络内能量不足时启动机器,
-            .addInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.info.07"))
-            // #tr tst.common.machine.MiracleDoor.tooltip.info.08
+            .addInfo(TSTUtils.tr("tst.machine.MiracleDoor.tooltip.info.07"))
+            // #tr tst.machine.MiracleDoor.tooltip.info.08
             // # the materials will fade.
             // #zh_CN 输入的原料将直接寂灭.
-            .addInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.info.08"))
-            // #tr tst.common.machine.MiracleDoor.tooltip.info.09
+            .addInfo(TSTUtils.tr("tst.machine.MiracleDoor.tooltip.info.08"))
+            // #tr tst.machine.MiracleDoor.tooltip.info.09
             // # Put Integrated Circuit into Controller block to decrease process time interval.
             // #zh_CN 在控制器方块内放置编程电路以减少处理时间间隔.
-            .addInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.info.09"))
+            .addInfo(TSTUtils.tr("tst.machine.MiracleDoor.tooltip.info.09"))
             .beginStructureBlock(shapeMain)
             .addStructureInfo(Tooltip_Details)
-            // #tr tst.common.machine.MiracleDoor.tooltip.structure.01
+            // #tr tst.machine.MiracleDoor.tooltip.structure.01
             // # Each run takes the same amount of time, (ABS) 25.6s | (EBF) 64s default.
             // #zh_CN 每次运行消耗相同的时间, 默认 (恒星锻炉) 64s | (合金冶炼) 25.6s .
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.structure.01"))
-            // #tr tst.common.machine.MiracleDoor.tooltip.structure.02
+            .addStructureInfo(TSTUtils.tr("tst.machine.MiracleDoor.tooltip.structure.01"))
+            // #tr tst.machine.MiracleDoor.tooltip.structure.02
             // # If putting Integrated Circuit into Controller block slot,
             // #zh_CN 如果在控制器方块输入槽放置编程电路,
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.structure.02"))
-            // #tr tst.common.machine.MiracleDoor.tooltip.structure.03
+            .addStructureInfo(TSTUtils.tr("tst.machine.MiracleDoor.tooltip.structure.02"))
+            // #tr tst.machine.MiracleDoor.tooltip.structure.03
             // # actual progress time = default / (Integrated Circuit Number * Stack Size)
             // #zh_CN 实际处理时间 = 默认耗时 / (编号 * 物品数量)
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.structure.03"))
-            // #tr tst.common.machine.MiracleDoor.tooltip.structure.04
+            .addStructureInfo(TSTUtils.tr("tst.machine.MiracleDoor.tooltip.structure.03"))
+            // #tr tst.machine.MiracleDoor.tooltip.structure.04
             // # Actual cost EU = recipe value * 16 * (Integrated Circuit Number * Stack Size)
             // #zh_CN 实际消耗 EU = 配方数值 * (编号 * 物品数量) * (恒星锻炉) 2 (合金冶炼) 1
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.structure.04"))
-            // #tr tst.common.machine.MiracleDoor.tooltip.structure.05
+            .addStructureInfo(TSTUtils.tr("tst.machine.MiracleDoor.tooltip.structure.04"))
+            // #tr tst.machine.MiracleDoor.tooltip.structure.05
             // # Each run cost number of OverClock Times Critical Photon to start(Default 1).
             // #zh_CN 每次运行需要消耗超频次数颗临界光子(默认为1).
-            .addStructureInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.structure.05"))
+            .addStructureInfo(TSTUtils.tr("tst.machine.MiracleDoor.tooltip.structure.05"))
             .addStructureInfo(Text_SeparatingLine)
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addStructureInfo(Tooltip_DoNotNeedEnergyHatch)

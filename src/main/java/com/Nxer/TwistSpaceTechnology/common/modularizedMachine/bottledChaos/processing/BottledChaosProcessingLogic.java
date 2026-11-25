@@ -106,13 +106,13 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
         blockedRoute = CheckRecipeResultRegistry.NO_RECIPE;
         durationLimits.clear();
         if (routeMask == 0) {
-            return SimpleResultWithText.ofFailure("tst.bottledchaos.result.unbound");
+            return SimpleResultWithText.ofFailure("tst.machine.BottledChaos.result.unbound");
         }
         if (!BottledChaosRecipeProcessor.isReady()) {
-            // #tr tst.bottledchaos.result.recipe_cache_unavailable
+            // #tr tst.machine.BottledChaos.result.recipe_cache_unavailable
             // # Bottled Chaos processing recipes are unavailable. Check the startup log.
             // #zh_CN 瓶中混沌处理配方不可用. 请检查启动日志.
-            return SimpleResultWithText.ofFailure("tst.bottledchaos.result.recipe_cache_unavailable");
+            return SimpleResultWithText.ofFailure("tst.machine.BottledChaos.result.recipe_cache_unavailable");
         }
         return wireless ? processWireless(diagnostics) : processWired(diagnostics);
     }
@@ -275,10 +275,10 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
             plan.prepareOutputs();
             outputs = plan.outputPlan();
         } catch (ArithmeticException overflow) {
-            // #tr tst.bottledchaos.result.output_overflow
+            // #tr tst.machine.BottledChaos.result.output_overflow
             // # Output quantity exceeds the limit.
             // #zh_CN 输出数量超过上限.
-            return SimpleResultWithText.ofFailure("tst.bottledchaos.result.output_overflow");
+            return SimpleResultWithText.ofFailure("tst.machine.BottledChaos.result.output_overflow");
         }
         return outputCheck.apply(outputs);
     }
@@ -300,10 +300,10 @@ public final class BottledChaosProcessingLogic extends GTCM_ProcessingLogic {
 
     private CheckRecipeResult validateLimits(long baseRecipeVoltage, long requiredPools) {
         if (baseRecipeVoltage > maximumRecipeVoltage) {
-            // #tr tst.bottledchaos.result.recipe_voltage_limit
+            // #tr tst.machine.BottledChaos.result.recipe_voltage_limit
             // # Recipe voltage exceeds the structure upgrade limit.
             // #zh_CN 配方电压超过结构升级上限.
-            return SimpleResultWithText.ofFailure("tst.bottledchaos.result.recipe_voltage_limit");
+            return SimpleResultWithText.ofFailure("tst.machine.BottledChaos.result.recipe_voltage_limit");
         }
         return validatePools(requiredPools);
     }

@@ -12,11 +12,10 @@ import com.gtnewhorizons.modularui.api.math.Pos2d;
 
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
 import gregtech.api.recipe.NEIRecipePropertiesBuilder;
-import gregtech.api.recipe.RecipeMapFrontend;
 import gregtech.api.util.GTUtility;
 import gregtech.nei.GTNEIDefaultHandler;
 
-public class TST_StellarForgeFrontend extends RecipeMapFrontend {
+public class TST_StellarForgeFrontend extends TST_RecipeMapFrontend {
 
     public TST_StellarForgeFrontend(BasicUIPropertiesBuilder uiPropertiesBuilder,
         NEIRecipePropertiesBuilder neiPropertiesBuilder) {
@@ -26,9 +25,8 @@ public class TST_StellarForgeFrontend extends RecipeMapFrontend {
     @Override
     public @NotNull List<String> handleNEIItemTooltip(ItemStack stack, List<String> currentTip,
         GTNEIDefaultHandler.CachedDefaultRecipe neiCachedRecipe) {
-        String aToolTip = EnumChatFormatting.YELLOW
-            + TSTUtils.tr("tst.common.recipe.StellarForgeRecipeMap.melt_into_ingots");
-        // #tr tst.common.recipe.StellarForgeRecipeMap.melt_into_ingots
+        String aToolTip = EnumChatFormatting.YELLOW + TSTUtils.tr("tst.recipe.StellarForgeRecipeMap.melt_into_ingots");
+        // #tr tst.recipe.StellarForgeRecipeMap.melt_into_ingots
         // # Place in input bus to melt molten metal into ingots
         // #zh_CN 放入输入总线,将熔融金属熔铸为锭
 

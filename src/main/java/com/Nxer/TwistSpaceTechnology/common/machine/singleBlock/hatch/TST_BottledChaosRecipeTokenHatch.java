@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.common.item.ItemBottledChaosCredential;
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.BottledChaosHatchControls;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_BottledChaos;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.BottledChaosMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.material.BottledChaosMaterialCache;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
@@ -55,26 +55,26 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
 
     private boolean executionEnabled;
     private boolean clearRunningStateRequested;
-    private MM_BottledChaos controller;
+    private BottledChaosMachineBase<?> controller;
     private int processingGroup = -1;
 
     private static final String[] DESCRIPTION = {
-        // #tr tst.bottledchaos.credential_hatch.tooltip.info.1
+        // #tr tst.machine.BottledChaosRecipeTokenHatch.tooltip.info.1
         // # Provides one Bottled Chaos processing group with a single credential slot.
         // #zh_CN 为瓶中混沌提供一个加工组, 每仓容纳一个凭证.
-        TSTUtils.tr("tst.bottledchaos.credential_hatch.tooltip.info.1"),
-        // #tr tst.bottledchaos.credential_hatch.tooltip.info.2
+        TSTUtils.tr("tst.machine.BottledChaosRecipeTokenHatch.tooltip.info.1"),
+        // #tr tst.machine.BottledChaosRecipeTokenHatch.tooltip.info.2
         // # The two positions below each credential hatch are dedicated inputs for its processing group.
         // #zh_CN 凭证仓下方两格为本组专用输入位.
-        TSTUtils.tr("tst.bottledchaos.credential_hatch.tooltip.info.2"),
-        // #tr tst.bottledchaos.credential_hatch.tooltip.info.3
+        TSTUtils.tr("tst.machine.BottledChaosRecipeTokenHatch.tooltip.info.2"),
+        // #tr tst.machine.BottledChaosRecipeTokenHatch.tooltip.info.3
         // # Intermediate products are cached here, separately from other processing groups.
         // #zh_CN 中间产物缓存在本仓, 不与其他加工组共享.
-        TSTUtils.tr("tst.bottledchaos.credential_hatch.tooltip.info.3"),
-        // #tr tst.bottledchaos.credential_hatch.tooltip.info.4
+        TSTUtils.tr("tst.machine.BottledChaosRecipeTokenHatch.tooltip.info.3"),
+        // #tr tst.machine.BottledChaosRecipeTokenHatch.tooltip.info.4
         // # The parallel controller module sets the credential hatch limit.
         // #zh_CN 可安装数量由并行控制器模块决定.
-        TSTUtils.tr("tst.bottledchaos.credential_hatch.tooltip.info.4") };
+        TSTUtils.tr("tst.machine.BottledChaosRecipeTokenHatch.tooltip.info.4") };
 
     public TST_BottledChaosRecipeTokenHatch(int id, String name, String nameRegional, int tier) {
         super(id, name, nameRegional, tier, DESCRIPTION);
@@ -156,10 +156,11 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
         ItemStack credential = getStackInSlot(0);
         if (ItemBottledChaosCredential.getCapacity(credential) == 0) return;
         if (player.inventory.getFirstEmptyStack() < 0) {
-            // #tr tst.bottledchaos.credential_hatch.inventory_full
+            // #tr tst.machine.BottledChaosRecipeTokenHatch.message.inventory_full
             // # No free inventory slot. The credential remains in its hatch.
             // #zh_CN 背包没有空位, 凭证保留在仓内.
-            player.addChatMessage(new ChatComponentTranslation("tst.bottledchaos.credential_hatch.inventory_full"));
+            player.addChatMessage(
+                new ChatComponentTranslation("tst.machine.BottledChaosRecipeTokenHatch.message.inventory_full"));
             return;
         }
         if (!player.inventory.addItemStackToInventory(credential.copy())) return;
@@ -169,25 +170,25 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
         player.inventory.markDirty();
     }
 
-    public void bindController(MM_BottledChaos controller, int slot) {
+    public void bindController(BottledChaosMachineBase<?> controller, int slot) {
         this.controller = controller;
         processingGroup = slot;
     }
 
-    public void unbindController(MM_BottledChaos controller) {
+    public void unbindController(BottledChaosMachineBase<?> controller) {
         if (this.controller != controller) return;
         this.controller = null;
         processingGroup = -1;
     }
 
     public NBTTagCompound getInformation(boolean details) {
-        return MM_BottledChaos.getCredentialHatchInformation(this, controller, processingGroup, details);
+        return BottledChaosMachineBase.getCredentialHatchInformation(this, controller, processingGroup, details);
     }
 
     @SideOnly(Side.CLIENT)
     private static String getFittedHatchDisplayText(NBTTagCompound data) {
         return TSTTextLayout.ellipsize(
-            MM_BottledChaos.getCredentialHatchTitle(data),
+            BottledChaosMachineBase.getCredentialHatchTitle(data),
             140,
             TextRenderer.getFontRenderer()::getStringWidth);
     }
@@ -216,7 +217,7 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
     public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
         IWailaConfigHandler config) {
         super.getWailaBody(itemStack, currentTip, accessor, config);
-        MM_BottledChaos.appendCredentialHatchWaila(
+        BottledChaosMachineBase.appendCredentialHatchWaila(
             currentTip,
             accessor.getNBTData()
                 .getCompoundTag(INFORMATION_NBT),
@@ -298,8 +299,9 @@ public class TST_BottledChaosRecipeTokenHatch extends TST_BottledChaosAuthorizat
                         tooltip -> tooltip.addLine(
                             information.getValue() != null && information.getValue()
                                 .getBoolean("connected")
-                                    ? MM_BottledChaos.getCredentialHatchTitle(information.getValue())
-                                    : StatCollector.translateToLocal("tst.bottledchaos.credential_hatch.disconnected")))
+                                    ? BottledChaosMachineBase.getCredentialHatchTitle(information.getValue())
+                                    : StatCollector.translateToLocal(
+                                        "tst.machine.BottledChaosRecipeTokenHatch.info.disconnected")))
                     .tooltipAutoUpdate(true)
                     .pos(14, 8)
                     .size(148, 18));

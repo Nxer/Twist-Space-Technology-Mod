@@ -39,7 +39,7 @@ public class ItemYamato extends ItemSword implements IItemOfTravel {
 
     public ItemYamato(CreativeTabs aCreativeTabs) {
         super(YAMATO);
-        // #tr item.tst.common.yamato.name
+        // #tr item.tst.yamato.name
         // # Yamato
         // #zh_CN 阎魔刀
         this.setUnlocalizedName("Yamato");
@@ -49,12 +49,12 @@ public class ItemYamato extends ItemSword implements IItemOfTravel {
 
     @Override
     public String getUnlocalizedName() {
-        return "item.tst.common.yamato";
+        return "item.tst.yamato";
     }
 
     @Override
     public String getUnlocalizedName(ItemStack itemStack) {
-        // #tr item.tst.common.yamato_unsheathed.name
+        // #tr item.tst.yamato_unsheathed.name
         // # Yamato(Unsheathed)
         // #zh_CN 阎魔刀(未开鞘)
         switch (itemStack.getItemDamage()) {

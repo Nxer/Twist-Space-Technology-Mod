@@ -38,6 +38,19 @@ public final class BottledChaosCraftingRecipes {
 
     public static void loadRecipes() {
         if (Config.EnableModularizedMachineSystem) {
+            GTValues.RA.stdBuilder()
+                .itemInputs(
+                    ItemList.Tool_DataStick.get(1),
+                    new Object[] { OrePrefixes.circuit.get(Materials.ZPM), 1 },
+                    ItemList.Circuit_Chip_Ram.get(4),
+                    GTOreDictUnificator.get(OrePrefixes.plate, Materials.Polybenzimidazole, 2))
+                .circuit(1)
+                .fluidInputs(MaterialsAlloy.INDALLOY_140.getFluidStack(144))
+                .itemOutputs(GTCMItemList.BottledChaosEarlyAccess.get(1))
+                .duration(20 * 30)
+                .eut(TierEU.RECIPE_ZPM)
+                .addTo(RecipeMaps.assemblerRecipes);
+
             // Controller: UV assembly, reachable with two ZPM energy hatches.
             GTValues.RA.stdBuilder()
                 .metadata(RESEARCH_ITEM, getModItem(Mods.AppliedEnergistics2.ID, "tile.BlockCraftingMonitor", 1))
@@ -101,7 +114,7 @@ public final class BottledChaosCraftingRecipes {
                 .fluidInputs(MaterialsAlloy.INDALLOY_140.getFluidStack(2304), Materials.RubberSilicone.getMolten(2304))
                 .itemOutputs(GTCMItemList.BottledChaosRecipeTokenHatch.get(1))
                 .duration(20 * 40)
-                .eut(TierEU.RECIPE_UV)
+                .eut(TierEU.RECIPE_ZPM)
                 .requireMods(Mods.AppliedEnergistics2, Mods.AE2FluidCraft, Mods.OpenComputers)
                 .addTo(GTRecipeConstants.AssemblyLine);
         }

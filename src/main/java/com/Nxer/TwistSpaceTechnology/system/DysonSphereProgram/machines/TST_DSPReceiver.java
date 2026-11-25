@@ -288,14 +288,14 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 
     @Override
     public String getMachineModeName() {
-        // #tr tst.dyson.machine.DSPReceiver.mode.0
+        // #tr tst.machine.DSPReceiver.mode.0
         // # Mode: Power Generation
         // #zh_CN 发电模式
 
-        // #tr tst.dyson.machine.DSPReceiver.mode.1
+        // #tr tst.machine.DSPReceiver.mode.1
         // # Mode: Photon Collection
         // #zh_CN 光子浓缩模式
-        return StatCollector.translateToLocal("tst.dyson.machine.DSPReceiver.mode." + machineMode);
+        return StatCollector.translateToLocal("tst.machine.DSPReceiver.mode." + machineMode);
     }
 
     @Override
@@ -400,31 +400,31 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         ret.add(
             EnumChatFormatting.AQUA
                 // spotless:off
-            // #tr tst.dyson.machine.DSPReceiver.info.01
+            // #tr tst.machine.DSPReceiver.info.01
             // # Generating EU/t:
             // #zh_CN 实际接收 EU/t:
-            + TSTUtils.tr("tst.dyson.machine.DSPReceiver.info.01")
+            + TSTUtils.tr("tst.machine.DSPReceiver.info.01")
             + EnumChatFormatting.RESET + " "
             + generateTickEU());
         ret.add(EnumChatFormatting.AQUA
-            // #tr tst.dyson.machine.DSPReceiver.info.02
+            // #tr tst.machine.DSPReceiver.info.02
             // # Used Power Point:
             // #zh_CN 已占用产能点数:
-            + TSTUtils.tr("tst.dyson.machine.DSPReceiver.info.02")
+            + TSTUtils.tr("tst.machine.DSPReceiver.info.02")
             + EnumChatFormatting.RESET + " "
             + usedPowerPoint);
         ret.add(EnumChatFormatting.AQUA
-            // #tr tst.dyson.machine.DSPReceiver.info.03
+            // #tr tst.machine.DSPReceiver.info.03
             // # Gravitational Lens Intensify Mode remaining time:
             // #zh_CN 引力透镜增强模式剩余时间:
-            + TSTUtils.tr("tst.dyson.machine.DSPReceiver.info.03")
+            + TSTUtils.tr("tst.machine.DSPReceiver.info.03")
             + EnumChatFormatting.RESET + " "
             + (gravitationalLensTime/20) + " s");
         ret.add(EnumChatFormatting.AQUA
-            // #tr tst.dyson.machine.DSPReceiver.info.04
+            // #tr tst.machine.DSPReceiver.info.04
             // # Overload Multiplier:
             // #zh_CN 过载倍率:
-            + TSTUtils.tr("tst.dyson.machine.DSPReceiver.info.04")
+            + TSTUtils.tr("tst.machine.DSPReceiver.info.04")
             + EnumChatFormatting.RESET + " "
             + astralArrayOverloadMultiplier);
         // DSPDataCell
@@ -454,10 +454,10 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             + dspDataCell.getDSPNode());
         ret.add(space
             + EnumChatFormatting.GOLD
-            // #tr tst.dyson.machine.DSPReceiver.info.current_stellar_coefficient
+            // #tr tst.machine.DSPReceiver.info.current_stellar_coefficient
             // # Current Stellar Coefficient:
             // #zh_CN 当前恒星系数:
-            + TSTUtils.tr("tst.dyson.machine.DSPReceiver.info.current_stellar_coefficient")
+            + TSTUtils.tr("tst.machine.DSPReceiver.info.current_stellar_coefficient")
             + EnumChatFormatting.RESET
             + dspDataCell.getGalaxy()
             + " -> "
@@ -465,10 +465,10 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             + dspDataCell.getGalaxy().stellarCoefficient);
         ret.add(space
             + EnumChatFormatting.GOLD
-            // #tr tst.dyson.machine.DSPReceiver.info.current_planet_coefficient
+            // #tr tst.machine.DSPReceiver.info.current_planet_coefficient
             // # Current Planet Coefficient:
             // #zh_CN 当前行星系数:
-            + TSTUtils.tr("tst.dyson.machine.DSPReceiver.info.current_planet_coefficient")
+            + TSTUtils.tr("tst.machine.DSPReceiver.info.current_planet_coefficient")
             + EnumChatFormatting.RESET
             + DSP_Planet.getPlanetFromDimID(dimID)
             + " -> "
@@ -486,10 +486,10 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         if (tag.getBoolean("isActive")) {
             currentTip.add(
                 EnumChatFormatting.AQUA
-                    // #tr tst.dyson.machine.DSPReceiver.waila.tst_dsp_receiver.1
+                    // #tr tst.machine.DSPReceiver.waila.energy_receiving
                     // # Energy Receiving:
                     // #zh_CN 接收能源:
-                    + TSTUtils.tr("tst.dyson.machine.DSPReceiver.waila.tst_dsp_receiver.1")
+                    + TSTUtils.tr("tst.machine.DSPReceiver.waila.energy_receiving")
                     + EnumChatFormatting.GOLD
                     + formatNumber(tag.getLong("TickEU"))
                     + EnumChatFormatting.RESET
@@ -734,84 +734,84 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.dyson.machine.DSPReceiver.tooltip.machine_type
+        // #tr tst.machine.DSPReceiver.tooltip.machine_type
         // # Dyson Sphere Program: Ray Receiving Station
         // #zh_CN 戴森球计划: 射线接收站
-        tt.addMachineType(TSTUtils.tr("tst.dyson.machine.DSPReceiver.tooltip.machine_type"))
-            // #tr tst.dyson.machine.DSPReceiver.tooltip.info.01
+        tt.addMachineType(TSTUtils.tr("tst.machine.DSPReceiver.tooltip.machine_type"))
+            // #tr tst.machine.DSPReceiver.tooltip.info.01
             // # Controller block for the Dyson Sphere Ray Receiving Station.
             // #zh_CN 戴森球射线接收站的控制器方块.
-            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPReceiver.tooltip.info.01"))
-            // #tr tst.dyson.machine.DSPReceiver.tooltip.info.02
+            .addInfo(TSTUtils.tr("tst.machine.DSPReceiver.tooltip.info.01"))
+            // #tr tst.machine.DSPReceiver.tooltip.info.02
             // # {\DARK_PURPLE}{\BOLD}You hold in your hands the true power of Master Nebula ...
             // #zh_CN {\DARK_PURPLE}{\BOLD}你的手中掌握着星云法师真正的力量 ...
-            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPReceiver.tooltip.info.02"))
-            // #tr tst.dyson.machine.DSPReceiver.tooltip.info.03
+            .addInfo(TSTUtils.tr("tst.machine.DSPReceiver.tooltip.info.02"))
+            // #tr tst.machine.DSPReceiver.tooltip.info.03
             // # Receive high-energy rays transmitted back from the Dyson Cloud or the Dyson Sphere.
             // #zh_CN 接收从戴森云或戴森球上传输回来的高能射线.
-            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPReceiver.tooltip.info.03"))
-            // #tr tst.dyson.machine.DSPReceiver.tooltip.info.04
+            .addInfo(TSTUtils.tr("tst.machine.DSPReceiver.tooltip.info.03"))
+            // #tr tst.machine.DSPReceiver.tooltip.info.04
             // # The received energy can be exported directly to the Wireless EU Net or Dynamo Hatches or stored as Critical Photons.
             // #zh_CN 可以将接收到的能量直接输出到无线EU电网或动力仓, 或者存储为临界状态的光子.
-            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPReceiver.tooltip.info.04"))
-            // #tr tst.dyson.machine.DSPReceiver.tooltip.info.05
+            .addInfo(TSTUtils.tr("tst.machine.DSPReceiver.tooltip.info.04"))
+            // #tr tst.machine.DSPReceiver.tooltip.info.05
             // # Ratio of the requesting from Dyson Sphere power point can be limited by putting Integrated Circuit into controller block.
             // #zh_CN 在控制器方块内放置编程电路可以限制请求功率的比率.
-            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPReceiver.tooltip.info.05"))
-            // #tr tst.dyson.machine.DSPReceiver.tooltip.info.06
+            .addInfo(TSTUtils.tr("tst.machine.DSPReceiver.tooltip.info.05"))
+            // #tr tst.machine.DSPReceiver.tooltip.info.06
             // # At the same time, the maximum requested power point is {\GOLD}1024{\GRAY}A Max (default).
             // #zh_CN 同时, 最大请求功率 {\GOLD}1024{\GRAY}A Max (默认).
-            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPReceiver.tooltip.info.06"))
-            // #tr tst.dyson.machine.DSPReceiver.tooltip.info.07
+            .addInfo(TSTUtils.tr("tst.machine.DSPReceiver.tooltip.info.06"))
+            // #tr tst.machine.DSPReceiver.tooltip.info.07
             // # Actual output power is affected by stellar and planetary coefficients.
             // #zh_CN 实际输出功率受恒星系数和行星系数影响.
-            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPReceiver.tooltip.info.07"))
-            // #tr tst.dyson.machine.DSPReceiver.tooltip.info.08
+            .addInfo(TSTUtils.tr("tst.machine.DSPReceiver.tooltip.info.07"))
+            // #tr tst.machine.DSPReceiver.tooltip.info.08
             // # Inputting Gravitational Lens will enable intensify mode. Increase actual output power.
             // #zh_CN 输入引力透镜将启用增强模式. 提高实际输出功率.
-            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPReceiver.tooltip.info.08"))
-            // #tr tst.dyson.machine.DSPReceiver.tooltip.info.09
+            .addInfo(TSTUtils.tr("tst.machine.DSPReceiver.tooltip.info.08"))
+            // #tr tst.machine.DSPReceiver.tooltip.info.09
             // # Joining the wireless EU network when without installing a dynamo hatch.
             // #zh_CN 未安装动力仓时自动进入无线电力网络模式.
-            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPReceiver.tooltip.info.09"))
+            .addInfo(TSTUtils.tr("tst.machine.DSPReceiver.tooltip.info.09"))
             .beginStructureBlock(shapeMain)
             .addStructureInfo(Tooltip_Details)
-            // #tr tst.dyson.machine.DSPReceiver.tooltip.structure.01
+            // #tr tst.machine.DSPReceiver.tooltip.structure.01
             // # Requesting ratio = Integrated Circuit Number / Stack Size
             // #zh_CN 请求比率 = 编程电路编号 / 堆叠数量
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPReceiver.tooltip.structure.01"))
-            // #tr tst.dyson.machine.DSPReceiver.tooltip.structure.02
+            .addStructureInfo(TSTUtils.tr("tst.machine.DSPReceiver.tooltip.structure.01"))
+            // #tr tst.machine.DSPReceiver.tooltip.structure.02
             // # Actual Generating EU = used power point * stellar coefficient * planet coefficient * 1 or 2 in intensify mode
             // #zh_CN 实际产生EU = 已占用产能点数 * 恒星系数 * 行星系数 * 1 或 4 在增强模式时
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPReceiver.tooltip.structure.02"))
-            // #tr tst.dyson.machine.DSPReceiver.tooltip.structure.03
+            .addStructureInfo(TSTUtils.tr("tst.machine.DSPReceiver.tooltip.structure.02"))
+            // #tr tst.machine.DSPReceiver.tooltip.structure.03
             // # Personal Dimension was been classified as Overworld(Earth).
             // #zh_CN 私人维度归类于主世界(地球).
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPReceiver.tooltip.structure.03"))
-            // #tr tst.dyson.machine.DSPReceiver.tooltip.structure.04
+            .addStructureInfo(TSTUtils.tr("tst.machine.DSPReceiver.tooltip.structure.03"))
+            // #tr tst.machine.DSPReceiver.tooltip.structure.04
             // # Every Gravitational Lens will provide (default) 10 minutes of intensify mode.
             // #zh_CN 每个引力透镜可以提供 (默认) 10 分钟的增强模式.
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPReceiver.tooltip.structure.04"))
-            // #tr tst.dyson.machine.DSPReceiver.tooltip.structure.05
+            .addStructureInfo(TSTUtils.tr("tst.machine.DSPReceiver.tooltip.structure.04"))
+            // #tr tst.machine.DSPReceiver.tooltip.structure.05
             // # Input Gravitational Lens will be consumed immediately.
             // #zh_CN 输入的引力透镜会立刻被消耗.
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPReceiver.tooltip.structure.05"))
-            // #tr tst.dyson.machine.DSPReceiver.tooltip.structure.06
+            .addStructureInfo(TSTUtils.tr("tst.machine.DSPReceiver.tooltip.structure.05"))
+            // #tr tst.machine.DSPReceiver.tooltip.structure.06
             // # Converted to remaining time of intensify mode.
             // #zh_CN 转换成剩余的增强模式时间.
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPReceiver.tooltip.structure.06"))
-            // #tr tst.dyson.machine.DSPReceiver.tooltip.structure.07
+            .addStructureInfo(TSTUtils.tr("tst.machine.DSPReceiver.tooltip.structure.06"))
+            // #tr tst.machine.DSPReceiver.tooltip.structure.07
             // # Put §b§l§oAstral Array Fabricator§7 into controller slot then this machine can request over 1024A Max power point.
             // #zh_CN 在控制器内放入 {\AQUA}{\BOLD}{\ITALIC}星阵{\GRAY} 可以使此机器请求超过1024A Max的能量点数.
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPReceiver.tooltip.structure.07"))
-            // #tr tst.dyson.machine.DSPReceiver.tooltip.structure.08
+            .addStructureInfo(TSTUtils.tr("tst.machine.DSPReceiver.tooltip.structure.07"))
+            // #tr tst.machine.DSPReceiver.tooltip.structure.08
             // # Final requesting power point limit = Astral Array Fabricator amount^2 * 2048A Max
             // #zh_CN 最终请求能量点数上限 = 星阵数量^2 * 2048A Max
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPReceiver.tooltip.structure.08"))
+            .addStructureInfo(TSTUtils.tr("tst.machine.DSPReceiver.tooltip.structure.08"))
             .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
             .addStructureInfo(DSPName + ":")
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.launch.01"))
-            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.launch.02"))
+            .addStructureInfo(TSTUtils.tr("tst.machine.DSPLauncher.tooltip.launch.01"))
+            .addStructureInfo(TSTUtils.tr("tst.machine.DSPLauncher.tooltip.launch.02"))
             .addStructureInfo(Tooltip_DSPInfo_00)
             .addStructureInfo(Tooltip_DSPInfo_01)
             .addStructureInfo(Tooltip_DSPInfo_02)

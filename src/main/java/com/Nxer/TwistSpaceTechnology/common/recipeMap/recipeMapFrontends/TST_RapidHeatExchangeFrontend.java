@@ -9,9 +9,8 @@ import com.gtnewhorizons.modularui.api.math.Pos2d;
 
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
 import gregtech.api.recipe.NEIRecipePropertiesBuilder;
-import gregtech.api.recipe.RecipeMapFrontend;
 
-public class TST_RapidHeatExchangeFrontend extends RecipeMapFrontend {
+public class TST_RapidHeatExchangeFrontend extends TST_RecipeMapFrontend {
 
     public TST_RapidHeatExchangeFrontend(BasicUIPropertiesBuilder uiPropertiesBuilder,
         NEIRecipePropertiesBuilder neiPropertiesBuilder) {

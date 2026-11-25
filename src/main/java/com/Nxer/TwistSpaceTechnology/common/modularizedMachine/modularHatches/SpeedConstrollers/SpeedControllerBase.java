@@ -51,11 +51,10 @@ public abstract class SpeedControllerBase extends ModularHatchBase {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         currentTip.add(
-            // #tr tst.modular.machine.SpeedControllerBase.waila.speed_controller_base.1
+            // #tr tst.machine.SpeedControllerBase.waila.speed_multiplier
             // # Speed Multiplier
             // #zh_CN 速度倍率
-            EnumChatFormatting.AQUA
-                + TSTUtils.tr("tst.modular.machine.SpeedControllerBase.waila.speed_controller_base.1")
+            EnumChatFormatting.AQUA + TSTUtils.tr("tst.machine.SpeedControllerBase.waila.speed_multiplier")
                 + EnumChatFormatting.RESET
                 + ": "
                 + EnumChatFormatting.GOLD

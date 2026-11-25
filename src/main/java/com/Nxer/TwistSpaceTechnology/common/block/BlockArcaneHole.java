@@ -28,7 +28,7 @@ public class BlockArcaneHole extends BlockContainer {
 
     private IIcon placedIcon;
 
-    // #tr tile.tst.common.arcane_hole.name
+    // #tr tile.tst.arcane_hole.name
     // # {\BOLD}{\LIGHT_PURPLE}Arcane Empty Space
     // #zh_CN {\BOLD}{\LIGHT_PURPLE}奥术裂隙
     public BlockArcaneHole() {
@@ -44,7 +44,7 @@ public class BlockArcaneHole extends BlockContainer {
 
     @Override
     public String getUnlocalizedName() {
-        return "tile.tst.common.arcane_hole";
+        return "tile.tst.arcane_hole";
     }
 
     @Override

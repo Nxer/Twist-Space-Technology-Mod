@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AirSingularity;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DistilledWaterSingularity;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.LifeEssenceSingularity;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MoldSingularity;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.ModItem.getModItem;
@@ -51,6 +53,25 @@ public class FluidSolidifierRecipePool {
                     .duration(20)
                     .addTo(fs);
             }
+
+            FluidStack distilledWater = FluidRegistry.getFluidStack("ic2distilledwater", Integer.MAX_VALUE);
+            if (distilledWater != null) {
+                GTValues.RA.stdBuilder()
+                    .itemInputs(MoldSingularity.get(0))
+                    .fluidInputs(distilledWater)
+                    .itemOutputs(DistilledWaterSingularity.get(1))
+                    .eut(RECIPE_UV)
+                    .duration(20)
+                    .addTo(fs);
+            }
+
+            GTValues.RA.stdBuilder()
+                .itemInputs(MoldSingularity.get(0))
+                .fluidInputs(Materials.LiquidAir.getFluid(Integer.MAX_VALUE))
+                .itemOutputs(AirSingularity.get(1))
+                .eut(RECIPE_UV)
+                .duration(20)
+                .addTo(fs);
 
             // Iron Singularity
             GTValues.RA.stdBuilder()

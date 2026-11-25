@@ -8,10 +8,10 @@ import cpw.mods.fml.common.Loader;
 
 public class TSTTooltipKeyHint {
 
-    // #tr tst.common.shared.tooltip.key.more
+    // #tr tst.shared.tooltip.key.more
     // # Hold %s for more
     // #zh_CN 按住 %s 显示更多
-    public static final String DEFAULT_MODIFIER = "tst.common.shared.tooltip.key.more";
+    public static final String DEFAULT_MODIFIER = "tst.shared.tooltip.key.more";
 
     public static final String CHROMATIC_ALT_MODIFIER = "§!alt";
     public static final String CHROMATIC_CTRL_MODIFIER = "§!ctrl";

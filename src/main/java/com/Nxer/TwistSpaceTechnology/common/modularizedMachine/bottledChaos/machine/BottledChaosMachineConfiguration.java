@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.bottledChaos.machine;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,10 +33,12 @@ import com.github.bsideup.jabel.Desugar;
 
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import gregtech.api.GregTechAPI;
+import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import kubatech.loaders.DEFCRecipes;
+import tectech.thing.CustomItemList;
 
 /** Startup machine directory and independent installed modules; no runtime registry scans. */
 public final class BottledChaosMachineConfiguration {
@@ -53,15 +56,19 @@ public final class BottledChaosMachineConfiguration {
     private static long[] machinePools = new long[0];
     private static int purificationPlantSlot = -1;
     private static long purificationPools;
+    private static int godforgeHostSlot = -1;
+    private static long godforgePools;
 
     // Auxiliary dependency identifier; installation slots are independent of pool identifiers.
     private static final String PURIFICATION_PLANT_KEY = "item.tst.bottled_chaos.machine_module.purification_plant";
+    private static final String GODFORGE_HOST_KEY = "item.tst.bottledchaos.machine_module.info.godforge_host";
 
     private final double[] machineSpeeds = new double[MODULE_SLOTS];
     private final BottledChaosStructureCatalog.Structure[] machineStructures = new BottledChaosStructureCatalog.Structure[MODULE_SLOTS];
     private final BottledChaosMachineParameters.InstalledSource[] machineSources = new BottledChaosMachineParameters.InstalledSource[MODULE_SLOTS];
     private final long[] machineQuantities = new long[MODULE_SLOTS];
     private ConfigurationSnapshot configurationSnapshot;
+    private BottledChaosGodforgeConfiguration godforgeConfiguration;
     private long supportedPools;
     private long debugPools;
     private NBTTagCompound pendingMachines;
@@ -137,6 +144,7 @@ public final class BottledChaosMachineConfiguration {
                 supportedPools |= machineStructures[slot].poolMask();
         }
         configurationSnapshot = null;
+        godforgeConfiguration = null;
         changed.run();
     }
 
@@ -148,6 +156,8 @@ public final class BottledChaosMachineConfiguration {
         for (int slot = 0; slot < pools.length; slot++)
             if (isPurificationPool(pools[slot])) purificationPools |= 1L << slot;
         purificationPlantSlot = purificationPools == 0 ? -1 : pools.length;
+        godforgeHostSlot = pools.length + (purificationPlantSlot < 0 ? 0 : 1);
+        godforgePools = 0;
         if (poolCount() > MAX_POOLS) throw new IllegalStateException("Too many Bottled Chaos machine slots");
         poolIndexes.clear();
         for (int slot = 0; slot < pools.length; slot++) poolIndexes.put(pools[slot], slot);
@@ -169,6 +179,8 @@ public final class BottledChaosMachineConfiguration {
             if (supported == null) continue;
             try {
                 machinePools[id] = supported.poolMask(machine);
+                if (supported.structureKind == BottledChaosSupportedMachine.StructureKind.GODFORGE)
+                    godforgePools |= machinePools[id];
             } catch (RuntimeException exception) {
                 TwistSpaceTechnology.LOG.warn("Cannot inspect Bottled Chaos machine catalyst {}.", id, exception);
             }
@@ -185,7 +197,7 @@ public final class BottledChaosMachineConfiguration {
     }
 
     public static int poolCount() {
-        return pools.length + (purificationPlantSlot < 0 ? 0 : 1);
+        return pools.length + (purificationPlantSlot < 0 ? 0 : 1) + (godforgeHostSlot < 0 ? 0 : 1);
     }
 
     /** Query-page grouping only; native recipe identities and execution masks stay distinct. */
@@ -194,12 +206,13 @@ public final class BottledChaosMachineConfiguration {
     }
 
     public static String poolKey(int slot) {
-        return isPurificationPlantSlot(slot) ? PURIFICATION_PLANT_KEY : pools[slot].unlocalizedName;
+        return isGodforgeHostSlot(slot) ? GODFORGE_HOST_KEY
+            : isPurificationPlantSlot(slot) ? PURIFICATION_PLANT_KEY : pools[slot].unlocalizedName;
     }
 
     /** Auxiliary plant slots have no recipe map or processing parameters. */
     public static RecipeMap<?> pool(int slot) {
-        return isPurificationPlantSlot(slot) ? null : pools[slot];
+        return isPurificationPlantSlot(slot) || isGodforgeHostSlot(slot) ? null : pools[slot];
     }
 
     public static String poolName(int slot) {
@@ -220,25 +233,28 @@ public final class BottledChaosMachineConfiguration {
     }
 
     public static String poolName(String key) {
+        if (key.equals(GODFORGE_HOST_KEY)) return CustomItemList.Machine_Multi_ForgeOfGods.get(1)
+            .getDisplayName();
         if (key.equals(PURIFICATION_PLANT_KEY)) {
-            // #tr tst.bottledchaos.machine_module.purification_plant
+            // #tr item.tst.bottledchaos.machine_module.info.purification_plant
             // # Main Water Purification Plant
             // #zh_CN 主净化厂
-            return StatCollector.translateToLocal("tst.bottledchaos.machine_module.purification_plant");
+            return StatCollector.translateToLocal("item.tst.bottledchaos.machine_module.info.purification_plant");
         }
         if (key.equals(GTCMRecipe.NeutronActivatorWithEURecipeMap.unlocalizedName)
             || key.equals("gg.recipe.neutron_activator")) {
-            // #tr tst.bottledchaos.machine_module.neutron_pool
+            // #tr item.tst.bottledchaos.machine_module.info.neutron_pool
             // # Neutron Activator
             // #zh_CN 中子活化器
-            return StatCollector.translateToLocal("tst.bottledchaos.machine_module.neutron_pool");
+            return StatCollector.translateToLocal("item.tst.bottledchaos.machine_module.info.neutron_pool");
         }
         String name = StatCollector.translateToLocal(key);
         if (key.startsWith("gt.recipe.purificationplant")) {
-            // #tr tst.bottledchaos.machine_module.purification_pool
+            // #tr item.tst.bottledchaos.machine_module.info.purification_pool
             // # Purified Water-%s
             // #zh_CN 净化水-%s
-            return StatCollector.translateToLocalFormatted("tst.bottledchaos.machine_module.purification_pool", name);
+            return StatCollector
+                .translateToLocalFormatted("item.tst.bottledchaos.machine_module.info.purification_pool", name);
         }
         return name.replaceFirst("^(大型|工业|巨型|Large |Industrial |Mega )", "");
     }
@@ -262,7 +278,33 @@ public final class BottledChaosMachineConfiguration {
     }
 
     public static long withDependencies(long mask) {
-        return (mask & purificationPools) == 0 ? mask : mask | purificationPlantMask();
+        if ((mask & purificationPools) != 0) mask |= purificationPlantMask();
+        return mask;
+    }
+
+    /** Display dependency only: shared recipe pools must remain usable by ordinary source machines. */
+    public long withInstalledDependencies(long mask) {
+        mask = withDependencies(mask);
+        for (int slot = 0; slot < moduleSlotLimit; slot++) if (machineQuantities[slot] > 0
+            && BottledChaosComplexStructures.isSeparateGodforgeModule(machineStructures[slot])
+            && (machineStructures[slot].poolMask() & mask) != 0) return mask | godforgeHostMask();
+        return mask;
+    }
+
+    public static boolean isGodforgeHostSlot(int slot) {
+        return slot >= 0 && slot == godforgeHostSlot;
+    }
+
+    public static long godforgeHostMask() {
+        return godforgeHostSlot < 0 ? 0 : 1L << godforgeHostSlot;
+    }
+
+    private BottledChaosGodforgeConfiguration godforge() {
+        if (godforgeConfiguration == null) godforgeConfiguration = new BottledChaosGodforgeConfiguration(
+            machineSources,
+            machineQuantities,
+            moduleSlotLimit);
+        return godforgeConfiguration;
     }
 
     public static String poolKeys(long mask) {
@@ -339,7 +381,7 @@ public final class BottledChaosMachineConfiguration {
 
     public long installedPoolMask() {
         loadPendingMachines();
-        long mask = requiredPools & supportedPools;
+        long mask = (requiredPools | godforgeHostMask()) & supportedPools;
         long plantQuantity = purificationPlantQuantity();
         for (int slot = 0; slot < poolCount(); slot++) {
             long bit = 1L << slot;
@@ -347,6 +389,16 @@ public final class BottledChaosMachineConfiguration {
                 boolean available = false;
                 for (int source : sourcesForPool(slot))
                     if (machineQuantities[source] <= plantQuantity) available = true;
+                if (!available) mask &= ~bit;
+            }
+            if ((godforgePools & bit) != 0) {
+                boolean available = false;
+                for (int source : sourcesForPool(slot)) {
+                    if (!BottledChaosComplexStructures.isSeparateGodforgeModule(machineStructures[source])
+                        || !godforge().bindings(source)
+                            .isEmpty())
+                        available = true;
+                }
                 if (!available) mask &= ~bit;
             }
         }
@@ -377,6 +429,68 @@ public final class BottledChaosMachineConfiguration {
         int sourceSlot = candidates.length == 0 ? -1 : candidates[Math.floorMod(candidate, candidates.length)];
         long quantity = sourceSlot < 0 ? 0 : machineQuantities[sourceSlot];
         data.setLong("quantity", quantity);
+        if (sourceSlot >= 0 && (BottledChaosComplexStructures.isSeparateGodforgeHost(machineStructures[sourceSlot])
+            || BottledChaosComplexStructures.isSeparateGodforgeModule(machineStructures[sourceSlot]))) {
+            var fleet = godforge();
+            data.setString("godforgeModules", fleet.totalModules.toString());
+            data.setString("godforgeCapacity", "0");
+            BottledChaosGodforgeConfiguration.Host host = null;
+            if (isGodforgeHostSlot(slot)) {
+                for (var candidateHost : fleet.hosts)
+                    if (candidateHost.installation() == fleet.canonical[sourceSlot]) host = candidateHost;
+            } else if (!fleet.bindings(sourceSlot)
+                .isEmpty()) {
+                    var binding = fleet.bindings(sourceSlot)
+                        .get(0);
+                    host = binding.host();
+                    BottledChaosModuleStacking.Combination best = null;
+                    for (var combination : binding.combinations()) if (best == null || combination.throughput()
+                        .compareTo(best.throughput()) > 0
+                        || combination.throughput()
+                            .equals(best.throughput())
+                            && combination.unused()
+                                .compareTo(best.unused()) < 0)
+                        best = combination;
+                    if (best != null) {
+                        data.setInteger("godforgeParallel", best.parallel());
+                        data.setString(
+                            "godforgeLower",
+                            best.lowerSpeed()
+                                .toString());
+                        data.setInteger("godforgeFaster", best.faster());
+                        data.setString(
+                            "godforgeUnused",
+                            best.unused()
+                                .toString());
+                    }
+                }
+            if (host != null && host.profile() != null) {
+                data.setBoolean("godforgeReady", true);
+                data.setString(
+                    "godforgeCapacity",
+                    host.quantity()
+                        .multiply(
+                            BigInteger.valueOf(
+                                host.profile()
+                                    .modules()))
+                        .toString());
+                NBTTagList upkeep = new NBTTagList();
+                FluidStack fuel = Materials.MHDCSM.getMolten(
+                    host.profile()
+                        .fuelPerFiveSeconds());
+                NBTTagCompound entry = fuel.writeToNBT(new NBTTagCompound());
+                entry.setString(
+                    "perSecond",
+                    new BigDecimal(
+                        host.quantity()
+                            .multiply(BigInteger.valueOf(fuel.amount))).divide(BigDecimal.valueOf(5))
+                                .stripTrailingZeros()
+                                .toPlainString());
+                upkeep.appendTag(entry);
+                data.setTag("upkeep", upkeep);
+            }
+            return data;
+        }
         if (isPurificationPlantSlot(slot)) {
             long needed = 0;
             for (int pool = 0; pool < pools.length; pool++)
@@ -496,6 +610,7 @@ public final class BottledChaosMachineConfiguration {
         private final double[] speeds = machineSpeeds.clone();
         private final BottledChaosMachineParameters.InstalledSource[] sources = machineSources.clone();
         private final int[][] candidates = new int[poolCount()][];
+        private final BottledChaosGodforgeConfiguration godforge = godforge();
 
         private ConfigurationSnapshot() {
             for (int pool = 0; pool < poolCount(); pool++) candidates[pool] = sourcesForPool(pool);
@@ -507,6 +622,7 @@ public final class BottledChaosMachineConfiguration {
         private final ConfigurationSnapshot installed;
         private final BottledChaosMachineParameters.Context context;
         private final Map<SourceKey, Evaluation> evaluations = new HashMap<>();
+        private final Map<SourceKey, List<Evaluation>> godforgeEvaluations = new HashMap<>();
         private final List<BottledChaosUpkeep.Demand> sourceUsage = new ArrayList<>();
         private long roundItemPools;
 
@@ -533,6 +649,15 @@ public final class BottledChaosMachineConfiguration {
             List<Evaluation> results = new ArrayList<>();
             for (int installation : installed.candidates[pool]) {
                 SourceKey key = new SourceKey(pool, installation, recipeVoltage, requirements);
+                if (installed.sources[installation] != null && BottledChaosComplexStructures
+                    .isSeparateGodforgeModule(installed.sources[installation].structure)) {
+                    if (installed.godforge.canonical[installation] != installation) continue;
+                    results.addAll(
+                        godforgeEvaluations.computeIfAbsent(
+                            key,
+                            ignored -> evaluateGodforge(pool, installation, map, recipeVoltage, requirements)));
+                    continue;
+                }
                 results.add(
                     evaluations.computeIfAbsent(
                         key,
@@ -545,6 +670,59 @@ public final class BottledChaosMachineConfiguration {
 
         private Evaluation evaluate(int slot, int installation, RecipeMap<?> map, long recipeVoltage,
             BottledChaosSourceRequirements requirements) {
+            return evaluate(
+                slot,
+                installation,
+                map,
+                recipeVoltage,
+                requirements,
+                installed.sources[installation],
+                installed.speeds[installation]);
+        }
+
+        private List<Evaluation> evaluateGodforge(int slot, int installation, RecipeMap<?> map, long recipeVoltage,
+            BottledChaosSourceRequirements requirements) {
+            List<Evaluation> result = new ArrayList<>();
+            for (var binding : installed.godforge.bindings(installation)) {
+                Evaluation base = evaluate(slot, installation, map, recipeVoltage, requirements, binding.source(), 1);
+                if (base.profile() == null) {
+                    result.add(base);
+                    continue;
+                }
+                for (var combination : binding.combinations()) result.add(
+                    new Evaluation(
+                        base.profile()
+                            .withParallel(
+                                Math.multiplyExact(
+                                    base.profile()
+                                        .parallel(),
+                                    combination.parallel())),
+                        combination.speedMultiplier(),
+                        false,
+                        base.maximumOverclocks(),
+                        base.perfectOverclocks(),
+                        base.overclockLimitAlternatives(),
+                        null,
+                        binding.host()
+                            .installation(),
+                        base.ingotMold()));
+            }
+            if (result.isEmpty()) {
+                // #tr tst.machine.BottledChaos.result.godforge_host
+                // # Requires a compatible Godforge host configuration with enough capacity for all installed modules.
+                // #zh_CN 需要支持此模块的神锻主机配置, 且容量足以容纳全部已安装模块.
+                result.add(
+                    Evaluation.rejected(
+                        BottledChaosPoolFailure.of(
+                            poolKey(slot),
+                            SimpleResultWithText.ofFailure("tst.machine.BottledChaos.result.godforge_host"))));
+            }
+            return result;
+        }
+
+        private Evaluation evaluate(int slot, int installation, RecipeMap<?> map, long recipeVoltage,
+            BottledChaosSourceRequirements requirements, BottledChaosMachineParameters.InstalledSource source,
+            double quantitySpeed) {
             if ((purificationPools & (1L << slot)) != 0
                 && installed.quantities[installation] > installed.purificationPlantQuantity)
                 return reject(
@@ -565,18 +743,18 @@ public final class BottledChaosMachineConfiguration {
                     installation,
                     true);
             }
-            var result = BottledChaosMachineParameters
-                .evaluate(installed.sources[installation], map, recipeVoltage, context, requirements);
+            var result = BottledChaosMachineParameters.evaluate(source, map, recipeVoltage, context, requirements);
             var profile = result.profile();
             if (profile == null) {
-                // #tr tst.bottledchaos.result.invalid_source_configuration
+                // #tr tst.machine.BottledChaos.result.invalid_source_configuration
                 // # Source structure configuration is not valid for this recipe pool.
                 // #zh_CN 来源结构配置不适用于此配方池.
                 return Evaluation.rejected(
                     result.failure() != null ? result.failure()
                         : BottledChaosPoolFailure.of(
                             poolKey(slot),
-                            SimpleResultWithText.ofFailure("tst.bottledchaos.result.invalid_source_configuration")));
+                            SimpleResultWithText
+                                .ofFailure("tst.machine.BottledChaos.result.invalid_source_configuration")));
             }
             long requiredVoltage = requirements.requiredSourceVoltage() > 0 ? requirements.requiredSourceVoltage()
                 : recipeVoltage;
@@ -609,15 +787,14 @@ public final class BottledChaosMachineConfiguration {
             int base = profile.maximumOverclocks();
             return new Evaluation(
                 profile,
-                installed.speeds[installation],
-                installed.sources[installation].original instanceof TST_MiracleDoor,
+                quantitySpeed,
+                source.original instanceof TST_MiracleDoor,
                 maximum,
                 perfect,
-                installed.sources[installation].fourHeliocasts ? new int[] { base, base + 1, base + 2, base + 3 }
-                    : null,
+                source.fourHeliocasts ? new int[] { base, base + 1, base + 2, base + 3 } : null,
                 null,
                 installation,
-                installed.sources[installation].upgrades.ingotMold);
+                source.upgrades.ingotMold);
         }
 
         private Evaluation reject(int slot, String parameter, long available, long required) {
@@ -645,14 +822,15 @@ public final class BottledChaosMachineConfiguration {
             int installation = source.installation();
             if (slot == null || profile == null || installation < 0) return;
             if (source.energyOnly()) roundItemPools |= 1L << installation;
+            BigInteger upkeepQuantity = installed.godforge.hostQuantity(installation);
+            if (upkeepQuantity == null) upkeepQuantity = BigInteger.valueOf(installed.quantities[installation]);
             for (FluidStack fluid : profile.upkeep()) {
                 if (fluid == null || fluid.amount <= 0) continue;
                 sourceUsage.add(
                     new BottledChaosUpkeep.Demand(
                         poolKey(slot),
                         fluid,
-                        BigInteger.valueOf(installed.quantities[installation])
-                            .multiply(BigInteger.valueOf(fluid.amount)),
+                        upkeepQuantity.multiply(BigInteger.valueOf(fluid.amount)),
                         profile.startupReserveSeconds(),
                         profile.upkeepPeriodSeconds(),
                         installation));

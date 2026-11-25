@@ -38,7 +38,7 @@ public abstract class AbstractTstMetaItem extends Item implements IHasVariantAnd
     private final String localizationName;
 
     public AbstractTstMetaItem(String unlocalizedName) {
-        this(unlocalizedName, "common." + unlocalizedName);
+        this(unlocalizedName, unlocalizedName);
     }
 
     protected AbstractTstMetaItem(String unlocalizedName, String localizationName) {

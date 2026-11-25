@@ -301,43 +301,43 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.BeeEngineer.tooltip.machine_type
+        // #tr tst.machine.BeeEngineer.tooltip.machine_type
         // # Bee Engineer
         // #zh_CN 蜜蜂操纵者
-        tt.addMachineType(TSTUtils.tr("tst.common.machine.BeeEngineer.tooltip.machine_type"))
-            // #tr tst.common.machine.BeeEngineer.tooltip.controller
+        tt.addMachineType(TSTUtils.tr("tst.machine.BeeEngineer.tooltip.machine_type"))
+            // #tr tst.machine.BeeEngineer.tooltip.controller
             // # Controller of the Bee Engineer
             // #zh_CN 蜜蜂操纵者的控制器
-            .addInfo(TSTUtils.tr("tst.common.machine.BeeEngineer.tooltip.controller"))
-            // #tr tst.common.machine.BeeEngineer.tooltip.info.01
+            .addInfo(TSTUtils.tr("tst.machine.BeeEngineer.tooltip.controller"))
+            // #tr tst.machine.BeeEngineer.tooltip.info.01
             // # Still in test.
             // #zh_CN 其实还在测试中.
-            .addInfo(TSTUtils.tr("tst.common.machine.BeeEngineer.tooltip.info.01"))
-            // #tr tst.common.machine.BeeEngineer.tooltip.info.02
+            .addInfo(TSTUtils.tr("tst.machine.BeeEngineer.tooltip.info.01"))
+            // #tr tst.machine.BeeEngineer.tooltip.info.02
             // # Transforming drones into princesses.
             // #zh_CN 将雄蜂转化为公主蜂.
-            .addInfo(TSTUtils.tr("tst.common.machine.BeeEngineer.tooltip.info.02"))
-            // #tr tst.common.machine.BeeEngineer.tooltip.info.03
+            .addInfo(TSTUtils.tr("tst.machine.BeeEngineer.tooltip.info.02"))
+            // #tr tst.machine.BeeEngineer.tooltip.info.03
             // # Who knows how many drones became stepping stones for the Last Queen?
             // #zh_CN 谁知道有多少雄蜂成为了蜂后的垫脚石？
-            .addInfo(TSTUtils.tr("tst.common.machine.BeeEngineer.tooltip.info.03"))
-            // #tr tst.common.machine.BeeEngineer.tooltip.info.04
+            .addInfo(TSTUtils.tr("tst.machine.BeeEngineer.tooltip.info.03"))
+            // #tr tst.machine.BeeEngineer.tooltip.info.04
             // # Cost {\GOLD}128kL{\GRAY} Honey to transform a drone into princess, but with {\RED}40%{\GRAY} failing chance.
             // #zh_CN 消耗{\GOLD}128k{\GRAY}L蜂蜜, 将雄蜂转化为公主蜂，但失败几率为{\RED}40%{\GRAY}.
-            .addInfo(TSTUtils.tr("tst.common.machine.BeeEngineer.tooltip.info.04"))
-            // #tr tst.common.machine.BeeEngineer.tooltip.info.05
+            .addInfo(TSTUtils.tr("tst.machine.BeeEngineer.tooltip.info.04"))
+            // #tr tst.machine.BeeEngineer.tooltip.info.05
             // # Will try to consume {\GOLD}32kL{\GRAY} UUM (if exists) to increase success rate to {\RED}80%{\GRAY}.
             // #zh_CN 将尝试消耗{\GOLD}32kL{\GRAY}的UU物质(如果存在)以将成功率提高到{\RED}80%{\GRAY}.
-            .addInfo(TSTUtils.tr("tst.common.machine.BeeEngineer.tooltip.info.05"))
-            // #tr tst.common.machine.BeeEngineer.tooltip.info.06
+            .addInfo(TSTUtils.tr("tst.machine.BeeEngineer.tooltip.info.05"))
+            // #tr tst.machine.BeeEngineer.tooltip.info.06
             // # In case of failure, all consumed ingredients will not be returned.
             // #zh_CN 在失败的情况下, 所有投入的原料都不会返还.
-            .addInfo(TSTUtils.tr("tst.common.machine.BeeEngineer.tooltip.info.06"))
+            .addInfo(TSTUtils.tr("tst.machine.BeeEngineer.tooltip.info.06"))
             .beginStructureBlock(STRUCTURE)
-            // #tr tst.common.machine.BeeEngineer.tooltip.info.07
+            // #tr tst.machine.BeeEngineer.tooltip.info.07
             // # Don't put too many drones in at once, that will result in a long run time!
             // #zh_CN 不要一次性放入太多雄蜂, 那会导致运行时间过长!
-            // .addInfo(TstUtils.tr("tst.common.machine.BeeEngineer.tooltip.info.07"))
+            // .addInfo(TstUtils.tr("tst.machine.BeeEngineer.tooltip.info.07"))
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint)
             .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint)

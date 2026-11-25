@@ -46,6 +46,8 @@ import appeng.api.config.Actionable;
 import appeng.api.networking.IGrid;
 import appeng.api.networking.energy.IEnergyGrid;
 import appeng.api.networking.security.BaseActionSource;
+import appeng.api.networking.security.IActionHost;
+import appeng.api.networking.security.MachineSource;
 import appeng.api.storage.IMEInventory;
 import appeng.api.storage.IMEInventoryHandler;
 import appeng.api.storage.ISaveProvider;
@@ -113,28 +115,28 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
     private static String[] createDescription() {
         return new String[] {
             TSTSharedLocalization.General.HatchTier + " " + TSTSharedFormat.getTierName(VoltageIndex.UIV),
-            // #tr tst.common.machine.AEStorageCellInputHatch.tooltip.info.01
+            // #tr tst.machine.AEStorageCellInputHatch.tooltip.info.01
             // # Advanced stocking input hatch upgrade for multiblock fluid input
             // #zh_CN 进阶存储输入仓的升级版，为多方块机器输入流体
-            TSTUtils.tr("tst.common.machine.AEStorageCellInputHatch.tooltip.info.01"),
-            // #tr tst.common.machine.AEStorageCellInputHatch.tooltip.info.02
+            TSTUtils.tr("tst.machine.AEStorageCellInputHatch.tooltip.info.01"),
+            // #tr tst.machine.AEStorageCellInputHatch.tooltip.info.02
             // # Retrieves up to 16 marked fluid types directly from the ME network
             // #zh_CN 直接从ME网络拉取至多16种已标记流体
-            TSTUtils.tr("tst.common.machine.AEStorageCellInputHatch.tooltip.info.02"),
-            // #tr tst.common.machine.AEStorageCellInputHatch.tooltip.info.03
+            TSTUtils.tr("tst.machine.AEStorageCellInputHatch.tooltip.info.02"),
+            // #tr tst.machine.AEStorageCellInputHatch.tooltip.info.03
             // # An inserted ME fluid storage cell supplies fluids instead and disconnects the ME network
             // #zh_CN 放入ME流体存储元件后改从元件中拉取，且无法连接ME网络
-            TSTUtils.tr("tst.common.machine.AEStorageCellInputHatch.tooltip.info.03"),
-            // #tr tst.common.machine.AEStorageCellInputHatch.tooltip.info.04
+            TSTUtils.tr("tst.machine.AEStorageCellInputHatch.tooltip.info.03"),
+            // #tr tst.machine.AEStorageCellInputHatch.tooltip.info.04
             // # Per recipe, TST machines handle %s x 2147483647 L in total
             // #zh_CN 单次配方TST机器合计最多处理%s x 2147483647 L流体
             TSTUtils.tr(
-                "tst.common.machine.AEStorageCellInputHatch.tooltip.info.04",
+                "tst.machine.AEStorageCellInputHatch.tooltip.info.04",
                 Config.MaxTotalIntSegments_AEStorageCellInput),
-            // #tr tst.common.machine.AEStorageCellInputHatch.tooltip.info.05
+            // #tr tst.machine.AEStorageCellInputHatch.tooltip.info.05
             // # Supported special processing can use the full stored amount
             // #zh_CN 支持的特殊处理可使用完整库存数量
-            TSTUtils.tr("tst.common.machine.AEStorageCellInputHatch.tooltip.info.05") };
+            TSTUtils.tr("tst.machine.AEStorageCellInputHatch.tooltip.info.05") };
     }
 
     @Override
@@ -401,16 +403,69 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
                 inputs.add(InputSource.of(owners.getOrDefault(stack, stack), stack));
             for (List<FluidSource> sources : longInputs.values()) {
                 for (FluidSource source : sources) {
-                    inputs.add(
-                        new InputSource(
-                            source.hatch.getTSTInputSource(),
-                            source.config,
-                            () -> simulateLong(source.hatch, source.config),
-                            amount -> extractLong(source.hatch, source.config, amount),
-                            true));
+                    inputs.add(cellSource(source.hatch, source.config));
                 }
             }
             return InputSource.unique(inputs);
+        }
+
+        private static InputSource cellSource(TST_AEStorageCellInputHatch hatch, FluidStack config) {
+            return new InputSource(
+                hatch.getTSTInputSource(),
+                config,
+                () -> simulateLong(hatch, config),
+                amount -> extractLong(hatch, config, amount),
+                true);
+        }
+
+        /** A configured fluid from one dedicated hatch, without enrolling that hatch as a general recipe input. */
+        public static InputSource fromHatch(MTEHatchInput hatch, FluidStack config) {
+            if (hatch instanceof TST_AEStorageCellInputHatch cell && cell.hasStorageCell())
+                return cellSource(cell, config);
+            if (hatch instanceof MTEHatchInputME me) {
+                IGrid grid = TST_AEStorageCellHelper.getNetwork(me.getProxy());
+                if (grid == null) return null;
+                for (FluidStack filter : me.getStoredFluids()) {
+                    if (!GTUtility.areFluidsEqual(filter, config)) continue;
+                    return new InputSource(
+                        grid,
+                        config,
+                        () -> transferME(me, config, Long.MAX_VALUE, Actionable.SIMULATE),
+                        amount -> transferME(me, config, amount, Actionable.MODULATE),
+                        true);
+                }
+                return null;
+            }
+            return new InputSource(
+                hatch,
+                config,
+                () -> drain(hatch, config, Integer.MAX_VALUE, false),
+                amount -> drain(hatch, config, Math.toIntExact(amount), true),
+                false);
+        }
+
+        private static long transferME(MTEHatchInputME hatch, FluidStack fluid, long amount, Actionable mode) {
+            try {
+                var proxy = hatch.getProxy();
+                var request = AEFluidStack.create(fluid);
+                // AE rounds up with addExact(amount, unitsPerBucket) when calculating the extraction power.
+                request.setStackSize(Math.min(amount, Long.MAX_VALUE - request.getAmountPerUnit()));
+                var taken = Platform.poweredExtraction(
+                    proxy.getEnergy(),
+                    proxy.getStorage()
+                        .getFluidInventory(),
+                    request,
+                    new MachineSource((IActionHost) hatch.getBaseMetaTileEntity()),
+                    mode);
+                return taken == null ? 0 : taken.getStackSize();
+            } catch (GridAccessException ignored) {
+                return 0;
+            }
+        }
+
+        private static int drain(MTEHatchInput hatch, FluidStack fluid, int amount, boolean consume) {
+            FluidStack taken = hatch.drain(ForgeDirection.UNKNOWN, fluid, amount, consume);
+            return taken == null ? 0 : taken.amount;
         }
 
         public List<Fluid> getFluidTypes() {

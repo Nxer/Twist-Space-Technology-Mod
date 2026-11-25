@@ -208,7 +208,7 @@ public final class BottledChaosRecipeResources {
 
         public static String translationKey(int index) {
             String name = tag(index);
-            return name == null ? null : "tst.bottledchaos.route." + name;
+            return name == null ? null : "tst.bottledchaos.shared.route." + name;
         }
 
         /** One representative per NEI page; unrelated routes on the main page remain independent. */
@@ -225,7 +225,7 @@ public final class BottledChaosRecipeResources {
                 if ((representatives & (1L << index)) == 0) continue;
                 keys.add(displayPage(index).summaryKey(translationKey(index)));
             }
-            if (keys.isEmpty()) keys.add("tst.bottledchaos.unbound");
+            if (keys.isEmpty()) keys.add("tst.machine.BottledChaos.info.unbound");
             return keys;
         }
 

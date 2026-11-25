@@ -47,7 +47,7 @@ public class BlockPowerChair extends Block {
 
     @Override
     public String getUnlocalizedName() {
-        return "tile.tst.common.block_power_chair";
+        return "tile.tst.block_power_chair";
     }
 
     @Override
@@ -158,7 +158,7 @@ public class BlockPowerChair extends Block {
 
         @Override
         public String getUnlocalizedName(ItemStack aStack) {
-            // #tr tile.tst.common.block_power_chair.0.name
+            // #tr tile.tst.block_power_chair.0.name
             // # PowerChair
             // #zh_CN 抛瓦椅
             return this.field_150939_a.getUnlocalizedName() + "." + this.getDamage(aStack);
@@ -174,15 +174,15 @@ public class BlockPowerChair extends Block {
         public void addInformation(final ItemStack itemStack, final EntityPlayer player, final List<String> toolTip,
             final boolean advancedToolTips) {
             if (isShiftKeyDown()) {
-                // #tr tile.tst.common.block_power_chair.0.tooltip.02
+                // #tr tile.tst.block_power_chair.0.tooltip.02
                 // # {\LIGHT_PURPLE}If you want it, then you'll have to take it.
                 // #zh_CN {\LIGHT_PURPLE}If you want it, then you'll have to take it.
-                toolTip.add(TSTUtils.tr("tile.tst.common.block_power_chair.0.tooltip.02"));
+                toolTip.add(TSTUtils.tr("tile.tst.block_power_chair.0.tooltip.02"));
             } else {
-                // #tr tile.tst.common.block_power_chair.0.tooltip.01
+                // #tr tile.tst.block_power_chair.0.tooltip.01
                 // # Your portal opening day's over.
                 // #zh_CN Your portal opening day's over.
-                toolTip.add(TSTUtils.tr("tile.tst.common.block_power_chair.0.tooltip.01"));
+                toolTip.add(TSTUtils.tr("tile.tst.block_power_chair.0.tooltip.01"));
             }
 
         }

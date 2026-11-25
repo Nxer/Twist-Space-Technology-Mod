@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
@@ -48,16 +49,25 @@ public class TST_Gui_LaserMeteorMiner extends MTEMultiBlockBaseGui<TST_LaserMete
     protected void registerSyncValues(PanelSyncManager syncManager) {
         super.registerSyncValues(syncManager);
         syncManager.syncValue("meteorReset", new ClickOnceSyncValue(multiblock::startReset).allowC2S());
+        syncManager.syncValue("meteorUnit", new BooleanSyncValue(multiblock::isMiningUnit));
         syncManager.syncValue("meteorMining", new BooleanSyncValue(multiblock::isMining));
-        syncManager.syncValue("meteorRadius", new IntSyncValue(multiblock::getCurrentRadius));
+        syncManager.syncValue(
+            "meteorRadius",
+            new IntSyncValue(() -> multiblock.isMiningUnit() ? 0 : multiblock.getCurrentRadius()));
         syncManager.syncValue("meteorFortune", new IntSyncValue(multiblock::getFortuneTier));
-        syncManager.syncValue("meteorProgress", new DoubleSyncValue(multiblock::getProgress));
-        syncManager.syncValue("meteorEta", new IntSyncValue(multiblock::getEtaSeconds));
-        syncManager.syncValue("meteorBlocksPerSecond", new DoubleSyncValue(multiblock::getBlocksPerSecond));
+        syncManager.syncValue(
+            "meteorProgress",
+            new DoubleSyncValue(() -> multiblock.isMiningUnit() ? 0 : multiblock.getProgress()));
+        syncManager.syncValue(
+            "meteorEta",
+            new IntSyncValue(() -> multiblock.isMiningUnit() ? -1 : multiblock.getEtaSeconds()));
+        syncManager.syncValue(
+            "meteorBlocksPerSecond",
+            new DoubleSyncValue(() -> multiblock.isMiningUnit() ? 0 : multiblock.getBlocksPerSecond()));
         syncManager.syncValue(
             "meteorOutputs",
             new GenericListSyncHandler<>(
-                multiblock::getMeteorOutputs,
+                () -> multiblock.isMiningUnit() ? Collections.emptyList() : multiblock.getMeteorOutputs(),
                 null,
                 TST_Gui_LaserMeteorMiner::readOutput,
                 TST_Gui_LaserMeteorMiner::writeOutput,
@@ -72,11 +82,13 @@ public class TST_Gui_LaserMeteorMiner extends MTEMultiBlockBaseGui<TST_LaserMete
 
     private IWidget createResetButton(PanelSyncManager syncManager) {
         BooleanSyncValue resetSyncer = syncManager.findSyncHandler("meteorReset", BooleanSyncValue.class);
+        BooleanSyncValue unit = syncManager.findSyncHandler("meteorUnit", BooleanSyncValue.class);
         return new ToggleButton().size(18, 18)
             .value(resetSyncer)
+            .setEnabledIf(widget -> !unit.getBoolValue())
             .overlay(GTGuiTextures.OVERLAY_BUTTON_CYCLIC)
-            .tooltipBuilder(t -> t.addLine(IKey.lang("tst.common.machine.MeteorMiner.gui.reset")));
-        // #tr tst.common.machine.MeteorMiner.gui.reset
+            .tooltipBuilder(t -> t.addLine(IKey.lang("tst.machine.MeteorMiner.gui.reset")));
+        // #tr tst.machine.MeteorMiner.gui.reset
         // # Reset machine
         // #zh_CN 重启机器
     }
@@ -86,7 +98,9 @@ public class TST_Gui_LaserMeteorMiner extends MTEMultiBlockBaseGui<TST_LaserMete
     protected ListWidget<IWidget, ?> createTerminalTextWidget(PanelSyncManager syncManager, ModularPanel parent) {
         ListWidget<IWidget, ?> terminal = super.createTerminalTextWidget(syncManager, parent);
 
+        BooleanSyncValue unit = syncManager.findSyncHandler("meteorUnit", BooleanSyncValue.class);
         BooleanSyncValue mining = syncManager.findSyncHandler("meteorMining", BooleanSyncValue.class);
+        BooleanSupplier worldMining = () -> !unit.getBoolValue() && mining.getBoolValue();
         IntSyncValue radius = syncManager.findSyncHandler("meteorRadius", IntSyncValue.class);
         IntSyncValue fortune = syncManager.findSyncHandler("meteorFortune", IntSyncValue.class);
         DoubleSyncValue progress = syncManager.findSyncHandler("meteorProgress", DoubleSyncValue.class);
@@ -95,51 +109,55 @@ public class TST_Gui_LaserMeteorMiner extends MTEMultiBlockBaseGui<TST_LaserMete
         GenericListSyncHandler<ItemStackLong> meteorOutputs = syncManager
             .findSyncHandler("meteorOutputs", GenericListSyncHandler.class);
         // Kept after the meteor is done, until the next one starts
-        BooleanSupplier hasOutputs = () -> !meteorOutputs.getValue()
+        BooleanSupplier hasOutputs = () -> !unit.getBoolValue() && !meteorOutputs.getValue()
             .isEmpty();
 
-        // #tr tst.common.machine.MeteorMiner.gui.radius
+        // #tr tst.star.miner.unit
+        // # Extraction unit
+        // #zh_CN 开采单元
+
+        // #tr tst.machine.MeteorMiner.gui.radius
         // # Radius: {\WHITE}%s
         // #zh_CN 当前半径: {\WHITE}%s
 
-        // #tr tst.common.machine.MeteorMiner.gui.progress
+        // #tr tst.machine.MeteorMiner.gui.progress
         // # Progress: {\WHITE}%s {\GRAY}(ETA: %s)
         // #zh_CN 进度: {\WHITE}%s {\GRAY}(预计剩余: %s)
 
-        // #tr tst.common.machine.MeteorMiner.gui.blocks_per_second
+        // #tr tst.machine.MeteorMiner.gui.blocks_per_second
         // # Mining speed: {\WHITE}%s blocks/s
         // #zh_CN 开采速度: {\WHITE}%s 方块/秒
 
-        // #tr tst.common.machine.MeteorMiner.gui.meteor_outputs
+        // #tr tst.machine.MeteorMiner.gui.meteor_outputs
         // # Mined since the last meteor arrived:
         // #zh_CN 本次陨星开采产出:
-        terminal
+        terminal.child(statLine(() -> StatCollector.translateToLocal("tst.star.miner.unit"), unit))
             .child(
                 statLine(
                     () -> StatCollector
-                        .translateToLocalFormatted("tst.common.machine.MeteorMiner.gui.radius", radius.getIntValue()),
-                    mining))
+                        .translateToLocalFormatted("tst.machine.MeteorMiner.gui.radius", radius.getIntValue()),
+                    worldMining))
             .child(
                 statLine(
                     () -> StatCollector.translateToLocalFormatted(
-                        "tst.common.machine.MeteorMiner.gui.progress",
+                        "tst.machine.MeteorMiner.gui.progress",
                         String.format("%.1f%%", progress.getDoubleValue() * 100),
                         formatEta(eta.getIntValue())),
-                    mining))
+                    worldMining))
             .child(
                 statLine(
                     () -> StatCollector.translateToLocalFormatted(
-                        "tst.common.machine.MeteorMiner.gui.blocks_per_second",
+                        "tst.machine.MeteorMiner.gui.blocks_per_second",
                         String.format("%.1f", blocksPerSecond.getDoubleValue())),
-                    mining))
+                    worldMining))
             .child(
                 statLine(
                     () -> StatCollector
-                        .translateToLocal("tst.common.machine.MeteorMiner.waila.fortune." + fortune.getIntValue()),
-                    mining))
+                        .translateToLocal("tst.machine.MeteorMiner.waila.fortune." + fortune.getIntValue()),
+                    worldMining))
             .child(
                 statLine(
-                    () -> StatCollector.translateToLocal("tst.common.machine.MeteorMiner.gui.meteor_outputs"),
+                    () -> StatCollector.translateToLocal("tst.machine.MeteorMiner.gui.meteor_outputs"),
                     hasOutputs));
 
         DynamicSyncHandler outputsHandler = new DynamicSyncHandler()
@@ -171,10 +189,10 @@ public class TST_Gui_LaserMeteorMiner extends MTEMultiBlockBaseGui<TST_LaserMete
     }
 
     private static String formatEta(int seconds) {
-        // #tr tst.common.machine.MeteorMiner.gui.eta_unknown
+        // #tr tst.machine.MeteorMiner.gui.eta_unknown
         // # calculating...
         // #zh_CN 计算中...
-        if (seconds < 0) return StatCollector.translateToLocal("tst.common.machine.MeteorMiner.gui.eta_unknown");
+        if (seconds < 0) return StatCollector.translateToLocal("tst.machine.MeteorMiner.gui.eta_unknown");
         final int hours = seconds / 3600;
         final int minutes = seconds / 60 % 60;
         final int secs = seconds % 60;

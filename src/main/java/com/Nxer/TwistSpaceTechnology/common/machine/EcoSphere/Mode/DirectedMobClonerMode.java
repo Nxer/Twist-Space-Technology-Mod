@@ -48,7 +48,7 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
 
     @Override
     public String getDisplayName() {
-        return translateToLocal("tst.ecosphere.machine.EcoSphereSimulator.mode.3");
+        return translateToLocal("tst.machine.EcoSphereSimulator.mode.3");
     }
 
     @Override
@@ -341,13 +341,13 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
         }
         List<FluidStackLong> lifeEssenceOutputs = new ArrayList<>();
         EcoSphereModeSupport.addFluidOutput(lifeEssenceOutputs, outputTemplate, outputAmount);
-        // #tr tst.ecosphere.machine.EcoSphereSimulator.gui.tier_one_cloning_address
+        // #tr tst.machine.EcoSphereSimulator.gui.tier_one_cloning_address
         // # Tier I Structure: Initial Biological Address Only
         // #zh_CN 一级结构: 仅执行初始生物地址
         String runningText = translateToLocal("GT5U.gui.text.recipe_result.processing_mob_drops") + "\n"
             + getRunningTarget(0, null);
-        if (!machine.isTierTwo()) runningText += "\n"
-            + translateToLocal("tst.ecosphere.machine.EcoSphereSimulator.gui.tier_one_cloning_address");
+        if (!machine.isTierTwo())
+            runningText += "\n" + translateToLocal("tst.machine.EcoSphereSimulator.gui.tier_one_cloning_address");
         return EcoSphereModeResult.standard(
             SimpleResultWithText.ofSuccessText(runningText),
             Collections.emptyList(),
@@ -356,11 +356,11 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
     }
 
     private static String getRunningTarget(int recipeId, String mobName) {
-        // #tr tst.ecosphere.machine.EcoSphereSimulator.gui.cloning_target
+        // #tr tst.machine.EcoSphereSimulator.gui.cloning_target
         // # ID : %s | Mob
         // #zh_CN 编号 : %s | 生物
         String label = EnumChatFormatting.WHITE + translateToLocalFormatted(
-            "tst.ecosphere.machine.EcoSphereSimulator.gui.cloning_target",
+            "tst.machine.EcoSphereSimulator.gui.cloning_target",
             EnumChatFormatting.GOLD + Integer.toString(recipeId) + EnumChatFormatting.WHITE);
         if (recipeId == 0) {
             return label + " : "

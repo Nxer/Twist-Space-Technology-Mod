@@ -435,16 +435,15 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
         float aX, float aY, float aZ, ItemStack aTool) {
         if (getBaseMetaTileEntity().isServerSide()) {
             enable_lightning = !enable_lightning;
-            // #tr tst.common.machine.LightningSpire.message.enable_lightning.true
+            // #tr tst.machine.LightningSpire.message.enable_lightning.true
             // # Enable lightning animation
             // #zh_CN 启用闪电特效
 
-            // #tr tst.common.machine.LightningSpire.message.enable_lightning.false
+            // #tr tst.machine.LightningSpire.message.enable_lightning.false
             // # Disable lightning animation
             // #zh_CN 禁用闪电特效
-            GTUtility.sendChatTrans(
-                aPlayer,
-                tr("tst.common.machine.LightningSpire.message.enable_lightning." + enable_lightning));
+            GTUtility
+                .sendChatTrans(aPlayer, tr("tst.machine.LightningSpire.message.enable_lightning." + enable_lightning));
             return true;
         }
         return false;
@@ -579,52 +578,52 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
     protected MultiblockTooltipBuilder createTooltip() {
         final TSTMultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.common.machine.LightningSpire.tooltip.machine_type
+        // #tr tst.machine.LightningSpire.tooltip.machine_type
         // # Multi Lightning Rod
         // #zh_CN 多方块避雷针
-        tt.addMachineType(tr("tst.common.machine.LightningSpire.tooltip.machine_type"))
-            // #tr tst.common.machine.LightningSpire.tooltip.info.01
+        tt.addMachineType(tr("tst.machine.LightningSpire.tooltip.machine_type"))
+            // #tr tst.machine.LightningSpire.tooltip.info.01
             // # {\BLUE}"Thunder is God's cannon."
             // #zh_CN {\BLUE}“雷霆是上帝的大炮”
-            .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.01"))
-            // #tr tst.common.machine.LightningSpire.tooltip.info.02
+            .addInfo(tr("tst.machine.LightningSpire.tooltip.info.01"))
+            // #tr tst.machine.LightningSpire.tooltip.info.02
             // # {\DARK_BLUE}"But now we will control the thunder."
             // #zh_CN {\DARK_BLUE}“但现在我们将掌控雷霆”
-            .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.02"))
+            .addInfo(tr("tst.machine.LightningSpire.tooltip.info.02"))
             .addSeparator()
-            // #tr tst.common.machine.LightningSpire.tooltip.info.03
+            // #tr tst.machine.LightningSpire.tooltip.info.03
             // # {\AQUA}Maximum storage capacity of 512 lightning rods(I).
             // #zh_CN {\AQUA}最大存储512个避雷针（I）
-            .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.03"))
-            // #tr tst.common.machine.LightningSpire.tooltip.info.04
+            .addInfo(tr("tst.machine.LightningSpire.tooltip.info.03"))
+            // #tr tst.machine.LightningSpire.tooltip.info.04
             // # {\AQUA}Each lightning rod produces 28 MEU per lightning strike and stores 280 MEU.
             // #zh_CN {\AQUA}每个避雷针每次雷击生产28MEU，并且存储280MEU
-            .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.04"))
-            // #tr tst.common.machine.LightningSpire.tooltip.info.05
+            .addInfo(tr("tst.machine.LightningSpire.tooltip.info.04"))
+            // #tr tst.machine.LightningSpire.tooltip.info.05
             // # {\AQUA}Ignoring thunderstorm weather for power generation.
             // #zh_CN {\AQUA}无视雷雨天气发电
-            .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.05"))
-            // #tr tst.common.machine.LightningSpire.tooltip.info.06
+            .addInfo(tr("tst.machine.LightningSpire.tooltip.info.05"))
+            // #tr tst.machine.LightningSpire.tooltip.info.06
             // # {\AQUA}Consume 128mb cruotheum and 72mb*the number of lightning rods of molten iron ever lightning
             // #zh_CN {\AQUA}每次雷击均会消耗128mb的极寒之凛冰以及72mb*避雷针数量的熔融铁
-            .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.06"))
-            // #tr tst.common.machine.LightningSpire.tooltip.info.07
+            .addInfo(tr("tst.machine.LightningSpire.tooltip.info.06"))
+            // #tr tst.machine.LightningSpire.tooltip.info.07
             // # {\AQUA}Quantitative input is required, too much or too little can lead to power generation failure
             // #zh_CN {\AQUA}需要定量输入,过多过少均会导致发电失败
-            .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.07"))
+            .addInfo(tr("tst.machine.LightningSpire.tooltip.info.07"))
             .addSeparator()
-            // #tr tst.common.machine.LightningSpire.tooltip.info.10
+            // #tr tst.machine.LightningSpire.tooltip.info.10
             // # {\UNDERLINE}Before dismantling the machine, please output the lightning rod first!
             // #zh_CN {\UNDERLINE}拆除机器前请先输出避雷针
-            .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.10"))
-            // #tr tst.common.machine.LightningSpire.tooltip.info.11
+            .addInfo(tr("tst.machine.LightningSpire.tooltip.info.10"))
+            // #tr tst.machine.LightningSpire.tooltip.info.11
             // # {\UNDERLINE}Otherwise all internal lightning rods will be lost!
             // #zh_CN {\UNDERLINE}否则会丢失所有内部避雷针！
-            .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.11"))
-            // #tr tst.common.machine.LightningSpire.tooltip.info.12
+            .addInfo(tr("tst.machine.LightningSpire.tooltip.info.11"))
+            // #tr tst.machine.LightningSpire.tooltip.info.12
             // # Use a wire cutter to enable/disable lightning animation.
             // #zh_CN 使用剪线钳开启/关闭闪电特效
-            .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.12"))
+            .addInfo(tr("tst.machine.LightningSpire.tooltip.info.12"))
             .beginStructureBlock(shapeMain)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint)

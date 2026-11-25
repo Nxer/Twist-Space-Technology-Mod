@@ -65,11 +65,11 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch extends MTEHatchWirelessDynamo
     // region General
     @Override
     public String[] getDescription() {
-        // #tr tst.common.machine.InfiniteWirelessDynamoHatch.tooltip.info.01
+        // #tr tst.machine.InfiniteWirelessDynamoHatch.tooltip.info.01
         // # Infinite output voltage limit.
         // #zh_CN 无限输出电压限制.
         return MTEHatch.formatEnergyInfoDesc(
-            EnumChatFormatting.WHITE + TSTUtils.tr("tst.common.machine.InfiniteWirelessDynamoHatch.tooltip.info.01"),
+            EnumChatFormatting.WHITE + TSTUtils.tr("tst.machine.InfiniteWirelessDynamoHatch.tooltip.info.01"),
             true,
             mTier,
             maxAmperes,
