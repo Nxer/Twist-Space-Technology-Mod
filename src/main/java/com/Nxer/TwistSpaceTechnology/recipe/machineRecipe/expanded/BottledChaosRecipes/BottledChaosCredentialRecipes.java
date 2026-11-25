@@ -119,11 +119,10 @@ public final class BottledChaosCredentialRecipes {
 
         register("petroleum_refining", Stage.LuV, ItemList.CasingNaquadahReinforcedDistillation.get(8), ItemList.Casing_Pipe_Polytetrafluoroethylene.get(8), cells(Materials.LightFuel.getFluid(1000), 64), cells(Materials.Gas.getGas(1000), 64));
         register("petroleum_cracking", Stage.LuV, ItemList.Casing_StableTitanium.get(8), ItemList.Casing_Coil_Nichrome.get(8), cells(Materials.Ethylene.getGas(1000), 64), cells(Materials.Octane.getFluid(1000), 64));
-        register("diesel_blending", Stage.LuV, ItemList.Casing_Chemically_Inert.get(8), ItemList.Casing_Pipe_Polytetrafluoroethylene.get(8), cells(Materials.Diesel.getFluid(1000), 64), cells(Materials.NitroFuel.getFluid(1000), 64));
+        register("diesel_blending", Stage.LuV, ItemList.Casing_Chemically_Inert.get(8), ItemList.Casing_Pipe_Polytetrafluoroethylene.get(8), cells(Materials.Diesel.getFluid(1000), 64), cells(Materials.HeavyFuel.getFluid(1000), 64));
         register("gasoline_blending", Stage.LuV, ItemList.Casing_Chemically_Inert.get(8), ItemList.Casing_Pipe_Polytetrafluoroethylene.get(8), cells(Materials.GasolineRegular.getFluid(1000), 64), cells(Materials.GasolinePremium.getFluid(1000), 64));
         register("wood_distillation", Stage.LuV, GregtechItemList.Casing_CokeOven_Coil2.get(8), ItemList.CasingNaquadahReinforcedDistillation.get(8), cells(Materials.WoodTar.getFluid(1000), 64), cells(Materials.Methanol.getFluid(1000), 64), cells(Materials.Benzene.getFluid(1000), 64));
-        register("benzene_nitration", Stage.LuV, ItemList.Casing_Chemically_Inert.get(8), ItemList.Electric_Pump_LuV.get(2), cells(Materials.NitricAcid.getFluid(1000), 8), cells(new FluidStack(BottledChaosRecipeResources.Nitrobenzene, 1000), 64));
-        register("petrochemical_oxygenates", Stage.LuV, ItemList.ChemicalReactorLuV.get(4), ItemList.Casing_Pipe_Polytetrafluoroethylene.get(8), cells(Materials.Ethanol.getFluid(1000), 64), cells(Materials.AceticAcid.getFluid(1000), 64), cells(Materials.Acetone.getFluid(1000), 64));
+        register("wood_oxygenates", Stage.LuV, ItemList.ChemicalReactorLuV.get(4), ItemList.Casing_Pipe_Polytetrafluoroethylene.get(8), cells(Materials.WoodGas.getGas(1000), 64), cells(Materials.Ethanol.getFluid(1000), 64), cells(Materials.Acetone.getFluid(1000), 64));
         register("ethanol_gasoline_blending", Stage.LuV, ItemList.Casing_Chemically_Inert.get(8), ItemList.Casing_Pipe_Polytetrafluoroethylene.get(8), cells(Materials.Ethanol.getFluid(1000), 8), cells(GGMaterial.ethanolGasoline.getFluidOrGas(1000), 64));
         // spotless:on
         RECIPES.sort(Comparator.comparingInt(InjectionRecipe::tagIndex));

@@ -228,13 +228,9 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
         // # Wood Distillation
         // #zh_CN 木材干馏
 
-        // #tr tst.bottledchaos.shared.route.petrochemical_oxygenates
-        // # Oxygenated Petrochemicals
-        // #zh_CN 石化含氧衍生物
-
-        // #tr tst.bottledchaos.shared.route.benzene_nitration
-        // # Benzene Nitration
-        // #zh_CN 苯硝化
+        // #tr tst.bottledchaos.shared.route.wood_oxygenates
+        // # Oxygenated Wood Products
+        // #zh_CN 木化含氧衍生物
 
         // #tr tst.bottledchaos.shared.route.titanium
         // # Titanium
