@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.IntUnaryOperator;
 import java.util.stream.Collectors;
 
@@ -148,10 +149,11 @@ public final class BottledChaosStructureCatalog {
         Requirement[] requirements) {
 
         public Structure example() {
-            return example(group -> 0, index -> 0);
+            return example(group -> 0, index -> 0, (group, index) -> {});
         }
 
-        public Structure example(IntUnaryOperator groupChoice, IntUnaryOperator requirementChoice) {
+        Structure example(IntUnaryOperator groupChoice, IntUnaryOperator requirementChoice,
+            BiConsumer<Integer, Integer> onAdjustedGroup) {
             if (BottledChaosComplexStructures.isFoundry(this))
                 return BottledChaosComplexStructures.foundryExample(this, groupChoice.applyAsInt(0));
             Map<TST_ItemID, ItemStack> materials = new LinkedHashMap<>();
@@ -191,13 +193,26 @@ public final class BottledChaosStructureCatalog {
                     if (replaced == null || !removeMaterial(materials, replaced)) return null;
                 }
             }
-            // A source upgrade also needs matching glass; examples must show a legal complete combination.
+            Part adjustedGlass = null;
             if (BottledChaosSupportedMachine.find(ItemMachines.getMetaTileEntity(controller))
-                == BottledChaosSupportedMachine.MTEINDUSTRIAL_LASER_ENGRAVER) matchLaserGlass(this, materials);
-            return resolve(
+                == BottledChaosSupportedMachine.MTEINDUSTRIAL_LASER_ENGRAVER)
+                adjustedGlass = matchLaserGlass(this, materials);
+            Structure structure = resolve(
                 this,
                 materials.values()
                     .toArray(new ItemStack[0]));
+            // Report only a real adjustment. Fixed blocks and choices from other groups can share an item.
+            if (structure != null && adjustedGlass != null) {
+                int index = 0;
+                for (Part part : parts) if (part.group == adjustedGlass.group) {
+                    if (part == adjustedGlass) {
+                        onAdjustedGroup.accept(part.group, index);
+                        break;
+                    }
+                    index++;
+                }
+            }
+            return structure;
         }
 
         /** Amount shown for a casing choice, after the minimum mandatory hatch count replaces its positions. */
@@ -488,7 +503,7 @@ public final class BottledChaosStructureCatalog {
         };
     }
 
-    private static void matchLaserGlass(Rule rule, Map<TST_ItemID, ItemStack> materials) {
+    private static Part matchLaserGlass(Rule rule, Map<TST_ItemID, ItemStack> materials) {
         int laserTier = -1;
         for (ItemStack material : materials.values()) {
             IMetaTileEntity hatch = material.getItem() instanceof ItemMachines
@@ -499,20 +514,21 @@ public final class BottledChaosStructureCatalog {
         for (ItemStack material : materials.values()) {
             Integer tier = GlassTier
                 .getGlassBlockTier(Block.getBlockFromItem(material.getItem()), material.getItemDamage());
-            if (tier != null && tier >= laserTier) return;
+            if (tier != null && tier >= laserTier) return null;
         }
         for (Part part : rule.parts) {
             Integer glassTier = GlassTier
                 .getGlassBlockTier(Block.getBlockFromItem(part.material.getItem()), part.material.getItemDamage());
-            if (glassTier == null || glassTier < laserTier) continue;
+            if (part.group == 0 || glassTier == null || glassTier < laserTier) continue;
             for (Part current : rule.parts) {
                 if (current.group != part.group || !materials.containsKey(TST_ItemID.create(current.material)))
                     continue;
                 materials.remove(TST_ItemID.create(current.material));
                 addMaterial(materials, part.material, part.material.stackSize);
-                return;
+                return part;
             }
         }
+        return null;
     }
 
     private static void consumePart(Map<TST_ItemID, ItemStack> remaining, Map<TST_ItemID, ItemStack> missing,
