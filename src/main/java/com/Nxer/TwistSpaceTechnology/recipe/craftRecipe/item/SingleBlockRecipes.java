@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item;
 
+import static com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.ModItem.getModItem;
 import static gregtech.api.util.GTModHandler.addCraftingRecipe;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GTRecipeConstants.SCANNING;
@@ -16,6 +17,7 @@ import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TierEU;
 import gregtech.api.recipe.RecipeMaps;
@@ -26,6 +28,8 @@ import gregtech.api.util.recipe.Scanning;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
 import tectech.thing.CustomItemList;
+import thaumcraft.common.config.ConfigBlocks;
+import thaumcraft.common.config.ConfigItems;
 
 public class SingleBlockRecipes {
 
@@ -122,6 +126,30 @@ public class SingleBlockRecipes {
             .eut(TierEU.RECIPE_UV)
             .duration(20 * 10)
             .addTo(GTRecipeConstants.AssemblyLine);
+
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                getModItem(Mods.Chisel.ID, "arcane", 1, 3),
+                getModItem(Mods.AdvancedSolarPanel.ID, "asp_crafting_items", 2, 3),
+                GTOreDictUnificator.get(OrePrefixes.bolt, Materials.HellishMetal, 8),
+                GTOreDictUnificator.get(OrePrefixes.foil, Materials.Ichorium, 4))
+            .fluidInputs(Materials.Force.getMolten(288))
+            .itemOutputs(GTCMItemList.IchoriumInlaidStone.get(1))
+            .duration(10 * 20)
+            .eut(TierEU.RECIPE_IV)
+            .addTo(RecipeMaps.formingPressRecipes);
+
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                new ItemStack(ConfigBlocks.blockSlabStone, 2, 1),
+                GTOreDictUnificator.get("ingotThauminite", 1),
+                GTOreDictUnificator.get(OrePrefixes.wireFine, Materials.Ichorium, 2),
+                new ItemStack(ConfigItems.itemShard, 1, 6),
+                getModItem(Mods.BloodMagic.ID, "sigilOfTheBridge", 1, 0))
+            .itemOutputs(GTCMItemList.AstralAlloyBand.get(1))
+            .duration(12 * 20)
+            .eut(TierEU.RECIPE_IV)
+            .addTo(RecipeMaps.formingPressRecipes);
     }
     // spotless:on
 }

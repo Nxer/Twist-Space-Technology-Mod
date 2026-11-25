@@ -3,14 +3,14 @@ navigation:
   title: 配方链验证原型机
   parent: index.md
   position: 45
-  icon: TwistSpaceTechnology:MetaItem01:47
+  icon: TwistSpaceTechnology:MetaItem01:51
 item_ids:
-  - TwistSpaceTechnology:MetaItem01:47
+  - TwistSpaceTechnology:MetaItem01:51
 ---
 
 # 配方链验证原型机
 
-<ItemImage id="TwistSpaceTechnology:MetaItem01:47" scale="3" />
+<ItemImage id="TwistSpaceTechnology:MetaItem01:51" scale="3" />
 
 在组装机中制作**技术验证先行协议**, 右键瓶中混沌主机, 消耗协议并**永久转换为原型机**.
 

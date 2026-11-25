@@ -168,6 +168,22 @@ public final class BottledChaosComplexStructures {
             if (target == null) continue;
             try {
                 Rule section = BottledChaosStructureCatalog.readRule(module, supported, 1, machinePools[id]);
+                Map<TST_ItemID, ItemStack> moduleMaterials = fixedMaterials(section);
+                // Inward modules share 16 support and 21 winding casings. Their controller also replaces a host casing.
+                remove(moduleMaterials, new ItemStack(TTCasingsContainer.GodforgeCasings, 1, 0), 17);
+                remove(moduleMaterials, new ItemStack(TTCasingsContainer.GodforgeCasings, 1, 3), 21);
+                rules.add(
+                    new Rule(
+                        section.machineKey(),
+                        1,
+                        section.poolMask(),
+                        section.controller(),
+                        moduleMaterials.values()
+                            .stream()
+                            .map(item -> new Part(0, item))
+                            .toArray(Part[]::new),
+                        0,
+                        new Requirement[0]));
                 for (var entry : maximumPaths.entrySet()) {
                     EnumSet<ForgeOfGodsUpgrade> path = entry.getValue();
                     if (!path.contains(target)) continue;
@@ -178,6 +194,26 @@ public final class BottledChaosComplexStructures {
                         tower = BottledChaosStructureCatalog
                             .readRule(host, BottledChaosSupportedMachine.MTEFORGE_OF_GODS, rings, 0);
                         towers.put(rings, tower);
+                    }
+                    String hostKey = tower.machineKey() + ":host";
+                    Map<Integer, GodforgeProfile> hosts = godforgeProfiles
+                        .computeIfAbsent(hostKey, unused -> new LinkedHashMap<>());
+                    if (!hosts.containsKey(entry.getKey())) {
+                        Map<TST_ItemID, ItemStack> hostMaterials = fixedMaterials(tower);
+                        addGodforgeUpgrades(hostMaterials, path);
+                        hosts.put(entry.getKey(), nativeGodforgeProfile(module, path, 8 + 4 * (rings - 1), rings, -1));
+                        rules.add(
+                            new Rule(
+                                hostKey,
+                                entry.getKey(),
+                                BottledChaosMachineConfiguration.godforgeHostMask(),
+                                tower.controller(),
+                                hostMaterials.values()
+                                    .stream()
+                                    .map(item -> new Part(0, item))
+                                    .toArray(Part[]::new),
+                                0,
+                                new Requirement[0]));
                     }
                     registerGodforgeProfile(tower, section, module, path, entry.getKey(), machinePools[id], rules);
                 }
@@ -196,14 +232,7 @@ public final class BottledChaosComplexStructures {
         remove(materials, new ItemStack(TTCasingsContainer.GodforgeCasings, 1, 0), modules);
         for (Part part : section.parts())
             add(materials, part.material(), Math.multiplyExact(modules, part.material().stackSize));
-        int shards = 0;
-        for (ForgeOfGodsUpgrade upgrade : path) {
-            shards = Math.addExact(shards, upgrade.getShardCost());
-            if (upgrade == ForgeOfGodsUpgrade.START && !upgrade.hasExtraCost())
-                throw new IllegalArgumentException("Godforge upgrade costs have not been registered");
-            for (ItemStack cost : upgrade.getExtraCostNoNulls()) add(materials, cost, cost.stackSize);
-        }
-        if (shards > 0) add(materials, Materials.GravitonShard.getGems(1), shards);
+        addGodforgeUpgrades(materials, path);
         String key = tower.machineKey() + ":"
             + BottledChaosSupportedMachine.find(module)
                 .name();
@@ -212,6 +241,17 @@ public final class BottledChaosComplexStructures {
         godforgeProfiles.computeIfAbsent(key, unused -> new LinkedHashMap<>())
             .put(profile, nativeGodforgeProfile(module, path, modules, rings, -1));
         rules.add(new Rule(key, profile, pools, tower.controller(), parts.toArray(new Part[0]), 0, new Requirement[0]));
+    }
+
+    private static void addGodforgeUpgrades(Map<TST_ItemID, ItemStack> materials, Set<ForgeOfGodsUpgrade> path) {
+        int shards = 0;
+        for (ForgeOfGodsUpgrade upgrade : path) {
+            shards = Math.addExact(shards, upgrade.getShardCost());
+            if (upgrade == ForgeOfGodsUpgrade.START && !upgrade.hasExtraCost())
+                throw new IllegalArgumentException("Godforge upgrade costs have not been registered");
+            for (ItemStack cost : upgrade.getExtraCostNoNulls()) add(materials, cost, cost.stackSize);
+        }
+        if (shards > 0) add(materials, Materials.GravitonShard.getGems(1), shards);
     }
 
     /** Native prerequisite/split checks select reachable upgrades without exceeding the host's ring count. */
@@ -309,8 +349,37 @@ public final class BottledChaosComplexStructures {
     }
 
     static ItemStack parameterController(ItemStack controller, Structure structure) {
+        if (isSeparateGodforgeHost(structure)) return controller;
         GodforgeProfile preset = godforgePreset(structure);
         return preset == null ? controller : preset.module();
+    }
+
+    public static boolean isSeparateGodforgeHost(Structure structure) {
+        return structure != null && structure.machineKey()
+            .endsWith(":host") && godforgePreset(structure) != null;
+    }
+
+    public static boolean isSeparateGodforgeModule(Structure structure) {
+        return structure != null && ItemMachines.getMetaTileEntity(structure.controller()) instanceof MTEBaseModule;
+    }
+
+    static GodforgeProfile bindGodforge(Structure host, IMetaTileEntity module) {
+        GodforgeProfile preset = godforge(host);
+        if (preset == null) return null;
+        BottledChaosSupportedMachine type = BottledChaosSupportedMachine.find(module);
+        ForgeOfGodsUpgrade required = type == BottledChaosSupportedMachine.MTESMELTING_MODULE ? ForgeOfGodsUpgrade.START
+            : type == BottledChaosSupportedMachine.MTEMOLTEN_MODULE ? ForgeOfGodsUpgrade.FDIM
+                : type == BottledChaosSupportedMachine.MTEPLASMA_MODULE ? ForgeOfGodsUpgrade.GPCI
+                    : type == BottledChaosSupportedMachine.MTEEXOTIC_MODULE ? ForgeOfGodsUpgrade.EE : null;
+        return required != null && preset.upgrades()
+            .contains(required)
+                ? nativeGodforgeProfile(module, preset.upgrades(), 1, preset.rings(), preset.fuelFactor())
+                : null;
+    }
+
+    static boolean isLegacyGodforge(Rule rule) {
+        return godforgeProfiles.containsKey(rule.machineKey()) && !rule.machineKey()
+            .endsWith(":host");
     }
 
     static boolean isFoundry(Rule rule) {
@@ -434,6 +503,7 @@ public final class BottledChaosComplexStructures {
     }
 
     static boolean hasGodforgeModule(Rule rule, ItemStack controller) {
+        if (!isLegacyGodforge(rule)) return false;
         Map<Integer, GodforgeProfile> profiles = godforgeProfiles.get(rule.machineKey());
         GodforgeProfile preset = profiles == null ? null : profiles.get(rule.profile());
         return preset != null && sameItem(preset.module(), controller);

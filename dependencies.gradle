@@ -1,6 +1,6 @@
 dependencies {
     elytraModpackVersion {
-        setGtnhVersion("2.9.0")
+        setGtnhVersion("2.9.1")
         // Elytra v1.1.2 passes this flag as allowFromCaching, so true reuses the pinned manifest.
         setManifestNoCache(true)
     }
@@ -9,6 +9,7 @@ dependencies {
     implementation(gtnh("GT5-Unofficial"))
     implementation(gtnh("GTNHLib"))
     compileOnly(gtnh("Angelica"))
+    compileOnly(gtnh("GuideNH")) { transitive = false }
     // Tooltip title integration when ChromaticTooltips is present.
     compileOnly(gtnh("ChromaticTooltips").replace("com.github.GTNewHorizons:", "com.github.slprime:")) { transitive = false }
     implementation(gtnh("NewHorizonsCoreMod"))

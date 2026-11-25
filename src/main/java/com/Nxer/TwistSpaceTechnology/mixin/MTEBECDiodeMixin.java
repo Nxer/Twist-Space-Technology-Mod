@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.mixin;
 
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
@@ -8,6 +7,7 @@ import java.util.Set;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -27,13 +27,17 @@ public abstract class MTEBECDiodeMixin {
     @Shadow
     private FluidParameter[] filterParameters;
 
-    @Inject(method = "initParameters", at = @At("RETURN"), require = 1)
+    @Inject(
+        method = "initParameters",
+        at = @At(
+            value = "FIELD",
+            target = "Ltectech/thing/metaTileEntity/multi/bec/MTEBECDiode;filterParameters:[Ltectech/thing/metaTileEntity/multi/base/parameter/FluidParameter;",
+            opcode = Opcodes.PUTFIELD,
+            shift = At.Shift.AFTER),
+        require = 1)
     private void tst$addCondensateFilterSlots(CallbackInfo ci) {
-        int nativeCount = filterParameters.length;
-        filterParameters = Arrays.copyOf(filterParameters, nativeCount + BECCondensates.getFilterCount());
-        for (int slot = nativeCount; slot < filterParameters.length; slot++) {
-            filterParameters[slot] = new FluidParameter(null, "GT5U.gui.text.bec-filter-n", "filter" + slot, slot + 1);
-        }
+        // Let GT initialize every slot with its network cache invalidation callback.
+        filterParameters = new FluidParameter[filterParameters.length + BECCondensates.getFilterCount()];
     }
 
     @Inject(method = "deriveFiltersFromInputHatches", at = @At("HEAD"), cancellable = true, require = 1)

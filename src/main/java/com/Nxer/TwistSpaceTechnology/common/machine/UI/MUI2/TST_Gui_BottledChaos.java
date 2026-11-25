@@ -130,8 +130,8 @@ public class TST_Gui_BottledChaos<T extends BottledChaosMachineBase<T>> extends 
 
     // spotless:off
     // #tr tst.machine.BottledChaos.gui.recipe_category_slot_hint
-    // # Every 8x quantity adds 100% pool speed.
-    // #zh_CN 数量每增至8倍, 配方池加速100%.
+    // # Speed tiers cost 1 + 2 + ... + 8 structures; each further +1x costs 8 more.
+    // #zh_CN 1-8倍速所需数量依次累加1-8, 此后每增加8个再加1倍速.
     // spotless:on
 
     // #tr tst.machine.BottledChaos.gui.credential_injection
@@ -1346,7 +1346,7 @@ public class TST_Gui_BottledChaos<T extends BottledChaosMachineBase<T>> extends 
                             structure.controller(),
                             structure,
                             BottledChaosMachineConfiguration.pool(data.getInteger("sourcePool")),
-                            ItemBottledChaosMachineModule.quantitySpeedExponent(quantity(slot)),
+                            ItemBottledChaosMachineModule.quantitySpeed(quantity(slot)),
                             data);
                         description = String.join("\n", lines);
                     }
@@ -1357,7 +1357,7 @@ public class TST_Gui_BottledChaos<T extends BottledChaosMachineBase<T>> extends 
                             stack,
                             null,
                             BottledChaosMachineConfiguration.pool(slot),
-                            ItemBottledChaosMachineModule.quantitySpeedExponent(quantity(slot)),
+                            ItemBottledChaosMachineModule.quantitySpeed(quantity(slot)),
                             data));
                 }
             }
@@ -1494,6 +1494,7 @@ public class TST_Gui_BottledChaos<T extends BottledChaosMachineBase<T>> extends 
         BooleanSyncValue activeMode = syncManager
             .findSyncHandler("bottledChaosActiveConcentratedPower", BooleanSyncValue.class);
         return createDisableableToggleButton(
+            syncManager,
             mode,
             () -> !wireless.getAsBoolean(),
             GTGuiTextures.OVERLAY_BUTTON_INPUT_SEPARATION_OFF,

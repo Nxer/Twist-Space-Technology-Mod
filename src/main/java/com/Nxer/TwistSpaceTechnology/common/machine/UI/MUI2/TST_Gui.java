@@ -73,6 +73,7 @@ public class TST_Gui<T extends GTCM_MultiMachineBase<T>> extends MTEMultiBlockBa
     @SuppressWarnings("unchecked")
     protected ListWidget<IWidget, ?> createTerminalTextWidget(PanelSyncManager syncManager, ModularPanel parent) {
         ListWidget<IWidget, ?> terminal = super.createTerminalTextWidget(syncManager, parent);
+        addMachineStatus(terminal, syncManager);
 
         BooleanSyncValue meOutputEnabledSyncer = (BooleanSyncValue) syncManager
             .getSyncHandlerFromMapKey("tstMEOutputEnabled:0");
@@ -97,6 +98,9 @@ public class TST_Gui<T extends GTCM_MultiMachineBase<T>> extends MTEMultiBlockBa
                 .setEnabledIf(widget -> meOutputEnabledSyncer.getBoolValue()));
         return terminal;
     }
+
+    /** Machine-specific operating details share the terminal, immediately above its ME outputs. */
+    protected void addMachineStatus(ListWidget<IWidget, ?> terminal, PanelSyncManager syncManager) {}
 
     private void notifyMERecipeHandler(DynamicSyncHandler recipeHandler,
         GenericListSyncHandler<ItemStackLong> itemOutputSyncer,
@@ -186,12 +190,14 @@ public class TST_Gui<T extends GTCM_MultiMachineBase<T>> extends MTEMultiBlockBa
                 + GTUtility.formatShortenedLong(amount)
                 + (fluid ? "L" : "")
                 + EnumChatFormatting.WHITE
-                + (showOutputRates() ? GTUtility.appendRate(fluid, amount, true, maxProgressSyncer.getIntValue()) : "");
+                + (showOutputRates() && maxProgressSyncer.getIntValue() > 0
+                    ? GTUtility.appendRate(fluid, amount, true, maxProgressSyncer.getIntValue())
+                    : "");
             return GTUtility.truncateText(coloredName, DISPLAY_ROW_CHAR_LIMIT - amountText.length()) + amountText;
         })).height(DISPLAY_ROW_HEIGHT)
             .scale(0.75f)
             .tooltip(t -> {
-                if (showOutputRates()) {
+                if (showOutputRates() && maxProgressSyncer.getIntValue() > 0) {
                     t.addLine(
                         coloredName + "\n"
                             + GTUtility.appendRate(fluid, amount, false, maxProgressSyncer.getIntValue()));

@@ -10,12 +10,16 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeSupport.RecipeData;
 import com.Nxer.TwistSpaceTechnology.util.recipes.RecipeMaterialUtils;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
 
 import gregtech.api.recipe.RecipeMap;
@@ -61,8 +65,33 @@ public final class BottledChaosSourceResolver {
 
         @Override
         public String toString() {
-            return pool.unlocalizedName + " [inputs=" + inputs + ", outputs=" + outputs + ", circuit=" + circuit + "]";
+            return pool.unlocalizedName + " [inputs="
+                + describeResources(inputs)
+                + ", outputs="
+                + describeResources(outputs)
+                + ", circuit="
+                + circuit
+                + "]";
         }
+    }
+
+    private static String describeResources(List<?> resources) {
+        return resources.stream()
+            .map(BottledChaosSourceResolver::describeResource)
+            .collect(Collectors.joining(", ", "[", "]"));
+    }
+
+    private static String describeResource(Object resource) {
+        if (resource instanceof TST_ItemID id) {
+            if (id.item() == null) return "<missing item>";
+            return Item.itemRegistry.getNameForObject(id.item()) + "@"
+                + id.metaData()
+                + (id.nbt() == null ? ""
+                    : id.nbt()
+                        .toString());
+        }
+        if (resource instanceof Fluid fluid) return fluid.getName();
+        return String.valueOf(resource);
     }
 
     /** Each selected pool is scanned once; only selectors belonging to that pool are examined. */

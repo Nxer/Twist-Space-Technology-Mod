@@ -11,7 +11,10 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import fox.spiteful.avaritia.render.IHaloRenderItem;
 
-public class ItemLifeEssenceSingularity extends Item implements IHaloRenderItem {
+public class ItemFluidSingularity extends Item implements IHaloRenderItem {
+
+    private final int backgroundColor;
+    private final int foregroundColor;
 
     @SideOnly(Side.CLIENT)
     private IIcon singularityBackground;
@@ -19,11 +22,10 @@ public class ItemLifeEssenceSingularity extends Item implements IHaloRenderItem 
     @SideOnly(Side.CLIENT)
     private IIcon singularityHalo;
 
-    public ItemLifeEssenceSingularity() {
-        // #tr item.tst.life_essence_singularity.name
-        // # Life Essence Singularity
-        // #zh_CN 生命本源奇点
-        setUnlocalizedName("tst.life_essence_singularity");
+    public ItemFluidSingularity(String name, int backgroundColor, int foregroundColor) {
+        this.backgroundColor = backgroundColor;
+        this.foregroundColor = foregroundColor;
+        setUnlocalizedName(name);
         setCreativeTab(TstCreativeTabs.TabGeneral);
         setTextureName("avaritia:singularity");
     }
@@ -56,7 +58,7 @@ public class ItemLifeEssenceSingularity extends Item implements IHaloRenderItem 
     @Override
     @SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack stack, int renderPass) {
-        return renderPass == 0 ? 0x800000 : 0xC00000;
+        return renderPass == 0 ? backgroundColor : foregroundColor;
     }
 
     @Override

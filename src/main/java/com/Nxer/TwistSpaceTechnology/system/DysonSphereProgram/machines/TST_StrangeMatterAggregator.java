@@ -908,7 +908,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     protected CheckRecipeResult setRunning() {
         if (wirelessMode) {
             lEUt = 0;
-            if (!addEUToGlobalEnergyMap(ownerUUID, (long) (getEuModifier() * totalPowerConsumption))) {
+            if (!addEUToGlobalEnergyMap(ownerUUID, (long) (-1 * getEuModifier() * totalPowerConsumption))) {
                 return CheckRecipeResultRegistry.insufficientPower((long) (getEuModifier() * totalPowerConsumption));
             }
         } else {
@@ -1150,7 +1150,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                     }
                     outputItems.add(GTCMItemList.StrangeAnnihilationFuelRod.get(remainder));
                 } else {
-                    outputItems.add(GTCMItemList.StrangeAnnihilationFuelRod.get((int) outputRodAmount));
+                    outputItems.add(GTCMItemList.StrangeAnnihilationFuelRod.get((int) strangeRod));
                 }
 
                 // output anti matter fuel rods
@@ -1162,7 +1162,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                     }
                     outputItems.add(GTCMItemList.AntimatterFuelRod.get(remainder));
                 } else {
-                    outputItems.add(GTCMItemList.AntimatterFuelRod.get((int) outputRodAmount));
+                    outputItems.add(GTCMItemList.AntimatterFuelRod.get((int) antiMatterRod));
                 }
 
             }

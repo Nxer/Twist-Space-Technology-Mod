@@ -587,6 +587,9 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
             long thisCoreEUt = executionCore.getEut();
             long thisCoreUsed = 0;
 
+            // Zero (or negative) EUt cores cannot be boosted: extra multiplier would divide by zero.
+            if (thisCoreEUt < 1) continue;
+
             long eutExtraMultiplier = maxAverageEUtCanUse / thisCoreEUt;
 
             int boostedTick;
