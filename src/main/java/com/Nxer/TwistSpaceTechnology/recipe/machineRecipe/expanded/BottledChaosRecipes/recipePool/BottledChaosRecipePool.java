@@ -68,7 +68,7 @@ import gregtech.api.enums.TierEU;
  * Set credential boundaries at independent feeds, outputs, or unlocks.
  *
  * <pre>
- * Full chain          One credential for nitrobenzene from logs, wood tar, or benzene.
+ * Full chain          One platinum metallic powder credential covers the steps to platinum dust.
  * Linked stages       One titanium credential for ore preparation and rutile processing.
  * Stage credentials   Each grade of purified water has its own credential.
  * Separate recipes    One IsaMill credential covers recipes for different ores.
@@ -97,6 +97,7 @@ public final class BottledChaosRecipePool {
         BottledChaosRadoxRecipes.registerRecipeChains(catalog);
         BottledChaosBiologicalRecipes.registerRecipeChains(catalog);
         BottledChaosPetrochemicalRecipes.registerRecipeChains(catalog);
+        BottledChaosWoodChemistryRecipes.registerRecipeChains(catalog);
         if (Config.BottledChaosCycleRecipes) {
             registerCrystalCycles(catalog);
             BottledChaosTesseractRecipes.registerRecipeChains(catalog);
