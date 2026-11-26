@@ -17,7 +17,7 @@ Of course, the game still needs to remain GTNH-style balanced.
 ## Downloads & Requirements
 | GTNH  | TST               | Download                                                                                                                                                       | Maintenance |
 |-------|-------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------:|
-| 2.9.1 | 0.8.4+            | [![Latest](https://img.shields.io/github/v/release/Nxer/Twist-Space-Technology-Mod)](https://github.com/Nxer/Twist-Space-Technology-Mod/releases/latest)       |     ✔️      |
+| 2.9.2 | 0.8.5+            | [![Latest](https://img.shields.io/github/v/release/Nxer/Twist-Space-Technology-Mod)](https://github.com/Nxer/Twist-Space-Technology-Mod/releases/latest)       |     ✔️      |
 | 2.8.4 | 0.7.16            | [![0.7.16](https://img.shields.io/badge/release-v0.7.16-orange)](https://github.com/Nxer/Twist-Space-Technology-Mod/releases/0.7.16)                           |     ❌️      |
 | 2.7.4 | 0.6.23            | [![0.6.23](https://img.shields.io/badge/release-v0.6.23-orange)](https://github.com/Nxer/Twist-Space-Technology-Mod/releases/0.6.23)                           |     ❌      |
 | 2.7.0 | 0.6.7             | [![0.6.7](https://img.shields.io/badge/release-v0.6.7-orange)](https://github.com/Nxer/Twist-Space-Technology-Mod/releases/0.6.7)                              |     ❌      |
