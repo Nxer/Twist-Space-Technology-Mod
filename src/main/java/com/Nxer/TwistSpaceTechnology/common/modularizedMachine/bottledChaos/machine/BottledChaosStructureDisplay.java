@@ -137,19 +137,9 @@ public final class BottledChaosStructureDisplay {
         Rule rule = selectedRule(choices);
         Structure structure = rule.example(
             group -> choices.getOrDefault("group" + group, 0),
-            index -> choices.getOrDefault(rule.requirements()[index].name(), 0));
+            index -> choices.getOrDefault(rule.requirements()[index].name(), 0),
+            (group, index) -> choices.put("group" + group, index));
         if (structure == null) return null;
-        // Native cross-tier requirements may raise glass to match a source. Show and retain the actual selection.
-        for (int group = 1; group <= rule.groups(); group++) {
-            int index = 0;
-            for (var part : rule.parts()) if (part.group() == group) {
-                for (ItemStack material : structure.materials()) if (material.isItemEqual(part.material())) {
-                    choices.put("group" + group, index);
-                    break;
-                }
-                index++;
-            }
-        }
         return frame(rule, structure, group -> choices.getOrDefault("group" + group, 0));
     }
 
@@ -358,11 +348,6 @@ public final class BottledChaosStructureDisplay {
                 TST_ItemID.create(
                     alternatives.get(Math.floorMod(groupChoice.applyAsInt(group), alternatives.size()))
                         .material()));
-            // Cross-tier rules can raise a selected glass variant to the minimum required by its source.
-            if (material == null) for (var part : alternatives) {
-                material = remaining.remove(TST_ItemID.create(part.material()));
-                if (material != null) break;
-            }
             if (material != null) ordered.add(material);
         }
         for (var requirement : rule.requirements()) {

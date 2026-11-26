@@ -26,8 +26,6 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.MixerNonCell;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.VacuumFreezer;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RutileDust;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.SiliconDioxideDust;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.SiliconDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.SluiceJuice;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.SodiumCarbonateDust;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.SodiumDust;
@@ -73,7 +71,6 @@ public final class BottledChaosTitaniumRecipes {
         bauxite.includeDecompositionStep(ElectrolyzerNonCell, AluminiumOxideDust, AluminiumDust, -1);
         bauxite.includeDecompositionStep(ElectrolyzerNonCell, SodiumCarbonateDust, SodiumDust, -1);
         bauxite.includeDecompositionStep(ElectrolyzerNonCell, CalciteDust, CarbonDust, -1);
-        bauxite.includeDecompositionStep(ElectrolyzerNonCell, SiliconDioxideDust, SiliconDust, -1);
         catalog.includeDecompositionPath(QuicklimeDust);
         catalog.includeSynthesisPath(AluminiumHydroxideDust, SodiumHydroxideDust, QuicklimeDust);
 
