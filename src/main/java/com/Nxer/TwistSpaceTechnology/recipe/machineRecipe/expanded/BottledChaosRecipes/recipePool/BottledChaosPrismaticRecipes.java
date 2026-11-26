@@ -27,6 +27,7 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Bottle
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.ChemicalBath;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.ChemicalPlant;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.DissolutionTank;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.ElectricImplosionCompressor;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.FluidExtractor;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.FluidSolidifier;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BottledChaosRecipes.BottledChaosRecipeResources.RecipePools.LargeChemicalReactor;
@@ -68,22 +69,38 @@ public final class BottledChaosPrismaticRecipes {
             catalog.markRecipe(ChemicalBath, PrismarineContaminatedNitrobenzeneSolution, PrismarineRichNitrobenzeneSolution, 1),
             catalog.markRecipe(LaserEngraver, PrismarinePrecipitate, PrismaticCrystal, -1),
             catalog.markRecipe(VacuumFurnace, PrismaticCrystal, PrismaticGas, -1),
-            catalog.markRecipe(VacuumFreezer, PrismaticGas, PrismaticAcid, -1));
+            catalog.markRecipe(VacuumFreezer, PrismaticGas, PrismaticAcid, -1)).setDisplayOutputs(PrismaticAcid);
 
-        // Both shard routes grow dim prismarine first. The comb boosts the engraving yield.
+        // Three preparations share dim prismarine as their handoff to engraving.
         var dimPrismarine = TST_ItemID.create(ItemList.Dim_Prismarine.get(1));
-        var growDimPrismarine = catalog.markRecipe(Autoclave,
-            new Object[] { RedAlgaeBiomass, TST_ItemID.create(Materials.CertusQuartz.getDust(1)) }, dimPrismarine, -1);
         catalog.registerAlternativeChain("prismatic_acid", TierEU.RECIPE_UHV, RedAlgaeBiomass,
-            new Object[] { PrismarineShard }, new Object[] { PrismarineShard },
-            growDimPrismarine, catalog.markRecipe(LaserEngraver, dimPrismarine, PrismarineShard, 1));
+            new Object[] { dimPrismarine },
+            catalog.markRecipe(Autoclave,
+                new Object[] { RedAlgaeBiomass, TST_ItemID.create(Materials.CertusQuartz.getDust(1)) }, dimPrismarine, -1));
+
+        var prismarineCrystals = TST_ItemID.create(Materials.Prismarine.getDust(1));
+        if (prismarineCrystals.item() != null) {
+            catalog.registerAlternativeChain("prismatic_acid", TierEU.RECIPE_UHV, prismarineCrystals,
+                new Object[] { dimPrismarine },
+                catalog.markRecipe(Autoclave, new Object[] { RedAlgaeBiomass, prismarineCrystals }, dimPrismarine, -1));
+            catalog.registerAlternativeChain("prismatic_acid", TierEU.RECIPE_UHV, prismarineCrystals,
+                new Object[] { dimPrismarine }, new Object[] { PrismaticAcid },
+                catalog.markRecipe(ElectricImplosionCompressor, new Object[] { prismarineCrystals, PrismaticAcid }, dimPrismarine, -1));
+            catalog.orderDisplayRecipes("prismatic", DiamondGem, RedAlgaeBiomass, prismarineCrystals, dimPrismarine,
+                PrismarineShard);
+        } else {
+            catalog.orderDisplayRecipes("prismatic", DiamondGem, RedAlgaeBiomass, dimPrismarine, PrismarineShard);
+        }
+
+        catalog.registerAlternativeChain("prismatic_acid", TierEU.RECIPE_UHV, dimPrismarine,
+            new Object[] { PrismarineShard },
+            catalog.markRecipe(LaserEngraver, dimPrismarine, PrismarineShard, 1)).requireCircuit(1);
         if (Mods.Forestry.isModLoaded() && GTBees.combs != null) {
-            catalog.registerAugmentedChain("prismatic_acid", "honeycomb", TierEU.RECIPE_UHV, RedAlgaeBiomass,
+            catalog.registerAugmentedChain("prismatic_acid", "honeycomb", TierEU.RECIPE_UHV, dimPrismarine,
                 new Object[] { PrismarineShard }, new Object[] { PrismarineShard },
-                growDimPrismarine, catalog.markRecipe(LaserEngraver,
+                catalog.markRecipe(LaserEngraver,
                     new Object[] { dimPrismarine, TST_ItemID.create(GTBees.combs.getStackForType(CombType.PRISMATIC, 1)) }, PrismarineShard, -1));
         }
-        catalog.orderDisplayRecipes("prismatic", DiamondGem, RedAlgaeBiomass, PrismarineShard);
 
         // Input branches: supplement extraction, then reuse the contaminated peroxide in looped leaching.
         catalog.includeSynthesisStep(ChemicalBath, PrismarineRichNitrobenzeneSolution,
@@ -121,6 +138,8 @@ public final class BottledChaosPrismaticRecipes {
         catalog.includeDecompositionStep(Macerator, StrontiumIngot, StrontiumDust, -1);
         catalog.includeSynthesisStep(LargeChemicalReactor, StrontiumHydroxideDust,
             new Object[] { StrontiumDust, HydrogenGas, OxygenGas }, -1);
+        // Keep acid exportable while the compressor consumes acid supplied to the group.
+        catalog.setExistingEntriesKeyOutputs("prismatic_acid", dimPrismarine, PrismarineShard, CrystallineAlloyMolten);
         // spotless:on
     }
 }

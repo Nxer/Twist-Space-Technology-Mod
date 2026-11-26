@@ -204,6 +204,34 @@ public final class ItemBottledChaosCredential extends AbstractTstMetaItem {
         // # Honeycomb Processing
         // #zh_CN 蜂窝处理
 
+        // #tr tst.bottledchaos.shared.route.petroleum_refining
+        // # Crude Oil Refining
+        // #zh_CN 原油分馏脱硫
+
+        // #tr tst.bottledchaos.shared.route.petroleum_cracking
+        // # Petroleum Cracking
+        // #zh_CN 石油馏分裂化
+
+        // #tr tst.bottledchaos.shared.route.diesel_blending
+        // # Diesel Blending
+        // #zh_CN 柴油调合
+
+        // #tr tst.bottledchaos.shared.route.ethanol_gasoline_blending
+        // # Ethanol Gasoline Blending
+        // #zh_CN 乙醇汽油调合
+
+        // #tr tst.bottledchaos.shared.route.gasoline_blending
+        // # Gasoline Blending
+        // #zh_CN 汽油调合
+
+        // #tr tst.bottledchaos.shared.route.wood_distillation
+        // # Wood Distillation
+        // #zh_CN 木材干馏
+
+        // #tr tst.bottledchaos.shared.route.wood_oxygenates
+        // # Oxygenated Wood Products
+        // #zh_CN 木化含氧衍生物
+
         // #tr tst.bottledchaos.shared.route.titanium
         // # Titanium
         // #zh_CN 钛

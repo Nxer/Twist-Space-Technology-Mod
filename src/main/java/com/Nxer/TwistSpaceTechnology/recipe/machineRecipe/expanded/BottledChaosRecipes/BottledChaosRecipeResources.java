@@ -83,7 +83,15 @@ public final class BottledChaosRecipeResources {
         // Material bindings stay in CredentialRoutes and are not initialized with this metadata.
         // spotless:off
         private static final TagDefinition[] DEFINITIONS = {
-            // LuV families.
+            // HV and EV families.
+            new TagDefinition("wood_distillation", true, "wood_chemistry", BottledChaosRecipePage.WOOD_CHEMISTRY),
+            new TagDefinition("wood_oxygenates", true, "wood_chemistry", BottledChaosRecipePage.WOOD_CHEMISTRY),
+            new TagDefinition("petroleum_refining", true, "petrochemical", BottledChaosRecipePage.PETROCHEMICAL),
+            new TagDefinition("petroleum_cracking", true, "petrochemical", BottledChaosRecipePage.PETROCHEMICAL),
+            new TagDefinition("diesel_blending", true, "petrochemical", BottledChaosRecipePage.PETROCHEMICAL),
+            new TagDefinition("gasoline_blending", true, "petrochemical", BottledChaosRecipePage.PETROCHEMICAL),
+            new TagDefinition("ethanol_gasoline_blending", true, "petrochemical", BottledChaosRecipePage.PETROCHEMICAL),
+            // IV and LuV families.
             new TagDefinition("titanium", true, "titanium", BottledChaosRecipePage.TITANIUM),
             new TagDefinition("tungsten", true, "tungsten", BottledChaosRecipePage.TUNGSTEN),
             new TagDefinition("indium", true, "indium", BottledChaosRecipePage.INDIUM),
@@ -351,6 +359,13 @@ public final class BottledChaosRecipeResources {
             }
             register("magmatter", recipeItemId(Materials.MagMatter.getDust(1)), recipeItemId(Materials.MagMatter.getDust(1)));
             register("quark_gluon_plasma", recipeItemId(Materials.QuarkGluonPlasma.getCells(1)), recipeItemId(Materials.QuarkGluonPlasma.getCells(1)));
+            register("petroleum_refining", fluid(Materials.Oil.getFluid(1)), fluid(Materials.LightFuel.getFluid(1)));
+            register("petroleum_cracking", fluid(Materials.Naphtha.getFluid(1)), EthyleneGas);
+            register("diesel_blending", fluid(Materials.Diesel.getFluid(1)), fluid(Materials.Diesel.getFluid(1)));
+            register("gasoline_blending", fluid(Materials.GasolineRegular.getFluid(1)), fluid(Materials.GasolinePremium.getFluid(1)));
+            register("wood_distillation", recipeItemId(Materials.Charcoal.getGems(1)), fluid(Materials.WoodTar.getFluid(1)));
+            register("wood_oxygenates", fluid(Materials.WoodGas.getGas(1)), fluid(Materials.Ethanol.getFluid(1)));
+            register("ethanol_gasoline_blending", fluid(GGMaterial.ethanolGasoline.getFluidOrGas(1)), fluid(GGMaterial.ethanolGasoline.getFluidOrGas(1)));
             // spotless:on
         }
 
