@@ -3,9 +3,9 @@ navigation:
   title: The Star That Never Was
   parent: /index.md
   position: 90
-  icon: gregtech:gt.blockmachines:19804
+  icon: gregtech:gt.blockmachines:19084
 item_ids:
-  - gregtech:gt.blockmachines:19804
+  - gregtech:gt.blockmachines:19084
 ---
 
 # The Star That Never Was
@@ -15,7 +15,7 @@ A Mineable **Lie**
 A meteor focus selects the virtual star. The controller forms it above the shaft, the Laser Meteor Miner cuts the ore, and the controller sends it to your ME network.
 
 <GameScene width="400" height="240" interactive={true} allowLayerSlider={true} showGrid={false}>
-  <ImportStructureLib controller="gregtech:gt.blockmachines:19804" />
+  <ImportStructureLib controller="gregtech:gt.blockmachines:19084" />
   <StarStructureControls />
 </GameScene>
 

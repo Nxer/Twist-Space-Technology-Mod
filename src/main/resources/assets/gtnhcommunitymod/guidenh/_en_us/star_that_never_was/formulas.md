@@ -3,7 +3,7 @@ navigation:
   title: Operating formulas
   parent: index.md
   position: 8
-  icon: gregtech:gt.blockmachines:19804
+  icon: gregtech:gt.blockmachines:19084
 ---
 
 # Operating formulas

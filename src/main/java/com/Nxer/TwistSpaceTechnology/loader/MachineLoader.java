@@ -76,6 +76,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SkypiercerTower;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SpaceApiary;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_StarThatNeverWas;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_StarThatNeverWasLegacy;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_StarcoreMiner;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SuperWaterPurifier;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SwelegfyrBlastFurnace;
@@ -746,11 +747,22 @@ public final class MachineLoader {
             // #zh_CN 激光陨星采矿场
             GTCMItemList.MeteorMiner
                 .set(new TST_LaserMeteorMiner(19072, "NameMeteorMiner", TSTUtils.tr("tst.machine.MeteorMiner.name")));
+
             // #tr tst.common.machine.StarThatNeverWas.name
             // # The Star That Never Was
             // #zh_CN 未曾存在之星
-            GTCMItemList.StarThatNeverWas.set(new TST_StarThatNeverWas(
-                19804, "NameStarThatNeverWas", TSTUtils.tr("tst.common.machine.StarThatNeverWas.name")));
+            GTCMItemList.StarThatNeverWas.set(
+                new TST_StarThatNeverWas(
+                    19084,
+                    "NameStarThatNeverWas",
+                    TSTUtils.tr("tst.common.machine.StarThatNeverWas.name")));
+            // TODO: Remove the transitional controller (19804) in the next version.
+            GTCMItemList.StarThatNeverWasLegacy.set(
+                new TST_StarThatNeverWasLegacy(
+                    19804,
+                    "NameStarThatNeverWasLegacy",
+                    TSTUtils.tr("tst.common.machine.StarThatNeverWas.name")));
+
         }
 
         // #tr tst.machine.SteamBasicGenerator.name

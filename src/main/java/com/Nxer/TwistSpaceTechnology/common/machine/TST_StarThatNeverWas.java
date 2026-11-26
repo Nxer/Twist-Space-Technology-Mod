@@ -66,8 +66,7 @@ import gregtech.common.tileentities.machines.outputme.MTEHatchOutputBusME;
 import thaumcraft.common.tiles.TileOwned;
 
 @SkipGenerateDescription
-public final class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarThatNeverWas>
-    implements INEIPreviewModifier {
+public class TST_StarThatNeverWas extends GTCM_MultiMachineBase<TST_StarThatNeverWas> implements INEIPreviewModifier {
 
     private static final int METEOR_INTERVAL_TICKS = 2 * 20;
 

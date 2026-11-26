@@ -343,6 +343,7 @@ public enum GTCMItemList {
     MegaNqReactor,
     MegaDigester,
     StarThatNeverWas,
+    StarThatNeverWasLegacy,
     AstralAlloyBand,
     CondensedStarCore,
     InactiveMineralSeedPowder,

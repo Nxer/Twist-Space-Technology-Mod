@@ -28,7 +28,7 @@ Call down a meteor above the rig with Blood Magic and mine it from below with a 
 
 ## [The Star That Never Was](star_that_never_was/index.md)
 
-<ItemImage id="gregtech:gt.blockmachines:19804" scale="3" />
+<ItemImage id="gregtech:gt.blockmachines:19084" scale="3" />
 
 Install a Laser Meteor Miner in the shaft to cut ore from a virtual star and deliver it to ME.
 

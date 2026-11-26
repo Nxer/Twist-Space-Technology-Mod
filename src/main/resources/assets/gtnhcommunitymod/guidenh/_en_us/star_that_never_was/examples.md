@@ -3,7 +3,7 @@ navigation:
   title: Worked examples
   parent: index.md
   position: 6
-  icon: gregtech:gt.blockmachines:19804
+  icon: gregtech:gt.blockmachines:19084
 ---
 
 # Worked examples
