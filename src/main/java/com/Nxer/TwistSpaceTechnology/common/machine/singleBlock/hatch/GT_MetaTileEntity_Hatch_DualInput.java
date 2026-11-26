@@ -24,6 +24,7 @@ import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.UISettings;
 import com.cleanroommc.modularui.utils.fluid.FluidStackTank;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
+import com.glodblock.github.common.item.ItemFluidPacket;
 import com.gtnewhorizons.modularui.api.ModularUITextures;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
@@ -214,8 +215,33 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, ForgeDirection side,
         ItemStack aStack) {
+        if (aStack != null && aStack.getItem() instanceof ItemFluidPacket) {
+            FluidStack fluid = ItemFluidPacket.getFluidStack(aStack);
+            return fluid != null && ItemFluidPacket.getFluidAmount(aStack) > 0 && fill(fluid, false) > 0;
+        }
         return aIndex != CATALYST_SLOT_1 && aIndex != CATALYST_SLOT_2
             && super.allowPutStack(aBaseMetaTileEntity, aIndex, side, aStack);
+    }
+
+    @Override
+    public void setInventorySlotContents(int aIndex, ItemStack aStack) {
+        if (aStack != null && aStack.getItem() instanceof ItemFluidPacket) {
+            FluidStack fluid = ItemFluidPacket.getFluidStack(aStack);
+            long packetAmount = ItemFluidPacket.getFluidAmount(aStack);
+            if (fluid != null && packetAmount > 0) {
+                fluid.amount = (int) Math.min(packetAmount, Integer.MAX_VALUE);
+                int filled = fill(fluid, true);
+                if (filled > 0) {
+                    packetAmount -= filled;
+                    if (packetAmount == 0) {
+                        aStack = null;
+                    } else {
+                        ItemFluidPacket.setFluidAmount(aStack, packetAmount);
+                    }
+                }
+            }
+        }
+        super.setInventorySlotContents(aIndex, aStack);
     }
 
     public FluidStack getFluid(int aSlot) {
