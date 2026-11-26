@@ -30,7 +30,7 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -39,7 +39,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.Nxer.TwistSpaceTechnology.client.effect.MegaNqReactorParticleBatch;
+import com.Nxer.TwistSpaceTechnology.client.render.MegaNqReactorWisps;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.TSTControllerTextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_MegaNqReactor;
@@ -293,16 +293,10 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     protected double coreFxX;
     protected double coreFxY;
     protected double coreFxZ;
-    protected long lastCoreParticleBatchTick = -1L;
     protected boolean isRenderActive = false;
     protected static final double CORE_CENTER_OFFSET_X = 15.0D;
     protected static final double CORE_CENTER_OFFSET_Y = 12.0D;
     protected static final double CORE_CENTER_OFFSET_Z = 0.0D;
-
-    /**
-     * 与 {@code MegaNqReactorParticle.LIFETIME_TICKS}（200）配合：约每 1/3 寿命一批，平均近 3 层叠加。
-     */
-    protected static final int CORE_PARTICLE_SPAWN_INTERVAL_TICKS = 67;
 
     @Override
     public RecipeMap<?> getRecipeMap() {
@@ -688,38 +682,26 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
             + CORE_CENTER_OFFSET_Z * back.offsetZ;
     }
 
-    /**
-     * 运行时在客户端按 {@link #CORE_PARTICLE_SPAWN_INTERVAL_TICKS} 追加粒子批次；
-     * 间隔约为单粒子寿命的三分之一，通常可见 2～3 批叠加；新批次不强制结束上一批。
-     */
-    @SideOnly(Side.CLIENT)
-    protected void scheduleCoreParticleBatch() {
-        IGregTechTileEntity base = getBaseMetaTileEntity();
-        if (base == null) {
-            return;
-        }
-        World world = base.getWorld();
-        if (world == null || !world.isRemote) {
-            return;
-        }
-        if (world.getTotalWorldTime() % CORE_PARTICLE_SPAWN_INTERVAL_TICKS != 0L) {
-            return;
-        }
-        if (lastCoreParticleBatchTick == world.getTotalWorldTime()) {
-            return;
-        }
-        lastCoreParticleBatchTick = world.getTotalWorldTime();
+    @Override
+    public AxisAlignedBB getRenderBoundingBox(int x, int y, int z) {
         updateCoreFxCenter();
-        MegaNqReactorParticleBatch.spawn(world, coreFxX, coreFxY, coreFxZ);
+        return AxisAlignedBB
+            .getBoundingBox(coreFxX - 7, coreFxY - 7, coreFxZ - 7, coreFxX + 7, coreFxY + 7, coreFxZ + 7);
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public void renderTESR(double x, double y, double z, float timeSinceLastTick) {
-        if (!isRenderActive) {
-            return;
-        }
-        scheduleCoreParticleBatch();
+        if (!isRenderActive) return;
+        IGregTechTileEntity base = getBaseMetaTileEntity();
+        updateCoreFxCenter();
+        MegaNqReactorWisps.render(
+            x + (coreFxX - base.getXCoord()),
+            y + (coreFxY - base.getYCoord()),
+            z + (coreFxZ - base.getZCoord()),
+            base.getWorld()
+                .getTotalWorldTime(),
+            timeSinceLastTick);
     }
 
     public Pair<FluidStack, Integer> getExcited(FluidInventoryView fluidView) {
