@@ -619,8 +619,8 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
             // #zh_CN 无充能节点时不加速。
             .addInfo(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.info.06"))
             // #tr tst.machine.IndustrialAlchemyTower.tooltip.info.07
-            // # When the number of nodes is less than 4, each charging node increases acceleration by 10%%,
-            // #zh_CN 当节点数量小于4时每有一个充能节点就加速10%%，
+            // # When the number of nodes is less than 4, each charging node increases acceleration by 10%,
+            // #zh_CN 当节点数量小于4时每有一个充能节点就加速10%，
             .addInfo(TSTUtils.tr("tst.machine.IndustrialAlchemyTower.tooltip.info.07"))
             // #tr tst.machine.IndustrialAlchemyTower.tooltip.info.08
             // # When the number of nodes is 4, calculate the nodes with the highest rates of air, fire, entropy, and order.

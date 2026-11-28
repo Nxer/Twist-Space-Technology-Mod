@@ -527,7 +527,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
             .addInfo(TSTUtils.tr("tst.machine.BiosphereIII.mode.02"))
             // #tr tst.machine.BiosphereIII.tooltip.info.09
             // # Don't need Petri Dish
-            // #zh_CN 不需要培养皿.加速300%%.
+            // #zh_CN 不需要培养皿.加速300%.
             .addInfo(TSTUtils.tr("tst.machine.BiosphereIII.tooltip.info.09"))
             // #tr tst.machine.BiosphereIII.tooltip.info.10
             // # Each glass tier over HV provides 4 times parallel

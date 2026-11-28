@@ -958,8 +958,8 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             // #zh_CN 几乎无限的并行, 升级力场发生器以获得更高的速度
             .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.25"))
             // #tr tst.machine.BallLightning.tooltip.info.26
-            // # Eu Modifier = 1 - 9.9%% * (Field Generator Tier - 1)
-            // #zh_CN 每升级一次力场发生器, 降低9.9%%功耗
+            // # Eu Modifier = 1 - 9.9% * (Field Generator Tier - 1)
+            // #zh_CN 每升级一次力场发生器, 降低9.9%功耗
             .addInfo(TSTUtils.tr("tst.machine.BallLightning.tooltip.info.26"))
             .beginStructureBlock(shapeMK1, shapeMK2)
             // #tr tst.machine.BallLightning.tooltip.structure.01

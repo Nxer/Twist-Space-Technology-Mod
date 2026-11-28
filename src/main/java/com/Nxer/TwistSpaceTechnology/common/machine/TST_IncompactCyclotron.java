@@ -214,8 +214,8 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
             // #zh_CN {\DARK_PURPLE}脉冲超快线性同步加速器
             .addInfo(TSTUtils.tr("tst.machine.IncompactCyclotron.tooltip.info.01"))
             // #tr tst.machine.IncompactCyclotron.tooltip.info.02
-            // # The particles are accelerated to {\YELLOW}99%%{\GRAY} of the speed of light by the electric field!
-            // #zh_CN 粒子在电场下被加速到{\YELLOW}99%%{\GRAY}光速！
+            // # The particles are accelerated to {\YELLOW}99%{\GRAY} of the speed of light by the electric field!
+            // #zh_CN 粒子在电场下被加速到{\YELLOW}99%{\GRAY}光速！
             .addInfo(TSTUtils.tr("tst.machine.IncompactCyclotron.tooltip.info.02"))
             // #tr tst.machine.IncompactCyclotron.tooltip.info.03
             // # But you can extract the accelerated particles at any time.
@@ -230,12 +230,12 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
             // #zh_CN 得益于工艺的升级
             .addInfo(TSTUtils.tr("tst.machine.IncompactCyclotron.tooltip.info.05"))
             // #tr tst.machine.IncompactCyclotron.tooltip.info.06
-            // # The accelerator upgraded 100%% speedup and 256 parallel
-            // #zh_CN 加速器拥有了额外100%%的额外加速,以及256并行
+            // # The accelerator upgraded 100% speedup and 256 parallel
+            // #zh_CN 加速器拥有了额外100%的额外加速,以及256并行
             .addInfo(TSTUtils.tr("tst.machine.IncompactCyclotron.tooltip.info.06"))
             // #tr tst.machine.IncompactCyclotron.tooltip.info.07
-            // # But it requires additional 60%% of power to work
-            // #zh_CN 但是需要额外60%%的供电来运行
+            // # But it requires additional 60% of power to work
+            // #zh_CN 但是需要额外60%的供电来运行
             .addInfo(TSTUtils.tr("tst.machine.IncompactCyclotron.tooltip.info.07"))
             .beginStructureBlock(shapeMain)
             .addController(textFrontCenter)

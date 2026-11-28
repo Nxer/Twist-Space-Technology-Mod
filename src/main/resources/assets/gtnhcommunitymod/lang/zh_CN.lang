@@ -782,7 +782,7 @@ tile.tst.photon_controller_upgrades.8.tooltip=额外§c70%§7的速度提升！
 tile.tst.photon_controller_upgrades.9.name=光量子增幅器UEV Tier
 tile.tst.photon_controller_upgrades.9.tooltip=额外§c100%§7的速度提升！
 tile.tst.photon_controller_upgrades.10.name=光量子增幅器UIV Tier
-tile.tst.photon_controller_upgrades.10.tooltip=额外140%%的速度提升！
+tile.tst.photon_controller_upgrades.10.tooltip=额外140%的速度提升！
 tile.tst.photon_controller_upgrades.11.name=光量子增幅器UMV Tier
 tile.tst.photon_controller_upgrades.11.tooltip.01=额外§c190%§7的速度提升！
 tile.tst.photon_controller_upgrades.11.tooltip.02=启用无损超频！
@@ -1074,8 +1074,8 @@ tst.machine.ArtificialStar.tooltip.structure.01=输出系数 = 时间场等级^0
 tst.machine.ArtificialStar.tooltip.structure.02=实际输出EU = 配方数值 * 输出系数 * 连续运行奖励系数
 tst.machine.ArtificialStar.tooltip.structure.03=原料回收概率 = 时间场等级 * 空间场等级 * 稳定场等级 / 1000
 tst.machine.ArtificialStar.tooltip.structure.04=输入的燃料将会一次性消耗掉, 然后运行 6.4s (默认), 并输出对应数值的 EU.
-tst.machine.ArtificialStar.tooltip.structure.05=在连续运行时, 每次运行连续运行奖励系数提高 1%% .
-tst.machine.ArtificialStar.tooltip.structure.06=连续运行奖励系数最大值 150%% , 中断后降到 100%% .
+tst.machine.ArtificialStar.tooltip.structure.05=在连续运行时, 每次运行连续运行奖励系数提高 1% .
+tst.machine.ArtificialStar.tooltip.structure.06=连续运行奖励系数最大值 150% , 中断后降到 100% .
 tst.machine.ArtificialStar.waila.current_generation=当前发电:
 tst.machine.AstralComputingArray.name=星规阵列
 tst.machine.BallLightning.mode.0=电弧炉
@@ -1110,7 +1110,7 @@ tst.machine.BallLightning.tooltip.info.22=65536 并行, 无损超频
 tst.machine.BallLightning.tooltip.info.23=聚变线圈等级决定配方等级
 tst.machine.BallLightning.tooltip.info.24=§e 星核发生器
 tst.machine.BallLightning.tooltip.info.25=几乎无限的并行, 升级力场发生器以获得更高的速度
-tst.machine.BallLightning.tooltip.info.26=每升级一次力场发生器, 降低9.9%%功耗
+tst.machine.BallLightning.tooltip.info.26=每升级一次力场发生器, 降低9.9%功耗
 tst.machine.BallLightning.tooltip.machine_type=电弧炉 | 等离子电弧炉 | 聚变反应堆 | 星核发生器
 tst.machine.BallLightning.tooltip.structure.01=§d无线模式 :
 tst.machine.BallLightning.tooltip.structure.02=机器等级为4且未安装能源仓时进入无线模式
@@ -1159,7 +1159,7 @@ tst.machine.BigBroArray.tooltip.info.08=机器会根据能源仓等级超频加�
 tst.machine.BigBroArray.tooltip.info.09=每个并行度产生20点污染每秒(最大污染为200000),你可能需要安装最多20个消声仓排放污染！不安装消声仓会导致机器无法运行。
 tst.machine.BigBroArray.tooltip.info.10=能源仓等级跟随玻璃，动力仓等级跟随机器外壳，UV等级玻璃解锁激光。可放入的机器等级被框架等级限制。UMV外壳解锁无线，不安装能源仓即可进入，出现内部错误时尝试重新放置。
 tst.machine.BigBroArray.tooltip.info.11=动力和能源仓只能放底层4个角，其他舱室替换任意钨钢机械方块。没有附加结构时，框架不会限制放入机器的等级。附加结构的并行处理机械方块等级限制了最大并行。
-tst.machine.BigBroArray.tooltip.info.12=附加结构的线圈每升级一级，能量消耗减少10%%(乘法叠加),并行处理机械方块每升级一级，处理速度增加50%%(乘法叠加)，每台机器提供2^(并行机械方块等级)个并行, 4级和5级并行方块可以让每台机器提供512/1024并行。
+tst.machine.BigBroArray.tooltip.info.12=附加结构的线圈每升级一级，能量消耗减少10%(乘法叠加),并行处理机械方块每升级一级，处理速度增加50%(乘法叠加)，每台机器提供2^(并行机械方块等级)个并行, 4级和5级并行方块可以让每台机器提供512/1024并行。
 tst.machine.BigBroArray.tooltip.info.13=能量消耗减少,并行度和处理速度提升对发电有效(其中能量消耗减少体现为发电量提升)。附加结构的方块为:并行机械方块*134, 玻璃x530, 框架x42, 线圈x42，洁净不锈钢方块*86,装配线机械方块*64
 tst.machine.BiosphereIII.info.efficiency=效率:
 tst.machine.BiosphereIII.mode.00=§6----- 细菌培养缸模式 -----
@@ -1176,7 +1176,7 @@ tst.machine.BiosphereIII.tooltip.info.05=需要在主机中放入培养皿
 tst.machine.BiosphereIII.tooltip.info.06=每个培养皿提供§b1x§7并行
 tst.machine.BiosphereIII.tooltip.info.07=使用先进的人工智能控制细菌的繁殖
 tst.machine.BiosphereIII.tooltip.info.08=初始控制效率为最高效率的§c160%§7.玻璃等级每超出配方要求1级,将控制效率提高§c60%§7.
-tst.machine.BiosphereIII.tooltip.info.09=不需要培养皿.加速300%%.
+tst.machine.BiosphereIII.tooltip.info.09=不需要培养皿.加速300%.
 tst.machine.BiosphereIII.tooltip.info.10=玻璃等级每超出HV一级,提供4倍并行
 tst.machine.BiosphereIII.tooltip.info.11=EV玻璃提供§b4x§7并行,IV玻璃提供§b16x§7并行,以此类推
 tst.machine.BiosphereIII.tooltip.machine_type=细菌培养缸 | 酿造室 | 发酵槽
@@ -1402,8 +1402,8 @@ tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.
 tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.02=超维度等离子锻炉的原型机.
 tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.03=更擅长连续长时间运行和大批量生产.
 tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.04=但在小型化方面不够好.
-tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.05=连续运行 §c24 §7小时后达到最佳运行状态, 降低 §b75%%§7 燃料消耗.
-tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.06=停止运行后燃料消耗减免率会在 §c1§7 小时内快速降低至 §b0%%§7.
+tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.05=连续运行 §c24 §7小时后达到最佳运行状态, 降低 §b75%§7 燃料消耗.
+tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.06=停止运行后燃料消耗减免率会在 §c1§7 小时内快速降低至 §b0%§7.
 tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.machine_type=§f模块化机械 §7- §e等离子锻炉
 tst.machine.DSPLauncher.info.01=剩余过载时间:
 tst.machine.DSPLauncher.info.02=速度倍率:
@@ -1564,7 +1564,7 @@ tst.machine.EyeOfWood.tooltip.info.02=仅可部署在主世界, 否则将产生�
 tst.machine.EyeOfWood.tooltip.machine_type=Happiness Master
 tst.machine.EyeOfWood.tooltip.structure.01=机器会将输入仓中输入的§9水§7和§c岩浆§7存储于机器内部, 就像鸿蒙之眼一样.
 tst.machine.EyeOfWood.tooltip.structure.02=机器运行的成功率取决于已存储的水和岩浆的数量.
-tst.machine.EyeOfWood.tooltip.structure.03=当已存储的水和岩浆数量都等于256,000L时达到最高成功率: 75%%
+tst.machine.EyeOfWood.tooltip.structure.03=当已存储的水和岩浆数量都等于256,000L时达到最高成功率: 75%
 tst.machine.EyeOfWood.tooltip.structure.04=    §b成功率§7 = §f{7500 - 7499 * [1 - 1/(§6S§f^§9dW§f * §6S§f^§cdL§f) ] } / 10000
 tst.machine.EyeOfWood.tooltip.structure.05=其中 :
 tst.machine.EyeOfWood.tooltip.structure.06=特定值底数 §6S§f ≈ 1.087
@@ -1582,7 +1582,7 @@ tst.machine.GiantVacuumDryingFurnace.tooltip.info.03=该设备由真空泵、主
 tst.machine.GiantVacuumDryingFurnace.tooltip.info.04=并行 = 线圈等级 * 层数 * 32
 tst.machine.GiantVacuumDryingFurnace.tooltip.info.05=每超出一级电压, 所需时间为原来的§c80%§7, 线圈每升高一级处理速度增加§c50%§7
 tst.machine.GiantVacuumDryingFurnace.tooltip.info.06=由螺丝刀切换模式
-tst.machine.GiantVacuumDryingFurnace.tooltip.info.07=注意你的电量小伙子,巨型真空干燥塔耗能200%%
+tst.machine.GiantVacuumDryingFurnace.tooltip.info.07=注意你的电量小伙子,巨型真空干燥塔耗能200%
 tst.machine.GiantVacuumDryingFurnace.tooltip.info.08=真的会有人需要这台机器来处理太空冰淇淋吗？
 tst.machine.GiantVacuumDryingFurnace.tooltip.info.09=能量舱口必须放置在主框架内
 tst.machine.GiantVacuumDryingFurnace.tooltip.machine_type=真空干燥炉 | 化学脱水机
@@ -1649,12 +1649,12 @@ tst.machine.HyperThermalConvector.tooltip.structure.04=蒸馏水输入仓
 tst.machine.IncompactCyclotron.name=PULSAR - 非紧凑式回旋加速器
 tst.machine.IncompactCyclotron.tooltip.controller=非紧凑式回旋加速器的控制方块
 tst.machine.IncompactCyclotron.tooltip.info.01=§5脉冲超快线性同步加速器
-tst.machine.IncompactCyclotron.tooltip.info.02=粒子在电场下被加速到§e99%%§7光速！
+tst.machine.IncompactCyclotron.tooltip.info.02=粒子在电场下被加速到§e99%§7光速！
 tst.machine.IncompactCyclotron.tooltip.info.03=但是你随时可以取出加工的粒子
 tst.machine.IncompactCyclotron.tooltip.info.04=这太神奇了！
 tst.machine.IncompactCyclotron.tooltip.info.05=得益于工艺的升级
-tst.machine.IncompactCyclotron.tooltip.info.06=加速器拥有了额外100%%的额外加速,以及256并行
-tst.machine.IncompactCyclotron.tooltip.info.07=但是需要额外60%%的供电来运行
+tst.machine.IncompactCyclotron.tooltip.info.06=加速器拥有了额外100%的额外加速,以及256并行
+tst.machine.IncompactCyclotron.tooltip.info.07=但是需要额外60%的供电来运行
 tst.machine.IncompactCyclotron.tooltip.machine_type=粒子加速器
 tst.machine.IndistinctTentacle.mode.0=装配线模式
 tst.machine.IndistinctTentacle.mode.1=部件装配线模式
@@ -1673,10 +1673,10 @@ tst.machine.IndistinctTentacle.tooltip.info.08=无线电网模式下处理时间
 tst.machine.IndistinctTentacle.tooltip.info.09=注意你的无线电网电量, 你应该不会想看到跳电的风景对吧.
 tst.machine.IndistinctTentacle.tooltip.machine_type=装配线 | 部件装配线 | 组装机 | 精密组装机
 tst.machine.IndistinctTentacle.tooltip.structure.01=模式下速度乘数(默认) :
-tst.machine.IndistinctTentacle.tooltip.structure.02=装配线 = 100%%
-tst.machine.IndistinctTentacle.tooltip.structure.03=部件装配线 = 200%%
-tst.machine.IndistinctTentacle.tooltip.structure.04=组装机 = 400%%
-tst.machine.IndistinctTentacle.tooltip.structure.05=精密组装机 = 400%%
+tst.machine.IndistinctTentacle.tooltip.structure.02=装配线 = 100%
+tst.machine.IndistinctTentacle.tooltip.structure.03=部件装配线 = 200%
+tst.machine.IndistinctTentacle.tooltip.structure.04=组装机 = 400%
+tst.machine.IndistinctTentacle.tooltip.structure.05=精密组装机 = 400%
 tst.machine.IndistinctTentacle.tooltip.structure.06=默认能源仓模式下256并行.
 tst.machine.IndistinctTentacle.tooltip.structure.07=无线电网模式下处理时间固定为25.6s.
 tst.machine.IndistinctTentacle.tooltip.structure.08=在控制器方块放入 §b§l§o星阵§7 ,
@@ -1697,7 +1697,7 @@ tst.machine.IndustrialAlchemyTower.tooltip.info.03=并行取决于结构方块�
 tst.machine.IndustrialAlchemyTower.tooltip.info.04=进行4/2超频。达到最高加速倍率后开启无损超频.
 tst.machine.IndustrialAlchemyTower.tooltip.info.05=§b使用充能节点以获得加速奖励§7，
 tst.machine.IndustrialAlchemyTower.tooltip.info.06=无充能节点时不加速。
-tst.machine.IndustrialAlchemyTower.tooltip.info.07=当节点数量小于4时每有一个充能节点就加速10%%，
+tst.machine.IndustrialAlchemyTower.tooltip.info.07=当节点数量小于4时每有一个充能节点就加速10%，
 tst.machine.IndustrialAlchemyTower.tooltip.info.08=当节点数量为4时，计算含有风、火、混沌、秩序率最高的节点，
 tst.machine.IndustrialAlchemyTower.tooltip.info.09=将含该要素率最多的节点的该要素量参与后续的计算。
 tst.machine.IndustrialAlchemyTower.tooltip.info.10= §bmin=min(fire,air,entropy,order,10);max=max(fire,air,entropy,order,10);
@@ -1738,7 +1738,7 @@ tst.machine.IndustrialMagicMatrix.tooltip.info.18=Variance为六个节点里最�
 tst.machine.IndustrialMagicMatrix.tooltip.info.19=Mean则为平均数。
 tst.machine.IndustrialMagicMatrix.tooltip.info.20=当六个要素的种类不为六种原始要素时,
 tst.machine.IndustrialMagicMatrix.tooltip.info.21=每缺少一种就固定增加1秒耗时。
-tst.machine.IndustrialMagicMatrix.tooltip.info.22=最高获得 1145.14%% 的加速倍数。
+tst.machine.IndustrialMagicMatrix.tooltip.info.22=最高获得 1145.14% 的加速倍数。
 tst.machine.IndustrialMagicMatrix.tooltip.info.23=在控制器GUI放入魔导源质元件则无需消耗源质，但如果是某位英雄的证明或许会发生一点不可思议的变化...
 tst.machine.IndustrialMagicMatrix.tooltip.info.24=注魔供应器
 tst.machine.IndustrialMagicMatrix.tooltip.info.25=§b任意魔法机械方块
@@ -1748,8 +1748,8 @@ tst.machine.IndustrialMagicMatrix.tooltip.structure.01=§b任意魔法机械方�
 tst.machine.IndustrialMagicMatrix.tooltip.structure.02=§b每级提供4^tier的并行
 tst.machine.IndustrialMagnetarSeparator.name=工业电磁离析机
 tst.machine.IndustrialMagnetarSeparator.tooltip.controller=工业电磁离析机的控制方块
-tst.machine.IndustrialMagnetarSeparator.tooltip.info.01=比相同电压的单方块机器快300%%
-tst.machine.IndustrialMagnetarSeparator.tooltip.info.02=只需要使用配方要求功率的80%%
+tst.machine.IndustrialMagnetarSeparator.tooltip.info.01=比相同电压的单方块机器快300%
+tst.machine.IndustrialMagnetarSeparator.tooltip.info.02=只需要使用配方要求功率的80%
 tst.machine.IndustrialMagnetarSeparator.tooltip.info.03=每提升一个电压等级，每次运行可以多处理4个物品
 tst.machine.IndustrialMagnetarSeparator.tooltip.machine_type=电磁离析机
 tst.machine.IndustrialMagnetarSeparator.tooltip.structure.01=剩余方块为§7抗磁机械方块§r(至少§69§r个！)
@@ -1962,7 +1962,7 @@ tst.machine.MegaEggGenerator.tooltip.info.04=每个无限之蛋产生§62A IV§7
 tst.machine.MegaEggGenerator.tooltip.info.05=数量积累至一定阶段，便能引发§l§o§6质的飞跃,
 tst.machine.MegaEggGenerator.tooltip.info.06=每2^n层提供§c2%§7的最大效率加成,而每个无限之蛋提高§c1%§7.
 tst.machine.MegaEggGenerator.tooltip.info.07=在这能量的殿堂里，每一个未被诸蛋之力占据的空缺，都将令整体的效率减损§c5%§7。
-tst.machine.MegaEggGenerator.tooltip.info.08=基础预热速度0.01%%每秒，一对龙蛋增加0.01%%但最多只计算50对，无限之蛋增加§c1%§7且无加速上限.
+tst.machine.MegaEggGenerator.tooltip.info.08=基础预热速度0.01%每秒，一对龙蛋增加0.01%但最多只计算50对，无限之蛋增加§c1%§7且无加速上限.
 tst.machine.MegaEggGenerator.tooltip.info.09=如果仅有爬行者蛋，预热将需要大约三小时，只是谁会真的在乎这个?
 tst.machine.MegaEggGenerator.tooltip.info.10=无论是§5龙蛋§r、§a爬行者蛋§7，抑或是§o§6无尽之蛋§7，唯有它们的存在，方能驱动力量的完满流转。
 tst.machine.MegaEggGenerator.tooltip.info.11=动力仓或TecTech动力仓,1个

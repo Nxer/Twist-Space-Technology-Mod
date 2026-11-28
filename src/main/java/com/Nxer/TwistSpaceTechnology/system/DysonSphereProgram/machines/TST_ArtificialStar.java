@@ -804,12 +804,12 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
             // #zh_CN 输入的燃料将会一次性消耗掉, 然后运行 6.4s (默认), 并输出对应数值的 EU.
             .addStructureInfo(TSTUtils.tr("tst.machine.ArtificialStar.tooltip.structure.04"))
             // #tr tst.machine.ArtificialStar.tooltip.structure.05
-            // # Rewards multiplier 1%% increase per run when continuous operation.
-            // #zh_CN 在连续运行时, 每次运行连续运行奖励系数提高 1%% .
+            // # Rewards multiplier 1% increase per run when continuous operation.
+            // #zh_CN 在连续运行时, 每次运行连续运行奖励系数提高 1% .
             .addStructureInfo(TSTUtils.tr("tst.machine.ArtificialStar.tooltip.structure.05"))
             // #tr tst.machine.ArtificialStar.tooltip.structure.06
-            // # Maximum is 150%%, Minimum is 100%% when uncontinuous.
-            // #zh_CN 连续运行奖励系数最大值 150%% , 中断后降到 100%% .
+            // # Maximum is 150%, Minimum is 100% when uncontinuous.
+            // #zh_CN 连续运行奖励系数最大值 150% , 中断后降到 100% .
             .addStructureInfo(TSTUtils.tr("tst.machine.ArtificialStar.tooltip.structure.06"))
           .addStructureInfo(EnumChatFormatting.GOLD+"-----------------------------------------")
           .addStructureInfo(DSPName + ":")

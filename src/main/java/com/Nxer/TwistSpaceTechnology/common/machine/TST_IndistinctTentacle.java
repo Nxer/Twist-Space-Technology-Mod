@@ -553,20 +553,20 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
             // #zh_CN 模式下速度乘数(默认) :
             .addStructureInfo(TSTUtils.tr("tst.machine.IndistinctTentacle.tooltip.structure.01"))
             // #tr tst.machine.IndistinctTentacle.tooltip.structure.02
-            // # Assembly Line = 100%%
-            // #zh_CN 装配线 = 100%%
+            // # Assembly Line = 100%
+            // #zh_CN 装配线 = 100%
             .addStructureInfo(TSTUtils.tr("tst.machine.IndistinctTentacle.tooltip.structure.02"))
             // #tr tst.machine.IndistinctTentacle.tooltip.structure.03
-            // # Component Assembly Line = 200%%;
-            // #zh_CN 部件装配线 = 200%%
+            // # Component Assembly Line = 200%;
+            // #zh_CN 部件装配线 = 200%
             .addStructureInfo(TSTUtils.tr("tst.machine.IndistinctTentacle.tooltip.structure.03"))
             // #tr tst.machine.IndistinctTentacle.tooltip.structure.04
-            // # Assembler = 400%%
-            // #zh_CN 组装机 = 400%%
+            // # Assembler = 400%
+            // #zh_CN 组装机 = 400%
             .addStructureInfo(TSTUtils.tr("tst.machine.IndistinctTentacle.tooltip.structure.04"))
             // #tr tst.machine.IndistinctTentacle.tooltip.structure.05
-            // # Precise Assembler = 400%%
-            // #zh_CN 精密组装机 = 400%%
+            // # Precise Assembler = 400%
+            // #zh_CN 精密组装机 = 400%
             .addStructureInfo(TSTUtils.tr("tst.machine.IndistinctTentacle.tooltip.structure.05"))
             .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
             // #tr tst.machine.IndistinctTentacle.tooltip.structure.06

@@ -539,8 +539,8 @@ public class GT_TileEntity_MegaEggGenerator extends TST_GeneratorBase<GT_TileEnt
             // #zh_CN 在这能量的殿堂里，每一个未被诸蛋之力占据的空缺，都将令整体的效率减损{\RED}5%{\GRAY}。
             .addInfo(TSTUtils.tr("tst.machine.MegaEggGenerator.tooltip.info.07"))
             // #tr tst.machine.MegaEggGenerator.tooltip.info.08
-            // # Warm-up process for 0.01%% per second as base, each pair of Dragon Eggs add 0.01%% but limit for 50 pairs, each Infinity Egg add {\RED}1%{\GRAY} with no limits.
-            // #zh_CN 基础预热速度0.01%%每秒，一对龙蛋增加0.01%%但最多只计算50对，无限之蛋增加{\RED}1%{\GRAY}且无加速上限.
+            // # Warm-up process for 0.01% per second as base, each pair of Dragon Eggs add 0.01% but limit for 50 pairs, each Infinity Egg add {\RED}1%{\GRAY} with no limits.
+            // #zh_CN 基础预热速度0.01%每秒，一对龙蛋增加0.01%但最多只计算50对，无限之蛋增加{\RED}1%{\GRAY}且无加速上限.
             .addInfo(TSTUtils.tr("tst.machine.MegaEggGenerator.tooltip.info.08"))
             // #tr tst.machine.MegaEggGenerator.tooltip.info.09
             // # The process will take about {\GOLD}3{\GRAY} hours if put Creeper Eggs only, but who really care about?
