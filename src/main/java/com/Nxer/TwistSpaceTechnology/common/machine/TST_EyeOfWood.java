@@ -672,8 +672,8 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
                 // #zh_CN 机器运行的成功率取决于已存储的水和岩浆的数量.
                 .addStructureInfo(TSTUtils.tr("tst.machine.EyeOfWood.tooltip.structure.02"))
                 // #tr tst.machine.EyeOfWood.tooltip.structure.03
-                // # Maximum success rate : 75%% when the amount of stored water and lava are both equal to 256,000L.
-                // #zh_CN 当已存储的水和岩浆数量都等于256,000L时达到最高成功率: 75%%
+                // # Maximum success rate : 75% when the amount of stored water and lava are both equal to 256,000L.
+                // #zh_CN 当已存储的水和岩浆数量都等于256,000L时达到最高成功率: 75%
                 .addStructureInfo(TSTUtils.tr("tst.machine.EyeOfWood.tooltip.structure.03"))
                 .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
                 // #tr tst.machine.EyeOfWood.tooltip.structure.04

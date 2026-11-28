@@ -491,7 +491,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
             // #zh_CN 并行 = 线圈等级 * 层数 * 32
             .addInfo(TSTUtils.tr("tst.machine.GiantVacuumDryingFurnace.tooltip.info.04"))
             // #tr tst.machine.GiantVacuumDryingFurnace.tooltip.info.05
-            // # Every additional voltage step reduces the time to 80%% of the original and The processing speed increases by 50%% for each step of the coil
+            // # Every additional voltage step reduces the time to 80% of the original and The processing speed increases by 50% for each step of the coil
             // #zh_CN 每超出一级电压, 所需时间为原来的§c80%§7, 线圈每升高一级处理速度增加§c50%§7
             .addInfo(TSTUtils.tr("tst.machine.GiantVacuumDryingFurnace.tooltip.info.05"))
             // #tr tst.machine.GiantVacuumDryingFurnace.tooltip.info.06
@@ -499,8 +499,8 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
             // #zh_CN 由螺丝刀切换模式
             .addInfo(TSTUtils.tr("tst.machine.GiantVacuumDryingFurnace.tooltip.info.06"))
             // #tr tst.machine.GiantVacuumDryingFurnace.tooltip.info.07
-            // # Every additional voltage step reduces the time to 80%% of the original
-            // #zh_CN 注意你的电量小伙子,巨型真空干燥塔耗能200%%
+            // # Every additional voltage step reduces the time to 80% of the original
+            // #zh_CN 注意你的电量小伙子,巨型真空干燥塔耗能200%
             .addInfo(TSTUtils.tr("tst.machine.GiantVacuumDryingFurnace.tooltip.info.07"))
             // #tr tst.machine.GiantVacuumDryingFurnace.tooltip.info.08
             // # Would anyone really need this machine to handle space ice cream?

@@ -473,12 +473,12 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
                 // #zh_CN 但在小型化方面不够好.
                 .addInfo(TSTUtils.tr("tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.04"))
                 // #tr tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.05
-                // # Reach the best operating state after {\RED}24 {\GRAY} hours of continuous operation, reducing {\AQUA}75%%{\GRAY} fuel consumption.
-                // #zh_CN 连续运行 {\RED}24 {\GRAY}小时后达到最佳运行状态, 降低 {\AQUA}75%%{\GRAY} 燃料消耗.
+                // # Reach the best operating state after {\RED}24 {\GRAY} hours of continuous operation, reducing {\AQUA}75%{\GRAY} fuel consumption.
+                // #zh_CN 连续运行 {\RED}24 {\GRAY}小时后达到最佳运行状态, 降低 {\AQUA}75%{\GRAY} 燃料消耗.
                 .addInfo(TSTUtils.tr("tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.05"))
                 // #tr tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.06
-                // # After stopping operation, the fuel consumption reduction rate will quickly decrease to {\AQUA}0%%{\GRAY} within {\RED}1{\GRAY} hours.
-                // #zh_CN 停止运行后燃料消耗减免率会在 {\RED}1{\GRAY} 小时内快速降低至 {\AQUA}0%%{\GRAY}.
+                // # After stopping operation, the fuel consumption reduction rate will quickly decrease to {\AQUA}0%{\GRAY} within {\RED}1{\GRAY} hours.
+                // #zh_CN 停止运行后燃料消耗减免率会在 {\RED}1{\GRAY} 小时内快速降低至 {\AQUA}0%{\GRAY}.
                 .addInfo(TSTUtils.tr("tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.06"))
                 .addInfo(TSTSharedLocalization.ModularizedMachine.InstallingModuleNearControllerImproveMachine)
                 .beginStructureBlock(SHAPE_MAIN)

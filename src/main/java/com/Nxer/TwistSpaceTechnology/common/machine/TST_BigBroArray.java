@@ -1667,8 +1667,8 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
             // #zh_CN 动力和能源仓只能放底层4个角，其他舱室替换任意钨钢机械方块。没有附加结构时，框架不会限制放入机器的等级。附加结构的并行处理机械方块等级限制了最大并行。
             .addInfo(TSTUtils.tr("tst.machine.BigBroArray.tooltip.info.11"))
             // #tr tst.machine.BigBroArray.tooltip.info.12
-            // # Energy consumption will decrease 10%% for each coil upgrade, processing speed will increase 50%% for each parallelism upgrade. Each machine provides 2^(tier of parallelism block) parallelisms，with casing MK4/5 each machine can provide 512/1024 parallelism.
-            // #zh_CN 附加结构的线圈每升级一级，能量消耗减少10%%(乘法叠加),并行处理机械方块每升级一级，处理速度增加50%%(乘法叠加)，每台机器提供2^(并行机械方块等级)个并行, 4级和5级并行方块可以让每台机器提供512/1024并行。
+            // # Energy consumption will decrease 10% for each coil upgrade, processing speed will increase 50% for each parallelism upgrade. Each machine provides 2^(tier of parallelism block) parallelisms，with casing MK4/5 each machine can provide 512/1024 parallelism.
+            // #zh_CN 附加结构的线圈每升级一级，能量消耗减少10%(乘法叠加),并行处理机械方块每升级一级，处理速度增加50%(乘法叠加)，每台机器提供2^(并行机械方块等级)个并行, 4级和5级并行方块可以让每台机器提供512/1024并行。
             .addInfo(TSTUtils.tr("tst.machine.BigBroArray.tooltip.info.12"))
             // #tr tst.machine.BigBroArray.tooltip.info.13
             // # The upgrade in energy/consumption/processing speed/parallelism will also take effect in energy generation. Structure of addon: parallelism casing*134, glassx530, framex64, coilx42，stainless steel casing*86, Assembly line casing*64

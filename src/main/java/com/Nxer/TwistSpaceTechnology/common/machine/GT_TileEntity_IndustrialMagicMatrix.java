@@ -893,8 +893,8 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
             // #zh_CN 每缺少一种就固定增加1秒耗时。
             .addInfo(TSTUtils.tr("tst.machine.IndustrialMagicMatrix.tooltip.info.21"))
             // #tr tst.machine.IndustrialMagicMatrix.tooltip.info.22
-            // # Gain up to 1145.14%% acceleration multiplier.
-            // #zh_CN 最高获得 1145.14%% 的加速倍数。
+            // # Gain up to 1145.14% acceleration multiplier.
+            // #zh_CN 最高获得 1145.14% 的加速倍数。
             .addInfo(TSTUtils.tr("tst.machine.IndustrialMagicMatrix.tooltip.info.22"))
             // #tr tst.machine.IndustrialMagicMatrix.tooltip.info.23
             // # Putting EssentiaCell_Creative in the controller GUI doesn't cost essentia, but if it's a hero's proof,maybe a little bit of an incredible change...

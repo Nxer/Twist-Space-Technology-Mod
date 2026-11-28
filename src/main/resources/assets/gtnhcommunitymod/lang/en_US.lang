@@ -782,7 +782,7 @@ tile.tst.photon_controller_upgrades.8.tooltip=Extra §c70%§7 Speed Up !
 tile.tst.photon_controller_upgrades.9.name=Photonic Intensifier UEV Tier
 tile.tst.photon_controller_upgrades.9.tooltip=Extra §c100%§7 Speed Up !
 tile.tst.photon_controller_upgrades.10.name=Photonic Intensifier UIV Tier
-tile.tst.photon_controller_upgrades.10.tooltip=Extra 140%% Speed Up !
+tile.tst.photon_controller_upgrades.10.tooltip=Extra 140% Speed Up !
 tile.tst.photon_controller_upgrades.11.name=Photonic Intensifier UMV Tier
 tile.tst.photon_controller_upgrades.11.tooltip.01=Extra §c190%§7 Speed Up !
 tile.tst.photon_controller_upgrades.11.tooltip.02=Enable perfect overclocks!
@@ -1074,8 +1074,8 @@ tst.machine.ArtificialStar.tooltip.structure.01=Output multiplier = tTime^0.25 *
 tst.machine.ArtificialStar.tooltip.structure.02=Actual Generating EU = recipe value * output multiplier * Rewards for continuous operation
 tst.machine.ArtificialStar.tooltip.structure.03=Recovering probability = tTime * tDim * tStabilisation / 1000
 tst.machine.ArtificialStar.tooltip.structure.04=Input fuels will be consumed at once, process 6.4s (default), and output the corresponding EU.
-tst.machine.ArtificialStar.tooltip.structure.05=Rewards multiplier 1%% increase per run when continuous operation.
-tst.machine.ArtificialStar.tooltip.structure.06=Maximum is 150%%, Minimum is 100%% when uncontinuous.
+tst.machine.ArtificialStar.tooltip.structure.05=Rewards multiplier 1% increase per run when continuous operation.
+tst.machine.ArtificialStar.tooltip.structure.06=Maximum is 150%, Minimum is 100% when uncontinuous.
 tst.machine.ArtificialStar.waila.current_generation=Current Generating:
 tst.machine.AstralComputingArray.name=Astral Computing Array
 tst.machine.BallLightning.mode.0=Electric Arc Furnace
@@ -1110,7 +1110,7 @@ tst.machine.BallLightning.tooltip.info.22=65536x parallel | Perfect overclocks
 tst.machine.BallLightning.tooltip.info.23=The max recipe tier is limited by the Compact Fusion Coil Tier
 tst.machine.BallLightning.tooltip.info.24=§e Star Kernel Generator
 tst.machine.BallLightning.tooltip.info.25=Almost infinite parallel | Upgrade the Field Generator for faster speeds
-tst.machine.BallLightning.tooltip.info.26=Eu Modifier = 1 - 9.9%% * (Field Generator Tier - 1)
+tst.machine.BallLightning.tooltip.info.26=Eu Modifier = 1 - 9.9% * (Field Generator Tier - 1)
 tst.machine.BallLightning.tooltip.machine_type=(Plasma / Electric) Arc Furnace / Fusion Reactor / Star Kernel Generator
 tst.machine.BallLightning.tooltip.structure.01=§dWireless Mode :
 tst.machine.BallLightning.tooltip.structure.02=Joining the wireless EU network when machine tier is 4 AND when no energy hatch is installed
@@ -1159,7 +1159,7 @@ tst.machine.BigBroArray.tooltip.info.08=Will overclock recipes to energy level o
 tst.machine.BigBroArray.tooltip.info.09=Produces 20 points of pollution per parallelism（200000/s max), you may need up to 20 mufflers. Dynamo/Energy hatches should only be put at 4 corners of bottom, other hatches replace any tungstensteel casing.
 tst.machine.BigBroArray.tooltip.info.10=Energy hatch tier follows glass, dynamo hatch tier follows machine casing, UV level glass/casing unlocks laser hatches. Tier of machines that can put in the array is restricted by frames, UMV casings will unlock all dynamo hatches and unlocks global wireless mode. Enable it without a dynamo hatch.
 tst.machine.BigBroArray.tooltip.info.11=The tier of machines is not limited when there's no addon structures. Level of parallelism casing in addon structures limits the parallelism.
-tst.machine.BigBroArray.tooltip.info.12=Energy consumption will decrease 10%% for each coil upgrade, processing speed will increase 50%% for each parallelism upgrade. Each machine provides 2^(tier of parallelism block) parallelisms，with casing MK4/5 each machine can provide 512/1024 parallelism.
+tst.machine.BigBroArray.tooltip.info.12=Energy consumption will decrease 10% for each coil upgrade, processing speed will increase 50% for each parallelism upgrade. Each machine provides 2^(tier of parallelism block) parallelisms，with casing MK4/5 each machine can provide 512/1024 parallelism.
 tst.machine.BigBroArray.tooltip.info.13=The upgrade in energy/consumption/processing speed/parallelism will also take effect in energy generation. Structure of addon: parallelism casing*134, glassx530, framex64, coilx42，stainless steel casing*86, Assembly line casing*64
 tst.machine.BiosphereIII.info.efficiency=Efficiency:
 tst.machine.BiosphereIII.mode.00=§6----- Bacterial Vat Mode -----
@@ -1402,8 +1402,8 @@ tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.
 tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.02=The Prototype of Dimensionally Transcendent Plasma Forge
 tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.03=Better at continuous long-term operation and mass production.
 tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.04=But it is not good enough in miniaturization.
-tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.05=Reach the best operating state after §c24 §7 hours of continuous operation, reducing §b75%%§7 fuel consumption.
-tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.06=After stopping operation, the fuel consumption reduction rate will quickly decrease to §b0%%§7 within §c1§7 hours.
+tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.05=Reach the best operating state after §c24 §7 hours of continuous operation, reducing §b75%§7 fuel consumption.
+tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.06=After stopping operation, the fuel consumption reduction rate will quickly decrease to §b0%§7 within §c1§7 hours.
 tst.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.machine_type=§fModularized Machine §7- §ePlasma Forge
 tst.machine.DSPLauncher.info.01=Overload time:
 tst.machine.DSPLauncher.info.02=Speed Up:
@@ -1564,7 +1564,7 @@ tst.machine.EyeOfWood.tooltip.info.02=Can only be deployed in the Overworld, oth
 tst.machine.EyeOfWood.tooltip.machine_type=Happiness Master
 tst.machine.EyeOfWood.tooltip.structure.01=This machine will constantly consume §9Water §7and §cLava §7in Input Hatches and store it inside the machine, like the Eye of Harmony.
 tst.machine.EyeOfWood.tooltip.structure.02=The success rate of processing depends on the amount of water and magma that has been stored inside machine.
-tst.machine.EyeOfWood.tooltip.structure.03=Maximum success rate : 75%% when the amount of stored water and lava are both equal to 256,000L.
+tst.machine.EyeOfWood.tooltip.structure.03=Maximum success rate : 75% when the amount of stored water and lava are both equal to 256,000L.
 tst.machine.EyeOfWood.tooltip.structure.04=    §bSuccess Rate§7 = §f{7500 - 7499 * [1 - 1/(§6S§f^§9dW§f * §6S§f^§cdL§f) ] } / 10000
 tst.machine.EyeOfWood.tooltip.structure.05=Of Which :
 tst.machine.EyeOfWood.tooltip.structure.06=Value-specific base §6S§f ≈ 1.087
@@ -1580,9 +1580,9 @@ tst.machine.GiantVacuumDryingFurnace.tooltip.info.01=Controller block for the Gi
 tst.machine.GiantVacuumDryingFurnace.tooltip.info.02=§9Harness the power of vacuum technology for industrial drying!!!
 tst.machine.GiantVacuumDryingFurnace.tooltip.info.03=This machine consists of vacuum pump, main structure, drying tower three parts.
 tst.machine.GiantVacuumDryingFurnace.tooltip.info.04=parallel = coil * piece * 32
-tst.machine.GiantVacuumDryingFurnace.tooltip.info.05=Every additional voltage step reduces the time to 80%% of the original and The processing speed increases by 50%% for each step of the coil
+tst.machine.GiantVacuumDryingFurnace.tooltip.info.05=Every additional voltage step reduces the time to 80% of the original and The processing speed increases by 50% for each step of the coil
 tst.machine.GiantVacuumDryingFurnace.tooltip.info.06=Switch modes using a screwdriver
-tst.machine.GiantVacuumDryingFurnace.tooltip.info.07=Every additional voltage step reduces the time to 80%% of the original
+tst.machine.GiantVacuumDryingFurnace.tooltip.info.07=Every additional voltage step reduces the time to 80% of the original
 tst.machine.GiantVacuumDryingFurnace.tooltip.info.08=Would anyone really need this machine to handle space ice cream?
 tst.machine.GiantVacuumDryingFurnace.tooltip.info.09=Energy Hatch must be placed in the main frame.
 tst.machine.GiantVacuumDryingFurnace.tooltip.machine_type=Vacuum Furnace | Dehydrator
@@ -1649,12 +1649,12 @@ tst.machine.HyperThermalConvector.tooltip.structure.04=Distilled water input hat
 tst.machine.IncompactCyclotron.name=PULSAR - Incompact Cyclotron
 tst.machine.IncompactCyclotron.tooltip.controller=Controller block for the Incompact Cyclotron
 tst.machine.IncompactCyclotron.tooltip.info.01=§5Pulsed Ultrafast Linear Synchronized Accelerator Ring
-tst.machine.IncompactCyclotron.tooltip.info.02=The particles are accelerated to §e99%%§7 of the speed of light by the electric field!
+tst.machine.IncompactCyclotron.tooltip.info.02=The particles are accelerated to §e99%§7 of the speed of light by the electric field!
 tst.machine.IncompactCyclotron.tooltip.info.03=But you can extract the accelerated particles at any time.
 tst.machine.IncompactCyclotron.tooltip.info.04="That's incredible!"
 tst.machine.IncompactCyclotron.tooltip.info.05=Thanks to the upgrade of technology
-tst.machine.IncompactCyclotron.tooltip.info.06=The accelerator upgraded 100%% speedup and 256 parallel
-tst.machine.IncompactCyclotron.tooltip.info.07=But it requires additional 60%% of power to work
+tst.machine.IncompactCyclotron.tooltip.info.06=The accelerator upgraded 100% speedup and 256 parallel
+tst.machine.IncompactCyclotron.tooltip.info.07=But it requires additional 60% of power to work
 tst.machine.IncompactCyclotron.tooltip.machine_type=Particle Accelerator
 tst.machine.IndistinctTentacle.mode.0=Mode: Assembly Line
 tst.machine.IndistinctTentacle.mode.1=Mode: Component Assembly Line
@@ -1673,10 +1673,10 @@ tst.machine.IndistinctTentacle.tooltip.info.08=Progressing time is fixed in Wire
 tst.machine.IndistinctTentacle.tooltip.info.09=Watch out your Global energy storage if use wireless mode, you should not want to see the power drain's landscape.
 tst.machine.IndistinctTentacle.tooltip.machine_type=Assembly Line | Component Assembly Line | Assembler | Precise Assembler
 tst.machine.IndistinctTentacle.tooltip.structure.01=Speed (default) of mode:
-tst.machine.IndistinctTentacle.tooltip.structure.02=Assembly Line = 100%%
-tst.machine.IndistinctTentacle.tooltip.structure.03=Component Assembly Line = 200%%;
-tst.machine.IndistinctTentacle.tooltip.structure.04=Assembler = 400%%
-tst.machine.IndistinctTentacle.tooltip.structure.05=Precise Assembler = 400%%
+tst.machine.IndistinctTentacle.tooltip.structure.02=Assembly Line = 100%
+tst.machine.IndistinctTentacle.tooltip.structure.03=Component Assembly Line = 200%;
+tst.machine.IndistinctTentacle.tooltip.structure.04=Assembler = 400%
+tst.machine.IndistinctTentacle.tooltip.structure.05=Precise Assembler = 400%
 tst.machine.IndistinctTentacle.tooltip.structure.06=Default power mode parallel 256.
 tst.machine.IndistinctTentacle.tooltip.structure.07=Progressing time is fixed at 25.6s in Wireless mode.
 tst.machine.IndistinctTentacle.tooltip.structure.08=Put an Astral Array Fabricator into controller slot,
@@ -1697,7 +1697,7 @@ tst.machine.IndustrialAlchemyTower.tooltip.info.03=Parallelism depends on the le
 tst.machine.IndustrialAlchemyTower.tooltip.info.04=Do an 4/2 overclock.Turn on lossless overclocking after reaching the maximum acceleration rate.
 tst.machine.IndustrialAlchemyTower.tooltip.info.05=Use Charged Nodes to get acceleration rewards,
 tst.machine.IndustrialAlchemyTower.tooltip.info.06=No acceleration when there are no charging nodes.
-tst.machine.IndustrialAlchemyTower.tooltip.info.07=When the number of nodes is less than 4, each charging node increases acceleration by 10%%,
+tst.machine.IndustrialAlchemyTower.tooltip.info.07=When the number of nodes is less than 4, each charging node increases acceleration by 10%,
 tst.machine.IndustrialAlchemyTower.tooltip.info.08=When the number of nodes is 4, calculate the nodes with the highest rates of air, fire, entropy, and order.
 tst.machine.IndustrialAlchemyTower.tooltip.info.09=Use the essence quantity of the node with the highest rate of each essence for subsequent calculations.
 tst.machine.IndustrialAlchemyTower.tooltip.info.10=min=min(fire,air,entropy,order,10);max=max(fire,air,entropy,order,10);
@@ -1738,7 +1738,7 @@ tst.machine.IndustrialMagicMatrix.tooltip.info.18=Variance is the variance of th
 tst.machine.IndustrialMagicMatrix.tooltip.info.19=Mean is the average.
 tst.machine.IndustrialMagicMatrix.tooltip.info.20=When the type of the six elements is not the six original elements,
 tst.machine.IndustrialMagicMatrix.tooltip.info.21=Each missing one adds a fixed 1 second to the time.
-tst.machine.IndustrialMagicMatrix.tooltip.info.22=Gain up to 1145.14%% acceleration multiplier.
+tst.machine.IndustrialMagicMatrix.tooltip.info.22=Gain up to 1145.14% acceleration multiplier.
 tst.machine.IndustrialMagicMatrix.tooltip.info.23=Putting EssentiaCell_Creative in the controller GUI doesn't cost essentia, but if it's a hero's proof,maybe a little bit of an incredible change...
 tst.machine.IndustrialMagicMatrix.tooltip.info.24=Infusion Provider
 tst.machine.IndustrialMagicMatrix.tooltip.info.25=§bAny magic mechanical block
@@ -1748,8 +1748,8 @@ tst.machine.IndustrialMagicMatrix.tooltip.structure.01=§bAny magic mechanical b
 tst.machine.IndustrialMagicMatrix.tooltip.structure.02=Each level provides 4^tier parallel
 tst.machine.IndustrialMagnetarSeparator.name=Industrial Magnetar Separator
 tst.machine.IndustrialMagnetarSeparator.tooltip.controller=Controller block for the Industrial Magnetar Separator
-tst.machine.IndustrialMagnetarSeparator.tooltip.info.01=300%% faster than using single block machines of the same voltage
-tst.machine.IndustrialMagnetarSeparator.tooltip.info.02=Only uses 80%% of the EU/t normally required
+tst.machine.IndustrialMagnetarSeparator.tooltip.info.01=300% faster than using single block machines of the same voltage
+tst.machine.IndustrialMagnetarSeparator.tooltip.info.02=Only uses 80% of the EU/t normally required
 tst.machine.IndustrialMagnetarSeparator.tooltip.info.03=Processes 4 items per voltage tier
 tst.machine.IndustrialMagnetarSeparator.tooltip.machine_type=Electromagnetic Separator
 tst.machine.IndustrialMagnetarSeparator.tooltip.structure.01=§69x §7Anti-Magnetic Casing (minimum)
@@ -1962,7 +1962,7 @@ tst.machine.MegaEggGenerator.tooltip.info.04=Infinity egg generates §62A IV§7,
 tst.machine.MegaEggGenerator.tooltip.info.05=But quantitative change leads to qualitative change,
 tst.machine.MegaEggGenerator.tooltip.info.06=Every 2^n pieces give §c2%§7 max efficiency bonus, and every infinity egg gives §c1%§7.
 tst.machine.MegaEggGenerator.tooltip.info.07=You can also put nothing on the egg pos, but every empty pos decreases §c5%§7 max efficiency.
-tst.machine.MegaEggGenerator.tooltip.info.08=Warm-up process for 0.01%% per second as base, each pair of Dragon Eggs add 0.01%% but limit for 50 pairs, each Infinity Egg add §c1%§7 with no limits.
+tst.machine.MegaEggGenerator.tooltip.info.08=Warm-up process for 0.01% per second as base, each pair of Dragon Eggs add 0.01% but limit for 50 pairs, each Infinity Egg add §c1%§7 with no limits.
 tst.machine.MegaEggGenerator.tooltip.info.09=The process will take about §63§7 hours if put Creeper Eggs only, but who really care about?
 tst.machine.MegaEggGenerator.tooltip.info.10=Whether it is the §5 Dragon Egg, §2 Creeper Egg, or the §6Egg of Infinity, §7only their presence can drive the full circulation of power.
 tst.machine.MegaEggGenerator.tooltip.info.11=Dynamo or TT Dynamo, one only

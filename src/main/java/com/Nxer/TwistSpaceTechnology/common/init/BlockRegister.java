@@ -722,8 +722,8 @@ public class BlockRegister {
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 10,
                 // #tr tile.tst.photon_controller_upgrades.10.tooltip
-                // # Extra 140%% Speed Up !
-                // #zh_CN 额外140%%的速度提升！
+                // # Extra 140% Speed Up !
+                // #zh_CN 额外140%的速度提升！
                 new String[] { TSTUtils.tr("tile.tst.photon_controller_upgrades.10.tooltip") }));
 
         // #tr tile.tst.photon_controller_upgrades.11.name
